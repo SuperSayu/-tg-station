@@ -5,8 +5,8 @@ var/datum/controller/event/events
 	var/list/running = list()	//list of all existing /datum/event
 
 	var/scheduled = 0			//The next world.time that a naturally occuring random event can be selected.
-	var/frequency_lower = 3000	//5 minutes lower bound.
-	var/frequency_upper = 9000	//15 minutes upper bound. Basically an event will happen every 15 to 30 minutes.
+	var/frequency_lower = 4500	//7.5 minutes lower bound.
+	var/frequency_upper = 12000	//20 minutes upper bound.
 
 	var/holiday					//This will be a string of the name of any realworld holiday which occurs today (GMT time)
 
@@ -59,6 +59,7 @@ var/datum/controller/event/events
 		if(E.earliest_start >= world.time)		continue
 		if(E.holidayID)
 			if(E.holidayID != holiday)			continue
+		if(player_list.len < E.minimumCrew)		continue
 		if(E.weight < 0)						//for round-start events etc.
 			if(E.runEvent() == PROCESS_KILL)
 				E.max_occurrences = 0
@@ -73,6 +74,7 @@ var/datum/controller/event/events
 		if(E.earliest_start >= world.time)		continue
 		if(E.holidayID)
 			if(E.holidayID != holiday)			continue
+		if(player_list.len < E.minimumCrew)	continue
 		sum_of_weights -= E.weight
 
 		if(sum_of_weights <= 0)				//we've hit our goal

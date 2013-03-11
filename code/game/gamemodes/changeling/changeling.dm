@@ -9,8 +9,8 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	config_tag = "changeling"
 	restricted_jobs = list("AI", "Cyborg")
 	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain")
-	required_players = 15
-	required_enemies = 1
+	required_players = 5
+	required_enemies = 2
 	recommended_enemies = 4
 
 	uplink_welcome = "Syndicate Uplink Console:"
@@ -36,7 +36,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 
-	var/const/changeling_amount = 4
+	var/changeling_amount = 4
 
 /datum/game_mode/changeling/announce()
 	world << "<B>The current game mode is - Changeling!</B>"
@@ -54,7 +54,12 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 			if(player.assigned_role == job)
 				possible_changelings -= player
 
-	if(possible_changelings.len>0)
+	if(player_list.len > (required_players * 2))
+		changeling_amount = recommended_enemies
+	else
+		changeling_amount = required_enemies
+
+	if(possible_changelings.len>= changeling_amount)
 		for(var/i = 0, i < changeling_amount, i++)
 			if(!possible_changelings.len) break
 			var/datum/mind/changeling = pick(possible_changelings)

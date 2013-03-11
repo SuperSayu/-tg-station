@@ -79,7 +79,7 @@
 
 
 /obj/item/weapon/storage/lockbox/clusterbang
-	name = "lockbox (clusterbang)"
+	name = "Lockbox (clusterbang)"
 	desc = "You have a bad feeling about opening this."
 	req_access = list(access_security)
 

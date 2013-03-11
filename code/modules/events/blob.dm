@@ -1,7 +1,7 @@
 /datum/event_control/blob
 	name = "Blob"
 	typepath = /datum/event/blob
-	weight = 5
+	weight = 2
 	max_occurrences = 1
 
 /datum/event/blob

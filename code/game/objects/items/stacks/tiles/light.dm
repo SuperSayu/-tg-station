@@ -13,6 +13,7 @@
 	attack_verb = list("bashed", "battered", "bludgeoned", "thrashed", "smashed")
 	var/on = 1
 	var/state //0 = fine, 1 = flickering, 2 = breaking, 3 = broken
+	var/brightness_on = 4
 
 /obj/item/stack/tile/light/New(var/loc, var/amount=null)
 	..()

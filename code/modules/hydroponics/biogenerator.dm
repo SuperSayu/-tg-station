@@ -50,7 +50,8 @@
 			user << "\red The biogenerator is already full! Activate it."
 		else
 			for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in O.contents)
-				G.loc = src
+				var/obj/item/weapon/storage/bag/plants/PB = O
+				PB.remove_from_storage(G,src)
 				i++
 				if(i >= 10)
 					user << "\blue You fill the biogenerator to its capacity."

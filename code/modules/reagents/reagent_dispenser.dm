@@ -161,7 +161,20 @@
 	icon_state = "virusfoodtank"
 	amount_per_transfer_from_this = 10
 	anchored = 1
+	density = 0
 
 	New()
 		..()
 		reagents.add_reagent("virusfood", 1000)
+
+/obj/structure/reagent_dispensers/hyronalin
+	name = "Hyronalin Dispenser"
+	desc = "Dispenses anti-rad medication."
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "hyronalintank"
+	amount_per_transfer_from_this = 10
+	anchored = 1
+	density = 0
+	New()
+		..()
+		reagents.add_reagent("hyronalin", 1000)

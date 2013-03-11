@@ -1,8 +1,9 @@
 /datum/event_control/spacevine
-	name = "Spacevine"
-	typepath = /datum/event/spacevine
-	weight = 15
+	name 			= "Spacevine"
+	typepath 		= /datum/event/spacevine
+	weight 			= 8
 	max_occurrences = 3
+	minimumCrew		= 3
 
 /datum/event/spacevine/start()
 	var/list/turfs = list() //list of all the empty floor turfs in the hallway areas

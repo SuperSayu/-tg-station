@@ -2,9 +2,10 @@
 //Don't judge me D; ~Carn
 
 /datum/event_control/ninja
-	name = "Space Ninja"
-	typepath = /datum/event/ninja
+	name 			= "Space Ninja"
+	typepath 		= /datum/event/ninja
 	max_occurrences = 1
+	minimumCrew		= 4
 
 /datum/event/ninja
 	var/success_spawn = 0

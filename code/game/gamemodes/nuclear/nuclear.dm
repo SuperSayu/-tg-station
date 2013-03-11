@@ -5,8 +5,8 @@
 /datum/game_mode/nuclear
 	name = "nuclear emergency"
 	config_tag = "nuclear"
-	required_players = 20 // 20 players - 5 players to be the nuke ops = 15 players remaining
-	required_enemies = 5
+	required_players = 5 // 20 players - 5 players to be the nuke ops = 15 players remaining
+	required_enemies = 1
 	recommended_enemies = 5
 
 	uplink_welcome = "Corporate Backed Uplink Console:"

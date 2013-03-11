@@ -1414,55 +1414,57 @@ datum
 			required_other = 1
 			on_reaction(var/datum/reagents/holder, var/created_volume)
 				feedback_add_details("slime_cores_used","[name]")
+				var/y_distance = rand(-10,10) * created_volume
+				var/x_distance = rand(-10,10) * created_volume
+				var/turf/FROM = get_turf_loc(holder.my_atom) // the turf of origin we're travelling FROM
+				var/turf/TO = locate(FROM.x + x_distance,FROM.y + y_distance,FROM.z)          // the turf of origin we're travelling TO
+				playsound(TO, 'sound/effects/phasein.ogg', 100, 1)
 
-				// Calculate new position (searches through beacons in world)
-				var/obj/item/device/radio/beacon/chosen
-				var/list/possible = list()
-				for(var/obj/item/device/radio/beacon/W in world)
-					possible += W
+				var/list/flashers = list()
+				for(var/mob/living/carbon/human/M in viewers(TO, null))
+					if(M:eyecheck() <= 0)
+						flick("e_flash", M.flash) // flash dose faggots
+						flashers += M
 
-				if(possible.len > 0)
-					chosen = pick(possible)
 
-				if(chosen)
-				// Calculate previous position for transition
+				var/t_range = rand(0,2) * created_volume
+				for (var/atom/movable/A in range(t_range, FROM )) // iterate thru list of mobs in the area
+					if( A.anchored ) continue
+					if(istype(A, /obj/item/device/radio/beacon)) continue // don't teleport beacons because that's just insanely stupid
+					if(istype(A, /obj/effect/portal)) continue
 
-					var/turf/FROM = get_turf_loc(holder.my_atom) // the turf of origin we're travelling FROM
-					var/turf/TO = get_turf_loc(chosen)			 // the turf of origin we're travelling TO
+					var/turf/newloc = locate(A.x + x_distance, A.y + y_distance, TO.z) // calculate the new place
 
-					playsound(TO, 'sound/effects/phasein.ogg', 100, 1)
+					if(!newloc || prob(10)) // If it goes off the edge of the map / is in any way invalid, or with some probability
+						var/obj/effect/portal/P = new /obj/effect/portal( A.loc )
+						P.target = newloc
+						P.creator = null
+						P.icon = 'icons/obj/objects.dmi'
+						if(newloc)
+							P.failchance = 10
+						else
+							P.failchance = 100
+						P.icon_state = "anom"
+						P.name = "wormhole"
+						walk_rand(P,rand(150,450)) // values larger than 300 mean it won't walk at all before it deletes itself
 
-					var/list/flashers = list()
-					for(var/mob/living/carbon/human/M in viewers(TO, null))
-						if(M:eyecheck() <= 0)
-							flick("e_flash", M.flash) // flash dose faggots
-							flashers += M
+					if(!A.Move(newloc)) // if the atom, for some reason, can't move, FORCE them to move! :) We try Move() first to invoke any movement-related checks the atom needs to perform after moving
+						A.loc = newloc
 
-					var/y_distance = TO.y - FROM.y
-					var/x_distance = TO.x - FROM.x
-					for (var/atom/movable/A in range(4, FROM )) // iterate thru list of mobs in the area
-						if(istype(A, /obj/item/device/radio/beacon)) continue // don't teleport beacons because that's just insanely stupid
-						if(A.anchored) continue
-						if(istype(A, /obj/structure/cable )) continue
-
-						var/turf/newloc = locate(A.x + x_distance, A.y + y_distance, TO.z) // calculate the new place
-						if(!A.Move(newloc)) // if the atom, for some reason, can't move, FORCE them to move! :) We try Move() first to invoke any movement-related checks the atom needs to perform after moving
-							A.loc = locate(A.x + x_distance, A.y + y_distance, TO.z)
-
-						spawn()
-							if(ismob(A) && !(A in flashers)) // don't flash if we're already doing an effect
-								var/mob/M = A
-								if(M.client)
-									var/obj/blueeffect = new /obj(src)
-									blueeffect.screen_loc = "WEST,SOUTH to EAST,NORTH"
-									blueeffect.icon = 'icons/effects/effects.dmi'
-									blueeffect.icon_state = "shieldsparkles"
-									blueeffect.layer = 17
-									blueeffect.mouse_opacity = 0
-									M.client.screen += blueeffect
-									sleep(20)
-									M.client.screen -= blueeffect
-									del(blueeffect)
+					spawn()
+						if(ismob(A) && !(A in flashers)) // don't flash if we're already doing an effect
+							var/mob/M = A
+							if(M.client)
+								var/obj/blueeffect = new /obj(src)
+								blueeffect.screen_loc = "WEST,SOUTH to EAST,NORTH"
+								blueeffect.icon = 'icons/effects/effects.dmi'
+								blueeffect.icon_state = "shieldsparkles"
+								blueeffect.layer = 17
+								blueeffect.mouse_opacity = 0
+								M.client.screen += blueeffect
+								sleep(50)
+								M.client.screen -= blueeffect
+								blueeffect.loc = null
 
 //Cerulean
 
@@ -1595,11 +1597,18 @@ datum
 			name = "Syntiflesh"
 			id = "syntiflesh"
 			result = null
-			required_reagents = list("blood" = 5, "clonexadone" = 1)
+			required_reagents = list("blood" = 10, "clonexadone" = 5)
 			result_amount = 1
 			on_reaction(var/datum/reagents/holder, var/created_volume)
 				var/location = get_turf(holder.my_atom)
-				new /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh(location)
+				if(created_volume > 2 && prob(50)) // meat production is messy, especially en masse
+					gibs(location)
+					created_volume--
+				for(var/count = 1;count <= created_volume;count++)
+					if(prob(5)) // small chance of losing any particular batch in a messy way
+						gibs(location)
+					else
+						new /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh(location)
 				return
 
 		hot_ramen

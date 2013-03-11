@@ -50,11 +50,14 @@
 			if(player.assigned_role == job)
 				possible_traitors -= player
 
+	possible_traitors -= modePlayer // traitorchan: no changeling+traitors
+
 	for(var/j = 0, j < num_traitors, j++)
 		if (!possible_traitors.len)
 			break
 		var/datum/mind/traitor = pick(possible_traitors)
 		traitors += traitor
+		modePlayer += traitors
 		traitor.special_role = "traitor"
 		possible_traitors.Remove(traitor)
 
@@ -69,7 +72,6 @@
 		spawn(rand(10,100))
 			finalize_traitor(traitor)
 			greet_traitor(traitor)
-	modePlayer += traitors
 	spawn (rand(waittime_l, waittime_h))
 		send_intercept()
 	..()

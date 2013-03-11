@@ -186,17 +186,18 @@ datum/radio_frequency
 //					del(signal)
 					return 0
 			if (filter) //here goes some copypasta. It is for optimisation. -rastaf0
-				for(var/obj/device in devices[filter])
-					if(device == source)
-						continue
-					if(range)
-						var/turf/end_point = get_turf(device)
-						if(!end_point)
+				if(filter != "_default")
+					for(var/obj/device in devices[filter])
+						if(device == source)
 							continue
-						//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
-						if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
-							continue
-					device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
+						if(range)
+							var/turf/end_point = get_turf(device)
+							if(!end_point)
+								continue
+							//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
+							if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
+								continue
+						device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
 				for(var/obj/device in devices["_default"])
 					if(device == source)
 						continue
@@ -239,7 +240,7 @@ datum/radio_frequency
 			if (!devices_line)
 				devices_line = new
 				devices[filter] = devices_line
-			devices_line+=device
+			devices_line |= device
 //			var/list/obj/devices_line___ = devices[filter_str]
 //			var/l = devices_line___.len
 			//log_admin("DEBUG: devices_line.len=[devices_line.len]")
@@ -290,10 +291,10 @@ var/list/pointers = list()
 
 /datum/signal/New()
 	..()
-	pointers += "\ref[src]"
+	pointers |= "\ref[src]"
 
 /datum/signal/Del()
-	pointers -= "\ref[src]"
+	pointers |= "\ref[src]"
 	..()
 
 /datum/signal/proc/copy_from(datum/signal/model)

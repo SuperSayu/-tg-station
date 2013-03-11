@@ -40,7 +40,7 @@
 	else
 		dat +=	"<br><b>Back:</b> <a href='?src=\ref[src];add_inv=back'>Nothing</a>"
 
-	user << browse(dat, text("window=mob[];size=325x500", name))
+	user << browse(dat, text("window=mob[];size=325x500", real_name))
 	onclose(user, "mob[real_name]")
 	return
 
@@ -186,7 +186,7 @@
 					src.inventory_back = item_to_add
 					regenerate_icons()
 
-		//show_inv(usr) //Commented out because changing Ian's  name and then calling up his inventory opens a new inventory...which is annoying.
+		show_inv(usr)
 	else
 		..()
 

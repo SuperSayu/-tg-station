@@ -15,6 +15,7 @@
 
 	var/holidayID				//string which should match the events.holiday variable if you wish this event to be holiday-specific
 								//anything with a (non-null) holidayID which does not match holiday, cannot run.
+	var/minimumCrew		=	0
 
 
 /datum/event_control/proc/runEvent()

@@ -8,12 +8,13 @@ In my current plan for it, 'solid' will be defined as anything with density == 1
 */
 
 /datum/event_control/immovable_rod
-	name = "Immovable Rod"
-	typepath = /datum/event/immovable_rod
+	name 			= "Immovable Rod"
+	typepath 		= /datum/event/immovable_rod
 	max_occurrences = 5
+	minimumCrew		= 3
 
 /datum/event/immovable_rod
-	announceWhen = 5
+	announceWhen 	= 5
 
 /datum/event/immovable_rod/announce()
 	command_alert("What the fuck was that?!", "General Alert")

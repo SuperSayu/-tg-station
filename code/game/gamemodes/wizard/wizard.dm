@@ -5,7 +5,7 @@
 /datum/game_mode/wizard
 	name = "wizard"
 	config_tag = "wizard"
-	required_players = 20
+	required_players = 2
 	required_enemies = 1
 	recommended_enemies = 1
 
@@ -34,6 +34,7 @@
 	modePlayer += wizard
 	wizard.assigned_role = "MODE" //So they aren't chosen for other jobs.
 	wizard.special_role = "Wizard"
+	wizard.original = wizard.current
 	if(wizardstart.len == 0)
 		wizard.current << "<B>\red A starting location for you could not be found, please report this bug!</B>"
 		return 0

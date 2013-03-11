@@ -220,7 +220,8 @@
 /obj/item/radio/integrated/signal
 	var/frequency = 1457
 	var/code = 30.0
-	var/last_transmission
+	var/last_transmission = null
+	var/last_recieve = null
 	var/datum/radio_frequency/radio_connection
 
 	New()
@@ -237,7 +238,7 @@
 	proc/set_frequency(new_frequency)
 		radio_controller.remove_object(src, frequency)
 		frequency = new_frequency
-		radio_connection = radio_controller.add_object(src, frequency)
+		radio_connection = radio_controller.add_object(src, frequency, RADIO_CHAT)
 
 	proc/send_signal(message="ACTIVATE")
 
@@ -256,4 +257,11 @@
 
 		radio_connection.post_signal(src, signal)
 
+		return
+
+	receive_signal(datum/signal/signal)
+		if(!signal) return
+		if(istype(loc,/obj/item/weapon/cartridge))
+			var/obj/item/weapon/cartridge/C = loc
+			C.receive_ping("[signal.encryption]")
 		return

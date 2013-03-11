@@ -113,7 +113,8 @@
 		user.attack_log += text("\[[time_stamp()]\] <font color='blue'>Has used [name] on \ref[target]</font>")
 
 
-		if(istype(target, /obj/item) && !(istype(target, /obj/item/weapon/storage) && !istype(target,/obj/item/weapon/storage/box)))
+		//The only storage items to allow are first aid kits and cardboard boxes.  Considered toolboxes, but they're too robust.
+		if (istype(target, /obj/item) && !(istype(target, /obj/item/weapon/storage) && !(istype(target,/obj/item/weapon/storage/box) || istype(target,/obj/item/weapon/storage/firstaid))))
 			var/obj/item/O = target
 			if(amount > 1)
 				var/obj/item/smallDelivery/P = new /obj/item/smallDelivery(get_turf(O.loc))	//Aaannd wrap it up!
@@ -229,7 +230,6 @@
 		return
 
 	Bumped(var/atom/movable/AM) //Go straight into the chute
-		if(istype(AM, /obj/item/projectile) || istype(AM, /obj/item/weapon/dummy))	return
 		switch(dir)
 			if(NORTH)
 				if(AM.loc.y != loc.y+1) return
@@ -239,6 +239,7 @@
 				if(AM.loc.y != loc.y-1) return
 			if(WEST)
 				if(AM.loc.x != loc.x-1) return
+		if(istype(AM, /obj/item/projectile) || istype(AM, /obj/item/weapon/dummy))	return
 
 		if(istype(AM, /obj))
 			var/obj/O = AM

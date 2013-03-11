@@ -370,7 +370,6 @@
 		return
 
 	var/turf/T = get_turf(src)
-	hide_from(usr)
 	for(var/obj/item/I in contents)
 		remove_from_storage(I, T)
 

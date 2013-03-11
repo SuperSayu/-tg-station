@@ -2,7 +2,7 @@
 	name = "Bluespace Anomaly"
 	typepath = /datum/event/bluespace_anomaly
 	weight = 5
-	max_occurrences = 1
+	max_occurrences = 3
 
 /datum/event/bluespace_anomaly
 	announceWhen	= 20

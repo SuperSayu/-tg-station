@@ -1197,6 +1197,9 @@ datum
 				M.adjustToxLoss(3*REM)
 				..()
 				return
+
+			/*	pretty sure this is broken
+
 			reaction_obj(var/obj/O, var/volume)
 				src = null
 				/*if(istype(O,/obj/item/weapon/reagent_containers/food/snacks/egg/slime))
@@ -1218,7 +1221,7 @@ datum
 				napalm.trace_gases += fuel
 				T.assume_air(napalm)
 				return
-
+			*/
 		leporazine
 			name = "Leporazine"
 			id = "leporazine"

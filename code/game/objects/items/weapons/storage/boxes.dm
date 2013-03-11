@@ -121,7 +121,6 @@
 /obj/item/weapon/storage/box/beakers
 	name = "beaker box"
 	icon_state = "beaker"
-
 	New()
 		..()
 		new /obj/item/weapon/reagent_containers/glass/beaker( src )

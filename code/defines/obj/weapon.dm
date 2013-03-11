@@ -104,18 +104,22 @@
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
+	var/uses = 10
 
 /obj/item/weapon/soap/nanotrasen
 	desc = "A Nanotrasen brand bar of soap. Smells of plasma."
 	icon_state = "soapnt"
+	uses = 30
 
 /obj/item/weapon/soap/deluxe
 	desc = "A deluxe Waffle Co. brand bar of soap. Smells of condoms."
 	icon_state = "soapdeluxe"
+	uses = 25
 
 /obj/item/weapon/soap/syndie
 	desc = "An untrustworthy bar of soap. Smells of fear."
 	icon_state = "soapsyndie"
+	uses = 40
 
 /obj/item/weapon/bikehorn
 	name = "bike horn"
@@ -458,7 +462,7 @@
 	throw_speed = 4
 	throw_range = 20
 
-/obj/item/weapon/camera_bug/attack_self(mob/usr as mob)
+/obj/item/device/camera_bug/attack_self(mob/usr as mob)
 	var/list/cameras = new/list()
 	for (var/obj/machinery/camera/C in cameranet.cameras)
 		if (C.bugged && C.status)

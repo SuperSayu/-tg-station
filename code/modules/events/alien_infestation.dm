@@ -1,8 +1,9 @@
 /datum/event_control/alien_infestation
-	name = "Alien Infestation"
-	typepath = /datum/event/alien_infestation
-	weight = 5
+	name 			= "Alien Infestation"
+	typepath 		= /datum/event/alien_infestation
+	weight			= 5
 	max_occurrences = 1
+	minimumCrew		= 5
 
 /datum/event/alien_infestation
 	announceWhen	= 400
@@ -42,5 +43,12 @@
 		var/mob/living/carbon/alien/larva/new_xeno = new(vent.loc)
 		new_xeno.key = C.key
 
+		spawncount--
+		successSpawn = 1
+
+	spawncount += rand(1,2)
+	while(spawncount > 0 && vents.len)
+		var/obj/vent = pick_n_take(vents)
+		new /obj/item/clothing/mask/facehugger(vent.loc)
 		spawncount--
 		successSpawn = 1

@@ -170,7 +170,6 @@
 	name = "cable coil"
 	icon = 'icons/obj/power.dmi'
 	icon_state = "coil_red"
-	item_state = "coil_red"
 	var/amount = MAXCOIL
 	color = "red"
 	desc = "A coil of power cable."
@@ -182,6 +181,7 @@
 	g_amt = 20
 	flags = TABLEPASS | USEDELAY | FPRINT | CONDUCT
 	slot_flags = SLOT_BELT
+	item_state = "coil_red"
 	attack_verb = list("whipped", "lashed", "disciplined", "flogged")
 
 	suicide_act(mob/user)
@@ -538,7 +538,6 @@ obj/structure/cable/proc/cableColor(var/colorC)
 /obj/item/weapon/cable_coil/blue
 	color = "blue"
 	icon_state = "coil_blue"
-	item_state = "coil_blue"
 
 /obj/item/weapon/cable_coil/green
 	color = "green"

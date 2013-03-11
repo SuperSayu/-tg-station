@@ -69,25 +69,19 @@ datum/controller/lighting/proc/Initialize(var/z_level)
 	processing = 0
 	spawn(-1)
 		set background = 1
-		for(var/i=1, i<=lights.len, i++)
-			var/datum/light_source/L = lights[i]
-			if(L.check())
-				lights.Cut(i,i+1)
-				i--
 
-		var/z_start = 1
-		var/z_finish = world.maxz
+		for(var/datum/light_source/L in lights)
+			if(L.check())
+				lights -= L
+
 		if(z_level)
 			z_level = round(z_level,1)
-			if(z_level > 0 && z_level <= world.maxz)
-				z_start = z_level
-				z_finish = z_level
-
-		for(var/k=z_start,k<=z_finish,k++)
-			for(var/i=1,i<=world.maxx,i++)
-				for(var/j=1,j<=world.maxy,j++)
-					var/turf/T = locate(i,j,k)
-					if(T)	T.shift_to_subarea()
+			for(var/turf/T in world)
+				if(T.z != z_level) continue
+				T.shift_to_subarea()
+		else
+			for(var/turf/T in world)
+				T.shift_to_subarea()
 
 		changed_turfs.Cut()		// reset the changed list
 

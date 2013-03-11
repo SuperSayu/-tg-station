@@ -851,13 +851,68 @@
 			beaker_contents = "<B>No beaker attached.</B><br>"
 		else
 			is_beaker_ready = 1
-			beaker_contents = "<B>The beaker contains:</B><br>"
-			var/anything = 0
+			if(istype(beaker,/obj/item/weapon/reagent_containers/glass))
+				var/obj/item/weapon/reagent_containers/glass/G = beaker
+				var/list/matterStates = list("a solid", "a liquid", "a gas")
+				beaker_contents = "<B>The beaker contains:</B><br>"
+
+				//Robots: Awesome
+				if(istype(user,/mob/living/silicon/robot))
+					if(G.reagents && G.reagents.reagent_list.len)
+						for(var/datum/reagent/R in G.reagents.reagent_list)
+							beaker_contents += "[R.volume] units of [R.name], [matterStates[R.reagent_state]]<br>"
+					else
+						beaker_contents = "\The [beaker] is empty!"
+				//Humans: Fallible eyes
+				else if(istype(user,/mob/living/carbon/human))
+					if(G.reestimate)
+						G.buildEstimate()
+
+					var/mob/living/carbon/human/H = user
+					if(H.confused > 5 || H.hallucination || prob(1)) // why am I doing this
+						do
+							var/nonsense = pick("evil", "ponies", "justice", "God", "bananas", "spiders", "owls", "Pun-Pun", "the finest wine imaginable", "love", "a singularity", "farts","time","space","bananium ore")
+							beaker_contents += "[rand(-5,G.reagents.maximum_volume + 5)] units of [nonsense]<br>"
+						while(prob(25))
+					else if(G.identify_probability >= 50 && H.glasses && (istype(H.glasses,/obj/item/clothing/glasses/science) || istype(H.glasses,/obj/item/clothing/glasses/hud/health)))
+						if(G.reagents && G.reagents.reagent_list.len)
+							for(var/datum/reagent/R in G.reagents.reagent_list)
+								beaker_contents = "[R.volume] units of [R.name], [matterStates[R.reagent_state]]<br>"
+						else
+							beaker_contents = "\The [beaker] is empty!"
+					else
+						for(var/str in G.estimate)
+							beaker_contents += "[str]<br>"
+
+				//Other creatures, estimates from far away, etc
+				else
+					if(!beaker.reagents || beaker.reagents.total_volume==0)
+						beaker_contents = "\The [beaker] is empty!"
+					else if (beaker.reagents.total_volume<=beaker.volume/4)
+						beaker_contents = "\The [beaker] is almost empty!"
+					else if (beaker.reagents.total_volume<=beaker.volume*0.66)
+						beaker_contents = "\The [beaker] is half full!"
+					else if (beaker.reagents.total_volume<=beaker.volume*0.90)
+						beaker_contents = "\The [beaker] is almost full!"
+					else
+						beaker_contents = "\The [beaker] is full!"
+			else
+				if(!beaker.reagents || beaker.reagents.total_volume==0)
+					beaker_contents = "\The [beaker] is empty!"
+				else if (beaker.reagents.total_volume<=beaker.volume/4)
+					beaker_contents = "\The [beaker] is almost empty!"
+				else if (beaker.reagents.total_volume<=beaker.volume*0.66)
+					beaker_contents = "\The [beaker] is half full!"
+				else if (beaker.reagents.total_volume<=beaker.volume*0.90)
+					beaker_contents = "\The [beaker] is almost full!"
+				else
+					beaker_contents = "\The [beaker] is full!"
+			/*var/anything = 0
 			for(var/datum/reagent/R in beaker.reagents.reagent_list)
 				anything = 1
 				beaker_contents += "[R.volume] - [R.name]<br>"
 			if(!anything)
-				beaker_contents += "Nothing<br>"
+				beaker_contents += "Nothing<br>"*/
 
 
 		dat = {"

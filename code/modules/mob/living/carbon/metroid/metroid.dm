@@ -750,6 +750,8 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		var/datum/reagents/R = new/datum/reagents(100)
 		reagents = R
 		R.my_atom = src
+		pixel_x = rand(-10,10)
+		pixel_y = rand(-10,10)
 
 /obj/item/slime_extract/grey
 	name = "grey slime extract"

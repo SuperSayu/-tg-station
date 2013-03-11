@@ -40,6 +40,8 @@ Stealthy and Inconspicuous Weapons;
 /obj/item/weapon/pen/paralysis:3:Paralysis Pen;
 /obj/item/weapon/soap/syndie:1:Syndicate Soap;
 /obj/item/weapon/cartridge/syndicate:3:Detomatix PDA Cartridge;
+/obj/item/weapon/box/syndie_kit/remotegrenade:3:Remote-detonation grenade kit;
+/obj/item/weapon/box/syndie_kit/remoteemp:3:Remote-detonation EMP kit
 Whitespace:Seperator;
 Stealth and Camouflage Items;
 /obj/item/clothing/under/chameleon:3:Chameleon Jumpsuit;
@@ -396,7 +398,7 @@ proc/display_roundstart_logout_report()
 
 			continue //Happy connected client
 		for(var/mob/dead/observer/D in mob_list)
-			if(D.mind && D.mind.current == L)
+			if(D.mind && (D.mind.original == L || D.mind.current == L))
 				if(L.stat == DEAD)
 					if(L.suiciding)	//Suicider
 						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<font color='red'><b>Suicide</b></font>)\n"

@@ -126,7 +126,7 @@
 		var/current = 0
 		for(var/obj/item/stack/sheet/S in contents)
 			current += S.amount
-		if(capacity == current)//If it's full, you're done
+		if(current >= capacity)//If it's full, you're done
 			if(!stop_messages)
 				usr << "\red The snatcher is full."
 			return 0
@@ -143,27 +143,30 @@
 		var/current = 0
 		for(var/obj/item/stack/sheet/S2 in contents)
 			current += S2.amount
-		if(capacity < current + S.amount)//If the stack will fill it up
+		if(capacity < (current + S.amount) )//If the stack will fill it up
 			amount = capacity - current
 		else
 			amount = S.amount
+		if(!amount) return 1
 
 		for(var/obj/item/stack/sheet/sheet in contents)
-			if(S.type == sheet.type) // we are violating the amount limitation because these are not sane objects
+			if(S.type == sheet.type) 	// we are violating the amount limitation because these are not sane objects
 				sheet.amount += amount	// they should only be removed through procs in this file, which split them up.
 				S.amount -= amount
 				inserted = 1
 				break
+		if(!inserted)
+			var/obj/item/stack/sheet/S2 = new S.type(src)
+			S2.amount = amount
+			S.amount -= amount
 
-		if(!inserted || !S.amount)
+		//If the entire stack was consumed
+		if(!S.amount)
 			usr.u_equip(S)
 			if (usr.client && usr.s_active != src)
 				usr.client.screen -= S
 			S.dropped(usr)
-			if(!S.amount)
-				del S
-			else
-				S.loc = src
+			S.loc = null
 
 		orient2hud(usr)
 		if(usr.s_active)
@@ -178,7 +181,7 @@
 		var/adjusted_contents = contents.len
 
 		//Numbered contents display
-		var/list/datum/numbered_display/numbered_contents
+		var/list/numbered_contents
 		if(display_contents_with_number)
 			numbered_contents = list()
 			adjusted_contents = 0
@@ -200,13 +203,12 @@
 	quick_empty()
 		var/location = get_turf(src)
 		for(var/obj/item/stack/sheet/S in contents)
-			while(S.amount)
+			while(S.amount > 0)
 				var/obj/item/stack/sheet/N = new S.type(location)
 				var/stacksize = min(S.amount,N.max_amount)
 				N.amount = stacksize
 				S.amount -= stacksize
-			if(!S.amount)
-				del S // todo: there's probably something missing here
+			S.loc = null // todo: there's probably something missing here
 		orient2hud(usr)
 		if(usr.s_active)
 			usr.s_active.show_to(usr)

@@ -1,9 +1,10 @@
 /datum/event_control/spontaneous_appendicitis
-	name = "Spontaneous Appendicitis"
-	typepath = /datum/event/spontaneous_appendicitis
-	weight = 20
+	name 			= "Spontaneous Appendicitis"
+	typepath 		= /datum/event/spontaneous_appendicitis
+	weight 			= 20
 	max_occurrences = 4
-	earliest_start = 6000
+	earliest_start 	= 6000
+	minimumCrew		= 2
 
 /datum/event/spontaneous_appendicitis/start()
 	for(var/mob/living/carbon/human/H in shuffle(living_mob_list))

@@ -32,10 +32,10 @@ JOBS_HAVE_MINIMAL_ACCESS
 LOG_OOC
 
 ## log client Say 
-LOG_SAY
+#LOG_SAY
 
 ## log admin actions
-LOG_ADMIN
+#LOG_ADMIN
 
 ## log client access (logon/logoff)
 LOG_ACCESS
@@ -47,16 +47,16 @@ LOG_GAME
 LOG_VOTE
 
 ## log client Whisper
-LOG_WHISPER
+#LOG_WHISPER
 
 ## log emotes
-LOG_EMOTE
+#LOG_EMOTE
 
 ## log attack messages
 LOG_ATTACK
 
 ## log pda messages
-LOG_PDA
+#LOG_PDA
 
 ## log prayers
 LOG_PRAYER
@@ -88,7 +88,7 @@ PROBABILITY MALFUNCTION 2
 PROBABILITY BLOB 0
 PROBABILITY NUCLEAR 5
 PROBABILITY SANDBOX 0
-PROBABILITY WIZARD 0
+PROBABILITY WIZARD 1
 PROBABILITY RESTRUCTURING 0
 PROBABILITY REVOLUTION 5
 PROBABILITY CHANGELING 0
@@ -112,16 +112,16 @@ ALLOW_ADMIN_OOCCOLOR
 ALLOW_METADATA
 
 ## allow players to initiate a restart vote
-#ALLOW_VOTE_RESTART
+ALLOW_VOTE_RESTART
 
 ## allow players to initate a mode-change start
-#ALLOW_VOTE_MODE
+ALLOW_VOTE_MODE
 
 ## min delay (deciseconds) between voting sessions (default 10 minutes)
 VOTE_DELAY 6000
 
 ## time period (deciseconds) which voting session will last (default 1 minute)
-VOTE_PERIOD 600
+VOTE_PERIOD 300
 
 ## prevents dead players from voting or starting votes
 # NO_DEAD_VOTE
@@ -134,20 +134,20 @@ ALLOW_AI
 
 
 ## disable abandon mob
-NORESPAWN
+#NORESPAWN
 
 ## disables calling del(src) on newmobs if they logout before spawnin in
 # DONT_DEL_NEWMOB
 
 ## set a hosted by name for unix platforms
-HOSTEDBY Yournamehere
+HOSTEDBY SuperSayu
 
 ## Set to jobban "Guest-" accounts from Captain, HoS, HoP, CE, RD, CMO, Warden, Security, Detective, and AI positions.
 ## Set to 1 to jobban them from those positions, set to 0 to allow them.
 # GUEST_JOBBAN
 
 ## Uncomment this to stop people connecting to your server without a registered ckey. (i.e. guest-* are all blocked from connecting)
-GUEST_BAN
+# GUEST_BAN
 
 ## Set to jobban everyone who's key is not listed in data/whitelist.txt from Captain, HoS, HoP, CE, RD, CMO, Warden, Security, Detective, and AI positions.
 ## Uncomment to 1 to jobban, leave commented out to allow these positions for everyone (but see GUEST_JOBBAN above and regular jobbans)
@@ -160,7 +160,7 @@ GUEST_BAN
 # FORUMURL http://justanotherday.example.com
 
 ## Wiki address
-# WIKIURL http://www.nanotrasen.com/wiki/index.php
+WIKIURL http://www.nanotrasen.com/wiki/index.php
 
 ## Ban appeals URL - usually for a forum or wherever people should go to contact your admins.
 # BANAPPEALS http://justanotherday.example.com
@@ -170,11 +170,11 @@ GUEST_BAN
 # LOAD_JOBS_FROM_TXT
 
 ##Remove the # mark infront of this to forbid admins from posssessing the singularity.
-#FORBID_SINGULO_POSSESSION
+FORBID_SINGULO_POSSESSION
 
 ## Remove the # to show a popup 'reply to' window to every non-admin that recieves an adminPM. 
 ## The intention is to make adminPMs more visible. (although I fnd popups annoying so this defaults to off)
-#POPUP_ADMIN_PM
+POPUP_ADMIN_PM
 
 ## Remove the # to allow special 'Easter-egg' events on special holidays such as seasonal holidays and stuff like 'Talk Like a Pirate Day' :3 YAARRR
 ALLOW_HOLIDAYS
@@ -189,23 +189,24 @@ TICKLAG 0.9
 TICKCOMP 0
 
 ## if uncommented this adds a random surname to a player's name if they only specify one name
-HUMANS_NEED_SURNAMES
+#HUMANS_NEED_SURNAMES
 
 ## Uncomment this to ban use of ToR
-#TOR_BAN
+TOR_BAN
 
 ## Comment this out to disable automuting
 #AUTOMUTE_ON
 
 ## How long the delay is before the Away Mission gate opens. Default is half an hour.
-GATEWAY_DELAY 18000
+GATEWAY_DELAY 6000
 
 ## Remove the # to give assistants maint access.
-#ASSISTANT_MAINT
+ASSISTANT_MAINT
 
 ## Remove the # to make rounds which end instantly (Rev, Wizard, Malf) to continue until the shuttle is called or the station is nuked.
 ## Malf and Rev will let the shuttle be called when the antags/protags are dead.
-#CONTINUOUS_ROUNDS
+CONTINUOUS_ROUNDS
+
 
 ##Remove the # to let ghosts spin chairs
-#GHOST_INTERACTION
+GHOST_INTERACTION

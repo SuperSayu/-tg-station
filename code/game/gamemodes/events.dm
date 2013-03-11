@@ -157,4 +157,3 @@
 		S.online = 1
 		S.updateicon()
 		S.power_change()
-

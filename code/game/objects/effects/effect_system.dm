@@ -458,7 +458,7 @@ steam.start() -- spawns the effect
 /obj/effect/effect/chem_smoke/Move()
 	..()
 	for(var/atom/A in view(1, src))
-		if(reagents.has_reagent("radium")||reagents.has_reagent("uranium")||reagents.has_reagent("carbon")||reagents.has_reagent("thermite"))//Prevents unholy radium spam by reducing the number of 'greenglows' down to something reasonable -Sieve
+		if(reagents.has_reagent("radium")||reagents.has_reagent("uranium")||reagents.has_reagent("carbon")||reagents.has_reagent("flour")||reagents.has_reagent("thermite"))//Prevents unholy radium spam by reducing the number of 'greenglows' down to something reasonable -Sieve
 			if(prob(5))
 				reagents.reaction(A)
 		else
@@ -484,7 +484,7 @@ steam.start() -- spawns the effect
 		chemholder.reagents = R
 		R.my_atom = chemholder
 
-	set_up(var/datum/reagents/carry = null, n = 5, c = 0, loca, direct)
+	set_up(var/datum/reagents/carry = null, n = 5, c = 0, loca, direct,silent=0)
 		if(n > 20)
 			n = 20
 		number = n
@@ -499,26 +499,27 @@ steam.start() -- spawns the effect
 		if(direct)
 			direction = direct
 
-		var/contained = ""
-		for(var/reagent in carry.reagent_list)
-			contained += " [reagent] "
-		if(contained)
-			contained = "\[[contained]\]"
-		var/area/A = get_area(location)
+		if(!silent)
+			var/contained = ""
+			for(var/reagent in carry.reagent_list)
+				contained += " [reagent] "
+			if(contained)
+				contained = "\[[contained]\]"
+			var/area/A = get_area(location)
 
-		var/where = "[A.name] | [location.x], [location.y]"
-		var/whereLink = "<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[location.x];Y=[location.y];Z=[location.z]'>[where]</a>"
+			var/where = "[A.name] | [location.x], [location.y]"
+			var/whereLink = "<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[location.x];Y=[location.y];Z=[location.z]'>[where]</a>"
 
-		if(carry.my_atom.fingerprintslast)
-			var/mob/M = get_mob_by_key(carry.my_atom.fingerprintslast)
-			var/more = ""
-			if(M)
-				more = "(<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</a>)"
-			message_admins("A chemical smoke reaction has taken place in ([whereLink])[contained]. Last associated key is [carry.my_atom.fingerprintslast][more].", 0, 1)
-			log_game("A chemical smoke reaction has taken place in ([where])[contained]. Last associated key is [carry.my_atom.fingerprintslast].")
-		else
-			message_admins("A chemical smoke reaction has taken place in ([whereLink]). No associated key.", 0, 1)
-			log_game("A chemical smoke reaction has taken place in ([where])[contained]. No associated key.")
+			if(carry.my_atom.fingerprintslast)
+				var/mob/M = get_mob_by_key(carry.my_atom.fingerprintslast)
+				var/more = ""
+				if(M)
+					more = "(<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</a>)"
+				message_admins("A chemical smoke reaction has taken place in ([whereLink])[contained]. Last associated key is [carry.my_atom.fingerprintslast][more].", 0, 1)
+				log_game("A chemical smoke reaction has taken place in ([where])[contained]. Last associated key is [carry.my_atom.fingerprintslast].")
+			else
+				message_admins("A chemical smoke reaction has taken place in ([whereLink]). No associated key.", 0, 1)
+				log_game("A chemical smoke reaction has taken place in ([where])[contained]. No associated key.")
 
 	start()
 		var/i = 0

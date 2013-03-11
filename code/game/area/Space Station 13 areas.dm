@@ -1041,6 +1041,10 @@ proc/process_ghost_teleport_locs()
 	name = "\improper Delivery Office"
 	icon_state = "quartstorage"
 
+/area/quartermaster/mailhub
+	name = "Mail Hub"
+	icon_state = "quart"
+
 ////////////WORK IN PROGRESS//////////
 
 /area/quartermaster/office
@@ -1078,7 +1082,7 @@ proc/process_ghost_teleport_locs()
 //Toxins
 
 /area/toxins/lab
-	name = "\improper Research and Development"
+	name = "\improper Research Lab"
 	icon_state = "toxlab"
 
 /area/toxins/xenobiology

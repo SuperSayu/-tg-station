@@ -1,18 +1,18 @@
 /datum/event_control/spider_infestation
-	name = "Spider Infestation"
-	typepath = /datum/event/spider_infestation
-	weight = 5
+	name 			= "Spider Infestation"
+	typepath 		= /datum/event/spider_infestation
+	weight 			= 2
 	max_occurrences = 1
+	minimumCrew		= 10
 
 /datum/event/spider_infestation
 	announceWhen	= 400
-
 	var/spawncount = 1
 
 
 /datum/event/spider_infestation/setup()
 	announceWhen = rand(announceWhen, announceWhen + 50)
-	spawncount = rand(5, 8)
+	spawncount = rand(2, 8)
 
 /datum/event/spider_infestation/announce()
 	command_alert("Unidentified lifesigns detected coming aboard [station_name()]. Secure any exterior access, including ducting and ventilation.", "Lifesign Alert")

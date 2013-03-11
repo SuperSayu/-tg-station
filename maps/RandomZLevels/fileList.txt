@@ -12,3 +12,7 @@
 #maps/RandomZLevels/wildwest.dmm
 #maps/RandomZLevels/challenge.dmm
 #maps/RandomZLevels/listeningpost.dmm
+#maps/RandomZLevels/arcticwaste.dmm
+
+# This is not for playing on.  It uses the same area names as the main station, which is probably bad for playability.
+#maps/RandomZLevels/Sayustation.dmm

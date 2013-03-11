@@ -1,12 +1,11 @@
 /datum/event_control/gravitational_anomaly
 	name = "Gravitational Anomaly"
 	typepath = /datum/event/gravitational_anomaly
-	max_occurrences = 5
+	max_occurrences = 3
 	weight = 2
 
 /datum/event/gravitational_anomaly
 	startWhen = 10
-
 	var/obj/effect/bhole/blackhole
 
 /datum/event/gravitational_anomaly/announce()

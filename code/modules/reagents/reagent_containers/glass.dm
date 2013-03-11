@@ -29,16 +29,185 @@
 		/mob/living/simple_animal/cow,
 		/mob/living/simple_animal/hostile/retaliate/goat
 	)
+	var/reestimate = 1
+	var/identify_probability = 50
+	var/list/estimate = list()
 
+	// Chemical estimation by SuperSayu
+	// Why is everyone on this station able to identify every damn chemical by eye?
+	// Use the damn PDA carts or chemmasters.
+
+	on_reagent_change()
+		..()
+		reestimate = 1
+
+	verb/stir()
+		set src = usr.loc
+		if(usr != src.loc)
+			return
+		if(reagents && reagents.reagent_list.len)
+			usr.visible_message("[usr] swishes the contents of the [src] around for a moment.","\blue You swirl the [src] and wait for the contents to settle.")
+			reestimate = 1
+
+	proc/buildEstimate()
+		if(!reestimate) return
+		estimate = list()
+		reestimate = 0
+
+		if(!reagents || !reagents.reagent_list.len)
+			estimate += "Nothing."
+			return
+
+		var/volSolid = 0
+		var/volLiquid = 0
+		var/volGas = 0
+		var/revealSolids = 1
+		var/revealLiquids = 1
+		var/revealGasses = 1
+		var/list/solids = list()
+		var/list/liquids = list()
+		var/list/gasses = list()
+		for(var/datum/reagent/R in reagents.reagent_list)
+			switch(R.reagent_state)
+				if(SOLID)
+					volSolid += R.volume
+					solids += R
+					if(!prob(identify_probability)) // it becomes harder to identify a compound
+						revealSolids = 0			// when there are several of the same state of matter
+				if(LIQUID)							// eg picking out one solid in four solids,
+					volLiquid += R.volume			// compared to one solid in one gas
+					liquids+= R
+					if(!prob(identify_probability))
+						revealLiquids = 0
+				if(GAS)
+					volGas += R.volume
+					gasses += R
+					if(!prob(identify_probability))
+						revealGasses = 0
+
+		var/approxchems = solids.len + liquids.len + gasses.len
+
+		var/approxvolume = round(reagents.total_volume / 5) * 5
+		volSolid = round(volSolid / 5) * 5
+		volLiquid = round(volLiquid / 5) * 5
+		volGas = round(volGas / 5) * 5
+		if((volSolid + volLiquid + volGas) == 0)
+			estimate +="A tiny amount of material."
+			return
+
+		if(!solids.len) revealSolids = 0
+		if(!liquids.len) revealLiquids = 0
+		if(!gasses.len) revealGasses = 0
+
+		var/list/matterStates = list("a solid", "a liquid", "a gas")
+
+		//Only one chemical to report
+		if(approxchems == 1)
+			// plus here is used to combine lists / boolean expressions in a way that doesn't require advanced logic
+			var/datum/reagent/R = pick(solids + liquids + gasses)
+			var/reveal = revealSolids + revealLiquids + revealGasses
+			if(reveal)
+				estimate += "[approxvolume] units of [R.name], [matterStates[R.reagent_state]]." // Chemical X, a gas
+			else
+				estimate += "[approxvolume] units of [matterStates[R.reagent_state]]."
+			return
+
+		//Multiple chemicals in one beaker / bottle
+		estimate += "[approxvolume] units of [approxchems] chemical\s"
+		if(volSolid > 0)
+			//Only one of this state of matter
+			if(solids.len == 1)
+				var/datum/reagent/R = solids[1]
+				if(!revealSolids)
+					estimate += "[volSolid] units of a solid."
+				else
+					estimate += "[volSolid] units of [R.name], a solid."
+			else
+				if(!revealSolids)
+					estimate += "[solids.len] types of solids, totaling [volSolid] units."
+				else
+					for(var/datum/reagent/R in solids)
+						estimate += "[round(R.volume)] units of [R.name], a solid."
+
+		if(volLiquid > 0)
+			if(liquids.len == 1)
+				var/datum/reagent/R = liquids[1]
+				if(!revealLiquids)
+					estimate += "[volLiquid] units of a liquid."
+				else
+					estimate += "[volLiquid] units of [R.name], a liquid."
+			else
+				if(!revealLiquids)
+					estimate += "[liquids.len] types of liquids, totaling [volLiquid] units."
+				else
+					for(var/datum/reagent/R in liquids)
+						estimate += "[round(R.volume)] units of [R.name], a liquid."
+		if(volGas > 0)
+			if(gasses.len == 1)
+				var/datum/reagent/R = gasses[1]
+				if(!revealGasses)
+					estimate += "[volGas] units of a gas."
+				else
+					estimate += "[volGas] units of [R.name], a gas."
+			else
+				if(!revealGasses)
+					estimate += "[gasses.len] types of gasses, totaling [volGas] units."
+				else
+					for(var/datum/reagent/R in gasses)
+						estimate += "[round(R.volume)]  units of [R.name], a gas."
 	examine()
 		set src in view()
 		..()
-		if(!(usr in view(2)) && usr != loc)
-			return
-		if(reagents && reagents.reagent_list.len)
-			usr << "It contains:"
-			for(var/datum/reagent/R in reagents.reagent_list)
-				usr << "[R.volume] units of [R.name]"
+		var/list/matterStates = list("a solid", "a liquid", "a gas")
+
+		//Robots: Awesome (also ghosts)
+		if(istype(usr,/mob/living/silicon/robot) || istype(usr,/mob/dead/observer))
+			usr << "\blue It contains:"
+			if(reagents && reagents.reagent_list.len)
+				for(var/datum/reagent/R in reagents.reagent_list)
+					usr << "\blue [R.volume] units of [R.name], [matterStates[R.reagent_state]]."
+			else
+				usr << "\blue Nothing."
+
+		//Humans: Fallible eyes
+		else if(istype(usr,/mob/living/carbon/human) && ((usr in view(1)) || usr==src.loc))
+			if(reestimate)
+				buildEstimate()
+
+			var/mob/living/carbon/human/H = usr
+			var/guessword = pick("estimate","think","believe","guess","guesstimate")
+
+			if(H.confused > 5 || H.hallucination || prob(1)) // why am I doing this
+				var/nonsense = pick("evil", "ponies", "justice", "God", "bananas", "spiders", "owls", "Pun-Pun", "the finest wine imaginable", "love", "a singularity", "farts","time","space","bananium ore")
+				usr << "\blue You [guessword] it contains [rand(-5,reagents.maximum_volume + 5)] units of [nonsense]."
+				return
+
+			if(identify_probability >= 50 && H.glasses && (istype(H.glasses,/obj/item/clothing/glasses/science) || istype(H.glasses,/obj/item/clothing/glasses/hud/health)))
+				usr << "\blue It contains:"
+				if(reagents && reagents.reagent_list.len)
+					for(var/datum/reagent/R in reagents.reagent_list)
+						usr << "\blue [R.volume] units of [R.name], [matterStates[R.reagent_state]]."
+				else
+					usr << "\blue Nothing."
+			else
+				usr << "\blue You [guessword] it contains:"
+				for(var/str in estimate)
+					usr << "\blue [str]"
+
+		//Other creatures, estimates from far away, etc
+		else
+			if(!reagents || reagents.total_volume==0)
+				usr << "\blue \The [src] is empty!"
+			else if (reagents.total_volume<=src.volume/4)
+				usr << "\blue \The [src] is almost empty!"
+			else if (reagents.total_volume<=src.volume*0.66)
+				usr << "\blue \The [src] is half full!"
+			else if (reagents.total_volume<=src.volume*0.90)
+				usr << "\blue \The [src] is almost full!"
+			else
+				usr << "\blue \The [src] is full!"
+
+
 
 	afterattack(obj/target, mob/user , flag)
 		for(var/type in can_be_placed_into)
@@ -105,9 +274,11 @@
 	item_state = "beaker"
 	m_amt = 0
 	g_amt = 500
+	identify_probability = 90
 
 	on_reagent_change()
 		update_icon()
+		..()
 
 	pickup(mob/user)
 		..()
@@ -181,6 +352,7 @@
 	possible_transfer_amounts = list(10,20,30,50,70)
 	volume = 70
 	flags = FPRINT | OPENCONTAINER
+	identify_probability = 30
 
 	attackby(var/obj/D, mob/user as mob)
 		if(isprox(D))

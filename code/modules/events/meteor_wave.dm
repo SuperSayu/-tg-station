@@ -1,7 +1,7 @@
 /datum/event_control/meteor_wave
 	name = "Meteor Wave"
 	typepath = /datum/event/meteor_wave
-	weight = 5
+	weight = 2
 	max_occurrences = 3
 
 /datum/event/meteor_wave
@@ -14,5 +14,5 @@
 
 
 /datum/event/meteor_wave/tick()
-	if(IsMultiple(activeFor, 3))
+	if(IsMultiple(activeFor, 6))
 		spawn_meteors(5)

@@ -15,6 +15,10 @@
 	throw_speed = 2
 	throw_range = 8
 	var/empty = 0
+	attackby(obj/item/W as obj, mob/user as mob)
+		if(istype(W,/obj/item/weapon/packageWrap)) // avoid alert
+			return
+		..()
 
 
 /obj/item/weapon/storage/firstaid/fire

@@ -1,14 +1,13 @@
 /datum/event_control/energetic_flux
-	name = "Energetic Flux"
-	typepath = /datum/event/energetic_flux
+	name 			= "Energetic Flux"
+	typepath 		= /datum/event/energetic_flux
 	max_occurrences = 2
-	weight = 15
+	weight 			= 5
+	minimumCrew		= 5
 
 /datum/event/energetic_flux
 	startWhen	= 30
-
 	var/area/impact_area
-
 
 /datum/event/energetic_flux/setup()
 	var/list/safe_areas = list(
@@ -32,7 +31,6 @@
 	var/list/danger_areas = list(
 	/area/engine/break_room,
 	/area/engine/chiefs_office)
-
 
 	impact_area = locate(pick((the_station_areas - safe_areas) + danger_areas))	//need to locate() as it's just a list of paths.
 

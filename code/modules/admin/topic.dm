@@ -1660,9 +1660,6 @@
 					//ticker.mode.forge_traitor_objectives(H.mind)
 					ticker.mode.finalize_traitor(H.mind)
 				for(var/mob/living/silicon/A in player_list)
-					if(A.stat == 2 || !A.client || !A.mind) continue
-					if(ispAI(A)) continue
-					else if(is_special_character(A)) continue
 					ticker.mode.traitors += A.mind
 					A.mind.special_role = "traitor"
 					var/datum/objective/new_objective = new
@@ -1817,8 +1814,28 @@
 			if("radiation")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","R")
-				message_admins("[key_name_admin(usr)] has has irradiated the station", 1)
+				message_admins("[key_name_admin(usr)] has caused normal radiation", 1)
 				new /datum/event/radiation_storm(overrides)
+			if("rad_gswap")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","RG")
+				message_admins("[key_name_admin(usr)] has caused gender-bending radiation", 1)
+				new /datum/event/radiation_storm/gswap
+			if("rad_pota")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","RP")
+				message_admins("[key_name_admin(usr)] has caused planet of the apes radiation", 1)
+				new /datum/event/radiation_storm/pota
+			if("rad_ffour")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","RF")
+				message_admins("[key_name_admin(usr)] has caused fantastic four radiation", 1)
+				new /datum/event/radiation_storm/ffour
+			if("rad_healing")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","RH")
+				message_admins("[key_name_admin(usr)] has caused healing radiation", 1)
+				new /datum/event/radiation_storm/healing
 			if("immovable")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","IR")

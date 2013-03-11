@@ -113,8 +113,6 @@
 /obj/item/weapon/reagent_containers/food/snacks/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W,/obj/item/weapon/storage))
 		..() // -> item/attackby()
-	if(istype(W,/obj/item/weapon/storage))
-		..() // -> item/attackby()
 	if((slices_num <= 0 || !slices_num) || !slice_path)
 		return 1
 	var/inaccurate = 0
@@ -419,6 +417,23 @@
 			usr << "<span class='notice'>You colour [src] [clr].</span>"
 			icon_state = "egg-[clr]"
 			color = clr
+		else
+			..()
+	HasEntered(AM as mob|obj)
+		if(istype(AM,/mob/living/carbon/human) && prob(50))
+			var/obj/effect/decal/cleanable/egg_smudge/ES = new(src.loc)
+			ES.pixel_x = pixel_x
+			ES.pixel_y = pixel_y
+			src.reagents.reaction(AM, TOUCH)
+			visible_message("\blue [AM] steps on \an [src]","You step on \an [src], breaking it.")
+			del src
+		else if(istype(AM,/mob/living/simple_animal/cow) && prob(25))
+			var/obj/effect/decal/cleanable/egg_smudge/ES = new(src.loc)
+			ES.pixel_x = pixel_x
+			ES.pixel_y = pixel_y
+			src.reagents.reaction(AM, TOUCH)
+			visible_message("\blue [AM] steps on \an [src]","You step on \an [src], breaking it.")
+			del src
 		else
 			..()
 

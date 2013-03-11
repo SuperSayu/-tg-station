@@ -309,7 +309,8 @@
 	newavail = 0
 
 
-	viewload = 0.8*viewload + 0.2*load
+	//viewload = 0.8*viewload + 0.2*load
+	viewload = load
 
 	viewload = round(viewload)
 

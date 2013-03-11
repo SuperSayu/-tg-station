@@ -1,15 +1,15 @@
 /datum/event_control/wormholes
-	name = "Wormholes"
-	typepath = /datum/event/wormholes
+	name 			= "Wormholes"
+	typepath 		= /datum/event/wormholes
 	max_occurrences = 3
-	weight = 2
+	weight 			= 8
 
 /datum/event/wormholes
-	announceWhen = 10
-	endWhen = 60
+	announceWhen 			= 10
+	endWhen 				= 60
 
-	var/list/wormholes = list()
-	var/shift_frequency = 3
+	var/list/wormholes 		= list()
+	var/shift_frequency 	= 3
 	var/number_of_wormholes = 1000
 
 /datum/event/wormholes/setup()

@@ -1,7 +1,7 @@
 /datum/event_control/brand_intelligence
-	name = "Brand Intelligence"
-	typepath = /datum/event/brand_intelligence
-	weight = 5
+	name 			= "Brand Intelligence"
+	typepath 		= /datum/event/brand_intelligence
+	weight 			= 3
 	max_occurrences = 1
 
 /datum/event/brand_intelligence

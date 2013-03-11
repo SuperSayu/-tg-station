@@ -240,7 +240,7 @@
 	var/energy = 0
 	var/max_energy = 1000
 
-/mob/living/simple_animal/constructbehemoth/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/mob/living/simple_animal/construct/behemoth/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(O.force)
 		if(O.force >= 11)
 			var/damage = O.force

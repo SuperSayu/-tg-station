@@ -110,17 +110,10 @@
 
 		var/time = time2text(world.realtime,"hh:mm:ss")
 		var/turf/T = get_turf(src)
-		lastsignalers.Add("[time] <B>:</B> [usr.key] used [src] @ location ([T.x],[T.y],[T.z]) <B>:</B> [format_frequency(frequency)]/[code]")
+		if(usr)
+			lastsignalers.Add("[time] <B>:</B> [usr.key] used [src] @ location ([T.x],[T.y],[T.z]) <B>:</B> [format_frequency(frequency)]/[code]")
 
 		return
-/*
-		for(var/obj/item/device/assembly/signaler/S in world)
-			if(!S)	continue
-			if(S == src)	continue
-			if((S.frequency == src.frequency) && (S.code == src.code))
-				spawn(0)
-					if(S)	S.pulse(0)
-		return 0*/
 
 
 	pulse(var/radio = 0)
@@ -151,7 +144,7 @@
 		return
 
 // Embedded signaller used in grenade construction.
-// It's necessary because the signaler doens't have an off state.
+// It's necessary because the signaler doesn't have an off state.
 // Generated during grenade construction.  -Sayu
 /obj/item/device/assembly/signaler/reciever
 	var/on = 0

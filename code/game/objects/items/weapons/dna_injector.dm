@@ -51,11 +51,13 @@
 				M.dna.struc_enzymes = setblock(M.dna.struc_enzymes,block,dna,3)
 				domutcheck(M, null,1)
 				uses--
-
-	spawn(0)//this prevents the collapse of space-time continuum
-		if (user)
-			user.drop_from_inventory(src)
-		del(src)
+	else
+		uses--
+	if(!uses)
+		spawn(0)//this prevents the collapse of space-time continuum
+			if(user)
+				user.drop_from_inventory(src)
+			del(src)
 	return uses
 
 /obj/item/weapon/dnainjector/attack(mob/M as mob, mob/user as mob)
@@ -149,6 +151,7 @@
 	desc = "This will make you big and strong, but give you a bad skin condition."
 	dnatype = "se"
 	dna = "FED"
+	uses = 2
 	//block = 2
 	New()
 		..()
@@ -159,6 +162,7 @@
 	desc = "Finally you can see what the Captain does."
 	dnatype = "se"
 	dna = "FED"
+	uses = 2
 	//block = 8
 	New()
 		..()
@@ -280,6 +284,7 @@
 	desc = "Gives you fire."
 	dnatype = "se"
 	dna = "FED"
+	uses = 2
 	//block = 10
 	New()
 		..()
@@ -320,6 +325,7 @@
 	desc = "Super brain man!"
 	dnatype = "se"
 	dna = "FED"
+	uses = 2
 	//block = 12
 	New()
 		..()

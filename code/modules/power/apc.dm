@@ -961,16 +961,27 @@
 			lighting = autoset(lighting, 0)
 			environ = autoset(environ, 0)
 			area.poweralert(0, src)
+		else if(cell.percent() < 10)			// <10%, even if charging; this prevents some light flickering
+			equipment = autoset(equipment, 2)
+			lighting = autoset(lighting, 2)
+			environ = autoset(environ, 1)
+			area.poweralert(0, src)
 		else if(cell.percent() < 15 && longtermpower < 0)	// <15%, turn off lighting & equipment
 			equipment = autoset(equipment, 2)
 			lighting = autoset(lighting, 2)
 			environ = autoset(environ, 1)
 			area.poweralert(0, src)
+		else if(cell.percent() < 20 && longtermpower < 6)	// <20% and charging slowly: do not turn on the lights
+			equipment = autoset(equipment, 1)				// This is driven mostly by lag concerns
+			//lighting: Not altered here
+			environ = autoset(environ, 1)
+			area.poweralert(1, src)
 		else if(cell.percent() < 30 && longtermpower < 0)			// <30%, turn off equipment
 			equipment = autoset(equipment, 2)
 			lighting = autoset(lighting, 1)
 			environ = autoset(environ, 1)
 			area.poweralert(0, src)
+
 		else									// otherwise all can be on
 			equipment = autoset(equipment, 1)
 			lighting = autoset(lighting, 1)
@@ -988,7 +999,7 @@
 				add_load(ch) // Removes the power we're taking from the grid
 				cell.give(ch) // actually recharge the cell
 */
-				var/ch = min(perapc*CELLRATE, (cell.maxcharge - cell.charge), (cell.maxcharge*CHARGELEVEL))
+				var/ch = min(perapc*CELLRATE*0.95, (cell.maxcharge - cell.charge), (cell.maxcharge*CHARGELEVEL))
 				add_load(ch/CELLRATE) // Removes the power we're taking from the grid
 				cell.give(ch) // actually recharge the cell
 
@@ -1003,19 +1014,28 @@
 
 		if(chargemode)
 			if(!charging)
-				if(excess > cell.maxcharge*CHARGELEVEL)
+				var/uptick = 0	// We have enough, this tick.
+				if(excess > (cell.charge*CHARGELEVEL))
+					uptick = 1
 					chargecount++
-				else
-					chargecount = 0
+				else if(chargecount > 1)
+					chargecount -= 2
+					uptick = 0
 
-				if(chargecount == 10)
-
-					chargecount = 0
-					charging = 1
+				if(uptick && prob(chargecount*10))	//Staggering the times that APCs start charging.
+					chargecount = 5					// This is in the perhaps vain hope that when restoring power,
+					charging = 1					// everything doesn't flip on and off like derps.
+			else if(charging == 1) // Chance to turn off so that everything doesn't flip off at once
+				if(excess < cell.maxcharge)
+					// The higher the charge, the more likely to switch off
+					if(prob(100 * (1 - (cell.charge/cell.maxcharge))))
+						charging = 0 // 2 only if fully charged, it's not here
+						chargecount--
 
 		else // chargemode off
 			charging = 0
-			chargecount = 0
+			if(chargecount>0)
+				chargecount--
 
 	else // no cell, switch everything off
 

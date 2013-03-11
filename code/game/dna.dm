@@ -205,17 +205,23 @@
 		temp1 = copytext(t,2,u+1)
 	return temp1
 
+
+#define HIGHCHANCE prob((rs*10)+rd)
+#define MEDCHANCE prob((rs*10))
+#define LOWCHANCE prob((rs*10)-rd)
+#define TINYCHANCE prob((rs*5)+rd)
+
 /proc/miniscramble(input,rs,rd)
 	var/output
 	output = null
 	if (input == "C" || input == "D" || input == "E" || input == "F")
-		output = pick(prob((rs*10));"4",prob((rs*10));"5",prob((rs*10));"6",prob((rs*10));"7",prob((rs*5)+(rd));"0",prob((rs*5)+(rd));"1",prob((rs*10)-(rd));"2",prob((rs*10)-(rd));"3")
+		output = pick(MEDCHANCE;"4",MEDCHANCE;"5",MEDCHANCE;"6",MEDCHANCE;"7",TINYCHANCE;"0",TINYCHANCE;"1",LOWCHANCE;"2",LOWCHANCE;"3")
 	if (input == "8" || input == "9" || input == "A" || input == "B")
-		output = pick(prob((rs*10));"4",prob((rs*10));"5",prob((rs*10));"A",prob((rs*10));"B",prob((rs*5)+(rd));"C",prob((rs*5)+(rd));"D",prob((rs*5)+(rd));"2",prob((rs*5)+(rd));"3")
+		output = pick(MEDCHANCE;"4",MEDCHANCE;"5",MEDCHANCE;"A",MEDCHANCE;"B",TINYCHANCE;"C",TINYCHANCE;"D",TINYCHANCE;"2",TINYCHANCE;"3")
 	if (input == "4" || input == "5" || input == "6" || input == "7")
-		output = pick(prob((rs*10));"4",prob((rs*10));"5",prob((rs*10));"A",prob((rs*10));"B",prob((rs*5)+(rd));"C",prob((rs*5)+(rd));"D",prob((rs*5)+(rd));"2",prob((rs*5)+(rd));"3")
+		output = pick(MEDCHANCE;"4",MEDCHANCE;"5",MEDCHANCE;"A",MEDCHANCE;"B",TINYCHANCE;"C",TINYCHANCE;"D",TINYCHANCE;"2",TINYCHANCE;"3")
 	if (input == "0" || input == "1" || input == "2" || input == "3")
-		output = pick(prob((rs*10));"8",prob((rs*10));"9",prob((rs*10));"A",prob((rs*10));"B",prob((rs*10)-(rd));"C",prob((rs*10)-(rd));"D",prob((rs*5)+(rd));"E",prob((rs*5)+(rd));"F")
+		output = pick(MEDCHANCE;"8",MEDCHANCE;"9",MEDCHANCE;"A",MEDCHANCE;"B",LOWCHANCE;"C",LOWCHANCE;"D",TINYCHANCE;"E",TINYCHANCE;"F")
 	if (!output) output = "5"
 	return output
 
@@ -225,42 +231,46 @@
 	var/output = null
 	switch(input)
 		if("0")
-			output = pick(prob((rs*10)+(rd));"0",prob((rs*10)+(rd));"1",prob((rs*10));"2",prob((rs*10)-(rd));"3")
+			output = pick(HIGHCHANCE;"0",HIGHCHANCE;"1",MEDCHANCE;"2",LOWCHANCE;"3")
 		if("1")
-			output = pick(prob((rs*10)+(rd));"0",prob((rs*10)+(rd));"1",prob((rs*10)+(rd));"2",prob((rs*10));"3",prob((rs*10)-(rd));"4")
+			output = pick(HIGHCHANCE;"0",HIGHCHANCE;"1",HIGHCHANCE;"2",MEDCHANCE;"3",LOWCHANCE;"4")
 		if("2")
-			output = pick(prob((rs*10));"0",prob((rs*10)+(rd));"1",prob((rs*10)+(rd));"2",prob((rs*10)+(rd));"3",prob((rs*10));"4",prob((rs*10)-(rd));"5")
+			output = pick(MEDCHANCE;"0",HIGHCHANCE;"1",HIGHCHANCE;"2",HIGHCHANCE;"3",MEDCHANCE;"4",LOWCHANCE;"5")
 		if("3")
-			output = pick(prob((rs*10)-(rd));"0",prob((rs*10));"1",prob((rs*10)+(rd));"2",prob((rs*10)+(rd));"3",prob((rs*10)+(rd));"4",prob((rs*10));"5",prob((rs*10)-(rd));"6")
+			output = pick(LOWCHANCE;"0",MEDCHANCE;"1",HIGHCHANCE;"2",HIGHCHANCE;"3",HIGHCHANCE;"4",MEDCHANCE;"5",LOWCHANCE;"6")
 		if("4")
-			output = pick(prob((rs*10)-(rd));"1",prob((rs*10));"2",prob((rs*10)+(rd));"3",prob((rs*10)+(rd));"4",prob((rs*10)+(rd));"5",prob((rs*10));"6",prob((rs*10)-(rd));"7")
+			output = pick(LOWCHANCE;"1",MEDCHANCE;"2",HIGHCHANCE;"3",HIGHCHANCE;"4",HIGHCHANCE;"5",MEDCHANCE;"6",LOWCHANCE;"7")
 		if("5")
-			output = pick(prob((rs*10)-(rd));"2",prob((rs*10));"3",prob((rs*10)+(rd));"4",prob((rs*10)+(rd));"5",prob((rs*10)+(rd));"6",prob((rs*10));"7",prob((rs*10)-(rd));"8")
+			output = pick(LOWCHANCE;"2",MEDCHANCE;"3",HIGHCHANCE;"4",HIGHCHANCE;"5",HIGHCHANCE;"6",MEDCHANCE;"7",LOWCHANCE;"8")
 		if("6")
-			output = pick(prob((rs*10)-(rd));"3",prob((rs*10));"4",prob((rs*10)+(rd));"5",prob((rs*10)+(rd));"6",prob((rs*10)+(rd));"7",prob((rs*10));"8",prob((rs*10)-(rd));"9")
+			output = pick(LOWCHANCE;"3",MEDCHANCE;"4",HIGHCHANCE;"5",HIGHCHANCE;"6",HIGHCHANCE;"7",MEDCHANCE;"8",LOWCHANCE;"9")
 		if("7")
-			output = pick(prob((rs*10)-(rd));"4",prob((rs*10));"5",prob((rs*10)+(rd));"6",prob((rs*10)+(rd));"7",prob((rs*10)+(rd));"8",prob((rs*10));"9",prob((rs*10)-(rd));"A")
+			output = pick(LOWCHANCE;"4",MEDCHANCE;"5",HIGHCHANCE;"6",HIGHCHANCE;"7",HIGHCHANCE;"8",MEDCHANCE;"9",LOWCHANCE;"A")
 		if("8")
-			output = pick(prob((rs*10)-(rd));"5",prob((rs*10));"6",prob((rs*10)+(rd));"7",prob((rs*10)+(rd));"8",prob((rs*10)+(rd));"9",prob((rs*10));"A",prob((rs*10)-(rd));"B")
+			output = pick(LOWCHANCE;"5",MEDCHANCE;"6",HIGHCHANCE;"7",HIGHCHANCE;"8",HIGHCHANCE;"9",MEDCHANCE;"A",LOWCHANCE;"B")
 		if("9")
-			output = pick(prob((rs*10)-(rd));"6",prob((rs*10));"7",prob((rs*10)+(rd));"8",prob((rs*10)+(rd));"9",prob((rs*10)+(rd));"A",prob((rs*10));"B",prob((rs*10)-(rd));"C")
+			output = pick(LOWCHANCE;"6",MEDCHANCE;"7",HIGHCHANCE;"8",HIGHCHANCE;"9",HIGHCHANCE;"A",MEDCHANCE;"B",LOWCHANCE;"C")
 		if("10")//A
-			output = pick(prob((rs*10)-(rd));"7",prob((rs*10));"8",prob((rs*10)+(rd));"9",prob((rs*10)+(rd));"A",prob((rs*10)+(rd));"B",prob((rs*10));"C",prob((rs*10)-(rd));"D")
+			output = pick(LOWCHANCE;"7",MEDCHANCE;"8",HIGHCHANCE;"9",HIGHCHANCE;"A",HIGHCHANCE;"B",MEDCHANCE;"C",LOWCHANCE;"D")
 		if("11")//B
-			output = pick(prob((rs*10)-(rd));"8",prob((rs*10));"9",prob((rs*10)+(rd));"A",prob((rs*10)+(rd));"B",prob((rs*10)+(rd));"C",prob((rs*10));"D",prob((rs*10)-(rd));"E")
+			output = pick(LOWCHANCE;"8",MEDCHANCE;"9",HIGHCHANCE;"A",HIGHCHANCE;"B",HIGHCHANCE;"C",MEDCHANCE;"D",LOWCHANCE;"E")
 		if("12")//C
-			output = pick(prob((rs*10)-(rd));"9",prob((rs*10));"A",prob((rs*10)+(rd));"B",prob((rs*10)+(rd));"C",prob((rs*10)+(rd));"D",prob((rs*10));"E",prob((rs*10)-(rd));"F")
+			output = pick(LOWCHANCE;"9",MEDCHANCE;"A",HIGHCHANCE;"B",HIGHCHANCE;"C",HIGHCHANCE;"D",MEDCHANCE;"E",LOWCHANCE;"F")
 		if("13")//D
-			output = pick(prob((rs*10)-(rd));"A",prob((rs*10));"B",prob((rs*10)+(rd));"C",prob((rs*10)+(rd));"D",prob((rs*10)+(rd));"E",prob((rs*10));"F")
+			output = pick(LOWCHANCE;"A",MEDCHANCE;"B",HIGHCHANCE;"C",HIGHCHANCE;"D",HIGHCHANCE;"E",MEDCHANCE;"F")
 		if("14")//E
-			output = pick(prob((rs*10)-(rd));"B",prob((rs*10));"C",prob((rs*10)+(rd));"D",prob((rs*10)+(rd));"E",prob((rs*10)+(rd));"F")
+			output = pick(LOWCHANCE;"B",MEDCHANCE;"C",HIGHCHANCE;"D",HIGHCHANCE;"E",HIGHCHANCE;"F")
 		if("15")//F
-			output = pick(prob((rs*10)-(rd));"C",prob((rs*10));"D",prob((rs*10)+(rd));"E",prob((rs*10)+(rd));"F")
+			output = pick(LOWCHANCE;"C",MEDCHANCE;"D",HIGHCHANCE;"E",HIGHCHANCE;"F")
 
 	if(!input || !output) //How did this happen?
 		output = "8"
 
 	return output
+#undef HIGHCHANCE
+#undef MEDCHANCE
+#undef LOWCHANCE
+#undef TINYCHANCE
 
 /proc/isblockon(hnumber, bnumber , var/UI = 0)
 
@@ -406,14 +416,14 @@
 	if (isblockon(getblock(M.dna.struc_enzymes, 1,3),1))
 		M.disabilities |= NEARSIGHTED
 		M << "\red Your eyes feel strange."
-	if (isblockon(getblock(M.dna.struc_enzymes, HULKBLOCK,3),2))
+	if (isblockon(getblock(M.dna.struc_enzymes, HULKBLOCK,3),HULKBLOCK))
 		if(inj || prob(10))
 			M << "\blue Your muscles hurt."
 			M.mutations.Add(HULK)
 	if (isblockon(getblock(M.dna.struc_enzymes, 3,3),3))
 		M.disabilities |= EPILEPSY
 		M << "\red You get a headache."
-	if (isblockon(getblock(M.dna.struc_enzymes, FAKEBLOCK,3),4))
+	if (isblockon(getblock(M.dna.struc_enzymes, FAKEBLOCK,3),FAKEBLOCK))
 		M << "\red You feel strange."
 		if (prob(95))
 			if(prob(50))
@@ -425,13 +435,13 @@
 	if (isblockon(getblock(M.dna.struc_enzymes, 5,3),5))
 		M.disabilities |= COUGHING
 		M << "\red You start coughing."
-	if (isblockon(getblock(M.dna.struc_enzymes, CLUMSYBLOCK,3),6))
+	if (isblockon(getblock(M.dna.struc_enzymes, CLUMSYBLOCK,3),CLUMSYBLOCK))
 		M << "\red You feel lightheaded."
 		M.mutations.Add(CLUMSY)
 	if (isblockon(getblock(M.dna.struc_enzymes, 7,3),7))
 		M.disabilities |= TOURETTES
 		M << "\red You twitch."
-	if (isblockon(getblock(M.dna.struc_enzymes, XRAYBLOCK,3),8))
+	if (isblockon(getblock(M.dna.struc_enzymes, XRAYBLOCK,3),XRAYBLOCK))
 		if(inj || prob(30))
 			M << "\blue The walls suddenly disappear."
 			M.sight |= (SEE_MOBS|SEE_OBJS|SEE_TURFS)
@@ -441,18 +451,18 @@
 	if (isblockon(getblock(M.dna.struc_enzymes, 9,3),9))
 		M.disabilities |= NERVOUS
 		M << "\red You feel nervous."
-	if (isblockon(getblock(M.dna.struc_enzymes, FIREBLOCK,3),10))
+	if (isblockon(getblock(M.dna.struc_enzymes, FIREBLOCK,3),FIREBLOCK))
 		if(inj || prob(30))
 			M << "\blue Your body feels warm."
 			M.mutations.Add(COLD_RESISTANCE)
-	if (isblockon(getblock(M.dna.struc_enzymes, BLINDBLOCK,3),11))
+	if (isblockon(getblock(M.dna.struc_enzymes, BLINDBLOCK,3),BLINDBLOCK))
 		M.sdisabilities |= BLIND
 		M << "\red You can't seem to see anything."
-	if (isblockon(getblock(M.dna.struc_enzymes, TELEBLOCK,3),12))
+	if (isblockon(getblock(M.dna.struc_enzymes, TELEBLOCK,3),TELEBLOCK))
 		if(inj || prob(25))
 			M << "\blue You feel smarter."
 			M.mutations.Add(TK)
-	if (isblockon(getblock(M.dna.struc_enzymes, DEAFBLOCK,3),13))
+	if (isblockon(getblock(M.dna.struc_enzymes, DEAFBLOCK,3),DEAFBLOCK))
 		M.sdisabilities |= DEAF
 		M.ear_deaf = 1
 		M << "\red You can't seem to hear anything..."
@@ -593,7 +603,10 @@
 			C.occupant = O
 			connected = null
 
-		var/i
+		var/i = 0
+		if(O.dna.real_name && !findtextEx(O.dna.real_name, "monkey (") && O.dna.real_name != "unknown")
+			O.real_name = O.dna.real_name
+			i++
 		while (!i)
 			var/randomname
 			if (O.gender == MALE)
@@ -604,6 +617,8 @@
 				continue
 			else
 				O.real_name = randomname
+				O.dna.real_name = O.real_name
+				O.dna.unique_enzymes = md5(O.real_name)
 				i++
 		updateappearance(O,O.dna.uni_identity)
 		O.take_overall_damage(M.getBruteLoss(), M.getFireLoss())

@@ -22,8 +22,8 @@
 	config_tag = "cult"
 	restricted_jobs = list("Chaplain","AI", "Cyborg", "Security Officer", "Warden", "Detective", "Head of Security", "Captain")
 	protected_jobs = list()
-	required_players = 15
-	required_enemies = 3
+	required_players = 10
+	required_enemies = 2
 	recommended_enemies = 4
 
 	uplink_welcome = "Nar-Sie Uplink Console:"
@@ -41,8 +41,8 @@
 	var/eldergod = 1 //for the summon god objective
 
 	var/const/acolytes_needed = 5 //for the survive objective
-	var/const/min_cultists_to_start = 3
-	var/const/max_cultists_to_start = 4
+	//var/const/min_cultists_to_start = 3
+	//var/const/max_cultists_to_start = 4
 	var/acolytes_survived = 0
 
 
@@ -67,8 +67,13 @@
 		for(var/job in restricted_jobs)//Removing heads and such from the list
 			if(player.assigned_role == job)
 				cultists_possible -= player
+	var/cultist_amount
+	if(player_list.len > (required_players * 2))
+		cultist_amount = recommended_enemies
+	else
+		cultist_amount = required_enemies
 
-	for(var/cultists_number = 1 to max_cultists_to_start)
+	for(var/cultists_number = 1 to cultist_amount)
 		if(!cultists_possible.len)
 			break
 		var/datum/mind/cultist = pick(cultists_possible)

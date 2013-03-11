@@ -33,6 +33,8 @@
 	var/message2
 	var/list/stored_data = list()
 
+	var/list/alert_messages = list() // for signaler cartridges and incoming signals
+
 	engineering
 		name = "Power-ON Cartridge"
 		icon_state = "cart-e"
@@ -267,7 +269,15 @@ Code:
 <a href='byond://?src=\ref[src];choice=Signal Code;scode=-1'>-</a>
 [radio:code]
 <a href='byond://?src=\ref[src];choice=Signal Code;scode=1'>+</a>
-<a href='byond://?src=\ref[src];choice=Signal Code;scode=5'>+</a><br>"}
+<a href='byond://?src=\ref[src];choice=Signal Code;scode=5'>+</a><br><br>"}
+				var/addchange = "Add"
+				if("[radio:code]" in alert_messages)
+					addchange = "Change"
+				menu += "<a href='byond://?src=\ref[src];choice=Signal Add'>[addchange] Alert</a><br>"
+				for(var/key in alert_messages)
+					menu += "<a href='byond://?src=\ref[src];choice=Signal Remove;scode=[key] '>X</a> [key] : <a href='byond://?src=\ref[src];choice=Send Signal;scode=[key]'>[alert_messages[key]]</a><br>"
+
+
 			if (41) //crew manifest
 
 				menu = "<h4><img src=pda_notes.png> Crew Manifest</h4>"
@@ -649,8 +659,14 @@ Code:
 				active3 = S
 
 		if("Send Signal")
+			var/code = href_list["scode"]
+			var/oldcode = radio:code
+			if(isnull(code)) code = oldcode
 			spawn( 0 )
+				radio:code = code
 				radio:send_signal("ACTIVATE")
+				if(radio) // who knows maybe it blew up
+					radio:code = oldcode
 				return
 
 		if("Signal Frequency")
@@ -662,7 +678,14 @@ Code:
 			radio:code = round(radio:code)
 			radio:code = min(100, radio:code)
 			radio:code = max(1, radio:code)
-
+		if("Signal Add")
+			var/key = "[radio:code]"
+			var/msg = input(usr, "Enter a name for this signal:", "Set alert", alert_messages[key]) as text|null
+			if(msg)
+				alert_messages[key]=msg
+		if("Signal Remove")
+			var/key = href_list["scode"]
+			alert_messages -= key
 		if("Status")
 			switch(href_list["statdisp"])
 				if("message")
@@ -685,3 +708,20 @@ Code:
 
 	generate_menu()
 	print_to_host(menu)
+
+/obj/item/weapon/cartridge
+	proc/receive_ping(var/key)
+		var/obj/item/device/pda/P = loc
+		if(key in alert_messages)
+			var/message = alert_messages[key]
+			P.tnote += "<i><b>Signal recieved:</b></i><br>[message]<br>"
+			if (!P.silent)
+				playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
+				for (var/mob/O in hearers(3, P.loc) - P.loc)
+					O.show_message(text("\icon[P] *[P.ttone]*"))
+				if( P.loc && ishuman(P.loc) )
+					var/mob/living/carbon/human/H = P.loc
+					H << "\icon[P] <b>Signal recieved:</b> \"[message]\""
+				P.overlays = null
+				P.overlays += image('icons/obj/pda.dmi', "pda-r")
+

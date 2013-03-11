@@ -491,7 +491,24 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
 		else
 			user << "\red [src] already has seeds in it!"
-
+	else if(istype(O,/obj/item/weapon/storage/bag/seeds))
+		var/obj/item/weapon/storage/bag/seeds/SB = O
+		if(SB.contents.len)
+			var/obj/item/seeds/S = SB.contents[1]
+			if(!planted)
+				SB.remove_from_storage(S,src)
+				user << "You plant [S]."
+				dead = 0
+				myseed = S
+				planted = 1
+				age = 1
+				health = myseed.endurance
+				lastcycle = world.time
+				update_icon()
+			else
+				user << "\red [src] already has seeds in it!"
+		else
+			user << "\red [SB] is empty!" // todo: biodegradable again
 	else if(istype(O, /obj/item/device/analyzer/plant_analyzer))
 		if(planted && myseed)
 			user << "*** <B>[myseed.plantname]</B> ***" //Carn: now reports the plants growing, not the seeds.
