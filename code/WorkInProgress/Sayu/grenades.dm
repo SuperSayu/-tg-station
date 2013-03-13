@@ -355,6 +355,16 @@
 	name = "Maximum Warp"
 	desc = "Spacetime: Nice job breaking it, hero."
 	payload = /obj/item/weapon/grenade/chem_grenade/large/bluespace
+/obj/item/weapon/grenade/clusterbuster/monster
+	name = "The Monster Mash"
+	desc = "It's a graveyeard smash."
+	payload = /obj/item/weapon/grenade/chem_grenade/large/monster
+/obj/item/weapon/grenade/clusterbuster/banquet
+	name = "Bork Bork Bonanza"
+	desc = "Bork bork bork."
+	payload = /obj/item/weapon/grenade/clusterbuster/banquet/child
+	child
+		payload = /obj/item/weapon/grenade/chem_grenade/large/feast
 
 // Mob spawning grenades
 /obj/item/weapon/grenade/clusterbuster/aviary
