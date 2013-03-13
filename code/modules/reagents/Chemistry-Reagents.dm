@@ -149,7 +149,12 @@ datum
 				src = null
 				if(!(volume >= 3)) return
 				//var/datum/disease/D = self.data["virus"]
-				if(!self.data["donor"] || istype(self.data["donor"], /mob/living/carbon/human))
+				if(!self.data)
+					var/obj/effect/decal/cleanable/blood/blood_prop = locate() in T //find some blood here
+					if(!blood_prop) //first blood!
+						blood_prop = new(T)
+
+				else if(!self.data["donor"] || istype(self.data["donor"], /mob/living/carbon/human))
 					var/obj/effect/decal/cleanable/blood/blood_prop = locate() in T //find some blood here
 					if(!blood_prop) //first blood!
 						blood_prop = new(T)

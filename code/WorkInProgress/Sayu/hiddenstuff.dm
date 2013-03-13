@@ -51,33 +51,3 @@
 			var/T = pick(private_stache)
 			new T(src)
 	..()
-
-
-/obj/machinery/vending/sayu/innocuous
-	name = "Admin-o-vend"
-	desc = "This is what we play with when you aren't around."
-
-	product_ads = "Hahahahaha.;You didn't need a soul anyway.;Trust me, they'll love it!;Mwahahahahahaha"
-	products = list(/obj/item/weapon/storage/belt/utility/bluespace = 5, /obj/item/weapon/cell/infinite = 5,/obj/item/weapon/circuitboard/programmable = 5,
-					/obj/item/weapon/circuitboard/mailstation = 5, /obj/item/weapon/circuitboard/mailhub = 2,
-					/obj/item/toy/random = 10, /obj/item/weapon/spellbook = 5, /obj/item/weapon/reagent_containers/glass/bottle/random_chem = 10,
-					/obj/item/weapon/storage/pill_bottle/random_meds = 10, /obj/item/weapon/reagent_containers/food/drinks/bottle/random_drink = 10,
-					/obj/item/weapon/grenade/chem_grenade/meat = 10, /obj/item/weapon/grenade/chem_grenade/dirt = 10, /obj/item/weapon/grenade/chem_grenade/soap = 10,
-					/obj/item/weapon/grenade/clusterbuster/meat = 5, /obj/item/weapon/grenade/clusterbuster/booze = 5, /obj/item/weapon/grenade/clusterbuster/honk = 5,
-					/obj/item/weapon/grenade/clusterbuster/xmas = 5, /obj/item/weapon/grenade/clusterbuster/aviary = 5, /obj/item/weapon/grenade/clusterbuster/fluffy = 5,
-					/obj/item/weapon/grenade/clusterbuster/monkey = 5, /obj/item/weapon/grenade/clusterbuster/soap = 5, /obj/item/weapon/grenade/clusterbuster/dirt = 5,
-					/obj/structure/largecrate/schrodinger = 1, /obj/structure/closet/syndicate/resources/everything = 1,/obj/item/weapon/research = 1)
-
-/obj/machinery/vending/sayu/admin
-	name = "Admin-o-vend"
-	desc = "If you're seeing this, I should probably gib you.  Probably."
-	product_ads = "Hahahahaha.;You didn't need a soul anyway.;Trust me, they'll love it!;Mwahahahahahaha"
-	products = list(/obj/item/toy/random = 10, /obj/structure/largecrate/schrodinger = 5,
-					/obj/item/weapon/reagent_containers/glass/bottle/random_reagent = 10, /obj/item/weapon/reagent_containers/glass/bottle/random_chem = 10, /obj/item/weapon/storage/pill_bottle/random_meds = 10,
-					/obj/item/weapon/reagent_containers/food/drinks/bottle/random_drink = 10, /obj/item/weapon/reagent_containers/food/drinks/bottle/random_reagent = 10,
-					/obj/item/weapon/grenade/chem_grenade/meat = 10,/obj/item/weapon/grenade/chem_grenade/dirt = 10,/obj/item/weapon/grenade/chem_grenade/soap = 10,
-					/obj/item/weapon/grenade/clusterbuster/meat = 5,/obj/item/weapon/grenade/clusterbuster/booze = 5,/obj/item/weapon/grenade/clusterbuster/honk = 5,
-					/obj/item/weapon/grenade/clusterbuster/xmas = 5,/obj/item/weapon/grenade/clusterbuster/soap = 5,/obj/item/weapon/grenade/clusterbuster/dirt = 5,
-					/obj/item/weapon/grenade/clusterbuster/aviary = 5, /obj/item/weapon/grenade/clusterbuster/fluffy = 5, /obj/item/weapon/grenade/clusterbuster/monkey = 5,
-					/obj/item/weapon/grenade/clusterbuster/megadirt = 5,/obj/item/weapon/grenade/clusterbuster/inferno = 2,/obj/item/weapon/grenade/clusterbuster/apocalypse = 1,/obj/item/weapon/grenade/clusterbuster/apocalypse/fake = 2,
-					/obj/item/weapon/storage/belt/utility/bluespace = 5, /obj/item/weapon/storage/belt/utility/bluespace/owlman = 1, /obj/item/weapon/storage/belt/utility/bluespace/admin = 5)

@@ -6,7 +6,7 @@
 //TODO: Take care of people going out of range properly
 //TODO: Improve menus
 //TODO: Mail administration needs its own access.
-//TODO: Mail networking?  Pipes?  Cables?  Radio?
+//TODO: Mail tubes/network: Pipes?  Cables?  Radio?  Magic?
 //TODO: Improved sprites
 
 //TODO: Mail networks?

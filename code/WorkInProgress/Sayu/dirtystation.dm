@@ -1,5 +1,6 @@
 //Janitors!  Janitors, janitors, janitors!
 
+
 // Conspicuously not-recent versions of suspicious cleanables
 
 /obj/effect/decal/cleanable/blood/old
@@ -31,8 +32,18 @@
 		icon *= "#808080"
 
 
+// If my understanding of functions defined in several places is correct, this will run after (or before) the similar function
+// located in code/game/turfs/simulated/floor.dm
+
 /turf/simulated/floor/New()
 	..()
+	MakeDirty()
+
+
+// This code should do all the station-dirtying
+
+/turf/simulated/floor/proc/MakeDirty()
+	//..()
 	if(prob(66) || usr) //usr check to prevent manually created floors from having dirt
 		return			//prob() to keep the rate of creation down and do a fast exit
 
@@ -125,8 +136,11 @@
 			else
 				new/obj/effect/decal/cleanable/blood/old(src)
 		else
-			if(prob(45))
-				new/obj/effect/decal/cleanable/vomit/old(src)
+			if(prob(40))
+				if(istype(A,/area/medical/morgue))
+					new/obj/item/weapon/ectoplasm(src)
+				else
+					new/obj/effect/decal/cleanable/vomit/old(src)
 			else
 				new/obj/effect/decal/cleanable/dirt(src)
 		return
