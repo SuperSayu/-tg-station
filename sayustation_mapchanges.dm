@@ -10,7 +10,7 @@
 	* add Centcom Puppies Room
 	* more maint closets around R&D
 	* solars area near engineering
-	* memorial promenade
+	* memorial promenade - lights, air alarm for escape hall
 
 	? hyronalin dispenser to genetics
 
