@@ -3,6 +3,7 @@
 	typepath 		= /datum/event/brand_intelligence
 	weight 			= 3
 	max_occurrences = 1
+	minimumCrew		= 5
 
 /datum/event/brand_intelligence
 	announceWhen	= 21

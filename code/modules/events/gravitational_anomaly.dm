@@ -1,8 +1,9 @@
 /datum/event_control/gravitational_anomaly
-	name = "Gravitational Anomaly"
-	typepath = /datum/event/gravitational_anomaly
+	name			= "Gravitational Anomaly"
+	typepath		= /datum/event/gravitational_anomaly
 	max_occurrences = 3
-	weight = 2
+	weight			= 2
+	minimumCrew		= 5
 
 /datum/event/gravitational_anomaly
 	startWhen = 10

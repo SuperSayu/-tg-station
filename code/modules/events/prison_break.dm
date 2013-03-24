@@ -1,12 +1,13 @@
 /datum/event_control/prison_break
-	name = "Prison Break"
-	typepath = /datum/event/prison_break
+	name			= "Prison Break"
+	typepath		= /datum/event/prison_break
 	max_occurrences = 2
+	minimumCrew		= 5
 
 /datum/event/prison_break
-	announceWhen = 50
-	endWhen = 20
-	var/list/area/prisonAreas = list()
+	announceWhen	= 50
+	endWhen			= 20
+	var/list/prisonAreas = list()
 
 
 /datum/event/prison_break/setup()

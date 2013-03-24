@@ -1,9 +1,10 @@
 /datum/event_control/carp_migration
-	name = "Carp Migration"
-	typepath = /datum/event/carp_migration
-	weight = 10
-	earliest_start = 6000
-	max_occurrences = 6
+	name				= "Carp Migration"
+	typepath			= /datum/event/carp_migration
+	weight				= 10
+	earliest_start		= 6000
+	max_occurrences		= 6
+	minimumCrew			= 3
 
 /datum/event/carp_migration
 	announceWhen	= 50
@@ -16,6 +17,11 @@
 
 
 /datum/event/carp_migration/start()
+	var/p = 100
+	if(player_list.len <= 3)
+		p = 25
+	else if(player_list.len <= 6)
+		p = 50
 	for(var/obj/effect/landmark/C in landmarks_list)
-		if(C.name == "carpspawn")
+		if(C.name == "carpspawn" && prob(p))
 			new /mob/living/simple_animal/hostile/carp(C.loc)

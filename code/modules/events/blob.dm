@@ -1,8 +1,9 @@
 /datum/event_control/blob
-	name = "Blob"
-	typepath = /datum/event/blob
-	weight = 2
+	name			= "Blob"
+	typepath		= /datum/event/blob
+	weight			= 2
 	max_occurrences = 1
+	minimumCrew		= 5
 
 /datum/event/blob
 	announceWhen	= 12

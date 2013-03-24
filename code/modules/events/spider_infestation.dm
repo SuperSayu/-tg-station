@@ -3,7 +3,7 @@
 	typepath 		= /datum/event/spider_infestation
 	weight 			= 2
 	max_occurrences = 1
-	minimumCrew		= 10
+	minimumCrew		= 5
 
 /datum/event/spider_infestation
 	announceWhen	= 400

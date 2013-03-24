@@ -1,7 +1,7 @@
 /datum/event_control/vent_clog
 	name = "Clogged Vents"
 	typepath = /datum/event/vent_clog
-	weight = 20
+	weight = 40
 	max_occurrences = 50
 
 /datum/event/vent_clog

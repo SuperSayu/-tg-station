@@ -73,7 +73,7 @@
 
 			var/obj/effect/glowshroom/child = new /obj/effect/glowshroom(newLoc)//The baby mushrooms have different stats :3
 			child.potency = max(potency+rand(-3,6), 0)
-			child.yield = max(yield+rand(-1,2), 0)
+			child.yield = max(yield+rand(-2,2), 0)
 			child.delay = max(delay+rand(-30,60), 0)
 			child.endurance = max(endurance+rand(-3,6), 1)
 			child.generation = generation+1

@@ -1,8 +1,9 @@
 /datum/event_control/meteor_wave
-	name = "Meteor Wave"
-	typepath = /datum/event/meteor_wave
-	weight = 2
+	name			= "Meteor Wave"
+	typepath		= /datum/event/meteor_wave
+	weight			= 2
 	max_occurrences = 3
+	minimumCrew		= 5
 
 /datum/event/meteor_wave
 	startWhen		= 6

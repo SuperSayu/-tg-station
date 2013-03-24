@@ -16,7 +16,7 @@ var/global/list/space_surprises = list(		/obj/item/clothing/mask/facehugger				=
 
 var/global/list/spawned_surprises = list()
 
-var/global/max_secret_rooms = 3
+var/global/max_secret_rooms = 4
 
 proc/spawn_room(var/atom/start_loc,var/x_size,var/y_size,var/wall,var/floor , var/clean = 0 , var/name)
 	var/list/room_turfs = list("walls"=list(),"floors"=list())

@@ -3,7 +3,7 @@
 	typepath 		= /datum/event/spacevine
 	weight 			= 8
 	max_occurrences = 3
-	minimumCrew		= 3
+	minimumCrew		= 5
 
 /datum/event/spacevine/start()
 	var/list/turfs = list() //list of all the empty floor turfs in the hallway areas
