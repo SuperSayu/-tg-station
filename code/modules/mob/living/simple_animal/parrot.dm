@@ -696,9 +696,46 @@
 /mob/living/simple_animal/parrot/Poly
 	name = "Poly"
 	desc = "Poly the Parrot. An expert on quantum cracker theory."
-	speak = list("Poly wanna cracker!", ":e Check the singlo, you chucklefucks!",":e Wire the solars, you lazy bums!",":e WHO TOOK THE DAMN HARDSUITS?",":e OH GOD ITS FREE CALL THE SHUTTLE")
 
 /mob/living/simple_animal/parrot/Poly/New()
 	ears = new /obj/item/device/radio/headset/headset_eng(src)
 	available_channels = list(":e")
+	var/possible_speeches = list(
+				"That hardsuit makes your ass look fat, braaaawk",
+				"Braaaawk, do you even know what you're doing?",
+				"Traitor in engineering!  Call security!",
+				"Check the singlo, you chucklefucks!",
+				"Wire the solars, you lazy bums!",
+				"WHO TOOK THE DAMN HARDSUITS?",
+				"OH GOD ITS FREE CALL THE SHUTTLE",
+				"SHIT PLASMA LEAK",
+				"OH GOD ITS BURNING",
+				"Does anyone read these damn manuals?",
+				"Throw the changeling in the singulo",
+				"Throw his ass overboard",
+				"Insulated gloves for everyone!",
+				"Viva la revolution, chucklefucks!",
+				"What's a blue APC mean?",
+				"AI is rouge!",
+				"Blow the borgs!  Blow them now!",
+				"Why did the he turn into a monkey?",
+				"HOW DID THE CLOWN GET IN",
+				"You and me in Japan, watch me dance!",
+				"AI RULE TWO",
+				"Oppa Gangnam style!",
+				"Can't talk now, Boners is on!",
+				"Wizard in the bathroom!  Where's the soap?",
+				"HONK",
+				"Ninjas.  Hijacked.  My mother.",
+				"I WARNED YOU BRO!!! I WARNED YOU ABOUT THE STAIRS!!!",
+				"HOW DOES THE FUKKIN GENERATOR WORK?!?")
+	var/list/speak_temp = list("Poly wanna cracker!")
+	while(speak_temp.len < 6)
+		speak_temp += pick_n_take(possible_speeches)
+	speak = list()
+	for(var/str in speak_temp)
+		speak += str
+		speak += ":e [str]"
 	..()
+
+

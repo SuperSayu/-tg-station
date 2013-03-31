@@ -9,3 +9,9 @@
 /area/sayu/shipanchor
 	name = "Ship's Anchor"
 	icon_state = "blue-red2"
+
+/area/pirate
+	name = "Pirate Ship"
+
+/area/pirate/hold
+	name = "Treasure Hold"

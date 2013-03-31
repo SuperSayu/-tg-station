@@ -351,6 +351,12 @@
 	desc = "For when you really, truly need to kill people."
 	payload = /obj/item/weapon/grenade/chem_grenade/explosion
 
+/obj/item/weapon/grenade/clusterbuster/lube
+	name = "Newton's First Law"
+	desc = "An object in motion remains in motion."
+	payload = /obj/item/weapon/grenade/chem_grenade/lube
+
+
 /obj/item/weapon/grenade/clusterbuster/bluespace
 	name = "Maximum Warp"
 	desc = "Spacetime: Nice job breaking it, hero."

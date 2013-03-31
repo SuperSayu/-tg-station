@@ -201,6 +201,28 @@
 			new/obj/item/weapon/storage/pill_bottle/random_meds(src)
 		return
 
+/obj/structure/closet/crate/secure/chemicals
+	name		= "Chemical Supply Kit"
+	desc		= "Full of basic chemistry supplies."
+	req_access	= list(access_chemistry,access_research)
+
+	New()
+		..()
+		sleep(2)
+		var/global/list/base_chems = list("water","oxygen","nitrogen","hydrogen","potassium","mercury","carbon","chlorine","fluorine","phosphorus","lithium","sulfur","sacid","radium","iron","aluminum","silicon","sugar","ethanol")
+		for(var/chem in base_chems)
+			var/obj/item/weapon/reagent_containers/glass/bottle/B = new(src)
+			B.reagents.add_reagent(chem,B.volume)
+			if(prob(85))
+				var/datum/reagent/r = chemical_reagents_list[chem]
+				B.name	= "[r.name] bottle"
+				B.identify_probability = 100
+			else
+				B.name	= "unlabelled bottle"
+				desc	= "Looks like the label fell off."
+				B.identify_probability = 0
+
+
 /obj/structure/closet/crate/bin/flowers
 	name = "flower barrel"
 	desc = "A bin full of fresh flowers for the bereaved."
@@ -235,13 +257,26 @@
 		return
 
 
+/datum/supply_packs/chemicals
+	name = "Chemistry Starter Kit"
+	contains = list()
+	cost = 150
+	containertype = /obj/structure/closet/crate/secure/chemicals
+	containername = "Chemistry Starter Kit"
+	access = access_research
+	contraband = 1
+
+	New()
+		manifest += "<ul>"
+		manifest += "<li> A basic set of chemical elements for the do-it-yourselfer</li>"
+		manifest += "</ul>"
+
 /datum/supply_packs/randomised/chemicals
 	name = "Grey-market Chemicals Grab Pack"
 	num_contained = 12
 	contains = list(/obj/item/weapon/reagent_containers/glass/bottle/random_chem,
 					/obj/item/weapon/reagent_containers/glass/bottle/random_base_chem,
-					/obj/item/weapon/reagent_containers/food/drinks/bottle/random_drink,
-					/obj/item/weapon/reagent_containers/food/drinks/bottle/random_reagent,
+					/obj/item/weapon/reagent_containers/glass/bottle/random_reagent,
 					/obj/item/weapon/storage/pill_bottle/random_meds)
 	cost = 150
 	containertype = /obj/structure/closet/crate/secure
@@ -253,6 +288,19 @@
 		manifest += "<ul>"
 		manifest += "<li> [num_contained] bottles of unregulated chemicals </li>"
 		manifest += "</ul>"
+
+/datum/supply_packs/randomised/contaband/novelty
+	name = "Colonel Sassacre's Chest of Dautingly Frivolous Weaponry"
+	num_contained	= 2
+	cost = 50
+	contains = list(/obj/item/weapon/sord, /obj/item/weapon/grenade/clusterbuster/banquet/child,
+					/obj/item/weapon/grenade/clusterbuster/aviary, /obj/item/weapon/grenade/chem_grenade/lube,
+					/obj/item/weapon/bikehorn, /obj/item/weapon/reagent_containers/spray/chemsprayer/honkmaster)
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Colonel Sassacre's Chest of Dautingly Frivolous Weaponry"
+	access = access_clown
+	contraband = 1
+
 
 // -------------------------------------
 //          Do not order this.

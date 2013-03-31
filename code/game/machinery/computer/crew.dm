@@ -88,7 +88,7 @@
 				var/damage_report = "(<font color='blue'>[dam1]</font>/<font color='green'>[dam2]</font>/<font color='orange'>[dam3]</font>/<font color='red'>[dam4]</font>)"
 
 				if(ID)
-					log += "<tr><td width='40%'>[ID.registered_name]</td>"
+					log += "<tr><td width='40%'>[ID.registered_name] ([ID.assignment])</td>"
 				else
 					log += "<tr><td width='40%'>Unknown</td>"
 

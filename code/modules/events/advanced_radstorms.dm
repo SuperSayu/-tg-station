@@ -42,7 +42,13 @@
 				spawn(time)
 					if(L != null)
 						updateappearance(L,L.dna.uni_identity)
-						L << "You feel different."
+
+						var/adverb = pick("suddenly","pleasantly","unpleasantly","strangely","oddly")
+						var/gender = "masculine"
+						if(L.gender == "female")
+							gender = "feminine"
+
+						L << "You feel [adverb] [gender]."
 						L.emote("whimper")
 
 /datum/event/radiation_storm/pota

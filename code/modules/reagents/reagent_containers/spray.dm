@@ -201,15 +201,21 @@
 	playsound(src.loc, 'sound/effects/spray2.ogg', 50, 1, -6)
 
 	if(reagents.has_reagent("sacid"))
-		message_admins("[key_name_admin(user)] fired sulphuric acid from a chem sprayer.")
-		log_game("[key_name(user)] fired sulphuric acid from a chem sprayer.")
+		message_admins("[key_name_admin(user)] fired sulphuric acid from \a [src].")
+		log_game("[key_name(user)] fired sulphuric acid from \a [src].")
 	if(reagents.has_reagent("pacid"))
-		message_admins("[key_name_admin(user)] fired Polyacid from a chem sprayer.")
-		log_game("[key_name(user)] fired Polyacid from a chem sprayer.")
+		message_admins("[key_name_admin(user)] fired Polyacid from \a [src].")
+		log_game("[key_name(user)] fired Polyacid from \a [src].")
 	if(reagents.has_reagent("lube"))
-		message_admins("[key_name_admin(user)] fired Space lube from a chem sprayer.")
-		log_game("[key_name(user)] fired Space lube from a chem sprayer.")
+		message_admins("[key_name_admin(user)] fired Space lube from \a [src].")
+		log_game("[key_name(user)] fired Space lube from \a [src].")
 	return
+
+/obj/item/weapon/reagent_containers/spray/chemsprayer/honkmaster
+	name = "Honkblaster Unlimited"
+	New()
+		..()
+		reagents.add_reagent("lube",volume)
 
 // Plant-B-Gone
 /obj/item/weapon/reagent_containers/spray/plantbgone // -- Skie

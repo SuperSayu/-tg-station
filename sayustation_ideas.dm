@@ -10,6 +10,20 @@
 
 	*	Mass lockdown available from the computer (Area, whole station)
 
+	*	Fukkin' space pirates (man)
+		-	Ship with loot hold
+		-	Return base
+	*	Fukkin' honk ops (man)
+
+	*	Space to mining tunnels
+
+	Adding new traitor types:
+	-	Game mode (if necessary)
+		-	check for victory
+	-	Add new objectives
+	-	Admin spawn
+	-	Traitor panel
+
 	Item Construction 2.0 + Research 2.0
 	Note: If I do this, it's just about gonna be forking /tg/ code unless they accept it.
 	Perhaps I ought to make a third checkout and only modify that?

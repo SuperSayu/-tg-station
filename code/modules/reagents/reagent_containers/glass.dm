@@ -179,7 +179,7 @@
 
 			if(H.confused > 5 || H.hallucination || prob(1)) // why am I doing this
 				var/nonsense = pick("evil", "ponies", "justice", "God", "bananas", "spiders", "owls", "Pun-Pun", "the finest wine imaginable", "love", "a singularity", "farts","time","space","bananium ore")
-				usr << "\blue You [guessword] it contains [rand(-5,reagents.maximum_volume + 5)] units of [nonsense]."
+				usr << "\blue You [guessword] it contains [rand(-5,reagents.maximum_volume * 2)] units of [nonsense]."
 				return
 
 			if(identify_probability >= 50 && H.glasses && (istype(H.glasses,/obj/item/clothing/glasses/science) || istype(H.glasses,/obj/item/clothing/glasses/hud/health)))
