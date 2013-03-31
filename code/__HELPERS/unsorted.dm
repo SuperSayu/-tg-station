@@ -4,6 +4,15 @@
  * A large number of misc global procs.
  */
 
+
+/*
+	Standard way to write links -Sayu
+*/
+/proc/topic_link(var/datum/D, var/arglist, var/content)
+	if(istype(arglist,/list))
+		arglist = list2params(arglist)
+	return "<a href='?src=\ref[D];[arglist]'>[content]</a>"
+
 //Inverts the colour of an HTML string
 /proc/invertHTML(HTMLstring)
 

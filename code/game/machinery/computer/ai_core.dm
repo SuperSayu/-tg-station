@@ -271,7 +271,7 @@ That prevents a few funky behaviors.
 							U << "\blue <b>Transfer succesful</b>: \black [A.name] ([rand(1000,9999)].exe) installed and executed succesfully. Local copy has been removed."
 							del(T)
 			if("AIFIXER")//AI Fixer terminal.
-				var/obj/machinery/computer/aifixer/T = target
+				var/obj/item/part/computer/ai_holder/T = target
 				switch(interaction)
 					if("AICARD")
 						var/obj/item/device/aicard/C = src
@@ -294,7 +294,7 @@ That prevents a few funky behaviors.
 								A << "You have been uploaded to a stationary terminal. Sadly, there is no remote access from here."
 								U << "\blue <b>Transfer successful</b>: \black [A.name] ([rand(1000,9999)].exe) installed and executed succesfully. Local copy has been removed."
 						else
-							if(!C.contents.len && T.occupant && !T.active)
+							if(!C.contents.len && T.occupant && !T.busy)
 								C.name = "inteliCard - [T.occupant.name]"
 								T.overlays += image('icons/obj/computer.dmi', "ai-fixer-empty")
 								if (T.occupant.stat == 2)
@@ -310,7 +310,7 @@ That prevents a few funky behaviors.
 								T.occupant = null
 							else if (C.contents.len)
 								U << "\red <b>ERROR</b>: \black Artificial intelligence detected on terminal."
-							else if (T.active)
+							else if (T.busy)
 								U << "\red <b>ERROR</b>: \black Reconstruction in progress."
 							else if (!T.occupant)
 								U << "\red <b>ERROR</b>: \black Unable to locate artificial intelligence."
@@ -331,7 +331,7 @@ That prevents a few funky behaviors.
 								A << "You have been uploaded to a stationary terminal. Sadly, there is no remote access from here."
 								U << "\blue <b>Transfer successful</b>: \black [A.name] ([rand(1000,9999)].exe) installed and executed succesfully. Local copy has been removed."
 						else
-							if(!C.AI && T.occupant && !T.active)
+							if(!C.AI && T.occupant && !T.busy)
 								if (T.occupant.stat)
 									U << "\red <b>ERROR</b>: \black [T.occupant.name] data core is corrupted. Unable to install."
 								else
@@ -344,7 +344,7 @@ That prevents a few funky behaviors.
 									T.occupant = null
 							else if (C.AI)
 								U << "\red <b>ERROR</b>: \black Artificial intelligence detected on terminal."
-							else if (T.active)
+							else if (T.busy)
 								U << "\red <b>ERROR</b>: \black Reconstruction in progress."
 							else if (!T.occupant)
 								U << "\red <b>ERROR</b>: \black Unable to locate artificial intelligence."
