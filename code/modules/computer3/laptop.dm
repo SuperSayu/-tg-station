@@ -46,7 +46,9 @@
 /obj/machinery/computer/laptop
 	name = "Laptop Computer"
 	desc = "A clamshell portable computer.  It is open."
-	icon_state = "laptop"
+
+	icon_state	= "laptop"
+	density		= 0
 	pixel_x		= 2
 	pixel_y		= -3
 

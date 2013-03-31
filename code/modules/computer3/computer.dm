@@ -45,7 +45,7 @@ var/list/removeable_drives = list("A:","B:","D:","E:","F:","G:")
 	// In all cases, typepaths are used, NOT objects
 
 	var/default_prog					= null										// the program running when spawned
-	var/list/spawn_parts				= list(/obj/item/part/computer/storage/hdd	// parts added when spawned
+	var/list/spawn_parts				= list(/obj/item/part/computer/storage/hdd)	// parts added when spawned
 	var/list/spawn_files				= list()									// files added when spawned
 
 	// If you want the computer to have a UPS, add a battery.  This is useful for things like
@@ -81,7 +81,7 @@ var/list/removeable_drives = list("A:","B:","D:","E:","F:","G:")
 				var/obj/item/weapon/cell/C = new typekey(src)
 				battery = C
 
-		if(!circuit)
+		if(!circuit || !istype(circuit))
 			circuit = new(src)
 
 		var/datum/file/drive/c_drive = drive_list["C:"]

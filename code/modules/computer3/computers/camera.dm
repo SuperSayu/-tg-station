@@ -67,8 +67,9 @@
 			for(var/obj/item/part/computer/storage/S in computer.peripherals)
 				for(var/datum/file/F in S.files)
 					if(istype(F,/datum/file/program/security))
-						src.execute(F)
-						F.execute(source)
+						var/datum/file/program/security/Sec = F
+						Sec.key = src
+						Sec.execute(source)
 						return
 		computer.ProgramError(MISSING_PROGRAM)
 
@@ -116,7 +117,6 @@
 	name = "Camera network access module"
 	desc = "Connects a computer to the camera network."
 
-	var/list/network = list("SS13")
 	var/obj/machinery/camera/current = null
 
 	// I have no idea what the following does
@@ -164,15 +164,15 @@
 	var/camera_list = null
 
 	Reset()
-		key = null
-		for(var/obj/item/part/computer/storage/S in computer.peripherals)
-			for(var/datum/file/F in S.files)
-				if(istype(F,/datum/file/camnet_key))
-					F.execute(src)
-					break
 		if(!key)
-			computer.ProgramError(PROG_CRASH) // todo: missing file or something
-			return
+			for(var/obj/item/part/computer/storage/S in computer.peripherals)
+				for(var/datum/file/F in S.files)
+					if(istype(F,/datum/file/camnet_key))
+						F.execute(src)
+						break
+			if(!key)
+				computer.ProgramError(PROG_CRASH) // todo: missing file or something
+				return
 		..()
 
 	interact()
