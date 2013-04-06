@@ -1,6 +1,7 @@
 <h1>Welcome to Sayu Station 13!</h1>
+<!-- Most valid html will work in here, excluding images. -->
 
-<i>This server is running a /tg/station13 SVN build, customized by me.  It will be updated periodically.</i><br>
+<i>This server is running a /tg/station13 git build, customized by me.  It will be updated periodically.</i><br>
 * <b>Official chatroom:</b> irc://irc.esper.net/#sayustation (Unofficial chatroom: #mspafa)<br>
 * Away missions are disabled for now.  They may be reactivated later<br>
 <br>

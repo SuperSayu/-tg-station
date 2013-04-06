@@ -256,7 +256,7 @@
 		if(ismob(M))
 			M.u_equip(obj)
 			M.update_icons()	//so their overlays update
-	
+
 	for(var/mob/M in obj.contents)
 		M.loc = obj.loc
 		silent = 0
@@ -327,6 +327,11 @@
 	if(emagged)
 		for(var/obj/item/weapon/holo/esword/H in linkedholodeck)
 			H.damtype = BRUTE
+
+	if(A.party)
+		linkedholodeck.partyalert()
+	else
+		linkedholodeck.partyreset()
 
 	spawn(30)
 		for(var/obj/effect/landmark/L in linkedholodeck)

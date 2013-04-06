@@ -101,7 +101,7 @@
 	blacklist = null
 	whitelist = list(/obj/item/weapon/storage, /obj/item/weapon/moneybag, /obj/item/weapon/evidencebag,
 					/obj/item/weapon/tray, /obj/item/pizzabox, /obj/item/weapon/clipboard,
-					/obj/item/weapon/gift, /obj/item/smallDelivery, /obj/structure/bigDelivery)
+					/obj/item/smallDelivery, /obj/structure/bigDelivery)
 
 /datum/cargoprofile/cargo
 	name = "Move Cargo Boxes"

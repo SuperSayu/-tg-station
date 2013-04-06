@@ -24,3 +24,4 @@
 
 /area/holodeck/source_party
 	name = "Party Room"
+	party = 1
