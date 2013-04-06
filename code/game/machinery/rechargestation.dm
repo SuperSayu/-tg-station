@@ -121,6 +121,10 @@
 							if(istype(O, /obj/item/device/lightreplacer))
 								var/obj/item/device/lightreplacer/LR = O
 								LR.Charge(R)
+							if(istype(O,/obj/item/weapon/soap))
+								var/obj/item/weapon/soap/S = O
+								if(S.uses < initial(S.uses))
+									S.uses++
 
 						if(R)
 							if(R.module)

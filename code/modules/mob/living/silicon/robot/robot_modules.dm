@@ -146,6 +146,13 @@
 		emag.reagents.add_reagent("lube", 250)
 		emag.name = "lube spray"
 
+	respawn_consumable(var/mob/living/silicon/robot/R)
+		if(!locate(/obj/item/weapon/soap/nanotrasen) in modules)
+			modules -= null
+			var/obj/item/weapon/soap/nanotrasen/NT = new(src)
+			NT.uses = 1
+			modules += NT
+
 
 /obj/item/weapon/robot_module/butler
 	name = "service robot module"

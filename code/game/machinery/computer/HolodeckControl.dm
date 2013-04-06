@@ -23,12 +23,13 @@
 		user.set_machine(src)
 
 		var/dat = "<h3>Current Loaded Programs</h3>"
-		dat += "<A href='?src=\ref[src];emptycourt=1'>((Empty Court)</font>)</A><BR>"
-		dat += "<A href='?src=\ref[src];boxingcourt=1'>((Boxing Court)</font>)</A><BR>"
-		dat += "<A href='?src=\ref[src];basketball=1'>((Basketball Court)</font>)</A><BR>"
-		dat += "<A href='?src=\ref[src];thunderdomecourt=1'>((Thunderdome Court)</font>)</A><BR>"
-		dat += "<A href='?src=\ref[src];beach=1'>((Beach)</font>)</A><BR>"
-//		dat += "<A href='?src=\ref[src];turnoff=1'>((Shutdown System)</font>)</A><BR>"
+		dat += "<A href='?src=\ref[src];emptycourt=1'>((Empty Court))</A><BR>"
+		dat += "<A href='?src=\ref[src];boxingcourt=1'>((Boxing Court))</A><BR>"
+		dat += "<A href='?src=\ref[src];basketball=1'>((Basketball Court))</A><BR>"
+		dat += "<A href='?src=\ref[src];thunderdomecourt=1'>((Thunderdome Court))</A><BR>"
+		dat += "<A href='?src=\ref[src];beach=1'>((Beach))</A><BR>"
+		dat += "<A href='?src=\ref[src];party=1'>((Party Room))</A><BR>"
+		dat += "<A href='?src=\ref[src];transit=1'>((Transit system demo))</A><BR>"
 
 		dat += "<span class='notice'>Please ensure that only holographic weapons are used in the holodeck if a combat simulation has been loaded.</span><BR>"
 
@@ -38,6 +39,9 @@
 			dat += "<BR>"
 			dat += "<A href='?src=\ref[src];wildlifecarp=1'>(<font color=red>Begin Wildlife Simulation</font>)</A><BR>"
 			dat += "Ensure the holodeck is empty before testing.<BR>"
+			dat += "<BR>"
+			dat += "<A href='?src=\ref[src];securebunker=1'>(<font color=red>Load secure bunker</font>)</A><BR>"
+			dat += "Ensure that bunker is not used in an unauthorized manner.<BR>"
 			dat += "<BR>"
 			if(issilicon(user))
 				dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=green>Re-Enable Safety Protocols?</font>)</A><BR>"
@@ -88,6 +92,16 @@
 				if(target)
 					loadProgram(target)
 
+			else if(href_list["transit"])
+				target = locate(/area/holodeck/source_transit)
+				if(target)
+					loadProgram(target)
+
+			else if(href_list["party"])
+				target = locate(/area/holodeck/source_party)
+				if(target)
+					loadProgram(target)
+
 			else if(href_list["turnoff"])
 				target = locate(/area/holodeck/source_plating)
 				if(target)
@@ -102,6 +116,12 @@
 			else if(href_list["wildlifecarp"])
 				if(!emagged)	return
 				target = locate(/area/holodeck/source_wildlife)
+				if(target)
+					loadProgram(target)
+
+			else if(href_list["securebunker"])
+				if(!emagged)	return
+				target = locate(/area/holodeck/source_bunker)
 				if(target)
 					loadProgram(target)
 
@@ -236,6 +256,10 @@
 		if(ismob(M))
 			M.u_equip(obj)
 			M.update_icons()	//so their overlays update
+	
+	for(var/mob/M in obj.contents)
+		M.loc = obj.loc
+		silent = 0
 
 	if(!silent)
 		var/obj/oldobj = obj

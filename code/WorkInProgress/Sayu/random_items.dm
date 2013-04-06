@@ -18,10 +18,22 @@
 /obj/effect/decal/cleanable/random
 	name = "Random Mess"
 	New()
-		var/list = typesof(/obj/effect/decal/cleanable) - list(/obj/effect/decal/cleanable,/obj/effect/decal/cleanable/random,/obj/effect/decal/cleanable/cobweb,/obj/effect/decal/cleanable/cobweb2)
+		..()
+		var/list/list = typesof(/obj/effect/decal/cleanable) - list(/obj/effect/decal/cleanable,/obj/effect/decal/cleanable/random,/obj/effect/decal/cleanable/cobweb,/obj/effect/decal/cleanable/cobweb2)
 		var/T = pick(list)
 		new T(loc)
 		spawn(0)
+			del src
+
+
+/obj/item/stack/sheet/animalhide/random
+	name = "Random animal hide"
+	New()
+		..()
+		spawn(1)
+			var/htype = pick(/obj/item/stack/sheet/animalhide/cat,/obj/item/stack/sheet/animalhide/corgi,/obj/item/stack/sheet/animalhide/human,/obj/item/stack/sheet/animalhide/lizard,/obj/item/stack/sheet/animalhide/monkey)
+			var/obj/item/stack/S = new htype(loc)
+			S.amount = amount
 			del src
 
 // -------------------------------------
@@ -101,7 +113,7 @@
 
 		var/obj/item/weapon/reagent_containers/food/drinks/bottle/B = new(loc)
 		var/datum/reagent/R = pick(drinks_only)
-		if(R == "blood" && prob(10)) // it's entirely natural for you to have blood in drinking bottles.
+		if(R == "blood" && prob(40)) // it's entirely natural for you to have blood in drinking bottles.
 			var/datum/disease/advance/F = new(0) // it only rarely has to do with diseases.
 			var/list/data = list("viruses"= list(F))
 			B.reagents.add_reagent(R,B.volume,data)
@@ -233,6 +245,29 @@
 			var/atom/movable/AM = new flowertype(src)
 			AM.pixel_x = rand(-10,10)
 			AM.pixel_y = rand(-5,5)
+
+
+/obj/structure/closet/crate/bin/plants
+	name = "plant barrel"
+	desc = "Caution: Contents may contain vitamins and minerals.  It is recommended that you deep fry them before eating."
+	New()
+		while(contents.len < 10)
+			var/ptype = pick(/obj/item/weapon/reagent_containers/food/snacks/grown/apple,/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/berries, /obj/item/weapon/reagent_containers/food/snacks/grown/cabbage,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/carrot, /obj/item/weapon/reagent_containers/food/snacks/grown/cherries,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/chili, /obj/item/weapon/reagent_containers/food/snacks/grown/cocoapod,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/corn, /obj/item/weapon/reagent_containers/food/snacks/grown/eggplant,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/grapes, /obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/icepepper, /obj/item/weapon/reagent_containers/food/snacks/grown/lemon,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/lime, /obj/item/weapon/reagent_containers/food/snacks/grown/orange,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/potato, /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/soybeans, /obj/item/weapon/reagent_containers/food/snacks/grown/sugarcane,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/tomato, /obj/item/weapon/reagent_containers/food/snacks/grown/watermelon,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/wheat, /obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chanterelle, /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet)
+			var/obj/O = new ptype(src)
+			O.pixel_x = rand(-10,10)
+			O.pixel_y = rand(-5,5)
 
 /obj/structure/closet/secure_closet/random_drinks
 	name = "Unlabelled Booze"

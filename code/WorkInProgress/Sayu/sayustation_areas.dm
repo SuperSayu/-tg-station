@@ -15,3 +15,12 @@
 
 /area/pirate/hold
 	name = "Treasure Hold"
+
+/area/holodeck/source_transit
+	name = "Transit Demo"
+
+/area/holodeck/source_bunker
+	name = "Secure Bunker"
+
+/area/holodeck/source_party
+	name = "Party Room"

@@ -958,8 +958,15 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 	if(perfectcopy)
 		if((O) && (original))
-			for(var/V in original.vars)
-				if(!(V in list("type","loc","locs","vars", "parent", "parent_type","verbs","ckey","key")))
+			var/global/list/forbidden_vars = list("type","loc","locs","vars", "parent", "parent_type","verbs","ckey","key","power_supply","contents","reagents")
+
+			for(var/V in original.vars - forbidden_vars) // yes, list operations work like this
+				if(istype(original.vars[V],/list))
+					var/list/L = original.vars[V]
+					O.vars[V] = L.Copy()
+				else if(isobj(original.vars[V]))
+					continue	// this would reference the original's object, that will break when it is used or deleted.
+				else
 					O.vars[V] = original.vars[V]
 	return O
 

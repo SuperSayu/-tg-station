@@ -14,6 +14,13 @@
 		-	Ship with loot hold
 		-	Return base
 	*	Fukkin' honk ops (man)
+	*	Pikmin mobs
+		-	Either botany or they corrode walls to grow
+		-	Feed off corpses to create a pikmin horde?
+		-	Very weak but endless supply, potentially
+		-	Plantmen are immune / source of pikmin?
+		-	Pikmin follow the leader always
+	*	Pikmin cultist antag
 
 	*	Space to mining tunnels
 

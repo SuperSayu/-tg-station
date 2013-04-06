@@ -82,6 +82,15 @@
 			if(immobilize)
 				M.canmove = 1
 
+/obj/effect/step_trigger/thrower/wind
+	Trigger(var/atom/A)
+		A << "A cold wind blows you [dir2text(direction)]!"
+		..()
+/obj/effect/step_trigger/thrower/wind/random
+	Trigger(var/atom/A)
+		direction = pick(NORTH,EAST,SOUTH,WEST)
+		..()
+
 /* Stops things thrown by a thrower, doesn't do anything */
 
 /obj/effect/step_trigger/stopper
