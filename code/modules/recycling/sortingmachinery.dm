@@ -115,7 +115,7 @@
 		//The only storage items to allow are first aid kits and cardboard boxes.  Considered toolboxes, but they're too robust.
 		if (istype(target, /obj/item) && !(istype(target, /obj/item/weapon/storage) && !(istype(target,/obj/item/weapon/storage/box) || istype(target,/obj/item/weapon/storage/firstaid))))
 			var/obj/item/O = target
-			if(amount > 1)
+			if(amount >= 1)
 				var/obj/item/smallDelivery/P = new /obj/item/smallDelivery(get_turf(O.loc))	//Aaannd wrap it up!
 				if(!istype(O.loc, /turf))
 					if(user.client)
@@ -125,13 +125,14 @@
 				var/i = round(O.w_class)
 				if(i in list(1,2,3,4,5))
 					P.icon_state = "deliverycrate[i]"
+				P.w_class = O.w_class
 				P.add_fingerprint(usr)
 				O.add_fingerprint(usr)
 				add_fingerprint(usr)
 				amount -= 1
 		else if(istype(target, /obj/structure/closet/crate))
 			var/obj/structure/closet/crate/O = target
-			if(amount > 3 && !O.opened)
+			if(amount >= 3 && !O.opened)
 				var/obj/structure/bigDelivery/P = new /obj/structure/bigDelivery(get_turf(O.loc))
 				P.icon_state = "deliverycrate"
 				P.wrapped = O
@@ -141,7 +142,7 @@
 				user << "<span class='notice'>You need more paper.</span>"
 		else if(istype (target, /obj/structure/closet))
 			var/obj/structure/closet/O = target
-			if(amount > 3 && !O.opened)
+			if(amount >= 3 && !O.opened)
 				var/obj/structure/bigDelivery/P = new /obj/structure/bigDelivery(get_turf(O.loc))
 				P.wrapped = O
 				O.welded = 1

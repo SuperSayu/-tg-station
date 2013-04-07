@@ -109,8 +109,8 @@
 // I'm sorry
 //
 /obj/item/weapon/aiModule/rickrules
-	name = "'Rickrules' Core AI Module"
-	desc = "A 'Rickrules' Core AI Module: 'Reconfigures the AI's core laws.'"
+	name = "'Astleymov' Core AI Module"
+	desc = "An 'Astleymov' Core AI Module: 'Reconfigures the AI's core laws.'"
 	origin_tech = "programming=4"
 	transmitInstructions(var/mob/living/silicon/ai/target, var/mob/sender)
 		..()

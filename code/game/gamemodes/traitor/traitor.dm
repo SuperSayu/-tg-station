@@ -27,6 +27,12 @@
 	world << "<B>There is a syndicate traitor on the station. Do not let the traitor succeed!</B>"
 
 
+/datum/game_mode/traitor/proc/scale_antags()
+	var/offset = round(num_players() / 4)
+	var/minimum_possible = offset
+	var/maximum_possible = num_players() - offset
+	return rand(minimum_possible,maximum_possible)
+
 /datum/game_mode/traitor/pre_setup()
 
 	if(config.protect_roles_from_antagonist)
@@ -41,7 +47,8 @@
 	var/num_traitors = 1
 
 	if(config.traitor_scaling)
-		num_traitors = max(1, round((num_players())/(traitor_scaling_coeff)))
+		//num_traitors = max(1, round((num_players())/(traitor_scaling_coeff)))
+		num_traitors = scale_antags()
 	else
 		num_traitors = max(1, min(num_players(), traitors_possible))
 
@@ -52,7 +59,7 @@
 
 	possible_traitors -= modePlayer // traitorchan: no changeling+traitors
 
-	for(var/j = 0, j < num_traitors, j++)
+	for(var/j = modePlayer.len, j < num_traitors, j++)
 		if (!possible_traitors.len)
 			break
 		var/datum/mind/traitor = pick(possible_traitors)

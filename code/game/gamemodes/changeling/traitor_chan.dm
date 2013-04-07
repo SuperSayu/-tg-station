@@ -1,7 +1,7 @@
 /datum/game_mode/traitor/changeling
 	name = "traitor+changeling"
 	config_tag = "traitorchan"
-	traitors_possible = 3 //hard limit on traitors if scaling is turned off
+	traitors_possible = 5 //hard limit on traitors if scaling is turned off
 	restricted_jobs = list("AI", "Cyborg")
 	required_players = 5
 	required_enemies = 2
@@ -17,20 +17,41 @@
 		restricted_jobs += protected_jobs
 
 	var/list/datum/mind/possible_changelings = get_players_for_role(BE_CHANGELING)
+	var/list/possible_traitors = get_players_for_role(BE_TRAITOR)
+
+	// stop setup if no possible traitors
+	if(!possible_traitors.len || !possible_changelings.len)
+		return 0
 
 	for(var/datum/mind/player in possible_changelings)
 		for(var/job in restricted_jobs)//Removing robots from the list
 			if(player.assigned_role == job)
 				possible_changelings -= player
+				possible_traitors -= player
 
-	if(possible_changelings.len>0)
-		var/datum/mind/changeling = pick(possible_changelings)
-		//possible_changelings-=changeling
+	if(config.traitor_scaling)
+		traitors_possible = scale_antags()
+
+	// No more than three lings, but allow them to be a
+	// greater portion of the antagonist docket if the
+	// dice land like that.
+	var/num_changelings = min(3,rand(1,traitors_possible-1))
+
+	while(possible_changelings.len && (changelings.len < num_changelings))
+		var/datum/mind/changeling = pick_n_take(possible_changelings)
 		changelings += changeling
-		modePlayer += changelings
-		return ..()
-	else
+		modePlayer += changeling
+		possible_traitors -= changeling
+
+	while(possible_traitors.len && (modePlayer.len < traitors_possible))
+		var/datum/mind/traitor = pick_n_take(possible_traitors)
+		traitors += traitor
+		modePlayer += traitor
+		traitor.special_role = "traitor"
+
+	if(!modePlayer.len)
 		return 0
+	return 1
 
 /datum/game_mode/traitor/changeling/post_setup()
 	for(var/datum/mind/changeling in changelings)
