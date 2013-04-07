@@ -325,14 +325,14 @@
 		manifest += "</ul>"
 
 /datum/supply_packs/randomised/contaband/novelty
-	name = "Colonel Sassacre's Chest of Dautingly Frivolous Weaponry"
+	name = "Colonel Sassacres Chest of Dautingly Frivolous Weaponry"
 	num_contained	= 2
 	cost = 50
 	contains = list(/obj/item/weapon/sord, /obj/item/weapon/grenade/clusterbuster/banquet/child,
 					/obj/item/weapon/grenade/clusterbuster/aviary, /obj/item/weapon/grenade/chem_grenade/lube,
 					/obj/item/weapon/bikehorn, /obj/item/weapon/reagent_containers/spray/chemsprayer/honkmaster)
 	containertype = /obj/structure/closet/crate/secure
-	containername = "Colonel Sassacre's Chest of Dautingly Frivolous Weaponry"
+	containername = "Chest of Dautingly Frivolous Weaponry"
 	access = access_clown
 	contraband = 1
 
