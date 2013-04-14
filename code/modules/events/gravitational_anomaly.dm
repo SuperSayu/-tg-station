@@ -2,7 +2,7 @@
 	name			= "Gravitational Anomaly"
 	typepath		= /datum/event/gravitational_anomaly
 	max_occurrences = 3
-	weight			= 2
+	weight			= 1
 	minimumCrew		= 5
 
 /datum/event/gravitational_anomaly

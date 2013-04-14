@@ -18,10 +18,12 @@
 	//return 1 for any sortable item
 	proc/contains(var/atom/A)
 		if(!istype(A,/obj))
-			return 0
-		var/obj/O = A
-		if(O.anchored)
-			return 0
+			if(!mobcheck || !istype(A,/mob))
+				return 0
+		else
+			var/obj/O = A
+			if(O.anchored)
+				return 0
 		//If you are using both white and blacklists, blacklists are absoulte, no matter what is whitelisted.
 		//I understand this has some limitations.  You cannot whitelist all items, blacklist weapons,
 		// and then whitelist a specific weapon.  Them's the breaks, kid.
@@ -96,7 +98,7 @@
 //----------------------------------------------------------------------------
 
 /datum/cargoprofile/boxes
-	name = "Other Containers"
+	name = "Move Small Containers"
 	id = "boxes"
 	blacklist = null
 	whitelist = list(/obj/item/weapon/storage, /obj/item/weapon/moneybag, /obj/item/weapon/evidencebag,
@@ -104,10 +106,30 @@
 					/obj/item/smallDelivery, /obj/structure/bigDelivery)
 
 /datum/cargoprofile/cargo
-	name = "Move Cargo Boxes"
+	name = "Move Large Containers"
 	id = "cargo"
 	blacklist = null
 	whitelist = list(/obj/structure/closet,/obj/structure/ore_box)
+
+	// Make an honest attempt to move other things out of the way
+	outlet_reaction(var/atom/W,var/turf/D)
+		for(var/obj/O in D)
+			if(O.density && !O.anchored)
+				step_away(O,src) // move forward first
+				if(O.loc == D)
+					step_away(O,D) // move anywhere
+		..(W,D)
+
+/datum/cargoprofile/cargo/empty
+	name = "Move Empty Large Containers"
+	id = "cargo-empty"
+	contains(var/atom/A)
+		return (..(A) && (A.contents.len == 0))
+/datum/cargoprofile/cargo/full
+	name = "Move Full Large Containers"
+	id = "cargo-full"
+	contains(var/atom/A)
+		return (..(A) && (A.contents.len > 0))
 
 /datum/cargoprofile/supplies
 	name = "Building Supplies"
@@ -152,14 +174,14 @@
 					/obj/item/weapon/storage/belt/medical,/obj/item/weapon/storage/firstaid,/obj/item/weapon/implanter)
 
 /datum/cargoprofile/pressure
-	name = "Tanks and Pressure Vessels"
+	name = "air tanks"
 	id = "pressure"
 	blacklist = null
 	whitelist = list(/obj/item/weapon/tank,/obj/machinery/portable_atmospherics,
 					/obj/item/weapon/flamethrower)
 					//Am I missing any?
 /datum/cargoprofile/pressure/empty
-	name = "Empty Tanks"
+	name = "empty air tanks"
 	id = "pressure-low"
 	var/lowpressure = ONE_ATMOSPHERE
 
@@ -184,7 +206,7 @@
 		return 0// Not container or failed low pressure check
 
 /datum/cargoprofile/pressure/full
-	name = "Full Tanks"
+	name = "full air tanks"
 	id = "pressure-high"
 	var/highpressure = ONE_ATMOSPHERE * 15 // stolen from canister.dm; Is this right?
 
@@ -273,6 +295,13 @@
 			return 1
 		return 0
 
+/datum/cargoprofile/stripping
+	name = "Auto-Frisker"
+	id = "frisk"
+	blacklist = null
+	whitelist = list(/mob/living/carbon/human)
+	mobcheck = 1
+
 
 
 //----------------------------------------------------------------------------
@@ -291,7 +320,7 @@
 		if(..(A))
 			if(istype(A,/obj/structure/closet))
 				var/obj/structure/closet/C = A
-				if(!C.can_open() && !C.opened) // must be able to access the contents
+				if(!C.can_open() && !C.opened && !master.emagged) // must be able to access the contents
 					return 0
 			if(A.contents.len)
 				return 1
@@ -304,6 +333,21 @@
 		if(istype(W,/obj/structure/closet))
 			var/obj/structure/closet/C = W
 			if(!C.can_open() && !C.opened) // must be able to access the contents
+				if(master.emagged && remaining >= BIG_OBJECT_WORK)
+					if(prob(10))
+						C.welded = 0
+						if("broken" in C.vars)
+							C:broken = 1
+						C.open()
+						C.update_icon()
+						master.visible_message("\red [master] breaks open [C]!")
+					else
+						master.visible_message("\blue [master] is trying to force [C] open!")
+
+					master.sleep += 1 // mechanical strain
+					return BIG_OBJECT_WORK
+				master.visible_message("\blue [master] is trying to open [C], but can't!")
+				master.sleep = 5
 				return 0
 
 		for(var/obj/item/O in W.contents)
@@ -456,109 +500,6 @@
 
 
 
-/*
-/datum/cargoprofile/seedboxer
-	name = "Box Seeds"
-	id = "seedboxer"
-	blacklist = null
-	whitelist = list(/obj/item/seeds)
-
-	dedicated_path = /obj/machinery/programmable/seedboxer
-	universal = 1
-
-	outlet_reaction(var/atom/W,var/turf/D)
-		var/obj/item/seeds/S = W
-		var/obj/machinery/vending/hydroseeds/M = (locate(/obj/machinery/vending/hydroseeds) in D.contents)
-		if(M != null)
-			//Restock machine instead of dispensing boxes
-			//CAUTION: if you do this, you will lose any genetic modification to the seeds.
-			//The seeds that come out of the vending machine will be stock.
-			for(var/datum/data/vending_product/P in M.product_records + M.hidden_records)
-				if(P.product_path == "[S.type]") // It's a string for some reason
-					P.amount++
-					del S
-					return
-			//Didn't find it. Drop a box on top anyway.
-		//Or maybe there just was no machine.  Well, either way...
-		for(var/obj/item/weapon/storage/box/seedbox/B in D.contents)
-			if(B.seedtype == S.type && B.contents.len < B.storage_slots)
-				S.loc = B
-				return
-		//No such box or all boxes full
-		var/obj/item/weapon/storage/box/seedbox/B = new(D)
-		S.loc = B
-		B.update_icon()
-*/
-
-/*
-// This will require a unary machine
-/datum/cargoprofile/botassembler
-	name = "Robot Assembler (Alpha)"
-	blacklist = list(/obj/item/mecha_parts/chassis,/obj/item/robot_parts/robot_suit)
-	whitelist = list(/obj/item/mecha_parts,/obj/item/robot_parts)
-
-	contains(var/atom/A)
-		if(..())
-			if(istype(A,/obj/item/robot_parts/chest))
-				var/obj/item/robot_parts/chest/O = A
-				if(!O.wires || !O.contents.len) // only accept prepared items
-					return 0
-				return 1
-			if(istype(A,/obj/item/robot_parts/head))
-				var/obj/item/robot_parts/head/O = A
-				if(O.contents.len != 2) //Two flashes
-					return 0
-				return 1
-			return 1
-
-	outlet_reaction(var/atom/W,var/turf/D)
-		if(istype(W,/obj/item/robot_parts))
-			var/obj/item/robot_parts/R = W
-			var/obj/item/robot_parts/robot_suit/S = locate(/obj/item/robot_parts/robot_suit/) in D.contents
-			if(!S || (locate(R.type) in S.contents) )
-				master.visible_message("\The [master.name] refuses \the [R.name] with a sigh.")
-				playsound(master.loc, 'sound/machines/buzz-sigh.ogg', 50, 0)
-				master.sleep = 2
-				return
-			S.attackby(R,null) // I expect that this will cause some null value runtimes
-			return
-		if(istype(W,/obj/item/mecha_parts))
-			var/obj/item/mecha_parts/M = W
-			var/list/L
-			//They don't make typechecking easy for us here
-
-			for(var/obj/item/mecha_parts/chassis/C in D.contents)
-				switch(C.type)
-				//Not here: firefighter
-					if(/obj/item/mecha_parts/chassis/ripley)
-						L = list(/obj/item/mecha_parts/part/ripley_torso,/obj/item/mecha_parts/part/ripley_left_arm,/obj/item/mecha_parts/part/ripley_right_arm,/obj/item/mecha_parts/part/ripley_left_leg,/obj/item/mecha_parts/part/ripley_right_leg)
-					if(/obj/item/mecha_parts/chassis/durand)
-						L = list(/obj/item/mecha_parts/part/durand_torso,/obj/item/mecha_parts/part/durand_left_arm,/obj/item/mecha_parts/part/durand_right_arm,/obj/item/mecha_parts/part/durand_left_leg,/obj/item/mecha_parts/part/durand_right_leg)
-					if(/obj/item/mecha_parts/chassis/gygax)
-						L = list(/obj/item/mecha_parts/part/gygax_torso,/obj/item/mecha_parts/part/gygax_left_arm,/obj/item/mecha_parts/part/gygax_right_arm,/obj/item/mecha_parts/part/gygax_left_leg,/obj/item/mecha_parts/part/gygax_right_leg)
-					if(/obj/item/mecha_parts/chassis/honker)
-						L = list(/obj/item/mecha_parts/part/honker_torso,/obj/item/mecha_parts/part/honker_left_arm,/obj/item/mecha_parts/part/honker_right_arm,/obj/item/mecha_parts/part/honker_left_leg,/obj/item/mecha_parts/part/honker_right_leg)
-					if(/obj/item/mecha_parts/chassis/odysseus)
-						L = list(/obj/item/mecha_parts/part/odysseus_torso,/obj/item/mecha_parts/part/odysseus_left_arm,/obj/item/mecha_parts/part/odysseus_right_arm,/obj/item/mecha_parts/part/odysseus_left_leg,/obj/item/mecha_parts/part/odysseus_right_leg)
-					if(/obj/item/mecha_parts/chassis/phazon)
-						L = list(/obj/item/mecha_parts/part/phazon_torso,/obj/item/mecha_parts/part/phazon_left_arm,/obj/item/mecha_parts/part/phazon_right_arm,/obj/item/mecha_parts/part/phazon_left_leg,/obj/item/mecha_parts/part/phazon_right_leg)
-				if(locate(M.type) in L)
-					C.attackby(M,null) // probably also null value runtimes
-					if(M.loc == master) // didn't take for whatever reason
-						M.loc = output
-						master.visible_message("\The [master.name] refuses \the [M.name] with a sigh.")
-						playsound(master.loc, 'sound/machines/buzz-sigh.ogg', 50, 0)
-						master.sleep = 2
-					return
-			//end for: no acceptable chassis
-			master.visible_message("\The [master.name] refuses \the [M.name] with a sigh.")
-			playsound(master.loc, 'sound/machines/buzz-sigh.ogg', 50, 0)
-			master.sleep = 2
-			return
-*/
-
-
-
 //----------------------------------------------------------------------------
 // Dubious Overrides (For emag use)
 //----------------------------------------------------------------------------
@@ -676,6 +617,56 @@
 			del W
 		return
 
+/datum/cargoprofile/unary/gibber
+	name = "human shredding"
+	id = "flesh"
+	whitelist = list(/mob/living/carbon,/mob/living/simple_animal)
+	blacklist = null
+	mobcheck = 1
+	contains(var/atom/A)
+		if(!istype(A,/mob))
+			return
+		if(blacklist)
+			for(var/T in blacklist)
+				if(istype(A,T))
+					return 0
+		if(whitelist)
+			for(var/T in whitelist)
+				if(istype(A,T))
+					return 1
+			return 0
+		return 1
+	inlet_reaction(var/atom/W,var/turf/S,var/remaining)
+		var/mob/living/M = W
+		if(istype(M) && (remaining > MOB_WORK))
+			//this is necessarily damaging
+			var/damage = rand(1,5)
+			M << "\red <B>The unloading machine grabs you with a hard metallic claw!</B>"
+			if(M.client)
+				M.client.eye = master
+				M.client.perspective = EYE_PERSPECTIVE
+			M.loc = master
+			master.types[M.type] = src
+			M.apply_damage(damage) // todo: ugly
+			M.visible_message("\red [M.name] gets pulled into the machine!")
+			return MOB_WORK
+	outlet_reaction(var/atom/W,var/turf/D)
+		var/mob/living/M = W
+		var/bruteloss = M.bruteloss
+		if(istype(M,/mob/living/carbon/human))
+			var/mob/living/carbon/human/C = M
+			for(var/datum/limb/L in C.organs)
+				bruteloss += L.brute_dam
+		if(bruteloss < 100) // requires tenderization
+			M.apply_damage(rand(5,15),BRUTE)
+			M << "The machine is tearing you apart!"
+			master.visible_message("\red [master] makes a squishy grinding noise.")
+			return
+		M.loc = master.loc
+		M.gib()
+		return
+
+
 /datum/cargoprofile/people
 	name = "Manhandling"
 	id = "people"
@@ -717,7 +708,6 @@
 			return MOB_WORK
 
 	outlet_reaction(var/atom/W,var/turf/D)
-		world.log << "Mob ejection"
 		var/mob/living/M = W
 		M.loc = master.loc
 		M.dir = master.outdir

@@ -9,9 +9,9 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	config_tag = "changeling"
 	restricted_jobs = list("AI", "Cyborg")
 	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain")
-	required_players = 5
+	required_players = 6
 	required_enemies = 2
-	recommended_enemies = 4
+	recommended_enemies = 3
 
 	uplink_welcome = "Syndicate Uplink Console:"
 	uplink_uses = 10
@@ -54,7 +54,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 			if(player.assigned_role == job)
 				possible_changelings -= player
 
-	if(player_list.len > (required_players * 2))
+	if(player_list.len >= (required_players * 2))
 		changeling_amount = recommended_enemies
 	else
 		changeling_amount = required_enemies

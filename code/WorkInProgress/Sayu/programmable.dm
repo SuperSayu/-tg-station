@@ -306,9 +306,12 @@
 
 	//Normal output reaction
 	if(contents.len)
-		for(var/atom/A in contents)
+		for(var/atom/movable/A in contents)
 			var/datum/cargoprofile/p = types[A.type]
-			p.outlet_reaction(A,output)
+			if(p)
+				p.outlet_reaction(A,output)
+			else
+				A.loc = output // may have been dropped by a mob, etc
 
 	if(types.len > 50)
 		types = list() // good luck mr. garbage collector
@@ -380,15 +383,6 @@
 //----------------------------------------------------------------------------
 //      Specialty machines
 //----------------------------------------------------------------------------
-/*
-/obj/machinery/programmable/seedboxer
-	name = "Seed Boxing Machine"
-	default = new/datum/cargoprofile/seedboxer()
-	profiles = list()
-	overrides = list()
-	emag_overrides = list()
-	typename = "Seed Boxer"
-	*/
 
 //Uses the inlet stacking profile.  Ejects only full stacks.
 /obj/machinery/programmable/stacker
@@ -415,6 +409,14 @@
 	overrides = list()
 	emag_overrides = list()
 	typename = "Robot Delivery"
+
+/obj/machinery/programmable/crate_handler
+	name = "Crate Handler"
+	default = null
+	profiles = list(new/datum/cargoprofile/cargo/unload(),new/datum/cargoprofile/cargo(),new/datum/cargoprofile/cargo/empty(),new/datum/cargoprofile/cargo/full())
+	overrides = list()
+	emag_overrides = list()
+	typename = "Crate Handler"
 
 //----------------------------------------------------------------------------
 //      Unary machine: Input and output in the same location
@@ -478,8 +480,7 @@
 	default = new/datum/cargoprofile/unary/shredder()
 	profiles = list()
 	overrides = list()
-	emag_overrides = list()
-	emagged = 1  //there's only one profile, but this makes it spit up, giving people a chance to recover data.
+	emag_overrides = list(new/datum/cargoprofile/unary/gibber())
 	typename = "Paper Shredder"
 
 /obj/machinery/programmable/unary/trainer
@@ -520,9 +521,9 @@
 			else if(damage < 10)
 				visible_message("[H] hits \the [src] with a solid [pick("punch","jab","smack")].")
 			else if(damage < 15)
-				visible_message("[pick("Whoa!","Nice!","Gasp!")] [H] hits \the [src] with a powerful [pick("punch","jab","uppercut","left hook", "right hook")].")
+				visible_message("[pick("Whoa!","Nice!","Gasp!")] [H] hits [src] with a powerful [pick("punch","jab","uppercut","left hook", "right hook")].")
 			else if(damage < 20)
-				visible_message("[pick("WHOA!","ACK!","Jeez!")]  [H] hits \the [src] so hard, the whole machine rocks band and forth for a moment.")
+				visible_message("[pick("WHOA!","ACK!","Jeez!")]  [H] hits [src] so hard, the whole machine rocks band and forth for a moment.")
 			else
 				visible_message("Holy moly!  [H] hits \the [src] so hard it stops working.")
 				stat |= BROKEN
@@ -543,74 +544,6 @@
 
 		else
 			return ..()
-
-/* // Not functioning for now
-/obj/machinery/programmable/unary/assembler
-	name = "Robot Assembler"
-	default = new/datum/cargoprofile/botassembler()
-	profiles = list()
-	overrides = list()
-	emag_overrides = list()*/
-
-//----------------------------------------------------------------------------
-//      Bidirectional machine: Moves front to back and back to front
-//		This may take a little effort to get right...
-//----------------------------------------------------------------------------
-/*
-
-//Not functional
-
-/obj/machinery/programmable/bidir
-	name = "Bi-directional Unloader"
-
-	profiles = list()
-	overrides = list()
-	emag_overrides = list()
-	var/list/i_contents = list()
-	var/list/o_contents = list()
-
-	//To be overridden:
-	// interact
-	// topic
-	// process
-	process()
-		if (!output || !input)
-			return
-
-		if(!on || stat || sleep)
-			if(sleep > 0) // prevent input or output errors from happening every tick
-				sleep--
-			use_power = 0
-
-			//Do not let things get stuck inside.  That's broken behavior.
-			for(var/obj/O in contents)
-				O.loc = loc
-			for(var/mob/M in contents)
-				M.loc = loc
-				if(M.client)
-					M.client.eye = M.client.mob
-					M.client.perspective = MOB_PERSPECTIVE
-					M << "\blue The machine turns off, and you fall out."
-			return
-
-		//Grab both input lists before we output anything.
-		//This will NOT prevent infinite loops; conveyor belts move AFTER we pick things up.
-		//You should NOT use the same profiles coming and going.
-		var/list/forward = input.contents
-		var/list/backward = output.contents
-
-		//Normal output
-		if(i_contents.len)
-			for(var/atom/A in i_contents)
-				var/datum/cargoprofile/p = types[A.type]
-				p.outlet_reaction(A,output)
-		if(o_contents.len)
-			for(var/atom/A in o_contents)
-				var/datum/cargoprofile/p = types[A.type]
-				p.outlet_reaction(A,input)
-
-
-*/
 
 //----------------------------------------------------------------------------
 //      For construction

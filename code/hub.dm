@@ -1,8 +1,8 @@
 /world
 
-	hub = "Exadv1.spacestation13"
-	hub_password = "SORRYNOPE"
-	name = "Sayustation - MSPA Community Server"
+	//hub = "Exadv1.spacestation13"
+	//hub_password = "SORRYNOPE"
+	//name = "Sayustation - MSPA Community Server"
 
 /*
 This is for any host that would like their server to appear on the main SS13 hub.

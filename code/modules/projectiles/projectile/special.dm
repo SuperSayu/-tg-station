@@ -11,6 +11,30 @@
 		empulse(target, 1, 1)
 		return 1
 
+/obj/item/projectile/bullet/bananacreme
+	name = "banana creme bullet"
+	damage = 0
+	nodamage = 1
+	flag = "bullet"
+
+	on_hit(var/atom/target,var/blocked=0)
+		if(istype(target,/mob))
+			var/mob/M = target
+			if(M.reagents) // Mama Clown's recipe
+				M.reagents.add_reagent("nutriment", 4)
+				M.reagents.add_reagent("banana",5)
+				M.reagents.add_reagent("cornoil", 1)
+				M.reagents.add_reagent("sugar",1)
+				if(prob(1))
+					M.reagents.add_reagent("minttoxin",1)
+		return
+
+	Bump(atom/A as mob|obj|turf|area)
+		var/turf/T = get_turf(A)
+		if(prob(33) && !(locate(/obj/effect/decal/cleanable/pie_smudge) in T))
+			new /obj/effect/decal/cleanable/pie_smudge(T)
+		return ..(A)
+
 
 /obj/item/projectile/bullet/gyro
 	name ="explosive bolt"

@@ -22,6 +22,7 @@
 
 
 
+
 /obj/item/weapon/gun/projectile/automatic/c20r
 	name = "\improper C-20r SMG"
 	desc = "A lightweight, fast firing gun, for when you REALLY need someone dead. Uses 12mm rounds. Has a 'Scarborough Arms - Per falcis, per pravitas' buttstamp"
@@ -61,6 +62,44 @@
 			icon_state = "c20r"
 		return
 
+/obj/item/weapon/gun/projectile/automatic/clown
+	name = "\improper clown machine gun"
+	desc = "A lightweight, fast firing gun, for when you REALLY need someone honked.  Idiot-proofed to prevent malfunctions."
+	icon_state = "clown"
+	item_state = "clowngun"
+	w_class = 3.0
+	max_shells = 20
+	caliber = "honk"
+	ammo_type = "/obj/item/ammo_casing/bananacreme"
+	fire_sound = 'sound/items/bikehorn.ogg'
+	load_method = 2
+	clumsy_check = 0
+
+
+	New()
+		..()
+		empty_mag = new /obj/item/ammo_magazine/bananacreme/empty(src)
+		update_icon()
+		return
+
+
+	afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag)
+		..()
+		if(!loaded.len && empty_mag)
+			empty_mag.loc = get_turf(src.loc)
+			empty_mag = null
+			playsound(user, 'sound/weapons/smg_empty_alarm.ogg', 40, 1)
+			update_icon()
+		return
+
+
+	update_icon()
+		..()
+		if(empty_mag)
+			icon_state = "clown-[round(loaded.len,4)]"
+		else
+			icon_state = "clown"
+		return
 
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw

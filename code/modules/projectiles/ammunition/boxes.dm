@@ -76,6 +76,14 @@
 	ammo_type = "/obj/item/ammo_casing/12mm"
 	max_ammo = 0
 
+/obj/item/ammo_magazine/bananacreme
+	name = "magazine (banana creme)"
+	icon_state = "clown"
+	ammo_type = "/obj/item/ammo_casing/bananacreme"
+	max_ammo = 20
+/obj/item/ammo_magazine/bananacreme/empty
+	max_ammo = 0
+
 /obj/item/ammo_magazine/a50
 	name = "magazine (.50)"
 	icon_state = "50ae"

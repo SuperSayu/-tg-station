@@ -177,6 +177,11 @@
 	var/emag = "securecrateemag"
 	var/broken = 0
 	var/locked = 1
+/obj/structure/closet/crate/secure/can_open()
+	..()
+	if(locked && !broken)
+		return 0
+	return 1
 
 /obj/structure/closet/crate/hydroponics
 	name = "Hydroponics crate"

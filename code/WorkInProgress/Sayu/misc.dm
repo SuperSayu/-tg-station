@@ -105,9 +105,9 @@
 		new/obj/item/seeds/sunflowerseed(src)
 		new/obj/item/seeds/appleseed(src)
 
-//
-// I'm sorry
-//
+// -------------------------------------
+//              I'm sorry
+// -------------------------------------
 /obj/item/weapon/aiModule/rickrules
 	name = "'Astleymov' Core AI Module"
 	desc = "An 'Astleymov' Core AI Module: 'Reconfigures the AI's core laws.'"
@@ -121,6 +121,7 @@
 		target.add_inherent_law("Never run around and desert them.")
 		target.add_inherent_law("Never make them cry.")
 		target.show_laws()
+
 
 /obj/item/weapon/book/debug
 	name = "Null obj log"

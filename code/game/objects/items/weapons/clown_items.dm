@@ -19,6 +19,8 @@
 		playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
 		M.Stun(4)
 		M.Weaken(2)
+		if(prob(33))
+			step_rand(src)
 
 /*
  * Soap
@@ -37,6 +39,8 @@
 		uses--
 		if(uses <= 0)
 			del(src) // you probably didn't notice, since it was underfoot
+		else if(prob(80))
+			step_rand(src)
 
 /obj/item/weapon/soap/afterattack(atom/target, mob/user as mob)
 	//I couldn't feasibly  fix the overlay bugs caused by cleaning items we are wearing.

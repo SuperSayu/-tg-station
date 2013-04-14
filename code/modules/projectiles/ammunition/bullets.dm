@@ -94,3 +94,27 @@
 	desc = "A 7.62 bullet casing."
 	caliber = "a762"
 	projectile_type = "/obj/item/projectile/bullet"
+
+/obj/item/ammo_casing/bananacreme
+	name = "banana creme bullet casing"
+	desc = "Isn't this just... a banana?"
+	caliber = "honk"
+	icon = 'icons/obj/items.dmi'
+	icon_state = "banana_peel"
+	projectile_type = "/obj/item/projectile/bullet/bananacreme"
+
+	HasEntered(AM as mob|obj)
+		if(BB)
+			return // not really a peel if it's full
+		if (istype(AM, /mob/living/carbon))
+			var/mob/M =	AM
+			if (istype(M, /mob/living/carbon/human) && (isobj(M:shoes) && M:shoes.flags&NOSLIP))
+				return
+
+			M.stop_pulling()
+			M << "\blue You slipped on the [name]!"
+			playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
+			M.Stun(4)
+			M.Weaken(2)
+			if(prob(20))
+				step_rand(src)

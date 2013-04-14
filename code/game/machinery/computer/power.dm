@@ -10,6 +10,8 @@
 	use_power = 2
 	idle_power_usage = 20
 	active_power_usage = 80
+	var/working = 0
+	var/progress = 0
 
 //fix for issue 521, by QualityVan.
 //someone should really look into why circuits have a powernet var, it's several kinds of retarded.
@@ -80,8 +82,11 @@
 	user.set_machine(src)
 	var/t = ""
 
-	t += "<A href='?src=\ref[src];update=1'>Refresh</A> <A href='?src=\ref[src];close=1'>Close</A><br /><br />"
-
+	t += "<A href='?src=\ref[src];update'>Refresh</A> <A href='?src=\ref[src];close'>Close</A><br>"
+	if(!working)
+		t += "<A href='?src=\ref[src];reset'>Reset all APCs</A><br><br>"
+	else
+		t += "Reset is [progress]% done..."
 	if(!powernet)
 		t += "\red No connection"
 	else
@@ -117,15 +122,41 @@
 	popup.set_title_image(user.browse_rsc_icon(src.icon, src.icon_state))
 	popup.open()
 
-/obj/machinery/power/monitor/Topic(href, href_list)
+/obj/machinery/power/monitor/Topic(var/href, var/list/href_list)
 	..()
-	if( href_list["close"] )
+	if( "close" in href_list )
 		usr << browse(null, "window=powcomp")
 		usr.unset_machine()
 		return
-	if( href_list["update"] )
+	if( "update" in href_list )
 		src.updateDialog()
 		return
+	if( ("reset" in href_list) && !working)
+		working = 1
+		spawn(0)
+			var/list/L = list()
+			for(var/obj/machinery/power/terminal/term in powernet.nodes)
+				if(istype(term.master, /obj/machinery/power/apc))
+					var/obj/machinery/power/apc/A = term.master
+					L += A
+			var/total = L.len
+			var/i = 0
+			while(L.len)
+				var/obj/machinery/power/apc/A = pick_n_take(L)
+				if(A.stat & (BROKEN|MAINT))
+					continue
+				if(!A.cell || A.aidisabled)
+					continue
+				A.charging = 0
+				A.chargemode = 1
+				A.chargecount = 0
+				i++
+				if(prob(10))
+					progress = round((i/total) * 100)
+					updateDialog()
+					sleep(100)
+
+			working = 0
 
 
 /obj/machinery/power/monitor/power_change()

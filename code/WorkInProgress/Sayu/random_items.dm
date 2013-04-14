@@ -190,7 +190,7 @@
 /obj/structure/closet/crate/secure/unknownchemicals
 	name = "Grey-market Chemicals Grab Pack"
 	desc = "Crate full of chemicals of unknown type and value from a 'trusted' source."
-	req_access = list(access_chemistry,access_research)
+	req_one_access = list(access_chemistry,access_research,access_qm) // the qm knows a guy, you see.
 
 	New()
 		..()
@@ -216,7 +216,7 @@
 /obj/structure/closet/crate/secure/chemicals
 	name		= "Chemical Supply Kit"
 	desc		= "Full of basic chemistry supplies."
-	req_access	= list(access_chemistry,access_research)
+	req_one_access	= list(access_chemistry,access_research)
 
 	New()
 		..()
@@ -231,7 +231,7 @@
 				B.identify_probability = 100
 			else
 				B.name	= "unlabelled bottle"
-				desc	= "Looks like the label fell off."
+				B.desc	= "Looks like the label fell off."
 				B.identify_probability = 0
 
 
@@ -298,8 +298,6 @@
 	cost = 150
 	containertype = /obj/structure/closet/crate/secure/chemicals
 	containername = "Chemistry Starter Kit"
-	access = access_research
-	contraband = 1
 
 	New()
 		manifest += "<ul>"
@@ -316,7 +314,6 @@
 	cost = 150
 	containertype = /obj/structure/closet/crate/secure
 	containername = "Unregulated Chemicals Crate"
-	access = access_research
 	contraband = 1
 
 	New()
@@ -326,11 +323,14 @@
 
 /datum/supply_packs/randomised/contaband/novelty
 	name = "Colonel Sassacres Chest of Dautingly Frivolous Weaponry"
-	num_contained	= 2
+	num_contained	= 3
 	cost = 50
 	contains = list(/obj/item/weapon/sord, /obj/item/weapon/grenade/clusterbuster/banquet/child,
 					/obj/item/weapon/grenade/clusterbuster/aviary, /obj/item/weapon/grenade/chem_grenade/lube,
-					/obj/item/weapon/bikehorn, /obj/item/weapon/reagent_containers/spray/chemsprayer/honkmaster)
+					/obj/item/weapon/grenade/clusterbuster/fluffy, /obj/item/weapon/grenade/clusterbuster/lube,
+					/obj/item/weapon/grenade/clusterbuster/smoke, /obj/item/weapon/grenade/clusterbuster/soap,
+					/obj/item/weapon/bikehorn, /obj/item/weapon/reagent_containers/spray/chemsprayer/honkmaster,
+					/obj/item/weapon/gun/projectile/automatic/clown)
 	containertype = /obj/structure/closet/crate/secure
 	containername = "Chest of Dautingly Frivolous Weaponry"
 	access = access_clown
