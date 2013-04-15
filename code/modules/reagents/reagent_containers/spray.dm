@@ -207,9 +207,10 @@
 
 /obj/item/weapon/reagent_containers/spray/chemsprayer/honkmaster
 	name = "Honkblaster Unlimited"
+	desc = "Made with the finest cheap plastic."
 	New()
 		..()
-		reagents.add_reagent("lube",volume)
+		reagents.add_reagent("water",volume)
 
 // Plant-B-Gone
 /obj/item/weapon/reagent_containers/spray/plantbgone // -- Skie

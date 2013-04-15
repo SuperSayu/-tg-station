@@ -505,15 +505,15 @@ mob/living/simple_animal/corgi/puppy/sgt_pepper
 
 		var/list/nasty = list(
 			"mutationtoxin","amutationtoxin","toxin","amatoxin","mutagen","plasma","slimejelly","carpotoxin","mindbreaker",
-			"chloralhydrate","beer2","sacid","pacid")
+			"chloralhydrate","sacid","pacid")
 
-		if(RC.type in approved && prob(85))
+		if((RC.type in approved) && prob(95))
 			return 1
-		if(RC.type in offensive && prob(67))
+		if(RC.type in offensive)
 			return -1
 
 		for(var/datum/reagent/R in RC.reagents)
-			if(R.id in nasty && prob(40))
+			if((R.id in nasty) && prob(85))
 				return -1
 		return 0
 
@@ -527,8 +527,10 @@ mob/living/simple_animal/corgi/puppy/sgt_pepper
 				if(get_dist(src,target) < 7)
 					var/atom/oldloc = loc
 					step_away(src,target)
+					sleep(1)
 					step_away(src,target)
-					while(prob(10))
+					while(prob(15))
+						sleep(1)
 						step_away(src,target)
 					if(loc == oldloc && prob(30))
 						visible_message("[src] cowers from [target]!")
@@ -558,10 +560,12 @@ mob/living/simple_animal/corgi/puppy/sgt_pepper
 					decide_interest(target)
 					return
 				target = null // didn't chase, lost interest
+
 			else if(target in dislike)
 				if(prob(55) && (target in oview(4,src)))
 					step_towards(src,target)
 					while(prob(20))
+						sleep(1)
 						step_towards(src,target)
 					if(prob(68))
 						var/angry_message = pick(
@@ -579,7 +583,24 @@ mob/living/simple_animal/corgi/puppy/sgt_pepper
 		if(prob(42))
 			return
 
-		for(var/mob/living/M in oview(4,src))
+		if(prob(50))
+			for(var/obj/item/weapon/reagent_containers/RD in loc)
+				switch(sniff_test(RD))
+					if(1)
+						visible_message("\blue [src] sniffs [RD]")
+						sleep(20)
+						RD.attack_animal(src)
+						return
+					if(-1)
+						if(prob(45))
+							visible_message("\blue [src] sniffs [RD]")
+							sleep(12)
+							visible_message("\red [src] recoils from [RD], and barks angrily!")
+							step_away(src,RD)
+							return
+
+
+		for(var/mob/living/M in viewers(6,src))
 			if(M in fears)
 				target = M
 				return
@@ -615,6 +636,7 @@ mob/living/simple_animal/corgi/puppy/sgt_pepper
 						dislike += M
 					else
 						like += M
+
 			if(istype(M,/mob/living/carbon/alien/larva))
 				dislike += M
 				target = M
@@ -631,17 +653,23 @@ mob/living/simple_animal/corgi/puppy/sgt_pepper
 		..()
 
 	attackby(var/obj/item/W as obj,var/mob/user as mob)
-		if(istype(W,/obj/item/weapon/reagent_containers))
+		if(istype(W,/obj/item/weapon/reagent_containers) && !(user in fears))
 			visible_message("\blue [src] sniffs [W]")
 			sleep(30)
-			switch(sniff_test(W))
+			var/r =sniff_test(W)
+			testing(r)
+			switch(r)
 				if(1)
 					var/result = pick("She seems okay with it.", "She looks hungry.", "She seems to like it.", "She's interested!")
 					visible_message("\blue [result]")
-					if(prob(19))
+					if(prob(59))
 						W.attack_animal(src)
+						if(user in dislike)
+							dislike -= user
+						else if (!(user in like) && prob(45))
+							like += user
 				if(0)
-					var/result = pick("She seems bemused.","She seems okay with it.", "She doesn't seem to mind.")
+					var/result = pick("She seems bemused.","She seems okay with it.", "She doesn't seem to care.")
 					visible_message("\blue [result]")
 				if(-1)
 					var/result = pick("She seems bemused.","She seems agitated!", "She doesn't seem to like it.", "She looks bothered!")

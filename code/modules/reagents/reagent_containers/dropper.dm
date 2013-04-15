@@ -11,6 +11,9 @@
 	afterattack(obj/target, mob/user , flag)
 		if(!target.reagents) return
 
+		if(istype(target,/mob/living/simple_animal/corgi/puppy/sgt_pepper) && user.a_intent == "help")
+			return //sgt. pepper can do a sniff test on reagent containers
+
 		if(filled)
 			if(target.reagents.total_volume >= target.reagents.maximum_volume)
 				user << "<span class='notice'>[target] is full.</span>"

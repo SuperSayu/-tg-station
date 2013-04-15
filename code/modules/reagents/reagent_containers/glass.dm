@@ -214,6 +214,9 @@
 			if(istype(target, type))
 				return
 
+		if(istype(target,/mob/living/simple_animal/corgi/puppy/sgt_pepper) && user.a_intent == "help")
+			return //sgt. pepper can do a sniff test on reagent containers
+
 		if(ismob(target) && target.reagents && reagents.total_volume)
 			var/mob/M = target
 			var/R
@@ -252,8 +255,15 @@
 				user << "<span class='notice'>[target] is full.</span>"
 				return
 
-			var/trans = reagents.trans_to(target, amount_per_transfer_from_this)
-			user << "<span class='notice'>You transfer [trans] unit\s of the solution to [target].</span>"
+			if(istype(target,/obj/item/weapon/reagent_containers/spray/chemsprayer/honkmaster))
+				var/trans = reagents.trans_id_to(target,"water",amount_per_transfer_from_this)
+				if(!trans)
+					user << "<span class='notice'>[target] is too cheaply made to hold anything but water!</span>"
+				else
+					user << "<span class='notice'>You transfer [trans] unit\s of the water to [target].</span>"
+			else
+				var/trans = reagents.trans_to(target, amount_per_transfer_from_this)
+				user << "<span class='notice'>You transfer [trans] unit\s of the solution to [target].</span>"
 
 		//Safety for dumping stuff into a ninja suit. It handles everything through attackby() and this is unnecessary.	//gee thanks noize
 		else if(istype(target, /obj/item/clothing/suit/space/space_ninja))
