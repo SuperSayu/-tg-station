@@ -79,6 +79,7 @@
 	New()
 		..()
 		empty_mag = new /obj/item/ammo_magazine/bananacreme/empty(src)
+		new /obj/item/ammo_magazine/bananacreme(loc)
 		update_icon()
 		return
 

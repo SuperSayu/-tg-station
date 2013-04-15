@@ -19,7 +19,7 @@
 			//Sometimes people choose justice.
 			//Sometimes justice chooses you.
 			visible_message("That doesn't look like a normal Toolbelt of Holding...")
-			new /obj/item/weapon/storage/belt/utility/bluespace/owlman(loc)
+			new /obj/item/weapon/storage/belt/bluespace/owlman(loc)
 			spawn(1)
 				del src
 			return
@@ -36,7 +36,7 @@
 			crit_fail = 1
 			return 0
 
-/obj/item/weapon/storage/belt/utility/bluespace/owlman
+/obj/item/weapon/storage/belt/bluespace/owlman
 	name = "Owlman's utility belt"
 	desc = "Sometimes people choose justice.  Sometimes, justice chooses you..."
 	icon_state = "securitybelt"
@@ -58,7 +58,7 @@
 
  // As a last resort, the belt can be used as a plastic explosive with a fixed timer (15 seconds).  Naturally, you'll lose all your gear...
  // Of course, it could be worse.  It could spawn a singularity!
-/obj/item/weapon/storage/belt/utility/bluespace/owlman/afterattack(atom/target as obj|turf, mob/user as mob, flag)
+/obj/item/weapon/storage/belt/bluespace/owlman/afterattack(atom/target as obj|turf, mob/user as mob, flag)
 	if (!flag)
 		return
 	if (istype(target, /turf/unsimulated) || istype(target, /turf/simulated/shuttle) || istype(target, /obj/item/weapon/storage) || istype(target, /obj/structure/table) || istype(target, /obj/structure/closet))
@@ -94,10 +94,10 @@
 						del(target)
 				if (src)
 					del(src)
-/obj/item/weapon/storage/belt/utility/bluespace/attack(mob/M as mob, mob/user as mob, def_zone)
+/obj/item/weapon/storage/belt/bluespace/attack(mob/M as mob, mob/user as mob, def_zone)
 	return
 
-/obj/item/weapon/storage/belt/utility/bluespace/admin
+/obj/item/weapon/storage/belt/bluespace/admin
 	name = "Admin's Tool-belt"
 	desc = "Holds everything for those that run everything."
 	icon_state = "soulstonebelt"

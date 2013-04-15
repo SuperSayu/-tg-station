@@ -155,7 +155,7 @@
 "acY" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/simulated/floor,/area/security/warden)
 "acZ" = (/obj/machinery/power/apc{dir = 8; name = "Head of Security's Office APC"; pixel_x = -24; pixel_y = 0},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor/carpet,/area/security/hos)
 "ada" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/carpet,/area/security/hos)
-"adb" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/simulated/floor/carpet,/area/security/hos)
+"adb" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/mob/living/simple_animal/corgi/puppy/sgt_pepper,/turf/simulated/floor/carpet,/area/security/hos)
 "adc" = (/obj/machinery/light_switch{pixel_y = -23},/turf/simulated/floor/carpet,/area/security/hos)
 "add" = (/obj/machinery/disposal,/obj/structure/disposalpipe/trunk,/turf/simulated/floor/carpet,/area/security/hos)
 "ade" = (/obj/machinery/mail,/obj/machinery/vending/mail/west,/turf/simulated/floor,/area/security/main)

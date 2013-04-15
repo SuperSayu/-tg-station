@@ -407,12 +407,269 @@
 	icon_living = "puppy"
 	icon_dead = "puppy_dead"
 
+
 //puppies cannot wear anything.
 /mob/living/simple_animal/corgi/puppy/Topic(href, href_list)
-	if(href_list["remove_inv"] || href_list["add_inv"])
+	if(href_list["add_inv"])
 		usr << "\red You can't fit this on [src]"
 		return
+	if(href_list["remove_inv"])
+		usr << "\red You can't take it off!"
 	..()
+
+mob/living/simple_animal/corgi/puppy/sgt_pepper
+	name = "Sgt. Pepper"
+	real_name = "Sgt. Pepper"
+	gender = "female"
+	desc = "She's the ruffest, tuffest little doggy in all the station."
+	icon_state = "sgt_pepper"
+	icon_living = "sgt_pepper"
+	icon_dead = "sgt_pepper_dead"
+	response_help  = "pets"
+	response_disarm = "bops"
+	response_harm   = "kicks"
+	var/list/dislike = list()
+	var/list/like = list()
+	var/list/fears = list()
+	var/turns_since_scan = 0
+	var/mob/target = null
+
+	proc/decide_interest(var/mob/M)
+		if(M in like || M in dislike)
+			return
+		if(ishuman(M) && M.mind)
+			var/mob/living/carbon/human/H = M
+			if(H.mind.changeling) // sgt pepper detects changelings
+				dislike += H
+				return
+
+			if(H.mind.special_role && prob(40))
+				dislike += H
+				return
+
+			if((H.mind.assigned_role in security_positions) && prob(65))
+				like += H
+				return
+
+			if(istype(H.l_hand,/obj/item/weapon/reagent_containers))
+				switch(sniff_test(H.l_hand))
+					if(1)
+						like += M
+						return
+					if(-1)
+						dislike += M
+						return
+
+			if(istype(H.r_hand,/obj/item/weapon/reagent_containers))
+				switch(sniff_test(H.r_hand))
+					if(1)
+						like += M
+						return
+					if(-1)
+						dislike += M
+						return
+
+			if(prob(40)) // blind determination
+				if(prob(59))
+					dislike += M
+					return
+				like += M
+				return
+
+
+	//return (-1, 0, 1) based on bad, indifferent, good
+	proc/sniff_test(var/obj/item/weapon/reagent_containers/RC)
+		var/list/approved = list(
+			/obj/item/weapon/reagent_containers/food/snacks/meat,
+			/obj/item/weapon/reagent_containers/food/snacks/meat/monkey,
+			/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh,
+			/obj/item/weapon/reagent_containers/food/snacks/donut,
+			/obj/item/weapon/reagent_containers/food/snacks/donut/normal,
+			/obj/item/weapon/reagent_containers/food/snacks/donut/jelly,
+			/obj/item/weapon/reagent_containers/food/snacks/donut/cherryjelly,
+			/obj/item/weapon/reagent_containers/food/snacks/meatbreadslice,
+			/obj/item/weapon/reagent_containers/food/snacks/monkeykabob,
+			/obj/item/weapon/reagent_containers/food/snacks/meatpie,
+			/obj/item/weapon/reagent_containers/food/snacks/sosjerky)
+		var/list/offensive = list(
+			/obj/item/weapon/reagent_containers/food/snacks/meat/human,
+			/obj/item/weapon/reagent_containers/food/snacks/meat/corgi,
+			/obj/item/weapon/reagent_containers/food/snacks/badrecipe,
+			/obj/item/weapon/reagent_containers/food/snacks/clownburger,
+			/obj/item/weapon/reagent_containers/food/snacks/spesslaw, // that's offensive to the legal system, sir
+			/obj/item/weapon/reagent_containers/food/snacks/xenomeat,
+			/obj/item/weapon/reagent_containers/food/snacks/xenomeatbreadslice,
+			/obj/item/weapon/reagent_containers/food/snacks/mysterysoup,
+			/obj/item/weapon/reagent_containers/food/snacks/carpmeat,
+			/obj/item/weapon/reagent_containers/food/snacks/brainburger)
+
+		var/list/nasty = list(
+			"mutationtoxin","amutationtoxin","toxin","amatoxin","mutagen","plasma","slimejelly","carpotoxin","mindbreaker",
+			"chloralhydrate","beer2","sacid","pacid")
+
+		if(RC.type in approved && prob(85))
+			return 1
+		if(RC.type in offensive && prob(67))
+			return -1
+
+		for(var/datum/reagent/R in RC.reagents)
+			if(R.id in nasty && prob(40))
+				return -1
+		return 0
+
+	Life()
+		..()
+		if(prob(21))
+			return // distractable
+
+		if(target)
+			if(target in fears)
+				if(get_dist(src,target) < 7)
+					var/atom/oldloc = loc
+					step_away(src,target)
+					step_away(src,target)
+					while(prob(10))
+						step_away(src,target)
+					if(loc == oldloc && prob(30))
+						visible_message("[src] cowers from [target]!")
+					if(loc != oldloc && prob(40))
+						visible_message("\red [src] flees, yipping in a panic!")
+					return
+				else
+					if(prob(90))
+						fears -= target
+					target = null
+
+
+			else if(target in like)
+				if(prob(60) && (target in oview(2,src)))
+					step_towards(src,target)
+					if(prob(32))
+						var/cheery_message = pick(
+							"[src] follows [target] and wags her tail hopefully.",
+							"[src] looks at [target] with bright eyes.",
+							"[src] arfs pleasantly at [target]!")
+
+						visible_message(cheery_message)
+					return
+
+				if(prob(10))
+					like -= target
+					decide_interest(target)
+					return
+				target = null // didn't chase, lost interest
+			else if(target in dislike)
+				if(prob(55) && (target in oview(4,src)))
+					step_towards(src,target)
+					while(prob(20))
+						step_towards(src,target)
+					if(prob(68))
+						var/angry_message = pick(
+							"\red [src] barks madly at [target]!",
+							"[src] glares stoicly at [target]!",
+							"\red [src] chases [target], yapping incessantly!")
+						visible_message(angry_message)
+					return
+
+				if(prob(2) && sniff_test(target) >= 0)
+					dislike -= target
+				target = null
+			return
+
+		if(prob(42))
+			return
+
+		for(var/mob/living/M in oview(4,src))
+			if(M in fears)
+				target = M
+				return
+
+			if(M in like)
+				if(prob(35)) // you got my attention
+					target = M
+					return
+				continue
+			if(M in dislike)
+				if(prob(55))
+					target = M
+					return
+				continue
+
+
+			if(istype(M,/mob/living/carbon/alien/humanoid)) // yes even dogs get oshit reactions
+				fears += M
+				target = M
+				return
+
+			visible_message("[src] sniffs warily at [M].")
+			if(istype(M,/mob/living/simple_animal))
+				if(istype(M,/mob/living/simple_animal/corgi) && prob(40))
+					like += M
+					continue
+				if(istype(M,/mob/living/simple_animal/hostile)) // this will likely make her march off to her doom
+					dislike += M								// love dogs, but they are loyal to a fault
+					target = M
+					return
+				if(istype(M,/mob/living/simple_animal) && prob(29))
+					if(prob(80))
+						dislike += M
+					else
+						like += M
+			if(istype(M,/mob/living/carbon/alien/larva))
+				dislike += M
+				target = M
+				return
+
+			if(istype(M,/mob/living/carbon/human))
+				decide_interest(M)
+				return
+
+	attack_animal(mob/living/simple_animal/M as mob)
+		like -= M
+		fears += M
+		target = M
+		..()
+
+	attackby(var/obj/item/W as obj,var/mob/user as mob)
+		if(istype(W,/obj/item/weapon/reagent_containers))
+			visible_message("\blue [src] sniffs [W]")
+			sleep(30)
+			switch(sniff_test(W))
+				if(1)
+					var/result = pick("She seems okay with it.", "She looks hungry.", "She seems to like it.", "She's interested!")
+					visible_message("\blue [result]")
+					if(prob(19))
+						W.attack_animal(src)
+				if(0)
+					var/result = pick("She seems bemused.","She seems okay with it.", "She doesn't seem to mind.")
+					visible_message("\blue [result]")
+				if(-1)
+					var/result = pick("She seems bemused.","She seems agitated!", "She doesn't seem to like it.", "She looks bothered!")
+					visible_message("\blue [result]")
+			return
+
+
+		// this will become a normal attack
+		like -= user
+		fears += user
+		..(W,user)
+
+	attack_hand(var/mob/user as mob)
+		if(iscarbon(user))
+			switch(user.a_intent)
+				if("grab")
+					var/atom/oldloc = loc
+					step_away(src,user)
+					if(loc != oldloc)
+						visible_message("\red [src] is trying not to get grabbed!")
+					else
+						visible_message("\red [src] cowers helplessly!")
+					fears |= user
+				if("harm","disarm")
+					fears += user
+		..(user)
+
+
 
 
 //LISA! SQUEEEEEEEEE~
@@ -442,7 +699,7 @@
 
 	if(!stat && !resting && !buckled)
 		turns_since_scan++
-		if(turns_since_scan > 15)
+		if(turns_since_scan > 15 && !client)
 			turns_since_scan = 0
 			var/alone = 1
 			var/ian = 0

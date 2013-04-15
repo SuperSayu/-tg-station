@@ -40,13 +40,29 @@
 		if(uses <= 0)
 			del(src) // you probably didn't notice, since it was underfoot
 		else if(prob(80))
+			var/atom/oldloc = loc
 			step_rand(src)
+			if(oldloc != loc)
+				for(var/mob/living/carbon/human/H in loc)
+					HasEntered(H)
 
 /obj/item/weapon/soap/afterattack(atom/target, mob/user as mob)
 	//I couldn't feasibly  fix the overlay bugs caused by cleaning items we are wearing.
 	//So this is a workaround. This also makes more sense from an IC standpoint. ~Carn
 	if(user.client && (target in user.client.screen))
 		user << "<span class='notice'>You need to take that [target.name] off before cleaning it.</span>"
+	else if(istype(target,/turf))
+		var/cleaned = 0
+		for(var/obj/effect/decal/cleanable/C in target)
+			if(uses <= 0 || cleaned > 3) break
+			cleaned++
+			uses--
+			del C
+		if(cleaned > 0)
+			usr << "<span class='notice'>You clean \the [target.name].</span>"
+		if(uses <= 0)
+			user << "<span class='notice'>That's the last of this bar of soap.</span>"
+			del(src)
 	else if(istype(target,/obj/effect/decal/cleanable))
 		user << "<span class='notice'>You scrub \the [target.name] out.</span>"
 		src.uses--
@@ -59,8 +75,8 @@
 	else
 		user << "<span class='notice'>You clean \the [target.name].</span>"
 		target.clean_blood()
-		src.uses--
-		if(src.uses<=0)
+		uses--
+		if(uses<=0)
 			user << "<span class='notice'>That's the last of this bar of soap.</span>"
 			del(src)
 	return
