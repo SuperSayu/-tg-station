@@ -268,7 +268,7 @@
 		else
 			fueled = 1
 
-		if(reaction_rate > .05)
+		if(reaction_rate > 0.05)
 			var/temp = min(2*reaction_rate,engine.toxins)
 			engine.toxins -= temp
 			t -= temp
@@ -294,7 +294,7 @@
 		if(!fueled)
 			var/rough_noise = pick("sputters","coughs","pops")
 			visible_message("\The [src] [rough_noise]")
-			if(low_o2 && prob(33)))
+			if(low_o2 && prob(33))
 				var/obj/effect/smoke
 				if(prob(60))
 					smoke = new /obj/effect/effect/bad_smoke(loc)
