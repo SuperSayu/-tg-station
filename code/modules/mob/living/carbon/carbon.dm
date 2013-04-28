@@ -215,7 +215,6 @@
 // ++++ROCKDTBEN++++ MOB PROCS //END
 
 /mob/living/carbon/proc/handle_ventcrawl() // -- TLE -- Merged by Carn
-
 	if(!stat)
 		if(!lying)
 

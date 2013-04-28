@@ -660,7 +660,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 	if(buckled)
 		anchored = 1
 		canmove = 0
-		if( istype(buckled,/obj/structure/stool/bed/chair) )
+		if( istype(buckled,/obj/structure/stool/bed/chair) || istype(buckled, /obj/machinery/scooter))
 			lying = 0
 		else
 			lying = 1

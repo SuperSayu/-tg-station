@@ -469,12 +469,12 @@ mob/living/simple_animal/corgi/puppy/sgt_pepper
 						dislike += M
 						return
 
-			if(prob(40)) // blind determination
-				if(prob(59))
-					dislike += M
-					return
-				like += M
+		if(prob(40)) // blind determination
+			if(prob(59))
+				dislike += M
 				return
+			like += M
+			return
 
 
 	//return (-1, 0, 1) based on bad, indifferent, good
@@ -519,7 +519,7 @@ mob/living/simple_animal/corgi/puppy/sgt_pepper
 
 	Life()
 		..()
-		if(prob(21))
+		if(stat != CONSCIOUS || prob(21))
 			return // distractable
 
 		if(target)
@@ -558,6 +558,7 @@ mob/living/simple_animal/corgi/puppy/sgt_pepper
 				if(prob(10))
 					like -= target
 					decide_interest(target)
+					target = null
 					return
 				target = null // didn't chase, lost interest
 
@@ -577,6 +578,8 @@ mob/living/simple_animal/corgi/puppy/sgt_pepper
 
 				if(prob(2) && sniff_test(target) >= 0)
 					dislike -= target
+				target = null
+			else
 				target = null
 			return
 
@@ -601,6 +604,8 @@ mob/living/simple_animal/corgi/puppy/sgt_pepper
 
 
 		for(var/mob/living/M in viewers(6,src))
+			if(M == src)
+				continue
 			if(M in fears)
 				target = M
 				return
@@ -642,9 +647,7 @@ mob/living/simple_animal/corgi/puppy/sgt_pepper
 				target = M
 				return
 
-			if(istype(M,/mob/living/carbon/human))
-				decide_interest(M)
-				return
+			decide_interest(M)
 
 	attack_animal(mob/living/simple_animal/M as mob)
 		like -= M

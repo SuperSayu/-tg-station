@@ -285,6 +285,24 @@ datum/objective/steal
 		"the hypospray" = /obj/item/weapon/reagent_containers/hypospray,
 		"the captain's pinpointer" = /obj/item/weapon/pinpointer,
 		"an ablative armor vest" = /obj/item/clothing/suit/armor/laserproof,
+		"a fire axe" = /obj/item/weapon/twohanded/fireaxe,
+        "the chain of command" = /obj/item/weapon/melee/chainofcommand,
+        "the captain's rubber stamp" = /obj/item/weapon/stamp/captain,
+        "the reactive teleport armor" = /obj/item/clothing/suit/armor/reactive,
+        "the captain's PDA cartridge" = /obj/item/weapon/cartridge/captain,
+        "the head of personnel's PDA cartridge" = /obj/item/weapon/cartridge/hop,
+        "the chief engineer's PDA cartridge" = /obj/item/weapon/cartridge/ce,
+        "the head of security's PDA cartridge" = /obj/item/weapon/cartridge/hos,
+        "the chief medical officer's PDA cartridge" = /obj/item/weapon/cartridge/cmo,
+        "the research director's PDA cartridge" = /obj/item/weapon/cartridge/rd,
+        "the captain's gloves" = /obj/item/clothing/gloves/captain,
+        "a live facehugger" = /obj/item/clothing/mask/facehugger,
+        "a hardsuit helmet" = /obj/item/clothing/head/helmet/space/rig,
+        "the monitor decryption key" = /obj/item/weapon/paper/monitorkey,
+        "a 'Freeform' core AI module" = /obj/item/weapon/aiModule/freeformcore,
+        "an 'Astleymov' core AI module" = /obj/item/weapon/aiModule/rickrules,
+        "a dermal armor patch" = /obj/item/clothing/head/helmet/HoS/dermal,
+        "a syndicate balloon" = /obj/item/toy/syndicateballoon // fuck you you don't get to buy anything else with telecrystals today
 	)
 
 	var/global/possible_items_special[] = list(

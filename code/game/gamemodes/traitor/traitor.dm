@@ -103,13 +103,44 @@
 
 	else
 		switch(rand(1,100))
-			if(1 to 50)
+			if(1 to 45)
 				var/datum/objective/assassinate/kill_objective = new
 				kill_objective.owner = traitor
 				kill_objective.find_target()
 				traitor.objectives += kill_objective
+			if(46 to 75)
+				var/datum/objective/steal/steal_objective = new
+				steal_objective.owner = traitor
+				steal_objective.find_target()
+				traitor.objectives += steal_objective
 			else
 				var/datum/objective/steal/steal_objective = new
+				steal_objective.owner = traitor
+				steal_objective.find_target()
+				traitor.objectives += steal_objective
+
+				steal_objective = new
+				steal_objective.owner = traitor
+				steal_objective.find_target()
+				traitor.objectives += steal_objective
+		switch(rand(1,100))
+			if(1 to 25)
+				var/datum/objective/assassinate/kill_objective = new
+				kill_objective.owner = traitor
+				kill_objective.find_target()
+				traitor.objectives += kill_objective
+			if(26 to 60)
+				var/datum/objective/steal/steal_objective = new
+				steal_objective.owner = traitor
+				steal_objective.find_target()
+				traitor.objectives += steal_objective
+			else
+				var/datum/objective/steal/steal_objective = new
+				steal_objective.owner = traitor
+				steal_objective.find_target()
+				traitor.objectives += steal_objective
+
+				steal_objective = new
 				steal_objective.owner = traitor
 				steal_objective.find_target()
 				traitor.objectives += steal_objective

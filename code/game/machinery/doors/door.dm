@@ -58,6 +58,11 @@
 				open()
 		return
 
+	if(istype(AM,/obj/machinery/scooter))
+		if(AM:pilot)
+			Bumped(AM:pilot)
+		return
+
 	if(istype(AM, /obj/mecha))
 		var/obj/mecha/mecha = AM
 		if(density)
