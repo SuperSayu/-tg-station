@@ -1,33 +1,33 @@
-/datum/event_control/radiation_storm/gswap
+/datum/round_event_control/radiation_storm/gswap
 	name 			= "Gender-swapping Radiation"
-	typepath		= /datum/event/radiation_storm/gswap
+	typepath		= /datum/round_event/radiation_storm/gswap
 	weight			= 6
 	max_occurrences = 4
-/datum/event_control/radiation_storm/pota
+/datum/round_event_control/radiation_storm/pota
 	name 			= "Planet of the Apes Radiation"
-	typepath 		= /datum/event/radiation_storm/pota
+	typepath 		= /datum/round_event/radiation_storm/pota
 	weight 			= 3
 	max_occurrences = 2
-/datum/event_control/radiation_storm/ffour
+/datum/round_event_control/radiation_storm/ffour
 	name 			= "Fantastic Four Radiation"
-	typepath 		= /datum/event/radiation_storm/ffour
+	typepath 		= /datum/round_event/radiation_storm/ffour
 	weight 			= 6
 	max_occurrences = 1
-/datum/event_control/radiation_storm/healing
+/datum/round_event_control/radiation_storm/healing
 	name 			= "Healing Radiation"
-	typepath 		= /datum/event/radiation_storm/healing
+	typepath 		= /datum/round_event/radiation_storm/healing
 	weight 			= 5
 	max_occurrences = 10
 
-/datum/event/radiation_storm/proc/rad_armorcheck(mob/living/M as mob,var/multiplier = 0.5)
+/datum/round_event/radiation_storm/proc/rad_armorcheck(mob/living/M as mob,var/multiplier = 0.5)
 	var/armor = M.getarmor(null,"rad")
 	var/probability = (100 - armor) * multiplier
 	return prob(probability)
-/datum/event/radiation_storm/proc/dna_toggle_block(var/input,var/blocknum,var/blocksize)
+/datum/round_event/radiation_storm/proc/dna_toggle_block(var/input,var/blocknum,var/blocksize)
 	return setblock(input,blocknum,toggledblock(getblock(input,blocknum,blocksize)),blocksize)
 
 
-/datum/event/radiation_storm/gswap
+/datum/round_event/radiation_storm/gswap
 	start()
 		for(var/mob/living/L in living_mob_list)
 			var/turf/T = get_turf(L)
@@ -51,7 +51,7 @@
 						L << "You feel [adverb] [gender]."
 						L.emote("whimper")
 
-/datum/event/radiation_storm/pota
+/datum/round_event/radiation_storm/pota
 	start()
 		for(var/mob/living/C in living_mob_list)
 			var/turf/T = get_turf(C)
@@ -67,7 +67,7 @@
 					if(C != null)
 						domutcheck(C,null,1)
 
-/datum/event/radiation_storm/ffour
+/datum/round_event/radiation_storm/ffour
 	start()
 		var/list/candidates = list()
 		for(var/mob/living/C in living_mob_list)
@@ -92,7 +92,7 @@
 					H.apply_damages(-200,-200,-200,-200,-200)
 					domutcheck(H,null,1)
 
-/datum/event/radiation_storm/healing
+/datum/round_event/radiation_storm/healing
 	start()
 		for(var/mob/living/L in living_mob_list)
 			var/turf/T = get_turf(L)

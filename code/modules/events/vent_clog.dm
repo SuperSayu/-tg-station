@@ -1,21 +1,21 @@
-/datum/event_control/vent_clog
+/datum/round_event_control/vent_clog
 	name = "Clogged Vents"
-	typepath = /datum/event/vent_clog
+	typepath = /datum/round_event/vent_clog
 	weight = 40
 	max_occurrences = 50
 
-/datum/event/vent_clog
+/datum/round_event/vent_clog
 	announceWhen	= 0
 	startWhen		= 5
 	endWhen			= 30
 	var/interval 	= 2
 	var/list/vents  = null
 
-/datum/event/vent_clog/announce()
+/datum/round_event/vent_clog/announce()
 	command_alert("The scrubbers network is experiencing a backpressure surge.  Some ejection of contents may occur.", "Atmospherics alert")
 
 
-/datum/event/vent_clog/setup()
+/datum/round_event/vent_clog/setup()
 	endWhen = rand(25,100)
 	vents = list()
 	for(var/obj/machinery/atmospherics/unary/vent_scrubber/temp_vent in world)
@@ -23,7 +23,7 @@
 			if(temp_vent.network.normal_members.len > 50)
 				vents += temp_vent
 
-/datum/event/vent_clog/tick()
+/datum/round_event/vent_clog/tick()
 	if((activeFor%interval)==0 && prob(95))
 		var/obj/vent = pick_n_take(vents)
 

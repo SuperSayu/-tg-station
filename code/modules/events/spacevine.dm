@@ -1,11 +1,11 @@
-/datum/event_control/spacevine
+/datum/round_event_control/spacevine
 	name 			= "Spacevine"
-	typepath 		= /datum/event/spacevine
+	typepath 		= /datum/round_event/spacevine
 	weight 			= 8
 	max_occurrences = 3
 	minimumCrew		= 5
 
-/datum/event/spacevine/start()
+/datum/round_event/spacevine/start()
 	var/list/turfs = list() //list of all the empty floor turfs in the hallway areas
 
 	for(var/area/hallway/A in world)
