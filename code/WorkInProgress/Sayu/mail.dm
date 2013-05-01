@@ -591,10 +591,10 @@ datum/design/mailhub
 	products = list(/obj/item/weapon/packageWrap = 2, /obj/item/stack/sheet/cardboard = 10, /obj/item/weapon/pen = 3, /obj/item/weapon/hand_labeler = 1)
 
 	north
-		pixel_y = 30
+		pixel_y = 27
 	south
-		pixel_y = -30
+		pixel_y = -28
 	east
-		pixel_x = 30
+		pixel_x = 24
 	west
-		pixel_x = -30
+		pixel_x = -24

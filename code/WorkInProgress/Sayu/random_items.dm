@@ -240,7 +240,7 @@
 	desc = "A bin full of fresh flowers for the bereaved."
 	New()
 		while(contents.len < 10)
-			var/flowertype = pick(/obj/item/weapon/grown/sunflower,/obj/item/weapon/grown/novaflower,
+			var/flowertype = pick(/obj/item/weapon/grown/sunflower,/obj/item/weapon/grown/novaflower,/obj/item/weapon/reagent_containers/food/snacks/grown/poppy,
 				/obj/item/weapon/reagent_containers/food/snacks/grown/harebell,/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower)
 			var/atom/movable/AM = new flowertype(src)
 			AM.pixel_x = rand(-10,10)

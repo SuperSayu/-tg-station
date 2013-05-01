@@ -271,6 +271,7 @@ datum/objective/steal
 		"an RCD" = /obj/item/weapon/rcd,
 		"a jetpack" = /obj/item/weapon/tank/jetpack,
 		"a functional AI" = /obj/item/device/aicard,
+		"a functional personal AI" = /obj/item/device/paicard,
 		"a pair of magboots" = /obj/item/clothing/shoes/magboots,
 		"the station blueprints" = /obj/item/blueprints,
 		"28 moles of plasma (full tank)" = /obj/item/weapon/tank,
@@ -291,6 +292,7 @@ datum/objective/steal
 		"a head of security's jumpsuit" = /obj/item/clothing/under/rank/head_of_security,
 		"a head of personnel's jumpsuit" = /obj/item/clothing/under/rank/head_of_personnel,
 
+		"the detective's scanner" = /obj/item/device/detective_scanner,
 		"a fire axe" = /obj/item/weapon/twohanded/fireaxe,
         "the chain of command" = /obj/item/weapon/melee/chainofcommand,
         "the captain's rubber stamp" = /obj/item/weapon/stamp/captain,
@@ -303,12 +305,22 @@ datum/objective/steal
         "the research director's PDA cartridge" = /obj/item/weapon/cartridge/rd,
         "the captain's gloves" = /obj/item/clothing/gloves/captain,
         "a live facehugger" = /obj/item/clothing/mask/facehugger,
-        "a hardsuit helmet" = /obj/item/clothing/head/helmet/space/rig,
         "the monitor decryption key" = /obj/item/weapon/paper/monitorkey,
         "a 'Freeform' core AI module" = /obj/item/weapon/aiModule/freeformcore,
         "an 'Astleymov' core AI module" = /obj/item/weapon/aiModule/rickrules,
-        "a dermal armor patch" = /obj/item/clothing/head/helmet/HoS/dermal,
-        "a syndicate balloon" = /obj/item/toy/syndicateballoon // fuck you you don't get to buy anything else with telecrystals today
+		"a dermal armor patch" = /obj/item/clothing/head/helmet/HoS/dermal,
+		"an AI upload construction circuit board" = /obj/item/weapon/circuitboard/aiupload,
+		"a cyborg upload construction circuit board" = /obj/item/weapon/circuitboard/borgupload,
+		"an AI core construction circuit board" = /obj/item/weapon/circuitboard/aicore,
+
+		"a syndicate balloon" = /obj/item/toy/syndicateballoon, // fuck you you don't get to buy anything else with telecrystals today
+		"four unique blood samples" = /obj/item/weapon/reagent_containers,
+		"50 units of unstable mutagen" = /obj/item/weapon/reagent_containers,
+		"50 units of chloral hydrate" = /obj/item/weapon/reagent_containers,
+		"50 units polytrinic acid" = /obj/item/weapon/reagent_containers,
+		"50 units of thermite" = /obj/item/weapon/reagent_containers,
+		"7 different kinds of alcohol" = /obj/item/weapon/reagent_containers, // can you get some beer while you're there, we seem to be out
+		"a telecomms hub circuit board" = /obj/item/weapon/circuitboard/telecomms/hub // this is difficult, I would recommend having a borg do it
 	)
 
 	var/global/possible_items_special[] = list(
@@ -319,11 +331,49 @@ datum/objective/steal
 		"a hyper-capacity cell" = /obj/item/weapon/cell/hyper,
 		"10 diamonds" = /obj/item/stack/sheet/mineral/diamond,
 		"50 gold bars" = /obj/item/stack/sheet/mineral/gold,
-		"25 refined uranium bars" = /obj/item/stack/sheet/mineral/uranium
+		"25 refined uranium bars" = /obj/item/stack/sheet/mineral/uranium,
+
 	)
+
+	// These lists forbid antagonist types from getting certain steal requests
+	// that are either thematically unsuited or impossible (balloon)
+
+	var/global/changeling_restricted[] = list(
+		"a syndicate balloon",
+		"an 'Astleymov' core AI module", // no sense of humor
+		"7 different kinds of alcohol",  // REALLY no sense of humor
+		"a piece of corgi meat",
+		"the captain's pinpointer", // don't care about nukes
+		"the monitor decryption key", // don't care about comms
+		"a telecomms hub circuit board", // don't care about comms
+		"an AI core construction circuit board" // better uses for your juices
+		)
+
+	var/global/traitor_restricted[] = list(
+		"a live facehugger", // syndies too creeped out to assign you to steal Lamarr
+		"four unique blood samples", // not useful to the syndicate
+		"50 units of unstable mutagen"
+		)
+
+	var/global/wizard_restricted[] = list(
+		"a syndicate balloon",
+		"a research director's jumpsuit", // captain and CMO not on this list due to wizard cosplay "Oh, captain~"
+		"a chief engineer's jumpsuit",
+		"a head of security's jumpsuit",
+		"a head of personnel's jumpsuit",
+		"the captain's rubber stamp",
+		"50 units polytrinic acid",
+		"an AI core construction circuit board"
+		)
+
 
 
 	proc/set_target(item_name)
+		if(!item_name)
+			steal_target = null
+			target_name = "Free Objective"
+			explanation_text = "Free Objective"
+			return null
 		target_name = item_name
 		steal_target = possible_items[target_name]
 		if (!steal_target )
@@ -332,8 +382,38 @@ datum/objective/steal
 		return steal_target
 
 
+	proc/validate(var/typekey)
+		for(var/datum/objective/steal/S in owner.objectives)
+			if(S == src) continue
+			if(S.target_name == typekey)
+				return 0
+		if(owner)
+			switch(owner.special_role)
+				if("Changeling")
+					if(typekey in changeling_restricted)
+						return 0
+				if("traitor")
+					if(typekey in traitor_restricted)
+						return 0
+				if("Wizard")
+					if(typekey in wizard_restricted)
+						return 0
+		return 1
+
 	find_target()
-		return set_target(pick(possible_items))
+		if(!owner)
+			return set_target(pick(possible_items))
+		var/temp
+		var/i = 0
+		while(i < 10 && !temp)
+			i++
+			temp = pick(possible_items)
+			if(!validate(temp))
+				temp = null
+		if(temp)
+			return set_target(temp)
+		explanation_text = "Free Objective"
+		return null
 
 
 	proc/select_target()
@@ -356,8 +436,8 @@ datum/objective/steal
 		return steal_target
 
 	check_completion()
-		if(!steal_target || !owner.current)	return 0
-		if(!isliving(owner.current))	return 0
+		if(!steal_target) return 1
+		if(!owner.current || !isliving(owner.current))	return 0
 		var/list/all_items = owner.current.GetAllContents()	//this should get things in cheesewheels, books, etc.
 		switch(target_name)
 			if("28 moles of plasma (full tank)","10 diamonds","50 gold bars","25 refined uranium bars")
@@ -374,6 +454,10 @@ datum/objective/steal
 					for(var/mob/living/silicon/ai/M in C)
 						if(istype(M, /mob/living/silicon/ai) && M.stat != 2) //See if any AI's are alive inside that card.
 							return 1
+			if("a functional personal AI")
+				for(var/obj/item/device/paicard/P in all_items)
+					if(P.pai && P.pai.stat != 2)
+						return 1
 
 			if("the station blueprints")
 				for(var/obj/item/I in all_items)	//the actual blueprints are good too!
@@ -389,6 +473,54 @@ datum/objective/steal
 					if(E.Uses > 0)
 						return 1
 
+			if("four unique blood samples")
+				var/list/dna_samples = list()
+				for(var/obj/item/weapon/reagent_containers/R in all_items)
+					if(!R.reagents) continue
+					for(var/datum/reagent/blood/B in R.reagents.reagent_list)
+						dna_samples |= B.data["blood_DNA"] // null will work too, but only once
+						if(dna_samples.len >= 4)
+							return 1
+			if("50 units of unstable mutagen")
+				var/amount = 0
+				for(var/obj/item/weapon/reagent_containers/R in all_items)
+					if(!R.reagents) continue
+					for(var/datum/reagent/toxin/mutagen/M in R.reagents.reagent_list)
+						amount += M.volume
+						if(amount >= 50)
+							return 1
+			if("50 units of chloral hydrate")
+				var/amount = 0
+				for(var/obj/item/weapon/reagent_containers/R in all_items)
+					if(!R.reagents) continue
+					for(var/datum/reagent/toxin/chloralhydrate/C in R.reagents.reagent_list)
+						amount += C.volume
+						if(amount >= 50)
+							return 1
+			if("50 units polytrinic acid")
+				var/amount = 0
+				for(var/obj/item/weapon/reagent_containers/R in all_items)
+					if(!R.reagents) continue
+					for(var/datum/reagent/toxin/acid/polyacid/P in R.reagents.reagent_list)
+						amount += P.volume
+						if(amount >= 50)
+							return 1
+			if("50 units polytrinic acid")
+				var/amount = 0
+				for(var/obj/item/weapon/reagent_containers/R in all_items)
+					if(!R.reagents) continue
+					for(var/datum/reagent/thermite/T in R.reagents.reagent_list)
+						amount += T.volume
+						if(amount >= 50)
+							return 1
+			if("7 different kinds of alcohol")
+				var/list/samples = list()
+				for(var/obj/item/weapon/reagent_containers/R in all_items)
+					if(!R.reagents) continue
+					for(var/datum/reagent/ethanol/E in R.reagents.reagent_list)
+						samples |= E.type // all booze are now subtypes of ethanol, this should work
+						if(samples.len >= 7)
+							return 1
 			else
 				for(var/obj/I in all_items) //Check for items
 					if(istype(I, steal_target))

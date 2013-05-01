@@ -3,8 +3,9 @@
 /obj/machinery/computer/hologram_comp
 	name = "Hologram Console"
 	desc = "Rumoured to control holograms."
-	icon = 'icons/obj/stationobjs.dmi'
-	icon_state = "holo_console0"
+	//icon = 'icons/obj/stationobjs.dmi'
+	//icon_state = "holo_console0"
+	icon_state = "airtunnel0e"
 	var/obj/machinery/hologram/projector/projector = null
 	var/temp = null
 	var/lumens = 0.0
