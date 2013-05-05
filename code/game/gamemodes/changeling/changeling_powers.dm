@@ -122,7 +122,7 @@
 	changeling.absorbed_dna |= T.dna
 	if(src.nutrition < 400) src.nutrition = min((src.nutrition + T.nutrition), 400)
 	changeling.chem_charges += 10
-	changeling.geneticpoints += 2
+//	changeling.geneticpoints += 2
 
 	if(T.mind && T.mind.changeling)
 		if(T.mind.changeling.absorbed_dna)
@@ -146,7 +146,7 @@
 						src.make_changeling()
 
 		changeling.chem_charges += T.mind.changeling.chem_charges
-		changeling.geneticpoints += T.mind.changeling.geneticpoints
+		changeling.geneticpoints += 5
 		T.mind.changeling.chem_charges = 0
 		T.mind.changeling.geneticpoints = 0
 		T.mind.changeling.absorbedcount = 0
