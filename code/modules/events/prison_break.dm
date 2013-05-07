@@ -8,20 +8,32 @@
 	announceWhen	= 50
 	endWhen			= 20
 	var/list/prisonAreas = list()
+	var/break_type = 0
 
 
 /datum/round_event/prison_break/setup()
 	announceWhen = rand(50, 60)
 	endWhen = rand(20, 30)
 
-	for(var/area/security/A in world)
-		if(istype(A, /area/security/prison) || istype(A, /area/security/brig))
-			prisonAreas += A
+	var/break_type = rand(0,1)
+
+	if(break_type == 0)
+		for(var/area/security/A in world)
+			if(istype(A, /area/security/prison) || istype(A, /area/security/brig))
+				prisonAreas += A
+	else
+		for(var/area/toxins/A in world)
+			if(istype(A, /area/toxins/xenobiology))
+				prisonAreas += A
+
 
 
 /datum/round_event/prison_break/announce()
 	if(prisonAreas && prisonAreas.len > 0)
-		command_alert("Gr3y.T1d3 virus detected in [station_name()] imprisonment subroutines. Recommend station AI involvement.", "Security Alert")
+		if(break_type == 0)
+			command_alert("Gr3y.T1d3 virus detected in [station_name()] imprisonment subroutines. Recommend station AI involvement.", "Security Alert")
+		else
+			command_alert("People-for-Ethical-Treatment-of-Slimes virus detected in [station_name()] xenobiology containment subroutines. Proceed with caution.", "Security Alert")
 	else
 		world.log << "ERROR: Could not initate grey-tide. Unable find prison or brig area."
 		kill()
@@ -51,3 +63,9 @@
 			else if(istype(O,/obj/machinery/door_timer))
 				var/obj/machinery/door_timer/temp = O
 				temp.releasetime = 1
+			else if(istype(O,/obj/machinery/door/airlock/research))
+				var/obj/machinery/door/airlock/security/temp = O
+				temp.prison_open()
+			else if(istype(O,/obj/machinery/door/window))
+				var/obj/machinery/door/airlock/security/temp = O
+				temp.open()
