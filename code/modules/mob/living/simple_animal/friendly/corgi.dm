@@ -269,7 +269,7 @@
 			valid = 1
 
 	if(valid)
-		usr.visible_message("[usr] puts [item_to_add] on [real_name]'s head.  [src] looks proud and gives a bark of approval.",
+		usr.visible_message("[usr] puts [item_to_add] on [real_name]'s head.  [src] looks at [usr] and barks once.",
 			"You put [item_to_add] on [real_name]'s head.  [src] gives you a peculiar look, then wags \his tail once and barks.",
 			"You hear a friendly-sounding bark.")
 		usr.drop_item()
