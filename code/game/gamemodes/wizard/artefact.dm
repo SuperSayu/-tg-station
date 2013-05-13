@@ -162,7 +162,13 @@
 	return
 
 /obj/effect/rend/cow/process()
-	if(locate(/mob) in loc) return
+	while(prob(10))
+		loc = get_step_rand(src)
+		if(!loc) // oh no nullspace
+			del(src)
+			return
+	if(locate(/mob/living) in loc)
+		return
 	new /mob/living/simple_animal/cow(loc)
 	cowsleft--
 	if(cowsleft <= 0)

@@ -299,7 +299,7 @@ ________________________________________________________________________________
 	if(alert(src, "You sure?", "Confirm", "Yes", "No") != "Yes")
 		return
 
-	log_admin("[key_name(src)] turned [H.key] into a Space Ninja.")
+	log_admin("[src.ckey] turned [H.ckey] into a Space Ninja.")
 	H.mind = create_ninja_mind(H.key)
 	H.mind_initialize()
 	H.equip_space_ninja(1)

@@ -277,9 +277,10 @@
 
 			for(var/mob/O in viewers(src, null))
 				if ((O.client && !( O.blinded )))
-					O.show_message(text("\red [] has grabbed [] passively!", M, src), 1)
-
-		if("harm", "disarm")
+					O.show_message("\red [M] has grabbed [src] passively!", 1)
+		if("disarm")
+			M.visible_message("\red [M] [response_disarm] [src]")
+		if("harm")
 			adjustBruteLoss(harm_intent_damage)
 			for(var/mob/O in viewers(src, null))
 				if ((O.client && !( O.blinded )))
@@ -313,7 +314,7 @@
 			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 			for(var/mob/O in viewers(src, null))
 				if ((O.client && !( O.blinded )))
-					O.show_message(text("\red [] has grabbed [] passively!", M, src), 1)
+					O.show_message("\red [M] has grabbed [src] passively!", 1)
 
 		if("harm", "disarm")
 			var/damage = rand(15, 30)
@@ -326,7 +327,7 @@
 
 	switch(L.a_intent)
 		if("help")
-			visible_message("\blue [L] rubs it's head against [src]")
+			visible_message("\blue [L] rubs \his head against [src]")
 
 
 		else
@@ -376,7 +377,7 @@
 						if ((M.client && !( M.blinded )))
 							M.show_message("\blue [user] applies the [MED] on [src]")
 		else
-			user << "\blue this [src] is dead, medical items won't bring it back to life."
+			user << "\blue This [src] is dead, medical items won't bring it back to life."
 	if(meat_type && (stat == DEAD))	//if the animal has a meat, and if it is dead.
 		if(istype(O, /obj/item/weapon/kitchenknife) || istype(O, /obj/item/weapon/butch))
 			new meat_type (get_turf(src))
