@@ -126,6 +126,11 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/pen/paralysis
 	cost = 3
 
+/datum/uplink_item/stealthy_weapons/soap
+	name = "Syndicate Soap"
+	item = /obj/item/weapon/soap/syndie
+	cost = 1
+
 /datum/uplink_item/stealthy_weapons/detomatix
 	name = "Detomatix PDA Cartridge"
 	item = /obj/item/weapon/cartridge/syndicate
@@ -162,6 +167,10 @@ var/list/uplink_items = list()
 	item = /obj/item/device/chameleon
 	cost = 4
 
+/datum/uplink_item/stealthy_tools/camera_bug
+	name = "Camera Bug"
+	item = /obj/item/device/camera_bug
+	cost = 2
 
 // DEVICE AND TOOLS
 

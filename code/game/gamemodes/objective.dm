@@ -285,7 +285,7 @@ datum/objective/steal
 		"a piece of corgi meat" = /obj/item/weapon/reagent_containers/food/snacks/meat/corgi,
 //		"the medal of captaincy" = /obj/item/clothing/tie/medal/gold/captain, // not on the map = sometimes impossible
 		"the hypospray" = /obj/item/weapon/reagent_containers/hypospray,
-		"the captain's pinpointer" = /obj/item/weapon/pinpointer,
+		"the nuclear authentication disk" = /obj/item/weapon/disk/nuclear,
 		"an ablative armor vest" = /obj/item/clothing/suit/armor/laserproof,
 
 // If you want to remove these this is the place to do it
@@ -331,7 +331,7 @@ datum/objective/steal
 	)
 
 	var/global/possible_items_special[] = list(
-		"the nuclear authentication disk" = /obj/item/weapon/disk/nuclear,
+		"the captain's pinpointer" = /obj/item/weapon/pinpointer,
 		"an advanced energy gun" = /obj/item/weapon/gun/energy/gun/nuclear,
 		"a diamond drill" = /obj/item/weapon/pickaxe/diamonddrill,
 		"a bag of holding" = /obj/item/weapon/storage/backpack/holding,
