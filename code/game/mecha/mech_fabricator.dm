@@ -496,9 +496,8 @@
 		temp = "Updating local R&D database..."
 		src.updateUsrDialog()
 		sleep(30) //only sleep if called by user
-	var/found = 0
 
-	// Note that area_contents() != area.contents.  It checks all related areas and builds a master contents list.
+	var/found = 0
 	for(var/obj/machinery/computer/rdconsole/RDC in area_contents(get_area(src)))
 		if(!RDC.sync)
 			continue
@@ -518,7 +517,7 @@
 		if(i || tech_output)
 			src.visible_message("\icon[src] <b>[src]</b> beeps, \"Succesfully synchronized with R&D server. New data processed.\"")
 	if(!silent && !found)
-		temp = "No local R&D database found.  Please check your connection.<br><a href='?src=\ref[src];clear_temp=1'>Return</a>"
+		temp = "Unable to connect to local R&D Database.<br>Please check your connections and try again.<br><a href='?src=\ref[src];clear_temp=1'>Return</a>"
 		src.updateUsrDialog()
 	return
 

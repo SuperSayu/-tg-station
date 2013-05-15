@@ -8,8 +8,8 @@
 /proc/area_contents(var/area/A)
 	if(!istype(A)) return null
 	var/list/contents = list()
-	for(var/area/A2 in A.related)
-		contents += A2.contents
+	for(var/area/LSA in A.related)
+		contents += LSA.contents
 	return contents
 
 // ===
