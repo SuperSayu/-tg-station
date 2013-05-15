@@ -223,13 +223,18 @@ var/global/list/uneatable = list(
 	if(defer_powernet_rebuild != 2)
 		defer_powernet_rebuild = 1
 	// Let's just make this one loop.
+	var/new_contained = 0
 	for(var/atom/X in orange(grav_pull,src))
 		if(istype(X,/area)) continue
+		if(X.type in list(/obj/machinery/containment_field,/obj/machinery/shieldwall))
+			new_contained = 1 // These stabilize space and keep gravity decay from getting out of hand
+			continue
 
 		var/dist = get_dist(X, src)
 
 		if(dist <= consume_range)
-			consume(X)
+			if(!istype(X,/turf/space))
+				consume(X)
 			continue
 
 		else if(dist <= decay_range && (!contained || current_size >=9))
@@ -251,6 +256,7 @@ var/global/list/uneatable = list(
 			if(X:anchored)
 				continue
 			step_towards(X,src)
+	contained = new_contained
 
 	if(defer_powernet_rebuild != 2)
 		defer_powernet_rebuild = 0

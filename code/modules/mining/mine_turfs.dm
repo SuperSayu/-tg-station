@@ -165,14 +165,18 @@
 
 /turf/simulated/floor/plating/airless/asteroid/cave
 	var/length = 100
+	var/crack = 0
 
-/turf/simulated/floor/plating/airless/asteroid/cave/New(loc, var/length, var/go_backwards = 1, var/exclude_dir = -1)
+/turf/simulated/floor/plating/airless/asteroid/cave/New(loc, var/length, var/go_backwards = 1, var/exclude_dir = -1, var/force_crack = null)
 
 	// If length (arg2) isn't defined, get a random length; otherwise assign our length to the length arg.
 	if(!length)
 		src.length = rand(25, 50)
 	else
 		src.length = length
+	if(isnull(force_crack))
+		if(prob(25))
+			crack = 1
 
 	// Get our directiosn
 	var/forward_cave_dir = pick(alldirs - exclude_dir)
@@ -210,7 +214,7 @@
 		if(istype(tunnel))
 			// Small chance to have forks in our tunnel; otherwise dig our tunnel.
 			if(i > 3 && prob(20))
-				new src.type(tunnel, rand(10, 15), 0, dir)
+				new src.type(tunnel, rand(10, 15), 0, dir,crack)
 			else
 				SpawnFloor(tunnel)
 		else if(!istype(tunnel, src.parent)) // We hit space/normal/wall, stop our tunnel.
@@ -224,7 +228,15 @@
 
 
 /turf/simulated/floor/plating/airless/asteroid/cave/proc/SpawnFloor(var/turf/T)
-	new /turf/simulated/floor/plating/airless/asteroid(T)
+	var/turf/simulated/floor/plating/airless/asteroid/A = null
+	if(crack) // the asteroid turf will get rid of the overlays problem I'm having
+		A = new(T)
+		spawn(5) // this is hackish
+			if(A) //sorrycat.png
+				A.ChangeTurf(/turf/space)
+	else
+		A = new(T)
+
 
 
 /turf/simulated/mineral/attackby(obj/item/weapon/W as obj, mob/user as mob)

@@ -130,7 +130,7 @@
 
 /obj/item/weapon/storage/belt/bluespace/sandbox
 	name = "Sandbox Mode Toolbelt"
-	desc = "Holds whatever, not as breaky as the adminbelt."
+	desc = "Holds whatever, you can spawn your own damn stuff."
 	w_class = 10 // permit holding other storage items
 	storage_slots = 28
 	max_w_class = 10
