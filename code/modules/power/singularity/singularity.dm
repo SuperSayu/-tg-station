@@ -1,36 +1,45 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:33
 
+/*
 var/global/list/uneatable = list(
+	/area,
 	/turf/space,
-	/obj/effect/overlay
-	)
+//	/obj/effect/overlay,
+	/mob/dead
+	)*/
 
 /obj/machinery/singularity
-	name = "Gravitational Singularity"
-	desc = "A Gravitational Singularity."
-	icon = 'icons/obj/singularity.dmi'
-	icon_state = "singularity_s1"
-	anchored = 1
-	density = 1
-	layer = 6
-	luminosity = 6
-	unacidable = 1 //Don't comment this out.
-	use_power = 0
-	var/current_size = 1
-	var/allowed_size = 1
-	var/contained = 1 //Are we going to move around?
-	var/energy = 100 //How strong are we?
-	var/dissipate = 1 //Do we lose energy over time?
-	var/dissipate_delay = 10
-	var/dissipate_track = 0
-	var/dissipate_strength = 1 //How much energy do we lose?
-	var/move_self = 1 //Do we move on our own?
-	var/grav_pull = 4 //How many tiles out do we pull?
-	var/consume_range = 0 //How many tiles out do we eat
-	var/event_chance = 15 //Prob for event each tick
-	var/target = null //its target. moves towards the target if it has one
-	var/last_failed_movement = 0//Will not move in the same dir if it couldnt before, will help with the getting stuck on fields thing
-	var/teleport_del = 0
+	name		= "gravitational singularity"
+	desc		= "A Gravitational Singularity."
+	icon		= 'icons/obj/singularity.dmi'
+	icon_state	= "singularity_s1"
+
+	anchored	= 1
+	density		= 1
+	layer		= 6
+	luminosity	= 6
+	unacidable	= 1 //Don't comment this out.
+	use_power	= 0
+
+	var/current_size		= 1
+	var/allowed_size		= 1
+	var/contained			= 1 //Are we going to move around?
+
+	var/energy				= 100 //How strong are we?
+	var/dissipate			= 1 //Do we lose energy over time?
+	var/dissipate_delay		= 10
+	var/dissipate_track		= 0
+	var/dissipate_strength	= 1 //How much energy do we lose?
+
+	var/move_self			= 1 //Do we move on our own?
+	var/grav_pull			= 4 //How many tiles out do we pull?
+	var/consume_range		= 0 //How many tiles out do we eat
+	var/decay_range			= 0 // At this range turfs and such fall apart
+
+	var/event_chance		= 15 //Prob for event each tick
+	var/target				= null //its target. moves towards the target if it has one
+	var/last_failed_movement= 0//Will not move in the same dir if it couldnt before, will help with the getting stuck on fields thing
+	var/teleport_del		= 0
 	var/last_warning
 
 /obj/machinery/singularity/New(loc, var/starting_energy = 50, var/temp = 0)
@@ -115,6 +124,7 @@ var/global/list/uneatable = list(
 		dissipate_track++
 
 
+
 /obj/machinery/singularity/proc/expand(var/force_size = 0)
 	var/temp_allowed_size = src.allowed_size
 	if(force_size)
@@ -124,57 +134,62 @@ var/global/list/uneatable = list(
 			current_size = 1
 			icon = 'icons/obj/singularity.dmi'
 			icon_state = "singularity_s1"
-			pixel_x = 0
-			pixel_y = 0
 			grav_pull = 4
 			consume_range = 0
+			decay_range = 0
 			dissipate_delay = 10
 			dissipate_track = 0
 			dissipate_strength = 1
+			pixel_x = 0
+			pixel_y = 0
 		if(3)//1 to 3 does not check for the turfs if you put the gens right next to a 1x1 then its going to eat them
 			current_size = 3
 			icon = 'icons/effects/96x96.dmi'
 			icon_state = "singularity_s3"
-			pixel_x = -32
-			pixel_y = -32
 			grav_pull = 6
 			consume_range = 1
+			decay_range = 1
 			dissipate_delay = 5
 			dissipate_track = 0
 			dissipate_strength = 5
+			pixel_x = -32
+			pixel_y = -32
 		if(5)
 			if((check_turfs_in(1,2))&&(check_turfs_in(2,2))&&(check_turfs_in(4,2))&&(check_turfs_in(8,2)))
 				current_size = 5
 				icon = 'icons/effects/160x160.dmi'
 				icon_state = "singularity_s5"
-				pixel_x = -64
-				pixel_y = -64
 				grav_pull = 8
 				consume_range = 2
+				decay_range = 3 // note that contained singulos are safe
 				dissipate_delay = 4
 				dissipate_track = 0
 				dissipate_strength = 20
+				pixel_x = -64
+				pixel_y = -64
 		if(7)
 			if((check_turfs_in(1,3))&&(check_turfs_in(2,3))&&(check_turfs_in(4,3))&&(check_turfs_in(8,3)))
 				current_size = 7
 				icon = 'icons/effects/224x224.dmi'
 				icon_state = "singularity_s7"
-				pixel_x = -96
-				pixel_y = -96
 				grav_pull = 10
 				consume_range = 3
+				decay_range = 5
 				dissipate_delay = 10
 				dissipate_track = 0
 				dissipate_strength = 10
+				pixel_x = -96
+				pixel_y = -96
 		if(9)//this one also lacks a check for gens because it eats everything
 			current_size = 9
 			icon = 'icons/effects/288x288.dmi'
 			icon_state = "singularity_s9"
-			pixel_x = -128
-			pixel_y = -128
 			grav_pull = 10
 			consume_range = 4
+			decay_range = 7
 			dissipate = 0 //It cant go smaller due to e loss
+			pixel_x = -128
+			pixel_y = -128
 	if(current_size == allowed_size)
 		investigate_log("<font color='red'>grew to size [current_size]</font>","singulo")
 		return 1
@@ -182,7 +197,6 @@ var/global/list/uneatable = list(
 		expand(temp_allowed_size)
 	else
 		return 0
-
 
 /obj/machinery/singularity/proc/check_energy()
 	if(energy <= 0)
@@ -209,23 +223,40 @@ var/global/list/uneatable = list(
 	if(defer_powernet_rebuild != 2)
 		defer_powernet_rebuild = 1
 	// Let's just make this one loop.
+	var/new_contained = 0
 	for(var/atom/X in orange(grav_pull,src))
+		if(istype(X,/area)) continue
+		if(X.type in list(/obj/machinery/containment_field,/obj/machinery/shieldwall))
+			new_contained = 1 // These stabilize space and keep gravity decay from getting out of hand
+			continue
+
 		var/dist = get_dist(X, src)
-		// Movable atoms only
-		if(dist > consume_range && istype(X, /atom/movable))
-			if(is_type_in_list(X, uneatable))	continue
-			if(((X) &&(!X:anchored) && (!istype(X,/mob/living/carbon/human)))|| (src.current_size >= 9))
-				step_towards(X,src)
-			else if(istype(X,/mob/living/carbon/human))
+
+		if(dist <= consume_range)
+			if(!istype(X,/turf/space))
+				consume(X)
+			continue
+
+		else if(dist <= decay_range && (!contained || current_size >=9))
+			if(istype(X,/obj) && prob(20))
+				var/obj/O = X
+				O.anchored = 0
+			else if(istype(X,/turf))
+				var/turf/T = X
+				T.gravity_decay()
+				continue
+
+		// Not an else, the above falls through
+		if(istype(X, /atom/movable))
+			if(current_size < 9 && istype(X,/mob/living/carbon/human))
 				var/mob/living/carbon/human/H = X
-				if(istype(H.shoes,/obj/item/clothing/shoes/magboots))
-					var/obj/item/clothing/shoes/magboots/M = H.shoes
-					if(M.magpulse)
-						continue
-				step_towards(H,src)
-		// Turf and movable atoms
-		else if(dist <= consume_range && (isturf(X) || istype(X, /atom/movable)))
-			consume(X)
+				var/obj/item/clothing/shoes/magboots/M = H.shoes
+				if(istype(M) && M.magpulse)
+					continue
+			if(X:anchored)
+				continue
+			step_towards(X,src)
+	contained = new_contained
 
 	if(defer_powernet_rebuild != 2)
 		defer_powernet_rebuild = 0
@@ -234,8 +265,8 @@ var/global/list/uneatable = list(
 
 /obj/machinery/singularity/proc/consume(var/atom/A)
 	var/gain = 0
-	if(is_type_in_list(A, uneatable))
-		return 0
+//	if(is_type_in_list(A, uneatable))
+//		return 0
 	if (istype(A,/mob/living))//Mobs get gibbed
 		gain = 20
 		if(istype(A,/mob/living/carbon/human))
@@ -246,7 +277,7 @@ var/global/list/uneatable = list(
 					gain = 100
 
 				if(H.mind.assigned_role == "Clown")
-					gain = rand(-300, 300) // HONK
+					gain = rand(-300, 200) // HONK
 
 		spawn()
 			A:gib()
@@ -354,16 +385,12 @@ var/global/list/uneatable = list(
 	var/turf/T2 = T
 	for(var/j = 1 to steps)
 		T2 = get_step(T2,dir2)
-		if(!isturf(T2))
-			return 0
 		turfs.Add(T2)
 	for(var/k = 1 to steps)
 		T = get_step(T,dir3)
-		if(!isturf(T))
-			return 0
 		turfs.Add(T)
 	for(var/turf/T3 in turfs)
-		if(isnull(T3))
+		if(!istype(T3))
 			continue
 		if(!can_move(T3))
 			return 0
@@ -371,18 +398,13 @@ var/global/list/uneatable = list(
 
 
 /obj/machinery/singularity/proc/can_move(var/turf/T)
-	if(!T)
-		return 0
-	if((locate(/obj/machinery/containment_field) in T)||(locate(/obj/machinery/shieldwall) in T))
-		return 0
-	else if(locate(/obj/machinery/field_generator) in T)
-		var/obj/machinery/field_generator/G = locate(/obj/machinery/field_generator) in T
-		if(G && G.active)
-			return 0
-	else if(locate(/obj/machinery/shieldwallgen) in T)
-		var/obj/machinery/shieldwallgen/S = locate(/obj/machinery/shieldwallgen) in T
-		if(S && S.active)
-			return 0
+	for(var/obj/machinery/M in T)
+		switch(M.type)
+			if(/obj/machinery/containment_field,/obj/machinery/shieldwall)
+				return 0
+			if(/obj/machinery/field_generator,/obj/machinery/shieldwallgen)
+				if(M:active)
+					return 0
 	return 1
 
 
@@ -425,12 +447,12 @@ var/global/list/uneatable = list(
 			if (istype(M,/mob/living/carbon/human))
 				var/mob/living/carbon/human/H = M
 				if(istype(H.glasses,/obj/item/clothing/glasses/meson))
-					H << "\blue You look directly into The [src.name], good thing you had your protective eyewear on!"
+					H << "\blue You look directly into the [src.name], good thing you had your protective eyewear on!"
 					return
-		M << "\red You look directly into The [src.name] and feel weak."
+		M << "\red You look directly into the [src.name] and feel weak."
 		M.apply_effect(3, STUN)
 		for(var/mob/O in viewers(M, null))
-			O.show_message(text("\red <B>[] stares blankly at The []!</B>", M, src), 1)
+			O.show_message(text("\red <B>[] stares blankly at \the []!</B>", M, src), 1)
 	return
 
 
@@ -486,8 +508,8 @@ var/global/list/uneatable = list(
 		mezzer()
 
 /obj/machinery/singularity/narsie/consume(var/atom/A) //Has its own consume proc because it doesn't need energy and I don't want BoHs to explode it. --NEO
-	if(is_type_in_list(A, uneatable))
-		return 0
+	//if(is_type_in_list(A, uneatable))
+	//	return 0
 	if (istype(A,/mob/living))//Mobs get gibbed
 		A:gib()
 	else if(istype(A,/obj/))
@@ -501,7 +523,7 @@ var/global/list/uneatable = list(
 					continue
 				if(O.invisibility == 101)
 					src.consume(O)
-		A:ChangeTurf(/turf/space)
+		T.ChangeTurf(/turf/space)
 	return
 
 /obj/machinery/singularity/narsie/ex_act() //No throwing bombs at it either. --NEO
@@ -568,3 +590,145 @@ var/global/list/uneatable = list(
 	if(defer_powernet_rebuild != 2)
 		defer_powernet_rebuild = 0
 	return
+
+
+// Called when the singularity attempts to destroy a turf
+/turf/proc/gravity_decay()
+	for(var/obj/O in contents)
+		O.anchored = 0
+	return
+
+/turf/simulated/gravity_decay()
+	var/counter = 0
+	for(var/d in cardinal)
+		var/turf/simulated/TS = get_step(src,d)
+		if(istype(TS))
+			counter++
+
+	if(prob(100 - (29 * counter)))
+		new /obj/structure/faketurf(src,counter)
+	else if(prob(15))
+		disintegrate()
+	return
+
+/turf/simulated/proc/disintegrate()
+	return
+
+/turf/simulated/floor/disintegrate()
+	// rip of tile, if present
+	for(var/obj/O in contents)
+		O.anchored = 0
+		if(istype(O,/obj/machinery))
+			O:stat |= NOPOWER
+			O.update_icon()
+	if(floor_tile)
+		floor_tile.loc = src
+		floor_tile = null
+		SetLuminosity(0)
+		if(prob(33))
+			break_tile()
+		return
+	new /obj/structure/faketurf(loc)
+
+/turf/simulated/floor/engine/disintegrate()
+	if(prob(80))
+		return
+	..()
+/turf/simulated/wall/disintegrate()
+	if(prob(10))
+		dismantle_wall(1,0)
+		return
+	if(prob(60))
+		dismantle_wall(0,0)
+	return
+
+/turf/simulated/wall/reinforced/disintegrate()
+	if(prob(75))
+		return
+	if(prob(30))
+		dismantle_wall(1,0) // catastrophic
+		return
+	if(prob(40))
+		dismantle_wall(0,0)
+	return
+
+// Created when the singularity pulls a floor or wall out
+/obj/structure/faketurf
+	var/last_movement
+	var/original_type
+	var/list/anchored_objects = null
+
+	New(var/atom/newloc,var/counter=0)
+		if(!istype(newloc,/turf/simulated))
+			del src
+			return
+		if(istype(newloc,/turf/simulated/wall/reinforced) || istype(newloc,/turf/simulated/floor/engine))
+			if(prob(counter*20)) // reinforced - harder to destroy
+				del src
+				return
+		loc = newloc
+
+		name = loc.name
+		desc = loc.desc
+		icon_state = loc.icon_state
+		icon = loc.icon
+		dir = loc.dir
+		density = loc.density
+		opacity = loc.opacity
+		original_type = loc.type
+		last_movement = world.time
+		anchored_objects = list()
+		for(var/obj/O in loc.contents)
+			if(O.anchored)
+				anchored_objects += O
+			if(istype(O,/obj/machinery))
+				var/obj/machinery/OM = O
+				OM.stat |= NOPOWER
+				OM.update_icon()
+
+		if(prob(33)) // doing this immediately affects the chances of other turfs coming off
+			loc:ChangeTurf(/turf/space)
+		else
+			spawn(1)
+				loc:ChangeTurf(/turf/space)
+		processing_objects.Add(src)
+
+	process()
+		if(!loc)
+			del src
+			return
+		if(world.time >= (last_movement + 35))
+			if(!istype(loc,/turf/space) || !original_type)
+				del src
+				return
+			var/turf/simulated/TS = new original_type(loc)
+			TS.name = name
+			TS.desc = desc
+			TS.dir = dir
+			TS.icon = icon
+			TS.icon_state = icon_state
+			del src
+			return
+	Move()
+		..()
+		for(var/obj/O in anchored_objects)
+			if(!O || !O.anchored)
+				anchored_objects -= O
+				continue
+			if(prob(10))
+				O.anchored = 0
+				anchored_objects -= O
+				step_rand(O)
+				continue
+			if(prob(10))
+				O.ex_act(3)
+				continue
+			O.loc = loc
+		last_movement = world.time
+
+	CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+		if(istype(mover,/obj/structure/faketurf))
+			return 0
+		return ..(mover,target,height,air_group)
+	// There is also an exception in turf/simulated/Enter() to prevent this from entering one of those tiles, ever.
+

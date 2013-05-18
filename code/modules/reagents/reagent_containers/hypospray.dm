@@ -43,3 +43,13 @@
 			log_attack("<font color='red'>[user.name] ([user.ckey]) injected [M.name] ([M.ckey]) with [src.name], which had [contained] (INTENT: [uppertext(user.a_intent)])</font>")
 			M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been injected ([contained]) with [src.name] by [user.name] ([user.ckey])</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to inject [M.name] ([M.ckey]) with [contained]</font>")
+
+/obj/item/weapon/reagent_containers/hypospray/admin
+	name = "Admin's Hypospray"
+	desc = "When I said 'Don't die on me', that wasn't a suggestion, it was an order."
+	volume = 300
+
+	New()
+		..()
+		reagents.clear_reagents()
+		reagents.add_reagent("adminordrazine",300)

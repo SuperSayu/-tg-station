@@ -31,7 +31,7 @@
 
 		B1.reagents.add_reagent("blood",60)
 		if(prob(5))
-			B1.reagents.add_reagent("blood",1) // Quality control problems, causes a big mess
+			B1.reagents.add_reagent("blood",1) // Quality control problems, causes a mess
 		B2.reagents.add_reagent("clonexadone",30)
 
 		beakers += B1
@@ -39,6 +39,20 @@
 
 		CreateDefaultTrigger(/obj/item/device/assembly/timer)
 		icon_state = "grenade"
+
+/obj/item/weapon/grenade/chem_grenade/holywater
+	name = "Holy Water Grenade"
+	desc = "Then shalt thou count to three, no more, no less."
+	stage = 2
+	path = 1
+	New()
+		..()
+		var/obj/item/weapon/reagent_containers/glass/beaker/B = new(src)
+		B.reagents.add_reagent("holywater",100)
+		beakers += B
+		icon_state = "grenade"
+		CreateDefaultTrigger(/obj/item/device/assembly/timer)
+		trigger:time = 3
 
 /obj/item/weapon/grenade/chem_grenade/soap
 	name = "Soap Grenade"

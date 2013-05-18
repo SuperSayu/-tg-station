@@ -129,12 +129,13 @@
 				kill_objective.owner = traitor
 				kill_objective.find_target()
 				traitor.objectives += kill_objective
-			if(26 to 60)
+			//if(26 to 60)
+			else
 				var/datum/objective/steal/steal_objective = new
 				steal_objective.owner = traitor
 				steal_objective.find_target()
 				traitor.objectives += steal_objective
-			else
+			/*else
 				var/datum/objective/steal/steal_objective = new
 				steal_objective.owner = traitor
 				steal_objective.find_target()
@@ -143,7 +144,7 @@
 				steal_objective = new
 				steal_objective.owner = traitor
 				steal_objective.find_target()
-				traitor.objectives += steal_objective
+				traitor.objectives += steal_objective*/
 		switch(rand(1,100))
 			if(1 to 90)
 				if (!(locate(/datum/objective/escape) in traitor.objectives))

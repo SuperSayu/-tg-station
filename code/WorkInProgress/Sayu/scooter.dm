@@ -41,7 +41,8 @@
 
 	var/obj/item/weapon/tank/fueltank = null
 	var/mob/living/carbon/pilot = null
-	var/obj/structure/closet/cargo = null
+	var/obj/structure/closet/cargo1 = null
+	var/obj/structure/closet/cargo2 = null
 
 	var/max_speed = 3
 
@@ -77,7 +78,8 @@
 	proc/RunOver(var/atom/movable/AM)
 		var/hit_mass = speed+1
 		if(pilot) hit_mass++
-		if(cargo) hit_mass++
+		if(cargo1) hit_mass++
+		if(cargo2) hit_mass++
 
 		if(istype(AM,/mob)) // laying down on the job
 			var/mob/living/M = AM
@@ -129,9 +131,13 @@
 		if(AM == user && !pilot)
 			usr = user
 			board()
-		else if(!cargo && istype(AM,/obj/structure/closet))
-			cargo = AM
-			cargo.loc = src
+		else if(!cargo1 && istype(AM,/obj/structure/closet))
+			cargo1 = AM
+			cargo1.loc = src
+			update_icon()
+		else if(!cargo2 && istype(AM,/obj/structure/closet))
+			cargo2 = AM
+			cargo2.loc = src
 			update_icon()
 		return
 
@@ -157,11 +163,16 @@
 			wipeout()
 			return
 
-		if(!speed && cargo)
-			cargo.loc = loc
-			cargo = null
-			update_icon()
-			return
+		if(!speed)
+			if(cargo2)
+				cargo2.loc = loc
+				cargo2 = null
+				update_icon()
+				return
+			if(cargo1)
+				cargo1.loc = loc
+				cargo1 = null
+				update_icon()
 
 	attackby(obj/item/W as obj, mob/user as mob)
 		if(istype(W,/obj/item/weapon/tank) && !fueltank)
@@ -229,7 +240,7 @@
 			icon_state = "moped_flipped"
 			layer = FLY_LAYER
 
-		if(cargo)
+		if(cargo1 || cargo2)
 			icon_state += "_cargo"
 
 		if(pilot)
@@ -325,12 +336,18 @@
 				eject_pilot()
 		if(hit)
 			if(speed > 2)
-				if(cargo)
-					cargo.loc = loc
-					if(prob(30))
-						step_rand(cargo)
-					cargo.throw_at(target,speed,speed)
-					cargo = null
+				if(cargo1 && prob(30))
+					cargo1.loc = loc
+					if(prob(20))
+						step_rand(cargo1)
+					cargo1.throw_at(target,speed,speed)
+					cargo1 = null
+				if(cargo2 && prob(30))
+					cargo2.loc = loc
+					if(prob(20))
+						step_rand(cargo2)
+					cargo2.throw_at(target,speed,speed)
+					cargo2 = null
 				rupture_tank()
 			speed = 0
 			walk(src,0)
@@ -350,7 +367,8 @@
 	Bump(var/atom/A)
 		var/hit_mass = speed
 		if(pilot) hit_mass++
-		if(cargo) hit_mass++
+		if(cargo1) hit_mass++
+		if(cargo2) hit_mass++
 
 		if(speed>2)
 			wipeout(1)

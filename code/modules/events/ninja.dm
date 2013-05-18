@@ -299,7 +299,7 @@ ________________________________________________________________________________
 	if(alert(src, "You sure?", "Confirm", "Yes", "No") != "Yes")
 		return
 
-	log_admin("[key_name(src)] turned [H.key] into a Space Ninja.")
+	log_admin("[src.ckey] turned [H.ckey] into a Space Ninja.")
 	H.mind = create_ninja_mind(H.key)
 	H.mind_initialize()
 	H.equip_space_ninja(1)
@@ -348,7 +348,7 @@ ________________________________________________________________________________
 	var/datum/preferences/A = new()//Randomize appearance for the ninja.
 	A.real_name = "[pick(ninja_titles)] [pick(ninja_names)]"
 	A.copy_to(new_ninja)
-	new_ninja.dna.ready_dna(new_ninja)
+	ready_dna(new_ninja)
 	new_ninja.equip_space_ninja()
 	return new_ninja
 

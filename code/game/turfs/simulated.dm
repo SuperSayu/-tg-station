@@ -73,3 +73,7 @@
 					M.Weaken(10)
 
 	..()
+/turf/simulated/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
+	if(istype(mover,/obj/structure/faketurf))
+		return 0
+	return ..(mover,forget)

@@ -152,7 +152,8 @@
 						ears = null
 						for(var/possible_phrase in speak)
 							if(copytext(possible_phrase,1,3) in department_radio_keys)
-								possible_phrase = copytext(possible_phrase,3,length(possible_phrase))
+								speak -= possible_phrase
+								//possible_phrase = copytext(possible_phrase,3,length(possible_phrase))
 					else
 						usr << "\red There is nothing to remove from its [remove_from]."
 						return
@@ -184,7 +185,7 @@
 						src.ears = headset_to_add
 						usr << "You fit the headset onto [src]."
 
-						clearlist(available_channels)
+						available_channels = list()
 						for(var/ch in headset_to_add.channels)
 							switch(ch)
 								if("Engineering")
@@ -204,6 +205,13 @@
 
 						if(headset_to_add.translate_binary)
 							available_channels.Add(":b")
+						var/list/newspeak = list()
+						for(var/speech in speak)
+							if(prob(80))
+								newspeak += ":h [speech]"
+							else
+								newspeak += "[pick(available_channels)] [speech]"
+						speak += newspeak
 		else
 			..()
 
@@ -761,7 +769,7 @@
 	speak = list()
 	for(var/str in speak_temp)
 		speak += str
-		speak += ":e [str]"
+		speak += ":h [str]"
 	..()
 
 

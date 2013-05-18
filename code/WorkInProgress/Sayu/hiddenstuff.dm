@@ -1,4 +1,4 @@
-/obj/structure/closet/New()
+/obj/structure/closet/initialize()
 	if(istype(src,/obj/structure/closet/secure_closet) || istype(src,/obj/structure/closet/crate/secure) || istype(src,/obj/structure/closet/bodybag) || istype(src,/obj/structure/closet/coffin) || istype(src,/obj/structure/closet/lasertag) || istype(src,/obj/structure/closet/fireaxecabinet))
 		return
 	if(usr)
@@ -20,7 +20,7 @@
 	var/list/hidden_loot = list(/obj/item/weapon/grenade/chem_grenade/dirt,/obj/item/weapon/grenade/chem_grenade/meat,
 						/obj/item/weapon/grenade/clusterbuster/booze,/obj/item/weapon/grenade/clusterbuster/honk,/obj/item/weapon/reagent_containers/glass/bottle/random_reagent,
 						/obj/item/device/transfer_valve,/obj/item/device/assembly/mousetrap/armed,/obj/item/weapon/soap,/obj/item/weapon/grenade/chem_grenade/lube,
-						/obj/item/weapon/grenade/clusterbuster/monkey,/obj/item/weapon/grenade/clusterbuster/aviary) + private_stache
+						/obj/item/weapon/grenade/clusterbuster/monkey,/obj/item/weapon/grenade/clusterbuster/aviary, /obj/item/weapon/grenade/chem_grenade/holywater) + private_stache
 	var/list/trash = typesof(/obj/item/trash) - /obj/item/trash + list(/obj/item/weapon/bananapeel,/obj/item/weapon/corncob,/obj/item/weapon/ectoplasm)
 
 

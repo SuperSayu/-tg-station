@@ -9,6 +9,10 @@
 	*	AI control wire damage will disable this functionality.
 
 	*	Mass lockdown available from the computer (Area, whole station)
+	
+	*	Traitor Semaphore Implant (by default)
+		-	Pre-determined phrasebook
+		-	Maybe irradiate you on send, not useful
 
 	*	Fukkin' space pirates (man)
 		-	Ship with loot hold

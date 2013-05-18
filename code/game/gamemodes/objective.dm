@@ -17,9 +17,15 @@ datum/objective
 		for(var/datum/mind/possible_target in ticker.minds)
 			if(possible_target != owner && ishuman(possible_target.current) && (possible_target.current.stat != 2))
 				possible_targets += possible_target
+
+		if(owner) // avoid duplicates where possible
+			for(var/datum/objective/O in owner.objectives)
+				possible_targets -= O.target
+
 		if(possible_targets.len > 0)
 			target = pick(possible_targets)
-
+		else
+			target = null
 
 	proc/find_target_by_role(role, role_type=0)//Option sets either to check assigned role or special role. Default to assigned.
 		for(var/datum/mind/possible_target in ticker.minds)
@@ -271,15 +277,15 @@ datum/objective/steal
 		"an RCD" = /obj/item/weapon/rcd,
 		"a jetpack" = /obj/item/weapon/tank/jetpack,
 		"a functional AI" = /obj/item/device/aicard,
-		"a functional personal AI" = /obj/item/device/paicard,
+//		"a functional personal AI" = /obj/item/device/paicard, // potentially impossible, must think on this
 		"a pair of magboots" = /obj/item/clothing/shoes/magboots,
 		"the station blueprints" = /obj/item/blueprints,
 		"28 moles of plasma (full tank)" = /obj/item/weapon/tank,
 		"an unused sample of slime extract" = /obj/item/slime_extract,
 		"a piece of corgi meat" = /obj/item/weapon/reagent_containers/food/snacks/meat/corgi,
-		"the medal of captaincy" = /obj/item/clothing/tie/medal/gold/captain,
+//		"the medal of captaincy" = /obj/item/clothing/tie/medal/gold/captain, // not on the map = sometimes impossible
 		"the hypospray" = /obj/item/weapon/reagent_containers/hypospray,
-		"the captain's pinpointer" = /obj/item/weapon/pinpointer,
+		"the nuclear authentication disk" = /obj/item/weapon/disk/nuclear,
 		"an ablative armor vest" = /obj/item/clothing/suit/armor/laserproof,
 
 // If you want to remove these this is the place to do it
@@ -292,18 +298,19 @@ datum/objective/steal
 		"a head of security's jumpsuit" = /obj/item/clothing/under/rank/head_of_security,
 		"a head of personnel's jumpsuit" = /obj/item/clothing/under/rank/head_of_personnel,
 
+        "the captain's PDA cartridge" = /obj/item/weapon/cartridge/captain,
+        "the head of personnel's PDA cartridge" = /obj/item/weapon/cartridge/hop,
+        "the chief engineer's PDA cartridge" = /obj/item/weapon/cartridge/ce,
+        "the head of security's PDA cartridge" = /obj/item/weapon/cartridge/hos,
+//        "the chief medical officer's PDA cartridge" = /obj/item/weapon/cartridge/cmo,
+//        "the research director's PDA cartridge" = /obj/item/weapon/cartridge/rd,
+
 		"the detective's scanner" = /obj/item/device/detective_scanner,
 		"a fire axe" = /obj/item/weapon/twohanded/fireaxe,
         "the chain of command" = /obj/item/weapon/melee/chainofcommand,
         "the captain's rubber stamp" = /obj/item/weapon/stamp/captain,
         "the reactive teleport armor" = /obj/item/clothing/suit/armor/reactive,
-        "the captain's PDA cartridge" = /obj/item/weapon/cartridge/captain,
-        "the head of personnel's PDA cartridge" = /obj/item/weapon/cartridge/hop,
-        "the chief engineer's PDA cartridge" = /obj/item/weapon/cartridge/ce,
-        "the head of security's PDA cartridge" = /obj/item/weapon/cartridge/hos,
-        "the chief medical officer's PDA cartridge" = /obj/item/weapon/cartridge/cmo,
-        "the research director's PDA cartridge" = /obj/item/weapon/cartridge/rd,
-        "the captain's gloves" = /obj/item/clothing/gloves/captain,
+//        "the captain's gloves" = /obj/item/clothing/gloves/captain,
         "a live facehugger" = /obj/item/clothing/mask/facehugger,
         "the monitor decryption key" = /obj/item/weapon/paper/monitorkey,
         "a 'Freeform' core AI module" = /obj/item/weapon/aiModule/freeformcore,
@@ -313,18 +320,19 @@ datum/objective/steal
 		"a cyborg upload construction circuit board" = /obj/item/weapon/circuitboard/borgupload,
 		"an AI core construction circuit board" = /obj/item/weapon/circuitboard/aicore,
 
-		"a syndicate balloon" = /obj/item/toy/syndicateballoon, // fuck you you don't get to buy anything else with telecrystals today
+//		"a syndicate balloon" = /obj/item/toy/syndicateballoon, // fuck you you don't get to buy anything else with telecrystals today
 		"four unique blood samples" = /obj/item/weapon/reagent_containers,
+		"four unique identification cards" = /obj/item/weapon/card/id,
 		"50 units of unstable mutagen" = /obj/item/weapon/reagent_containers,
 		"50 units of chloral hydrate" = /obj/item/weapon/reagent_containers,
 		"50 units polytrinic acid" = /obj/item/weapon/reagent_containers,
 		"50 units of thermite" = /obj/item/weapon/reagent_containers,
 		"7 different kinds of alcohol" = /obj/item/weapon/reagent_containers, // can you get some beer while you're there, we seem to be out
-		"a telecomms hub circuit board" = /obj/item/weapon/circuitboard/telecomms/hub // this is difficult, I would recommend having a borg do it
+		"a telecomms hub circuit board" = /obj/item/weapon/circuitboard/telecomms/hub // this might be difficult to steal, if you are not R&D
 	)
 
 	var/global/possible_items_special[] = list(
-		"the nuclear authentication disk" = /obj/item/weapon/disk/nuclear,
+		"the captain's pinpointer" = /obj/item/weapon/pinpointer,
 		"an advanced energy gun" = /obj/item/weapon/gun/energy/gun/nuclear,
 		"a diamond drill" = /obj/item/weapon/pickaxe/diamonddrill,
 		"a bag of holding" = /obj/item/weapon/storage/backpack/holding,
@@ -454,6 +462,12 @@ datum/objective/steal
 					for(var/mob/living/silicon/ai/M in C)
 						if(istype(M, /mob/living/silicon/ai) && M.stat != 2) //See if any AI's are alive inside that card.
 							return 1
+
+			if("a live facehugger")
+				for(var/obj/item/clothing/mask/facehugger/F in all_items)
+					if(!(F.stat&DEAD))
+						return 1
+
 			if("a functional personal AI")
 				for(var/obj/item/device/paicard/P in all_items)
 					if(P.pai && P.pai.stat != 2)
@@ -481,6 +495,14 @@ datum/objective/steal
 						dna_samples |= B.data["blood_DNA"] // null will work too, but only once
 						if(dna_samples.len >= 4)
 							return 1
+			if("four unique identification cards")
+				var/list/card_names = list()
+				var/list/card_jobs = list()
+				for(var/obj/item/weapon/card/id/ID in all_items)
+					card_names |= ID.registered_name
+					card_jobs |= ID.assignment
+					if(card_names.len >= 4 && card_jobs.len >= 4)
+						return 1
 			if("50 units of unstable mutagen")
 				var/amount = 0
 				for(var/obj/item/weapon/reagent_containers/R in all_items)
@@ -505,7 +527,7 @@ datum/objective/steal
 						amount += P.volume
 						if(amount >= 50)
 							return 1
-			if("50 units polytrinic acid")
+			if("50 units of thermite")
 				var/amount = 0
 				for(var/obj/item/weapon/reagent_containers/R in all_items)
 					if(!R.reagents) continue

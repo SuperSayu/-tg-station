@@ -78,6 +78,7 @@
 			affecting.drop_item()
 			affecting.hand = h
 			for(var/obj/item/weapon/grab/G in affecting.grabbed_by)
+				if(G == src) continue
 				if(G.state == GRAB_AGGRESSIVE)
 					allow_upgrade = 0
 		if(allow_upgrade)
@@ -106,7 +107,7 @@
 		return
 	if(assailant.next_move > world.time)
 		return
-	if(last_upgrade > world.time + UPGRADE_COOLDOWN)
+	if(world.time < (last_upgrade + UPGRADE_COOLDOWN))
 		return
 	if(!assailant.canmove || assailant.lying)
 		del(src)

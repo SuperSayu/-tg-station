@@ -53,6 +53,7 @@
 		new /obj/item/clothing/under/owl(src)
 		new /obj/item/weapon/grenade/smokebomb(src)
 		new /obj/item/weapon/grenade/smokebomb(src)
+		new /obj/item/device/detective_scanner(src)
 
 
 
@@ -125,12 +126,30 @@
 		new /obj/item/weapon/dnainjector/hulkmut(src)
 		new /obj/item/weapon/spellbook(src) // for smoke effects, door openings, etc
 
-		var/obj/item/weapon/reagent_containers/hypospray/H = new(src)
-		H.reagents.clear_reagents()
-		H.volume = 300
-		H.reagents.maximum_volume = 300
-		H.reagents.add_reagent("adminordrazine",300)
-		H.name = "admin's hypospray"
+		new/obj/item/weapon/reagent_containers/hypospray/admin(src)
+
+/obj/item/weapon/storage/belt/bluespace/sandbox
+	name = "Sandbox Mode Toolbelt"
+	desc = "Holds whatever, you can spawn your own damn stuff."
+	w_class = 10 // permit holding other storage items
+	storage_slots = 28
+	max_w_class = 10
+	max_combined_w_class = 280
+	can_hold = list()
+
+	New()
+		..()
+		new /obj/item/weapon/crowbar(src)
+		new /obj/item/weapon/screwdriver(src)
+		new /obj/item/weapon/weldingtool/hugetank(src)
+		new /obj/item/weapon/wirecutters(src)
+		new /obj/item/weapon/wrench(src)
+		new /obj/item/device/multitool(src)
+		new /obj/item/weapon/cable_coil(src)
+
+		new /obj/item/device/analyzer(src)
+		new /obj/item/device/healthanalyzer(src)
+
 
 //Research for the Bluespace Belt
 datum/design/bluespace_belt
