@@ -33,6 +33,7 @@
 
 	var/list/possible_syndicates = get_players_for_role(BE_OPERATIVE)
 	var/agent_number = 0
+	var/n_players = num_players()
 
 	if(possible_syndicates.len < 1)
 		return 0
@@ -42,12 +43,10 @@
 	else
 		agent_number = possible_syndicates.len
 
+	agent_number = min(agent_number , 1+round(n_players)/(nukeop_scaling_coeff))) //up to five, or one for every five crewmembers, whichever is smaller
 
-	agent_number = min(agent_number , 1+round((num_players())/	(nukeop_scaling_coeff))) //up to five, or one for every five crewmembers, whichever is smaller
-
-
-	var/n_players = num_players()
-	if(agent_number > n_players)
+	
+	if(agent_number >= n_players)
 		agent_number = n_players/2
 
 	while(agent_number > 0)
