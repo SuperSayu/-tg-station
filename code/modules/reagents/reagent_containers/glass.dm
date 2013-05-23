@@ -261,6 +261,14 @@
 					user << "<span class='notice'>[target] is too cheaply made to hold anything but water!</span>"
 				else
 					user << "<span class='notice'>You transfer [trans] unit\s of the water to [target].</span>"
+			if(istype(target,/obj/item/weapon/reagent_containers/spray/chemsprayer/cleanblaster))
+				var/trans = reagents.trans_id_to(target,"cleaner",amount_per_transfer_from_this)
+				if(!trans)
+					user << "<span class='notice'>[target] seems to only accept cleaning fluid!</span>"
+				else
+					user << "<span class='notice'>You transfer [trans] unit\s of cleaning fluid to [target].</span>"
+			else if(istype(target,/obj/item/weapon/reagent_containers/spray/chemsprayer/dirtblaster))
+				user << "<span class='notice'>You can't seem to find a way to fill it.</span>"
 			else
 				var/trans = reagents.trans_to(target, amount_per_transfer_from_this)
 				user << "<span class='notice'>You transfer [trans] unit\s of the solution to [target].</span>"

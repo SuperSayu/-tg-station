@@ -521,21 +521,18 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 			if(W.flags & USEDELAY)
 				//Objects that use the USEDELAY flag can only attack once every 2 seconds
 				if (usr.next_move < world.time)
-					usr.prev_move = usr.next_move
 					usr.next_move = world.time + 20
 				else
 					return	//A click has recently been handled already, you need to wait until the anti-spam delay between clicks passes
 			else if(!(W.flags & NODELAY))
 				//Objects with NODELAY don't have a delay between uses, while most objects have the standard 1 second delay.
 				if (usr.next_move < world.time)
-					usr.prev_move = usr.next_move
 					usr.next_move = world.time + 10
 				else
 					return	//A click has recently been handled already, you need to wait until the anti-spam delay between clicks passes
 	else
 		//Empty hand
 		if (usr.next_move < world.time)
-			usr.prev_move = usr.next_move
 			usr.next_move = world.time + 10
 		else
 			return	//A click has recently been handled already, you need to wait until the anti-spam delay between clicks passes
@@ -893,7 +890,6 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 		// ------- ( CAN USE ITEM OR HAS 1 SECOND USE DELAY ) AND NOT CLICKING ON SCREEN -------
 
 		if (usr.next_move < world.time)
-			usr.prev_move = usr.next_move
 			usr.next_move = world.time + 10
 		else
 			// ------- ALREADY USED ONE ITEM WITH USE DELAY IN THE PREVIOUS SECOND -------
@@ -951,18 +947,19 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 									// ------- YOU TRIED TO CLICK ON AN ITEM THROUGH A WINDOW (OR SIMILAR THING THAT LIMITS ON BORDERS) ON THE TILE YOU'RE ON -------
 									check_1 = 0
 
-					D.loc = usr.loc
-					if(step_to(D, Step_2))
-						check_2 = 1
+					if(!check_1)
+						D.loc = usr.loc
+						if(step_to(D, Step_2))
+							check_2 = 1
 
-						for(var/obj/border_obstacle in Step_2)
-							if(border_obstacle.flags & ON_BORDER)
-								if(!border_obstacle.CheckExit(D, src))
-									check_2 = 0
-						for(var/obj/border_obstacle in get_turf(src))
-							if((border_obstacle.flags & ON_BORDER) && (src != border_obstacle))
-								if(!border_obstacle.CanPass(D, D.loc, 1, 0))
-									check_2 = 0
+							for(var/obj/border_obstacle in Step_2)
+								if(border_obstacle.flags & ON_BORDER)
+									if(!border_obstacle.CheckExit(D, src))
+										check_2 = 0
+							for(var/obj/border_obstacle in get_turf(src))
+								if((border_obstacle.flags & ON_BORDER) && (src != border_obstacle))
+									if(!border_obstacle.CanPass(D, D.loc, 1, 0))
+										check_2 = 0
 
 
 					if(check_1 || check_2)
@@ -1059,7 +1056,6 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 		// ------- ITEM INACESSIBLE OR CLICKING ON SCREEN -------
 		if (istype(src, /obj/screen))
 			// ------- IT'S THE HUD YOU'RE CLICKING ON -------
-			usr.prev_move = usr.next_move
 			usr:lastDblClick = world.time + 2
 			if (usr.next_move < world.time)
 				usr.next_move = world.time + 2
@@ -1123,9 +1119,10 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 	return
 
 /atom/proc/ShiftClick(var/mob/M as mob)
-
-	if(istype(M.machine, /obj/machinery/computer/security)) //No examining by looking through cameras
+	if(!M.client || (M.client.eye != M))
 		return
+	//if(istype(M.machine, /obj/machinery/computer/security)) //No examining by looking through cameras
+		//return
 
 	//I dont think this was ever really a problem and it's only creating more bugs...
 //	if(( abs(src.x-M.x)<8 || abs(src.y-M.y)<8 ) && src.z == M.z ) //This should prevent non-observers to examine stuff from outside their view.
@@ -1170,44 +1167,40 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 	return
 
 /atom/proc/AIShiftClick() // Opens and closes doors!
-	if(istype(src , /obj/machinery/door/airlock))
-		if(src:density)
-			var/nhref = "src=\ref[src];aiEnable=7"
-			src.Topic(nhref, params2list(nhref), src, 1)
-		else
-			var/nhref = "src=\ref[src];aiDisable=7"
-			src.Topic(nhref, params2list(nhref), src, 1)
-
 	return
+/obj/machinery/door/airlock/AIShiftClick()
+	if(src.density)
+		//var/nhref = "src=\ref[src];aiEnable=7"
+		src.Topic("aiEnable=7", list("aiEnable"="7"), src, 1)
+	else
+		//var/nhref = "src=\ref[src];aiDisable=7"
+		src.Topic("aiDisable=7", list("aiDisable"="7"), src, 1)
+
 
 /atom/proc/AIAltClick() // Eletrifies doors.
-	if(istype(src , /obj/machinery/door/airlock))
-		if(!src:secondsElectrified)
-			var/nhref = "src=\ref[src];aiEnable=6"
-			src.Topic(nhref, params2list(nhref), src, 1)
-		else
-			var/nhref = "src=\ref[src];aiDisable=5"
-			src.Topic(nhref, params2list(nhref), src, 1)
-
-
+	return
+/obj/machinery/door/airlock/AIAltClick()
+	if(!src.secondsElectrified)
+		//var/nhref = "src=\ref[src];aiEnable=6"
+		src.Topic("aiEnable=6", list("aiEnable"="6"), src, 1)
+	else
+		//var/nhref = "src=\ref[src];aiDisable=5"
+		src.Topic("aiDisable=5", list("aiDisable"="5"), src, 1)
 	return
 
 /atom/proc/AICtrlClick() // Bolts doors, turns off APCs.
-	if(istype(src , /obj/machinery/door/airlock))
-		if(src:locked)
-			var/nhref = "src=\ref[src];aiEnable=4"
-			src.Topic(nhref, params2list(nhref), src, 1)
-		else
-			var/nhref = "src=\ref[src];aiDisable=4"
-			src.Topic(nhref, params2list(nhref), src, 1)
-
-	else if (istype(src , /obj/machinery/power/apc/))
-		var/nhref = "src=\ref[src];breaker=1"
-		src.Topic(nhref, params2list(nhref), 0)
-
-
-
 	return
+/obj/machinery/door/airlock/AICtrlClick()
+	if(src.locked)
+		//var/nhref = "src=\ref[src];aiEnable=4"
+		src.Topic("aiEnable=4", list("aiEnable"="4"), src, 1)
+	else
+		//var/nhref = "src=\ref[src];aiDisable=4"
+		src.Topic("aiDisable=4", list("aiDisable"="4"), src, 1)
+/obj/machinery/power/apc/AICtrlClick()
+	//var/nhref = "src=\ref[src];breaker=1"
+	src.Topic("breaker=1", list("breaker"="1"), 0)
+
 
 /atom/proc/MiddleClick(var/mob/M as mob) // switch hands
 	if(istype(M, /mob/living/carbon))

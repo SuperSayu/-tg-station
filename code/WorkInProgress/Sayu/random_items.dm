@@ -330,7 +330,7 @@
 					/obj/item/weapon/grenade/clusterbuster/fluffy, /obj/item/weapon/grenade/clusterbuster/lube,
 					/obj/item/weapon/grenade/clusterbuster/smoke, /obj/item/weapon/grenade/clusterbuster/soap,
 					/obj/item/weapon/bikehorn, /obj/item/weapon/reagent_containers/spray/chemsprayer/honkmaster,
-					/obj/item/weapon/gun/projectile/automatic/clown)
+					/obj/item/weapon/gun/projectile/automatic/clown, /obj/item/weapon/reagent_containers/spray/chemsprayer/dirtblaster)
 	containertype = /obj/structure/closet/crate/secure
 	containername = "Chest of Dautingly Frivolous Weaponry"
 	access = access_clown

@@ -211,6 +211,21 @@
 	New()
 		..()
 		reagents.add_reagent("water",volume)
+/obj/item/weapon/reagent_containers/spray/chemsprayer/cleanblaster
+	name = "Megamaid's Little Friend"
+	desc = "She has promised to shove this through the digestive system of anyone who tells her secrets--starting at the wrong end."
+	New()
+		..()
+		reagents.add_reagent("cleaner",volume)
+/obj/item/weapon/reagent_containers/spray/chemsprayer/dirtblaster
+	name = "Megamaid's Dirty Little Secret"
+	desc = "Janitors everywhere shed a tear and know not why."
+	New()
+		..()
+		var/Q = round(volume/3)
+		reagents.add_reagent("carbon",Q)
+		reagents.add_reagent("flour",Q)
+		reagents.add_reagent("blood",Q)
 
 // Plant-B-Gone
 /obj/item/weapon/reagent_containers/spray/plantbgone // -- Skie

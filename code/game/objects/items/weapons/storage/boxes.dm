@@ -469,3 +469,17 @@
 		new /obj/item/weapon/light/tube(src)
 	for(var/i = 0; i < 7; i++)
 		new /obj/item/weapon/light/bulb(src)
+
+// Welcome to spaceburger home of the spaceburger
+/obj/item/weapon/storage/box/spacemeal
+	name = "Burgerspace Spaceymeal"
+	desc = "Filled with... well, pretty much the opposite of nutrition.  Comes with a toy!"
+	storage_slots = 4
+	foldable = /obj/item/weapon/paper/crumpled
+
+/obj/item/weapon/storage/box/spacemeal/New()
+	..()
+	new /obj/item/weapon/reagent_containers/food/snacks/monkeyburger(src)
+	new /obj/item/weapon/reagent_containers/food/snacks/fries(src)
+	new /obj/item/weapon/reagent_containers/food/drinks/cola(src)
+	new /obj/item/toy/random(src)

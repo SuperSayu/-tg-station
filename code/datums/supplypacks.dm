@@ -53,6 +53,13 @@
 	containertype = /obj/structure/closet/crate/freezer
 	containername = "food crate"
 
+/datum/supply_packs/fastfood
+	name = "Fast Food delivery"
+	contains = list(/obj/item/weapon/storage/box/spacemeal,/obj/item/weapon/storage/box/spacemeal,/obj/item/weapon/storage/box/spacemeal,/obj/item/weapon/storage/box/spacemeal)
+	cost = 30
+	containertype = /obj/structure/closet/acloset
+	containername = "fast food crate"
+
 /datum/supply_packs/paper
 	name = "Bureaucracy crate"
 	contains = list(/obj/structure/filingcabinet/chestdrawer/wheeled,
@@ -150,7 +157,8 @@
 					/obj/item/weapon/caution,
 					/obj/item/weapon/caution,
 					/obj/item/weapon/storage/bag/trash,
-					/obj/item/weapon/reagent_containers/spray/cleaner,
+					// /obj/item/weapon/reagent_containers/spray/cleaner,
+					/obj/item/weapon/reagent_containers/spray/chemsprayer/cleanblaster,
 					/obj/item/weapon/reagent_containers/glass/rag,
 					/obj/item/weapon/grenade/chem_grenade/cleaner,
 					/obj/item/weapon/grenade/chem_grenade/cleaner,

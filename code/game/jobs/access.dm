@@ -111,22 +111,27 @@
 //returns 1 if this mob has sufficient access to use this object
 /obj/proc/allowed(mob/M)
 	//check if it doesn't require any access at all
-	if(src.check_access(null))
-		return 1
 	if(istype(M, /mob/living/silicon))
 		//AI can do whatever he wants
 		return 1
-	else if(istype(M, /mob/living/carbon/human))
+	var/list/access = list()
+
+	if(istype(M, /mob/living/carbon/human)) //if they are holding or wearing a card that has access, that works
 		var/mob/living/carbon/human/H = M
-		//if they are holding or wearing a card that has access, that works
-		if(src.check_access(H.get_active_hand()) || src.check_access(H.wear_id))
-			return 1
+		if(H.wear_id)
+			access += H.wear_id.GetAccess()
+		var/obj/item/I = H.get_active_hand()
+		if(I)
+			access += I.GetAccess()
+
 	else if(istype(M, /mob/living/carbon/monkey) || istype(M, /mob/living/carbon/alien/humanoid))
 		var/mob/living/carbon/george = M
 		//they can only hold things :(
-		if(src.check_access(george.get_active_hand()))
-			return 1
-	return 0
+		var/obj/item/I = george.get_active_hand()
+		if(I)
+			access += I.GetAccess()
+
+	return check_access_list(access)
 
 /obj/item/proc/GetAccess()
 	return list()
@@ -134,39 +139,26 @@
 /obj/item/proc/GetID()
 	return null
 
-/obj/proc/check_access(obj/item/I)
-
-	if(!src.req_access && !src.req_one_access) //no requirements
-		return 1
-	if(!istype(src.req_access, /list)) //something's very wrong
-		return 1
-
-	var/list/L = src.req_access
-	if(!L.len && (!src.req_one_access || !src.req_one_access.len)) //no requirements
-		return 1
-	if(!I)
-		return 0
-	for(var/req in src.req_access)
-		if(!(req in I.GetAccess())) //doesn't have this access
-			return 0
-	if(src.req_one_access && src.req_one_access.len)
-		for(var/req in src.req_one_access)
-			if(req in I.GetAccess()) //has an access from the single access list
-				return 1
-		return 0
-	return 1
-
+/obj/proc/check_access(var/obj/item/I)
+	if(!istype(I))
+		return check_access_list(null)
+	return check_access_list(I.GetAccess())
 
 /obj/proc/check_access_list(var/list/L)
-	if(!src.req_access  && !src.req_one_access)	return 1
-	if(!istype(src.req_access, /list))	return 1
-	if(!src.req_access.len && (!src.req_one_access || !src.req_one_access.len))	return 1
-	if(!L)	return 0
-	if(!istype(L, /list))	return 0
+	if(!istype(src.req_access, /list))
+		src.req_access = list()
+	if(!istype(src.req_one_access, /list))
+		src.req_one_access = list()
+
+	if(!src.req_access.len && !src.req_one_access.len) //no requirements
+		return 1
+	if(!istype(L) || !L.len) // no access
+		return 0
+
 	for(var/req in src.req_access)
 		if(!(req in L)) //doesn't have this access
 			return 0
-	if(src.req_one_access && src.req_one_access.len)
+	if(src.req_one_access.len)
 		for(var/req in src.req_one_access)
 			if(req in L) //has an access from the single access list
 				return 1
@@ -413,20 +405,12 @@
 /proc/get_all_centcom_jobs()
 	return list("VIP Guest","Custodian","Thunderdome Overseer","Intel Officer","Medical Officer","Death Commando","Research Officer","BlackOps Commander","Supreme Commander")
 
-/obj/proc/GetJobName()
-	if (!istype(src, /obj/item/device/pda) && !istype(src,/obj/item/weapon/card/id))
-		return
+/obj/item/proc/GetJobName()
+	var/obj/item/weapon/card/id/I = src.GetID()
+	if(!istype(I)) return null
 
-	var/jobName
+	var/jobName = I.assignment
 
-	if(istype(src, /obj/item/device/pda))
-		if(src:id)
-			jobName = src:id:assignment
-	if(istype(src, /obj/item/weapon/card/id))
-		jobName = src:assignment
-
-	if(jobName in get_all_jobs()) //Check station jobs
+	if(jobName in (get_all_jobs() + "Prisoner")) //Check station jobs, or prisoner status
 		return jobName
-	if(jobName == "Prisoner") //Check for Prisoner
-		return "Prisoner"
 	return "Unknown" //Return unknown if none of the above apply

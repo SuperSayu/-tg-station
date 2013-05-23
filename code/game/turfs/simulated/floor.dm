@@ -16,7 +16,7 @@ var/list/plating_icons = list("plating","platingdmg1","platingdmg2","platingdmg3
 				"ironsand1", "ironsand2", "ironsand3", "ironsand4", "ironsand5", "ironsand6", "ironsand7",
 				"ironsand8", "ironsand9", "ironsand10", "ironsand11",
 				"ironsand12", "ironsand13", "ironsand14", "ironsand15")
-var/list/wood_icons = list("wood","wood-broken")
+//var/list/wood_icons = list("wood","wood-broken")
 
 /turf/simulated/floor
 
@@ -84,20 +84,22 @@ turf/simulated/floor/proc/update_icon()
 	else if(is_plasteel_floor())
 		if(!broken && !burnt)
 			icon_state = icon_regular_floor
+		intact = 1
 	else if(is_plating())
 		if(!broken && !burnt)
 			icon_state = icon_plating //Because asteroids are 'platings' too.
+		intact = 0
 	else if(is_light_floor())
 		var/obj/item/stack/tile/light/T = floor_tile
 		if(T.on)
 			switch(T.state)
 				if(0)
 					icon_state = "light_on"
-					SetLuminosity(1)
+					SetLuminosity(2)
 				if(1)
 					var/num = pick("1","2","3","4")
 					icon_state = "light_on_flicker[num]"
-					SetLuminosity(1)
+					SetLuminosity(2)
 				if(2)
 					icon_state = "light_on_broken"
 					SetLuminosity(1)
@@ -107,58 +109,55 @@ turf/simulated/floor/proc/update_icon()
 		else
 			SetLuminosity(0)
 			icon_state = "light_off"
+		intact = 1
 	else if(is_grass_floor())
 		if(!broken && !burnt)
 			if(!(icon_state in list("grass1","grass2","grass3","grass4")))
 				icon_state = "grass[pick("1","2","3","4")]"
+		intact = 1
 	else if(is_carpet_floor())
 		if(!broken && !burnt)
-			if(icon_state == "carpet")
+			if(1)//icon_state == "carpet" || icon_state == "carpet-broken")
 				var/connectdir = 0
 				for(var/direction in cardinal)
-					if(istype(get_step(src,direction),/turf/simulated/floor))
-						var/turf/simulated/floor/FF = get_step(src,direction)
-						if(FF.is_carpet_floor())
-							connectdir |= direction
+					var/turf/simulated/floor/FF = get_step(src,direction)
+					if(istype(FF) && FF.is_carpet_floor())
+						connectdir |= direction
 
 				//Check the diagonal connections for corners, where you have, for example, connections both north and east. In this case it checks for a north-east connection to determine whether to add a corner marker or not.
 				var/diagonalconnect = 0 //1 = NE; 2 = SE; 4 = NW; 8 = SW
 
 				//Northeast
 				if(connectdir & NORTH && connectdir & EAST)
-					if(istype(get_step(src,NORTHEAST),/turf/simulated/floor))
-						var/turf/simulated/floor/FF = get_step(src,NORTHEAST)
-						if(FF.is_carpet_floor())
-							diagonalconnect |= 1
+					var/turf/simulated/floor/FF = get_step(src,NORTHEAST)
+					if(istype(FF) && FF.is_carpet_floor())
+						diagonalconnect |= 1
 
 				//Southeast
 				if(connectdir & SOUTH && connectdir & EAST)
-					if(istype(get_step(src,SOUTHEAST),/turf/simulated/floor))
-						var/turf/simulated/floor/FF = get_step(src,SOUTHEAST)
-						if(FF.is_carpet_floor())
-							diagonalconnect |= 2
+					var/turf/simulated/floor/FF = get_step(src,SOUTHEAST)
+					if(istype(FF) && FF.is_carpet_floor())
+						diagonalconnect |= 2
 
 				//Northwest
 				if(connectdir & NORTH && connectdir & WEST)
-					if(istype(get_step(src,NORTHWEST),/turf/simulated/floor))
-						var/turf/simulated/floor/FF = get_step(src,NORTHWEST)
-						if(FF.is_carpet_floor())
-							diagonalconnect |= 4
+					var/turf/simulated/floor/FF = get_step(src,NORTHWEST)
+					if(istype(FF) && FF.is_carpet_floor())
+						diagonalconnect |= 4
 
 				//Southwest
 				if(connectdir & SOUTH && connectdir & WEST)
-					if(istype(get_step(src,SOUTHWEST),/turf/simulated/floor))
-						var/turf/simulated/floor/FF = get_step(src,SOUTHWEST)
-						if(FF.is_carpet_floor())
-							diagonalconnect |= 8
+					var/turf/simulated/floor/FF = get_step(src,SOUTHWEST)
+					if(istype(FF) && FF.is_carpet_floor())
+						diagonalconnect |= 8
 
 				icon_state = "carpet[connectdir]-[diagonalconnect]"
+		intact = 1
 
 	else if(is_wood_floor())
 		if(!broken && !burnt)
-			if( !(icon_state in wood_icons) )
-				icon_state = "wood"
-				//world << "[icon_state]y's got [icon_state]"
+			icon_state = "wood"
+		intact = 1
 	spawn(1)
 		if(istype(src,/turf/simulated/floor)) //Was throwing runtime errors due to a chance of it changing to space halfway through.
 			if(air)
@@ -420,6 +419,7 @@ turf/simulated/floor/proc/update_icon()
 	broken = 0
 	burnt = 0
 	intact = 1
+	//icon_state = "carpet"
 	if(T)
 		if(istype(T,/obj/item/stack/tile/carpet))
 			floor_tile = T
@@ -443,7 +443,7 @@ turf/simulated/floor/proc/update_icon()
 			if(T.state)
 				user.drop_item(C)
 				del(C)
-				T.state = C //fixing it by bashing it with a light bulb, fun eh?
+				T.state = 0 //fixing it by bashing it with a light bulb, fun eh?
 				update_icon()
 				user << "\blue You replace the light bulb."
 			else
