@@ -17,16 +17,17 @@
 	icon = 'icons/obj/card.dmi'
 	w_class = 1.0
 
-	var/list/files = list(  )
-
 /obj/item/weapon/card/data
-	name = "data disk"
+	name = "data card"
 	desc = "A disk of data."
 	icon_state = "data"
+	item_state = "card-id"
+
 	var/function = "storage"
 	var/data = "null"
 	var/special = null
-	item_state = "card-id"
+
+	var/list/files = list(  )
 
 /obj/item/weapon/card/data/verb/label(t as text)
 	set name = "Label Disk"
@@ -65,7 +66,7 @@
 	desc = "A card used to provide ID and determine access across the station."
 	icon_state = "id"
 	item_state = "card-id"
-	var/access = list()
+	var/list/access = list()
 	var/registered_name = null // The name registered_name on the card
 	slot_flags = SLOT_ID
 

@@ -6,13 +6,13 @@
 	use_power = 1
 	idle_power_usage = 4
 	active_power_usage = 250
-	var/obj/item/weapon/charging = null
+	var/obj/item/charging = null
 
 
 /obj/machinery/recharger/attackby(obj/item/weapon/G, mob/user)
 	if(istype(user,/mob/living/silicon))
 		return
-	if(istype(G, /obj/item/weapon/gun/energy) || istype(G, /obj/item/weapon/melee/baton))
+	if(istype(G, /obj/item/weapon/gun/energy) || istype(G, /obj/item/weapon/melee/baton) || istype(G,/obj/item/device/laptop))
 		if(charging)
 			return
 
@@ -27,6 +27,11 @@
 			return
 		if (istype(G, /obj/item/weapon/gun/energy/staff))
 			return
+		if(istype(G,/obj/item/device/laptop))
+			var/obj/item/device/laptop/L = G
+			if(!L.stored_computer.battery)
+				user << "There's no battery in it!"
+				return
 		user.drop_item()
 		G.loc = src
 		charging = G
@@ -81,6 +86,15 @@
 					icon_state = "recharger2"
 			else
 				icon_state = "recharger3"
+		if(istype(charging, /obj/item/device/laptop))
+			var/obj/item/device/laptop/L = charging
+			if(L.stored_computer.battery.charge < L.stored_computer.battery.maxcharge)
+				L.stored_computer.battery.give(100)
+				icon_state = "recharger1"
+				use_power(250)
+			else
+				icon_state = "recharger2"
+			return
 
 
 /obj/machinery/recharger/emp_act(severity)
@@ -97,6 +111,8 @@
 		var/obj/item/weapon/melee/baton/B = charging
 		if(B.bcell)
 			B.bcell.charge = 0
+	else if(istype(charging, /obj/item/device/laptop))
+		charging.emp_act(severity)
 	..(severity)
 
 
