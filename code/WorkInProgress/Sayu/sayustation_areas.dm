@@ -25,3 +25,9 @@
 /area/holodeck/source_party
 	name = "Party Room"
 	party = 1
+
+
+/area/holodeck/betadeck
+	name = "\improper Holodeck Beta"
+	luminosity = 0.5
+	lighting_use_dynamic = 0

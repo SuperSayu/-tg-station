@@ -86,26 +86,6 @@
 		return
 
 // -------------------------------------
-//  	  Gardening supplies
-//	(As distinct from hydroponics)
-// -------------------------------------
-/obj/structure/closet/garden
-	name = "Garden Supplies"
-	icon_state = "syndicate1"
-	icon_closed = "syndicate1"
-	icon_opened = "syndicate1_open"
-
-	New()
-		..()
-		new/obj/item/weapon/minihoe(src)
-		new/obj/item/weapon/reagent_containers/glass/bucket(src)
-		new/obj/item/weapon/reagent_containers/spray/plantbgone(src)
-		new/obj/item/weapon/reagent_containers/spray/plantbgone(src)
-		new/obj/item/seeds/sunflowerseed(src)
-		new/obj/item/seeds/sunflowerseed(src)
-		new/obj/item/seeds/appleseed(src)
-
-// -------------------------------------
 //              I'm sorry
 // -------------------------------------
 /obj/item/weapon/aiModule/rickrules
@@ -121,6 +101,118 @@
 		target.add_inherent_law("Never run around and desert them.")
 		target.add_inherent_law("Never make them cry.")
 		target.show_laws()
+
+
+// ------------------------------------------
+//  Pet collars - Allows renaming of animals
+//   Actual code in simple_animal/attackby
+// ------------------------------------------
+
+/obj/item/weapon/pet_collar
+	name = "Pet Collar"
+	desc = "Helps you keep track of an animal's name."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "collar"
+
+
+
+//
+// Actual bombs
+//
+
+/obj/item/weapon/dynamite
+	name = "Dynamite"
+	desc = "If the fuse is sparkin' done come a-knockin', baby."
+	icon = 'icons/obj/grenade.dmi'
+	icon_state = "tnt"
+
+	var/fuselength = 3000 // 5 minutes
+	var/lit_time = null
+
+	New()
+		..()
+		processing_objects.Add(src)
+
+	proc/Time(var/length)
+		var/m = round(length / 600)
+		var/s = round((length - 600*m) / 10)
+		if(s<10) s = "0[s]"
+		return "[m]:[s]"
+
+	update_icon()
+		if(lit_time)
+			icon_state = "tnt-armed"
+		else if(fuselength)
+			icon_state = "tnt"
+		else
+			icon_state = "tnt-disarmed"
+
+	examine()
+		..()
+		if(lit_time)
+			var/det_time = lit_time + fuselength
+			var/difference = det_time - world.time
+			usr << "\red The fuse is lit!  You have [Time(difference)] to get away!"
+		else
+			if(fuselength)
+				usr << "\blue The fuse is [Time(fuselength)] long."
+			else
+				usr << "\blue The fuse was removed."
+
+	attackby(var/obj/item/W as obj, var/mob/living/user as mob)
+		if(istype(W,/obj/item/weapon/wirecutters))
+			if(lit_time != null)
+				var/time_left = (lit_time + fuselength) - world.time
+				if(time_left < 100)
+					user << "\red The fuse it too short!  You can't get the [W] in close enough to stop it!"
+					return
+				lit_time = null
+				fuselength = round(time_left * (rand(5,18) / 20))
+				update_icon()
+				user << "\blue You clip the fuse.  The burning piece of fuse falls harmlessly to the ground."
+				return
+			var/list/possible_lengths = list(0, 50,100,150,300,450,600,900,1200,1500,1800,2100,2400,2700)
+			var/list/entries = list()
+			for(var/index = 1; index <= possible_lengths.len; index++)
+				if(possible_lengths[index] >= fuselength)
+					possible_lengths.Cut(index)
+					break
+				entries += Time(possible_lengths[index])
+			if(possible_lengths.len <= 1 && fuselength > 0)
+				fuselength = 0
+				user << "\blue You remove the last of the fuse."
+				update_icon()
+				return
+			var/chosen = input(user, "Shorten the fuse from [Time(fuselength)] to...","Cut Fuse",entries[1]) as null|anything in entries
+			var/index = entries.Find(chosen)
+			if(!index) return
+			fuselength = possible_lengths[index]
+			if(fuselength)
+				user << "\blue You shorten the fuse to [index]."
+			else
+				user << "\blue You remove the fuse."
+				update_icon()
+			return
+		if(is_hot(W))
+			if(lit_time)
+				user << "\red The fuse is alread lit!"
+				return
+			if(!fuselength)
+				user << "\blue The fuse seems to have been removed."
+				return
+			lit_time = world.time
+			user << "You light the fuse.  It should go off in [Time(fuselength)]."
+			update_icon()
+			return
+
+
+	process()
+		if(!lit_time) return
+		if(world.time >= (lit_time + fuselength))
+			explosion(get_turf(loc), 1, 3, 5, 7) // todo actual values
+			if(src) del src
+			return
+
 
 
 /obj/item/weapon/book/debug
@@ -246,3 +338,15 @@
 			else
 				oshit[t]=1
 				names[t]=M.name
+/obj/item/weapon/book/debug/effects
+	name = "Effect log"
+	populate()
+		oshit.Cut()
+		names.Cut()
+		for(var/obj/effect/E in world)
+			var/t = E.type
+			if(t in oshit)
+				oshit[t]++
+			else
+				oshit[t]=1
+				names[t]=E.name

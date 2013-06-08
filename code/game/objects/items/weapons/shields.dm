@@ -59,12 +59,15 @@
 	throw_range = 10
 	w_class = 2.0
 	origin_tech = "magnets=3;syndicate=4"
+	var/active_power_use = 15
 
 	var/mob/living/cloaked_user = null
+	var/obj/item/weapon/cell/battery
 
 /obj/item/weapon/cloaking_device/New()
 	..()
 	processing_objects.Add(src)
+	battery = new
 
 /obj/item/weapon/cloaking_device/Del()
 	active=0
@@ -74,11 +77,28 @@
 
 /obj/item/weapon/cloaking_device/process()
 	if(!active || !istype(loc,/mob/living/carbon/human))
+		if(cloaked_user)
+			cloaked_user.update_icons()
+		cloaked_user = null
+		if(active)
+			battery.use(active_power_use)
 		return
+
+	if(!battery || !battery.use(active_power_use))
+		if(active)
+			if(istype(loc,/mob))
+				loc.visible_message("[loc] flickers back into view!")
+			else
+				visible_message("[src] flickers back into view!")
+			active = 0
+			update_icon()
+		return
+
 	if(cloaked_user != loc)
 		if(cloaked_user)
 			cloaked_user.update_icons()
 		cloaked_user = loc
+
 	var/mob/living/carbon/human/H = cloaked_user
 	if(H.lying)
 		active = 0
@@ -101,11 +121,7 @@
 /obj/item/weapon/cloaking_device/dropped(mob/user as mob)
 	if(active) // did you seriously just drop an invisible thing
 		spawn(5)
-			user.update_icons()
-			cloaked_user.update_icons()
-			cloaked_user = null
-		active = 1
-		icon = null
+			update_icon()
 		icon_state = null
 	..()
 
@@ -120,8 +136,7 @@
 	..()
 /obj/item/weapon/cloaking_device/on_enter_storage()
 	if(active)
-		icon = initial(icon) // it is dropped before entering the container, it will become irretrievable
-		icon_state = initial(icon_state)
+		icon_state = initial(icon_state)// it is dropped before entering the container, it would become irretrievable
 		cloaked_user.update_icons()
 	..()
 /obj/item/weapon/cloaking_device/on_exit_storage()
@@ -130,23 +145,41 @@
 	..()
 
 /obj/item/weapon/cloaking_device/attack_self(mob/user as mob)
+	if(battery.charge < active_power_use && !active)
+		user << "You flip the switch, but nothing happens!"
+		return
 	src.active = !( src.active )
 	if (src.active)
 		user << "\blue The cloaking device is now active."
-		src.icon_state = "shield1"
 		cloaked_user = user
 	else
 		user << "\blue The cloaking device is now inactive."
-		src.icon_state = "shield0"
-		cloaked_user = null
-	user.update_icons()
+	update_icon()
 	src.add_fingerprint(user)
 	return
 
-/obj/item/weapon/cloaking_device/emp_act(severity)
+/obj/item/weapon/cloaking_device/update_icon()
 	if(active)
-		active = 0
+		if(isturf(loc))
+			icon_state = null
+			if(cloaked_user)
+				cloaked_user.update_icons()
+				cloaked_user = null
+		else
+			icon_state = "shield1"
+			if(cloaked_user && cloaked_user != loc)
+				cloaked_user.update_icons()
+				cloaked_user = null
+			if(ismob(loc))
+				loc:update_icons()
+				cloaked_user = loc
+	else
 		icon_state = "shield0"
-		if(ismob(loc))
-			loc:update_icons()
+		if(cloaked_user)
+			cloaked_user.update_icons()
+			cloaked_user = null
+
+/obj/item/weapon/cloaking_device/emp_act(severity)
+	active = pick(0,1)
+	update_icon()
 	..()

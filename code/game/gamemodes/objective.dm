@@ -537,12 +537,15 @@ datum/objective/steal
 							return 1
 			if("7 different kinds of alcohol")
 				var/list/samples = list()
+				var/static/list/other_alcohols = list(/datum/reagent/atomicbomb,/datum/reagent/gargle_blaster,/datum/reagent/neurotoxin,/datum/reagent/hippies_delight)
 				for(var/obj/item/weapon/reagent_containers/R in all_items)
 					if(!R.reagents) continue
-					for(var/datum/reagent/ethanol/E in R.reagents.reagent_list)
-						samples |= E.type // all booze are now subtypes of ethanol, this should work
-						if(samples.len >= 7)
-							return 1
+					for(var/datum/reagent/ER in R.reagents.reagent_list)
+						if(istype(ER,/datum/reagent/ethanol) || (ER.type in other_alcohols))
+							samples |= ER.type // all booze are now subtypes of ethanol, this should work
+							if(samples.len >= 7)
+								return 1
+
 			else
 				for(var/obj/I in all_items) //Check for items
 					if(istype(I, steal_target))

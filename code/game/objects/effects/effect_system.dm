@@ -221,6 +221,36 @@ steam.start() -- spawns the effect
 	name = "lightning"
 	icon_state = "electricity"
 
+/datum/effect/effect/system/lightning
+	var/total_sparks = 0 // To stop it being spammed and lagging!
+
+	set_up(n = 3, loca)
+		if(n > 10)
+			n = 10
+		number = n
+		if(istype(loca, /turf/))
+			location = loca
+		else
+			location = get_turf(loca)
+
+	start()
+		var/i = 0
+		for(i=0, i<src.number, i++)
+			if(src.total_sparks > 20)
+				return
+			spawn(0)
+				if(holder)
+					src.location = get_turf(holder)
+				var/obj/effect/effect/sparks/electricity/sparks = new /obj/effect/effect/sparks/electricity(src.location)
+				src.total_sparks++
+				spawn(rand(20,100))
+					if(sparks) // Might be deleted already
+						sparks.delete()
+					if(src)
+						src.total_sparks--
+				sleep(10)
+
+
 /datum/effect/effect/system/lightning_spread
 	var/total_sparks = 0 // To stop it being spammed and lagging!
 
@@ -255,7 +285,8 @@ steam.start() -- spawns the effect
 				spawn(20)
 					if(sparks) // Might be deleted already
 						sparks.delete()
-					src.total_sparks--
+					if(src)
+						src.total_sparks--
 
 
 

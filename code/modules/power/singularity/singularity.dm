@@ -24,6 +24,7 @@ var/global/list/uneatable = list(
 	var/current_size		= 1
 	var/allowed_size		= 1
 	var/contained			= 1 //Are we going to move around?
+	var/force_contained		= 0 // if 1, keep existing value
 
 	var/energy				= 100 //How strong are we?
 	var/dissipate			= 1 //Do we lose energy over time?
@@ -224,8 +225,9 @@ var/global/list/uneatable = list(
 		defer_powernet_rebuild = 1
 	// Let's just make this one loop.
 	var/new_contained = 0
-	for(var/atom/X in orange(grav_pull,src))
-		if(istype(X,/area)) continue
+	var/outer_range = max(grav_pull,decay_range,consume_range)
+	for(var/atom/X in orange(outer_range,src))
+		if(istype(X,/turf/space)) continue
 		if(X.type in list(/obj/machinery/containment_field,/obj/machinery/shieldwall))
 			new_contained = 1 // These stabilize space and keep gravity decay from getting out of hand
 			continue
@@ -233,8 +235,7 @@ var/global/list/uneatable = list(
 		var/dist = get_dist(X, src)
 
 		if(dist <= consume_range)
-			if(!istype(X,/turf/space))
-				consume(X)
+			consume(X)
 			continue
 
 		else if(dist <= decay_range && (!contained || current_size >=9))
@@ -247,7 +248,7 @@ var/global/list/uneatable = list(
 				continue
 
 		// Not an else, the above falls through
-		if(istype(X, /atom/movable))
+		if(dist <= grav_pull && istype(X, /atom/movable))
 			if(current_size < 9 && istype(X,/mob/living/carbon/human))
 				var/mob/living/carbon/human/H = X
 				var/obj/item/clothing/shoes/magboots/M = H.shoes
@@ -256,7 +257,8 @@ var/global/list/uneatable = list(
 			if(X:anchored)
 				continue
 			step_towards(X,src)
-	contained = new_contained
+	if(!force_contained)
+		contained = new_contained
 
 	if(defer_powernet_rebuild != 2)
 		defer_powernet_rebuild = 0
@@ -469,6 +471,8 @@ var/global/list/uneatable = list(
 	return
 
 
+// Sayu's Notes: With the new decay range, we can make Nar-Sie destroy the station as it passes by;
+// the thing is so terrifying the station itself falls to pieces.  I love it.
 
 /obj/machinery/singularity/narsie //Moving narsie to a child object of the singularity so it can be made to function differently. --NEO
 	name = "Nar-Sie"
@@ -477,11 +481,15 @@ var/global/list/uneatable = list(
 	pixel_x = -89
 	pixel_y = -85
 	current_size = 9 //It moves/eats like a max-size singulo, aside from range. --NEO
+	force_contained = 1 // Nar-sie is not so easily bound
 	contained = 0 //Are we going to move around?
 	dissipate = 0 //Do we lose energy over time?
 	move_self = 1 //Do we move on our own?
+
 	grav_pull = 10 //How many tiles out do we pull?
 	consume_range = 3 //How many tiles out do we eat
+	decay_range = 12
+	grav_pull = 6
 
 /obj/machinery/singularity/narsie/large
 	name = "Nar-Sie"
@@ -491,7 +499,9 @@ var/global/list/uneatable = list(
 	pixel_y = -256
 	current_size = 12
 	move_self = 1 //Do we move on our own?
-	consume_range = 12 //How many tiles out do we eat
+	consume_range = 8 //How many tiles out do we eat
+	decay_range = 18
+	grav_pull = 12
 
 /obj/machinery/singularity/narsie/large/New()
 	..()
@@ -607,7 +617,7 @@ var/global/list/uneatable = list(
 
 	if(prob(100 - (29 * counter)))
 		new /obj/structure/faketurf(src,counter)
-	else if(prob(15))
+	else if(prob(11))
 		disintegrate()
 	return
 
@@ -615,7 +625,7 @@ var/global/list/uneatable = list(
 	return
 
 /turf/simulated/floor/disintegrate()
-	// rip of tile, if present
+	// rip off tile, if present
 	for(var/obj/O in contents)
 		O.anchored = 0
 		if(istype(O,/obj/machinery))
@@ -624,11 +634,18 @@ var/global/list/uneatable = list(
 	if(floor_tile)
 		floor_tile.loc = src
 		floor_tile = null
+		intact = 0
 		SetLuminosity(0)
 		if(prob(33))
 			break_tile()
+		else
+			update_icon()
+			levelupdate()
 		return
-	new /obj/structure/faketurf(loc)
+	else if(prob(27))
+		new /obj/structure/faketurf(loc)
+	else if(prob(33))
+		break_tile()
 
 /turf/simulated/floor/engine/disintegrate()
 	if(prob(80))

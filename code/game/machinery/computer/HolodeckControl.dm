@@ -8,6 +8,7 @@
 	var/list/holographic_items = list()
 	var/damaged = 0
 	var/last_change = 0
+	var/target_area = /area/holodeck/alphadeck
 
 
 	attack_ai(var/mob/user as mob)
@@ -183,7 +184,8 @@
 
 /obj/machinery/computer/HolodeckControl/New()
 	..()
-	linkedholodeck = locate(/area/holodeck/alphadeck)
+	linkedholodeck = locate(target_area)
+	linkedholodeck = linkedholodeck.master
 	//if(linkedholodeck)
 	//	target = locate(/area/holodeck/source_emptycourt)
 	//	if(target)
@@ -240,7 +242,7 @@
 
 
 		for(var/item in holographic_items)
-			if(!(get_turf(item) in linkedholodeck))
+			if(!(get_area(item) in linkedholodeck.related))
 				derez(item, 0)
 
 

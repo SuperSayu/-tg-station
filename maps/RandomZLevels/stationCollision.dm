@@ -166,10 +166,17 @@ var/sc_safecode5 = "[rand(0,9)]"
 /*
  * Modified Nar-Sie
  */
+
+// Note by Sayu: Using the containment checks I put into singulos it should be possible to make this Nar-Sie releasable but still perfectly tame the rest of the time
+// you just have to make it contained by glyphs instead of things
 /obj/machinery/singularity/narsie/sc_Narsie
 	desc = "Your body becomes weak and your feel your mind slipping away as you try to comprehend what you know can't be possible."
+	force_contained = 1
+	contained = 1 //
 	move_self = 0 //Contianed narsie does not move!
 	grav_pull = 0 //Contained narsie does not pull stuff in!
+	decay_range = 0 //
+
 
 //Override this to prevent no adminlog runtimes and admin warnings about a singularity without containment
 /obj/machinery/singularity/narsie/sc_Narsie/admin_investigate_setup()

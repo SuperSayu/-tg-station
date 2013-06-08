@@ -5,3 +5,6 @@
 	if (random_icon_states && length(src.random_icon_states) > 0)
 		src.icon_state = pick(src.random_icon_states)
 	..()
+
+/obj/effect/decal/cleanable/ex_act()
+	del src

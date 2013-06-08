@@ -13,7 +13,7 @@
 		world << sound('sound/AI/meteors.ogg')
 
 /datum/round_event/dust/meaty/setup()
-	qnty = rand(5,15)
+	qnty = rand(5,25)
 
 /datum/round_event/dust/meaty/start()
 	while(qnty-- > 0)
@@ -24,7 +24,9 @@
 	icon_state = "cow"
 
 	strength = 1
-	life = 1
+	life = 3
+
+
 
 	Bump(atom/A)
 		if(prob(20))
@@ -36,22 +38,24 @@
 			playsound(src.loc, 'sound/effects/meteorimpact.ogg', 40, 1)
 			walk(src,0)
 			invisibility = 101
-			if(isturf(A))
-				new /obj/effect/decal/cleanable/blood(A)
-
-			if(prob(80))
-				if(prob(33))
-					new /obj/item/weapon/reagent_containers/food/snacks/meat(loc)
-				else
-					new /obj/effect/decal/cleanable/blood/gibs(loc)
-			else
-				new /mob/living/simple_animal/cow(loc)
-
+			new /obj/effect/decal/cleanable/blood(get_turf(A))
 			if(ismob(A))
 				A.meteorhit(src)
 			else
-				var/s = strength
-				spawn(1)
-					A.ex_act(s)
+				spawn(0)
+					if(A)
+						A.ex_act(strength)
+					if(src)
+						walk_towards(src,goal,1)
+			life--
+			if(!life)
+				if(prob(80))
+					gibs(loc)
+					if(prob(45))
+						new /obj/item/weapon/reagent_containers/food/snacks/meat(loc)
+					else if(prob(10))
+						explosion(get_turf(loc), 0, pick(0,1), pick(2,3), 0)
+				else
+					new /mob/living/simple_animal/cow(loc)
 
-			del(src)
+				del(src)

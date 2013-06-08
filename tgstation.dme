@@ -1117,6 +1117,7 @@
 #include "code\WorkInProgress\Sayu\battery_backup.dm"
 #include "code\WorkInProgress\Sayu\belt.dm"
 #include "code\WorkInProgress\Sayu\cargoprofile.dm"
+#include "code\WorkInProgress\Sayu\chemscanner.dm"
 #include "code\WorkInProgress\Sayu\grenades.dm"
 #include "code\WorkInProgress\Sayu\hiddenstuff.dm"
 #include "code\WorkInProgress\Sayu\mail.dm"

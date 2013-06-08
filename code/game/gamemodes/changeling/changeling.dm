@@ -84,34 +84,35 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 
 
 /datum/game_mode/proc/forge_changeling_objectives(var/datum/mind/changeling)
-	//OBJECTIVES - Always absorb 5 genomes, plus random traitor objectives.
+	//OBJECTIVES - Always absorb genomes, plus random traitor objectives.
 	//If they have two objectives as well as absorb, they must survive rather than escape
 	//No escape alone because changelings aren't suited for it and it'd probably just lead to rampant robusting
 	//If it seems like they'd be able to do it in play, add a 10% chance to have to escape alone
 
 	var/datum/objective/absorb/absorb_objective = new
 	absorb_objective.owner = changeling
-	absorb_objective.gen_amount_goal(2, 3)
+	absorb_objective.gen_amount_goal(1, 3)
 	changeling.objectives += absorb_objective
 
 	switch(rand(1,100))
-		if(1 to 80)
+		if(1 to 70)
 			var/datum/objective/assassinate/kill_objective = new
 			kill_objective.owner = changeling
 			kill_objective.find_target()
 			changeling.objectives += kill_objective
-		else
+		if(71 to 85)
 			var/datum/objective/debrain/debrain_objective = new
 			debrain_objective.owner = changeling
 			debrain_objective.find_target()
 			changeling.objectives += debrain_objective
+		else
+			var/datum/objective/steal/steal_objective = new
+			steal_objective.owner = changeling
+			steal_objective.find_target()
+			changeling.objectives += steal_objective
+
 
 	var/datum/objective/steal/steal_objective = new
-	steal_objective.owner = changeling
-	steal_objective.find_target()
-	changeling.objectives += steal_objective
-
-	steal_objective = new
 	steal_objective.owner = changeling
 	steal_objective.find_target()
 	changeling.objectives += steal_objective

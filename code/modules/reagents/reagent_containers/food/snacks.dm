@@ -123,7 +123,7 @@
 	if(istype(W,/obj/item/weapon/storage))
 		..() // -> item/attackby()
 	if((slices_num <= 0 || !slices_num) || !slice_path)
-		return 1
+		return 0
 	var/inaccurate = 0
 	if( \
 			istype(W, /obj/item/weapon/kitchenknife) || \
@@ -141,7 +141,7 @@
 		inaccurate = 1
 	else if(W.w_class <= 2 && istype(src,/obj/item/weapon/reagent_containers/food/snacks/sliceable))
 		if(!iscarbon(user))
-			return 1
+			return 0
 		user << "<span class='notice'>You slip [W] inside [src].</span>"
 		user.u_equip(W)
 		if ((user.client && user.s_active != src))
@@ -149,9 +149,9 @@
 		W.dropped(user)
 		add_fingerprint(user)
 		contents += W
-		return
-	else
 		return 1
+	else
+		return 0
 	if ( \
 			!isturf(src.loc) || \
 			!(locate(/obj/structure/table) in src.loc) && \
@@ -177,6 +177,7 @@
 		var/obj/slice = new slice_path (src.loc)
 		reagents.trans_to(slice,reagents_per_slice)
 	del(src)
+	return 1
 
 
 /obj/item/weapon/reagent_containers/food/snacks/Del()

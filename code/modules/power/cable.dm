@@ -171,9 +171,18 @@
 
 		shock(user, 5, 0.2)
 
+	/*else if(istype(W, /obj/item/weapon/shard))
+		if(!short && prob(33))
+			user << "You slice the insulation, and the cable begins to spark."
+			short = new(src)
+			src.add_fingerprint(user)
+			return
+		..(W,user)*/
 	else
-		if (W.flags & CONDUCT)
+		var/datum/powernet/PN = get_powernet()
+		if (PN && PN.avail && W.flags & CONDUCT)
 			shock(user, 50, 0.7)
+		..(W,user)
 
 	src.add_fingerprint(user)
 

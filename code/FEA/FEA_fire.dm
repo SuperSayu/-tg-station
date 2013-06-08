@@ -59,6 +59,7 @@
 	var/temperature = FIRE_MINIMUM_TEMPERATURE_TO_EXIST
 	var/just_spawned = 1
 	var/bypassing = 0
+	var/dying = 0
 
 
 /obj/effect/hotspot/proc/perform_exposure()
@@ -142,6 +143,8 @@
 // Garbage collect itself by nulling reference to it
 
 /obj/effect/hotspot/proc/Kill()
+	if(dying) return // there's some kind of funky loop going on here
+	dying = 1
 	DestroyTurf()
 	if(istype(loc, /turf/simulated))
 		var/turf/simulated/T = loc

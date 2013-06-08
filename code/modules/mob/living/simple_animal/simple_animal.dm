@@ -378,6 +378,20 @@
 							M.show_message("\blue [user] applies the [MED] on [src]")
 		else
 			user << "\blue This [src] is dead, medical items won't bring it back to life."
+	if(istype(O,/obj/item/weapon/pet_collar))
+		if(type in list(/mob/living/simple_animal/corgi/Ian,/mob/living/simple_animal/cat/Runtime,/mob/living/simple_animal/parrot/Poly,/mob/living/simple_animal/mouse/brown/Tom,/mob/living/simple_animal/lizard/professor,/mob/living/simple_animal/corgi/Lisa,/mob/living/simple_animal/crab/Coffee))
+			user << "\red [src] is already quite attached to their existing name."
+			return
+		if(istype(src,/mob/living/simple_animal/hostile))
+			user << "\red [src] doesn't seem to like being labelled a pet."
+			return
+		var/tag = input(user,"Pet's name:","Name the pet",name) as text|null
+		if(O && src && length(tag))
+			src.real_name = tag
+			src.name = tag
+			src.visible_message("[user] gives [src] a shiny new pet collar!")
+			del O
+		return
 	if(meat_type && (stat == DEAD))	//if the animal has a meat, and if it is dead.
 		if(istype(O, /obj/item/weapon/kitchenknife) || istype(O, /obj/item/weapon/butch))
 			new meat_type (get_turf(src))

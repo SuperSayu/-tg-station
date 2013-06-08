@@ -327,6 +327,12 @@
 	src.oldloc = src.loc
 
 /obj/machinery/bot/floorbot/Bump(var/atom/A)
+	if(doorwait)
+		if(target)
+			unreachable |= list(src.target = world.time)
+			src.target = null
+			src.path = list()
+		return
 	if(istype(A,/obj/machinery/door))
 		doorwait = 1
 		A.Bumped(src)
@@ -339,6 +345,21 @@
 				unreachable |= list(src.target = world.time)
 				src.target = null
 				src.path = list()
+	else if(istype(A,/atom/movable))
+		var/atom/movable/AM = A
+		var/turf/T = AM.loc
+		if(!AM.anchored)
+			doorwait = 1
+			var/t = get_dir(src, AM)
+			if (istype(AM, /obj/structure/window))
+				if(AM:ini_dir == NORTHWEST || AM:ini_dir == NORTHEAST || AM:ini_dir == SOUTHWEST || AM:ini_dir == SOUTHEAST)
+					for(var/obj/structure/window/win in get_step(AM,t))
+						doorwait = 0
+						return
+			step(AM, t)
+			if(AM.loc != T)
+				step_to(src,T)
+			doorwait = 0
 	if(target)
 		unreachable |= list(src.target = world.time)
 		src.target = null
@@ -390,6 +411,7 @@
 			F.floor_tile = new /obj/item/stack/tile/plasteel(null)
 			F.intact = 1
 			F.update_icon()
+			F.levelupdate()
 			src.repairing = 0
 			src.amount -= 1
 			src.update_icon()
