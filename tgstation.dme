@@ -1114,7 +1114,6 @@
 #include "code\modules\surgery\organs\organ.dm"
 #include "code\WorkInProgress\buildmode.dm"
 #include "code\WorkInProgress\explosion_particles.dm"
-#include "code\WorkInProgress\Sayu\battery_backup.dm"
 #include "code\WorkInProgress\Sayu\belt.dm"
 #include "code\WorkInProgress\Sayu\cargoprofile.dm"
 #include "code\WorkInProgress\Sayu\chemscanner.dm"

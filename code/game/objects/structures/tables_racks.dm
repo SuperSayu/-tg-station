@@ -38,6 +38,14 @@
 			T.update_icon()
 	..()
 
+/obj/structure/table/initialize()
+	for(var/obj/item/I in loc)
+		if(I.anchored) continue
+		if(prob(80))
+			I.pixel_x += rand(-5,5)
+		if(prob(80))
+			I.pixel_y += rand(-5,5)
+
 /obj/structure/table/update_icon()
 	spawn(2) //So it properly updates when deleting
 		var/dir_sum = 0
@@ -467,6 +475,15 @@
 	anchored = 1.0
 	throwpass = 1	//You can throw objects over this, despite it's density.
 
+/obj/structure/rack/initialize()
+	for(var/obj/item/I in loc)
+		if(I.anchored) continue
+
+		if(prob(80))
+			I.pixel_x += rand(-5,5)
+		if(prob(80))
+			I.pixel_y += rand(-7.7)
+
 /obj/structure/rack/ex_act(severity)
 	switch(severity)
 		if(1.0)
@@ -528,7 +545,7 @@
 	if(HULK in user.mutations)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-		new /obj/item/weapon/rack_parts(loc)
+		new /obj/item/weapon/table_parts(loc)
 		density = 0
 		del(src)
 

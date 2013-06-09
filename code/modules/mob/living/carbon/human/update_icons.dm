@@ -132,20 +132,28 @@ Please contact me on #coderbus IRC. ~Carn x
 	update_hud()		//TODO: remove the need for this
 	overlays.Cut()
 
-	if(lying)		//can't be cloaked when lying. (for now)
-		icon = lying_icon
-		for(var/image/I in overlays_lying)
-			overlays += I
+	var/stealth = 0
+	if(istype(wear_suit, /obj/item/clothing/suit/space/space_ninja) && wear_suit:s_active)
+		stealth = 1
 	else
-		var/stealth = 0
-		if(istype(wear_suit, /obj/item/clothing/suit/space/space_ninja) && wear_suit:s_active)
-			stealth = 1
+		for(var/obj/item/weapon/cloaking_device/S in list(l_hand,r_hand,belt,l_store,r_store))
+			if(S.active)
+				stealth = 1
+				break
+
+	if(lying)
+		if(stealth)
+			icon = 'icons/mob/human.dmi'
+			icon_state = "body_lying_cloaked"
+			var/image/I	= overlays_lying[L_HAND_LAYER]
+			if(istype(I))	overlays += I
+			I 			= overlays_lying[R_HAND_LAYER]
+			if(istype(I))	overlays += I
 		else
-			//cloaking devices. //TODO: get rid of this :<
-			for(var/obj/item/weapon/cloaking_device/S in list(l_hand,r_hand,belt,l_store,r_store))
-				if(S.active)
-					stealth = 1
-					break
+			icon = lying_icon
+			for(var/image/I in overlays_lying)
+				overlays += I
+	else
 		if(stealth)
 			icon = 'icons/mob/human.dmi'
 			icon_state = "body_cloaked"

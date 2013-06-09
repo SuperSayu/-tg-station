@@ -114,6 +114,18 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "collar"
 
+/obj/item/weapon/storage/box/collars
+	name = "Pet Supplies"
+	desc = "Carries a number of collars for renaming animals."
+	New()
+		..()
+		new /obj/item/weapon/pet_collar(src)
+		new /obj/item/weapon/pet_collar(src)
+		new /obj/item/weapon/pet_collar(src)
+		new /obj/item/weapon/pet_collar(src)
+		new /obj/item/weapon/pet_collar(src)
+		new /obj/item/weapon/pet_collar(src)
+		new /obj/item/weapon/pet_collar(src)
 
 
 //

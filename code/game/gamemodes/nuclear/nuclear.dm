@@ -43,9 +43,9 @@
 	else
 		agent_number = possible_syndicates.len
 
-	agent_number = min(agent_number , 1+round(n_players)/(nukeop_scaling_coeff))) //up to five, or one for every five crewmembers, whichever is smaller
+	agent_number = min(agent_number , 1+round(n_players)/(nukeop_scaling_coeff)) //up to five, or one for every five crewmembers, whichever is smaller
 
-	
+
 	if(agent_number >= n_players)
 		agent_number = n_players/2
 

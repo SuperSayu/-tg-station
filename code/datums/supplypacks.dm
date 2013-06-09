@@ -251,12 +251,19 @@
 	containername = "chicken crate"
 	access = access_hydroponics
 
-/datum/supply_packs/lisa
+/datum/supply_packs/corgi
 	name = "Corgi Crate"
 	contains = list()
 	cost = 50
 	containertype = /obj/structure/largecrate/lisa
 	containername = "corgi crate"
+
+/datum/supply_packs/cat
+	name = "Cat Crate"
+	contains = list()
+	cost = 50
+	containertype = /obj/structure/largecrate/cat
+	containername = "cat crate"
 
 /datum/supply_packs/seeds
 	name = "Seeds Crate"

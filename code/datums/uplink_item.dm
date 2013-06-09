@@ -172,6 +172,11 @@ var/list/uplink_items = list()
 	item = /obj/item/device/camera_bug
 	cost = 2
 
+/datum/uplink_item/stealthy_tools/cloaking_device
+	name = "Cloaking Device"
+	item = /obj/item/weapon/cloaking_device
+	cost = 4
+
 // DEVICE AND TOOLS
 
 /datum/uplink_item/device_tools
