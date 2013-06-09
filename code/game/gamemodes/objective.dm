@@ -328,7 +328,8 @@ datum/objective/steal
 		"50 units polytrinic acid" = /obj/item/weapon/reagent_containers,
 		"50 units of thermite" = /obj/item/weapon/reagent_containers,
 		"7 different kinds of alcohol" = /obj/item/weapon/reagent_containers, // can you get some beer while you're there, we seem to be out
-		"a telecomms hub circuit board" = /obj/item/weapon/circuitboard/telecomms/hub // this might be difficult to steal, if you are not R&D
+	//	"a telecomms hub circuit board" = /obj/item/weapon/circuitboard/telecomms/hub // this might be difficult to steal, if you are not R&D
+		"a red telephone" = /obj/item/weapon/phone
 	)
 
 	var/global/possible_items_special[] = list(
