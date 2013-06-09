@@ -304,6 +304,7 @@
 		return
 
 	if(expansion || !W)
+		user << "There is already \an [expansion] in [src]."
 		return ..(W,user)
 
 	// I am not sure that this list is or should be final
@@ -340,6 +341,8 @@
 			if(bugtype in list(UNIVERSAL_BUG,NETWORK_BUG,ADMIN_BUG))
 				skip_bugcheck = 1
 			return
+	user << "[W] won't fit in [src]."
+	..()
 
 #undef VANILLA_BUG
 #undef UNIVERSAL_BUG

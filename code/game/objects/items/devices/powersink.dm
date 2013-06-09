@@ -128,6 +128,8 @@
 					if(A.operating && A.cell)
 						A.cell.charge = max(0, A.cell.charge - 50)
 						power_drained += 50
+					A.charging = 0		// fixing the notorious apcs-stop-charging-after-power-sink bug
+					A.chargecount = 0	// although I liked having the power computer do it instead...
 
 	if(power_drained > max_power * 0.95)
 		playsound(src, 'sound/effects/screech.ogg', 100, 1, 1)

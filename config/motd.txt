@@ -1,27 +1,3 @@
-<h1>Welcome to Sayu Station 13!</h1>
 <!-- Most valid html will work in here, excluding images. -->
-
-<i>This server is running a /tg/station13 git build, customized by me.  It will be updated periodically.</i><br>
-* <b>Official chatroom:</b> irc://irc.esper.net/#sayustation (Unofficial chatroom: #mspafa)<br>
-* Away missions are disabled for now.  They may be reactivated later<br>
-<br>
-* I apologize for the changes /tg/ made to the map.<br><br>
-<u><b>News</b> (above and beyond the /tg/ changelog:</u><br>
-* I am testing out a new mail system.  Please report any problems and tell me what needs work.<br>
-* Let me know if you see anything wrong with storage items.<br>
-* If you have trouble identifying chems in a beaker, try using science goggles.<br>
-<br>
-<u>The following features are unique to Sayustation:</u><br>
-* Lighted tiles produce light (Bugfix submitted but not yet accepted by /tg/)<br>
-* The Toolbelt of Holding (More slots, carries different things.  Research required.)<br>
-* * Some people choose justice.  Sometimes, justice chooses you.<br>
-* Booze and other junk can be found hidden throughout the station.<br>
-* You can move vending machines after prying them up with a crowbar.  This is probably a terrible idea.<br>
-* The station is dirty!  Where's the janitor?<br>
-* Analyzing beakers and bottles by eye isn't a sure thing.<br>
-* There are random chemicals in Chemistry to be identified (And random booze in the bar).<br>
-* Soap has limited use and can be crafted (Ammonia, corn oil, universal enzyme)<br>
-<hr>
-
-<b>Admins:</b><br>
-* SuperSayu
+<i>This server is running a Sayustation git build</i><br>
+* <b>Official chatroom:</b> irc://irc.esper.net/#sayustation<br>

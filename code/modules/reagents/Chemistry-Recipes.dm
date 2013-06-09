@@ -1437,7 +1437,7 @@ datum
 				feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
 				var/y_distance = rand(-10,10) * created_volume
 				var/x_distance = rand(-10,10) * created_volume
-				var/turf/FROM = get_turf_loc(holder.my_atom) // the turf of origin we're travelling FROM
+				var/turf/FROM = get_turf(holder.my_atom) // the turf of origin we're travelling FROM
 				var/turf/TO = locate(FROM.x + x_distance,FROM.y + y_distance,FROM.z)          // the turf of origin we're travelling TO
 				playsound(TO, 'sound/effects/phasein.ogg', 100, 1)
 

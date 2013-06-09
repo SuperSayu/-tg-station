@@ -56,7 +56,7 @@
 			else
 				usr << "\red [src] is wearing too much armor. You can't reach \his skin."
 				for (var/mob/M in viewers(src, null))
-				M.show_message("\red [user] gently taps [src] with [O]. ")
+					M.show_message("\red [user] gently taps [src] with [O]. ")
 			if(health>0 && prob(15))
 				emote("gives [user] [pick("an amused","an annoyed","a confused","a resentful", "a happy", "an excited")] look")
 			return
@@ -127,6 +127,7 @@
 					var/list/allowed_types = list(
 						/obj/item/clothing/suit/armor/vest,
 						/obj/item/device/radio,
+						/obj/item/device/radio/off,
 						/obj/item/clothing/suit/cardborg,
 						/obj/item/weapon/tank/oxygen,
 						/obj/item/weapon/tank/air,

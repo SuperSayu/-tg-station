@@ -1129,5 +1129,9 @@
 #include "code\WorkInProgress\Sigyn\Department Sec\jobs.dm"
 #include "interface\interface.dm"
 #include "interface\skin.dmf"
-#include "maps\MetaStation v27G-II.dmm"
+#include "maps\MetaStation v27G-III.dmm"
+#include "maps\RandomZLevels\Academy.dm"
+#include "maps\RandomZLevels\challenge.dm"
+#include "maps\RandomZLevels\stationCollision.dm"
+#include "maps\RandomZLevels\wildwest.dm"
 // END_INCLUDE
