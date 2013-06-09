@@ -5,7 +5,7 @@
 /datum/game_mode/nuclear
 	name = "nuclear emergency"
 	config_tag = "nuclear"
-	required_players = 5 // 20 players - 5 players to be the nuke ops = 15 players remaining
+	required_players = 10 // 20 players - 5 players to be the nuke ops = 15 players remaining
 	required_enemies = 1
 	recommended_enemies = 5
 
@@ -13,6 +13,7 @@
 	uplink_uses = 40
 
 	var/const/agents_possible = 5 //If we ever need more syndicate agents.
+	var/const/nukeop_scaling_coeff = 6 //how much does the amount of players get divided by to determine operatives. Six players means one operative versus five crewmembers
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 
@@ -32,6 +33,7 @@
 
 	var/list/possible_syndicates = get_players_for_role(BE_OPERATIVE)
 	var/agent_number = 0
+	var/n_players = num_players()
 
 	if(possible_syndicates.len < 1)
 		return 0
@@ -41,8 +43,10 @@
 	else
 		agent_number = possible_syndicates.len
 
-	var/n_players = num_players()
-	if(agent_number > n_players)
+	agent_number = min(agent_number , 1+round(n_players)/(nukeop_scaling_coeff))) //up to five, or one for every five crewmembers, whichever is smaller
+
+	
+	if(agent_number >= n_players)
 		agent_number = n_players/2
 
 	while(agent_number > 0)
