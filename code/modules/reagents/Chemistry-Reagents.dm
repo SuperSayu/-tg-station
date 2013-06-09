@@ -320,10 +320,11 @@ datum
 				if(!M) M = holder.my_atom
 				if(ishuman(M))
 					var/mob/living/carbon/human/human = M
-					if(human.dna.mutantrace == null)
+					if(human.dna && !human.dna.mutantrace)
 						M << "\red Your flesh rapidly mutates!"
 						human.dna.mutantrace = "slime"
-						human.update_mutantrace()
+						human.update_body()
+						human.update_hair()
 				..()
 				return
 
@@ -1194,6 +1195,33 @@ datum
 				..()
 				return
 
+		rezadone
+			name = "Rezadone"
+			id = "rezadone"
+			description = "A powder derived from fish toxin, this substance can effectively treat genetic damage in humanoids, though excessive consumption has side effects."
+			reagent_state = SOLID
+			color = "#669900" // rgb: 102, 153, 0
+
+			on_mob_life(var/mob/living/M as mob)
+				if(!M) M = holder.my_atom
+				if(!data) data = 1
+				data++
+				switch(data)
+					if(1 to 15)
+						M.adjustCloneLoss(-1)
+						M.heal_organ_damage(1,1)
+					if(15 to 35)
+						M.adjustCloneLoss(-2)
+						M.heal_organ_damage(2,1)
+						M.status_flags &= ~DISFIGURED
+					if(35 to INFINITY)
+						M.adjustToxLoss(1)
+						M.make_dizzy(5)
+						M.make_jittery(5)
+
+				..()
+				return
+
 		spaceacillin
 			name = "Spaceacillin"
 			id = "spaceacillin"
@@ -1633,7 +1661,7 @@ datum
 							var/datum/limb/affecting = H.get_organ("head")
 							if(affecting)
 								if(affecting.take_damage(4*toxpwr, 2*toxpwr))
-									H.UpdateDamageIcon(0)
+									H.update_damage_overlays(0)
 								if(prob(meltprob)) //Applies disfigurement
 									H.emote("scream")
 									H.f_style = "Shaved"

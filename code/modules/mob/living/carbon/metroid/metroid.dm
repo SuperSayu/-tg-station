@@ -62,9 +62,7 @@
 
 
 /mob/living/carbon/slime/New()
-	var/datum/reagents/R = new/datum/reagents(100)
-	reagents = R
-	R.my_atom = src
+	create_reagents(100)
 	name = text("[colour] baby slime ([rand(1, 1000)])")
 	real_name = name
 	spawn (1)
@@ -594,22 +592,6 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 /mob/living/carbon/slime/show_inv(mob/user)
 	return
 
-
-/mob/living/carbon/slime/updatehealth()
-	if(status_flags & GODMODE)
-		if(istype(src, /mob/living/carbon/slime/adult))
-			health = 200
-		else
-			health = 150
-		stat = CONSCIOUS
-	else
-		// slimes can't suffocate unless they suicide. They are also not harmed by fire
-		if(istype(src, /mob/living/carbon/slime/adult))
-			health = 200 - (getOxyLoss() + getToxLoss() + getFireLoss() + getBruteLoss() + getCloneLoss())
-		else
-			health = 150 - (getOxyLoss() + getToxLoss() + getFireLoss() + getBruteLoss() + getCloneLoss())
-
-
 /mob/living/carbon/slime/proc/get_obstacle_ok(atom/A)
 	var/direct = get_dir(src, A)
 	var/obj/item/weapon/dummy/D = new /obj/item/weapon/dummy( src.loc )
@@ -722,11 +704,15 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 /obj/item/slime_extract/New()
 		..()
+<<<<<<< HEAD
 		var/datum/reagents/R = new/datum/reagents(100)
 		reagents = R
 		R.my_atom = src
 		pixel_x = rand(-10,10)
 		pixel_y = rand(-10,10)
+=======
+		create_reagents(100)
+>>>>>>> remotes/origin/master
 
 /obj/item/slime_extract/grey
 	name = "grey slime extract"
@@ -1084,9 +1070,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 /obj/item/slime_core/New()
 		..()
-		var/datum/reagents/R = new/datum/reagents(100)
-		reagents = R
-		R.my_atom = src
+		create_reagents(100)
 		POWERFLAG = rand(1,10)
 		Uses = rand(7, 25)
 		//flags |= NOREACT

@@ -41,9 +41,16 @@ obj/machinery/recharger/attackby(obj/item/weapon/G, mob/user)
 		playsound(loc, 'sound/items/Ratchet.ogg', 75, 1)
 
 
+<<<<<<< HEAD
 obj/machinery/recharger/attack_hand(mob/user)
 	add_fingerprint(user)
+=======
+/obj/machinery/recharger/attack_hand(mob/user)
+	if(issilicon(user))
+		return
+>>>>>>> remotes/origin/master
 
+	add_fingerprint(user)
 	if(charging)
 		charging.update_icon()
 		charging.loc = loc

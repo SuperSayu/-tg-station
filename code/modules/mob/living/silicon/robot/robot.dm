@@ -3,8 +3,8 @@
 	real_name = "Cyborg"
 	icon = 'icons/mob/robots.dmi'//
 	icon_state = "robot"
-	maxHealth = 300
-	health = 300
+	maxHealth = 100
+	health = 100
 	var/sight_mode = 0
 	var/custom_name = ""
 
@@ -201,6 +201,9 @@
 		changed_name = "[(prefix ? "[prefix] " : "")]Cyborg-[num2text(ident)]"
 	real_name = changed_name
 	name = real_name
+	if(camera)
+		camera.c_tag = real_name	//update the camera name too
+
 
 /mob/living/silicon/robot/verb/cmd_robot_alerts()
 	set category = "Robot Commands"
@@ -327,11 +330,6 @@
 		now_pushing = 1
 		if(ismob(AM))
 			var/mob/tmob = AM
-			if(istype(tmob, /mob/living/carbon/human) && (FAT in tmob.mutations))
-				if(prob(20))
-					usr << "\red <B>You fail to push [tmob]'s fat ass out of the way.</B>"
-					now_pushing = 0
-					return
 			if(!(tmob.status_flags & CANPUSH))
 				now_pushing = 0
 				return
@@ -406,6 +404,12 @@
 
 	if (istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
+		if (src == user)
+			user << "<span class='warning'>You lack the reach to be able to repair yourself.</span>"
+			return
+		if (src.health >= src.maxHealth)
+			user << "<span class='warning'>[src] is already in good condition.</span>"
+			return
 		if (WT.remove_fuel(0))
 			adjustBruteLoss(-30)
 			updatehealth()
