@@ -169,7 +169,11 @@
 			return
 	if(locate(/mob/living) in loc)
 		return
-	new /mob/living/simple_animal/cow(loc)
+	if(prob(80))
+		new /mob/living/simple_animal/cow(loc)
+	else
+		new /mob/living/simple_animal/cow/Bessie(loc) // BES-SIE HAS RISEN
+
 	cowsleft--
 	if(cowsleft <= 0)
 		del src

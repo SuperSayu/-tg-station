@@ -86,6 +86,7 @@
 /mob/living/simple_animal/cow
 	name = "cow"
 	desc = "Known for their milk, just don't tip them over."
+	gender = "female" // cows not bulls
 	icon_state = "cow"
 	icon_living = "cow"
 	icon_dead = "cow_dead"
@@ -105,6 +106,11 @@
 	attacktext = "kicks"
 	health = 50
 	var/datum/reagents/udder = null
+
+	var/list/tip_responses = list(	"looks at you imploringly.",
+											"looks at you pleadingly",
+											"looks at you with a resigned expression.",
+											"seems resigned to her fate.")
 
 /mob/living/simple_animal/cow/New()
 	udder = new(50)
@@ -137,13 +143,18 @@
 		spawn(rand(20,50))
 			if(!stat && M)
 				icon_state = icon_living
-				var/list/responses = list(	"[src] looks at you imploringly.",
-											"[src] looks at you pleadingly",
-											"[src] looks at you with a resigned expression.",
-											"[src] seems resigned to its fate.")
-				M << pick(responses)
+				M << "[src] [pick(tip_responses)]"
 	else
 		..()
+
+/mob/living/simple_animal/cow/Bessie // I am sorry -Sayu
+	name = "BES-SIE"
+	real_name = "BES-SIE"
+	desc = "Your mouth starts to salivate as you try to comprehend what you are seeing."
+	tip_responses = list("glares at you","moos evilly","moos vengefully", "burns with the hatred of a thousand steaks", "pierces your very soul with her blank, cow-eyed stare")
+/mob/living/simple_animal/cow/Bessie/New()
+	..()
+	visible_message("<font size='14' color='red'><b>BES-SIE HAS RISEN</b></font>")
 
 /mob/living/simple_animal/chick
 	name = "\improper chick"

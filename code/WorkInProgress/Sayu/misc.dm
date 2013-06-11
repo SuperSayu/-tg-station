@@ -108,6 +108,21 @@
 //   Actual code in simple_animal/attackby
 // ------------------------------------------
 
+/mob/living/simple_animal/
+	var/renamable = 1 // if 0, pet collars cannot be used
+	hostile/renamable = 0
+	hostile/retaliate/goat/renamable = 1
+	cat/Runtime/renamable = 0
+	corgi
+		Ian/renamable = 0
+		Lisa/renamable = 0
+		puppy/sgt_pepper/renamable = 0
+	crab/Coffee/renamable = 0
+	lizard/professor/renamable = 0
+	mouse/Tom/renamable = 0
+	parrot/Poly/renamable = 0
+	cow/Bessie/renamable = 0
+
 /obj/item/weapon/pet_collar
 	name = "Pet Collar"
 	desc = "Helps you keep track of an animal's name."
