@@ -201,7 +201,7 @@ datum/borrowbook // Datum used to keep track of who has borrowed what when and f
 				dat += "<table>"
 				dat += "<tr><td>AUTHOR</td><td>TITLE</td><td>CATEGORY</td><td></td></tr>"
 
-				var/DBQuery/query = dbcon.NewQuery("SELECT id, author, title, category FROM erro_library")
+				var/DBQuery/query = dbcon.NewQuery("SELECT id, author, title, category FROM erro_library ORDER BY category DESC")
 				query.Execute()
 
 				while(query.NextRow())
