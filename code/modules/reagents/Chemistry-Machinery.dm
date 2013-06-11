@@ -841,6 +841,15 @@
 			if(holdingitems && holdingitems.len >= limit) //Sanity checking so the blender doesn't overfill
 				user << "You fill the All-In-One grinder to the brim."
 				break
+		for (var/obj/item/weapon/grown/G in O.contents)
+			if(!G.reagents || !G.reagents.reagent_list.len) // should filter out logs and sunflowers but allow nettles and novaflowers.
+				continue
+			O.contents -= G
+			G.loc = src
+			holdingitems += G
+			if(holdingitems && holdingitems.len >= limit) //Sanity checking so the blender doesn't overfill
+				user << "You fill the All-In-One grinder to the brim."
+				break
 
 		if(!O.contents.len)
 			user << "You empty the plant bag into the All-In-One grinder."
