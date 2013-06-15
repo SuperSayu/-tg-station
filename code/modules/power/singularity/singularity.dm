@@ -488,7 +488,7 @@ var/global/list/uneatable = list(
 
 	grav_pull = 10 //How many tiles out do we pull?
 	consume_range = 3 //How many tiles out do we eat
-	decay_range = 12
+	decay_range = 9
 	grav_pull = 6
 
 /obj/machinery/singularity/narsie/large
@@ -500,7 +500,7 @@ var/global/list/uneatable = list(
 	current_size = 12
 	move_self = 1 //Do we move on our own?
 	consume_range = 8 //How many tiles out do we eat
-	decay_range = 18
+	decay_range = 14
 	grav_pull = 12
 
 /obj/machinery/singularity/narsie/large/New()
@@ -604,11 +604,13 @@ var/global/list/uneatable = list(
 
 // Called when the singularity attempts to destroy a turf
 /turf/proc/gravity_decay()
+	if(prob(65)) return
 	for(var/obj/O in contents)
 		O.anchored = 0
 	return
 
 /turf/simulated/gravity_decay()
+	if(prob(25)) return
 	var/counter = 0
 	for(var/d in cardinal)
 		var/turf/simulated/TS = get_step(src,d)
@@ -629,7 +631,7 @@ var/global/list/uneatable = list(
 	for(var/obj/O in contents)
 		O.anchored = 0
 		if(istype(O,/obj/machinery))
-			O:stat |= NOPOWER
+			O:stat |= pick(NOPOWER,BROKEN,MAINT,EMPED)
 			O.update_icon()
 	if(floor_tile)
 		floor_tile.loc = src

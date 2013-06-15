@@ -25,10 +25,10 @@
 	if(!possible_traitors.len || !possible_changelings.len)
 		return 0
 
-	if(config.changeling_scaling_coeff)
+	/*if(config.changeling_scaling_coeff)
 		num_changelings = max(1, round((num_players())/(config.changeling_scaling_coeff*2)))
 	else
-		num_changelings = max(1, min(num_players(), changeling_amount))
+		num_changelings = max(1, min(num_players(), changeling_amount))*/
 
 	for(var/datum/mind/player in possible_changelings)
 		for(var/job in restricted_jobs)//Removing robots from the list
@@ -36,8 +36,8 @@
 				possible_changelings -= player
 				possible_traitors -= player
 
-	if(config.traitor_scaling)
-		traitors_possible = scale_antags()
+	//if(config.traitor_scaling)
+	traitors_possible = scale_antags()
 
 	// No more than three lings, but allow them to be a
 	// greater portion of the antagonist docket if the

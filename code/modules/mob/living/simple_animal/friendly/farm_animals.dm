@@ -154,7 +154,7 @@
 	tip_responses = list("glares at you","moos evilly","moos vengefully", "burns with the hatred of a thousand steaks", "pierces your very soul with her blank, cow-eyed stare")
 /mob/living/simple_animal/cow/Bessie/New()
 	..()
-	visible_message("<font size='14' color='red'><b>BES-SIE HAS RISEN</b></font>")
+	visible_message("<font size='12' color='red'><b>BES-SIE HAS RISEN</b></font>")
 
 /mob/living/simple_animal/chick
 	name = "\improper chick"

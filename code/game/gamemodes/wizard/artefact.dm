@@ -169,13 +169,11 @@
 			return
 	if(locate(/mob/living) in loc)
 		return
-	if(prob(80))
+	if(cowsleft > 1)
 		new /mob/living/simple_animal/cow(loc)
+		cowsleft--
 	else
 		new /mob/living/simple_animal/cow/Bessie(loc) // BES-SIE HAS RISEN
-
-	cowsleft--
-	if(cowsleft <= 0)
 		del src
 
 /obj/effect/rend/cow/attackby(obj/item/I as obj, mob/user as mob)
