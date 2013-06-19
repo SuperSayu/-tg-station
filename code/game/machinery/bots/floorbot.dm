@@ -170,6 +170,7 @@
 			src.updateUsrDialog()
 
 
+// Reject any turf that you naturally cannot reach.
 /obj/machinery/bot/floorbot/proc/consider(var/atom/A)
 	if(!A || A.density || A == src.oldtarget || (A in floorbottargets))
 		return 0
@@ -177,7 +178,7 @@
 	if(T.density)
 		return 0
 	for(var/obj/O in T)
-		if(O.density)
+		if(O.density && !istype(O,/obj/machinery/door) && !istype(O,/obj/structure/table)) // tablepass flag
 			return 0
 		if(istype(O,/obj/machinery/bot/floorbot) && O != src)
 			return 0
@@ -186,19 +187,19 @@
 /obj/machinery/bot/floorbot/process()
 	set background = 1
 
-	while(null in floorbottargets)
-		floorbottargets -= null
-	for(var/entry in unreachable)
-		var/timer = unreachable[entry]
-		if(world.time > (timer + 300))
-			unreachable -= entry
-			floorbottargets -= entry
-
 	if(!src.on || src.repairing || !loc)
 		return
 	if(target && doorwait)
 		return
+
 	doorwait = 0 // if not target
+	floorbottargets -= null // this is a little pointless but I might as well
+
+	for(var/entry in unreachable)
+		var/timer = unreachable[entry]
+		if(get_dist(entry,src) == 0 || world.time > (timer + 300))
+			unreachable -= entry
+			floorbottargets -= entry
 
 	if(src.amount <= 0 && !src.target)
 		if(src.eattiles)
@@ -215,47 +216,45 @@
 					src.target = M
 					break
 		else
+			if(prob(5))
+				visible_message("[src] makes a despondant booping sound.")
 			return
 	if(prob(5))
 		visible_message("[src] makes an excited booping beeping sound!")
 
 	if(!src.target && emagged < 2)
-		if(targetdirection != null)
-			/*
-			for (var/turf/space/D in view(7,src))
-				if(!(D in floorbottargets) && D != src.oldtarget)			// Added for bridging mode -- TLE
-					if(get_dir(src, D) == targetdirection)
-						src.oldtarget = D
-						src.target = D
-						break
-			*/
+		if(src.amount && istype(loc,/turf/space) && consider(loc) && (loc.loc.type != /area))
+			oldtarget = loc
+			target = loc
+
+		if(!target && targetdirection != null)
 			var/turf/T = get_step(src, targetdirection)
 			if(istype(T, /turf/space))
 				src.oldtarget = T
 				src.target = T
+
+
+		var/list/nearby = view(7,src) // Caching this, previously at worst it would run this three times
+
 		if(!src.target && src.amount)
-			if(istype(loc,/turf/space) && (loc.loc.type != /area)) //  && consider(loc)
-				src.oldtarget = loc
-				src.target = loc
-			else
-				for (var/turf/space/D in view(7,src))
-					if(consider(D) && (D.loc.type != /area))
-						src.oldtarget = D
-						src.target = D
-						break
+			for (var/turf/space/D in nearby)
+				if(consider(D) && (D.loc.type != /area))
+					src.oldtarget = D
+					src.target = D
+					break
 		if(!src.target)
 			var/turf/simulated/floor/Floc = loc
-			if( Floc.broken || Floc.burnt || (!Floc.intact && src.amount && src.improvefloors) ) // consider(Floc) &&
+			if( istype(Floc) && (Floc.broken || Floc.burnt || (!Floc.intact && src.amount && src.improvefloors) ) ) // consider(Floc) &&
 				src.oldtarget = loc
 				src.target = loc
 			else
-				for (var/turf/simulated/floor/F in view(7,src))
+				for (var/turf/simulated/floor/F in nearby)
 					if( consider(F) && (F.broken || F.burnt || (!Floc.intact && src.amount && src.improvefloors) ) )
 						src.oldtarget = F
 						src.target = F
 						break
 		if(!src.target && src.eattiles)
-			for(var/obj/item/stack/tile/plasteel/T in view(7, src))
+			for(var/obj/item/stack/tile/plasteel/T in nearby)
 				if(consider(T))
 					src.oldtarget = T
 					src.target = T
@@ -273,6 +272,7 @@
 			src.oldtarget = null
 		return
 	floorbottargets |= src.target
+	unreachable -= src.target
 
 	if(get_dist(src,src.target) > 0)
 		if(istype(src.target) && src.path.len == 0)
