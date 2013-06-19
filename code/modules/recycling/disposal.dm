@@ -507,9 +507,11 @@
 			if(istype(AM, /obj/structure/bigDelivery) && !hasmob)
 				var/obj/structure/bigDelivery/T = AM
 				src.destinationTag = T.sortTag
+				src.tomail = 1
 			if(istype(AM, /obj/item/smallDelivery) && !hasmob)
 				var/obj/item/smallDelivery/T = AM
 				src.destinationTag = T.sortTag
+				src.tomail = 1
 
 
 	// start the movement process
@@ -1033,28 +1035,13 @@
 	New()
 		..()
 		posdir = dir
+		negdir = turn(posdir, 180)
 		if(icon_state == "pipe-j1s")
 			sortdir = turn(posdir, -90)
-			negdir = turn(posdir, 180)
 		else
 			icon_state = "pipe-j2s"
 			sortdir = turn(posdir, 90)
-			negdir = turn(posdir, 180)
-		dpdir = sortdir | posdir | negdir
 
-		update()
-		return
-
-	New()
-		..()
-		posdir = dir
-		if(icon_state == "pipe-j1s")
-			sortdir = turn(posdir, -90)
-			negdir = turn(posdir, 180)
-		else
-			icon_state = "pipe-j2s"
-			sortdir = turn(posdir, 90)
-			negdir = turn(posdir, 180)
 		dpdir = sortdir | posdir | negdir
 
 		update()

@@ -238,6 +238,7 @@
 /obj/structure/closet/crate/bin/flowers
 	name = "flower barrel"
 	desc = "A bin full of fresh flowers for the bereaved."
+	anchored = 0
 	New()
 		while(contents.len < 10)
 			var/flowertype = pick(/obj/item/weapon/grown/sunflower,/obj/item/weapon/grown/novaflower,/obj/item/weapon/reagent_containers/food/snacks/grown/poppy,
@@ -250,6 +251,7 @@
 /obj/structure/closet/crate/bin/plants
 	name = "plant barrel"
 	desc = "Caution: Contents may contain vitamins and minerals.  It is recommended that you deep fry them before eating."
+	anchored = 0
 	New()
 		while(contents.len < 10)
 			var/ptype = pick(/obj/item/weapon/reagent_containers/food/snacks/grown/apple,/obj/item/weapon/reagent_containers/food/snacks/grown/banana,

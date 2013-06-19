@@ -37,7 +37,7 @@ var/datum/controller/supply_shuttle/supply_shuttle = new()
 		return prob(60)
 
 	var/obj/structure/stool/bed/B = A
-	if (istype(A, /obj/structure/stool/bed) && B.buckled_mob)//if it's a bed/chair and someone is buckled, it will not pass
+	if (istype(B) && B.buckled_mob)//if it's a bed/chair and someone is buckled, it will not pass
 		return 0
 
 	else if(istype(A, /mob/living)) // You Shall Not Pass!
@@ -223,7 +223,7 @@ var/datum/controller/supply_shuttle/supply_shuttle = new()
 		var/crate_count = 0
 
 		centcomm_message = ""
-		
+
 		for(var/atom/movable/MA in shuttle)
 			if(MA.anchored)	continue
 
@@ -282,7 +282,7 @@ var/datum/controller/supply_shuttle/supply_shuttle = new()
 		if(plasma_count)
 			centcomm_message += "<font color=green>+[round(plasma_count/plasma_per_point)]</font>: Received [plasma_count] units of exotic material.<BR>"
 			points += round(plasma_count / plasma_per_point)
-		
+
 		if(crate_count)
 			centcomm_message += "<font color=green>+[round(crate_count*points_per_crate)]</font>: Received [crate_count] crates.<BR>"
 			points += crate_count * points_per_crate
@@ -359,7 +359,7 @@ var/datum/controller/supply_shuttle/supply_shuttle = new()
 				if(SP.amount && B2:amount) B2:amount = SP.amount
 				slip.info += "<li>[B2.name]</li>" //add the item to the manifest (even if it was misplaced)
 				// If it has multiple items, there's a 1% of each going missing... Not for secure crates or those large wooden ones, though.
-				if(contains.len > 1 && prob(1) && !findtext(SP.containertype,"/secure/") && !findtext(SP.containertype,"/largecrate/")) 
+				if(contains.len > 1 && prob(1) && !findtext(SP.containertype,"/secure/") && !findtext(SP.containertype,"/largecrate/"))
 					slip.erroneous |= MANIFEST_ERROR_ITEM // This item was not included in the shipment!
 					del(B2) // Lost in space... or the loading dock.
 

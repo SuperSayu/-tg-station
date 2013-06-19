@@ -46,7 +46,7 @@
 	/* mobs */
 	mob
 		process(loc, what)
-			..()
+			..(loc,what)
 
 
 		slime

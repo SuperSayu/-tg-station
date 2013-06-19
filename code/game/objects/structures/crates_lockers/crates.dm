@@ -186,14 +186,6 @@
 	density = 1
 
 /obj/structure/closet/crate/hydroponics/prespawned
-	//This exists so the prespawned hydro crates spawn with their contents.
-/*	name = "Hydroponics crate"
-	desc = "All you need to destroy those pesky weeds and pests."
-	icon = 'icons/obj/storage.dmi'
-	icon_state = "hydrocrate"
-	icon_opened = "hydrocrateopen"
-	icon_closed = "hydrocrate"
-	density = 1*/
 	New()
 		..()
 		new /obj/item/weapon/reagent_containers/spray/plantbgone(src)
@@ -204,6 +196,16 @@
 //		new /obj/item/weapon/pestspray(src)
 //		new /obj/item/weapon/pestspray(src)
 //		new /obj/item/weapon/pestspray(src)
+
+/obj/structure/closet/crate/hydroponics/mystery
+	New()
+		..()
+		var/list/mysteryseeds = typesof(/obj/item/seeds)
+		var/list/boringseeds = list(/obj/item/seeds,/obj/item/seeds/weeds, /obj/item/seeds/cornseed, /obj/item/seeds/kudzuseed, /obj/item/seeds/plumpmycelium, /obj/item/seeds/poisonedappleseed, /obj/item/seeds/deathnettleseed, /obj/item/seeds/deathberryseed)
+		mysteryseeds -= boringseeds
+		for(var/i in 1 to 4)
+			var/typekey = pick_n_take(mysteryseeds)
+			new typekey(src)
 
 
 /obj/structure/closet/crate/secure/New()

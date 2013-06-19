@@ -764,9 +764,6 @@
 		/obj/item/stack/sheet/mineral/clown = list("banana" = 20),
 		/obj/item/stack/sheet/mineral/silver = list("silver" = 20),
 		/obj/item/stack/sheet/mineral/gold = list("gold" = 20),
-		/obj/item/weapon/grown/nettle = list("sacid" = 0),
-		/obj/item/weapon/grown/deathnettle = list("pacid" = 0),
-		/obj/item/weapon/grown/novaflower = list("capsaicin" = 0),
 
 		//Blender Stuff
 		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans = list("soymilk" = 0),
@@ -775,7 +772,9 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/wheat = list("flour" = -5),
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries = list("cherryjelly" = 0),
 
-
+		/obj/item/weapon/grown/nettle = list("sacid" = 0),
+		/obj/item/weapon/grown/deathnettle = list("pacid" = 0),
+		/obj/item/weapon/grown/novaflower = list("capsaicin" = 0),
 
 		//All types that you can put into the grinder to transfer the reagents to the beaker. !Put all recipes above this.!
 		/obj/item/weapon/reagent_containers/pill = list(),
