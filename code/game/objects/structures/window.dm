@@ -11,6 +11,7 @@
 	var/ini_dir = null
 	var/state = 0
 	var/reinf = 0
+	var/holo = 0
 //	var/silicate = 0 // number of units of silicate
 //	var/icon/silicateIcon = null // the silicated icon
 
@@ -19,8 +20,9 @@
 	health -= Proj.damage
 	..()
 	if(health <= 0)
-		new /obj/item/weapon/shard(loc)
-		new /obj/item/stack/rods(loc)
+		if(!holo)
+			new /obj/item/weapon/shard(loc)
+			if(reinf) new /obj/item/stack/rods(loc)
 		del(src)
 	return
 
@@ -31,35 +33,38 @@
 			del(src)
 			return
 		if(2.0)
-			new /obj/item/weapon/shard(loc)
-			if(reinf) new /obj/item/stack/rods(loc)
+			if(!holo)
+				new /obj/item/weapon/shard(loc)
+				if(reinf) new /obj/item/stack/rods(loc)
 			del(src)
 			return
 		if(3.0)
 			if(prob(50))
-				new /obj/item/weapon/shard(loc)
-				if(reinf) new /obj/item/stack/rods(loc)
+				if(!holo)
+					new /obj/item/weapon/shard(loc)
+					if(reinf) new /obj/item/stack/rods(loc)
 				del(src)
 				return
 
 
 /obj/structure/window/blob_act()
-	new /obj/item/weapon/shard(loc)
-	if(reinf) new /obj/item/stack/rods(loc)
+	if(!holo)
+		new /obj/item/weapon/shard(loc)
+		if(reinf) new /obj/item/stack/rods(loc)
 	del(src)
 
 
 /obj/structure/window/meteorhit()
-	//world << "glass at [x],[y],[z] Mhit"
-	new /obj/item/weapon/shard( loc )
-	if(reinf) new /obj/item/stack/rods( loc)
+	if(!holo)
+		new /obj/item/weapon/shard( loc )
+		if(reinf) new /obj/item/stack/rods( loc)
 	del(src)
 
 
 /obj/structure/window/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(dir == SOUTHWEST || dir == SOUTHEAST || dir == NORTHWEST || dir == NORTHEAST)
+	if(dir&(dir-1))//more than one bit = diagonal = full window
 		return 0	//full tile window, you can't move into it!
 	if(get_dir(loc, target) == dir)
 		return !density
@@ -92,8 +97,9 @@
 		update_nearby_icons()
 		step(src, get_dir(AM, src))
 	if(health <= 0)
-		new /obj/item/weapon/shard(loc)
-		if(reinf) new /obj/item/stack/rods(loc)
+		if(!holo)
+			new /obj/item/weapon/shard(loc)
+			if(reinf) new /obj/item/stack/rods(loc)
 		del(src)
 
 
@@ -101,8 +107,9 @@
 	if(HULK in user.mutations)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!"))
 		user.visible_message("<span class='danger'>[user] smashes through [src]!</span>")
-		new /obj/item/weapon/shard(loc)
-		if(reinf) new /obj/item/stack/rods(loc)
+		if(!holo)
+			new /obj/item/weapon/shard(loc)
+			if(reinf) new /obj/item/stack/rods(loc)
 		del(src)
 	else
 		user.visible_message("<span class='notice'>[user] knocks on [src].</span>")
@@ -117,8 +124,9 @@
 	health -= damage
 	if(health <= 0)
 		user.visible_message("<span class='danger'>[user] smashes through [src]!</span>")
-		new /obj/item/weapon/shard(loc)
-		if(reinf) new /obj/item/stack/rods(loc)
+		if(!holo)
+			new /obj/item/weapon/shard(loc)
+			if(reinf) new /obj/item/stack/rods(loc)
 		del(src)
 	else	//for nicer text~
 		user.visible_message("<span class='danger'>[user] smashes into [src]!</span>")
@@ -179,7 +187,7 @@
 	if(sound_effect)
 		playsound(loc, 'sound/effects/Glasshit.ogg', 75, 1)
 	if(health <= 0)
-		if(dir == SOUTHWEST)
+		if(dir == SOUTHWEST && !holo)
 			var/index = null
 			index = 0
 			while(index < 2)
@@ -187,8 +195,9 @@
 				if(reinf) new /obj/item/stack/rods(loc)
 				index++
 		else
-			new /obj/item/weapon/shard(loc)
-			if(reinf) new /obj/item/stack/rods(loc)
+			if(!holo)
+				new /obj/item/weapon/shard(loc)
+				if(reinf) new /obj/item/stack/rods(loc)
 		del(src)
 		return
 
@@ -265,11 +274,11 @@
 
 	return
 
-
 /obj/structure/window/Del()
 	density = 0
 	update_nearby_tiles()
-	playsound(src, "shatter", 70, 1)
+	if(!holo)
+		playsound(src, "shatter", 70, 1)
 	update_nearby_icons()
 	..()
 
@@ -364,5 +373,20 @@
 	opacity = 1
 
 /obj/structure/window/reinforced/tinted/frosted
+	name = "frosted window"
+	icon_state = "fwindow"
+
+/obj/structure/window/holographic
+	icon_state = "window"
+	holo = 1
+/obj/structure/window/holographic/reinforced
+	name = "reinforced window"
+	icon_state = "rwindow"
+	reinf = 1
+/obj/structure/window/holographic/reinforced/tinted
+	name = "tinted window"
+	icon_state = "twindow"
+	opacity = 1
+/obj/structure/window/holographic/reinforced/tinted/frosted
 	name = "frosted window"
 	icon_state = "fwindow"

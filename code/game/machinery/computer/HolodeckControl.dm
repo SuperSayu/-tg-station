@@ -25,30 +25,36 @@
 
 		var/dat = "<h3>Current Loaded Programs</h3>"
 		dat += "<A href='?src=\ref[src];emptycourt=1'>((Empty Court))</A><BR>"
-		dat += "<A href='?src=\ref[src];boxingcourt=1'>((Boxing Court))</A><BR>"
+		dat += "<A href='?src=\ref[src];boxingcourt=1'>((Dodgeball Arena)</font>)</A><BR>"
 		dat += "<A href='?src=\ref[src];basketball=1'>((Basketball Court))</A><BR>"
 		dat += "<A href='?src=\ref[src];thunderdomecourt=1'>((Thunderdome Court))</A><BR>"
 		dat += "<A href='?src=\ref[src];beach=1'>((Beach))</A><BR>"
 		dat += "<A href='?src=\ref[src];party=1'>((Party Room))</A><BR>"
 		dat += "<A href='?src=\ref[src];transit=1'>((Transit system demo))</A><BR>"
+		if(emagged | issilicon(user))
+			dat += "<A href='?src=\ref[src];medical=1'>((Emergency Medical Center))</A><BR>"
+			dat += "Caution: Holographic medical facilities for emergency use only. <BR>"
 
 		dat += "<span class='notice'>Please ensure that only holographic weapons are used in the holodeck if a combat simulation has been loaded.</span><BR>"
 
 		if(emagged)
+			dat += "<A href='?src=\ref[src];securebunker=1'>(<font color=red>Load secure bunker</font>)</A><BR>"
+			dat += "Caution: Ensure that bunker is not used in an unauthorized manner.<BR>"
+
 			dat += "<A href='?src=\ref[src];burntest=1'>(<font color=red>Begin Atmospheric Burn Simulation</font>)</A><BR>"
 			dat += "Ensure the holodeck is empty before testing.<BR>"
 			dat += "<BR>"
 			dat += "<A href='?src=\ref[src];wildlifecarp=1'>(<font color=red>Begin Wildlife Simulation</font>)</A><BR>"
 			dat += "Ensure the holodeck is empty before testing.<BR>"
 			dat += "<BR>"
-			dat += "<A href='?src=\ref[src];securebunker=1'>(<font color=red>Load secure bunker</font>)</A><BR>"
-			dat += "Ensure that bunker is not used in an unauthorized manner.<BR>"
 			dat += "<BR>"
 			if(issilicon(user))
 				dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=green>Re-Enable Safety Protocols?</font>)</A><BR>"
 			dat += "Safety Protocols are <font class='bad'>DISABLED</font><BR>"
 		else
 			if(issilicon(user))
+				dat += "<BR>"
+				dat += "<BR>"
 				dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=red>Override Safety Protocols?</font>)</A><BR>"
 			dat += "<BR>"
 			dat += "Safety Protocols are <font class='good'>ENABLED</font><BR>"
@@ -68,7 +74,18 @@
 		if((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
 			usr.set_machine(src)
 
-			if(href_list["emptycourt"])
+			if(href_list["loadarea"])
+				var/typepath = text2path(href_list["loadarea"])
+				if(ispath(typepath,/area))
+					target = locate(typepath)
+					if(target)
+						loadProgram(target)
+					else
+						world.log << "area not ready: [typepath]"
+				else
+					world.log << "bad area argument: [href_list["loadarea"]]"
+
+			else if(href_list["emptycourt"])
 				target = locate(/area/holodeck/source_emptycourt)
 				if(target)
 					loadProgram(target)
@@ -121,11 +138,14 @@
 					loadProgram(target)
 
 			else if(href_list["securebunker"])
-				if(!emagged)	return
+				//if(!emagged)	return
 				target = locate(/area/holodeck/source_bunker)
 				if(target)
 					loadProgram(target)
-
+			else if(href_list["medical"])
+				target = locate(/area/holodeck/source_medical)
+				if(target)
+					loadProgram(target)
 			else if(href_list["AIoverride"])
 				if(!issilicon(usr))	return
 				emagged = !emagged
@@ -253,7 +273,7 @@
 	if(obj == null)
 		return
 
-	if(isobj(obj))
+	if(istype(obj))
 		var/mob/M = obj.loc
 		if(ismob(M))
 			M.u_equip(obj)
@@ -364,9 +384,25 @@
 	active = 0
 
 
+/obj/machinery/computer/HolodeckControl/theater
+	target_area = /area/holodeck/betadeck
 
+	attack_hand(var/mob/user as mob)
+		user.set_machine(src)
 
+		var/dat = "<h3>Current Loaded Programs</h3>"
+		for(var/typekey in typesof(/area/holodeck/theater) - /area/holodeck/theater)
+			var/area/A = locate(typekey)
+			if(!A) continue
+			dat += "<a href='?src=\ref[src];loadarea=[typekey]'>[A.name]</a><br>"
 
+		//user << browse(dat, "window=computer;size=400x500")
+		//onclose(user, "computer")
+		var/datum/browser/popup = new(user, "computer", name, 400, 500)
+		popup.set_content(dat)
+		popup.set_title_image(user.browse_rsc_icon(src.icon, src.icon_state))
+		popup.open()
+		return
 
 
 // Holographic Items!
@@ -389,6 +425,38 @@
 				if(istype(get_step(src,direction),/turf/simulated/floor))
 					var/turf/simulated/floor/FF = get_step(src,direction)
 					FF.update_icon() //so siding get updated properly
+/turf/simulated/floor/holofloor/asteroid
+	name = "Asteroid"
+	icon_state = "asteroid0"
+	floor_tile = new/obj/item/stack/tile/grass
+
+	New()
+		floor_tile.New() //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
+		icon_state = "asteroid[pick(0,1,2,3,4,5,6,7,8,9,10,11,12)]"
+		..()
+
+/turf/simulated/floor/holofloor/fakespace
+	name = "Space"
+	icon = 'icons/turf/space.dmi'
+	icon_state = "0"
+	floor_tile = new/obj/item/stack/tile/grass
+
+	New()
+		floor_tile.New() //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
+		icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
+		..()
+
+/turf/simulated/floor/holofloor/hyperspace
+	name = "Hyperspace"
+	icon = 'icons/turf/space.dmi'
+	icon_state = "speedspace_eq_1"
+	floor_tile = new/obj/item/stack/tile/grass
+
+	New()
+		floor_tile.New() //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
+		src.icon_state = "speedspace_ew_[(x+rand(0,28))%14+1]"
+		..()
+
 
 /turf/simulated/floor/holofloor/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	return
@@ -528,6 +596,21 @@
 	item_state = "basketball"
 	desc = "Here's your chance, do your dance at the Space Jam."
 	w_class = 4 //Stops people from hiding it in their bags/pockets
+
+/obj/item/weapon/beach_ball/holoball/dodgeball
+	name = "dodgeball"
+	icon_state = "dodgeball"
+	item_state = "dodgeball"
+	desc = "Used for playing the most violent and degrading of childhood games."
+
+/obj/item/weapon/beach_ball/holoball/dodgeball/throw_impact(atom/hit_atom)
+	if((ishuman(hit_atom)))
+		var/mob/living/carbon/M = hit_atom
+		playsound(src, 'sound/items/dodgeball.ogg', 50, 1)
+		M.apply_damage(10, HALLOSS)
+		if(prob(5))
+			M.Weaken(3)
+			visible_message("\red [M] is knocked right off \his feet!", 3)
 
 /obj/structure/holohoop
 	name = "basketball hoop"

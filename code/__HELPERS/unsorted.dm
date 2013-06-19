@@ -483,11 +483,11 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 	if(!ckey)
 		include_link = 0
-	
+
 	if(key)
 		if(include_link)
 			. += "<a href='?priv_msg=[ckey]'>"
-		
+
 		if(C && C.holder && C.holder.fakekey && !include_name)
 			. += "Administrator"
 		else
@@ -972,18 +972,21 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 	var/list/refined_src = new/list()
 	for(var/turf/T in turfs_src)
 		refined_src += T
-		refined_src[T] = new/datum/coords
+		refined_src[T] = "[T.x - src_min_x].[T.y - src_min_y]"
+		/*new/datum/coords
 		var/datum/coords/C = refined_src[T]
 		C.x_pos = (T.x - src_min_x)
-		C.y_pos = (T.y - src_min_y)
+		C.y_pos = (T.y - src_min_y)*/
 
 	var/list/refined_trg = new/list()
 	for(var/turf/T in turfs_trg)
+		refined_trg["[T.x - trg_min_x].[T.y - trg_min_y]"] = T
+		/*
 		refined_trg += T
 		refined_trg[T] = new/datum/coords
 		var/datum/coords/C = refined_trg[T]
 		C.x_pos = (T.x - trg_min_x)
-		C.y_pos = (T.y - trg_min_y)
+		C.y_pos = (T.y - trg_min_y)*/
 
 	var/list/toupdate = new/list()
 
@@ -992,64 +995,68 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 	moving:
 		for (var/turf/T in refined_src)
-			var/datum/coords/C_src = refined_src[T]
-			for (var/turf/B in refined_trg)
+			//var/datum/coords/C_src = refined_src[T]
+			var/coordstring = refined_src[T]
+			var/turf/B = refined_trg[coordstring]
+			if(istype(B))
+			/*for (var/turf/B in refined_trg)
 				var/datum/coords/C_trg = refined_trg[B]
-				if(C_src.x_pos == C_trg.x_pos && C_src.y_pos == C_trg.y_pos)
+				if(C_src.x_pos == C_trg.x_pos && C_src.y_pos == C_trg.y_pos)*/
 
-					var/old_dir1 = T.dir
-					var/old_icon_state1 = T.icon_state
-					var/old_icon1 = T.icon
+				var/old_dir1 = T.dir
+				var/old_icon_state1 = T.icon_state
+				var/old_icon1 = T.icon
 
-					if(platingRequired)
-						if(istype(B, /turf/space))
-							continue moving
+				if(platingRequired)
+					if(istype(B, /turf/space))
+						continue moving
 
-					var/turf/X = new T.type(B)
-					X.dir = old_dir1
-					X.icon_state = old_icon_state1
-					X.icon = old_icon1 //Shuttle floors are in shuttle.dmi while the defaults are floors.dmi
-
-
-					var/list/objs = new/list()
-					var/list/newobjs = new/list()
-					var/list/mobs = new/list()
-					var/list/newmobs = new/list()
-
-					for(var/obj/O in T)
-
-						if(!istype(O,/obj))
-							continue
-
-						objs += O
+				var/turf/X = new T.type(B)
+				X.dir = old_dir1
+				X.icon_state = old_icon_state1
+				X.icon = old_icon1 //Shuttle floors are in shuttle.dmi while the defaults are floors.dmi
 
 
-					for(var/obj/O in objs)
-						newobjs += DuplicateObject(O , 1)
+				var/list/objs = new/list()
+				var/list/newobjs = new/list()
+				var/list/mobs = new/list()
+				var/list/newmobs = new/list()
+
+				for(var/obj/O in T)
+
+					if(!istype(O,/obj))
+						continue
+
+					objs += O
 
 
-					for(var/obj/O in newobjs)
-						O.loc = X
-
-					for(var/mob/M in T)
-
-						if(!istype(M,/mob) || istype(M, /mob/aiEye)) continue // If we need to check for more mobs, I'll add a variable
-						mobs += M
-
-					for(var/mob/M in mobs)
-						newmobs += DuplicateObject(M , 1)
-
-					for(var/mob/M in newmobs)
-						M.loc = X
-
-					copiedobjs += newobjs
-					copiedobjs += newmobs
+				for(var/obj/O in objs)
+					newobjs += DuplicateObject(O , 1)
 
 
+				for(var/obj/O in newobjs)
+					O.loc = X
+					copiedobjs += O.contents
 
-					for(var/V in T.vars)
-						if(!(V in list("type","loc","locs","vars", "parent", "parent_type","verbs","ckey","key","x","y","z","contents", "luminosity")))
-							X.vars[V] = T.vars[V]
+				for(var/mob/M in T)
+
+					if(!istype(M,/mob) || istype(M, /mob/aiEye)) continue // If we need to check for more mobs, I'll add a variable
+					mobs += M
+
+				for(var/mob/M in mobs)
+					newmobs += DuplicateObject(M , 1)
+
+				for(var/mob/M in newmobs)
+					M.loc = X
+
+				copiedobjs += newobjs
+				copiedobjs += newmobs
+
+
+
+				for(var/V in T.vars)
+					if(!(V in list("type","stat","loc","locs","vars", "parent", "parent_type","verbs","ckey","key","x","y","z","contents", "luminosity")))
+						X.vars[V] = T.vars[V]
 
 //					var/area/AR = X.loc
 
@@ -1057,11 +1064,11 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 //						X.opacity = !X.opacity
 //						X.sd_SetOpacity(!X.opacity)			//TODO: rewrite this code so it's not messed by lighting ~Carn
 
-					toupdate += X
+				toupdate += X
 
-					refined_src -= T
-					refined_trg -= B
-					continue moving
+				refined_src -= T
+				refined_trg -= B
+				continue moving
 
 
 

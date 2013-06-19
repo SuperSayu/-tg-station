@@ -11,6 +11,12 @@
 	* more maint closets around R&D
 	* solars area near engineering
 	* memorial promenade - lights, air alarm for escape hall
+	* Box of collars in art storage
+	* Mirror near Genetics
+	* Public garden near arrivals
+	* Maint room - Meeting hall
+	* Maint room - Oh god honk
+	* Murder mystery
 
 	? hyronalin dispenser to genetics
 
