@@ -2,7 +2,6 @@
 	name = "Dirty Grenade"
 	desc = "From the makers of BLAM! brand foaming space cleaner, this bomb guarantees steady work for any janitor."
 	stage = 2
-	path = 1
 
 	New()
 		..()
@@ -22,7 +21,7 @@
 	name = "Meat Grenade"
 	desc = "Not always as messy as the name implies."
 	stage = 2
-	path = 1
+
 
 	New()
 		..()
@@ -44,7 +43,7 @@
 	name = "Holy Water Grenade"
 	desc = "Then shalt thou count to three, no more, no less."
 	stage = 2
-	path = 1
+
 	New()
 		..()
 		var/obj/item/weapon/reagent_containers/glass/beaker/B = new(src)
@@ -52,13 +51,14 @@
 		beakers += B
 		icon_state = "grenade"
 		CreateDefaultTrigger(/obj/item/device/assembly/timer)
-		trigger:time = 3
+		var/obj/item/device/assembly/timer/T = nadeassembly.a_right
+		T.time = 3
 
 /obj/item/weapon/grenade/chem_grenade/soap
 	name = "Soap Grenade"
 	desc = "Not necessarily as clean as the name implies."
 	stage = 2
-	path = 1
+
 	New()
 		..()
 		var/obj/item/weapon/reagent_containers/glass/beaker/B1 = new(src)
@@ -80,7 +80,7 @@
 	name = "Lubricant Remote Mine"
 	desc = "For that perfectly timed distraction.  Has a remote detonator."
 	stage = 2
-	path = 1
+
 	icon_state = "grenade"
 	New()
 		..()
@@ -88,13 +88,13 @@
 		B1.reagents.add_reagent("lube",50)
 		beakers += B1
 
-		CreateDefaultTrigger(/obj/item/device/assembly/signaler/reciever)
+		CreateDefaultTrigger(/obj/item/device/assembly/signaler)
 
 // Basic explosion grenade
 /obj/item/weapon/grenade/chem_grenade/explosion
 	name = "Grenade"
 	stage = 2
-	path = 1
+
 	icon_state = "grenade"
 	New()
 		..()
@@ -115,7 +115,7 @@
 	desc = "A hand held grenade, with a remote detonator."
 	New()
 		..()
-		CreateDefaultTrigger(/obj/item/device/assembly/signaler/reciever)
+		CreateDefaultTrigger(/obj/item/device/assembly/signaler)
 
 /obj/item/weapon/grenade/chem_grenade/explosion/prox
 	name = "Proximity Mine"
@@ -135,7 +135,7 @@
 /obj/item/weapon/grenade/chem_grenade/emp
 	name = "EMP Grenade"
 	stage = 2
-	path = 1
+
 	icon_state = "grenade"
 	New()
 		..()
@@ -154,7 +154,7 @@
 	desc = "A hand held grenade, with a remote detonator."
 	New()
 		..()
-		CreateDefaultTrigger(/obj/item/device/assembly/signaler/reciever)
+		CreateDefaultTrigger(/obj/item/device/assembly/signaler)
 
 /obj/item/weapon/grenade/chem_grenade/emp/prox
 	name = "Proximity EMP Mine"
@@ -177,7 +177,7 @@
 	name = "Bluespace Slime Grenade"
 	desc = "A standard grenade containing weaponized slime extract."
 	stage = 2
-	path = 1
+
 	New()
 		..()
 		var/obj/item/slime_extract/bluespace/B1 = new(src)
@@ -208,13 +208,13 @@
 	desc = "A grenade containing weaponized slime extract, with an attached remote detonator."
 	New()
 		..()
-		CreateDefaultTrigger(/obj/item/device/assembly/signaler/reciever)
+		CreateDefaultTrigger(/obj/item/device/assembly/signaler)
 
 /obj/item/weapon/grenade/chem_grenade/large/monster
 	name = "Gold Slime Grenade"
 	desc = "A standard grenade containing weaponized slime extract."
 	stage = 2
-	path = 1
+
 	New()
 		..()
 		var/obj/item/slime_extract/gold/B1 = new(src)
@@ -245,13 +245,13 @@
 	desc = "A grenade containing weaponized slime extract, with an attached remote detonator."
 	New()
 		..()
-		CreateDefaultTrigger(/obj/item/device/assembly/signaler/reciever)
+		CreateDefaultTrigger(/obj/item/device/assembly/signaler)
 
 /obj/item/weapon/grenade/chem_grenade/large/feast
 	name = "Silver Slime Grenade"
 	desc = "A standard grenade containing weaponized slime extract."
 	stage = 2
-	path = 1
+
 	New()
 		..()
 		var/obj/item/slime_extract/silver/B1 = new(src)

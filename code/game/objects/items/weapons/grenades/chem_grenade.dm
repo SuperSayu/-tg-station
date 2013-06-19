@@ -175,6 +175,12 @@
 	spawn(50)		   //To make sure all reagents can work
 		del(src)	   //correctly before deleting the grenade.
 
+/obj/item/weapon/grenade/chem_grenade/proc/CreateDefaultTrigger(var/typekey)
+	if(ispath(typekey,/obj/item/device/assembly))
+		nadeassembly = new
+		nadeassembly.a_left = new /obj/item/device/assembly/igniter(nadeassembly)
+		nadeassembly.a_right = new typekey(nadeassembly)
+
 
 
 //Large chem grenades accept slime cores and use the appropriately.
