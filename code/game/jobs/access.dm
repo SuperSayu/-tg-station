@@ -175,7 +175,7 @@
 			return list(access_cent_general, access_cent_living, access_cent_storage)
 		if("Thunderdome Overseer")
 			return list(access_cent_general, access_cent_thunder)
-		if("Intel Officer")
+		if("Centcom Official")
 			return list(access_cent_general, access_cent_living)
 		if("Medical Officer")
 			return list(access_cent_general, access_cent_living, access_cent_medical)
@@ -186,6 +186,8 @@
 		if("BlackOps Commander")
 			return list(access_cent_general, access_cent_thunder, access_cent_specops, access_cent_living, access_cent_storage, access_cent_creed)
 		if("Supreme Commander")
+			return get_all_centcom_access()
+		if("Centcom Commander")
 			return get_all_centcom_access()
 
 /proc/get_all_accesses()
@@ -403,7 +405,7 @@
 				"Research Director", "Scientist", "Roboticist", "Head of Security", "Warden", "Detective", "Security Officer")
 
 /proc/get_all_centcom_jobs()
-	return list("VIP Guest","Custodian","Thunderdome Overseer","Intel Officer","Medical Officer","Death Commando","Research Officer","BlackOps Commander","Supreme Commander")
+	return list("VIP Guest","Custodian","Thunderdome Overseer","Centcom Official","Medical Officer","Death Commando","Research Officer","Special Ops Officer","Admiral","Centcom Commander")
 
 /obj/item/proc/GetJobName()
 	var/obj/item/weapon/card/id/I = src.GetID()
