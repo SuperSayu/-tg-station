@@ -10,6 +10,9 @@
 	wires = WIRE_RECEIVE | WIRE_PULSE | WIRE_RADIO_PULSE | WIRE_RADIO_RECEIVE
 
 	secured = 1
+	var/receiving = 0
+
+	bomb_name = "remote-control bomb"
 
 	var/code = 30
 	var/frequency = 1457
@@ -48,6 +51,7 @@
 	<TT>
 
 	<A href='byond://?src=\ref[src];send=1'>Send Signal</A><BR>
+	Reciever is <A href='byond://?src=\ref[src];receive=1'>[receiving?"on":"off"]</A><BR>
 	<B>Frequency/Code</B> for signaler:<BR>
 	Frequency:
 	<A href='byond://?src=\ref[src];freq=-10'>-</A>
@@ -88,6 +92,8 @@
 			src.code = round(src.code)
 			src.code = min(100, src.code)
 			src.code = max(1, src.code)
+		if(href_list["receive"])
+			receiving = !receiving
 
 		if(href_list["send"])
 			spawn( 0 )
@@ -124,9 +130,13 @@
 
 
 	receive_signal(datum/signal/signal)
-		if(!signal)	return 0
-		if(signal.encryption != code)	return 0
+		if( !receiving || !signal )
+			return 0
+
+		if(signal.encryption != code)
+			return 0
 		if(!(src.wires & WIRE_RADIO_RECEIVE))	return 0
+
 		pulse(1)
 		for(var/mob/O in hearers(1, src.loc))
 			O.show_message(text("\icon[] *beep* *beep*", src), 3, "*beep* *beep*", 2)
@@ -143,22 +153,3 @@
 		radio_connection = radio_controller.add_object(src, frequency, RADIO_CHAT)
 		return
 
-// Embedded signaller used in grenade construction.
-// It's necessary because the signaler doesn't have an off state.
-// Generated during grenade construction.  -Sayu
-/obj/item/device/assembly/signaler/reciever
-	var/on = 0
-
-	proc/toggle_safety()
-		on = !on
-
-	activate()
-		toggle_safety()
-		return 1
-
-	describe()
-		return "The radio reciever is [on?"on":"off"]."
-
-	receive_signal(datum/signal/signal)
-		if(!on) return
-		return ..(signal)

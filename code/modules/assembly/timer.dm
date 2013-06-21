@@ -9,8 +9,10 @@
 
 	secured = 0
 
+	bomb_name = "time bomb"
+
 	var/timing = 0
-	var/time = 5
+	var/time = 10
 
 	proc
 		timer_end()

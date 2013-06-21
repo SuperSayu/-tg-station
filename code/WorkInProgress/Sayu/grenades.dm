@@ -1,5 +1,5 @@
 /obj/item/weapon/grenade/chem_grenade/dirt
-	name = "Dirty Grenade"
+	payload_name = "dirt"
 	desc = "From the makers of BLAM! brand foaming space cleaner, this bomb guarantees steady work for any janitor."
 	stage = 2
 
@@ -14,11 +14,10 @@
 			B1.reagents.add_reagent(pick(muck - filth,25)) // but sometimes...
 
 		beakers += B1
-		CreateDefaultTrigger(/obj/item/device/assembly/timer)
-		icon_state = "grenade"
+
 
 /obj/item/weapon/grenade/chem_grenade/meat
-	name = "Meat Grenade"
+	payload_name = "meat"
 	desc = "Not always as messy as the name implies."
 	stage = 2
 
@@ -36,26 +35,20 @@
 		beakers += B1
 		beakers += B2
 
-		CreateDefaultTrigger(/obj/item/device/assembly/timer)
-		icon_state = "grenade"
-
 /obj/item/weapon/grenade/chem_grenade/holywater
-	name = "Holy Water Grenade"
+	payload_name = "holy water"
 	desc = "Then shalt thou count to three, no more, no less."
 	stage = 2
+	det_time = 30
 
 	New()
 		..()
 		var/obj/item/weapon/reagent_containers/glass/beaker/B = new(src)
 		B.reagents.add_reagent("holywater",100)
 		beakers += B
-		icon_state = "grenade"
-		CreateDefaultTrigger(/obj/item/device/assembly/timer)
-		var/obj/item/device/assembly/timer/T = nadeassembly.a_right
-		T.time = 3
 
 /obj/item/weapon/grenade/chem_grenade/soap
-	name = "Soap Grenade"
+	payload_name = "soap"
 	desc = "Not necessarily as clean as the name implies."
 	stage = 2
 
@@ -70,32 +63,40 @@
 
 		beakers += B1
 		beakers += B2
-		CreateDefaultTrigger(/obj/item/device/assembly/timer)
-		icon_state = "grenade"
+		update_icon()
+
 
 // -------------------------------------
 // Grenades using new grenade assemblies
 // -------------------------------------
 /obj/item/weapon/grenade/chem_grenade/lube
-	name = "Lubricant Remote Mine"
-	desc = "For that perfectly timed distraction.  Has a remote detonator."
+	payload_name = "lubricant"
 	stage = 2
 
-	icon_state = "grenade"
 	New()
 		..()
 		var/obj/item/weapon/reagent_containers/glass/beaker/B1 = new(src)
 		B1.reagents.add_reagent("lube",50)
 		beakers += B1
-
+/obj/item/weapon/grenade/chem_grenade/lube/remote
+	New()
+		..()
 		CreateDefaultTrigger(/obj/item/device/assembly/signaler)
+/obj/item/weapon/grenade/chem_grenade/lube/prox
+	New()
+		..()
+		CreateDefaultTrigger(/obj/item/device/assembly/prox_sensor)
+/obj/item/weapon/grenade/chem_grenade/lube/tripwire
+	New()
+		..()
+		CreateDefaultTrigger(/obj/item/device/assembly/infra)
+
 
 // Basic explosion grenade
 /obj/item/weapon/grenade/chem_grenade/explosion
-	name = "Grenade"
+	payload_name = "conventional"
 	stage = 2
 
-	icon_state = "grenade"
 	New()
 		..()
 		var/obj/item/weapon/reagent_containers/glass/beaker/B1 = new(src)
@@ -107,36 +108,27 @@
 		beakers += B1
 		beakers += B2
 
-		CreateDefaultTrigger(/obj/item/device/assembly/timer)
-
 // Assembly Variants
 /obj/item/weapon/grenade/chem_grenade/explosion/remote
-	name = "Remote Mine"
-	desc = "A hand held grenade, with a remote detonator."
 	New()
 		..()
 		CreateDefaultTrigger(/obj/item/device/assembly/signaler)
 
 /obj/item/weapon/grenade/chem_grenade/explosion/prox
-	name = "Proximity Mine"
-	desc = "A hand held grenade, with a proximity sensor."
 	New()
 		..()
 		CreateDefaultTrigger(/obj/item/device/assembly/prox_sensor)
 
 /obj/item/weapon/grenade/chem_grenade/explosion/mine
-	name = "Contact Mine"
-	desc = "A hand held grenade, rigged with a pressure switch."
 	New()
 		..()
 		CreateDefaultTrigger(/obj/item/device/assembly/mousetrap)
 
 // Basic EMP grenade
 /obj/item/weapon/grenade/chem_grenade/emp
-	name = "EMP Grenade"
+	payload_name = "EMP"
 	stage = 2
 
-	icon_state = "grenade"
 	New()
 		..()
 		var/obj/item/weapon/reagent_containers/glass/beaker/B1 = new(src)
@@ -146,26 +138,18 @@
 		beakers += B1
 		beakers += B2
 
-		CreateDefaultTrigger(/obj/item/device/assembly/timer)
-
 // Assembly Variants
 /obj/item/weapon/grenade/chem_grenade/emp/remote
-	name = "Remote EMP Grenade"
-	desc = "A hand held grenade, with a remote detonator."
 	New()
 		..()
 		CreateDefaultTrigger(/obj/item/device/assembly/signaler)
 
 /obj/item/weapon/grenade/chem_grenade/emp/prox
-	name = "Proximity EMP Mine"
-	desc = "A hand held grenade, with a proximity sensor."
 	New()
 		..()
 		CreateDefaultTrigger(/obj/item/device/assembly/prox_sensor)
 
 /obj/item/weapon/grenade/chem_grenade/emp/mine
-	name = "EMP Mine"
-	desc = "A hand held grenade, rigged with a pressure switch."
 	New()
 		..()
 		CreateDefaultTrigger(/obj/item/device/assembly/mousetrap)
@@ -174,8 +158,8 @@
 //  Dangerous slime core grenades
 // --------------------------------------
 /obj/item/weapon/grenade/chem_grenade/large/bluespace
-	name = "Bluespace Slime Grenade"
-	desc = "A standard grenade containing weaponized slime extract."
+	payload_name = "bluespace slime"
+	desc = "A standard grenade casing containing weaponized slime extract."
 	stage = 2
 
 	New()
@@ -186,32 +170,24 @@
 		B2.reagents.add_reagent("plasma",5 * B1.Uses)
 		beakers += B1
 		beakers += B2
-		CreateDefaultTrigger(/obj/item/device/assembly/timer)
-		icon_state = "large_grenade_locked"
 
 /obj/item/weapon/grenade/chem_grenade/large/bluespace/prox
-	name = "Bluespace Slime Proximity Mine"
-	desc = "A grenade containing weaponized slime extract, with an attached proximity sensor."
 	New()
 		..()
 		CreateDefaultTrigger(/obj/item/device/assembly/prox_sensor)
 
 /obj/item/weapon/grenade/chem_grenade/large/bluespace/mine
-	name = "Bluespace Slime Mine"
-	desc = "A grenade containing weaponized slime extract, with an attached pressure switch."
 	New()
 		..()
 		CreateDefaultTrigger(/obj/item/device/assembly/mousetrap)
 
 /obj/item/weapon/grenade/chem_grenade/large/bluespace/remote
-	name = "Remote Bluespace Slime Grenade"
-	desc = "A grenade containing weaponized slime extract, with an attached remote detonator."
 	New()
 		..()
 		CreateDefaultTrigger(/obj/item/device/assembly/signaler)
 
 /obj/item/weapon/grenade/chem_grenade/large/monster
-	name = "Gold Slime Grenade"
+	payload_name = "gold slime"
 	desc = "A standard grenade containing weaponized slime extract."
 	stage = 2
 
@@ -223,32 +199,24 @@
 		B2.reagents.add_reagent("plasma",5 * B1.Uses)
 		beakers += B1
 		beakers += B2
-		CreateDefaultTrigger(/obj/item/device/assembly/timer)
-		icon_state = "large_grenade_locked"
 
 /obj/item/weapon/grenade/chem_grenade/large/monster/prox
-	name = "Gold Slime Proximity Mine"
-	desc = "A grenade containing weaponized slime extract, with an attached proximity sensor."
 	New()
 		..()
 		CreateDefaultTrigger(/obj/item/device/assembly/prox_sensor)
 
 /obj/item/weapon/grenade/chem_grenade/large/monster/mine
-	name = "Gold Slime Mine"
-	desc = "A grenade containing weaponized slime extract, with an attached pressure switch."
 	New()
 		..()
 		CreateDefaultTrigger(/obj/item/device/assembly/mousetrap)
 
 /obj/item/weapon/grenade/chem_grenade/large/monster/remote
-	name = "Remote Gold Slime Grenade"
-	desc = "A grenade containing weaponized slime extract, with an attached remote detonator."
 	New()
 		..()
 		CreateDefaultTrigger(/obj/item/device/assembly/signaler)
 
 /obj/item/weapon/grenade/chem_grenade/large/feast
-	name = "Silver Slime Grenade"
+	payload_name = "silver slime"
 	desc = "A standard grenade containing weaponized slime extract."
 	stage = 2
 
@@ -260,13 +228,13 @@
 		B2.reagents.add_reagent("plasma",5 * B1.Uses)
 		beakers += B1
 		beakers += B2
-		CreateDefaultTrigger(/obj/item/device/assembly/timer)
-		icon_state = "large_grenade_locked"
 
+// Slime Clusterbusters
 /obj/item/weapon/grenade/clusterbuster/bluespace
 	name = "Bluespace Megabomb"
 	desc = "Widely regarded as proof that while there is a God, He is Insane."
 	payload = /obj/item/weapon/grenade/chem_grenade/large/bluespace
+
 /obj/item/weapon/grenade/clusterbuster/monster
 	name = "Monster Megabomb"
 	desc = "Widely regarded as proof that there is no God."
@@ -430,7 +398,6 @@
 /obj/item/weapon/grenade/clusterbuster/segment/New(var/turf/newloc,var/T,var/N)//Segments should never exist except part of the clusterbang, since these immediately 'do their thing' and asplode
 	icon_state = "clusterbang_segment_active"
 	active = 1
-	//banglet = 1
 	payload = T
 	name = N
 	var/stepdist = rand(1,5)		//How far to step
@@ -439,7 +406,6 @@
 	var/dettime = rand(15,60)
 	spawn(dettime)
 		prime()
-	..()
 
 /obj/item/weapon/grenade/clusterbuster/segment/prime()
 	var/numspawned = rand(4,8)
@@ -448,29 +414,25 @@
 			numspawned --
 
 	for(,numspawned > 0, numspawned--)
+		new /obj/item/weapon/grenade/clusterbuster/node(src.loc,payload)
 		spawn(0)
-			new /obj/item/weapon/grenade/clusterbuster/node(src.loc,payload)
 			playsound(src.loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
-	spawn(0)
-		del(src)
-		return
+	del(src)
+	return
 
 /obj/item/weapon/grenade/clusterbuster/node/New(var/turf/newloc,var/T,var/N)
-	spawn(0)
-		icon_state = "flashbang_active"
-		active = 1
-//		banglet = 1
-		payload = T
-		name = N
-		var/stepdist = rand(1,4)
-		var/temploc = src.loc
-		walk_away(src,temploc,stepdist)
-		var/dettime = rand(15,60)
-		spawn(dettime)
-			var/atom/A = new payload(loc)
-			if(istype(A,/obj/item/weapon/grenade))
-				A:prime()
-			if(istype(A,/obj/machinery/singularity)) // I can't emphasize enough how much you should never use this grenade
-				A:energy = 200
-			del src
-	..()
+	icon_state = "flashbang_active"
+	active = 1
+	payload = T
+	name = N
+	var/stepdist = rand(1,4)
+	var/temploc = src.loc
+	walk_away(src,temploc,stepdist)
+	var/dettime = rand(15,60)
+	spawn(dettime)
+		var/atom/A = new payload(loc)
+		if(istype(A,/obj/item/weapon/grenade))
+			A:prime()
+		if(istype(A,/obj/machinery/singularity)) // I can't emphasize enough how much you should never use this grenade
+			A:energy = 200
+		del src

@@ -13,6 +13,8 @@
 	throw_range = 10
 	origin_tech = "magnets=1"
 
+	var/bomb_name = "bomb" // used for naming bombs / mines
+
 	var/secured = 1
 	var/list/attached_overlays = null
 	var/obj/item/device/assembly_holder/holder = null
@@ -73,10 +75,6 @@
 			holder.process_activation(src, 1, 0)
 		if(holder && (wires & WIRE_PULSE_SPECIAL))
 			holder.process_activation(src, 0, 1)
-
-		if(istype(loc,/obj/item/weapon/grenade)) // This is a hack.  Todo: Manage this better -Sayu
-			var/obj/item/weapon/grenade/G = loc
-			G.prime() 							 // Adios, muchachos
 //		if(radio && (wires & WIRE_RADIO_PULSE))
 			//Not sure what goes here quite yet send signal?
 		return 1

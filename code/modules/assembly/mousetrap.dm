@@ -7,6 +7,7 @@
 	origin_tech = "combat=1"
 	var/armed = 0
 
+	bomb_name = "contact mine"
 
 	examine()
 		..()

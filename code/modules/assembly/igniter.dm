@@ -7,6 +7,9 @@
 	w_amt = 10
 	origin_tech = "magnets=1"
 
+	describe()
+		return "The igniter is [secured?"secured.":"unsecured."]"
+
 	activate()
 		if(!..())	return 0//Cooldown check
 		var/turf/location = get_turf(loc)

@@ -9,6 +9,8 @@
 	w_amt = 100
 	origin_tech = "magnets=2"
 
+	bomb_name = "tripwire mine"
+
 	secured = 0
 
 	var/on = 0
@@ -64,7 +66,7 @@
 		else if (holder)
 			if (istype(holder.loc,/turf))
 				T = holder.loc
-			else if (istype(holder.loc.loc,/turf)) //for onetankbombs and other tertiary builds with assemblies
+			else if (holder.master && istype(holder.master.loc,/turf)) //for onetankbombs and other tertiary builds with assemblies
 				T = holder.loc.loc
 		else if(istype(loc,/obj/item/weapon/grenade) && istype(loc.loc,/turf))
 			T = loc.loc
@@ -104,7 +106,6 @@
 
 	holder_movement()
 		if(!holder)	return 0
-//		dir = holder.dir
 		del(first)
 		return 1
 
@@ -123,6 +124,8 @@
 		if(!secured)	return
 		user.set_machine(src)
 		var/dat = text("<TT><B>Infrared Laser</B>\n<B>Status</B>: []<BR>\n<B>Visibility</B>: []<BR>\n</TT>", (on ? text("<A href='?src=\ref[];state=0'>On</A>", src) : text("<A href='?src=\ref[];state=1'>Off</A>", src)), (src.visible ? text("<A href='?src=\ref[];visible=0'>Visible</A>", src) : text("<A href='?src=\ref[];visible=1'>Invisible</A>", src)))
+		if(holder)
+			dat += "<BR>Beam direction: [dir2text(dir)] <A href='?src=\ref[src];rotate=-1'>Counter-clockwise</A> | <A href='?src=\ref[src];rotate=1'>Clockwise</A>"
 		dat += "<BR><BR><A href='?src=\ref[src];refresh=1'>Refresh</A>"
 		dat += "<BR><BR><A href='?src=\ref[src];close=1'>Close</A>"
 		user << browse(dat, "window=infra")
@@ -136,6 +139,17 @@
 			usr << browse(null, "window=infra")
 			onclose(usr, "infra")
 			return
+
+		if(href_list["rotate"])
+			switch(href_list["rotate"])
+				if("-1")
+					dir = turn(dir,90)
+					update_icon()
+					del(first)
+				if("1")
+					dir = turn(dir,-90)
+					update_icon()
+					del(first)
 
 		if(href_list["state"])
 			on = !(on)

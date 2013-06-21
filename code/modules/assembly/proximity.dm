@@ -9,6 +9,8 @@
 
 	secured = 0
 
+	bomb_name = "proximity mine"
+
 	var/scanning = 0
 	var/timing = 0
 	var/time = 10
@@ -99,6 +101,9 @@
 		..()
 		sense()
 		return
+
+	holder_movement()
+		sense()
 
 
 	interact(mob/user as mob)//TODO: Change this to the wires thingy

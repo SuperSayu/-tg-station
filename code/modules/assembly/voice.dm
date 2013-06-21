@@ -7,7 +7,15 @@
 	w_amt = 10
 	origin_tech = "magnets=1"
 	var/listening = 0
-	var/recorded	//the activation message
+	var/recorded = null	//the activation message
+
+	bomb_name = "voice-activated bomb"
+
+	describe()
+		if(recorded || listening)
+			return "A meter on [src] flickers with every nearby sound."
+		else
+			return "[src] is deactivated."
 
 	hear_talk(mob/living/M as mob, msg)
 		if(secured)
@@ -18,19 +26,19 @@
 				T.visible_message("\icon[src] beeps, \"Activation message is '[recorded]'.\"")
 			else
 				if(findtext(msg, recorded))
-					pulse(0)
+					spawn(1) // give the message time to be heard by everyone else
+						pulse(0)
 
 	activate()
-		if(secured)
-			if(!holder)
-				listening = !listening
-				var/turf/T = get_turf(src)
-				T.visible_message("\icon[src] beeps, \"[listening ? "Now" : "No longer"] recording input.\"")
+		return // previously this toggled listning when not in a holder, that's a little silly.  It was only called in attack_self that way.
 
 
 	attack_self(mob/user)
-		if(!user)	return 0
-		activate()
+		if(!user || !secured)	return 0
+
+		listening = !listening
+		var/turf/T = get_turf(src)
+		T.visible_message("\icon[src] beeps, \"[listening ? "Now" : "No longer"] recording input.\"")
 		return 1
 
 

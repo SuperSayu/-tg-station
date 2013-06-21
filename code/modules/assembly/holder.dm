@@ -94,12 +94,19 @@
 		if(a_right)
 			a_right.hear_talk(M, msg)
 
-	Move()
-		..()
+	proc/process_movement() // infrared beams and prox sensors
 		if(a_left && a_right)
 			a_left.holder_movement()
 			a_right.holder_movement()
+
+	Move()
+		..()
+		process_movement()
 		return
+
+	pickup()
+		..()
+		process_movement()
 
 
 	attack_hand()//Perhapse this should be a holder_pickup proc instead, can add if needbe I guess
