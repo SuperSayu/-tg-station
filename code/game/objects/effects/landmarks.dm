@@ -214,3 +214,7 @@
 	new /obj/item/clothing/mask/gas/sexymime(src.loc)
 	new /obj/item/clothing/under/sexymime(src.loc)
 	del(src)
+
+/obj/effect/landmark/costume/xeno/New()
+	new /obj/item/clothing/suit/xenos(src.loc)
+	new /obj/item/clothing/head/xenos(src.loc)
