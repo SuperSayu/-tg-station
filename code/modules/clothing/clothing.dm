@@ -65,6 +65,7 @@ BLIND     // can't see anything
 	slot_flags = SLOT_HEAD
 	var/flash_protect = 0
 	var/tint = 0
+	var/loose = 10 // propensity to fall off, 0..100
 
 //Mask
 /obj/item/clothing/mask
@@ -117,6 +118,7 @@ BLIND     // can't see anything
 	heat_protection = HEAD
 	max_heat_protection_temperature = SPACE_HELM_MAX_TEMP_PROTECT
 	flash_protect = 2
+	loose = 0 // This falling off would be A Bad Thing
 
 /obj/item/clothing/suit/space
 	name = "space suit"

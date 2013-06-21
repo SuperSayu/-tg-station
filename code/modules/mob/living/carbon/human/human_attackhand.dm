@@ -121,6 +121,16 @@
 				forcesay(hit_appends)
 				return
 
+			if(randn <= 45)
+				if(head)
+					var/obj/item/clothing/head/H = head
+					if(!istype(H) || prob(H.loose))
+						drop_from_inventory(H)
+						if(prob(60))
+							step_rand(H)
+						if(stat == CONSCIOUS)
+							src.visible_message("<span class='warning'>[M] has knocked [src]'s [H] off!</span>",
+											 "<span class='warning'>[M] knocked the [H] clean off your head!</span>")
 			var/talked = 0	// BubbleWrap
 
 			if(randn <= 60)

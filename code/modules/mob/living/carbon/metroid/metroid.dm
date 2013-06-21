@@ -983,6 +983,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	heat_protection = HEAD
 	max_heat_protection_temperature = FIRE_HELM_MAX_TEMP_PROTECT
 	armor = list(melee = 80, bullet = 20, laser = 20, energy = 10, bomb = 0, bio = 0, rad = 0)
+	loose = 0 // not even
 
 /obj/effect/golemrune
 	anchored = 1

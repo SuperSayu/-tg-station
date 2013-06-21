@@ -9,7 +9,7 @@
 	*	AI control wire damage will disable this functionality.
 
 	*	Mass lockdown available from the computer (Area, whole station)
-	
+
 	*	Traitor Semaphore Implant (by default)
 		-	Pre-determined phrasebook
 		-	Maybe irradiate you on send, not useful
@@ -27,6 +27,8 @@
 	*	Pikmin cultist antag
 
 	*	Space to mining tunnels
+
+	*	Pour chemicals in attached scrubber to cause backpressure cloud
 
 	Adding new traitor types:
 	-	Game mode (if necessary)

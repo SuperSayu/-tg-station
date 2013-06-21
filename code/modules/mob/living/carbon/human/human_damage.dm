@@ -54,6 +54,20 @@
 	if(HULK in mutations)	return
 	..()
 
+/mob/living/carbon/human/update_canmove()
+	var/old_lying = lying
+	. = ..()
+	if(lying && !old_lying) // fell down
+		if(head)
+			var/obj/item/clothing/head/H = head
+			if(!istype(H) || prob(H.loose))
+				drop_from_inventory(H)
+				if(prob(12))
+					step_rand(H)
+				if(stat == CONSCIOUS)
+					src << "Your [H] falls off!"
+
+
 ////////////////////////////////////////////
 
 //Returns a list of damaged organs

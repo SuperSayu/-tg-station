@@ -6,12 +6,14 @@
 	desc = "It's good to be emperor."
 	flags = FPRINT|TABLEPASS
 	item_state = "that"
+	loose = 0 // centcom
 
 /obj/item/clothing/head/powdered_wig
 	name = "powdered wig"
 	desc = "A powdered wig."
 	icon_state = "pwig"
 	item_state = "pwig"
+	loose = 90 // fucking whigs
 
 /obj/item/clothing/head/that
 	name = "top-hat"
@@ -19,18 +21,21 @@
 	icon_state = "tophat"
 	item_state = "that"
 	flags = FPRINT|TABLEPASS
+	loose = 70
 
 /obj/item/clothing/head/redcoat
 	name = "redcoat's hat"
 	icon_state = "redcoat"
 	desc = "<i>'I guess it's a redhead.'</i>"
 	flags = FPRINT | TABLEPASS
+	loose = 45
 
 /obj/item/clothing/head/mailman
 	name = "mailman's hat"
 	icon_state = "mailman"
 	desc = "<i>'Right-on-time'</i> mail service head wear."
 	flags = FPRINT | TABLEPASS
+	loose = 65
 
 /obj/item/clothing/head/plaguedoctorhat
 	name = "plague doctor's hat"
@@ -38,18 +43,22 @@
 	icon_state = "plaguedoctor"
 	flags = FPRINT | TABLEPASS
 	permeability_coefficient = 0.01
+	loose = 30
+
 
 /obj/item/clothing/head/hasturhood
 	name = "hastur's hood"
 	desc = "It's unspeakably stylish"
 	icon_state = "hasturhood"
 	flags = FPRINT|TABLEPASS|HEADCOVERSEYES|BLOCKHAIR
+	loose = 1 // full-head objects (almost) never fall off
 
 /obj/item/clothing/head/nursehat
 	name = "nurse's hat"
 	desc = "It allows quick identification of trained medical personnel."
 	icon_state = "nursehat"
 	flags = FPRINT|TABLEPASS
+	loose = 80 // this allows awkward come-ons when he/she drops her hat and you get it for him/her
 
 /obj/item/clothing/head/syndicatefake
 	name = "red space-helmet replica"
@@ -58,6 +67,7 @@
 	desc = "A plastic replica of a syndicate agent's space helmet, you'll look just like a real murderous syndicate agent in this! This is a toy, it is not made for use in space!"
 	flags = FPRINT | TABLEPASS | BLOCKHAIR
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
+	loose = 1 // full-head objects (almost) never fall off
 
 /obj/item/clothing/head/cueball
 	name = "cueball helmet"
@@ -66,6 +76,7 @@
 	flags = FPRINT|TABLEPASS|HEADCOVERSEYES|HEADCOVERSMOUTH|BLOCKHAIR
 	item_state="cueball"
 	flags_inv = 0
+	loose = 0
 
 /obj/item/clothing/head/that
 	name = "sturdy top-hat"
@@ -82,6 +93,7 @@
 	item_state = "greenbandana"
 	flags = FPRINT|TABLEPASS
 	flags_inv = 0
+	loose = 1
 
 /obj/item/clothing/head/cardborg
 	name = "cardborg helmet"
@@ -90,6 +102,7 @@
 	item_state = "cardborg_h"
 	flags = FPRINT | TABLEPASS | HEADCOVERSEYES | HEADCOVERSMOUTH
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
+	loose = 1 // full-head objects (almost) never fall off
 
 /obj/item/clothing/head/justice
 	name = "justice hat"
@@ -97,6 +110,7 @@
 	icon_state = "justicered"
 	item_state = "justicered"
 	flags = FPRINT|TABLEPASS|HEADCOVERSEYES|HEADCOVERSMOUTH|BLOCKHAIR
+	loose = 0 // full-head objects (almost) never fall off
 
 /obj/item/clothing/head/justice/blue
 	icon_state = "justiceblue"
@@ -119,30 +133,36 @@
 	desc = "Wearing these makes you looks useless, and only good for your sex appeal."
 	icon_state = "bunny"
 	flags = FPRINT | TABLEPASS
+	loose = 2
 
 /obj/item/clothing/head/flatcap
 	name = "flat cap"
 	desc = "A working man's cap."
 	icon_state = "flat_cap"
 	item_state = "detective"
+	loose = 1
 
 /obj/item/clothing/head/pirate
 	name = "pirate hat"
 	desc = "Yarr."
 	icon_state = "pirate"
 	item_state = "pirate"
+	loose = 17
 
 /obj/item/clothing/head/hgpiratecap
 	name = "pirate hat"
 	desc = "Yarr."
 	icon_state = "hgpiratecap"
 	item_state = "hgpiratecap"
+	loose = 34
+
 
 /obj/item/clothing/head/bandana
 	name = "pirate bandana"
 	desc = "Yarr."
 	icon_state = "bandana"
 	item_state = "bandana"
+	loose = 2 // awfully hardboiled
 
 /obj/item/clothing/head/bowler
 	name = "bowler-hat"
@@ -150,6 +170,7 @@
 	icon_state = "bowler"
 	item_state = "bowler"
 	flags = FPRINT | TABLEPASS
+	loose = 33
 
 /obj/item/clothing/head/witchwig
 	name = "witch costume wig"
@@ -171,6 +192,7 @@
 	icon_state = "bearpelt"
 	item_state = "bearpelt"
 	flags = FPRINT | TABLEPASS | BLOCKHAIR
+	loose = 1 // fiercely stays attached
 
 /obj/item/clothing/head/xenos
 	name = "xenos helmet"
@@ -179,3 +201,4 @@
 	desc = "A helmet made out of chitinous alien hide."
 	flags = FPRINT | TABLEPASS | BLOCKHAIR
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
+	loose = 35

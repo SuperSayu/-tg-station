@@ -754,7 +754,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 
 /mob/proc/Stun(amount)
 	if(status_flags & CANSTUN)
-		stunned = max(max(stunned,amount),0) //can't go below 0, getting a low amount of stun doesn't lower your current stun
+		stunned = max(stunned,amount,0) //can't go below 0, getting a low amount of stun doesn't lower your current stun
 	return
 
 /mob/proc/SetStunned(amount) //if you REALLY need to set stun to a set amount without the whole "can't go below current stunned"
@@ -769,7 +769,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 
 /mob/proc/Weaken(amount)
 	if(status_flags & CANWEAKEN)
-		weakened = max(max(weakened,amount),0)
+		weakened = max(weakened,amount,0)
 		update_canmove()	//updates lying, canmove and icons
 	return
 
@@ -813,7 +813,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 	return
 
 /mob/proc/Resting(amount)
-	resting = max(max(resting,amount),0)
+	resting = max(resting,amount,0)
 	return
 
 /mob/proc/SetResting(amount)

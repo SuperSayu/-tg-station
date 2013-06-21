@@ -25,6 +25,7 @@
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	flags_inv = (HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE)
 	action_button_name = "Toggle Welding Helmet"
+	loose = 4
 
 /obj/item/clothing/head/welding/attack_self()
 	toggle()
@@ -67,6 +68,7 @@
 	var/status = 0
 	var/fire_resist = T0C+1300	//this is the max temp it can stand before you start to cook. although it might not burn away, you take damage
 	var/processing = 0 //I dont think this is used anywhere.
+	loose = 60
 
 /obj/item/clothing/head/cakehat/process()
 	if(!onfire)
@@ -106,6 +108,7 @@
 	icon_state = "ushankadown"
 	item_state = "ushankadown"
 	flags_inv = HIDEEARS
+	loose = 1 // too warm to fall off
 
 /obj/item/clothing/head/ushanka/attack_self(mob/user as mob)
 	if(src.icon_state == "ushankadown")
@@ -130,6 +133,7 @@
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
 	var/brightness_on = 2 //luminosity when on
 	var/on = 0
+	loose = 40
 
 	attack_self(mob/user)
 		if(!isturf(user.loc))
@@ -164,6 +168,7 @@
 	flags = FPRINT | TABLEPASS
 	var/icon/mob
 	var/icon/mob2
+	loose = 4
 
 /obj/item/clothing/head/kitty/equipped(mob/user, slot)
 	if(user && slot == slot_head)

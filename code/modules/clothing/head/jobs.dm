@@ -7,6 +7,7 @@
 	item_state = "chef"
 	desc = "The commander in chef's head wear."
 	flags = FPRINT | TABLEPASS
+	loose = 35
 
 //Captain: This probably shouldn't be space-worthy
 /obj/item/clothing/head/caphat
@@ -15,6 +16,7 @@
 	desc = "It's good being the king."
 	flags = FPRINT|TABLEPASS
 	item_state = "that"
+	loose = 43
 
 //Captain: This probably shouldn't be space-worthy
 /obj/item/clothing/head/helmet/cap
@@ -27,6 +29,7 @@
 	min_cold_protection_temperature = SPACE_HELM_MIN_TEMP_PROTECT
 	heat_protection = HEAD
 	max_heat_protection_temperature = SPACE_HELM_MAX_TEMP_PROTECT
+	loose = 18
 
 //Chaplain
 /obj/item/clothing/head/chaplain_hood
@@ -34,6 +37,7 @@
 	desc = "It's hood that covers the head. It keeps you warm during the space winters."
 	icon_state = "chaplain_hood"
 	flags = FPRINT|TABLEPASS|HEADCOVERSEYES|BLOCKHAIR
+	loose = 2 // full-head objects (almost) never fall off
 
 //Chaplain
 /obj/item/clothing/head/nun_hood
@@ -41,6 +45,7 @@
 	desc = "Maximum piety in this star system."
 	icon_state = "nun_hood"
 	flags = FPRINT|TABLEPASS|HEADCOVERSEYES|BLOCKHAIR
+	loose = 2 // full-head objects (almost) never fall off
 
 //Mime
 /obj/item/clothing/head/beret
@@ -48,6 +53,7 @@
 	desc = "A beret, a mime's favorite headwear."
 	icon_state = "beret"
 	flags = FPRINT | TABLEPASS
+	loose = 15
 
 //Security
 /obj/item/clothing/head/beret/sec
@@ -55,3 +61,4 @@
 	desc = "A beret with the security insignia emblazoned on it. For officers that are more inclined towards style than safety."
 	icon_state = "beret_badge"
 	flags = FPRINT | TABLEPASS
+	loose = 12

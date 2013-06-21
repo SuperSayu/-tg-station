@@ -40,6 +40,7 @@
 	min_cold_protection_temperature = HELMET_MIN_TEMP_PROTECT
 	heat_protection = HEAD
 	max_heat_protection_temperature = HELMET_MAX_TEMP_PROTECT
+	loose = 1
 
 
 /obj/item/clothing/head/culthood/alt
@@ -73,6 +74,7 @@
 	flags_inv = HIDEFACE
 	flags = FPRINT|TABLEPASS|HEADCOVERSEYES|HEADCOVERSMOUTH|BLOCKHAIR
 	armor = list(melee = 30, bullet = 30, laser = 30,energy = 20, bomb = 0, bio = 0, rad = 0)
+	loose = 1
 
 /obj/item/clothing/suit/magusred
 	name = "magus robes"
