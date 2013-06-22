@@ -2,7 +2,7 @@
 	name = "Mounted Sleeper"
 	desc = "Mounted Sleeper. (Can be attached to: Medical Exosuits)"
 	icon = 'icons/obj/Cryogenic2.dmi'
-	icon_state = "sleeper_0"
+	icon_state = "sleeper"
 	origin_tech = "programming=2;biotech=3"
 	energy_drain = 20
 	range = MELEE
@@ -217,6 +217,7 @@
 			S.set_ready_state(1)
 			S.log_message("Deactivated.")
 			S.occupant_message("[src] deactivated - no power.")
+			S.go_out()
 			return stop()
 		var/mob/living/carbon/M = S.occupant
 		if(!M)

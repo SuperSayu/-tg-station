@@ -1,25 +1,25 @@
 
 
 /obj/item/clothing/under/actorsuit
-	name = "actor's jumpsuit"
+	name = "holographic jumpsuit"
 	desc = "Used to adjust your appearance while on the holodeck."
-	icon_state = "black"
-	item_state = "bl_suit"
-	color = "black"
+	icon_state = "overalls"
+	item_state = "lb_suit"
+	color = "overalls"
 
-	var/list/jumpsuit_choices = list("None")
+	var/global/list/jumpsuit_choices = list("None")
 	var/obj/item/clothing/under/jumpsuit = null
-	var/list/suit_choices = list("None")
+	var/global/list/suit_choices = list("None")
 	var/obj/item/clothing/suit/suit = null
-	var/list/hat_choices = list("None")
+	var/global/list/hat_choices = list("None")
 	var/obj/item/clothing/head/hat = null
-	var/list/glove_choices = list("None")
+	var/global/list/glove_choices = list("None")
 	var/obj/item/clothing/gloves/glove = null
-	var/list/shoe_choices = list("None")
+	var/global/list/shoe_choices = list("None")
 	var/obj/item/clothing/shoes/shoe = null
-	var/list/mask_choices = list("None")
+	var/global/list/mask_choices = list("None")
 	var/obj/item/clothing/mask/mask = null
-	var/list/eye_choices = list("None")
+	var/global/list/eye_choices = list("None")
 	var/obj/item/clothing/glasses/eye = null
 
 	var/global/list/forbidden = list(/obj/item/clothing/under/actorsuit, /obj/item/clothing/under/chameleon,/obj/item/clothing/under/chameleon/all,
@@ -28,27 +28,28 @@
 
 	New()
 		..()
-		for(var/U in typesof(/obj/item/clothing/under) - forbidden)
-			var/obj/item/clothing/C = new U
-			jumpsuit_choices += C
-		for(var/U in typesof(/obj/item/clothing/suit) - forbidden)
-			var/obj/item/clothing/C = new U
-			suit_choices += C
-		for(var/U in typesof(/obj/item/clothing/head) - forbidden)
-			var/obj/item/clothing/C = new U
-			hat_choices += C
-		for(var/U in typesof(/obj/item/clothing/gloves) - forbidden)
-			var/obj/item/clothing/C = new U
-			glove_choices += C
-		for(var/U in typesof(/obj/item/clothing/shoes) - forbidden)
-			var/obj/item/clothing/C = new U
-			shoe_choices += C
-		for(var/U in typesof(/obj/item/clothing/mask) - forbidden)
-			var/obj/item/clothing/C = new U
-			mask_choices += C
-		for(var/U in typesof(/obj/item/clothing/glasses) - forbidden)
-			var/obj/item/clothing/C = new U
-			eye_choices += C
+		if(jumpsuit_choices.len == 1)
+			for(var/U in typesof(/obj/item/clothing/under) - forbidden)
+				var/obj/item/clothing/C = new U
+				jumpsuit_choices += C
+			for(var/U in typesof(/obj/item/clothing/suit) - forbidden)
+				var/obj/item/clothing/C = new U
+				suit_choices += C
+			for(var/U in typesof(/obj/item/clothing/head) - forbidden)
+				var/obj/item/clothing/C = new U
+				hat_choices += C
+			for(var/U in typesof(/obj/item/clothing/gloves) - forbidden)
+				var/obj/item/clothing/C = new U
+				glove_choices += C
+			for(var/U in typesof(/obj/item/clothing/shoes) - forbidden)
+				var/obj/item/clothing/C = new U
+				shoe_choices += C
+			for(var/U in typesof(/obj/item/clothing/mask) - forbidden)
+				var/obj/item/clothing/C = new U
+				mask_choices += C
+			for(var/U in typesof(/obj/item/clothing/glasses) - forbidden)
+				var/obj/item/clothing/C = new U
+				eye_choices += C
 		processing_objects.Add(src)
 		return
 
@@ -207,3 +208,15 @@
 					H.drop_from_inventory(H.glasses)
 					H.equip_to_slot_if_possible(eye,slot_glasses)
 		interact()
+
+/obj/item/clothing/under/actorsuit/clown
+	name = "clown's holographic jumpsuit"
+	icon_state = "clown"
+	item_state = "clown"
+	color = "clown"
+
+/obj/item/clothing/under/actorsuit/mime
+	name = "mime's holographic jumpsuit"
+	icon_state = "mime"
+	item_state = "mime"
+	color = "mime"

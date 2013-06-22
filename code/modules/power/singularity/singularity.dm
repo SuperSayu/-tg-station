@@ -93,6 +93,8 @@ var/global/list/uneatable = list(
 
 
 /obj/machinery/singularity/process()
+	if(current_size == 1)
+		decay_range = pick(0,0,0,1)
 	eat()
 	dissipate()
 	check_energy()
