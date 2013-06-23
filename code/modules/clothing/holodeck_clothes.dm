@@ -22,6 +22,9 @@
 	var/global/list/eye_choices = list("None")
 	var/obj/item/clothing/glasses/eye = null
 
+	var/obj/item/device/radio/off/mic = null
+	var/performing = 0 // when on, the owner's speech is copied into the theater-chat
+
 	var/global/list/forbidden = list(/obj/item/clothing/under/actorsuit, /obj/item/clothing/under/chameleon,/obj/item/clothing/under/chameleon/all,
 		/obj/item/clothing/mask/facehugger, /obj/item/clothing/mask/horsehead, /obj/item/clothing/suit/space/space_ninja, /obj/item/clothing/gloves/space_ninja,
 		/obj/item/clothing/head/helmet/space/space_ninja,/obj/item/clothing/mask/gas/voice/space_ninja)
@@ -51,6 +54,8 @@
 				var/obj/item/clothing/C = new U
 				eye_choices += C
 		processing_objects.Add(src)
+
+		mic = new/obj/item/device/radio/off{frequency=1441}(src)
 		return
 
 	emp_act(severity)
@@ -77,9 +82,23 @@
 		set category = "Object"
 		set src in usr
 		if(!istype(get_area(loc),/area/holodeck))
-			usr << "The advanced functions of this jumpsuit only work on the holodeck!"
+			usr << "\red The advanced functions of this jumpsuit only work on the holodeck!"
 			return
 		interact()
+
+	verb/toggle_radio()
+		set name = "Toggle Suit Microphone"
+		set category = "Object"
+		set src in usr
+
+		performing = !performing
+		usr << "\blue The suit's builtin microphone is now [performing?"on":"off"]."
+
+	hear_talk(mob/M as mob, msg)
+		if(M == loc && performing)
+			var/mob/living/carbon/human/H = M
+			if(istype(H) && src == H.w_uniform)
+				mic.talk_into(M,msg)
 
 	process()
 		var/mob/living/carbon/human/H = loc
@@ -142,6 +161,7 @@
 		var/mob/living/carbon/human/H = usr
 		if(usr != loc || !istype(H) || src != H.w_uniform) return
 		if(!istype(get_area(loc),/area/holodeck))
+			usr << "\red The advanced functions of this jumpsuit only work on the holodeck!"
 			usr << browse(null,"window=clothing_actor")
 			return
 		switch(href_list["select"])

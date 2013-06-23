@@ -21,8 +21,8 @@
 	config_tag = "cult"
 	restricted_jobs = list("Chaplain","AI", "Cyborg", "Security Officer", "Warden", "Detective", "Head of Security", "Captain")
 	protected_jobs = list()
-	required_players = 10
-	required_enemies = 2
+	required_players = 12
+	required_enemies = 3
 	recommended_enemies = 4
 
 	uplink_welcome = "Nar-Sie Uplink Console:"
@@ -51,7 +51,7 @@
 
 
 /datum/game_mode/cult/pre_setup()
-	if(prob(50))
+	if(num_players() < 18 || prob(50))
 		objectives += "survive"
 		objectives += "sacrifice"
 	else

@@ -65,6 +65,9 @@
 /area/holodeck/theater/ai
 	name = "Holodeck - AI"
 
+/area/holodeck/theater/malfai
+	name = "Holodeck - Malfunctioning AI"
+
 /area/holodeck/theater/bluecheckers
 	name = "Holodeck - Blue Checker Tile"
 
@@ -100,6 +103,10 @@
 
 /area/holodeck/theater/space
 	name = "Holodeck - Space"
+
+/area/holodeck/theater/party
+	name = "Holodeck - Dance Party"
+	party = 1
 
 // Note that icon states will have to be manually configured for this one
 // I'm not the source of this problem, I'm just not the solution.

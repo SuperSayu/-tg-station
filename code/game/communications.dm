@@ -99,6 +99,7 @@ On the map:
 
 var/list/radiochannels = list(
 	"Common" = 1459,
+	"Theatre" = 1441,
 	"Science" = 1351,
 	"Command" = 1353,
 	"Medical" = 1355,
