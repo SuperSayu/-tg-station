@@ -975,6 +975,7 @@ steam.start() -- spawns the effect
 		del(src)
 
 	bullet_act()
+		..()
 		if(metal==1 || prob(50))
 			del(src)
 

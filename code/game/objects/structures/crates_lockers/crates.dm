@@ -170,6 +170,7 @@
 	var/emag = "securecrateemag"
 	var/broken = 0
 	var/locked = 1
+	health = 1000
 /obj/structure/closet/crate/secure/can_open()
 	..()
 	if(locked && !broken)
