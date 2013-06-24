@@ -1,4 +1,4 @@
-var/global/list/possiblethemes = list("organharvest","cult","wizden","cavein","xenoden","hitech","speakeasy","plantlab")
+var/global/list/possiblethemes = list("organharvest","cult","wizden","cavein","xenoden","hitech","speakeasy","plantlab", "deadradio", "bluespa", "carpcave")
 
 var/global/max_secret_rooms = 6
 
@@ -123,6 +123,24 @@ proc/make_mining_asteroid_secret()
 			fluffitems = list(/obj/structure/flora/kirbyplants=1,/obj/structure/table/reinforced=2,/obj/machinery/hydroponics=1,
 							  /obj/effect/glowshroom/single=2,/obj/item/weapon/reagent_containers/syringe/antitoxin=2,
 							  /obj/item/weapon/reagent_containers/glass/bottle/diethylamine=3,/obj/item/weapon/reagent_containers/glass/bottle/ammonia=3)
+
+		if("deadradio")
+			theme = "deadradio"
+			treasureitems = list(/obj/item/device/encryptionkey/binary=1,/obj/item/device/camera_bug=1)
+			fluffitems = list(/obj/effect/decal/remains/human=1,/obj/item/device/radio/headset=1)
+
+		if("bluespa")
+			theme = "bluespa"
+			floortypes = list(/turf/simulated/floor,/turf/simulated/floor/wood)
+			treasureitems = list(/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato=3,/obj/item/weapon/soap/deluxe=3)
+			fluffitems = list(/obj/machinery/shower=2,/obj/item/weapon/bikehorn/rubberducky=1,/obj/structure/mirror=1)
+
+		if("carpcave")
+			theme = "carpcave"
+			walltypes = list(/turf/simulated/mineral/random/high_chance=1)
+			floortypes = list(/turf/unsimulated/beach/water)
+			treasureitems = list(/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans=3,/mob/living/simple_animal/hostile/carp=1)
+			fluffitems = list(/mob/living/simple_animal/crab=1)
 
 		/*if("poly")
 			theme = "poly"
