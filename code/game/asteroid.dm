@@ -1,4 +1,4 @@
-var/global/list/possiblethemes = list("organharvest","cult","wizden","cavein","xenoden","hitech","speakeasy","plantlab", "deadradio", "bluespa", "carpcave")
+var/global/list/possiblethemes = list("organharvest","cult","wizden","cavein","xenoden","hitech","speakeasy","plantlab", "deadradio", "bluespa", "carpcave", "witch")
 
 var/global/max_secret_rooms = 6
 
@@ -141,6 +141,15 @@ proc/make_mining_asteroid_secret()
 			floortypes = list(/turf/unsimulated/beach/water)
 			treasureitems = list(/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans=3,/mob/living/simple_animal/hostile/carp=1)
 			fluffitems = list(/mob/living/simple_animal/crab=1)
+
+ 		if("witch")
+      		theme = "witch"
+      		walltypes = list
+(/turf/simulated/wall/r_wall=1)
+      		floortypes = list
+(/turf/simulated/floor/wood)
+      		treasureitems = list(/obj/item/device/soulstone=1,/obj/item/weapon/reagent_containers/glass/bottle/wizarditis=1)
+      		fluffitems = list(/mob/living/simple_animal/cat=1,/obj/item/weapon/staff/broom=1,/obj/item/clothing/head/wizard/marisa=1,/obj/item/clothing/suit/wizrobe/marisa=1)
 
 		/*if("poly")
 			theme = "poly"
