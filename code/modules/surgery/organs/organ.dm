@@ -26,6 +26,17 @@
 	else
 		icon_state = "appendix"
 
+/obj/item/organ/liver
+	name = "liver"
+	icon_state = "liver"
+	var/turbo = 0
+
+/obj/item/organ/liver/update_icon()
+	if(turbo)
+		icon_state = "turboliver"
+	else
+		icon_state = "liver"
+
 
 //Looking for brains?
 //Try code/modules/mob/living/carbon/brain/brain_item.dm
