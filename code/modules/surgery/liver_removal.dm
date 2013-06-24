@@ -24,5 +24,5 @@
 		L.loc = get_turf(target)
 		target.internal_organs -= L
 	else
-		user.visible_message("<span class='notice'>[user] can't find an appendix in [target]!</span>")
+		user.visible_message("<span class='notice'>[user] can't find a liver in [target]!</span>")
 	return 1
