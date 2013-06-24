@@ -2345,3 +2345,21 @@
 	New()
 		..()
 		reagents.add_reagent("nutriment", 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/surgeonsausage
+	name = "Surgeon's Sausage"
+	desc = "It is an appendix filled with blood. Why..."
+	icon_state = "surgeonsausage"
+
+	New()
+		..()
+		reagents.add_reagent("nutriment", 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/livercabbage
+	name = "Liver and Cabbage"
+	desc = "We don't have any onions, okay?"
+	icon_state = "livercabbage"
+
+	New()
+		..()
+		reagents.add_reagent("nutriment", 3)
