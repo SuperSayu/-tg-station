@@ -411,10 +411,7 @@ datum/preferences
 			return
 
 		if(role == "Assistant")
-			if(job_civilian_low & job.flag)
-				job_civilian_low &= ~job.flag
-			else
-				job_civilian_low |= job.flag
+			job_civilian_low ^= job.flag
 			SetChoices(user)
 			return 1
 

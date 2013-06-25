@@ -6,14 +6,6 @@
 	density = 1
 	var/obj/machinery/sleeper/connected = null
 
-
-/obj/machinery/sleep_console/New()
-	try_connect()
-
-/obj/machinery/sleep_console/initialize()
-	try_connect()
-
-
 /obj/machinery/sleep_console/proc/try_connect()
 	connected = locate(/obj/machinery/sleeper, get_step(src, dir))
 	return connected
@@ -28,6 +20,8 @@
 /obj/machinery/sleep_console/attack_hand(mob/user)
 	if(..())
 		return
+	if(!connected || get_dist(src,connected) > 1)
+		try_connect()
 	if(connected)
 		var/mob/living/occupant = connected.occupant
 		var/dat = "<h3>Sleeper Status</h3>"

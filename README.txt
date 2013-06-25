@@ -1,8 +1,18 @@
+Sayustation:
+Code: https://github.com/supersayu/-tg-station
+IRC: irc://irc.esper.net/sayustation
+
+This branch is only slightly modified, all things considered, from /tg/station's
+branch.  That itself was built on the backs of giants; or, at least, other people
+on the internet.  What I've done would be impossible without them.
+
+Original Branch's README.txt:
 /tg/station 13 v1.0 - 6 October 2010
 
 Website:http://nanotrasen.com
 Code: https://github.com/tgstation/-tg-station
 IRC: irc://irc.rizon.net/coderbus
+
 
 ================================================================================
 DOWNLOADING

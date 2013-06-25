@@ -56,6 +56,8 @@
 		processing_objects.Add(src)
 
 		mic = new/obj/item/device/radio/off{frequency=1441}(src)
+		mic.icon = icon
+		mic.icon_state = icon_state
 		return
 
 	emp_act(severity)
@@ -63,6 +65,7 @@
 			derez(C)
 		jumpsuit = null
 		colorchange()
+
 	Del()
 		for(var/obj/item/clothing/C in list(suit,hat,glove,shoe,mask,eye))
 			derez(C)
@@ -137,6 +140,7 @@
 			color = initial(color)
 			if(istype(H))
 				H.update_inv_w_uniform()	//so our overlays update.
+		mic.icon_state = icon_state
 
 	interact()
 		var/mob/living/carbon/human/H = usr

@@ -65,7 +65,7 @@
 				if(prob(12))
 					step_rand(H)
 				if(stat == CONSCIOUS)
-					src << "Your [H] falls off!"
+					src << "\blue [H] falls off!"
 
 
 ////////////////////////////////////////////
