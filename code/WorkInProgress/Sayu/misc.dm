@@ -1,40 +1,3 @@
-// -------------------------------------
-//     Movable vending machines hack
-// -------------------------------------
-
-/obj/machinery/vending/attackby(obj/item/I as obj, mob/user as mob)
-	if(istype(I,/obj/item/weapon/crowbar))
-		if(istype(src,/obj/machinery/vending/wallmed1) || istype(src,/obj/machinery/vending/wallmed2))
-			..()
-			return
-		if(anchored)
-			playsound(src.loc, 'sound/items/Crowbar.ogg', 80, 1)
-			user << "You struggle to pry the vending machine up off the floor."
-			if(do_after(user, 40))
-				user.visible_message( \
-					"[user] lifts \the [src], which clicks.", \
-					"\blue You have lifted \the [src], and wheels dropped into place underneath. Now you can pull it safely.", \
-					"You hear a scraping noise and a click.")
-				anchored = 0
-		else
-			user.visible_message( \
-					"[user] pokes \his crowbar under \the [src], which settles with a loud bang", \
-					"\blue You poke the crowbar at \the [src]'s wheels, and they retract.", \
-					"You hear a scraping noise and a loud bang.")
-			anchored = 1
-			power_change()
-		return
-	..()
-
-/obj/machinery/vending/attack_hand(mob/user as mob)
-	if(!anchored)
-		power_change()
-	..()
-/obj/machinery/vending/Topic(href, href_list)
-	if(!anchored)
-		power_change()
-	..()
-
 // ---------------------------
 //  This is a one-line wonder
 // ---------------------------
@@ -75,7 +38,7 @@
 	result_amount = 10
 	on_reaction(var/datum/reagents/holder, var/created_volume)
 		var/location = get_turf(holder.my_atom)
-		var/number_of_bars = rand(1,round(created_volume / 10))
+		var/number_of_bars = rand(1,round(created_volume / 15))
 		var/average_volume = round(created_volume / number_of_bars)
 		while(number_of_bars>0)
 			var/obj/item/weapon/soap/S = new(location)

@@ -12,6 +12,7 @@
 // END_PREFERENCES
 
 // BEGIN_INCLUDE
+#include "sayustation_todo.dm"
 #include "code\__DEFINES.dm"
 #include "code\_compile_options.dm"
 #include "code\global.dm"
@@ -286,6 +287,7 @@
 #include "code\game\machinery\transformer.dm"
 #include "code\game\machinery\turrets.dm"
 #include "code\game\machinery\vending.dm"
+#include "code\game\machinery\vending_refill.dm"
 #include "code\game\machinery\washing_machine.dm"
 #include "code\game\machinery\wishgranter.dm"
 #include "code\game\machinery\atmoalter\area_atmos_computer.dm"
@@ -340,6 +342,7 @@
 #include "code\game\machinery\doors\checkForMultipleDoors.dm"
 #include "code\game\machinery\doors\door.dm"
 #include "code\game\machinery\doors\firedoor.dm"
+#include "code\game\machinery\doors\large_door.dm"
 #include "code\game\machinery\doors\poddoor.dm"
 #include "code\game\machinery\doors\shutters.dm"
 #include "code\game\machinery\doors\unpowered.dm"
@@ -1140,6 +1143,7 @@
 #include "maps\tgstation.2.1.2.dmm"
 #include "maps\RandomZLevels\Academy.dm"
 #include "maps\RandomZLevels\challenge.dm"
+#include "maps\RandomZLevels\ss21.dm"
 #include "maps\RandomZLevels\stationCollision.dm"
 #include "maps\RandomZLevels\wildwest.dm"
 // END_INCLUDE

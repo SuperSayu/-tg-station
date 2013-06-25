@@ -581,13 +581,14 @@ datum/design/mailhub
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = "/obj/item/weapon/circuitboard/mailhub"
 
-/obj/machinery/vending/mail
+/obj/machinery/vending/refillable/mail
 	name = "Mail supplies"
 	desc = "For all your packaging needs."
 	icon = 'icons/WIP_Sayu.dmi'
 	icon_state = "mailvend"
 	product_ads = "The mail always delivers.;Doing our part when you're apart.;Don't forget to write home occasionally!"
 	density = 0
+	wheeled = 0
 	products = list(/obj/item/weapon/packageWrap = 2, /obj/item/stack/sheet/cardboard = 10, /obj/item/weapon/pen = 3, /obj/item/weapon/hand_labeler = 1)
 
 	north

@@ -71,7 +71,7 @@
 						M.spell_list += new /obj/effect/proc_holder/spell/targeted/mind_transfer(M)
 						M << "<B>Your service has not gone unrewarded, however. Studying under [H.real_name], you have learned stealthy, robeless spells. You are able to cast knock and mindswap."
 				M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
-				M.equip_to_slot_or_del(new /obj/item/clothing/under/lightpurple(M), slot_w_uniform)
+				M.equip_to_slot_or_del(new /obj/item/clothing/under/color/lightpurple(M), slot_w_uniform)
 				M.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(M), slot_shoes)
 				M.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(M), slot_wear_suit)
 				M.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(M), slot_head)

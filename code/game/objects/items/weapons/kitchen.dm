@@ -374,6 +374,11 @@
 			carrying.Add(I)
 			overlays += image("icon" = I.icon, "icon_state" = I.icon_state, "layer" = 30 + I.layer)
 
+/obj/item/weapon/tray/update_icon()
+	overlays.Cut()
+	for(var/obj/item/I in carrying)
+		overlays += image("icon" = I.icon, "icon_state" = I.icon_state, "layer" = 30 + I.layer)
+
 /obj/item/weapon/tray/dropped(mob/user)
 
 	var/mob/living/M

@@ -114,7 +114,7 @@
 	icon_state = "johnny"
 	color = "johnny"
 
-/obj/item/clothing/under/rainbow
+/obj/item/clothing/under/color/rainbow
 	name = "rainbow"
 	desc = "rainbow"
 	icon_state = "rainbow"

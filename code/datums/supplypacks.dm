@@ -703,3 +703,12 @@
 	containertype = /obj/structure/closet/crate
 	containername = "crate"	//let's keep it subtle, eh?
 	contraband = 1
+
+
+/datum/supply_packs/empty_vender
+	name = "Do-it-yourself Vending Machine"
+	cost = 100
+
+	contains = list(/obj/machinery/vending/refillable/generic)
+	containertype = /obj/structure/largecrate
+	containername = "vending machine crate"

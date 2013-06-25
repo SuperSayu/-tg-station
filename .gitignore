@@ -1,0 +1,9 @@
+.svn
+/*.lk
+*.sav
+/*.rsc
+/maps/backup
+/*.dmb
+/data/*.bdb
+/data/*.ban
+/*.int

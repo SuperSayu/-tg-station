@@ -72,84 +72,84 @@
 	flags = FPRINT | TABLEPASS | ONESIZEFITSALL
 
 /obj/item/clothing/under/psyche
-	name = "psychedelic"
+	name = "psychedelic jumpsuit"
 	desc = "Groovy!"
 	icon_state = "psyche"
 	color = "psyche"
 
-/obj/item/clothing/under/lightblue
-	name = "lightblue"
+/obj/item/clothing/under/color/lightblue
+	name = "light blue jumpsuit"
 	desc = "lightblue"
 	icon_state = "lightblue"
 	color = "lightblue"
 
-/obj/item/clothing/under/aqua
-	name = "aqua"
+/obj/item/clothing/under/color/aqua
+	name = "aqua jumpsuit"
 	desc = "aqua"
 	icon_state = "aqua"
 	color = "aqua"
 	flags = FPRINT | TABLEPASS | ONESIZEFITSALL
 
-/obj/item/clothing/under/purple
-	name = "purple"
+/obj/item/clothing/under/color/purple
+	name = "purple jumpsuit"
 	desc = "purple"
 	icon_state = "purple"
 	item_state = "p_suit"
 	color = "purple"
 
-/obj/item/clothing/under/lightpurple
-	name = "lightpurple"
+/obj/item/clothing/under/color/lightpurple
+	name = "light purple jumpsuit"
 	desc = "lightpurple"
 	icon_state = "lightpurple"
 	color = "lightpurple"
 
-/obj/item/clothing/under/lightgreen
-	name = "lightgreen"
+/obj/item/clothing/under/color/lightgreen
+	name = "light green jumpsuit"
 	desc = "lightgreen"
 	icon_state = "lightgreen"
 	color = "lightgreen"
 
-/obj/item/clothing/under/lightblue
-	name = "lightblue"
+/obj/item/clothing/under/color/lightblue
+	name = "light blue jumpsuit"
 	desc = "lightblue"
 	icon_state = "lightblue"
 	color = "lightblue"
 
-/obj/item/clothing/under/lightbrown
-	name = "lightbrown"
+/obj/item/clothing/under/color/lightbrown
+	name = "light brown jumpsuit"
 	desc = "lightbrown"
 	icon_state = "lightbrown"
 	color = "lightbrown"
 	flags = FPRINT | TABLEPASS | ONESIZEFITSALL
 
-/obj/item/clothing/under/brown
-	name = "brown"
+/obj/item/clothing/under/color/brown
+	name = "brown jumpsuit"
 	desc = "brown"
 	icon_state = "brown"
 	color = "brown"
 	flags = FPRINT | TABLEPASS | ONESIZEFITSALL
 
-/obj/item/clothing/under/yellowgreen
-	name = "yellowgreen"
+/obj/item/clothing/under/color/yellowgreen
+	name = "yellow green jumpsuit"
 	desc = "yellowgreen"
 	icon_state = "yellowgreen"
 	color = "yellowgreen"
 
-/obj/item/clothing/under/darkblue
-	name = "darkblue"
+/obj/item/clothing/under/color/darkblue
+	name = "dark blue jumpsuit"
 	desc = "darkblue"
 	icon_state = "darkblue"
 	color = "darkblue"
 	flags = FPRINT | TABLEPASS | ONESIZEFITSALL
 
-/obj/item/clothing/under/lightred
-	name = "lightred"
+/obj/item/clothing/under/color/lightred
+	name = "light red jumpsuit"
 	desc = "lightred"
 	icon_state = "lightred"
 	color = "lightred"
 
-/obj/item/clothing/under/darkred
-	name = "darkred"
+/obj/item/clothing/under/color/darkred
+	name = "dark red jumpsuit"
 	desc = "darkred"
 	icon_state = "darkred"
 	color = "darkred"

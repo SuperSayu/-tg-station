@@ -3,6 +3,15 @@
 	var/product_path = null
 	var/amount = 0
 	var/display_color = "blue"
+	var/artificial = 0 // If true, only exists because of inserted items
+
+	New(var/atom/source = null,var/new_amount = null)
+		if(!source) return
+		product_name = source.name
+		product_path = source.type
+		display_color = pick("red","lightgreen","aqua","maroon","green","teal")
+		if(!isnull(new_amount))
+			amount = new_amount
 
 
 /obj/machinery/vending
@@ -13,6 +22,8 @@
 	layer = 2.9
 	anchored = 1
 	density = 1
+	var/wheeled = 1		// if 1, you can move this vending machine with a crowbar
+
 	var/active = 1		//No sales pitches if off!
 	var/vend_ready = 1	//Are we ready to vend?? Is it time??
 	var/vend_delay = 10	//How long does it take to vend?
@@ -72,6 +83,8 @@
 			if(prob(50))
 				del(src)
 				return
+			else if(prob(25))
+				malfunction()
 		if(3.0)
 			if(prob(25))
 				malfunction()
@@ -90,11 +103,8 @@
 		if(isnull(amount)) amount = 1
 
 		var/atom/temp = new typepath(null)
-		var/datum/data/vending_product/R = new /datum/data/vending_product()
-		R.product_name = temp.name
-		R.product_path = typepath
-		R.amount = amount
-		R.display_color = pick("red","blue","green")
+		if(!temp) continue
+		var/datum/data/vending_product/R = new(temp,amount)
 
 		if(hidden)
 			hidden_records += R
@@ -102,14 +112,16 @@
 			coin_records += R
 		else
 			product_records += R
-//		world << "Added: [R.product_name]] - [R.amount] - [R.product_path]"
 
 
 /obj/machinery/vending/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/card/emag))
 		emagged = 1
+		extended_inventory = 1
+		if(!coin)
+			coin = new /obj/item/weapon/coin/iron(src)
 		user << "You short out the product lock on [src]"
-		return
+		return 1
 	else if(istype(W, /obj/item/weapon/screwdriver))
 		panel_open = !panel_open
 		user << "You [panel_open ? "open" : "close"] the maintenance panel."
@@ -117,16 +129,34 @@
 		if(panel_open)
 			overlays += image(icon, "[initial(icon_state)]-panel")
 		updateUsrDialog()
-		return
+		return 1
 	else if(istype(W, /obj/item/device/multitool)||istype(W, /obj/item/weapon/wirecutters))
 		if(panel_open)
 			attack_hand(user)
-		return
+		return 1
 	else if(istype(W, /obj/item/weapon/coin) && premium.len > 0)
 		user.drop_item()
 		W.loc = src
 		coin = W
 		user << "<span class='notice'>You insert [W] into [src].</span>"
+		return 1
+	else if(istype(W,/obj/item/weapon/crowbar) && wheeled)
+		if(anchored)
+			playsound(src.loc, 'sound/items/Crowbar.ogg', 80, 1)
+			user << "You struggle to pry the vending machine up off the floor."
+			if(do_after(user, 40))
+				user.visible_message( \
+					"[user] lifts \the [src], which clicks.", \
+					"\blue You have lifted \the [src], and wheels dropped into place underneath. Now you can pull it safely.", \
+					"You hear a scraping noise and a click.")
+				anchored = 0
+		else
+			user.visible_message( \
+					"[user] pokes \his crowbar under \the [src], which settles with a loud bang", \
+					"\blue You poke the crowbar at \the [src]'s wheels, and they retract.", \
+					"You hear a scraping noise and a loud bang.")
+			anchored = 1
+			power_change()
 		return
 	else
 		..()
@@ -262,6 +292,9 @@
 					del(coin)
 
 			R.amount--
+			if(!R.amount && R.artificial) // remove inserted
+				product_records -= R
+				products -= R.product_path
 
 			if(((last_reply + (vend_delay + 200)) <= world.time) && vend_reply)
 				speak(vend_reply)
@@ -271,7 +304,7 @@
 			if(icon_vend) //Show the vending animation if needed
 				flick(icon_vend,src)
 			spawn(vend_delay)
-				new R.product_path(get_turf(src))
+				vend(R.product_path)
 				vend_ready = 1
 				return
 
@@ -286,8 +319,12 @@
 	else
 		usr << browse(null, "window=vending")
 
+/obj/machinery/vending/proc/vend(var/typepath, var/newloc = loc)
+	return new typepath(newloc)
 
 /obj/machinery/vending/process()
+	if(!anchored)
+		power_change()
 	if(stat & (BROKEN|NOPOWER))
 		return
 	if(!active)
@@ -332,12 +369,9 @@
 	for(var/datum/data/vending_product/R in product_records)
 		if(R.amount <= 0) //Try to use a record that actually has something to dump.
 			continue
-		var/dump_path = R.product_path
-		if(!dump_path)
-			continue
 
 		while(R.amount>0)
-			new dump_path(loc)
+			step_rand(vend(R.product_path))
 			R.amount--
 		break
 
@@ -352,23 +386,21 @@
 	if(!target)
 		return 0
 
-	for(var/datum/data/vending_product/R in product_records)
+	var/list/candidate_records = product_records.Copy()
+	while(candidate_records.len)
+		var/datum/data/vending_product/R = pick_n_take(candidate_records)
 		if(R.amount <= 0) //Try to use a record that actually has something to dump.
 			continue
-		var/dump_path = R.product_path
-		if(!dump_path)
-			continue
-
-		R.amount--
-		throw_item = new dump_path(loc)
-		break
+		throw_item = vend(R.product_path)
+		if(throw_item)
+			R.amount--
+			break
 	if(!throw_item)
 		return 0
 
 	throw_item.throw_at(target, 16, 3)
 	visible_message("<span class='danger'>[src] launches [throw_item] at [target]!</span>")
 	return 1
-
 
 /obj/machinery/vending/proc/shock(mob/user, prb)
 	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
@@ -417,6 +449,7 @@
 	desc = "A technological marvel, supposedly able to mix just the mixture you'd like to drink the moment you ask for one."
 	icon_state = "boozeomat"        //////////////18 drink entities below, plus the glasses, in case someone wants to edit the number of bottles
 	icon_deny = "boozeomat-deny"
+	wheeled = 0
 	products = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/gin = 5,/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey = 5,
 					/obj/item/weapon/reagent_containers/food/drinks/bottle/tequilla = 5,/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka = 5,
 					/obj/item/weapon/reagent_containers/food/drinks/bottle/vermouth = 5,/obj/item/weapon/reagent_containers/food/drinks/bottle/rum = 5,
@@ -433,10 +466,11 @@
 	product_ads = "Drink up!;Booze is good for you!;Alcohol is humanity's best friend.;Quite delighted to serve you!;Care for a nice, cold beer?;Nothing cures you like booze!;Have a sip!;Have a drink!;Have a beer!;Beer is good for you!;Only the finest alcohol!;Best quality booze since 2053!;Award-winning wine!;Maximum alcohol!;Man loves beer.;A toast for progress!"
 	req_access_txt = "25"
 
-/obj/machinery/vending/assist
-	products = list(	/obj/item/device/assembly/prox_sensor = 5,/obj/item/device/assembly/igniter = 3,/obj/item/device/assembly/signaler = 4,
-						/obj/item/weapon/wirecutters = 1, /obj/item/weapon/cartridge/signal = 4)
-	contraband = list(/obj/item/device/flashlight = 5,/obj/item/device/assembly/timer = 2)
+/obj/machinery/vending/refillable/assist
+	products = list(	/obj/item/device/flashlight = 5,/obj/item/weapon/wirecutters = 1, /obj/item/weapon/reagent_containers/glass/bucket = 2, /obj/item/weapon/soap = 3,
+						/obj/item/weapon/clipboard = 2, /obj/item/weapon/tray = 2, /obj/item/stack/sheet/cardboard = 5, /obj/item/device/camera = 1, /obj/item/weapon/paper_bin = 2)
+	premium = list(	/obj/item/weapon/rsf = 1)
+	contraband = list(/obj/item/device/assembly/prox_sensor = 5,/obj/item/device/assembly/igniter = 3,/obj/item/device/assembly/signaler = 4,/obj/item/device/assembly/timer = 2)
 	product_ads = "Only the finest!;Have some tools.;The most robust equipment.;The finest gear in space!"
 
 /obj/machinery/vending/coffee
@@ -451,12 +485,13 @@
 
 
 
-/obj/machinery/vending/snack
+/obj/machinery/vending/refillable/food/snack
 	name = "\improper Getmore Chocolate Corp"
 	desc = "A snack machine courtesy of the Getmore Chocolate Corporation, based out of Mars"
 	product_slogans = "Try our new nougat bar!;Twice the calories for half the price!"
 	product_ads = "The healthiest!;Award-winning chocolate bars!;Mmm! So good!;Oh my god it's so juicy!;Have a snack.;Snacks are good for you!;Have some more Getmore!;Best quality snacks straight from mars.;We love chocolate!;Try our new jerky!"
 	icon_state = "snack"
+	wheeled = 1
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/candy = 6,/obj/item/weapon/reagent_containers/food/drinks/dry_ramen = 6,/obj/item/weapon/reagent_containers/food/snacks/chips =6,
 					/obj/item/weapon/reagent_containers/food/snacks/sosjerky = 6,/obj/item/weapon/reagent_containers/food/snacks/no_raisin = 6,/obj/item/weapon/reagent_containers/food/snacks/spacetwinkie = 6,
 					/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers = 6)
@@ -527,6 +562,7 @@
 	icon_state = "wallmed"
 	icon_deny = "wallmed-deny"
 	req_access_txt = "5"
+	wheeled = 0
 	density = 0 //It is wall-mounted, and thus, not dense. --Superxpdude
 	products = list(/obj/item/stack/medical/bruise_pack = 2,/obj/item/stack/medical/ointment = 2,/obj/item/weapon/reagent_containers/syringe/inaprovaline = 4,/obj/item/device/healthanalyzer = 1)
 	contraband = list(/obj/item/weapon/reagent_containers/syringe/antitoxin = 4,/obj/item/weapon/reagent_containers/syringe/antiviral = 4,/obj/item/weapon/reagent_containers/pill/tox = 1)
@@ -537,12 +573,13 @@
 	icon_state = "wallmed"
 	icon_deny = "wallmed-deny"
 	req_access_txt = "5"
+	wheeled = 0
 	density = 0 //It is wall-mounted, and thus, not dense. --Superxpdude
 	products = list(/obj/item/weapon/reagent_containers/syringe/inaprovaline = 5,/obj/item/weapon/reagent_containers/syringe/antitoxin = 3,/obj/item/stack/medical/bruise_pack = 3,
 					/obj/item/stack/medical/ointment =3,/obj/item/device/healthanalyzer = 3)
 	contraband = list(/obj/item/weapon/reagent_containers/pill/tox = 3)
 
-/obj/machinery/vending/security
+/obj/machinery/vending/refillable/security
 	name = "\improper SecTech"
 	desc = "A security equipment vendor"
 	product_ads = "Crack capitalist skulls!;Beat some heads in!;Don't forget - harm is good!;Your weapons are right here.;Handcuffs!;Freeze, scumbag!;Don't tase me bro!;Tase them, bro.;Why not have a donut?"
@@ -553,7 +590,7 @@
 					/obj/item/weapon/reagent_containers/food/snacks/donut/normal = 12,/obj/item/weapon/storage/box/evidence = 6)
 	contraband = list(/obj/item/clothing/glasses/sunglasses = 2,/obj/item/weapon/storage/fancy/donut_box = 2)
 
-/obj/machinery/vending/hydronutrients
+/obj/machinery/vending/refillable/hydronutrients
 	name = "\improper NutriMax"
 	desc = "A plant nutrients vendor"
 	product_slogans = "Aren't you glad you don't have to fertilize the natural way?;Now with 50% less stink!;Plants are people too!"
@@ -563,8 +600,22 @@
 	products = list(/obj/item/nutrient/ez = 35,/obj/item/nutrient/l4z = 25,/obj/item/nutrient/rh = 15,/obj/item/weapon/pestspray = 20,
 					/obj/item/weapon/reagent_containers/syringe = 5,/obj/item/weapon/storage/bag/plants = 5)
 	contraband = list(/obj/item/weapon/reagent_containers/glass/bottle/ammonia = 10,/obj/item/weapon/reagent_containers/glass/bottle/diethylamine = 5)
+	allow_insert(var/obj/item/I, var/mob/user)
+		if(!..(I,user)) return 0
+		if(istype(I,/obj/item/weapon/reagent_containers/syringe))
+			if(!I.reagents || I.reagents.reagent_list.len) // full syringe
+				user << "[src] refuses [I]."
+				return 0
+		else if(istype(I,/obj/item/weapon/reagent_containers)) // this is exploitable but I don't want empty bottles here
+			if(!I.reagents || !I.reagents.reagent_list.len)
+				user << "[src] refuses [I]."
+				return 0
+		else if(istype(I,/obj/item/weapon/storage) && I.contents.len) // full plant bag
+			user << "[src] refuses [I]."
+			return 0
+		return 1
 
-/obj/machinery/vending/hydroseeds
+/obj/machinery/vending/refillable/hydroseeds
 	name = "\improper MegaSeed Servitor"
 	desc = "When you need seeds fast!"
 	product_slogans = "THIS'S WHERE TH' SEEDS LIVE! GIT YOU SOME!;Hands down the best seed selection on the station!;Also certain mushroom varieties available, more for experts! Get certified today!"
@@ -580,6 +631,42 @@
 						/obj/item/seeds/plumpmycelium = 2,/obj/item/seeds/reishimycelium = 2)
 	premium = list(/obj/item/toy/waterflower = 1)
 
+	allow_insert(var/obj/item/I)
+		if(istype(I,/obj/item/seeds))
+			return 1
+		return 0
+
+	attackby(var/obj/item/W as obj, var/mob/user as mob)
+		if(istype(W,/obj/item/weapon/storage/bag/plants) || istype(W,/obj/item/weapon/storage/bag/seeds))
+			var/inserted = 0
+			var/obj/item/weapon/storage/SB = W
+			for(var/obj/item/seeds/S in SB)
+				SB.remove_from_storage(S, loc)
+				insert(S, null)
+				inserted = 1
+			if(inserted)
+				if(!W.contents.len)
+					user << "\blue You empty [W] into [src]."
+					if(istype(W,/obj/item/weapon/storage/bag/seeds))
+						user.drop_item()
+						del W
+				else
+					user << "\blue You dump the seeds from [W] into [src]."
+				add_fingerprint(user)
+			else
+				if(istype(W,/obj/item/weapon/storage/bag/seeds))
+					usr << "\blue You dispose of [W]."
+					user.drop_item()
+					del W
+				usr << "\red There are no seeds in [W]!"
+			return
+		..(W,user)
+
+/obj/machinery/vending/refillable/hydroseeds/empty
+	products = list()
+	contraband = list()
+	premium = list()
+
 
 /obj/machinery/vending/magivend
 	name = "\improper MagiVend"
@@ -588,11 +675,12 @@
 	product_slogans = "Sling spells the proper way with MagiVend!;Be your own Houdini! Use MagiVend!"
 	vend_delay = 15
 	vend_reply = "Have an enchanted evening!"
+	wheeled = 0
 	product_ads = "FJKLFJSD;AJKFLBJAKL;1234 LOONIES LOL!;>MFW;Kill them fuckers!;GET DAT FUKKEN DISK;HONK!;EI NATH;Destroy the station!;Admin conspiracies since forever!;Space-time bending hardware!"
 	products = list(/obj/item/clothing/head/wizard = 1,/obj/item/clothing/suit/wizrobe = 1,/obj/item/clothing/head/wizard/red = 1,/obj/item/clothing/suit/wizrobe/red = 1,/obj/item/clothing/shoes/sandal = 1,/obj/item/weapon/staff = 2)
 	contraband = list(/obj/item/weapon/reagent_containers/glass/bottle/wizarditis = 1)	//No one can get to the machine to hack it anyways; for the lulz - Microwave
 
-/obj/machinery/vending/dinnerware
+/obj/machinery/vending/refillable/dinnerware
 	name = "dinnerware"
 	desc = "A kitchen and restaurant equipment vendor"
 	product_ads = "Mm, food stuffs!;Food and food accessories.;Get your plates!;You like forks?;I like forks.;Woo, utensils.;You don't really need these..."
@@ -658,4 +746,3 @@
 					/obj/item/weapon/scalpel = 2,/obj/item/weapon/circular_saw = 2,/obj/item/weapon/tank/anesthetic = 2,/obj/item/clothing/mask/breath/medical = 5,
 					/obj/item/weapon/screwdriver = 5,/obj/item/weapon/crowbar = 5)
 	//everything after the power cell had no amounts, I improvised.  -Sayu
-

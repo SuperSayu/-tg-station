@@ -26,7 +26,7 @@
 "z" = (/obj/machinery/vending/boozeomat{emagged = 1},/turf/unsimulated/floor{tag = "icon-wood"; icon_state = "wood"},/area/awaymission/beach)
 "A" = (/obj/machinery/vending/cigarette,/turf/unsimulated/floor{tag = "icon-wood"; icon_state = "wood"},/area/awaymission/beach)
 "B" = (/obj/machinery/vending/cola,/turf/unsimulated/floor{tag = "icon-wood"; icon_state = "wood"},/area/awaymission/beach)
-"C" = (/obj/machinery/vending/snack,/turf/unsimulated/floor{tag = "icon-wood"; icon_state = "wood"},/area/awaymission/beach)
+"C" = (/obj/machinery/vending/refillable/food/snack,/turf/unsimulated/floor{tag = "icon-wood"; icon_state = "wood"},/area/awaymission/beach)
 "D" = (/turf/unsimulated/wall{tag = "icon-sandstone1"; icon_state = "sandstone1"},/area/awaymission/beach)
 "E" = (/turf/unsimulated/floor{tag = "icon-wood"; icon_state = "wood"},/area/awaymission/beach)
 "F" = (/obj/structure/mineral_door/wood{tag = "icon-wood"; icon_state = "wood"},/turf/unsimulated/floor{tag = "icon-wood"; icon_state = "wood"},/area/awaymission/beach)

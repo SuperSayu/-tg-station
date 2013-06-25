@@ -21,7 +21,7 @@
 "u" = (/obj/structure/disposaloutlet{dir = 4},/obj/structure/disposalpipe/trunk{dir = 8},/turf/simulated/floor/plating/airless,/area)
 "v" = (/obj/structure/stool/bed,/obj/item/weapon/bedsheet/brown,/turf/simulated/floor,/area/awaymission/listeningpost)
 "w" = (/obj/structure/table,/obj/item/device/flashlight/lamp,/turf/simulated/floor,/area/awaymission/listeningpost)
-"x" = (/obj/machinery/vending/snack,/turf/simulated/floor,/area/awaymission/listeningpost)
+"x" = (/obj/machinery/vending/refillable/food/snack,/turf/simulated/floor,/area/awaymission/listeningpost)
 "y" = (/obj/structure/disposalpipe/segment,/turf/simulated/mineral,/area/mine/unexplored)
 "z" = (/obj/machinery/vending/cola,/turf/simulated/floor,/area/awaymission/listeningpost)
 "A" = (/obj/structure/closet,/obj/item/clothing/gloves/boxing,/turf/simulated/floor,/area/awaymission/listeningpost)
