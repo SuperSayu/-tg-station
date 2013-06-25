@@ -508,7 +508,16 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 			else
 				user << "\red [src] already has seeds in it!"
 		else
-			user << "\red [SB] is empty!" // todo: biodegradable again
+			if(prob(80))
+				user << "\blue You crumble up [O] and add it to [src]."
+				adjustNutri(1)
+
+			else
+				user << "\blue You crumble up [O], but of it misses [src]."
+				adjustNutri(pick(0,0,1))
+			user.drop_item()
+			del O
+
 	else if(istype(O, /obj/item/device/analyzer/plant_analyzer))
 		if(planted && myseed)
 			user << "*** <B>[myseed.plantname]</B> ***" //Carn: now reports the plants growing, not the seeds.

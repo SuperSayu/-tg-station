@@ -130,6 +130,11 @@
 	New()
 		..()
 		new /obj/item/weapon/book/manual/medical_cloning(src)
+		new /obj/item/weapon/book/manual/infections(src)
+		new /obj/item/weapon/book/manual/hydroponics_pod_people(src)
+		new /obj/item/weapon/book/manual/robotics_cyborgs(src)
+		new /obj/item/weapon/book/manual/chef_recipes(src)
+		new /obj/item/weapon/book/manual/security_space_law(src)
 		update_icon()
 
 

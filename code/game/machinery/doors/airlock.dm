@@ -91,14 +91,6 @@
 	opacity = 1
 	doortype = 9
 
-/obj/machinery/door/airlock/glass_large
-	name = "glass airlock"
-	icon = 'icons/obj/doors/Door2x1glassfull.dmi'
-	opacity = 0
-	doortype = 10
-	bound_width = 64
-	glass = 1
-
 /obj/machinery/door/airlock/freezer
 	name = "freezer airlock"
 	icon = 'icons/obj/doors/Doorfreezer.dmi'
@@ -1000,14 +992,18 @@ About the new airlock wires panel:
 	if(!forced)
 		if( !arePowerSystemsOn() || (stat & NOPOWER) || isWireCut(AIRLOCK_WIRE_DOOR_BOLTS) )
 			return
+	var/list/affected_mobs = list()
+	for(var/turf/T in locs)
+		for(var/mob/living/ML in T)
+			affected_mobs += ML
 	if(safe)
-		if(locate(/mob/living) in get_turf(src))
+		if(affected_mobs.len)
 		//	playsound(src.loc, 'sound/machines/buzz-two.ogg', 50, 0)	//THE BUZZING IT NEVER STOPS	-Pete
 			spawn (60)
 				close()
 			return
 
-	for(var/mob/living/M in get_turf(src))
+	for(var/mob/living/M in affected_mobs)
 		if(isrobot(M))
 			M.adjustBruteLoss(DOOR_CRUSH_DAMAGE)
 		else
@@ -1022,12 +1018,11 @@ About the new airlock wires panel:
 	use_power(50)
 	if(istype(src, /obj/machinery/door/airlock/glass))
 		playsound(src.loc, 'sound/machines/windowdoor.ogg', 30, 1)
-	if(istype(src, /obj/machinery/door/airlock/clown))
+	else if(istype(src, /obj/machinery/door/airlock/clown))
 		playsound(src.loc, 'sound/items/bikehorn.ogg', 30, 1)
 	else
 		playsound(src.loc, 'sound/machines/airlock.ogg', 30, 1)
-	var/obj/structure/window/killthis = (locate(/obj/structure/window) in get_turf(src))
-	if(killthis)
+	for(var/obj/structure/window/killthis in get_turf(src))
 		killthis.ex_act(2)//Smashin windows
 
 	..()
