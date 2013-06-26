@@ -119,6 +119,7 @@ var/datum/controller/supply_shuttle/supply_shuttle = new()
 	var/points_per_slip = 2
 	var/points_per_crate = 5
 	var/plasma_per_point = 5 // 2 plasma for 1 point
+	var/points_per_tech = 1 // placeholder for now
 	var/centcom_message = "" // Remarks from Centcom on how well you checked the last order.
 	//control
 	var/ordernum
@@ -221,6 +222,7 @@ var/datum/controller/supply_shuttle/supply_shuttle = new()
 
 		var/plasma_count = 0
 		var/crate_count = 0
+		var/tech_count = 0
 
 		centcom_message = ""
 
@@ -277,6 +279,15 @@ var/datum/controller/supply_shuttle/supply_shuttle = new()
 					if(istype(A, /obj/item/stack/sheet/mineral/plasma))
 						var/obj/item/stack/sheet/mineral/plasma/P = A
 						plasma_count += P.amount
+
+
+					//Sell tech
+					if(istype(A, /obj/item/weapon/disk/tech_disk))
+
+						var/obj/item/weapon/disk/tech_disk/T = A
+						if(T.stored)
+							tech_count += T.stored.level
+
 			del(MA)
 
 		if(plasma_count)
@@ -286,6 +297,10 @@ var/datum/controller/supply_shuttle/supply_shuttle = new()
 		if(crate_count)
 			centcom_message += "<font color=green>+[round(crate_count*points_per_crate)]</font>: Received [crate_count] crates.<BR>"
 			points += crate_count * points_per_crate
+
+		if(tech_count)
+			centcom_message += "<font color=green>+[round(tech_count * points_per_tech)]</font>: Received [tech_count]  levels of new technology.<BR>"
+			points += tech_count * points_per_tech
 
 	//Buyin
 	proc/buy()
