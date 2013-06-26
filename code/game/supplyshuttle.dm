@@ -120,7 +120,7 @@ var/list/known_tech = list()
 	var/points_per_slip = 2
 	var/points_per_crate = 5
 	var/points_per_tech = 6 // placeholder for now
-	var/plasma_per_point = 5 // 2 plasma for 1 point
+	var/plasma_per_point = 2 // 2 plasma for 1 point
 	var/plant_per_point = 5
 	var/centcom_message = "" // Remarks from Centcom on how well you checked the last order.
 	//control
