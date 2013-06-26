@@ -127,12 +127,12 @@ proc/make_mining_asteroid_secret()
 		if("deadradio")
 			theme = "deadradio"
 			treasureitems = list(/obj/item/device/encryptionkey/binary=1,/obj/item/device/camera_bug=1)
-			fluffitems = list(/obj/effect/decal/remains/human=1,/obj/item/device/radio/headset=1)
+			fluffitems = list(/obj/effect/decal/remains/human=1,/obj/item/device/radio/headset=2)
 
 		if("bluespa")
 			theme = "bluespa"
 			floortypes = list(/turf/simulated/floor,/turf/simulated/floor/wood)
-			treasureitems = list(/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato=3,/obj/item/weapon/soap/deluxe=3)
+			treasureitems = list(/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato=1,/obj/item/weapon/soap/deluxe=2)
 			fluffitems = list(/obj/machinery/shower=2,/obj/item/weapon/bikehorn/rubberducky=1,/obj/structure/mirror=1)
 
 		if("carpcave")
@@ -140,7 +140,7 @@ proc/make_mining_asteroid_secret()
 			walltypes = list(/turf/simulated/mineral/random/high_chance=1)
 			floortypes = list(/turf/unsimulated/beach/water)
 			treasureitems = list(/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans=3,/mob/living/simple_animal/hostile/carp=1)
-			fluffitems = list(/mob/living/simple_animal/crab=1)
+			fluffitems = list(/mob/living/simple_animal/crab=1,/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans=2)
 
 		if("witch")
 			theme = "witch"
