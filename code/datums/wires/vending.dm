@@ -29,6 +29,8 @@ var/const/VENDING_WIRE_IDSCAN = 8
 	. += "The red light is [V.shoot_inventory ? "off" : "blinking"].<BR>"
 	. += "The green light is [V.extended_inventory ? "on" : "off"].<BR>"
 	. += "A [V.scan_id ? "purple" : "yellow"] light is on.<BR>"
+	if(V.emagged)
+		. += "Some of the lights are flickering.<BR>"
 
 /datum/wires/vending/UpdatePulsed(var/index)
 	var/obj/machinery/vending/V = holder

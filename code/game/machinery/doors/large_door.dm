@@ -23,3 +23,13 @@
 		else
 			air_master.tiles_to_update += TS
 	return 1
+
+// Note: You cannot click a door (as carbon/simpleanimal) when you are only adjacent to the non-canonical loc
+// (which is to say, diagonal to the right side of the door).  This is a consequence of the click code, which
+// only considers distance to the canonical location, which you are 2 squares away from.  Bumping the door
+// still works, because the door is physically in that location.
+
+// This could be fixed, but you would have to rewrite the click handler.  Significantly, it would mean a second version
+// of it that only applies to movable atoms, since non-moveable atoms don't have the locs[] list.
+
+// I will consider rewriting it to make the whole click system more maintainable, but in the meantime, this is a minor inconvenience.

@@ -28,10 +28,8 @@
 
 
 /obj/item/weapon/storage/box/attack_self(mob/user)
-	..()
+	..(user)
 
-	if(!foldable)
-		return
 	if(contents.len)
 		return
 	if(!ispath(foldable))

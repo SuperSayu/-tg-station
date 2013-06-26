@@ -7,7 +7,18 @@
 	attackby(var/obj/item/W as obj, var/mob/user as mob)
 		if(istype(W, /obj/item/weapon/card/emag))
 			emagged = 1
+			extended_inventory = !extended_inventory
+			if(coin_records.len)
+				hidden_records += coin_records
+				coin_records.Cut()
+				contraband += premium
+				premium.Cut()
 			user << "You short out the product lock on [src]"
+			if(coin)
+				coin.loc = loc
+				user << "\blue[coin] pops out!"
+				coin = null
+			updateUsrDialog()
 			return 1
 		else if(istype(W, /obj/item/weapon/screwdriver))
 			panel_open = !panel_open
@@ -30,10 +41,11 @@
 		else
 			if(allow_insert(W, user))
 				insert(W, user)
+				updateUsrDialog()
+				return 1
 			else
-				return ..()
-
-
+				..()
+				return 1
 
 	proc/allow_insert(var/obj/item/I, var/mob/user)
 		if(scan_id_insert && !allowed(user))
@@ -227,7 +239,9 @@
 		if(istype(W,/obj/item/device/healthanalyzer) || istype(W,/obj/item/clothing/glasses/hud/health))
 			return 1
 		// otherwise
-		if(!..(W,user)) return 0
+		if(!..(W,user))
+			user << "\red [src] refuses [W]."
+			return 0
 		if(W.reagents && W.reagents.reagent_list.len) // nothing full of reagents
 			user << "\red [src] refuses [W]."
 			return 0

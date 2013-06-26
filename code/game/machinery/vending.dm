@@ -117,10 +117,18 @@
 /obj/machinery/vending/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/card/emag))
 		emagged = 1
-		extended_inventory = 1
-		if(!coin)
-			coin = new /obj/item/weapon/coin/iron(src)
+		extended_inventory = !extended_inventory
+		if(coin_records.len)
+			hidden_records += coin_records
+			coin_records.Cut()
+			contraband += premium
+			premium.Cut()
 		user << "You short out the product lock on [src]"
+		if(coin)
+			coin.loc = loc
+			user << "\blue[coin] pops out!"
+			coin = null
+		updateUsrDialog()
 		return 1
 	else if(istype(W, /obj/item/weapon/screwdriver))
 		panel_open = !panel_open
@@ -190,16 +198,17 @@
 
 	dat += "<h3>Select an Item</h3>"
 	dat += "<div class='statusDisplay'>"
-	if(product_records.len == 0)
+	var/list/display_records = product_records
+	if(extended_inventory)
+		display_records = product_records + hidden_records
+	if(coin)
+		display_records = product_records + coin_records
+	if(coin && extended_inventory)
+		display_records = product_records + hidden_records + coin_records
+
+	if(display_records.len == 0)
 		dat += "<font color = 'red'>No product loaded!</font>"
 	else
-		var/list/display_records = product_records
-		if(extended_inventory)
-			display_records = product_records + hidden_records
-		if(coin)
-			display_records = product_records + coin_records
-		if(coin && extended_inventory)
-			display_records = product_records + hidden_records + coin_records
 		dat += "<ul>"
 		for (var/datum/data/vending_product/R in display_records)
 			dat += "<li>"
