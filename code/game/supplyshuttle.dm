@@ -121,6 +121,7 @@ var/list/known_tech = list()
 	var/points_per_crate = 5
 	var/plasma_per_point = 5 // 2 plasma for 1 point
 	var/points_per_tech = 6 // placeholder for now
+	var/plant_per_point = 10
 	var/centcom_message = "" // Remarks from Centcom on how well you checked the last order.
 	//control
 	var/ordernum
@@ -224,6 +225,7 @@ var/list/known_tech = list()
 		var/plasma_count = 0
 		var/crate_count = 0
 		var/tech_count = 0
+		var/plant_count = 0
 
 		centcom_message = ""
 
@@ -296,6 +298,11 @@ var/list/known_tech = list()
 								tech_count += T.stored.level-1 //new tech, minus the base level of 1
 								known_tech += T.stored
 
+
+					//Sell plants
+					if(istype(A,/obj/item/weapon/reagent_containers/food/snacks/grown/))
+						plant_count += 1
+
 			del(MA)
 
 		if(plasma_count)
@@ -309,6 +316,10 @@ var/list/known_tech = list()
 		if(tech_count)
 			centcom_message += "<font color=green>+[round(tech_count * points_per_tech)]</font>: Received [tech_count]  levels of new technology.<BR>"
 			points += tech_count * points_per_tech
+
+		if(plant_count)
+			centcom_message += "<font color=green>+[round(plant_count/plant_per_point)]</font>: Received [plant_count] units of grown produce.<BR>"
+			points += round(plasma_count / plasma_per_point)
 
 	//Buyin
 	proc/buy()
