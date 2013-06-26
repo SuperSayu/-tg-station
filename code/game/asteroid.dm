@@ -143,13 +143,11 @@ proc/make_mining_asteroid_secret()
 			fluffitems = list(/mob/living/simple_animal/crab=1)
 
  		if("witch")
-      		theme = "witch"
-      		walltypes = list
-(/turf/simulated/wall/r_wall=1)
-      		floortypes = list
-(/turf/simulated/floor/wood)
-      		treasureitems = list(/obj/item/device/soulstone=1,/obj/item/weapon/reagent_containers/glass/bottle/wizarditis=1)
-      		fluffitems = list(/mob/living/simple_animal/cat=1,/obj/item/weapon/staff/broom=1,/obj/item/clothing/head/wizard/marisa=1,/obj/item/clothing/suit/wizrobe/marisa=1)
+			theme = "witch"
+			walltypes = list(/turf/simulated/wall/r_wall=1)
+			floortypes = list(/turf/simulated/floor/wood)
+			treasureitems = list(/obj/item/device/soulstone=1,/obj/item/weapon/reagent_containers/glass/bottle/wizarditis=1)
+			fluffitems = list(/mob/living/simple_animal/cat=1,/obj/item/weapon/staff/broom=1,/obj/item/clothing/head/wizard/marisa=1,/obj/item/clothing/suit/wizrobe/marisa=1)
 
 		/*if("poly")
 			theme = "poly"
