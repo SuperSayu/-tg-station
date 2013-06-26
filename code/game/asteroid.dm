@@ -142,7 +142,7 @@ proc/make_mining_asteroid_secret()
 			treasureitems = list(/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans=3,/mob/living/simple_animal/hostile/carp=1)
 			fluffitems = list(/mob/living/simple_animal/crab=1)
 
- 		if("witch")
+		if("witch")
 			theme = "witch"
 			walltypes = list(/turf/simulated/wall/r_wall=1)
 			floortypes = list(/turf/simulated/floor/wood)
