@@ -5,6 +5,7 @@
 #define SUPPLY_DOCK_AREATYPE "/area/supply/dock"	//Type of the supply shuttle area for dock
 
 var/datum/controller/supply_shuttle/supply_shuttle = new()
+var/list/known_tech = list()
 
 /area/supply/station //DO NOT TURN THE lighting_use_dynamic STUFF ON FOR SHUTTLES. IT BREAKS THINGS.
 	name = "supply shuttle"
@@ -119,7 +120,7 @@ var/datum/controller/supply_shuttle/supply_shuttle = new()
 	var/points_per_slip = 2
 	var/points_per_crate = 5
 	var/plasma_per_point = 5 // 2 plasma for 1 point
-	var/points_per_tech = 1 // placeholder for now
+	var/points_per_tech = 6 // placeholder for now
 	var/centcom_message = "" // Remarks from Centcom on how well you checked the last order.
 	//control
 	var/ordernum
@@ -283,10 +284,17 @@ var/datum/controller/supply_shuttle/supply_shuttle = new()
 
 					//Sell tech
 					if(istype(A, /obj/item/weapon/disk/tech_disk))
-
 						var/obj/item/weapon/disk/tech_disk/T = A
-						if(T.stored)
-							tech_count += T.stored.level
+						var/unknown_tech = 1
+						if(T.stored && T.stored.level!=1) //you only got money for high level and nonempty disks
+							for(var/datum/tech/KT in known_tech)
+								if(KT.id == T.stored.id)
+									tech_count += max(0,T.stored.level-KT.level) //check if the tech is new
+									KT.level = max(KT.level, T.stored.level) //updating old tech
+									unknown_tech = 0
+							if(unknown_tech)
+								tech_count += T.stored.level-1 //new tech, minus the base level of 1
+								known_tech += T.stored
 
 			del(MA)
 
