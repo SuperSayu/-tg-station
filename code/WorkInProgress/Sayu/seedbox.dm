@@ -6,9 +6,8 @@
 
 /obj/item/weapon/storage/bag/seeds
 	name = "Seed bag"
-	desc = "A biodegradable seed bag."
+	desc = "A biodegradable seed bag.  Fairly flimsy, but all natural?"
 	var/obj/item/seeds/seedtype = null
-//	foldable = /obj/effect/decal/cleanable/dirt // wait what?
 	can_hold = list("/obj/item/seeds") //When the bag has a kind of seed, this gets narrowed down to only that.
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "evidence"
@@ -34,7 +33,26 @@
 		if(contents.len == 0 && seedtype != null)
 			overlays.Cut()
 			icon_state = "evidence"
-			name = "Seed Bag (Empty)"
+			name = "Seed Bag"
 			seedtype = null
 			can_hold = list("/obj/item/seeds")
 			allow_quick_gather = 0
+
+	attack_self(mob/user as mob)
+		..(user)
+		if(contents.len || prob(75))
+			return
+
+		//Close any open UI windows first
+		var/found = 0
+		for(var/mob/M in range(1))
+			if(M.s_active == src)
+				close(M)
+			if(M == user)
+				found = 1
+		if(!found)	//User is too far away
+			return
+
+		user << "<span class='notice'>[src] crumbles to dirt in your hands.</span>"
+		new/obj/effect/decal/cleanable/dirt(get_turf(src))
+		del(src)

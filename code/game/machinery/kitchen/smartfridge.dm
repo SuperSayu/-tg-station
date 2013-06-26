@@ -62,8 +62,11 @@
 				item_quants[I.name]++
 			else
 				item_quants[I.name] = 1
+			amount--
 
 /obj/machinery/smartfridge/chemistry/accept_check(var/obj/item/O as obj)
+	if(istype(O,/obj/item/weapon/storage/pill_bottle) && (locate(/obj/item/weapon/reagent_containers) in O.contents))
+		return 1
 	if(!istype(O,/obj/item/weapon/reagent_containers))
 		return 0
 	if(!O.reagents || !O.reagents.reagent_list.len)
@@ -114,9 +117,11 @@
 				item_quants[O.name] = 1
 			user.visible_message("<span class='notice'>[user] has added \the [O] to \the [src].", \
 								 "<span class='notice'>You add \the [O] to \the [src].")
+			updateUsrDialog()
+			return 1
 
 	else if(istype(O, /obj/item/weapon/storage/bag))
-		var/obj/item/weapon/storage/bag/P = O
+		var/obj/item/weapon/storage/P = O
 		var/plants_loaded = 0
 		for(var/obj/G in P.contents)
 			if(accept_check(G))
@@ -139,6 +144,8 @@
 			else if(istype(O,/obj/item/weapon/storage/bag/seeds))
 				user.drop_item()
 				del O
+			updateUsrDialog()
+			return 1
 
 	else
 		user << "<span class='notice'>\The [src] smartly refuses [O].</span>"
@@ -183,6 +190,15 @@
 							dat += "(<a href='byond://?src=\ref[src];vend=[O];amount=25'>x25</A>)"
 				if(N > 1)
 					dat += "(<a href='?src=\ref[src];vend=[O];amount=[N]'>All</A>)"
+				if((findtext(O,"seeds") || findtext(O,"mycelium")) && N>1)
+					var/max_bags = round((N-1)/7)+1
+					dat += "(<a href='?src=\ref[src];bagvend=[O];amount=1'>1 Bag</A>)"
+					if(max_bags > 2) // at least 14
+						dat += "(<a href='?src=\ref[src];bagvend=[O];amount=2'>2 Bags</A>)"
+						if(max_bags > 5) // at least 35
+							dat += "(<a href='?src=\ref[src];bagvend=[O];amount=5'>5 Bags</A>)"
+					if(max_bags > 1)
+						dat += "(<a href='?src=\ref[src];bagvend=[O];amount=[max_bags]'>Bag All</A>)"
 				dat += "<br>"
 
 		dat += "</TT>"
@@ -190,11 +206,38 @@
 	onclose(user, "smartfridge")
 	return
 
-/obj/machinery/smartfridge/Topic(href, href_list)
+/obj/machinery/smartfridge/Topic(var/href, var/list/href_list)
 	if(..())
 		return
 	usr.set_machine(src)
 
+	if("bagvend" in href_list) // bag seeds and dispense
+		var/N = href_list["bagvend"]
+		var/amount = text2num(href_list["amount"])
+
+		if(item_quants[N] <= 0) // Sanity check, there are probably ways to press the button when it shouldn't be possible.
+			return
+
+		item_quants[N] = max(item_quants[N] - amount*7, 0)
+
+		var/i = amount * 7
+		var/j = 0
+		var/obj/item/weapon/storage/bag/seeds/SB = new(loc)
+		for(var/obj/O in contents)
+			if(O.name == N)
+				O.loc = SB
+				i--
+				j++
+				if(i <= 0)
+					break
+				if(j >= 7)
+					j = 0
+					SB.update_icon()
+					SB = new(loc)
+		SB.update_icon()
+
+		src.updateUsrDialog()
+		return
 	var/N = href_list["vend"]
 	var/amount = text2num(href_list["amount"])
 

@@ -513,8 +513,12 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 				adjustNutri(1)
 
 			else
-				user << "\blue You crumble up [O], but of it misses [src]."
+				user << "\blue You crumble up [O], but much of it misses [src]."
 				adjustNutri(pick(0,0,1))
+				if(prob(66))
+					var/obj/effect/decal/cleanable/dirt = new(loc)
+					if(prob(50))
+						step_rand(dirt)
 			user.drop_item()
 			del O
 
