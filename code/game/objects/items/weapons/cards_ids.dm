@@ -95,13 +95,13 @@
 
 
 /obj/item/weapon/card/id/silver
-	name = "identification card"
+	name = "silver identification card"
 	desc = "A silver card which shows honour and dedication."
 	icon_state = "silver"
 	item_state = "silver_id"
 
 /obj/item/weapon/card/id/gold
-	name = "identification card"
+	name = "golden identification card"
 	desc = "A golden card which shows power and might."
 	icon_state = "gold"
 	item_state = "gold_id"
