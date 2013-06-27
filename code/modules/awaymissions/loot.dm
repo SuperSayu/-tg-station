@@ -6,12 +6,17 @@
 	var/list/loot			//a list of possible items to spawn e.g. list(/obj/item, /obj/structure, /obj/effect)
 
 /obj/effect/spawner/lootdrop/initialize()
-	if(loot && loot.len)
-		for(var/i = lootcount, i > 0, i--)
+	if(!istype(loot))
+		var/list/temp = params2list(loot)
+		loot = list()
+		for(var/entry in temp)
+			loot += text2path(entry)
+	if(istype(loot) && loot.len && lootcount >= 1)
+		for(lootcount--)
 			if(!loot.len) return
 			var/lootspawn = pick(loot)
 			if(!lootdoubles)
 				loot.Remove(lootspawn)
-
-			new lootspawn(get_turf(src))
+			if(ispath(lootspawn))
+				new lootspawn(get_turf(src))
 	del(src)

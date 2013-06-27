@@ -1,7 +1,7 @@
 /obj/machinery/gateway
 	name = "gateway"
 	desc = "A mysterious gateway built by unknown hands, it allows for faster than light travel to far-flung locations."
-	icon = 'icons/obj/machines/gateway.dmi'
+	icon = 'icons/obj/machines/gateway2.dmi'
 	icon_state = "off"
 	density = 1
 	anchored = 1
@@ -43,8 +43,10 @@
 /obj/machinery/gateway/centerstation/update_icon()
 	if(active)
 		icon_state = "oncenter"
+		overlays = list("activated")
 		return
 	icon_state = "offcenter"
+	overlays = list("idle")
 
 
 
@@ -88,6 +90,9 @@ obj/machinery/gateway/centerstation/process()
 		user << "<span class='notice'>Error: Warpspace triangulation in progress. Estimated time to completion: [round(((wait - world.time) / 10) / 60)] minutes.</span>"
 		return
 
+	overlays = list("activating")
+	sleep(10)
+
 	for(var/obj/machinery/gateway/G in linked)
 		G.active = 1
 		G.update_icon()
@@ -124,7 +129,7 @@ obj/machinery/gateway/centerstation/process()
 		return
 	else
 		var/obj/effect/landmark/dest = pick(awaydestinations)
-		if(dest)
+		if(dest && dest.loc)
 			M.loc = dest.loc
 			M.dir = SOUTH
 			use_power(5000)
@@ -157,8 +162,10 @@ obj/machinery/gateway/centerstation/process()
 /obj/machinery/gateway/centeraway/update_icon()
 	if(active)
 		icon_state = "oncenter"
+		overlays = list("activated")
 		return
 	icon_state = "offcenter"
+	overlays = list("idle")
 
 
 /obj/machinery/gateway/centeraway/proc/detect()
@@ -187,6 +194,9 @@ obj/machinery/gateway/centerstation/process()
 	if(!stationgate)
 		user << "<span class='notice'>Error: No destination found.</span>"
 		return
+
+	overlays = list("activating")
+	sleep(10)
 
 	for(var/obj/machinery/gateway/G in linked)
 		G.active = 1
