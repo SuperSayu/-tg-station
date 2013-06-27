@@ -550,3 +550,30 @@ turf/simulated/floor/proc/update_icon()
 					broken = 0
 				else
 					user << "\blue You need more welding fuel to complete this task."
+	if(istype(C,/obj/item/weapon/storage))
+		var/obj/item/weapon/storage/S = C
+		if(S.collection_mode)
+			var/list/rejections = list()
+			var/success = 0
+			var/failure = 0
+			for(var/obj/item/I in src)
+				if(I.type in rejections) // To limit bag spamming: any given type only complains once
+					continue
+				if(!S.can_be_inserted(I))	// Note can_be_inserted still makes noise when the answer is no
+					rejections += I.type	// therefore full bags are still a little spammy
+					failure = 1
+					continue
+				success = 1
+				S.handle_item_insertion(I, 1)	//The 1 stops the "You put the [src] into [S]" insertion message from being displayed.
+			if(success && !failure)
+				user << "<span class='notice'>You put everything in [S].</span>"
+			else if(success)
+				user << "<span class='notice'>You put some things in [S].</span>"
+			else
+				user << "<span class='notice'>You fail to pick anything up with [S].</span>"
+
+	if(istype(C,/obj/item/weapon/scythe))
+		var/obj/effect/spacevine/vine = locate() in src
+		if(vine)
+			vine.attackby(C,user)
+			return

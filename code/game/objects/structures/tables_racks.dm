@@ -314,6 +314,11 @@
 			del(src)
 		return
 
+	var/obj/effect/spacevine/vine = locate() in loc
+	if(vine) // don't drop things on tables when trying to attack spacevines
+		vine.attackby(W,user)
+		return
+
 	if(isrobot(user))
 		return
 
@@ -328,9 +333,7 @@
 		new /obj/item/weapon/table_parts( src.loc )
 		del(src)
 		return
-
 	user.drop_item(src)
-	//if(W && W.loc)	W.loc = src.loc // Unnecessary -  see: mob/proc/drop_item(atom)    - Doohl
 	return
 
 
@@ -531,6 +534,12 @@
 		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 		del(src)
 		return
+
+	var/obj/effect/spacevine/vine = locate() in loc
+	if(vine) // don't drop things on tables when trying to attack spacevines
+		vine.attackby(W,user)
+		return
+
 	if(isrobot(user))
 		return
 	user.drop_item()
