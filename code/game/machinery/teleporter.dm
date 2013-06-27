@@ -58,15 +58,12 @@
 /obj/machinery/computer/teleporter/attack_hand()
 	if(stat & (NOPOWER|BROKEN))
 		return
-
 	var/list/L = list()
 	var/list/areaindex = list()
 
 	for(var/obj/item/device/radio/beacon/R in world)
 		var/turf/T = get_turf(R)
-		if (!T)
-			continue
-		if(T.z == 2 || T.z > 7)
+		if (!T || T.z == 2 || T.z > 7)
 			continue
 		var/tmpname = T.loc.name
 		if(areaindex[tmpname])
@@ -75,18 +72,13 @@
 			areaindex[tmpname] = 1
 		L[tmpname] = R
 
-	for (var/obj/item/weapon/implant/tracking/I in world)
-		if (!I.implanted || !ismob(I.loc))
+	for(var/mob/M in mob_list)
+		if (M.stat == 2 && (M.timeofdeath + 6000 < world.time))
 			continue
-		else
-			var/mob/M = I.loc
-			if (M.stat == 2)
-				if (M.timeofdeath + 6000 < world.time)
-					continue
-			var/turf/T = get_turf(M)
-			if(T)	continue
-			if(T.z == 2)	continue
-			var/tmpname = M.real_name
+		var/turf/T = get_turf(M.loc)
+		if(!T || T.z == 2)	continue
+		for(var/obj/item/weapon/implant/tracking/I in M)
+			var/tmpname = I.name
 			if(areaindex[tmpname])
 				tmpname = "[tmpname] ([++areaindex[tmpname]])"
 			else
@@ -159,14 +151,15 @@
 			do_teleport(M, com.locked)
 			if(ishuman(M))//don't remove people from the round randomly you jerks
 				var/mob/living/carbon/human/human = M
-				if(human.dna && !human.dna.mutantrace)
+				if(human.dna && !human.dna.mutantrace && prob(40))
 					M  << "<span class='danger'>You hear a buzzing in your ears.</span>"
 					human.dna.mutantrace = "fly"
 					human.update_body()
 					human.update_hair()
-				human.apply_effect((rand(90, 150)), IRRADIATE, 0)
-				randmutb(human)
-				domutcheck(human, null)
+				human.apply_effect((rand(30, 160)), IRRADIATE, 0)
+				if(prob(40))
+					randmutb(human)
+					domutcheck(human, null)
 		else
 			do_teleport(M, com.locked) //dead-on precision
 			if(prob(30) && accurate)//the gate will need recalibration after some use.
@@ -185,7 +178,7 @@
 		s.start()
 		for(var/mob/B in hearers(src, null))
 			B.show_message("<span class='notice'>Test fire completed.</span>")
-			accurate = 1
+		accurate = 1
 	return
 
 /obj/machinery/teleport/hub/examine()

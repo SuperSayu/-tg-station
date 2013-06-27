@@ -30,7 +30,7 @@
 	return .
 
 /obj/item/weapon/implant/tracking
-	name = "tracking"
+	name = "tracking implant"
 	desc = "Track with this."
 	var/id = 1.0
 
@@ -50,7 +50,9 @@
 				circuitry. As a result neurotoxins can cause massive damage.<HR>
 				Implant Specifics:<BR>"}
 	return dat
-
+/obj/item/weapon/implant/tracking/implanted(var/mob/source)
+	name = "tracking implant ([source.real_name])"
+	return 1
 
 
 /obj/item/weapon/implant/explosive
