@@ -16,6 +16,7 @@
 	var/list/allowed_containers = list(/obj/item/weapon/reagent_containers/glass/beaker, /obj/item/weapon/reagent_containers/glass/bottle)
 	var/affected_area = 3
 	var/obj/item/device/assembly_holder/nadeassembly = null
+	var/label = null
 
 
 /obj/item/weapon/grenade/chem_grenade/New()
@@ -45,16 +46,14 @@
 
 
 /obj/item/weapon/grenade/chem_grenade/proc/update_overlays()
-	overlays = list()
+	underlays = list()
 	if(nadeassembly)
-		if(stage == WIRED || !istype(nadeassembly.a_left,/obj/item/device/assembly/igniter))
-			overlays += "[nadeassembly.a_left.icon_state]_left"
-			for(var/O in nadeassembly.a_left.attached_overlays)
-				overlays += "[O]_l"
-		if(stage == WIRED || !istype(nadeassembly.a_right,/obj/item/device/assembly/igniter))
-			overlays += "[nadeassembly.a_right.icon_state]_right"
-			for(var/O in nadeassembly.a_right.attached_overlays)
-				overlays += "[O]_r"
+		underlays += "[nadeassembly.a_left.icon_state]_left"
+		for(var/O in nadeassembly.a_left.attached_overlays)
+			underlays += "[O]_l"
+		underlays += "[nadeassembly.a_right.icon_state]_right"
+		for(var/O in nadeassembly.a_right.attached_overlays)
+			underlays += "[O]_r"
 
 /obj/item/weapon/grenade/chem_grenade/update_icon()
 	if(nadeassembly)
@@ -63,28 +62,28 @@
 		update_overlays()
 		var/obj/item/device/assembly/A = get_trigger()
 		if(stage != READY)
-			name = "bomb casing"
+			name = "bomb casing[label]"
 		else
 			if(!A)
-				name = "[payload_name]de-fused bomb" // this should not actually happen
+				name = "[payload_name]de-fused bomb[label]" // this should not actually happen
 			else
-				name = "[payload_name][A.bomb_name]" // time bombs, remote mines, etc
+				name = payload_name + A.bomb_name + label // time bombs, remote mines, etc
 	else
 		icon = 'icons/obj/grenade.dmi'
 		icon_state = initial(icon_state)
 		overlays = list()
 		switch(stage)
 			if(EMPTY)
-				name = "grenade casing"
+				name = "grenade casing[label]"
 			if(WIRED)
 				icon_state += "_ass"
-				name = "grenade casing"
+				name = "grenade casing[label]"
 			if(READY)
 				if(active)
 					icon_state += "_active"
 				else
 					icon_state += "_locked"
-				name = "[payload_name]grenade"
+				name = payload_name + "grenade" + label
 
 
 /obj/item/weapon/grenade/chem_grenade/attack_self(mob/user)
@@ -110,6 +109,17 @@
 
 
 /obj/item/weapon/grenade/chem_grenade/attackby(obj/item/I, mob/user)
+	if(istype(I,/obj/item/weapon/hand_labeler))
+		var/obj/item/weapon/hand_labeler/HL = I
+		if(length(HL.label))
+			label = HL.label
+			return 0
+		else
+			if(label)
+				label = null
+				update_icon()
+				user << "You remove the label from [src]."
+				return 1
 	if(istype(I, /obj/item/weapon/screwdriver))
 		if(stage == WIRED)
 			if(beakers.len)
@@ -189,6 +199,7 @@
 		user << "<span class='notice'>You open the grenade and remove the contents.</span>"
 		stage = EMPTY
 		payload_name = null
+		label = null
 		if(nadeassembly)
 			nadeassembly.loc = get_turf(src)
 			nadeassembly.master = null

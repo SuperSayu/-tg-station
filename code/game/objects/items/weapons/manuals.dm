@@ -5,7 +5,11 @@
 	icon = 'icons/obj/library.dmi'
 	due_date = 0 // Game time in 1/10th seconds
 	unique = 1   // 0 - Normal book, 1 - Should not be treated as normal book, unable to be copied, unable to be modified
-
+/obj/item/weapon/book/manual/random
+	New()
+		var/newtype = pick(typesof(/obj/item/weapon/book/manual) - /obj/item/weapon/book/manual - /obj/item/weapon/book/manual/random - /obj/item/weapon/book/manual/nuclear)
+		new newtype(loc)
+		del src
 
 /obj/item/weapon/book/manual/engineering_construction
 	name = "Station Repairs and Construction"

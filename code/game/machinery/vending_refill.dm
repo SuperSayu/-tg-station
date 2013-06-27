@@ -48,7 +48,7 @@
 				return 1
 
 	proc/allow_insert(var/obj/item/I, var/mob/user)
-		if(scan_id_insert && !allowed(user))
+		if(!emagged && scan_id_insert && !allowed(user))
 			return 0
 		var/searchlist = products
 		if(extended_inventory)
@@ -134,15 +134,20 @@
 	premium = list(/obj/item/weapon/card/id/gold = 1)
 
 	allow_insert(var/obj/item/I, var/mob/user)
+		if(!emagged && scan_id_insert && !allowed(user))
+			return 0
 		if(istype(I,/obj/item/weapon/cartridge))
 			return 1
 		if(istype(I,/obj/item/weapon/card/id))
 			var/obj/item/weapon/card/id/id = I
-			if(id.registered_name || id.assignment)
+			if(id.registered_name || id.assignment) // already taken
 				return 0
-		if(..(I))
 			return 1
-
+		if(istype(I,/obj/item/device/pda))
+			var/obj/item/device/pda/pda = I
+			if(pda.owner || pda.id || pda.pai || pda.cartridge)
+				return 0
+			return 1
 
 /obj/machinery/vending/refillable/wardrobe
 	name = "\improper clothing vendor"
@@ -151,13 +156,14 @@
 	icon_deny = "robotics_deny"
 	wheeled = 0
 
+	// took out orange clothing because it's dedicated prisonwear
 	products = list(/obj/item/clothing/under/color/white = 5, /obj/item/clothing/under/color/grey = 5, /obj/item/clothing/under/color/black = 5, /obj/item/clothing/under/color/brown = 5,
-					/obj/item/clothing/under/color/red = 3,/obj/item/clothing/under/color/orange = 3,/obj/item/clothing/under/color/yellow = 3,
+					/obj/item/clothing/under/color/red = 3, /obj/item/clothing/under/color/yellow = 3,
 					/obj/item/clothing/under/color/green = 3,/obj/item/clothing/under/color/blue = 3, /obj/item/clothing/under/color/purple = 3,
 					/obj/item/clothing/under/color/pink = 3,
 
 					/obj/item/clothing/shoes/black = 5, /obj/item/clothing/shoes/brown = 5, /obj/item/clothing/shoes/white = 5,
-					/obj/item/clothing/shoes/red = 2, /obj/item/clothing/shoes/orange = 2, /obj/item/clothing/shoes/yellow = 2,
+					/obj/item/clothing/shoes/red = 2, /obj/item/clothing/shoes/yellow = 2,
 					/obj/item/clothing/shoes/green = 2,/obj/item/clothing/shoes/blue = 2,/obj/item/clothing/shoes/purple=2,
 
 					/obj/item/clothing/glasses/regular = 5, /obj/item/clothing/glasses/eyepatch = 2,
@@ -165,7 +171,7 @@
 	premium = list(/obj/item/clothing/head/beret = 2, /obj/item/clothing/head/cakehat = 0, /obj/item/clothing/head/flatcap = 1, /obj/item/clothing/head/that = 2,
 					/obj/item/clothing/under/suit_jacket = 1, /obj/item/clothing/under/sundress = 1, /obj/item/clothing/shoes/sandal = 1,
 					/obj/item/clothing/glasses/monocle = 1)
-	contraband = list(/obj/item/clothing/under/color/rainbow = 1, /obj/item/clothing/under/blackskirt = 1, /obj/item/clothing/shoes/clown_shoes = 1)
+	contraband = list(/obj/item/clothing/under/color/rainbow = 1, /obj/item/clothing/head/soft/rainbow = 1, /obj/item/clothing/gloves/rainbow = 1, /obj/item/clothing/shoes/rainbow = 1, /obj/item/clothing/under/blackskirt = 1, /obj/item/clothing/shoes/clown_shoes = 1)
 
 
 /obj/machinery/vending/refillable/food
@@ -188,9 +194,7 @@
 		if(!istype(W,/obj/item/weapon/reagent_containers/food/snacks))
 			return 0
 
-		if(emagged) // anyone inserts food
-			return 1
-		return allowed(user)
+		return emagged || !scan_id_insert || allowed(user)
 
 	attackby(var/obj/item/W as obj, var/mob/user as mob)
 		if(istype(W,/obj/item/weapon/tray))
@@ -228,11 +232,14 @@
 	desc = "The third hand you need to give the station what it needs."
 	products = list(/obj/item/weapon/reagent_containers/glass/beaker/large = 5, /obj/item/weapon/reagent_containers/glass/beaker = 12,
 					/obj/item/weapon/reagent_containers/syringe = 18, /obj/item/weapon/reagent_containers/dropper = 4, /obj/item/weapon/reagent_containers/spray = 2,
-					/obj/item/weapon/storage/pill_bottle = 10, /obj/item/clothing/glasses/science = 4)
+					/obj/item/weapon/storage/pill_bottle = 10, /obj/item/clothing/gloves/latex = 4, /obj/item/clothing/glasses/science = 4)
 	premium = list(/obj/item/weapon/cartridge/chemistry = 2, /obj/item/weapon/storage/belt/medical = 4, /obj/item/weapon/gun/syringe = 1)
 	contraband = list(/obj/item/weapon/grenade/chem_grenade = 10, /obj/item/device/assembly/igniter = 4, /obj/item/device/assembly/timer = 6)
+	req_one_access_txt = "33;39"
 
 	allow_insert(var/obj/item/W as obj, var/mob/user as mob)
+		if(!emagged && scan_id_insert && !allowed(user))
+			return 0
 		// things it doesn't start with
 		if(istype(W,/obj/item/device/assembly) && extended_inventory)
 			return 1
@@ -250,6 +257,7 @@
 			if(CG.beakers.len || CG.stage)
 				user << "\red [src] refuses [W]."
 				return 0
+			return 1
 		if(istype(W,/obj/item/weapon/storage) && W.contents.len)
 			user << "\red [src] refuses [W]."
 			return 0
@@ -263,6 +271,4 @@
 	allow_insert(var/obj/item/W, var/mob/user)
 		if(!istype(W,/obj/item/weapon/grown) && !istype(W,/obj/item/weapon/reagent_containers/food/snacks/grown) && !istype(W,/obj/item/stack/sheet/wood))
 			return 0
-		if(emagged)
-			return 1
-		return allowed(user)
+		return emagged || !scan_id_insert || allowed(user)

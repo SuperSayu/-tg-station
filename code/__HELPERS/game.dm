@@ -161,9 +161,7 @@
 	if(!T)
 		return hear
 
-	var/list/range = hear(R, T)
-
-	for(var/atom/A in range)
+	for(var/atom/A as obj|mob in hear(R, T))
 		if(ismob(A))
 			var/mob/M = A
 			if(M.client)
@@ -190,7 +188,7 @@
 		if(R)
 			var/turf/speaker = get_turf(R)
 			if(speaker)
-				for(var/turf/T in hear(R.canhear_range,speaker))
+				for(var/turf/T as turf in hear(R.canhear_range,speaker))
 					speaker_coverage[T] = T
 
 

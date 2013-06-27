@@ -17,6 +17,10 @@
 	* Maint room - Meeting hall
 	* Maint room - Oh god honk
 	* Murder mystery
+	* Sheet snatchers
+	* Ore bags replacing satchels
+
+	* Vending machines, Materials Storage, & Smartfridges
 
 	? hyronalin dispenser to genetics
 

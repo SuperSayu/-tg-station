@@ -23,6 +23,10 @@
 		return 1
 	return 0
 
+
+// ----------------------------
+// Hydroponics Seed Smartfridge (Obsoleted by restockable venders)
+// ----------------------------
 /obj/machinery/smartfridge/seeds
 	name = "\improper MegaSeed Servitor"
 	desc = "When you need seeds fast!"
@@ -36,6 +40,9 @@
 		return 1
 	return 0
 
+// -------------------------------------
+// Xenobiology Slime-Extract Smartfridge
+// -------------------------------------
 /obj/machinery/smartfridge/extract
 	name = "\improper Slime Extract Storage"
 	desc = "A refrigerated storage unit for slime extracts"
@@ -45,6 +52,9 @@
 		return 1
 	return 0
 
+// -----------------------------
+// Chemistry Medical Smartfridge
+// -----------------------------
 /obj/machinery/smartfridge/chemistry
 	name = "\improper Chemical Storage"
 	desc = "A refrigerated storage unit for medicine storage."
@@ -65,21 +75,28 @@
 			amount--
 
 /obj/machinery/smartfridge/chemistry/accept_check(var/obj/item/O as obj)
-	if(istype(O,/obj/item/weapon/storage/pill_bottle) && (locate(/obj/item/weapon/reagent_containers) in O.contents))
-		return 1
+	if(istype(O,/obj/item/weapon/storage/pill_bottle))
+		for(var/obj/item/I in O)
+			if(accept_check(I))
+				return 1
+		return 0
 	if(!istype(O,/obj/item/weapon/reagent_containers))
 		return 0
-	if(!O.reagents || !O.reagents.reagent_list.len)
+	if(istype(O,/obj/item/weapon/reagent_containers/pill)) // empty pill prank ok
+		return 1
+	if(!O.reagents || !O.reagents.reagent_list.len) // other empty containers not accepted
 		return 0
-	if(istype(O,/obj/item/weapon/reagent_containers/syringe) || istype(O,/obj/item/weapon/reagent_containers/pill) || istype(O,/obj/item/weapon/reagent_containers/glass/bottle) || istype(O,/obj/item/weapon/reagent_containers/glass/beaker) || istype(O,/obj/item/weapon/reagent_containers/spray))
+	if(istype(O,/obj/item/weapon/reagent_containers/syringe) || istype(O,/obj/item/weapon/reagent_containers/glass/bottle) || istype(O,/obj/item/weapon/reagent_containers/glass/beaker) || istype(O,/obj/item/weapon/reagent_containers/spray))
 		return 1
 	return 0
 
+// ----------------------------
+// Virology Medical Smartfridge
+// ----------------------------
 /obj/machinery/smartfridge/chemistry/virology
 	name = "\improper Virus Storage"
 	desc = "A refrigerated storage unit for volatile sample storage."
 	spawn_meds = list(/obj/item/weapon/reagent_containers/syringe/antiviral = 4, /obj/item/weapon/reagent_containers/glass/bottle/retrovirus = 1, /obj/item/weapon/reagent_containers/glass/bottle/flu_virion = 1)
-
 
 /obj/machinery/smartfridge/power_change()
 	if( powered() )
