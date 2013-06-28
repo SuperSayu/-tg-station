@@ -164,8 +164,11 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 		if(AIRLOCK_WIRE_ELECTRIFY)
 			//one wire for electrifying the door. Sending a pulse through this electrifies the door for 30 seconds.
 			if(A.secondsElectrified==0)
-				A.shockedby += text("\[[time_stamp()]\][usr](ckey:[usr.ckey])")
-				usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Electrified the [A.name] at [A.x] [A.y] [A.z]</font>")
+				if(usr)
+					A.shockedby += text("\[[time_stamp()]\][usr](ckey:[usr.ckey])")
+					usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Electrified the [A.name] at [A.x] [A.y] [A.z]</font>")
+				else
+					A.shockedby += "\[[timestamp()]\](No usr - timer/trigger activated)"
 				A.secondsElectrified = 30
 				spawn(10)
 					if(A)

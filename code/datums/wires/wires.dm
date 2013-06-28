@@ -90,7 +90,13 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 		html += "<td[row_options2]>"
 		html += "<A href='?src=\ref[src];action=1;cut=[colour]'>[IsColourCut(colour) ? "Mend" :  "Cut"]</A>"
 		html += " <A href='?src=\ref[src];action=1;pulse=[colour]'>Pulse</A>"
-		html += " <A href='?src=\ref[src];action=1;attach=[colour]'>[IsAttached(colour) ? "Detach" : "Attach"] Signaller</A></td></tr>"
+		switch(IsAttached(colour))
+			if("signaler")
+				html += " <A href='?src=\ref[src];action=1;attach=[colour]'>Detach Signaller</A></td></tr>"
+			if("timer")
+				html += " <A href='?src=\ref[src];action=1;attach=[colour]'>Detach Timer</A></td></tr>"
+			else
+				html += " <A href='?src=\ref[src];action=1;attach=[colour]'>Attach Signaller / Timer</A></td></tr>"
 	html += "</table>"
 	html += "</div>"
 
@@ -128,11 +134,11 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 
 				// Attach
 				else
-					if(istype(I, /obj/item/device/assembly/signaler))
+					if(istype(I, /obj/item/device/assembly/signaler) || istype(I,/obj/item/device/assembly/timer))
 						L.drop_item()
 						Attach(colour, I)
 					else
-						L << "<span class='error'>You need a remote signaller!</span>"
+						L << "<span class='error'>You need a timer or remote signaller!</span>"
 
 
 
@@ -216,8 +222,10 @@ var/const/POWER = 8
 //
 
 /datum/wires/proc/IsAttached(var/colour)
-	if(signallers[colour])
-		return 1
+	if(istype(signallers[colour],/obj/item/device/assembly/signaler))
+		return "signaler"
+	if(istype(signallers[colour],/obj/item/device/assembly/timer))
+		return "timer"
 	return 0
 
 /datum/wires/proc/GetAttached(var/colour)
@@ -231,6 +239,8 @@ var/const/POWER = 8
 			signallers[colour] = S
 			S.loc = holder
 			S.connected = src
+			if(istype(S))
+				S.receiving = 1 // since most players won't know right now that signalers start off.
 			return S
 
 /datum/wires/proc/Detach(var/colour)

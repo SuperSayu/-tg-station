@@ -17,7 +17,6 @@
 	var/code = 30
 	var/frequency = 1457
 	var/delay = 0
-	var/datum/wires/connected = null
 	var/datum/radio_frequency/radio_connection
 
 	New()
@@ -120,13 +119,6 @@
 			lastsignalers.Add("[time] <B>:</B> [usr.key] used [src] @ location ([T.x],[T.y],[T.z]) <B>:</B> [format_frequency(frequency)]/[code]")
 
 		return
-
-
-	pulse(var/radio = 0)
-		if(src.connected && src.wires)
-			connected.Pulse(src)
-		else
-			return ..(radio)
 
 
 	receive_signal(datum/signal/signal)
