@@ -316,8 +316,7 @@
 
 	var/obj/effect/spacevine/vine = locate() in loc
 	if(vine) // don't drop things on tables when trying to attack spacevines
-		vine.attackby(W,user)
-		return
+		return vine.attackby(W,user)
 
 	if(isrobot(user))
 		return
@@ -368,6 +367,10 @@
 		playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 		del(src)
 		return
+	var/obj/effect/spacevine/vine = locate() in loc
+	if(vine) // don't drop things on tables when trying to attack spacevines
+		return vine.attackby(W,user)
+
 	if(isrobot(user))
 		return
 	if(istype(W, /obj/item/weapon/melee/energy/blade))
@@ -413,6 +416,10 @@
 		return
 
 	if (istype(W, /obj/item/weapon/weldingtool))
+		var/obj/effect/spacevine/vine = locate() in loc
+		if(vine) // don't disassemble tables when trying to attack spacevines
+			return vine.attackby(W,user)
+
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			if(src.status == 2)
@@ -430,6 +437,7 @@
 					user << "\blue Table strengthened"
 					src.status = 2
 			return
+
 		if(isrobot(user))
 			return
 		user.drop_item(src)
@@ -445,6 +453,10 @@
 				playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 				del(src)
 			return
+	var/obj/effect/spacevine/vine = locate() in loc
+	if(vine) // don't drop things on tables when trying to attack spacevines
+		return vine.attackby(W,user)
+
 	if(isrobot(user))
 		return
 
