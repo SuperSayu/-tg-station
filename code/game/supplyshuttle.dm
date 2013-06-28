@@ -5,6 +5,7 @@
 #define SUPPLY_DOCK_AREATYPE "/area/supply/dock"	//Type of the supply shuttle area for dock
 
 var/datum/controller/supply_shuttle/supply_shuttle = new()
+var/list/known_tech = list()
 
 /area/supply/station //DO NOT TURN THE lighting_use_dynamic STUFF ON FOR SHUTTLES. IT BREAKS THINGS.
 	name = "supply shuttle"
@@ -118,7 +119,9 @@ var/datum/controller/supply_shuttle/supply_shuttle = new()
 	var/points_per_process = 1
 	var/points_per_slip = 2
 	var/points_per_crate = 5
-	var/plasma_per_point = 5 // 2 plasma for 1 point
+	var/points_per_tech = 6 // placeholder for now
+	var/plasma_per_point = 2 // 2 plasma for 1 point
+	var/plant_per_point = 5
 	var/centcom_message = "" // Remarks from Centcom on how well you checked the last order.
 	//control
 	var/ordernum
@@ -221,6 +224,8 @@ var/datum/controller/supply_shuttle/supply_shuttle = new()
 
 		var/plasma_count = 0
 		var/crate_count = 0
+		var/tech_count = 0
+		var/plant_count = 0
 
 		centcom_message = ""
 
@@ -277,6 +282,27 @@ var/datum/controller/supply_shuttle/supply_shuttle = new()
 					if(istype(A, /obj/item/stack/sheet/mineral/plasma))
 						var/obj/item/stack/sheet/mineral/plasma/P = A
 						plasma_count += P.amount
+
+
+					//Sell tech
+					if(istype(A, /obj/item/weapon/disk/tech_disk))
+						var/obj/item/weapon/disk/tech_disk/T = A
+						var/unknown_tech = 1
+						if(T.stored && T.stored.level!=1) //you only got money for high level and nonempty disks
+							for(var/datum/tech/KT in known_tech)
+								if(KT.id == T.stored.id)
+									tech_count += max(0,T.stored.level-KT.level) //check if the tech is new
+									KT.level = max(KT.level, T.stored.level) //updating old tech
+									unknown_tech = 0
+							if(unknown_tech)
+								tech_count += T.stored.level-1 //new tech, minus the base level of 1
+								known_tech += T.stored
+
+
+					//Sell plants
+					if(istype(A,/obj/item/weapon/reagent_containers/food/snacks/grown/))
+						plant_count += 1
+
 			del(MA)
 
 		if(plasma_count)
@@ -286,6 +312,14 @@ var/datum/controller/supply_shuttle/supply_shuttle = new()
 		if(crate_count)
 			centcom_message += "<font color=green>+[round(crate_count*points_per_crate)]</font>: Received [crate_count] crates.<BR>"
 			points += crate_count * points_per_crate
+
+		if(tech_count)
+			centcom_message += "<font color=green>+[round(tech_count * points_per_tech)]</font>: Received [tech_count]  levels of new technology.<BR>"
+			points += tech_count * points_per_tech
+
+		if(plant_count)
+			centcom_message += "<font color=green>+[round(plant_count/plant_per_point)]</font>: Received [plant_count] units of grown produce.<BR>"
+			points += round(plasma_count / plasma_per_point)
 
 	//Buyin
 	proc/buy()
