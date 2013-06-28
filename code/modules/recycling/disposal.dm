@@ -1042,11 +1042,8 @@
 			icon_state = "pipe-j2s"
 			sortdir = turn(posdir, 90)
 
-		dpdir = sortdir | posdir | negdir
-
 		update()
 		return
-
 
 	// next direction to move
 	// if coming in from negdir, then next is primary dir or sortdir
