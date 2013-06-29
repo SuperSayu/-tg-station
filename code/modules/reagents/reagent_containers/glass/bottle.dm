@@ -118,6 +118,17 @@
 		var/list/data = list("viruses"= list(F))
 		reagents.add_reagent("blood", 20, data)
 
+/obj/item/weapon/reagent_containers/glass/bottle/lizardvirus
+	name = "lizard virus culture bottle"
+	desc = "A small bottle. Contains lizard virus culture in synthblood medium."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "bottle3"
+	New()
+		..()
+		var/datum/disease/F = new /datum/disease/advance/lizardvirus(0)
+		var/list/data = list("viruses"= list(F))
+		reagents.add_reagent("blood", 20, data)
+
 /obj/item/weapon/reagent_containers/glass/bottle/epiglottis_virion
 	name = "Epiglottis virion culture bottle"
 	desc = "A small bottle. Contains Epiglottis virion culture in synthblood medium."
