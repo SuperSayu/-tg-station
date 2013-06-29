@@ -1078,3 +1078,17 @@
 /datum/recipe/cracker
 	reagents = list("flour" = 5, "sodiumchloride" = 1)
 	result = /obj/item/weapon/reagent_containers/food/snacks/cracker
+
+/datum/recipe/surgeonsausage
+	reagents = list("blood" = 5)
+	items = list(
+	/obj/item/organ/appendix
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/surgeonsausage
+
+/datum/recipe/livercabbage
+	items = list(
+	/obj/item/organ/liver,
+	/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage
+	)
+	result = /obj/item/weapon/reagent_containers/food/snacks/livercabbage

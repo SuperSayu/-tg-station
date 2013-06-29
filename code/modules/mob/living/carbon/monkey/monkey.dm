@@ -15,6 +15,7 @@
 	internal_organs += new /obj/item/organ/appendix
 	internal_organs += new /obj/item/organ/heart
 	internal_organs += new /obj/item/organ/brain
+	internal_organs += new /obj/item/organ/liver
 
 	if(name == "monkey")
 		name = text("monkey ([rand(1, 1000)])")
