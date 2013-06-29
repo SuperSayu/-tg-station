@@ -41,3 +41,11 @@
 		name = "Reality Impairment"
 		symptoms = list(new/datum/symptom/hallucigen)
 	..(process, D, copy)
+
+// Lizardification
+
+/datum/disease/advance/lizardvirus/New(var/process = 1, var/datum/disease/advance/D, var/copy = 0)
+	if(!D)
+		name = "Reptilian Trasnformation"
+		symptoms = list(new/datum/symptom/lizardification)
+	..(process, D, copy)
