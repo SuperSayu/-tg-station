@@ -33,13 +33,13 @@ Bonus
 		if(istype(M,/mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
 
-			switch(A.stage)
-				if(1, 2)
-					H << "<span class='notice'>[pick("Your skin itches.", "You feel a tingling underneath your skin.", "You feel goosebumps on your skin.")]</span>"
-				if(3, 4)
-					H << "<span class='notice'>[pick("Your nose seems to elongate.", "Scales start pushing out of your skin.", "Your teeth feel sharper.")]</span>"
-				if(5)
-					if(H.dna && !H.dna.mutantrace)
+			if(H.dna && !H.dna.mutantrace)
+				switch(A.stage)
+					if(1, 2)
+						H << "<span class='notice'>[pick("Your skin itches.", "You feel a tingling underneath your skin.", "You feel goosebumps on your skin.")]</span>"
+					if(3, 4)
+						H << "<span class='notice'>[pick("Your nose seems to elongate.", "Scales start pushing out of your skin.", "Your teeth feel sharper.")]</span>"
+					if(5)
 						H  << "<span class='danger'>You feel coldblooded.</span>"
 						H.dna.mutantrace = "lizard"
 						H.update_body()
