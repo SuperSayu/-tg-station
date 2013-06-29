@@ -44,5 +44,19 @@ Bonus
 						H.dna.mutantrace = "lizard"
 						H.update_body()
 						H.update_hair()
-						A.cure()
+	return
+
+
+/datum/symptom/lizardification/End(var/datum/disease/advance/A)
+	..()
+
+	var/mob/living/M = A.affected_mob
+
+	if(istype(M,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = M
+		if(H.dna && H.dna.mutantrace=="lizard")
+			H  << "<span class='danger'>You feel warmblooded.</span>"
+			H.dna.mutantrace = null
+			H.update_body()
+			H.update_hair()
 	return
