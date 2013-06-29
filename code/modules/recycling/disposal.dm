@@ -1041,6 +1041,7 @@
 		else
 			icon_state = "pipe-j2s"
 			sortdir = turn(posdir, 90)
+		dpdir = sortdir | posdir | negdir
 
 		update()
 		return

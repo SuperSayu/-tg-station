@@ -486,7 +486,7 @@ datum
 				if(B && B.data)
 					var/datum/disease/advance/D = locate(/datum/disease/advance) in B.data["viruses"]
 					if(D)
-						D.Evolve(level - rand(0, 1))
+						D.Evolve(level - rand(0, 2))
 
 
 			mix_virus_2

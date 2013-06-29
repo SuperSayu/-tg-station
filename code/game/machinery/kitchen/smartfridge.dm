@@ -96,7 +96,7 @@
 /obj/machinery/smartfridge/chemistry/virology
 	name = "\improper Virus Storage"
 	desc = "A refrigerated storage unit for volatile sample storage."
-	spawn_meds = list(/obj/item/weapon/reagent_containers/syringe/antiviral = 4, /obj/item/weapon/reagent_containers/glass/bottle/retrovirus = 1, /obj/item/weapon/reagent_containers/glass/bottle/flu_virion = 1)
+	spawn_meds = list(/obj/item/weapon/reagent_containers/syringe/antiviral = 4, /obj/item/weapon/reagent_containers/glass/bottle/retrovirus = 1, /obj/item/weapon/reagent_containers/glass/bottle/flu_virion = 1, /obj/item/weapon/reagent_containers/glass/bottle/mutagen = 1)
 
 /obj/machinery/smartfridge/power_change()
 	if( powered() )

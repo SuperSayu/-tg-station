@@ -31,7 +31,7 @@
 	var/offset = round(num_players() / 4)
 	var/minimum_possible = offset
 	var/maximum_possible = num_players() - 2 * offset
-	return rand(minimum_possible,maximum_possible)
+	return min(required_enemies,rand(minimum_possible,maximum_possible))
 
 /datum/game_mode/traitor/pre_setup()
 

@@ -144,7 +144,7 @@ var/list/advance_cures = 	list(
 	var/list/possible_symptoms = list()
 	for(var/symp in list_symptoms)
 		var/datum/symptom/S = new symp
-		if(S.level <= type_level_limit)
+		if(S.level <= type_level_limit && S.level >= (type_level_limit - 2))
 			if(!HasSymptom(S))
 				possible_symptoms += S
 
