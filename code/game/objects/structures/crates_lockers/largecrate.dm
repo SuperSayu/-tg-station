@@ -54,7 +54,7 @@
 					new /mob/living/simple_animal/corgi/puppy(loc)
 					new /obj/item/weapon/pet_collar(loc)
 				else	// net 10% smart girl
-					new /mob/living/simple_animal/corgi/puppy/sgt_pepper{name="corgi puppy";real_name="corgi";icon_state = "puppy";icon_living = "puppy";icon_dead = "puppy_dead"}(loc)
+					new /mob/living/simple_animal/corgi/puppy/sgt_pepper{name="corgi puppy";real_name="corgi";icon_state = "puppy";icon_living = "puppy";icon_dead = "puppy_dead";renamable=1}(loc)
 					new /obj/item/weapon/pet_collar(loc)
 	..()
 

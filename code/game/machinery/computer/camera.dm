@@ -42,7 +42,23 @@
 		var/list/D = list()
 		D["Cancel"] = "Cancel"
 		for(var/obj/machinery/camera/C in L)
-			var/list/tempnetwork = C.network&network
+			var/list/A = C.network
+			var/list/B = network
+			if(!istype(A))
+				if(istext(A))
+					A = params2list(A)
+				else
+					world.log << "Erronous camera network: '[A]' ([C.c_tag])"
+					A = list()
+				C.network = A
+			if(!istype(B))
+				if(istext(B))
+					B = params2list(B)
+				else
+					world.log << "Erronous camera network: [B] ([src][loc?" [loc.loc]":""])"
+					B = list()
+				network = B
+			var/list/tempnetwork = A&B
 			if(tempnetwork.len)
 				D[text("[][]", C.c_tag, (C.status ? null : " (Deactivated)"))] = C
 

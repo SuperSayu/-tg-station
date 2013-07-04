@@ -214,6 +214,10 @@
 					H.drop_from_inventory(H.head)
 					H.equip_to_slot_if_possible(hat,slot_head)
 			if("mask")
+				if(istype(H.wear_mask, /obj/item/clothing/mask/horsehead))
+					H << "\red [H.wear_mask] won't come off!"
+					interact()
+					return
 				var/obj/item/clothing/result = input(usr,"Select a mask style:","Select a mask", "None") as null|anything in mask_choices
 				if(!result || usr != loc || src != H.w_uniform || !istype(get_area(loc),/area/holodeck)) return
 				derez(mask)

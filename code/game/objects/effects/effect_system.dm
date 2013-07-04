@@ -725,7 +725,7 @@ steam.start() -- spawns the effect
 						flick("ion_fade", I)
 						I.icon_state = "blank"
 						spawn( 20 )
-							I.delete()
+							I && I.delete()
 					spawn(2)
 						if(src.on)
 							src.processing = 1
@@ -770,7 +770,7 @@ steam.start() -- spawns the effect
 					src.oldposition = get_turf(holder)
 					I.dir = src.holder.dir
 					spawn(10)
-						I.delete()
+						I && I.delete()
 						src.number--
 					spawn(2)
 						if(src.on)

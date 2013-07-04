@@ -305,6 +305,9 @@
 				return
 
 			var/obj/item/weapon/grab/G = new /obj/item/weapon/grab(M, src )
+			if(!G)
+				M << "You can't get a grip!"
+				return
 
 			M.put_in_active_hand(G)
 

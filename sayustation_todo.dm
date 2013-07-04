@@ -1,10 +1,11 @@
 /*
 	* Adjust shredder/gibber cargo profile
-	* Adjust sassacre crate
-	* Adjust maint spawning
 	* noclone brains
 	* Normal shift end
 	* Fix mech thing
+
+	* Portable reader for newscaster
+	* pAI camera bug
 
 	Goon item inspirations:
 	* Anyscanner
@@ -14,7 +15,7 @@
 	* Random appearance DNA injector
 	* "Teleport to syndicate" thing for stealing, hiding bodies, etc - defer?
 	* Slave implanter
-	* Fix(?) cloaking device
+
 
 	Researchables
 	* Eyewear

@@ -287,7 +287,7 @@
 	New()
 		..()
 		reagents.add_reagent("plasma",20)
-/obj/item/weapon/reagent_containres/glass/bottle/mutagen
+/obj/item/weapon/reagent_containers/glass/bottle/mutagen
 	name = "Unstable Mutagen Bottle"
 	desc = "Contains unpleasant chemicals that have undesirable consequences on living cells."
 	New()

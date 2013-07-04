@@ -5,6 +5,8 @@
 	var/list/inserted = list()
 
 	attackby(var/obj/item/W as obj, var/mob/user as mob)
+		if(istype(W,/obj/item/weapon/grab) || istype(W,/obj/item/tk_grab))
+			return ..(W,user)
 		if(istype(W, /obj/item/weapon/card/emag))
 			emagged = 1
 			extended_inventory = !extended_inventory
@@ -110,7 +112,7 @@
 	req_access_txt = "46" // access_theatre
 	products = list(/obj/item/weapon/lipstick = 1, /obj/item/weapon/lipstick/black = 1, /obj/item/weapon/lipstick/jade = 1, /obj/item/weapon/lipstick/purple = 1,
 					/obj/item/weapon/razor = 1, /obj/item/toy/gun = 2, /obj/item/toy/ammo/gun = 4,/obj/item/weapon/gun/energy/laser/practice = 2,
-					/obj/item/toy/snappop = 10)
+					/obj/item/toy/snappop = 10, /obj/item/device/violin = 1)
 	premium = list(/obj/item/clothing/under/actorsuit = 2)
 	contraband = list( /obj/item/toy/sword = 3, /obj/item/toy/crossbow = 2, /obj/item/toy/blink, /obj/item/toy/spinningtoy)
 
