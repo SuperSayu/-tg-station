@@ -562,6 +562,7 @@ var/list/known_tech = list()
 	if(istype(I,/obj/item/weapon/card/emag) && !hacked)
 		user << "\blue Special supplies unlocked."
 		hacked = 1
+		req_access = list()
 		return
 	if(istype(I, /obj/item/weapon/screwdriver))
 		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)

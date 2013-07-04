@@ -8,7 +8,7 @@ var/bomb_set
 	density = 1
 	var/deployable = 0.0
 	var/extended = 0.0
-	var/timeleft = 60.0
+	var/timeleft = 300.0
 	var/timing = 0.0
 	var/r_code = "ADMIN"
 	var/code = ""
@@ -125,7 +125,7 @@ var/bomb_set
 				if (href_list["time"])
 					var/time = text2num(href_list["time"])
 					src.timeleft += time
-					src.timeleft = min(max(round(src.timeleft), 60), 600)
+					src.timeleft = min(max(round(src.timeleft), 300), 900)
 				if (href_list["timer"])
 					if (src.timing == -1.0)
 						return

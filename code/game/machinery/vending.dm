@@ -115,14 +115,14 @@
 
 
 /obj/machinery/vending/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/card/emag))
+	if(istype(W, /obj/item/weapon/card/emag) && !emagged)
 		emagged = 1
-		extended_inventory = !extended_inventory
-		if(coin_records.len)
-			hidden_records += coin_records
-			coin_records.Cut()
-			contraband += premium
-			premium.Cut()
+		extended_inventory = 1
+		hidden_records += coin_records
+		coin_records.Cut()
+		contraband += premium
+		if(premium.len)
+			premium = list(null) // preserve the existence of the coin slot
 		user << "You short out the product lock on [src]"
 		if(coin)
 			coin.loc = loc

@@ -52,10 +52,15 @@
 			head_check = 1
 			break
 
+	if(!head_check)
+		return 0
+
 	for(var/datum/mind/player in possible_headrevs)
-		for(var/job in restricted_jobs)//Removing heads and such from the list
-			if(player.assigned_role == job)
-				possible_headrevs -= player
+		if(player.assigned_role in restricted_jobs)
+			possible_headrevs -= player
+		//for(var/job in restricted_jobs)//Removing heads and such from the list
+			//if(player.assigned_role == job)
+
 
 	for (var/i=1 to max_headrevs)
 		if (possible_headrevs.len==0)
@@ -65,7 +70,7 @@
 		head_revolutionaries += lenin
 		log_game("[lenin.key] (ckey) has been selected as a head rev")
 
-	if((head_revolutionaries.len==0)||(!head_check))
+	if(head_revolutionaries.len==0) //||(!head_check))
 		return 0
 
 	return 1

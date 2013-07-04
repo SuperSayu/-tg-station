@@ -13,7 +13,7 @@
 	uplink_uses = 40
 
 	var/const/agents_possible = 5 //If we ever need more syndicate agents.
-	var/const/nukeop_scaling_coeff = 6 //how much does the amount of players get divided by to determine operatives. Six players means one operative versus five crewmembers
+	var/const/nukeop_scaling_coeff = 11 //how much does the amount of players get divided by to determine operatives. Six players means one operative versus five crewmembers
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 
@@ -150,9 +150,11 @@
 
 	if(uplinklocker)
 		new /obj/structure/closet/syndicate/nuclear(uplinklocker.loc)
-	if(nuke_spawn && synd_spawn.len > 0)
-		var/obj/machinery/nuclearbomb/the_bomb = new /obj/machinery/nuclearbomb(nuke_spawn.loc)
-		the_bomb.r_code = nuke_code
+	if(nuke_spawn)
+		new /obj/machinery/nuclearbomb(nuke_spawn.loc)
+	if(synd_spawn.len > 0)
+		for(var/obj/machinery/nuclearbomb/the_bomb in world)
+			the_bomb.r_code = nuke_code
 
 	spawn (rand(waittime_l, waittime_h))
 		send_intercept()
