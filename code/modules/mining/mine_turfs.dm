@@ -350,6 +350,7 @@
 	//	seedAmt = rand(1,4)
 	if(prob(20))
 		icon_state = "asteroid[rand(0,12)]"
+		icon_plating = icon_state
 	spawn(2)
 		updateMineralOverlays()
 

@@ -71,13 +71,11 @@ var/global/list/uneatable = list(
 /obj/machinery/singularity/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			if(prob(25))
-				del(src)
-				return
-			else
-				energy += 50
+			del(src)
+			return
 		if(2.0 to 3.0)
-			energy += round((rand(20,60)/2),1)
+
+			energy -= round((rand(20,60)/2),1)
 			return
 	return
 
