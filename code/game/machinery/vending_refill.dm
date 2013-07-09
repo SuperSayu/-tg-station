@@ -2,11 +2,21 @@
 
 /obj/machinery/vending/refillable
 	var/scan_id_insert = 0 // by default you can only fill it with what it already has, which is safe-ish
+	var/renamable = 0	// set true for do-it-yourself venders
 	var/list/inserted = list()
 
 	attackby(var/obj/item/W as obj, var/mob/user as mob)
-		if(istype(W,/obj/item/weapon/grab) || istype(W,/obj/item/tk_grab))
+		if(istype(W,/obj/item/weapon/grab) || istype(W,/obj/item/tk_grab) || istype(W,/obj/item/weapon/crowbar))
 			return ..(W,user)
+		if(istype(W,/obj/item/weapon/hand_labeler))
+			var/obj/item/weapon/hand_labeler/HL = W
+			if(HL.mode)
+				if(HL.labels_left)
+					name = HL.label
+					user << "You label [src]."
+					return 1
+				return 0 // no labels message
+
 		if(istype(W, /obj/item/weapon/card/emag))
 			emagged = 1
 			extended_inventory = !extended_inventory
@@ -233,7 +243,8 @@
 	name = "Chemistry Supplies"
 	desc = "The third hand you need to give the station what it needs."
 	products = list(/obj/item/weapon/reagent_containers/glass/beaker/large = 5, /obj/item/weapon/reagent_containers/glass/beaker = 12,
-					/obj/item/weapon/reagent_containers/syringe = 18, /obj/item/weapon/reagent_containers/dropper = 4, /obj/item/weapon/reagent_containers/spray = 2,
+					/obj/item/weapon/storage/pill_bottle = 10, /obj/item/weapon/reagent_containers/syringe = 18,
+					/obj/item/weapon/reagent_containers/dropper = 4, /obj/item/weapon/reagent_containers/spray = 2,
 					/obj/item/weapon/storage/pill_bottle = 10, /obj/item/clothing/gloves/latex = 4, /obj/item/clothing/glasses/science = 4)
 	premium = list(/obj/item/weapon/cartridge/chemistry = 2, /obj/item/weapon/storage/belt/medical = 4, /obj/item/weapon/gun/syringe = 1)
 	contraband = list(/obj/item/weapon/grenade/chem_grenade = 10, /obj/item/device/assembly/igniter = 4, /obj/item/device/assembly/timer = 6)
