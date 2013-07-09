@@ -58,7 +58,7 @@
 		return
 	if(!istype(user, /mob/living/silicon) && get_dist(src, user) > 1)
 		user.unset_machine()
-		user << browse(null, "window=powcomp")
+		user << browse(null, "window=crewcomp")
 		return
 	user.set_machine(src)
 	src.scan()
@@ -85,7 +85,7 @@
 				var/dam4 = round(H.getBruteLoss(),1)
 
 				var/life_status = "[H.stat > 1 ? "<span class='bad'>Deceased</span>" : "<span class='good'>Living</span>"]"
-				var/damage_report = "(<font color='blue'>[dam1]</font>/<font color='green'>[dam2]</font>/<font color='orange'>[dam3]</font>/<font color='red'>[dam4]</font>)"
+				var/damage_report = "(<font color='teal'>[dam1]</font>/<font color='green'>[dam2]</font>/<font color='orange'>[dam3]</font>/<font color='red'>[dam4]</font>)"
 
 				if(ID)
 					log += "<tr><td width='40%'>[ID.registered_name] ([ID.assignment])</td>"
