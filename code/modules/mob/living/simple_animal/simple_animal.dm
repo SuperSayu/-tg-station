@@ -139,6 +139,8 @@
 					else
 						emote(pick(emote_hear),2)
 
+	if(status_flags & GODMODE)
+		return 1 // everything after here is atmospheric damage
 
 	//Atmos
 	var/atmos_suitable = 1

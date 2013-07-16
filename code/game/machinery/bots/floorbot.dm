@@ -172,6 +172,7 @@
 
 // Reject any turf that you naturally cannot reach.
 /obj/machinery/bot/floorbot/proc/consider(var/atom/A)
+	set background = 1
 	if(!A || A.density || A == src.oldtarget || (A in floorbottargets))
 		return 0
 	var/turf/T = get_turf(A)
@@ -366,6 +367,7 @@
 		src.path = list()
 
 /obj/machinery/bot/floorbot/proc/repair(var/turf/target)
+	set background = 1
 	floorbottargets -= src.target
 
 	if(istype(target, /turf/space/))

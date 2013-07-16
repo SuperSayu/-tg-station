@@ -437,7 +437,7 @@
 				id = H.wear_id.GetID()
 			usr << browse("<HEAD><TITLE>[name]</TITLE></HEAD>[buildMenu(id)]", "window=mailstat;size=450x600")
 		else if(istype(usr,/mob/living/silicon))
-			usr << "The [src] refuses to interact with you."
+			usr << "[src] refuses to interact with you."
 			//usr << browse("<HEAD><TITLE>[name]</TITLE></HEAD>[RobotMenu()]", "window=mailstat;size=450x600")
 		return
 

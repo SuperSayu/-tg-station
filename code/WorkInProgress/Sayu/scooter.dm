@@ -262,7 +262,7 @@
 			fueled = 0
 			return 0
 		var/turf/simulated/T = loc
-		if(!T.air)
+		if(!istype(T) || !T.air)
 			fueled = 0
 			return 0
 		var/datum/gas_mixture/engine = fueltank.air_contents.remove(0.25)

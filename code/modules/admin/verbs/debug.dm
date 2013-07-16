@@ -445,8 +445,19 @@ var/global/list/g_fancy_list_of_safe_types = null
 			if(istype(H.wear_id, /obj/item/device/pda))
 				var/obj/item/device/pda/pda = H.wear_id
 				id = pda.id
-			id.icon_state = "gold"
-			id:access = get_all_accesses()+get_all_centcom_access()+get_all_syndicate_access()
+				if(!id)
+					pda.id = new /obj/item/weapon/card/id(pda)
+					pda.id.icon_state = "gold"
+					pda.id.access = get_all_accesses()+get_all_centcom_access()+get_all_syndicate_access()
+					pda.id.registered_name = H.real_name
+					pda.id.assignment = "Captain"
+					pda.id.name = "[id.registered_name]'s ID Card ([id.assignment])"
+				else
+					id.icon_state = "gold"
+					id:access = get_all_accesses()+get_all_centcom_access()+get_all_syndicate_access()
+			else // todo: wallets
+				id.icon_state = "gold"
+				id:access = get_all_accesses()+get_all_centcom_access()+get_all_syndicate_access()
 		else
 			var/obj/item/weapon/card/id/id = new/obj/item/weapon/card/id(M);
 			id.icon_state = "gold"
