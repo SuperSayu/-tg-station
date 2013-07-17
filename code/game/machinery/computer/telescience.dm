@@ -1,8 +1,7 @@
 /obj/machinery/computer/telescience
 	name = "Telepad Control Console"
 	desc = "Used to teleport objects to and from the telescience telepad."
-	icon_state = "teleport-sci"
-	req_access = list(access_telescience)
+	icon_state = "teleport-sci
 
 	// VARIABLES //
 	var/teles_left	// How many teleports left until it becomes uncalibrated
