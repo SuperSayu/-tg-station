@@ -179,7 +179,7 @@
 		L.lit = 1
 		modules += L
 
-		modules += new /obj/item/weapon/tray(src)
+		modules += new /obj/item/weapon/tray{max_carry = 20}(src)
 		modules += new /obj/item/weapon/reagent_containers/food/drinks/shaker(src)
 		emag = new /obj/item/weapon/reagent_containers/food/drinks/beer(src)
 

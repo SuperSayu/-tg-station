@@ -332,6 +332,21 @@
 			return
 
 
+/obj/item/weapon/tray/attack_robot(mob/living/silicon/robot/user)
+	if(user.module && src in user.module.modules)
+		user:return_item(src,1)
+	else
+		..(user)
+
+/obj/item/weapon/tray/attack_self(mob/living/user)
+	if(isrobot(user))
+		if(isturf(loc))
+			user:return_item(src,1)
+		else
+			loc = user.loc
+			dropped(user)
+
+
 /*
 ===============~~~~~================================~~~~~====================
 =																			=
@@ -379,6 +394,19 @@
 	for(var/obj/item/I in carrying)
 		overlays += image("icon" = I.icon, "icon_state" = I.icon_state, "layer" = 30 + I.layer)
 
+/obj/item/weapon/tray/proc/un_carry(var/scatter = 0)
+	overlays.Cut()
+	var/turf/T = get_turf(loc)
+	for(var/obj/item/I in carrying)
+		I.loc = T
+		carrying.Remove(I)
+		if(scatter && isturf(loc))
+			spawn()
+				for(var/i = 1, i <= rand(1,2), i++)
+					if(I)
+						step(I, pick(NORTH,SOUTH,EAST,WEST))
+						sleep(rand(2,4))
+
 /obj/item/weapon/tray/dropped(mob/user)
 
 	var/mob/living/M
@@ -390,18 +418,7 @@
 		foundtable = 1
 		break
 
-	overlays.Cut()
-
-	for(var/obj/item/I in carrying)
-		I.loc = loc
-		carrying.Remove(I)
-		if(!foundtable && isturf(loc))
-			// if no table, presume that the person just shittily dropped the tray on the ground and made a mess everywhere!
-			spawn()
-				for(var/i = 1, i <= rand(1,2), i++)
-					if(I)
-						step(I, pick(NORTH,SOUTH,EAST,WEST))
-						sleep(rand(2,4))
+	un_carry(!foundtable)
 
 
 

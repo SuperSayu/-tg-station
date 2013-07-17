@@ -20,9 +20,22 @@
 		if(F.on)
 			F.on = 0
 			F.update_brightness(src)
+
 	if(client)
 		client.screen -= O
-	contents -= O
+
+	if(O.loc != src)
+		if(ismob(O.loc))
+			var/mob/living/LM = O.loc
+			LM.before_take_item(O)
+		else if(istype(O.loc,/obj/item/weapon/storage))
+			var/obj/item/weapon/storage/S = O.loc
+			S.remove_from_storage(O,loc)
+
+	if(istype(O,/obj/item/weapon/tray))
+		O:un_carry(0) // drop contents of tray so they do not become irretrievable
+
+	O.loc = module
 
 	if(module_active == O)
 		module_active = null

@@ -282,6 +282,9 @@
 	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
 		return
 	if(isrobot(user))
+		if(istype(O,/obj/item/weapon/tray))
+			O.loc = loc
+			O:dropped(user)
 		return
 	user.drop_item()
 	if (O.loc != src.loc)
@@ -319,6 +322,9 @@
 		return vine.attackby(W,user)
 
 	if(isrobot(user))
+		if(istype(W,/obj/item/weapon/tray))
+			W.loc = loc
+			W.dropped(user)
 		return
 
 	if(istype(W, /obj/item/weapon/melee/energy/blade))
@@ -372,6 +378,9 @@
 		return vine.attackby(W,user)
 
 	if(isrobot(user))
+		if(istype(W,/obj/item/weapon/tray))
+			W.loc = loc
+			W.dropped(user)
 		return
 	if(istype(W, /obj/item/weapon/melee/energy/blade))
 		var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
@@ -439,6 +448,9 @@
 			return
 
 		if(isrobot(user))
+			if(istype(W,/obj/item/weapon/tray))
+				W.loc = loc
+				W.dropped(user)
 			return
 		user.drop_item(src)
 		//if(W && W.loc)	W.loc = src.loc
@@ -458,6 +470,9 @@
 		return vine.attackby(W,user)
 
 	if(isrobot(user))
+		if(istype(W,/obj/item/weapon/tray))
+			W.loc = loc
+			W.dropped(user)
 		return
 
 	if(istype(W, /obj/item/weapon/melee/energy/blade))

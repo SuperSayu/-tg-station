@@ -1,4 +1,5 @@
 /mob/living/silicon/robot/gib()
+	uneq_all() // prevents a gibbed robot from, say, losing the nuke disk
 	//robots don't die when gibbed. instead they drop their MMI'd brain
 	var/atom/movable/overlay/animation = null
 	monkeyizing = 1

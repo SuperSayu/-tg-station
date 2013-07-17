@@ -272,18 +272,36 @@
 
 	return 1
 
+/mob/living/silicon/robot/proc/return_item(var/obj/item/I,var/force = 0)
+	if(I.loc == src || !I.loc || (!force && get_dist(I,src) <= 1))
+		return
+	if(I.loc != src && ismob(I.loc))
+		var/mob/M = I.loc
+		M.before_take_item(I)
+	else if(istype(I.loc, /obj/item/weapon/storage))
+		var/obj/item/weapon/storage/S = I.loc
+		S.remove_from_storage(loc)
+	if(force)
+		I.pickup(src)
+	I.loc = src
+
 /mob/living/silicon/robot/proc/update_items()
 	if (src.client)
 		src.client.screen -= src.contents
 		for(var/obj/I in src.contents)
 			if(I && !(istype(I,/obj/item/weapon/cell) || istype(I,/obj/item/device/radio)  || istype(I,/obj/machinery/camera) || istype(I,/obj/item/device/mmi)))
 				src.client.screen += I
+
+	// Adding pickup code
 	if(src.module_state_1)
 		src.module_state_1:screen_loc = ui_inv1
+		return_item(src.module_state_1)
 	if(src.module_state_2)
 		src.module_state_2:screen_loc = ui_inv2
+		return_item(src.module_state_2)
 	if(src.module_state_3)
 		src.module_state_3:screen_loc = ui_inv3
+		return_item(src.module_state_3)
 
 
 /mob/living/silicon/robot/proc/process_killswitch()
