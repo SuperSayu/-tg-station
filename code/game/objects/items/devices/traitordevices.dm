@@ -56,6 +56,32 @@ effective or pretty fucking useless.
 	if(times_used >= max_uses)
 		icon_state = "battererburnt"
 
+/obj/item/device/irradscanner
+	name = "Health Analyzer"
+	icon_state = "health"
+	item_state = "analyzer"
+	desc = "A hand-held body scanner able to distinguish vital signs of the subject."
+	flags = FPRINT | TABLEPASS | CONDUCT
+	slot_flags = SLOT_BELT
+	throwforce = 3
+	w_class = 1.0
+	throw_speed = 5
+	throw_range = 10
+	m_amt = 200
+	origin_tech = "magnets=1;biotech=2;syndicate=4"
+	var/charges = 5
 
-
-
+/obj/item/device/irradscanner/attack(mob/living/M as mob, mob/living/user as mob)
+	if (!(istype(usr, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
+		usr << "\red You don't have the dexterity to do this!"
+		return
+	if(charges != 0)
+		for(var/mob/O in viewers(M, null))
+			O.show_message(text("\red [] has analyzed []'s vitals!", user, M), 1)
+		M.apply_effect((rand(115, 150)), IRRADIATE, 0)
+		charges--
+		return
+	else
+		..()
+		user << "The irradiation device is out of charges!"
+		return
