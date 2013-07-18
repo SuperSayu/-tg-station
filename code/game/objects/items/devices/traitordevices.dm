@@ -4,6 +4,7 @@ Miscellaneous traitor devices
 
 BATTERER
 
+IRRADIATION DEVICE
 
 */
 
