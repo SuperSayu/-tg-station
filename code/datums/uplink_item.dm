@@ -143,7 +143,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/stealthy_weapons/irradscanner
 	name = "Irradiation Device"
 	item = /obj/item/device/irradscanner
-	cost = 4
+	cost = 3
 
 // STEALTHY TOOLS
 
