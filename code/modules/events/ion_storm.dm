@@ -4,6 +4,7 @@
 	weight = 15
 
 /datum/round_event/ion_storm
+	var/aiLawChange = 1
 	var/botEmagChance = 10
 
 /datum/round_event/ion_storm/announce()
@@ -13,6 +14,15 @@
 
 
 /datum/round_event/ion_storm/start()
+
+	if(botEmagChance)
+		for(var/obj/machinery/bot/bot in world)
+			if(prob(botEmagChance))
+				bot.Emag()
+
+	if(aiLawChange == 0)
+		return
+
 	//AI laws
 	for(var/mob/living/silicon/ai/M in living_mob_list)
 		if(M.stat != 2 && M.see_in_dark != 0)
@@ -499,7 +509,20 @@
 				M << "\red [message] ...LAWS UPDATED"
 				M << "<br>"
 
-	if(botEmagChance)
-		for(var/obj/machinery/bot/bot in world)
-			if(prob(botEmagChance))
-				bot.Emag()
+/****
+
+Rise of the bots
+
+******/
+
+/datum/round_event_control/ion_storm/bot_storm
+	name = "Ion Storm"
+	typepath = /datum/round_event/ion_storm/bot_storm
+	max_occurrences = 2
+	weight = 15
+
+/datum/round_event/ion_storm/bot_storm
+	aiLawChange = 0
+	botEmagChance = 100
+
+
