@@ -12,9 +12,9 @@
 	var/z_co	// Z coordinate
 
 /obj/machinery/computer/telescience/New()
-	teles_left = rand(9,13)
-	x_off = rand(1,10)
-	y_off = rand(1,10)
+	teles_left = rand(8,12)
+	x_off = rand(-10,10)
+	y_off = rand(-10,10)
 
 /obj/machinery/computer/telescience/update_icon()
 	if(stat & BROKEN)
@@ -117,6 +117,7 @@
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(5, 1, L)
 		s.start()
+		flick("pad-beam", E)
 		usr << "\blue Teleport successful."
 		for(var/obj/item/OI in L)
 			do_teleport(OI, target, 0)
@@ -139,6 +140,7 @@
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(5, 1, L)
 		s.start()
+		flick("pad-beam", E)
 		usr << "\blue Teleport successful."
 		for(var/obj/item/ROI in G)
 			do_teleport(ROI, E, 0)
@@ -263,8 +265,8 @@
 		return
 	if(href_list["recal"])
 		teles_left = rand(7,10)
-		x_off = rand(1,10)
-		y_off = rand(1,10)
+		x_off = rand(-10,10)
+		y_off = rand(-10,10)
 		for(var/obj/machinery/telepad/E in world)
 			var/L = get_turf(E)
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
