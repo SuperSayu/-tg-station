@@ -23,18 +23,20 @@
 /proc/ToRban_update()
 	spawn(0)
 		diary << "Downloading updated ToR data..."
-		var/http[] = world.Export("http://exitlist.torproject.org/exit-addresses")
-
+		var/http[] = world.Export("http://check.torproject.org/cgi-bin/TorBulkExitList.py?ip=[world.internet_address]")
+		world.log << "ToRban update: http [http["STATUS"]]"
+		if(http["STATUS"] != "200 OK")
+			return
 		var/list/rawlist = file2list(http["CONTENT"])
+
 		if(rawlist.len)
 			fdel(TORFILE)
 			var/savefile/F = new(TORFILE)
 			for( var/line in rawlist )
 				if(!line)	continue
-				if( copytext(line,1,12) == "ExitAddress" )
-					var/cleaned = copytext(line,13,length(line)-19)
-					if(!cleaned)	continue
-					F[cleaned] << 1
+				if( copytext(line,1,2) == "#" ) continue
+				F[line] << 1
+
 			F["last_update"] << world.realtime
 			diary << "ToR data updated!"
 			if(usr)	usr << "ToRban updated."
