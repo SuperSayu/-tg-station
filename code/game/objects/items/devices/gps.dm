@@ -54,7 +54,6 @@
 			return
 		else
 			gpstag = a
-			usr << browse("window=SPS")
 			name = "Space Positioning System ([gpstag])"
 			return
 
