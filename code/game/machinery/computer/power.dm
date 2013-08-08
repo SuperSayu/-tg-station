@@ -123,7 +123,8 @@
 	popup.open()
 
 /obj/machinery/power/monitor/Topic(var/href, var/list/href_list)
-	..()
+	if(..())
+		return
 	if( "close" in href_list )
 		usr << browse(null, "window=powcomp")
 		usr.unset_machine()

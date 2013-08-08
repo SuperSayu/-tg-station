@@ -267,6 +267,8 @@
 
 	playsound(loc, 'sound/effects/bamf.ogg', 50, 1)
 
+	update_mob()
+
 	invisibility = INVISIBILITY_MAXIMUM		//kaboom
 	del nadeassembly // do this now to stop infrared beams
 
@@ -337,6 +339,8 @@
 		return
 
 	playsound(loc, 'sound/effects/bamf.ogg', 50, 1)
+
+	update_mob()
 
 	if(valid_core)
 		for(var/obj/item/weapon/reagent_containers/glass/G in beakers)

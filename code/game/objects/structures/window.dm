@@ -104,6 +104,8 @@
 
 
 /obj/structure/window/attack_hand(mob/user as mob)
+	if(!can_be_reached(user))
+		return
 	if(HULK in user.mutations)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!"))
 		user.visible_message("<span class='danger'>[user] smashes through [src]!</span>")
@@ -121,6 +123,8 @@
 
 
 /obj/structure/window/proc/attack_generic(mob/user as mob, damage = 0)	//used by attack_alien, attack_animal, and attack_slime
+	if(!can_be_reached(user))
+		return
 	health -= damage
 	if(health <= 0)
 		user.visible_message("<span class='danger'>[user] smashes through [src]!</span>")
@@ -150,6 +154,8 @@
 
 
 /obj/structure/window/attackby(obj/item/I, mob/user)
+	if(!can_be_reached(user))
+		return 1 //returning 1 will skip the afterattack()
 	if(istype(I, /obj/item/weapon/screwdriver))
 		if(reinf && state >= 1)
 			state = 3 - state
@@ -180,6 +186,14 @@
 			playsound(loc, 'sound/effects/Glasshit.ogg', 75, 1)
 		..()
 	return
+
+/obj/structure/window/proc/can_be_reached(mob/user)
+	if(!is_fulltile())
+		if(get_dir(user,src) & dir)
+			for(var/obj/O in loc)
+				if(!O.CanPass(user, user.loc, 1, 0))
+					return 0
+	return 1
 
 /obj/structure/window/proc/hit(var/damage, var/sound_effect = 1)
 	if(reinf) damage *= 0.5

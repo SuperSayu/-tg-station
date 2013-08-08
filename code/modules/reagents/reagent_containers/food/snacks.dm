@@ -150,9 +150,9 @@
 		W.dropped(user)
 		add_fingerprint(user)
 		contents += W
-		return 1
+		return 1 // no afterattack here
 	else
-		return 0 // this
+		return 0 // --- this is everything that is NOT a slicing implement, and which is not being slipped into food; allow afterattack ---
 	if ( \
 			!isturf(src.loc) || \
 			!(locate(/obj/structure/table) in src.loc) && \
@@ -161,6 +161,7 @@
 		)
 		user << "<span class='notice'>You cannot slice [src] here! You need a table or at least a tray.</span>"
 		return 1
+
 	var/slices_lost = 0
 	if (!inaccurate)
 		user.visible_message( \
@@ -177,7 +178,7 @@
 	for(var/i=1 to (slices_num-slices_lost))
 		var/obj/slice = new slice_path (src.loc)
 		reagents.trans_to(slice,reagents_per_slice)
-	del(src)
+	del(src) // so long and thanks for all the fish
 	return 1
 
 

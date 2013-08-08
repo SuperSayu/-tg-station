@@ -510,7 +510,7 @@
 	var/obj/item/weapon/light/L = new light_type()
 	L.status = status
 	L.rigged = rigged
-	L.brightness = src.brightness
+	L.brightness = brightness
 
 	// light item inherits the switchcount, then zero it
 	L.switchcount = switchcount
@@ -518,6 +518,7 @@
 
 	L.update()
 	L.add_fingerprint(user)
+	L.loc = loc
 
 	user.put_in_active_hand(L)	//puts it in our active hand
 

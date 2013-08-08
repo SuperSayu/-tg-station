@@ -62,8 +62,7 @@
 
 		New()
 			..()
-			spawn(5)
-				radio = new /obj/item/radio/integrated/beepsky(src)
+			radio = new /obj/item/radio/integrated/beepsky(src)
 
 	detective
 		name = "D.E.T.E.C.T. Cartridge"
@@ -72,6 +71,9 @@
 		access_medical = 1
 		access_manifest = 1
 
+		New()
+			..()
+			radio = new /obj/item/radio/integrated/beepsky(src)
 
 	janitor
 		name = "CustodiPRO Cartridge"
@@ -115,8 +117,7 @@
 
 		New()
 			..()
-			spawn(5)
-				radio = new /obj/item/radio/integrated/signal(src)
+			radio = new /obj/item/radio/integrated/signal(src)
 
 
 
@@ -128,8 +129,7 @@
 
 		New()
 			..()
-			spawn(5)
-				radio = new /obj/item/radio/integrated/mule(src)
+			radio = new /obj/item/radio/integrated/mule(src)
 
 	head
 		name = "Easy-Record DELUXE"
@@ -148,8 +148,7 @@
 
 		New()
 			..()
-			spawn(5)
-				radio = new /obj/item/radio/integrated/mule(src)
+			radio = new /obj/item/radio/integrated/mule(src)
 
 	hos
 		name = "R.O.B.U.S.T. DELUXE"
@@ -160,8 +159,7 @@
 
 		New()
 			..()
-			spawn(5)
-				radio = new /obj/item/radio/integrated/beepsky(src)
+			radio = new /obj/item/radio/integrated/beepsky(src)
 
 	ce
 		name = "Power-On DELUXE"
@@ -189,8 +187,7 @@
 
 		New()
 			..()
-			spawn(5)
-				radio = new /obj/item/radio/integrated/signal(src)
+			radio = new /obj/item/radio/integrated/signal(src)
 
 	captain
 		name = "Value-PAK Cartridge"
@@ -203,6 +200,10 @@
 		access_reagent_scanner = 1
 		access_status_display = 1
 		access_atmos = 1
+
+		New()
+			..()
+			radio = new /obj/item/radio/integrated/beepsky(src)
 
 	syndicate
 		name = "Detomatix Cartridge"
@@ -378,7 +379,7 @@ Code:
 
 				menu += "<h4><img src=pda_medical.png> Medical Data</h4>"
 				if (istype(active2, /datum/data/record) && (active2 in data_core.medical))
-					menu += "Blood Type: [active2.fields["b_type"]]<br><br>"
+					menu += "Blood Type: [active2.fields["blood_type"]]<br><br>"
 
 					menu += "Minor Disabilities: [active2.fields["mi_dis"]]<br>"
 					menu += "Details: [active2.fields["mi_dis_d"]]<br><br>"

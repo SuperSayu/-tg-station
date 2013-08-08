@@ -278,6 +278,9 @@
 /obj/structure/table/attackby(obj/item/weapon/W, mob/user)
 	if (istype(W, /obj/item/weapon/grab) && get_dist(src, user) < 2)
 		var/obj/item/weapon/grab/G = W
+		if(G.affecting.buckled)
+			user << "<span class='notice'>[G.affecting] is buckled to [G.affecting.buckled]!</span>"
+			return
 		if(G.state < GRAB_AGGRESSIVE)
 			user << "<span class='notice'>You need a better grip to do that!</span>"
 			return
@@ -389,6 +392,9 @@
 
 	if (istype(W, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = W
+		if(G.affecting.buckled)
+			user << "<span class='notice'>[G.affecting] is buckled to [G.affecting.buckled]!</span>"
+			return
 		if(G.state < GRAB_AGGRESSIVE)
 			user << "<span class='notice'>You need a better grip to do that!</span>"
 			return
@@ -463,6 +469,9 @@
 
 	if (istype(W, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = W
+		if(G.affecting.buckled)
+			user << "<span class='notice'>[G.affecting] is buckled to [G.affecting.buckled]!</span>"
+			return
 		if(G.state < GRAB_AGGRESSIVE)
 			user << "<span class='notice'>You need a better grip to do that!</span>"
 			return

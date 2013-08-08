@@ -301,7 +301,10 @@
 
 	return 1
 
-/obj/machinery/computer/HolodeckControl/proc/togglePower(var/toggleOn = 0)
+/obj/machinery/computer/HolodeckControl/power_change()
+	..()
+	if(stat & NOPOWER)
+		emergencyShutdown()
 	if(active == toggleOn) return
 
 	if(toggleOn)
@@ -379,16 +382,17 @@
 
 
 /obj/machinery/computer/HolodeckControl/proc/emergencyShutdown()
-	//Get rid of any items
-	for(var/item in holographic_items)
-		derez(item)
-	//Turn it back to the regular non-holographic room
-	target = locate(/area/holodeck/source_plating)
-	if(target)
-		loadProgram(target)
+	if(!istype(target,/area/holodeck/source_plating))
+		//Get rid of any items
+		for(var/item in holographic_items)
+			derez(item)
+		//Turn it back to the regular non-holographic room
+		target = locate(/area/holodeck/source_plating)
+		if(target)
+			loadProgram(target)
 
-	var/area/targetsource = locate(/area/holodeck/source_plating)
-	targetsource.copy_contents_to(linkedholodeck , 1)
+		var/area/targetsource = locate(/area/holodeck/source_plating)
+		targetsource.copy_contents_to(linkedholodeck , 1)
 	active = 0
 
 

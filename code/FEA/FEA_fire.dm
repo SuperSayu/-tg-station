@@ -146,6 +146,9 @@
 	if(dying) return // there's some kind of funky loop going on here
 	dying = 1
 	DestroyTurf()
+	garbage_collect()
+
+/obj/effect/hotspot/proc/garbage_collect()
 	if(istype(loc, /turf/simulated))
 		var/turf/simulated/T = loc
 		if(T.active_hotspot == src)
