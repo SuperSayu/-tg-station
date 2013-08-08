@@ -256,7 +256,7 @@ its easier to just keep the beam vertical.
 	return
 
 /atom/proc/attack_ghost(mob/user as mob)
-	src.examine()
+	//src.examine()
 	return
 
 /atom/proc/attack_admin(mob/user as mob)
@@ -812,6 +812,13 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 				MiddleClick(usr)
 				return
 		}
+
+	if(isobserver(usr))
+		/*if(usr.client && usr.client.holder)
+			src.attack_admin(usr)				//This is so admins can interact with things ingame.
+		else*/
+		src.attack_ghost(usr)				//Standard click as ghost
+		return
 
 	// ------- THROW -------
 	if(usr.in_throw_mode)

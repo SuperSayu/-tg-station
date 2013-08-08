@@ -12,6 +12,11 @@
 	attack_verb = list("called", "rang")
 	hitsound = 'sound/weapons/ring.ogg'
 
+	attack_ghost()
+		if(config.ghost_interaction && prob(2))
+			playsound(src.loc, hitsound, 50, 1, -1)
+			visible_message("[src] rings")
+
 /obj/item/weapon/rsp
 	name = "\improper Rapid-Seed-Producer (RSP)"
 	desc = "A device used to rapidly deploy seeds."
@@ -680,6 +685,12 @@
 	gender = PLURAL
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "ectoplasm"
+/obj/item/weapon/ectoplasm/attack_ghost(mob/user)
+	if(prob(90)) return
+	if(prob(15))
+		step_away(src,user)
+	else if(prob(15))
+		step_rand(src)
 
 /obj/item/weapon/research//Makes testing much less of a pain -Sieve
 	name = "research"

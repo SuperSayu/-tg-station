@@ -136,6 +136,13 @@
 			teleport(M)
 			use_power(5000)
 	return
+/obj/machinery/teleport/hub/attack_ghost(mob/user as mob)
+	if(prob(95)) return
+	var/atom/l = src.loc
+	var/obj/machinery/computer/teleporter/com = locate(/obj/machinery/computer/teleporter, locate(l.x - 2, l.y, l.z))
+	if (!com || !com.locked)
+		return
+	do_teleport(user,com.locked)
 
 /obj/machinery/teleport/hub/proc/teleport(atom/movable/M as mob|obj)
 	var/atom/l = src.loc

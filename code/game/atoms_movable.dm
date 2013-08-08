@@ -56,6 +56,9 @@
 					src.throwing = 0
 			if(isobj(A))
 				if(A.density && !A.throwpass)	// **TODO: Better behaviour for windows which are dense, but shouldn't always stop movement
+					if(A.flags&ON_BORDER)
+						if(!(A.dir&src.dir) && !(A.dir&turn(src.dir,180)))
+							continue
 					src.throw_impact(A)
 					src.throwing = 0
 
