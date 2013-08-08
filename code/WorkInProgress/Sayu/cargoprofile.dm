@@ -672,7 +672,7 @@
 	id = "people"
 
 	whitelist = null
-	blacklist = list(/mob/aiEye,/mob/new_player,/mob/living/blob,/mob/living/simple_animal/hostile/blobspore,/mob/living/simple_animal/hostile/creature,
+	blacklist = list(/mob/camera,/mob/new_player,/mob/living/simple_animal/hostile/blobspore,/mob/living/simple_animal/hostile/creature,
 					/mob/living/simple_animal/space_worm,/mob/living/simple_animal/shade,/mob/living/simple_animal/hostile/faithless,/mob/dead)
 	universal = 1
 	mobcheck = 1

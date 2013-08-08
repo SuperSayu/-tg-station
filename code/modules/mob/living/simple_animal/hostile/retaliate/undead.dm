@@ -9,8 +9,8 @@
 			R.visible_message("[R]'s head swivels eerily towards [src].")
 		else
 			R.visible_message("[R] stares at [src] for a minute before turning away.")
-			if(R.target_mob == src)
-				R.target_mob = null
+			if(R.target == src)
+				R.target = null
 
 
 /mob/living/simple_animal/hostile/retaliate/ghost
@@ -59,7 +59,7 @@
 		emote("wails at [.]")
 
 /mob/living/simple_animal/hostile/retaliate/ghost/Life()
-	if(target_mob)
+	if(target)
 		invisibility = pick(0,0,60,invisibility)
 	else
 		invisibility = pick(0,60,60,invisibility)

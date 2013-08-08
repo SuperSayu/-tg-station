@@ -176,7 +176,7 @@
 	cast(mob/caster, mob/target)
 		if(istype(target))
 			if(ishuman(target) || ismonkey(target))
-				var/obj/item/organ/brain/B = getbrain(target)
+				var/obj/item/organ/brain/B = target.getorgan(/obj/item/organ/brain)
 				if(B)
 					B.loc = get_turf(target)
 					B.transfer_identity(target)

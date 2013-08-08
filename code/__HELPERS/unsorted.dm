@@ -1008,7 +1008,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0, var/at
 			copiedobjs += O2.contents + O2
 
 		for(var/mob/M in T)
-			if(!istype(M,/mob) || istype(M, /mob/aiEye)) continue // If we need to check for more mobs, I'll add a variable
+			if(!istype(M,/mob) || istype(M, /mob/camera)) continue // If we need to check for more mobs, I'll add a variable
 			copiedobjs += DuplicateObject(M , 1, newloc = X)
 
 		var/list/forbidden_vars = list("type","stat","loc","locs","vars", "parent", "parent_type","verbs","ckey","key","x","y","z","contents", "luminosity")

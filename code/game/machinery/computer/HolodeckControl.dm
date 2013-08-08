@@ -301,10 +301,7 @@
 
 	return 1
 
-/obj/machinery/computer/HolodeckControl/power_change()
-	..()
-	if(stat & NOPOWER)
-		emergencyShutdown()
+/obj/machinery/computer/HolodeckControl/proc/togglePower(var/toggleOn = 0)
 	if(active == toggleOn) return
 
 	if(toggleOn)

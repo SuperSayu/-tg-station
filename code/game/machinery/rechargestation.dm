@@ -141,10 +141,6 @@
 						playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
 						if(do_after(user,60))
 							user << "You finish prying out the components."
-							if(istype(O,/obj/item/weapon/soap))
-								var/obj/item/weapon/soap/S = O
-								if(S.uses < initial(S.uses))
-									S.uses++
 
 							// Drop all the component stuff
 							if(contents.len > 0)

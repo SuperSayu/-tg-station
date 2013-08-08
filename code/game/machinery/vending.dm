@@ -298,9 +298,9 @@
 				del(coin)
 
 		R.amount--
-			if(!R.amount && R.artificial) // remove inserted
-				product_records -= R
-				products -= R.product_path
+		if(!R.amount && R.artificial) // remove inserted
+			product_records -= R
+			products -= R.product_path
 
 		if(((last_reply + (vend_delay + 200)) <= world.time) && vend_reply)
 			speak(vend_reply)
