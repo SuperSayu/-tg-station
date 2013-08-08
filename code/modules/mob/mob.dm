@@ -664,7 +664,13 @@ note dizziness decrements automatically in the mob's Life() proc.
 					statpanel("Spells","[S.charge_counter]/[S.charge_max]",S)
 				if("holdervar")
 					statpanel("Spells","[S.holder_var_type] [S.holder_var_amount]",S)
-
+	for(var/obj/effect/knowspell/KS in src.contents)
+		if(KS.rechargable)
+			statpanel("Spells","[KS.charge/10.0]/[KS.chargemax/10]",KS)
+		else
+			statpanel("Spells","[KS.charge] left",KS)
+	if(l_hand) l_hand.Stat()
+	if(r_hand) r_hand.Stat()
 
 
 // facing verbs

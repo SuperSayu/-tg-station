@@ -22,6 +22,43 @@
 		if(prob(33))
 			step_rand(src)
 
+/obj/item/weapon/bananapeel/wizard
+	name = "magical banana peel"
+	desc = "Far superior to the genetically enhanced version"
+	var/walk_delay = 2
+
+/obj/item/weapon/bananapeel/wizard/New()
+	..()
+	walk_delay = rand(0,5)
+	walk_rand(src,walk_delay)
+	spawn(rand(3,6)*100)
+		if(src)
+			del src
+
+/obj/item/weapon/bananapeel/wizard/HasEntered(AM as mob|obj)
+	if (istype(AM, /mob/living/carbon))
+		var/mob/M =	AM
+
+		if(HULK in M.mutations)
+			M << "You squash [src], and it disintegrates with a \i [magic_soundfx()]."
+			del src
+			return
+
+		if (istype(M, /mob/living/carbon/human))
+			var/mob/living/carbon/human/H = M
+
+			if(H.shoes && H.shoes.flags&NOSLIP)
+				return
+
+		M.stop_pulling()
+		M << "\blue You slipped on the [name]!"
+		playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
+		M.Stun(4)
+		M.Weaken(2)
+		walk_rand(new src.type(loc),walk_delay)
+		while(prob(15))
+			walk_rand(new src.type(loc),walk_delay)
+
 /*
  * Soap
  */

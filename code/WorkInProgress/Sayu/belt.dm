@@ -124,7 +124,8 @@
 		new /obj/item/weapon/dnainjector/firemut(src)
 		new /obj/item/weapon/dnainjector/telemut(src)
 		new /obj/item/weapon/dnainjector/hulkmut(src)
-		new /obj/item/weapon/spellbook(src) // for smoke effects, door openings, etc
+//		new /obj/item/weapon/spellbook(src) // for smoke effects, door openings, etc
+		new /obj/item/weapon/magic/spellbook/basic(src)
 
 		new/obj/item/weapon/reagent_containers/hypospray/admin(src)
 

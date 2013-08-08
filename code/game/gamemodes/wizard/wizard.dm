@@ -214,7 +214,8 @@
 	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/box(wizard_mob), slot_in_backpack)
 //	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/scrying_gem(wizard_mob), slot_l_store) For scrying gem.
 	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/teleportation_scroll(wizard_mob), slot_r_store)
-	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/spellbook(wizard_mob), slot_r_hand)
+	//wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/spellbook(wizard_mob), slot_r_hand)
+	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/magic/spellbook/basic(wizard_mob),slot_r_hand)
 
 	wizard_mob << "You will find a list of available spells in your spell book. Choose your magic arsenal carefully."
 	wizard_mob << "In your pockets you will find a teleport scroll. Use it as needed."
@@ -230,7 +231,7 @@
 
 	var/wizards_alive = 0
 	for(var/datum/mind/wizard in wizards)
-		if(!istype(wizard.current,/mob/living/carbon))
+		if(!istype(wizard.current,/mob/living))
 			continue
 		if(wizard.current.stat==2)
 			continue
@@ -296,8 +297,10 @@
 
 //To batch-remove wizard spells. Linked to mind.dm.
 /mob/proc/spellremove(var/mob/M as mob)
-	for(var/obj/effect/proc_holder/spell/spell_to_remove in src.spell_list)
+	for(var/obj/effect/spell_to_remove in src.spell_list)
+		spell_list -= spell_to_remove
 		del(spell_to_remove)
+
 
 /*Checks if the wizard can cast spells.
 Made a proc so this is not repeated 14 (or more) times.*/
