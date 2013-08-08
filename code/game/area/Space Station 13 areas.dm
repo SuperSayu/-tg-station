@@ -202,7 +202,7 @@ proc/process_ghost_teleport_locs()
 	mob_activate(var/mob/living/L)
 		push_mob_back(L, push_dir)
 
-/area/shuttle/escape_pod5 //Pod 4 was lost to meteors
+/area/shuttle/escape_pod5
 	name = "\improper Escape Pod Five"
 	music = "music/escape.ogg"
 	push_dir = WEST
@@ -885,6 +885,11 @@ proc/process_ghost_teleport_locs()
 	icon_state = "teleporter"
 	music = "signal"
 
+/area/telescience
+	name = "\improper Telescience Lab"
+	icon_state = "teleporter"
+	music = "signal"
+
 //MedBay
 
 /area/medical/medbay
@@ -892,7 +897,7 @@ proc/process_ghost_teleport_locs()
 	icon_state = "medbay"
 	music = 'sound/ambience/signal.ogg'
 
-//Medbay is a large area, these additional areas help level out APC load.
+//Medbay is a large area, the additional areas help level out APC load.
 /area/medical/medbay2
 	name = "Medbay"
 	icon_state = "medbay2"
@@ -1610,6 +1615,7 @@ var/list/the_station_areas = list (
 	/area/solar,
 	/area/assembly,
 	/area/teleporter,
+	/area/telescience,
 	/area/medical,
 	/area/security,
 	/area/quartermaster,

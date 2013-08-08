@@ -31,3 +31,19 @@
 	proc/digest_delay()
 		spawn(600)
 			del(src)*/ //Bacon beacons are no more rip in peace
+
+/obj/item/device/telepad_beacon
+	name = "Telepad Beacon"
+	desc = "Use to warp in a cargo telepad."
+	icon = 'icons/obj/radio.dmi'
+	icon_state = "beacon"
+	item_state = "signaler"
+	origin_tech = "bluespace=3"
+
+/obj/item/device/telepad_beacon/attack_self(mob/user as mob)
+	if(user)
+		user << "\blue Locked In"
+		new /obj/machinery/telepad_cargo(user.loc)
+		playsound(src, 'sound/effects/pop.ogg', 100, 1, 1)
+		del(src)
+	return
