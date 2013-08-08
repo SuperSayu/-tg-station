@@ -208,7 +208,7 @@
 	return 0
 
 // ++++ROCKDTBEN++++ MOB PROCS //END
-
+/*
 /mob/living/carbon/proc/handle_ventcrawl() // -- TLE -- Merged by Carn
 	if(!stat)
 		if(!lying)
@@ -221,7 +221,7 @@
 					src << "\red That vent is welded."
 
 			if(vent_found)
-				if(vent_found.network&&vent_found.network.normal_members.len)
+				if(vent_found.network && vent_found.network.normal_members.len)
 					var/list/vents[0]
 					for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in vent_found.network.normal_members)
 						if(temp_vent.loc == loc)
@@ -244,8 +244,10 @@
 						return
 
 					var/turf/startloc = loc
-					var/obj/selection = input("Select a destination.", "Duct System") as null|anything in sortList(vents)
-					if(!selection)	return
+					var/obj/selection = input(src,"Select a destination.", "Duct System") as null|anything in sortList(vents)
+					if(!selection)
+						src << "\blue You decline to crawl through the nasty cramped air pipes."
+						return
 					if(loc==startloc)
 						for(var/obj/item/carried_item in contents)//If the monkey got on objects.
 							if( !istype(carried_item, /obj/item/weapon/implant) && !istype(carried_item, /obj/item/clothing/mask/facehugger) )//If it's not an implant or a facehugger
@@ -290,7 +292,7 @@
 	else
 		src << "You must be conscious to do this!"
 	return
-
+*/
 
 /mob/living/carbon/clean_blood()
 	. = ..()
@@ -368,6 +370,8 @@
 	u_equip(item)
 	if(src.client)
 		src.client.screen -= item
+
+	if(!item) return // dropping some things may delete them
 
 	item.loc = src.loc
 
