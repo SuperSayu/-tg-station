@@ -4,12 +4,13 @@
 	icon_state = "holocontrol"
 	var/area/linkedholodeck = null
 	var/area/target = null
+	var/area/previous_target = null
 	var/active = 0
 	var/list/holographic_items = list()
 	var/damaged = 0
 	var/last_change = 0
 	var/target_area = /area/holodeck/alphadeck
-
+	var/offline_area = /area/holodeck/source_plating
 
 	attack_ai(var/mob/user as mob)
 		return src.attack_hand(user)
@@ -24,6 +25,8 @@
 		user.set_machine(src)
 
 		var/dat = "<h3>Current Loaded Programs</h3>"
+		dat += "<A href='?src=\ref[src];turnoff=1'>((Turn Off))</A><BR>"
+		dat += "<A href='?src=\ref[src];lounge=1'>((Classic Lounge))</A><BR>"
 		dat += "<A href='?src=\ref[src];emptycourt=1'>((Empty Court))</A><BR>"
 		dat += "<A href='?src=\ref[src];boxingcourt=1'>((Dodgeball Arena)</font>)</A><BR>"
 		dat += "<A href='?src=\ref[src];basketball=1'>((Basketball Court))</A><BR>"
@@ -89,7 +92,10 @@
 				target = locate(/area/holodeck/source_emptycourt)
 				if(target)
 					loadProgram(target)
-
+			else if(href_list["lounge"])
+				target = locate(/area/holodeck/source_lounge)
+				if(target)
+					loadProgram(target)
 			else if(href_list["boxingcourt"])
 				target = locate(/area/holodeck/source_boxingcourt)
 				if(target)
@@ -121,7 +127,7 @@
 					loadProgram(target)
 
 			else if(href_list["turnoff"])
-				target = locate(/area/holodeck/source_plating)
+				target = locate(offline_area)
 				if(target)
 					loadProgram(target)
 
@@ -296,41 +302,43 @@
 	return 1
 
 /obj/machinery/computer/HolodeckControl/proc/togglePower(var/toggleOn = 0)
+	if(active == toggleOn) return
 
 	if(toggleOn)
-		var/area/targetsource = locate(/area/holodeck/source_emptycourt)
-		holographic_items = targetsource.copy_contents_to(linkedholodeck)
-
-		spawn(30)
-			for(var/obj/effect/landmark/L in linkedholodeck)
-				if(L.name=="Atmospheric Test Start")
-					spawn(20)
-						var/turf/T = get_turf(L)
-						var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-						s.set_up(2, 1, T)
-						s.start()
-						if(T)
-							T.temperature = 5000
-							T.hotspot_expose(50000,50000,1)
-
+		if(previous_target)
+			target = previous_target
+			loadProgram(target, delay = 1)
+			previous_target = null
 		active = 1
 	else
-		for(var/item in holographic_items)
-			derez(item)
-		var/area/targetsource = locate(/area/holodeck/source_plating)
-		targetsource.copy_contents_to(linkedholodeck , 1)
+
+		var/area/targetsource = locate(offline_area)
+		if(target && target != targetsource)
+			previous_target = target
+		target = targetsource
+		loadProgram(target,force=1)
 		active = 0
 
+/obj/machinery/computer/HolodeckControl/power_change()
+	..()
+	if(stat&NOPOWER)
+		togglePower(0)
+	else
+		togglePower(1)
 
-/obj/machinery/computer/HolodeckControl/proc/loadProgram(var/area/A)
 
-	if(world.time < (last_change + 25))
-		if(world.time < (last_change + 15))//To prevent super-spam clicking, reduced process size and annoyance -Sieve
-			return
-		for(var/mob/M in range(3,src))
-			M.show_message("\b ERROR. Recalibrating projection apparatus.")
-			last_change = world.time
-			return
+/obj/machinery/computer/HolodeckControl/proc/loadProgram(var/area/A, var/force = 0, var/delay = 0)
+
+	if(world.time < (last_change + 25) && !force)
+		if(delay)
+			sleep(25)
+		else
+			if(world.time < (last_change + 15))//To prevent super-spam clicking, reduced process size and annoyance -Sieve
+				return
+			for(var/mob/M in range(3,src))
+				usr << "\b ERROR. Recalibrating projection apparatus."
+				last_change = world.time
+				return
 
 	last_change = world.time
 	active = 1
@@ -338,7 +346,7 @@
 	for(var/item in holographic_items)
 		derez(item)
 
-	for(var/obj/effect/decal/cleanable/blood/B in linkedholodeck)
+	for(var/obj/effect/decal/cleanable/B in linkedholodeck)
 		del(B)
 
 	for(var/mob/living/simple_animal/hostile/carp/C in linkedholodeck)
@@ -386,6 +394,7 @@
 
 /obj/machinery/computer/HolodeckControl/theater
 	target_area = /area/holodeck/betadeck
+	offline_area = /area/holodeck/theater/base
 
 	attack_hand(var/mob/user as mob)
 		user.set_machine(src)
@@ -461,60 +470,6 @@
 /turf/simulated/floor/holofloor/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	return
 	// HOLOFLOOR DOES NOT GIVE A FUCK
-
-
-
-
-
-
-
-
-
-
-/obj/structure/table/holotable
-	name = "table"
-	desc = "A square piece of metal standing on four metal legs. It can not move."
-	icon = 'icons/obj/structures.dmi'
-	icon_state = "table"
-	density = 1
-	anchored = 1.0
-	layer = 2.8
-	throwpass = 1	//You can throw objects over this, despite it's density.
-
-
-/obj/structure/table/holotable/attack_paw(mob/user as mob)
-	return attack_hand(user)
-
-/obj/structure/table/holotable/attack_alien(mob/user as mob) //Removed code for larva since it doesn't work. Previous code is now a larva ability. /N
-	return attack_hand(user)
-
-/obj/structure/table/holotable/attack_animal(mob/living/simple_animal/user as mob) //Removed code for larva since it doesn't work. Previous code is now a larva ability. /N
-	return attack_hand(user)
-
-/obj/structure/table/holotable/attack_hand(mob/user as mob)
-	return // HOLOTABLE DOES NOT GIVE A FUCK
-
-
-/obj/structure/table/holotable/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
-		var/obj/item/weapon/grab/G = W
-		if(G.state < GRAB_AGGRESSIVE)
-			user << "\red You need a better grip to do that!"
-			return
-		G.affecting.loc = src.loc
-		G.affecting.Weaken(5)
-		visible_message("\red [G.assailant] puts [G.affecting] on the table.")
-		del(W)
-		return
-
-	if (istype(W, /obj/item/weapon/wrench))
-		user << "It's a holotable!  There are no bolts!"
-		return
-
-	if(isrobot(user))
-		return
-
-
 
 /obj/item/clothing/gloves/boxing/hologlove
 	name = "boxing gloves"

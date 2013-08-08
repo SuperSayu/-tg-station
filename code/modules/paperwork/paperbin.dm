@@ -78,9 +78,9 @@
 	set src in oview(1)
 
 	if(amount)
-		usr << "<span class='notice'>There " + (amount > 1 ? "are [amount] papers" : "is one paper") + " in the bin.</span>"
+		usr << "<span class='notice'>There " + (amount > 1 ? "are [amount] sheets" : "is one sheet") + " in the bin.</span>"
 	else
-		usr << "<span class='notice'>There are no papers in the bin.</span>"
+		usr << "<span class='notice'>There is no paper in the bin.</span>"
 
 
 /obj/item/weapon/paper_bin/update_icon()
@@ -88,3 +88,9 @@
 		icon_state = "paper_bin0"
 	else
 		icon_state = "paper_bin1"
+
+/obj/item/weapon/paper_bin/fire_act(air,temp,volume)
+	if(prob(50 - amount))
+		del src
+	else if(prob(50) && amount>0)
+		amount-- // burns papers

@@ -77,6 +77,11 @@
 		name = "photo[(n_name ? text("- '[n_name]'") : null)]"
 	add_fingerprint(usr)
 
+/obj/item/weapon/photo/fire_act()
+	if(prob(15))
+		del src
+
+
 
 /*
  * Photo album

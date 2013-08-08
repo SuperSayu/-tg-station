@@ -86,6 +86,9 @@ datum/air_group
 		if(!group_processing)	 //Revert to individual processing then end
 			for(var/T in members)
 				var/turf/simulated/member = T
+				if(!istype(member))
+					members -= T
+					continue
 				member.process_cell()
 			return
 

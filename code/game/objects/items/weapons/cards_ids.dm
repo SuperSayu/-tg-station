@@ -19,6 +19,12 @@
 
 	var/list/files = list(  )
 
+	fire_act()
+		if(prob(5))
+			if(prob(45))
+				new /obj/effect/decal/cleanable/ash{name = "burnt plastic"}(loc)
+			del src
+
 /obj/item/weapon/card/data
 	name = "data disk"
 	desc = "A disk of data."

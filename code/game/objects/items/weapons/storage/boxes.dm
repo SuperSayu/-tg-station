@@ -50,6 +50,16 @@
 	user.put_in_hands(I)
 	del(src)
 
+/obj/item/weapon/storage/box/fire_act()
+	if(prob(25))
+		for(var/mob/M in range(1))
+			if(M.s_active == src)
+				close(M)
+		for(var/obj/O in src)
+			src.remove_from_storage(O,loc)
+
+		del src
+
 
 /obj/item/weapon/storage/box/survival
 	New()

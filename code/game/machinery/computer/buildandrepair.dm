@@ -28,6 +28,10 @@
 	var/list/records = null
 	var/frame_desc = null
 
+/obj/item/weapon/circuitboard/fire_act()
+	if(prob(2))
+		del src
+
 
 /obj/item/weapon/circuitboard/message_monitor
 	name = "Circuit board (Message Monitor)"

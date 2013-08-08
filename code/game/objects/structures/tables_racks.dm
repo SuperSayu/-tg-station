@@ -20,6 +20,9 @@
 	layer = 2.8
 	throwpass = 1	//You can throw objects over this, despite it's density.")
 
+	var/strong = 0 // 0: weak; 1: reinforced+weakened; 2:reinforced; 3: cannot disassemble
+	var/part_type = /obj/item/weapon/table_parts
+
 /obj/structure/table/New()
 	..()
 	for(var/obj/structure/table/T in src.loc)
@@ -182,91 +185,65 @@
 		else
 			dir = 2
 
+/obj/structure/table/proc/breakdown(var/parts_probability = 100)
+	if(prob(parts_probability) && ispath(part_type))
+		new part_type(src.loc)
+	spawn(1)
+		del src
+
+/obj/structure/table/proc/damage(var/amount, var/damtype = BRUTELOSS) // BRUTELOSS, FIRELOSS, etc
+	if(strong == 3) return
+	if(strong == 2)
+		amount = round(amount/2)
+	reliability -= amount
+	if(!prob(reliability))
+		breakdown(reliability)
+
 /obj/structure/table/ex_act(severity)
 	switch(severity)
 		if(1.0)
 			del(src)
 			return
 		if(2.0)
-			if (prob(50))
-				del(src)
-				return
+			damage(25,BRUTELOSS)
 		if(3.0)
-			if (prob(25))
-				src.density = 0
-		else
+			damage(10,BRUTELOSS)
 	return
 
+/obj/structure/table/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(exposed_temperature < (T0C+300)) // this is the autoignition point of wood apparently
+		return
+	damage(5,FIRELOSS)
 
 /obj/structure/table/blob_act()
-	if(prob(75))
-		if(istype(src, /obj/structure/table/woodentable))
-			new /obj/item/weapon/table_parts/wood( src.loc )
-			del(src)
-			return
-		new /obj/item/weapon/table_parts( src.loc )
-		del(src)
-		return
+	damage(66,BRUTELOSS)
 
 
 /obj/structure/table/hand_p(mob/user as mob)
 	return src.attack_paw(user)
-	return
 
 
 /obj/structure/table/attack_paw(mob/user)
 	if(HULK in user.mutations)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-		visible_message("<span class='danger'>[user] smashes the table apart!</span>")
-		if(istype(src, /obj/structure/table/reinforced))
-			new /obj/item/weapon/table_parts/reinforced(loc)
-		else if(istype(src, /obj/structure/table/woodentable))
-			new/obj/item/weapon/table_parts/wood(loc)
-		else
-			new /obj/item/weapon/table_parts(loc)
-		density = 0
-		del(src)
+		visible_message("<span class='danger'>[user] smashes [src]!</span>")
+		damage(33, BRUTELOSS)
 
 
 /obj/structure/table/attack_alien(mob/user)
 	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
-	if(istype(src, /obj/structure/table/reinforced))
-		new /obj/item/weapon/table_parts/reinforced(loc)
-	else if(istype(src, /obj/structure/table/woodentable))
-		new/obj/item/weapon/table_parts/wood(loc)
-	else
-		new /obj/item/weapon/table_parts(loc)
-	density = 0
-	del(src)
-
+	damage(50,BRUTELOSS)
 
 /obj/structure/table/attack_animal(mob/living/simple_animal/user)
 	if(user.wall_smash)
-		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
-		if(istype(src, /obj/structure/table/reinforced))
-			new /obj/item/weapon/table_parts/reinforced(loc)
-		else if(istype(src, /obj/structure/table/woodentable))
-			new/obj/item/weapon/table_parts/wood(loc)
-		else
-			new /obj/item/weapon/table_parts(loc)
-		density = 0
-		del(src)
-
-
-
+		visible_message("<span class='danger'>[user] smashes [src]!</span>")
+		damage(20,BRUTELOSS)
 
 /obj/structure/table/attack_hand(mob/user)
 	if(HULK in user.mutations)
-		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-		if(istype(src, /obj/structure/table/reinforced))
-			new /obj/item/weapon/table_parts/reinforced(loc)
-		else if(istype(src, /obj/structure/table/woodentable))
-			new/obj/item/weapon/table_parts/wood(loc)
-		else
-			new /obj/item/weapon/table_parts(loc)
-		density = 0
-		del(src)
+		visible_message("<span class='danger'>[user] smashes [src]!</span>")
+		damage(40,BRUTELOSS)
 
 
 /obj/structure/table/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
@@ -277,18 +254,24 @@
 	else
 		return 0
 
-
 /obj/structure/table/MouseDrop_T(obj/O, mob/user)
-	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
+	if ((!( istype(O, /obj/item) ) || user.get_active_hand() != O))
+		return
+	if(istype(O,/obj/item/weapon/grab))
+		attackby(O,user) // not duplicating code here
 		return
 	if(isrobot(user))
 		if(istype(O,/obj/item/weapon/tray))
 			O.loc = loc
 			O:dropped(user)
 		return
+
 	user.drop_item()
 	if (O.loc != src.loc)
 		step(O, get_dir(O, src))
+	if(O.loc == src.loc)
+		if(!prob(reliability))
+			visible_message("<span class='danger'>[src] breaks!</span>")
 	return
 
 
@@ -307,7 +290,7 @@
 		del(W)
 		return
 
-	if (istype(W, /obj/item/weapon/wrench))
+	if (strong < 2 && istype(W, /obj/item/weapon/wrench))
 		user << "\blue Now disassembling table"
 		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user,50))
@@ -316,6 +299,28 @@
 			//SN src = null
 			del(src)
 		return
+	if(istype(W,/obj/item/weapon/weldingtool) && strong < 3)
+		var/obj/item/weapon/weldingtool/WT = W
+		if(WT.welding && WT.remove_fuel(0, user))
+			switch(strong)
+				if(2)
+					user << "\blue Now weakening [src]"
+					playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
+					if (do_after(user, 50))
+						if(!src || !WT.isOn()) return
+						user << "\blue [src] weakened"
+						strong = 1
+				if(1)
+					user << "\blue Now strengthening [src]"
+					playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
+					if (do_after(user, 50))
+						if(!src || !WT.isOn()) return
+						user << "\blue [src] strengthened"
+						strong = 2
+				if(0)
+					visible_message("<span class='warning'>[user] slices [src] with [WT]!</span>")
+					damage(10,FIRELOSS)
+			return
 
 	var/obj/effect/spacevine/vine = locate() in loc
 	if(vine) // don't drop things on tables when trying to attack spacevines
@@ -333,13 +338,17 @@
 		spark_system.start()
 		playsound(src.loc, 'sound/weapons/blade1.ogg', 50, 1)
 		playsound(src.loc, "sparks", 50, 1)
-		for(var/mob/O in viewers(user, 4))
-			O.show_message("\blue The table was sliced apart by [user]!", 1, "\red You hear metal coming apart.", 2)
-		new /obj/item/weapon/table_parts( src.loc )
-		del(src)
+		visible_message("<span class='danger'>[user] slices [src] apart!</span>")
+		damage(60, FIRELOSS)
 		return
+
 	user.drop_item(src)
-	return
+
+	if(!prob(reliability)) // damaged
+		visible_message("\red [src] breaks!")
+		breakdown(reliability)
+		return
+	return 1
 
 
 /*
@@ -349,9 +358,34 @@
 	name = "wooden table"
 	desc = "Do not apply fire to this. Rumour says it burns easily."
 	icon_state = "woodtable"
+	part_type = /obj/item/weapon/table_parts/wood
+
+// I imagine this flies in the face of proper interaction with the air system
+// and you know what
+// I have no fucking idea
+// let's see how it works -Sayu
+/obj/structure/table/woodentable/damage(var/amount, var/damtype)
+	if(damtype == FIRELOSS)
+		reliability -= amount * 2
+		if(!prob(reliability))
+			var/turf/simulated/T = loc
+			if(istype(T) && T.air)
+				T.air.toxins++
+			if(!prob(reliability))
+				breakdown(src,reliability)
+		return
+	..()
 
 
+
+/*
 /obj/structure/table/woodentable/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(!prob(reliability)) // damaged by fire
+		visible_message("\red [src] breaks!")
+		if(prob(reliability))
+			new /obj/item/weapon/table_parts/wood(src.loc)
+		del(src)
+		return
 
 	if (istype(W, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = W
@@ -395,9 +429,8 @@
 		return
 
 	user.drop_item(src)
-	//if(W && W.loc)	W.loc = src.loc
-	return
-
+	return 1
+*/
 
 /*
  * Reinforced tables
@@ -406,9 +439,26 @@
 	name = "reinforced table"
 	desc = "A version of the four legged table. It is stronger."
 	icon_state = "reinftable"
-	var/status = 2
+	strong = 2
 
 
+
+/obj/structure/table/holotable
+	name = "table"
+	desc = "A square piece of metal standing on four metal legs. It can not move."
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "table"
+	strong = 3
+
+/obj/structure/table/holotable/wood
+	name = "wooden table"
+	icon_state = "woodtable"
+	desc = "A classic design in a classic material."
+
+/obj/structure/table/holotable/reinforced
+	name = "reinforced table"
+	desc = "A version of the four legged table with multiple layers of metal."
+/*
 /obj/structure/table/reinforced/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 	if (istype(W, /obj/item/weapon/grab))
@@ -489,8 +539,8 @@
 
 	user.drop_item(src)
 	//if(W && W.loc)	W.loc = src.loc
-	return
-
+	return 1
+*/
 
 /*
  * Racks
@@ -569,9 +619,8 @@
 
 	if(isrobot(user))
 		return
-	user.drop_item()
-	if(W && W.loc)	W.loc = src.loc
-	return
+	user.drop_item(loc)
+	return 1
 
 /obj/structure/rack/meteorhit(obj/O as obj)
 	del(src)

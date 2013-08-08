@@ -301,6 +301,10 @@
 	add_fingerprint(user)
 
 
+/obj/item/weapon/paper/fire_act()
+	if(prob(25))
+		del src
+
 /*
  * Premade paper
  */

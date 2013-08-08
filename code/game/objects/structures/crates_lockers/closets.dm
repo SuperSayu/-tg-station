@@ -281,3 +281,12 @@
 			overlays += "welded"
 	else
 		icon_state = icon_opened
+
+/obj/structure/closet/fire_act(air,temp,volume)
+	if(prob(1))
+		del src
+		return
+
+	for(var/atom/movable/AM in contents)
+		if(prob(80)) continue
+		AM.fire_act(air,temp,volume)

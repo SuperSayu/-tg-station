@@ -115,7 +115,14 @@
 				for(var/obj/item/weapon/book/b in contents)
 					b.loc = (get_turf(src))
 				del(src)
-
+/obj/structure/bookcase/fire_act(air,temp,volume)
+	if(prob(15 - contents.len))
+		del src
+		return
+	for(var/obj/item/I in contents)
+		if(prob(90)) continue // thermal mass
+		I.fire_act(air,temp,volume)
+	update_icon()
 
 /obj/structure/bookcase/update_icon()
 	if(contents.len < 5)
@@ -293,7 +300,11 @@
 			return
 	else
 		..()
-
+/obj/item/weapon/book/fire_act()
+	if(prob(20))
+		if(store)
+			store.loc = loc
+		del src
 
 /*
  * Barcode Scanner

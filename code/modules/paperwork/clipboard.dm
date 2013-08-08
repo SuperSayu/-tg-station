@@ -115,3 +115,10 @@
 		//Update everything
 		attack_self(usr)
 		update_icon()
+/obj/item/weapon/clipboard/fire_act(air,temp,volume)
+	if(prob(25))
+		del src
+	else if(contents.len)
+		var/obj/item/I = pick(contents)
+		if(I)
+			I.fire_act(air,temp,volume)

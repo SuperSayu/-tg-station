@@ -83,9 +83,9 @@
 
 	for(var/atom/item in loc)
 		if(!bypassing)
-			item.temperature_expose(null, temperature, volume)
+			item.temperature_expose(location.air, temperature, volume)
 		if(item) // It's possible that the item is deleted in temperature_expose
-			item.fire_act(null, temperature, volume)
+			item.fire_act(location.air, temperature, volume)
 
 	return 0
 

@@ -25,6 +25,7 @@ datum/pipe_network
 		//for(var/datum/pipeline/line_member in line_members)
 		//	line_member.process()
 
+
 	proc/build_network(obj/machinery/atmospherics/start_normal, obj/machinery/atmospherics/reference)
 		//Purpose: Generate membership roster
 		//Notes: Assuming that members will add themselves to appropriate roster in network_expand()
@@ -74,6 +75,7 @@ datum/pipe_network
 			gases += line_member.air
 
 	proc/reconcile_air()
+		set background=1
 		//Perfectly equalize all gases members instantly
 
 		//Calculate totals from individual components
@@ -141,6 +143,7 @@ datum/pipe_network
 		return 1
 
 proc/equalize_gases(datum/gas_mixture/list/gases)
+	set background=1
 	//Perfectly equalize all gases members instantly
 
 	//Calculate totals from individual components

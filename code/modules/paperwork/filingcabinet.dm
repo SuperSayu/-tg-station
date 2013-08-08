@@ -82,11 +82,25 @@
 			icon_state = initial(icon_state)
 
 
+/obj/structure/filingcabinet/fire_act(air,temp,volume)
+	if(prob(20) && contents.len)
+		var/obj/item/I = pick(contents)
+		if(I)
+			I.fire_act(air,temp,volume)
+
+
 /*
  * Security Record Cabinets
  */
 /obj/structure/filingcabinet/security
 	var/virgin = 1
+
+/obj/structure/filingcabinet/security/fire_act()
+	if(!virgin)
+		..()
+	else if(prob(5))
+		virgin = 0 // all records lost
+
 
 /obj/structure/filingcabinet/security/attack_hand(mob/user)
 	if(virgin)
@@ -116,6 +130,13 @@
  */
 /obj/structure/filingcabinet/medical
 	var/virgin = 1
+
+/obj/structure/filingcabinet/medical/fire_act()
+	if(!virgin)
+		..()
+	else if(prob(5))
+		virgin = 0 // all records lost
+
 
 /obj/structure/filingcabinet/medical/attack_hand(mob/user)
 	if(virgin)

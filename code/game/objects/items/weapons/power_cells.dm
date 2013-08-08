@@ -23,6 +23,9 @@
 	suicide_act(mob/user)
 		viewers(user) << "\red <b>[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</b>"
 		return (FIRELOSS)
+	fire_act()
+		if(rigged || prob(1))
+			explode()
 
 /obj/item/weapon/cell/crap
 	name = "\improper Nanotrasen brand rechargable AA battery"

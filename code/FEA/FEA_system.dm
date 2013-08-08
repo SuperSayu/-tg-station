@@ -289,6 +289,7 @@ datum
 				for(var/datum/air_group/turf/turf_AG in groups_to_rebuild) //Deconstruct groups, gathering their old members
 					for(var/turf in turf_AG.members)
 						var/turf/simulated/T = turf
+						if(!istype(T)) continue
 						T.parent = null
 						turfs += T
 					del(turf_AG)

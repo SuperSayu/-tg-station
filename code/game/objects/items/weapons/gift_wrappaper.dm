@@ -89,3 +89,7 @@
 
 /obj/item/weapon/wrapping_paper/attack_self(mob/user)
 	user << "<span class='notice'>You need to use it on a package that has already been wrapped!</span>"
+
+/obj/item/weapon/wrapping_paper/fire_act()
+	if(prob(6))
+		del src

@@ -31,6 +31,9 @@ LINEN BINS
 	add_fingerprint(user)
 	return
 
+/obj/item/weapon/bedsheet/fire_act()
+	if(prob(10))
+		del src
 
 /obj/item/weapon/bedsheet/blue
 	icon_state = "sheetblue"
@@ -172,3 +175,9 @@ LINEN BINS
 
 
 	add_fingerprint(user)
+/obj/structure/bedsheetbin/fire_act()
+	if(prob(15 - amount))
+		del src
+		return
+	else if(prob(20) && amount>0)
+		amount--

@@ -62,6 +62,10 @@
 		src.dir = turn(src.dir, 90)
 		handle_rotation()
 		return
+/obj/structure/stool/bed/chair/attack_ghost(mob/user)
+	if(config.ghost_interaction && prob(10))
+		src.dir = turn(src.dir, 90)
+		handle_rotation()
 
 /obj/structure/stool/bed/chair/MouseDrop_T(mob/M as mob, mob/user as mob)
 	if(!istype(M)) return
@@ -87,9 +91,17 @@
 	else
 		..()
 
+/obj/structure/stool/bed/chair/wood/fire_act()
+	if(prob(18))
+		del src
+
 /obj/structure/stool/bed/chair/comfy
 	name = "comfy chair"
 	desc = "It looks comfy."
+
+/obj/structure/stool/bed/chair/comfy/fire_act() // comfy chairs are full of highly flammable fibers usually
+	if(prob(40))
+		del src
 
 /obj/structure/stool/bed/chair/comfy/brown
 	icon_state = "comfychair_brown"
@@ -100,14 +112,25 @@
 /obj/structure/stool/bed/chair/comfy/teal
 	icon_state = "comfychair_teal"
 
-/obj/structure/stool/bed/chair/office
-	anchored = 0
-
 /obj/structure/stool/bed/chair/comfy/black
 	icon_state = "comfychair_black"
 
 /obj/structure/stool/bed/chair/comfy/lime
 	icon_state = "comfychair_lime"
+
+/obj/structure/stool/bed/chair/holo/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(istype(W,/obj/item/weapon/wrench))
+		user << "It's holographic!  There's no taking it apart."
+		return
+	..()
+
+/obj/structure/stool/bed/chair/holo/comfy
+	name = "comfy chair"
+	desc = "It looks comfy."
+	icon_state = "comfychair_brown"
+
+/obj/structure/stool/bed/chair/office
+	anchored = 0
 
 /obj/structure/stool/bed/chair/office/Move()
 	..()

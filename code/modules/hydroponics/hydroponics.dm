@@ -35,6 +35,15 @@
 	else
 		..()
 		return
+/obj/machinery/hydroponics/fire_act()
+	adjustWater(-rand(2,8))
+	if(prob(waterlevel)) return
+
+	if(myseed && !dead)
+		adjustHealth(-rand(1,5))
+	else
+		if(prob(2))
+			del src
 
 obj/machinery/hydroponics/process()
 
