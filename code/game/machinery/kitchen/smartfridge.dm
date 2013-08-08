@@ -1,7 +1,8 @@
-/* SmartFridge.  Much todo
-*/
+// -------------------------
+//  SmartFridge.  Much todo
+// -------------------------
 /obj/machinery/smartfridge
-	name = "\improper SmartFridge"
+	name = "smartfridge"
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "smartfridge"
 	layer = 2.9
@@ -25,26 +26,23 @@
 
 
 // ----------------------------
-// Hydroponics Seed Smartfridge (Obsoleted by restockable venders)
+//  Bar drink smartfridge
 // ----------------------------
-/obj/machinery/smartfridge/seeds
-	name = "\improper MegaSeed Servitor"
-	desc = "When you need seeds fast!"
-	icon = 'icons/obj/vending.dmi'
-	icon_state = "seeds"
-	icon_on = "seeds"
-	icon_off = "seeds-off"
-
-/obj/machinery/smartfridge/seeds/accept_check(var/obj/item/O as obj)
-	if(istype(O,/obj/item/seeds/))
+/obj/machinery/smartfridge/drinks
+	name = "drink showcase"
+	desc = "A refrigerated storage unit for tasty tasty alcohol."
+/obj/machinery/smartfridge/drinks/accept_check(var/obj/item/O as obj)
+	if(!istype(O,/obj/item/weapon/reagent_containers) || !O.reagents || !O.reagents.reagent_list.len)
+		return 0
+	if(istype(O,/obj/item/weapon/reagent_containers/glass) || istype(O,/obj/item/weapon/reagent_containers/food/drinks) || istype(O,/obj/item/weapon/reagent_containers/food/condiment))
 		return 1
-	return 0
+
 
 // -------------------------------------
 // Xenobiology Slime-Extract Smartfridge
 // -------------------------------------
 /obj/machinery/smartfridge/extract
-	name = "\improper Slime Extract Storage"
+	name = "slime extract storage"
 	desc = "A refrigerated storage unit for slime extracts"
 
 /obj/machinery/smartfridge/extract/accept_check(var/obj/item/O as obj)
@@ -56,7 +54,7 @@
 // Chemistry Medical Smartfridge
 // -----------------------------
 /obj/machinery/smartfridge/chemistry
-	name = "\improper Chemical Storage"
+	name = "chemical storage"
 	desc = "A refrigerated storage unit for medicine storage."
 	var/list/spawn_meds = list(/obj/item/weapon/reagent_containers/pill/inaprovaline = 12,/obj/item/weapon/reagent_containers/pill/antitox = 2,
 								/obj/item/weapon/reagent_containers/glass/bottle/inaprovaline = 2, /obj/item/weapon/reagent_containers/glass/bottle/antitoxin = 3)
@@ -94,7 +92,7 @@
 // Virology Medical Smartfridge
 // ----------------------------
 /obj/machinery/smartfridge/chemistry/virology
-	name = "\improper Virus Storage"
+	name = "virus storage"
 	desc = "A refrigerated storage unit for volatile sample storage."
 	spawn_meds = list(/obj/item/weapon/reagent_containers/syringe/antiviral = 4, /obj/item/weapon/reagent_containers/glass/bottle/cold = 1, /obj/item/weapon/reagent_containers/glass/bottle/flu_virion = 1, /obj/item/weapon/reagent_containers/glass/bottle/mutagen = 1)
 

@@ -407,6 +407,10 @@
 		..()
 
 /mob/living/simple_animal/corgi/regenerate_icons()
+	if(stat&DEAD)
+		icon_state = icon_dead
+	else
+		icon_state = icon_living
 	overlays = list()
 
 	if(inventory_head)

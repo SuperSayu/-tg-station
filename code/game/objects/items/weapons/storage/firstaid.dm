@@ -111,6 +111,19 @@
 	allow_quick_gather = 1
 	use_to_pickup = 1
 
+/obj/item/weapon/storage/pill_bottle/Del()
+	var/turf/T = get_turf(loc)
+	for(var/obj/item/I in contents)
+		I.loc = T
+		if(prob(65))
+			spawn()
+				step_rand(I)
+				var/d = get_dir(T,I)
+				while(prob(12))
+					step(I,d)
+
+	..()
+
 /obj/item/weapon/storage/pill_bottle/MouseDrop(obj/over_object as obj) //Quick pillbottle fix. -Agouri
 
 	if (ishuman(usr) || ismonkey(usr)) //Can monkeys even place items in the pocket slots? Leaving this in just in case~

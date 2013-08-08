@@ -46,7 +46,9 @@ proc/createRandomZlevel()
 				continue
 			awaydestinations.Add(L)
 
+		makepowernets()
 		world << "\red \b Away mission loaded."
+
 
 	else
 		world << "\red \b No away missions found."

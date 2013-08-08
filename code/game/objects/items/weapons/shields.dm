@@ -141,13 +141,18 @@
 /obj/item/weapon/cloaking_device/on_enter_storage()
 	if(active)
 		icon_state = initial(icon_state)// it is dropped before entering the container, it would become irretrievable
-		cloaked_user.update_icons()
+		if(cloaked_user)
+			cloaked_user.update_icons()
 	..()
+/*
+// Not really needed because it should register a pickup() if it is now in someone's possession
 /obj/item/weapon/cloaking_device/on_exit_storage()
 	if(active)
-		cloaked_user.update_icons()
+		if(istype(loc,/mob))
+			cloaked_user = mob
+			cloaked_user.update_icons()
 	..()
-
+*/
 /obj/item/weapon/cloaking_device/attack_self(mob/user as mob)
 	if(battery.charge < active_power_use && !active)
 		user << "You flip the switch, but nothing happens!"

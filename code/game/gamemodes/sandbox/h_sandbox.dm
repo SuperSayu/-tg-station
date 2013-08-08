@@ -33,7 +33,7 @@ datum/hSB
 		/obj/item/device/uplink/hidden, /obj/item/smallDelivery, /obj/item/missile,/obj/item/projectile,
 		/obj/item/borg/sight,/obj/item/borg/overdrive,/obj/item/borg/stun,
 		/obj/item/organ, /obj/item/alien_embryo, /obj/item/weapon/robot_module, /obj/item/weapon/storage/secure/safe,
-		/obj/item/weapon/storage/belt/bluespace/admin, /obj/item/weapon/grenade/clusterbuster/apocalypse)
+		/obj/item/weapon/storage/belt/bluespace/admin, /obj/item/weapon/grenade/clusterbuster/apocalypse,/obj/item/weapon/veilrender)
 
 	proc
 		update()

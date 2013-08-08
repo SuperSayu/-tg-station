@@ -24,8 +24,8 @@
 
 	New()
 		..()
-		var/obj/item/weapon/reagent_containers/glass/beaker/B1 = new(src)
-		var/obj/item/weapon/reagent_containers/glass/beaker/B2 = new(src)
+		var/obj/item/weapon/reagent_containers/glass/beaker/large/B1 = new(src)
+		var/obj/item/weapon/reagent_containers/glass/beaker/large/B2 = new(src)
 
 		B1.reagents.add_reagent("blood",60)
 		if(prob(5))
@@ -43,7 +43,7 @@
 
 	New()
 		..()
-		var/obj/item/weapon/reagent_containers/glass/beaker/B = new(src)
+		var/obj/item/weapon/reagent_containers/glass/beaker/large/B = new(src)
 		B.reagents.add_reagent("holywater",100)
 		beakers += B
 
@@ -65,6 +65,45 @@
 		beakers += B2
 		update_icon()
 
+/obj/item/weapon/grenade/chem_grenade/drugs
+	payload_name = "miracle"
+	desc = "How does it work?"
+	stage = 2
+
+	New()
+		..()
+		var/obj/item/weapon/reagent_containers/glass/beaker/large/B1 = new(src)
+		var/obj/item/weapon/reagent_containers/glass/beaker/large/B2 = new(src)
+
+		B1.reagents.add_reagent("space_drugs", 25)
+		B1.reagents.add_reagent("mindbreaker", 25)
+		B1.reagents.add_reagent("potassium", 25)
+		B2.reagents.add_reagent("phosphorus", 25)
+		B2.reagents.add_reagent("sugar", 25)
+
+		beakers += B1
+		beakers += B2
+		update_icon()
+
+/obj/item/weapon/grenade/chem_grenade/ethanol
+	payload_name = "ethanol"
+	desc = "Ach, that hits the spot."
+	stage = 2
+
+	New()
+		..()
+		var/obj/item/weapon/reagent_containers/glass/beaker/large/B1 = new(src)
+		var/obj/item/weapon/reagent_containers/glass/beaker/large/B2 = new(src)
+
+		B1.reagents.add_reagent("ethanol", 75)
+		B1.reagents.add_reagent("potassium", 25)
+		B2.reagents.add_reagent("phosphorus", 25)
+		B2.reagents.add_reagent("sugar", 25)
+		B2.reagents.add_reagent("ethanol", 25)
+
+		beakers += B1
+		beakers += B2
+		update_icon()
 
 // -------------------------------------
 // Grenades using new grenade assemblies

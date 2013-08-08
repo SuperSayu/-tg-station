@@ -1,6 +1,6 @@
 /obj/structure/stack_dispenser
 	name = "Materials Storage Unit"
-	desc = "Also called 'shelves'."
+	desc = "Also called 'shelves'.  Used for storing metal and glass stacks."
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "shelves0"
 	density = 1
@@ -97,7 +97,9 @@
 			dat += "<br>"
 		user << browse(dat,"window=matstorage")
 	Topic(var/href, var/list/href_list)
-		if(get_dist(src,usr) > 1) return
+		if(!usr || get_dist(src,usr) > 1) return
+		if("close" in href_list)
+			return
 		var/obj/item/stack/stack = locate(href_list["vend"])
 		var/amount = text2num(href_list["amount"])
 		if(!istype(stack) || !amount) return
@@ -110,8 +112,24 @@
 		stack.use(amount)
 		total -= amount
 		update_icon()
+		attack_hand(usr)
 
 /obj/structure/stack_dispenser/eva
 	spawn_stacks = list(/obj/item/stack/sheet/plasteel = 20, /obj/item/stack/sheet/metal = 100, /obj/item/stack/rods = 50, /obj/item/stack/sheet/rglass = 100, /obj/item/stack/sheet/glass = 100, /obj/item/stack/tile/plasteel = 120)
+
 /obj/structure/stack_dispenser/aux_storage
 	spawn_stacks = list(/obj/item/stack/sheet/metal = 100, /obj/item/stack/sheet/glass = 100, /obj/item/stack/rods = 50, /obj/item/stack/tile/plasteel = 60)
+/obj/structure/stack_dispenser/robotics
+	spawn_stacks = list(/obj/item/stack/sheet/metal = 300, /obj/item/stack/sheet/glass = 100, /obj/item/stack/sheet/plasteel = 20)
+/obj/structure/stack_dispenser/research
+	spawn_stacks = list(/obj/item/stack/sheet/metal = 100, /obj/item/stack/sheet/glass = 100, /obj/item/stack/sheet/plasteel = 10)
+	New()
+		var/list/random_stacks = list(/obj/item/stack/sheet/mineral/gold, /obj/item/stack/sheet/mineral/silver, /obj/item/stack/sheet/mineral/uranium,  /obj/item/stack/sheet/mineral/plasma, /obj/item/stack/sheet/mineral/diamond)
+		spawn_stacks[pick_n_take(random_stacks)] = 5
+		for(var/i = 1 to 7)
+			var/extra = pick(random_stacks)
+			if(extra in spawn_stacks)
+				spawn_stacks[extra]++
+			else
+				spawn_stacks[extra] = 1
+		..()

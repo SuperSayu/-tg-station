@@ -218,3 +218,4 @@
 /obj/effect/landmark/costume/xeno/New()
 	new /obj/item/clothing/suit/xenos(src.loc)
 	new /obj/item/clothing/head/xenos(src.loc)
+	del(src)

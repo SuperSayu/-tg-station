@@ -451,7 +451,7 @@ var/global/list/g_fancy_list_of_safe_types = null
 					pda.id.access = get_all_accesses()+get_all_centcom_access()+get_all_syndicate_access()
 					pda.id.registered_name = H.real_name
 					pda.id.assignment = "Captain"
-					pda.id.name = "[id.registered_name]'s ID Card ([id.assignment])"
+					pda.id.name = "[pda.id.registered_name]'s ID Card ([pda.id.assignment])"
 				else
 					id.icon_state = "gold"
 					id:access = get_all_accesses()+get_all_centcom_access()+get_all_syndicate_access()
@@ -954,7 +954,8 @@ var/global/list/g_fancy_list_of_safe_types = null
 			M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
 			M.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(M), slot_head)
 			M.equip_to_slot_or_del(new /obj/item/weapon/teleportation_scroll(M), slot_r_store)
-			M.equip_to_slot_or_del(new /obj/item/weapon/spellbook(M), slot_r_hand)
+			//M.equip_to_slot_or_del(new /obj/item/weapon/spellbook(M), slot_r_hand)
+			M.equip_to_slot_or_del(new /obj/item/weapon/magic/spellbook/basic(M), slot_r_hand)
 			M.equip_to_slot_or_del(new /obj/item/weapon/staff(M), slot_l_hand)
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(M), slot_back)
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/box(M), slot_in_backpack)
@@ -966,7 +967,7 @@ var/global/list/g_fancy_list_of_safe_types = null
 			M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
 			M.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/red(M), slot_head)
 			M.equip_to_slot_or_del(new /obj/item/weapon/teleportation_scroll(M), slot_r_store)
-			M.equip_to_slot_or_del(new /obj/item/weapon/spellbook(M), slot_r_hand)
+			M.equip_to_slot_or_del(new /obj/item/weapon/magic/spellbook/basic(M), slot_r_hand)
 			M.equip_to_slot_or_del(new /obj/item/weapon/staff(M), slot_l_hand)
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(M), slot_back)
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/box(M), slot_in_backpack)
@@ -978,7 +979,7 @@ var/global/list/g_fancy_list_of_safe_types = null
 			M.equip_to_slot_or_del(new /obj/item/device/radio/headset(M), slot_ears)
 			M.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/marisa(M), slot_head)
 			M.equip_to_slot_or_del(new /obj/item/weapon/teleportation_scroll(M), slot_r_store)
-			M.equip_to_slot_or_del(new /obj/item/weapon/spellbook(M), slot_r_hand)
+			M.equip_to_slot_or_del(new /obj/item/weapon/magic/spellbook/basic(M), slot_r_hand)
 			M.equip_to_slot_or_del(new /obj/item/weapon/staff(M), slot_l_hand)
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(M), slot_back)
 			M.equip_to_slot_or_del(new /obj/item/weapon/storage/box(M), slot_in_backpack)

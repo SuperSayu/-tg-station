@@ -65,6 +65,7 @@
 /obj/structure/largecrate/cow/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/crowbar))
 		new /mob/living/simple_animal/cow(loc)
+		new /obj/item/weapon/pet_collar(loc)
 	..()
 
 /obj/structure/largecrate/goat
@@ -74,6 +75,7 @@
 /obj/structure/largecrate/goat/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/crowbar))
 		new /mob/living/simple_animal/hostile/retaliate/goat(loc)
+		new /obj/item/weapon/pet_collar(loc)
 	..()
 
 /obj/structure/largecrate/chick
@@ -85,4 +87,6 @@
 		var/num = rand(4, 6)
 		for(var/i = 0, i < num, i++)
 			new /mob/living/simple_animal/chick(loc)
+		new /obj/item/weapon/pet_collar(loc)
+		new /obj/item/weapon/pet_collar(loc)
 	..()

@@ -2262,6 +2262,10 @@ datum
 					..()
 					return
 				..()
+			reaction_turf(var/turf/T, var/volume)
+				src = null
+				if(!istype(T, /turf/space))
+					new /obj/effect/decal/cleanable/pie_smudge(T)
 
 		nothing
 			name = "Nothing"

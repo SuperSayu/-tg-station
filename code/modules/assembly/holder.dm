@@ -108,6 +108,13 @@
 		..()
 		process_movement()
 
+	Bump()
+		..()
+		process_movement()
+
+	throw_impact() // called when a throw stops
+		..()
+		process_movement()
 
 	attack_hand()//Perhapse this should be a holder_pickup proc instead, can add if needbe I guess
 		if(a_left && a_right)

@@ -96,6 +96,9 @@
 		if(possible_targets.len > 0)
 			sacrifice_target = pick(possible_targets)
 
+	if(cult.len == 3) // no room for hell, sorry
+		startwords -= "hell"
+
 	for(var/datum/mind/cult_mind in cult)
 		equip_cultist(cult_mind.current)
 		grant_runeword(cult_mind.current)

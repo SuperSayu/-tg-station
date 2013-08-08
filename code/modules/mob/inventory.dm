@@ -79,6 +79,7 @@
 	if(W)
 		if(client)	client.screen -= W
 		u_equip(W)
+		if(!W) return // some "items" delete when dropped
 		W.layer = initial(W.layer)
 		W.loc = loc
 
@@ -99,7 +100,10 @@
 		l_hand.layer = initial(l_hand.layer)
 
 		if(Target)	l_hand.loc = Target.loc
-		else		l_hand.loc = loc
+		else
+			l_hand.loc = loc
+			if(istype(loc,/obj/machinery/atmospherics)) // ventcrawlin
+				l_hand.loc = loc.loc // todo do better
 
 		var/turf/T = get_turf(loc)
 		if(isturf(T))
@@ -118,7 +122,10 @@
 		r_hand.layer = initial(r_hand.layer)
 
 		if(Target)	r_hand.loc = Target.loc
-		else		r_hand.loc = loc
+		else
+			r_hand.loc = loc
+			if(istype(loc,/obj/machinery/atmospherics)) // ventcrawlin
+				r_hand.loc = loc.loc // todo do better
 
 		var/turf/T = get_turf(Target)
 		if(istype(T))

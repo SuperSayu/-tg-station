@@ -42,9 +42,8 @@
 		reestimate = 1
 
 	verb/stir()
-		set src = usr.loc
-		if(usr != src.loc)
-			return
+		set name = "stir container"
+		set src in usr.contents
 		if(reagents && reagents.reagent_list.len)
 			usr.visible_message("[usr] swishes the contents of the [src] around for a moment.","\blue You swirl the [src] and wait for the contents to settle.")
 			reestimate = 1

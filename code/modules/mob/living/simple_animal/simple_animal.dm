@@ -247,10 +247,20 @@
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		adjustBruteLoss(damage)
 
-/mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
-	if(!Proj)	return
-	adjustBruteLoss(Proj.damage)
+
+/mob/living/simple_animal/bullet_act(var/obj/item/projectile/P)
+	if(!P)	return
+	if(!P.nodamage)
+		adjustBruteLoss(P.damage)
+	P.on_hit(src)
 	return 0
+
+
+/mob/living/simple_animal/regenerate_icons()
+	if(stat&DEAD)
+		icon_state = icon_dead
+	else
+		icon_state = icon_living
 
 /mob/living/simple_animal/attack_hand(mob/living/carbon/human/M as mob)
 	..()

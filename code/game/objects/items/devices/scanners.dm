@@ -34,7 +34,7 @@ MASS SPECTROMETER
 		processing_objects.Remove(src)
 		return null
 
-	for(var/turf/T in range(1, src.loc) )
+	for(var/turf/T in range(1, get_turf(loc)) )
 
 		if(!T.intact)
 			continue

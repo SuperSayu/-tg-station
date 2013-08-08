@@ -171,8 +171,9 @@ proc/listclearnulls(list/list)
 /proc/uniquelist(var/list/L)
 	var/list/K = list()
 	for(var/item in L)
-		if(!(item in K))
-			K += item
+		K |= item
+		//if(!(item in K))
+			//K += item
 	return K
 
 //Mergesort: divides up the list into halves to begin the sort
@@ -213,7 +214,15 @@ proc/listclearnulls(list/list)
 	var/list/result = new()
 	while(Li <= L.len && Ri <= R.len)
 		var/atom/rL = L[Li]
+		if(isnull(rL))
+			L -= rL
+			continue
+
 		var/atom/rR = R[Ri]
+		if(isnull(rR))
+			R -= rR
+			continue
+
 		if(sorttext(rL.name, rR.name) == order)
 			result += L[Li++]
 		else

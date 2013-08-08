@@ -208,9 +208,10 @@ var/turf/space/Space_Tile = locate(/turf/space) // A space tile to reference whe
 #define NERVOUS			16
 
 //sdisabilities
-#define BLIND			1
-#define MUTE			2
-#define DEAF			4
+// Note: moved them to not overlap with disabilties, were 1-2-4 -Sayu
+#define BLIND			32
+#define MUTE			64
+#define DEAF			128
 
 //mob/var/stat things
 #define CONSCIOUS	0

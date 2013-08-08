@@ -368,11 +368,11 @@ var/list/binary = list("0","1")
 	if(!istext(into))	into = ""
 	if(!istext(from))	from = ""
 	var/null_ascii = istext(null_char) ? text2ascii(null_char,1) : null_char
-	
+
 	var/previous = 0
 	var/start = 1
 	var/end = length(into) + 1
-	
+
 	for(var/i=1, i<end, i++)
 		var/ascii = text2ascii(from, i)
 		if(ascii == null_ascii)
@@ -385,9 +385,8 @@ var/list/binary = list("0","1")
 				. += copytext(into, start, i)
 				start = i
 				previous = 0
-	
+
 	if(previous == 0)
 		. += copytext(from, start, end)
 	else
 		. += copytext(into, start, end)
-		

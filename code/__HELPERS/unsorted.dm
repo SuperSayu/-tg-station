@@ -931,7 +931,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0, var/at
 
 	if(perfectcopy)
 		if((O) && (original))
-			var/global/list/forbidden_vars = list("type","loc","locs","vars", "parent","parent_type", "verbs","ckey","key","power_supply","contents","reagents","stat","x","y","z")
+			var/global/list/forbidden_vars = list("type","loc","locs","vars", "parent","parent_type", "verbs","ckey","key","power_supply","contents","reagents","stat","x","y","z","group")
 
 			for(var/V in original.vars - forbidden_vars) // yes, list operations work like this
 				if(istype(original.vars[V],/list))

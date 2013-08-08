@@ -16,6 +16,9 @@
 	* "Teleport to syndicate" thing for stealing, hiding bodies, etc - defer?
 	* Slave implanter
 
+	* slime core bag
+	* new sprites for monkey recycler / slime processor
+	* crew computer on mining z-level
 
 	Researchables
 	* Eyewear

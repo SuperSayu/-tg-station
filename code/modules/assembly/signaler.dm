@@ -24,7 +24,8 @@
 		spawn(40)
 			set_frequency(frequency)
 		return
-
+	describe()
+		return "\The [src]'s power light is [receiving?"on":"off"]"
 
 	activate()
 		if(cooldown > 0)	return 0

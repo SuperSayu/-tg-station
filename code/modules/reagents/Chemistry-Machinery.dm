@@ -189,6 +189,7 @@
 
 /obj/machinery/chem_master/New()
 	create_reagents(100)
+	loaded_pill_bottle = new(src)
 
 /obj/machinery/chem_master/ex_act(severity)
 	switch(severity)

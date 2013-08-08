@@ -11,30 +11,94 @@
 		empulse(target, 1, 1)
 		return 1
 
-/obj/item/projectile/bullet/bananacreme
+/obj/item/projectile/reagent
+	name = "syringe dart"
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "syringeproj"
+	damage = 0
+	nodamage = 1
+	flag = "bullet"
+	kill_count = 8 // lower range by far
+	var/obj/item/contained = null
+
+	New(loc,obj/item/reagent_source = null)
+		if(reagent_source && reagent_source.reagents)
+			contained = reagent_source
+			contained.loc = src
+		..()
+
+	on_hit(var/atom/target,var/blocked=0)
+		var/destroy = 0
+		if(prob(32))
+			splat(target)
+			destroy = 1
+		if(istype(target,/mob))
+			var/mob/M = target
+			if(contained && contained.reagents && M.reagents)
+				contained.reagents.trans_to(M,contained.reagents.total_volume)
+			destroy = 1
+		if(destroy)
+			del contained
+		else
+			contained.loc = loc
+			step_rand(contained)
+
+	proc/splat(var/atom/A)
+		A = get_turf(A)
+		if(!A) return
+		for(var/datum/reagent/R in contained.reagents.reagent_list)
+			R.reaction_turf(A)
+	/*
+	Bump(atom/A as mob|obj|turf)
+		var/turf/simulated/T = get_turf(A)
+		if(contained && contained.reagents && prob(33) && istype(A))
+			if(contained.reagents.has_reagent("banana") && !(locate(/obj/effect/decal/cleanable/pie_smudge) in T))
+				new /obj/effect/decal/cleanable/pie_smudge(T)
+			for(var/datum/reagent/R in contained.reagents.reagent_list)
+				R.reaction_turf(T)
+
+		return ..(A)
+	*/
+	log_hit(var/mob/target)
+		var/R = ""
+		if(contained && contained.reagents)
+			for(var/datum/reagent/A in contained.reagents.reagent_list)
+				R += A.id + ","
+		else
+			R = "no payload"
+		if(istype(firer, /mob))
+			target.attack_log += "\[[time_stamp()]\] <b>[firer]/[firer.ckey]</b> shot <b>[target]/[target.ckey]</b> with a <b>[src]</b> ([R])"
+			firer.attack_log += "\[[time_stamp()]\] <b>[firer]/[firer.ckey]</b> shot <b>[target]/[target.ckey]</b> with a <b>[src]</b> ([R])"
+			log_attack("<font color='red'>[firer] ([firer.ckey]) shot [target] ([target.ckey]) with a [src] ([R])</font>")
+		else
+			target.attack_log += "\[[time_stamp()]\] <b>UNKNOWN SUBJECT (No longer exists)</b> shot <b>[target]/[target.ckey]</b> with a <b>[src]</b> ([R])"
+			log_attack("<font color='red'>UNKNOWN shot [target] ([target.ckey]) with a [src] ([R])</font>")
+
+/obj/item/projectile/reagent/bananacreme
 	name = "banana creme bullet"
 	damage = 0
 	nodamage = 1
 	flag = "bullet"
 
-	on_hit(var/atom/target,var/blocked=0)
-		if(istype(target,/mob))
-			var/mob/M = target
-			if(M.reagents) // Mama Clown's recipe
-				M.reagents.add_reagent("nutriment", 4)
-				M.reagents.add_reagent("banana",5)
-				M.reagents.add_reagent("cornoil", 1)
-				M.reagents.add_reagent("sugar",1)
-				if(prob(1))
-					M.reagents.add_reagent("minttoxin",1)
+	New()
+		..()
+		contained = new /obj/item/weapon/reagent_containers/food/snacks(src)
+		contained.name = "banana creme bullet"
+		contained.desc = "Oh god it's dripping all over your fingers and it smells SO good."
+		contained.icon = 'icons/obj/items.dmi'
+		contained.icon_state = "banana"
+		contained.item_state = "banana"
+
+		contained:bitecount = 1 // snack variables not in scope
+		contained:bitesize = 10
+
+		contained.reagents.add_reagent("nutriment", 3)
+		contained.reagents.add_reagent("banana",3)
+		contained.reagents.add_reagent("cornoil", 1)
+		contained.reagents.add_reagent("sugar",1)
+		if(prob(1))
+			contained.reagents.add_reagent("minttoxin",1)
 		return
-
-	Bump(atom/A as mob|obj|turf|area)
-		var/turf/T = get_turf(A)
-		if(prob(33) && !(locate(/obj/effect/decal/cleanable/pie_smudge) in T))
-			new /obj/effect/decal/cleanable/pie_smudge(T)
-		return ..(A)
-
 
 /obj/item/projectile/bullet/gyro
 	name ="explosive bolt"

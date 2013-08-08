@@ -122,6 +122,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W,/obj/item/weapon/storage))
 		..() // -> item/attackby()
+		return 0
 	if((slices_num <= 0 || !slices_num) || !slice_path)
 		return 0
 	var/inaccurate = 0
@@ -151,7 +152,7 @@
 		contents += W
 		return 1
 	else
-		return 0
+		return 0 // this
 	if ( \
 			!isturf(src.loc) || \
 			!(locate(/obj/structure/table) in src.loc) && \

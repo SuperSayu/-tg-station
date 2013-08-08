@@ -2,22 +2,24 @@
 	name = "Meaty Space Dust"
 	typepath = /datum/round_event/dust/meaty
 	weight = 10
-	max_occurrences = 100
+	max_occurrences = 20
 	earliest_start = 0
 
 /datum/round_event/dust/meaty/announce()
-	if(prob(33))
+	if(prob(16))
 		command_alert("Unknown biological entities have been detected near [station_name()], please stand-by.", "Lifesign Alert")
 	else
 		command_alert("Meaty ores have been detected on collision course with the station.", "Meaty Ore Alert")
 		world << sound('sound/AI/meteors.ogg')
 
 /datum/round_event/dust/meaty/setup()
-	qnty = rand(5,25)
+	qnty = rand(45,125)
 
 /datum/round_event/dust/meaty/start()
 	while(qnty-- > 0)
 		new /obj/effect/space_dust/meaty()
+		if(prob(10))
+			sleep(rand(10,15))
 
 /obj/effect/space_dust/meaty
 	icon = 'icons/mob/animal.dmi'
@@ -25,8 +27,6 @@
 
 	strength = 1
 	life = 3
-
-
 
 	Bump(atom/A)
 		if(prob(20))

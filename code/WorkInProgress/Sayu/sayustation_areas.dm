@@ -32,6 +32,10 @@
 /area/holodeck/source_medical
 	name = "Emergency Medical Center"
 
+/area/holodeck/source_lounge
+	name = "Lounge"
+
+
 // Not used - Theater holodeck
 /area/holodeck/betadeck
 	name = "\improper Holodeck Beta"
@@ -108,7 +112,5 @@
 	name = "Holodeck - Dance Party"
 	party = 1
 
-// Note that icon states will have to be manually configured for this one
-// I'm not the source of this problem, I'm just not the solution.
 /area/holodeck/theater/hyperspace
 	name = "Holodeck - Hyperspace"

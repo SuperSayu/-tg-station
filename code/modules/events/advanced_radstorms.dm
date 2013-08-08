@@ -6,13 +6,15 @@
 /datum/round_event_control/radiation_storm/pota
 	name 			= "Planet of the Apes Radiation"
 	typepath 		= /datum/round_event/radiation_storm/pota
-	weight 			= 3
+	weight 			= 1
 	max_occurrences = 2
+	minimumCrew		= 12
 /datum/round_event_control/radiation_storm/ffour
 	name 			= "Fantastic Four Radiation"
 	typepath 		= /datum/round_event/radiation_storm/ffour
-	weight 			= 6
+	weight 			= 2
 	max_occurrences = 1
+	minimumCrew		= 6
 /datum/round_event_control/radiation_storm/healing
 	name 			= "Healing Radiation"
 	typepath 		= /datum/round_event/radiation_storm/healing
@@ -46,10 +48,21 @@
 			if((ishuman(L) || ismonkey(L)) &&  rad_armorcheck(L))
 				var/mob/living/carbon/C = L
 				if(!C.dna) continue
-				C.dna.uni_identity = dna_toggle_block(C.dna.uni_identity,11)
+				//C.dna.uni_identity = dna_toggle_block(C.dna.uni_identity,11)
+
+				switch(C.gender)
+					if(MALE)
+						C.gender = FEMALE
+					if(FEMALE)
+						C.gender = MALE
+					else
+						C.gender = pick(MALE,FEMALE)
+				C.dna.uni_identity = setblock(C.dna.uni_identity, DNA_GENDER_BLOCK, construct_block((C.gender!=MALE)+1, 2))
+
 				var/time = rand(10,100)
 				C.emote("collapse")
-				C.apply_effect(time/10,WEAKEN)
+				C.apply_effect(round(time/10),WEAKEN)
+
 				spawn(time)
 					if(C != null)
 						updateappearance(C)
@@ -69,7 +82,7 @@
 			if(!T || T.z != 1)			continue
 
 			C.apply_effect(rand(25,125),IRRADIATE)
-			if((ishuman(C) || ismonkey(C)) &&  rad_armorcheck(C))
+			if((ishuman(C) || ismonkey(C)) &&  rad_armorcheck(C,0.33))
 				var/mob/living/carbon/L = C // fuck you, anyone else who's reading this
 				if(!L.dna) continue
 				L.dna.struc_enzymes = dna_toggle_block(L.dna.struc_enzymes,RACEBLOCK,3)
@@ -95,6 +108,7 @@
 		while(powerblocks.len && candidates.len)
 			var/block = pick(powerblocks)
 			var/mob/living/carbon/human/H = pick(candidates)
+			if(!H.dna) continue
 
 			powerblocks	-= block
 			candidates	-= H
@@ -111,5 +125,5 @@
 			var/turf/T = get_turf(L)
 			if(!T || T.z != 1)			continue
 
-			if(rad_armorcheck(L,0.66))
-				L.apply_damages(-100,-100,-100,-100,-100)
+			if(L.stat != 2 && rad_armorcheck(L,0.33))
+				L.revive() // miraculous

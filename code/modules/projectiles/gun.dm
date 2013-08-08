@@ -48,11 +48,13 @@
 		//Exclude lasertag guns from the CLUMSY check.
 		if(clumsy_check)
 			if(istype(user, /mob/living))
-				var/mob/living/M = user
-				if ((CLUMSY in M.mutations) && prob(40))
-					M << "<span class='danger'>You shoot yourself in the foot with the [src]!</span>"
-					afterattack(user, user)
-					M.drop_item()
+				if ((CLUMSY in user.mutations) && prob(40))
+					if(load_into_chamber() && in_chamber)
+						user << "<span class='danger'>You shoot yourself in the foot with the [src]!</span>"
+						fireat(user, user)
+					else
+						user << "<span class='warning'>You fumble the [src] for a moment before dropping it on the ground!</span>"
+						user.drop_item()
 					return
 
 		if (!user.IsAdvancedToolUser())
@@ -68,7 +70,16 @@
 			if(H.dna && H.dna.mutantrace == "adamantine")
 				user << "<span class='notice'>Your metal fingers don't fit in the trigger guard!</span>"
 				return
+		if(!special_check(user))
+			return
 
+		if(!load_into_chamber() || !in_chamber)
+			user << "<span class='warning'>*click*</span>"
+			return
+
+		fireat(target,user,params)
+
+	proc/fireat(var/atom/target, var/mob/living/user, var/params)
 		add_fingerprint(user)
 
 		var/turf/curloc = user.loc
@@ -76,18 +87,11 @@
 		if (!istype(targloc) || !istype(curloc))
 			return
 
-		if(!special_check(user))
-			return
-		if(!load_into_chamber())
-			user << "<span class='warning'>*click*</span>"
-			return
-
 		if(!in_chamber)
 			return
 
 		in_chamber.firer = user
 		in_chamber.def_zone = user.zone_sel.selecting
-
 
 		if(recoil)
 			spawn()
@@ -100,15 +104,14 @@
 			user.visible_message("<span class='danger'>[user] fires [src]!</span>", "<span class='danger'>You fire [src]!</span>", "You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
 
 		prepare_shot(in_chamber)				//Set the projectile's properties
-		
-
 
 		if(targloc == curloc)			//Fire the projectile
 			user.bullet_act(in_chamber)
 			del(in_chamber)
 			update_icon()
 			return
-		in_chamber.original = target		
+
+		in_chamber.original = target
 		in_chamber.loc = get_turf(user)
 		in_chamber.starting = get_turf(user)
 		in_chamber.current = curloc

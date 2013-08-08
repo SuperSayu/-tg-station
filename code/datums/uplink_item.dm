@@ -130,6 +130,11 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/pen/paralysis
 	cost = 3
 
+/datum/uplink_item/stealthy_weapons/blowgun
+	name = "Blowgun"
+	item = /obj/item/clothing/mask/blowgun
+	cost = 1
+
 /datum/uplink_item/stealthy_weapons/soap
 	name = "Syndicate Soap"
 	item = /obj/item/weapon/soap/syndie

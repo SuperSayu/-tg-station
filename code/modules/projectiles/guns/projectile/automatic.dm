@@ -44,7 +44,7 @@
 		return
 
 
-	afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag)
+	fireat(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params)
 		..()
 		if(!loaded.len && empty_mag)
 			empty_mag.loc = get_turf(src.loc)
@@ -83,7 +83,7 @@
 		return
 
 
-	afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag)
+	fireat(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params)
 		..()
 		if(!loaded.len && empty_mag)
 			empty_mag.loc = get_turf(src.loc)

@@ -1,5 +1,6 @@
 
 /mob/new_player/proc/handle_privacy_poll()
+	return // no, fuck you
 	establish_db_connection()
 	if(!dbcon.IsConnected())
 		return
@@ -15,6 +16,7 @@
 		privacy_poll()
 
 /mob/new_player/proc/privacy_poll()
+	return // no, fuck you
 	var/output = "<div align='center'><B>Player poll</B>"
 	output +="<hr>"
 	output += "<b>We would like to expand our stats gathering.</b>"

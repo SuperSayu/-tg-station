@@ -11,5 +11,7 @@
 	var/tally = 0 //Incase I need to add stuff other than "speed" later
 
 	tally = speed
+	if(!cell || !cell.charge) // whose the fuck idea was it for batteryless borgs to move at full speed
+		tally += 20
 
 	return tally+config.robot_delay

@@ -80,6 +80,7 @@
 			user << "\red [O] is full."
 		if(!transfered)
 			user << "\red The udder is dry. Wait a bit longer..."
+		return 1
 	else
 		..()
 //cow
@@ -126,8 +127,8 @@
 			user << "\red [O] is full."
 		if(!transfered)
 			user << "\red The udder is dry. Wait a bit longer..."
-	else
-		..()
+		return 1
+	..()
 
 /mob/living/simple_animal/cow/Life()
 	. = ..()

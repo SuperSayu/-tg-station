@@ -43,6 +43,8 @@
 	if(stat == DEAD)	return
 	if(healths)			healths.icon_state = "health5"
 	stat = DEAD
+	if(istype(loc,/obj/machinery/atmospherics))
+		loc = loc.loc // todo do this better
 
 	if(!gibbed)
 		visible_message("<b>[src]</b> lets out a faint chimper as it collapses and stops moving...")	//ded -- Urist

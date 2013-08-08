@@ -20,17 +20,22 @@
 	..()
 
 /obj/structure/falsewall/Del()
+	density = 0
+	SetOpacity(0)
+	icon = null
+	update_nearby_tiles()
 
 	var/temploc = src.loc
-
+	loc = null
 	spawn(10)
-		for(var/turf/simulated/wall/W in range(temploc,1))
+		var/list/R = range(temploc,1)
+		for(var/turf/simulated/wall/W in R)
 			W.relativewall()
 
-		for(var/obj/structure/falsewall/W in range(temploc,1))
+		for(var/obj/structure/falsewall/W in R)
 			W.relativewall()
 
-		for(var/obj/structure/falserwall/W in range(temploc,1))
+		for(var/obj/structure/falserwall/W in R)
 			W.relativewall()
 	..()
 
@@ -185,6 +190,7 @@
 		if(istype(east)) air_master.tiles_to_update += east
 		if(istype(west)) air_master.tiles_to_update += west
 	return 1
+
 /obj/structure/falsewall/proc/update_heat_protection(var/turf/simulated/source)
 	if(istype(source))
 		if(src.density)
@@ -192,9 +198,6 @@
 		else
 			source.thermal_conductivity = initial(source.thermal_conductivity)
 /obj/structure/falsewall/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
-	if(air_group) return 0
-	if(istype(mover) && mover.checkpass(PASSGLASS))
-		return !opacity
 	return !density
 
 /*

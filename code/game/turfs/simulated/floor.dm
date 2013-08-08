@@ -44,6 +44,14 @@ var/list/plating_icons = list("plating","platingdmg1","platingdmg2","platingdmg3
 	else
 		icon_regular_floor = icon_state
 
+/turf/simulated/floor/examine()
+	..()
+	if(wet)
+		usr << "It looks wet."
+	for(var/obj/effect/decal/cleanable/dirt/D in contents)
+		usr << "It is covered in dirt."
+		break
+
 //turf/simulated/floor/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
 //	if ((istype(mover, /obj/machinery/vehicle) && !(src.burnt)))
 //		if (!( locate(/obj/machinery/mass_driver, src) ))
@@ -54,12 +62,19 @@ var/list/plating_icons = list("plating","platingdmg1","platingdmg2","platingdmg3
 	//set src in oview(1)
 	switch(severity)
 		if(1.0)
-			src.ChangeTurf(/turf/space)
+			if(prob(82))
+				src.ChangeTurf(/turf/space)
+			else
+				src.break_tile_to_plating()
+				new /obj/structure/faketurf(src)
 		if(2.0)
-			switch(pick(1,2;75,3))
+			switch(pick(1,75;2,3))
 				if (1)
-					src.ReplaceWithLattice()
-					if(prob(33)) new /obj/item/stack/sheet/metal(src)
+					if(prob(50))
+						src.ReplaceWithLattice()
+						if(prob(33)) new /obj/item/stack/sheet/metal(src)
+					else
+						new /obj/structure/faketurf(src)
 				if(2)
 					src.ChangeTurf(/turf/space)
 				if(3)
@@ -175,7 +190,6 @@ turf/simulated/floor/proc/update_icon()
 			return "wood_siding[dir_sum]"
 		else
 			return 0
-
 
 /turf/simulated/floor/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -404,13 +418,12 @@ turf/simulated/floor/proc/update_icon()
 	burnt = 0
 	intact = 1
 	//icon_state = "carpet"
-	if(T)
-		if(istype(T,/obj/item/stack/tile/carpet))
-			floor_tile = T
-			update_icon()
-			levelupdate()
-			return
-	//if you gave a valid parameter, it won't get thisf ar.
+	if(istype(T))
+		floor_tile = T
+		update_icon()
+		levelupdate()
+		return
+	//if you gave a valid parameter, it won't get this far.
 	floor_tile = new/obj/item/stack/tile/carpet
 
 	update_icon()

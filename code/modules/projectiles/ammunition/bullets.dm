@@ -101,7 +101,7 @@
 	caliber = "honk"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "banana_peel"
-	projectile_type = "/obj/item/projectile/bullet/bananacreme"
+	projectile_type = "/obj/item/projectile/reagent/bananacreme"
 
 	HasEntered(AM as mob|obj)
 		if(BB)

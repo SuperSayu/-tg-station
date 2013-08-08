@@ -4,7 +4,7 @@
 	weight				= 10
 	earliest_start		= 6000
 	max_occurrences		= 6
-	minimumCrew			= 3
+	minimumCrew			= 4
 
 /datum/round_event/carp_migration
 	announceWhen	= 50

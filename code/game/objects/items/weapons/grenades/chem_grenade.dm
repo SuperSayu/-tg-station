@@ -241,6 +241,15 @@
 	if(nadeassembly)
 		nadeassembly.hear_talk(M, msg)
 
+/obj/item/weapon/grenade/chem_grenade/Bump()
+	..()
+	if(nadeassembly)
+		nadeassembly.process_movement()
+
+/obj/item/weapon/grenade/chem_grenade/throw_impact() // called when a throw stops
+	..()
+	if(nadeassembly)
+		nadeassembly.process_movement()
 
 
 /obj/item/weapon/grenade/chem_grenade/prime()
@@ -291,6 +300,7 @@
 		nadeassembly.a_right.holder = nadeassembly
 		nadeassembly.secured = 1
 		nadeassembly.master = src
+		nadeassembly.update_icon()
 		stage = READY
 		update_icon()
 
@@ -417,10 +427,11 @@
 		var/obj/item/weapon/reagent_containers/glass/beaker/B1 = new(src)
 		var/obj/item/weapon/reagent_containers/glass/beaker/B2 = new(src)
 
-		B1.reagents.add_reagent("plantbgone", 25)
-		B1.reagents.add_reagent("potassium", 25)
-		B2.reagents.add_reagent("phosphorus", 25)
-		B2.reagents.add_reagent("sugar", 25)
+		B1.reagents.add_reagent("plantbgone", 30)
+		B1.reagents.add_reagent("potassium", 20)
+		B2.reagents.add_reagent("phosphorus", 20)
+		B2.reagents.add_reagent("sugar", 20)
+		B2.reagents.add_reagent("plantbgone", 10)
 
 		beakers += B1
 		beakers += B2
@@ -435,11 +446,11 @@
 	New()
 		..()
 		var/obj/item/weapon/reagent_containers/glass/beaker/B1 = new(src)
-		var/obj/item/weapon/reagent_containers/glass/beaker/B2 = new(src)
+		var/obj/item/weapon/reagent_containers/glass/beaker/large/B2 = new(src)
 
 		B1.reagents.add_reagent("fluorosurfactant", 40)
 		B2.reagents.add_reagent("water", 40)
-		B2.reagents.add_reagent("cleaner", 10)
+		B2.reagents.add_reagent("cleaner", 60)
 
 		beakers += B1
 		beakers += B2

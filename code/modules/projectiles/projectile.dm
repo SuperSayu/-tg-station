@@ -63,6 +63,15 @@
 		return 1
 
 
+	proc/log_hit(var/mob/target)
+		if(istype(firer, /mob))
+			target.attack_log += "\[[time_stamp()]\] <b>[firer]/[firer.ckey]</b> shot <b>[target]/[target.ckey]</b> with a <b>[src]</b>"
+			firer.attack_log += "\[[time_stamp()]\] <b>[firer]/[firer.ckey]</b> shot <b>[target]/[target.ckey]</b> with a <b>[src]</b>"
+			log_attack("<font color='red'>[firer] ([firer.ckey]) shot [target] ([target.ckey]) with a [src]</font>")
+		else
+			target.attack_log += "\[[time_stamp()]\] <b>UNKNOWN SUBJECT (No longer exists)</b> shot <b>[target]/[target.ckey]</b> with a <b>[src]</b>"
+			log_attack("<font color='red'>UNKNOWN shot [target] ([target.ckey]) with a [src]</font>")
+
 	Bump(atom/A as mob|obj|turf|area)
 		if(A == firer)
 			loc = A.loc
@@ -85,14 +94,8 @@
 			else
 				M.visible_message("<span class='danger'>[M] is hit by [src] in the [parse_zone(def_zone)]!", \
 									"<span class='userdanger'>[M] is hit by [src] in the [parse_zone(def_zone)]!")	//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
+			log_hit(M)
 
-			if(istype(firer, /mob))
-				M.attack_log += "\[[time_stamp()]\] <b>[firer]/[firer.ckey]</b> shot <b>[M]/[M.ckey]</b> with a <b>[src]</b>"
-				firer.attack_log += "\[[time_stamp()]\] <b>[firer]/[firer.ckey]</b> shot <b>[M]/[M.ckey]</b> with a <b>[src]</b>"
-				log_attack("<font color='red'>[firer] ([firer.ckey]) shot [M] ([M.ckey]) with a [src]</font>")
-			else
-				M.attack_log += "\[[time_stamp()]\] <b>UNKNOWN SUBJECT (No longer exists)</b> shot <b>[M]/[M.ckey]</b> with a <b>[src]</b>"
-				log_attack("<font color='red'>UNKNOWN shot [M] ([M.ckey]) with a [src]</font>")
 
 		spawn(0)
 			if(A)

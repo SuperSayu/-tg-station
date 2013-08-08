@@ -44,7 +44,7 @@
 				user << "<span class='notice'>You begin to reinforce the barrel of [src].</span>"
 				if(loaded.len)
 					afterattack(user, user)	//you know the drill
-					playsound(user, fire_sound, 50, 1)
+					//playsound(user, fire_sound, 50, 1)
 					user.visible_message("<span class='danger'>[src] goes off!</span>", "<span class='danger'>[src] goes off in your face!</span>")
 					return
 				if(do_after(user, 30))
@@ -58,7 +58,7 @@
 				user << "<span class='notice'>You begin to revert the modifications to [src].</span>"
 				if(loaded.len)
 					afterattack(user, user)	//and again
-					playsound(user, fire_sound, 50, 1)
+					//playsound(user, fire_sound, 50, 1)
 					user.visible_message("<span class='danger'>[src] goes off!</span>", "<span class='danger'>[src] goes off in your face!</span>")
 					return
 				if(do_after(user, 30))

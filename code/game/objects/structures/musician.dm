@@ -54,7 +54,7 @@
 	instrumentObj.updateDialog()		// assumes it's an object in world, override if otherwise
 
 /datum/song/proc/shouldStopPlaying()
-	return !instrumentObj.anchored		// add special cases to stop in subclasses
+	return !instrumentObj || !instrumentObj.anchored		// add special cases to stop in subclasses
 
 /datum/song/proc/playsong(mob/user as mob)
 	while(repeat >= 0)

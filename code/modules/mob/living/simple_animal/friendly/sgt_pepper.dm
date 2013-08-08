@@ -276,7 +276,7 @@
 				if(1)
 					var/result = pick(smell_approved_emotes)
 					visible_message("\blue [result]")
-					if(prob(59))
+					if(prob(89))
 						W.attack_animal(src)
 						if(user in dislike)
 							dislike -= user

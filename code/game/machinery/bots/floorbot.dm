@@ -262,15 +262,20 @@
 					break
 
 	if(!src.target && emagged == 2)
-		for (var/turf/simulated/floor/D in view(7,src))
-			if(consider(D) && D.intact)
-				src.oldtarget = D
-				src.target = D
-				break
-
+		if(istype(loc,/turf/simulated/floor) && consider(loc))
+			src.oldtarget = loc
+			src.target = loc
+		else
+			for (var/turf/simulated/floor/D in view(7,src))
+				if(consider(D) && D.intact)
+					src.oldtarget = D
+					src.target = D
+					break
 	if(!src.target)
 		if(src.loc != src.oldloc)
 			src.oldtarget = null
+		if(emagged == 2)
+			step_rand(src)
 		return
 	floorbottargets |= src.target
 	unreachable -= src.target
@@ -312,16 +317,23 @@
 			var/turf/simulated/floor/F = src.target
 			src.anchored = 1
 			src.repairing = 1
-			if(prob(90))
+			src.icon_state = "floorbot-c"
+			if(!F.is_plating())
 				F.break_tile_to_plating()
-			else
-				F.ReplaceWithLattice()
-			visible_message("\red [src] makes an excited booping sound.")
-			spawn(50)
+				visible_message("\red [src] makes an excited booping sound.")
+				src.oldtarget = null // special case here because we want to put holes in the floor
 				src.amount ++
+			else if(prob(30))
+				F.ReplaceWithLattice()
+				visible_message("\red [src] makes an excited booping sound.")
+				src.amount ++
+
+			spawn(150)
 				src.anchored = 0
 				src.repairing = 0
 				src.target = null
+				src.update_icon()
+
 		src.path = new()
 		return
 

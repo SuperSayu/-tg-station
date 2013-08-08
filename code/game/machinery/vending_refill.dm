@@ -17,21 +17,21 @@
 					return 1
 				return 0 // no labels message
 
-		if(istype(W, /obj/item/weapon/card/emag))
+		if(istype(W, /obj/item/weapon/card/emag) && !emagged)
 			emagged = 1
 			extended_inventory = !extended_inventory
 			if(coin_records.len)
 				hidden_records += coin_records
 				coin_records.Cut()
 				contraband += premium
-				premium.Cut()
+				premium = list(null)
 			user << "You short out the product lock on [src]"
 			if(coin)
 				coin.loc = loc
 				user << "\blue[coin] pops out!"
 				coin = null
 			updateUsrDialog()
-			return 1
+			return 0
 		else if(istype(W, /obj/item/weapon/screwdriver))
 			panel_open = !panel_open
 			user << "You [panel_open ? "open" : "close"] the maintenance panel."
@@ -39,11 +39,11 @@
 			if(panel_open)
 				overlays += image(icon, "[initial(icon_state)]-panel")
 			updateUsrDialog()
-			return 1
+			return 0
 		else if(istype(W, /obj/item/device/multitool)||istype(W, /obj/item/weapon/wirecutters))
 			if(panel_open)
 				attack_hand(user)
-				return 1
+				return 0
 		else if(istype(W, /obj/item/weapon/coin) && premium.len > 0)
 			user.drop_item()
 			W.loc = src
@@ -57,7 +57,7 @@
 				return 1
 			else
 				..()
-				return 1
+				return 0
 
 	proc/allow_insert(var/obj/item/I, var/mob/user)
 		if(!emagged && scan_id_insert && !allowed(user))
@@ -104,7 +104,7 @@
 			return new typepath(loc)
 
 /obj/machinery/vending/refillable/generic
-	name = "Do-it-yourself Vend-o-mat"
+	name = "do-it-yourself vend-o-mat"
 	desc = "Filled with dreams--YOUR dreams.  Which is to say, empty."
 	allow_insert(var/obj/item/I)
 		if(istype(I))
@@ -116,8 +116,22 @@
 			anchored = 0
 
 
+/obj/machinery/vending/refillable/drink
+	name = "mixed drink vender"
+	desc = "Full of the bartender's leftovers."
+
+	allow_insert(var/obj/item/weapon/reagent_containers/W as obj, var/mob/user as mob)
+		if(!istype(W,/obj/item/weapon/reagent_containers/food/drinks) || !W.reagents)
+			return 0
+		if(istype(W,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass) && W.reagents.reagent_list.len) // no full glasses
+			return 0
+		if(!W.reagents.reagent_list.len) // no empty bottles
+			return 0
+
+		return (emagged || !scan_id_insert || allowed(user))
+
 /obj/machinery/vending/refillable/theatre
-	name = "\improper Prop Storage"
+	name = "prop storage"
 	desc = "Contains various props and toys; access to some has been restricted."
 	req_access_txt = "46" // access_theatre
 	products = list(/obj/item/weapon/lipstick = 1, /obj/item/weapon/lipstick/black = 1, /obj/item/weapon/lipstick/jade = 1, /obj/item/weapon/lipstick/purple = 1,
@@ -162,7 +176,7 @@
 			return 1
 
 /obj/machinery/vending/refillable/wardrobe
-	name = "\improper clothing vendor"
+	name = "clothing vendor"
 	desc = "Clean, pressed, and dressed to robust."
 	icon_state = "robotics"
 	icon_deny = "robotics_deny"
@@ -183,14 +197,13 @@
 	premium = list(/obj/item/clothing/head/beret = 2, /obj/item/clothing/head/cakehat = 0, /obj/item/clothing/head/flatcap = 1, /obj/item/clothing/head/that = 2,
 					/obj/item/clothing/under/suit_jacket = 1, /obj/item/clothing/under/sundress = 1, /obj/item/clothing/shoes/sandal = 1,
 					/obj/item/clothing/glasses/monocle = 1)
-	contraband = list(/obj/item/clothing/under/color/rainbow = 1, /obj/item/clothing/head/soft/rainbow = 1, /obj/item/clothing/gloves/rainbow = 1, /obj/item/clothing/shoes/rainbow = 1, /obj/item/clothing/under/blackskirt = 1, /obj/item/clothing/shoes/clown_shoes = 1)
+	contraband = list(/obj/item/clothing/under/color/rainbow = 1, /obj/item/clothing/head/soft/rainbow = 1, /obj/item/clothing/gloves/rainbow = 1, /obj/item/clothing/shoes/rainbow = 1, /obj/item/clothing/under/blackskirt = 1, /obj/item/clothing/shoes/clown_shoes = 1, /obj/item/clothing/shoes/laceup = 1)
 
 
 /obj/machinery/vending/refillable/food
-	name = "Fresh Food Vendor"
+	name = "fresh food vendor"
 	desc = "Straight from the cook's hands to your mouth.  Mmm, MMM!"
 	icon_state = "nutrimat" // could use smartfridge but I want it visually distinct
-	wheeled = 0 // used as a barrier, don't allow it to move
 
 	product_slogans = "Kiss the cook!;Please don't harrass the cook.;Have a snack.;Don't forget to eat!"
 	product_ads = "Don't forget to say thank you.;Please, have something to eat.;The management is not responsible for the quality of these meals."
@@ -240,7 +253,7 @@
 		..()
 
 /obj/machinery/vending/refillable/chemistry
-	name = "Chemistry Supplies"
+	name = "chemistry supplies"
 	desc = "The third hand you need to give the station what it needs."
 	products = list(/obj/item/weapon/reagent_containers/glass/beaker/large = 5, /obj/item/weapon/reagent_containers/glass/beaker = 12,
 					/obj/item/weapon/storage/pill_bottle = 10, /obj/item/weapon/reagent_containers/syringe = 18,
@@ -277,9 +290,10 @@
 		return 1
 
 /obj/machinery/vending/refillable/food/plant
-	name = "Farmer's Market"
+	name = "farmer's market"
 	desc = "Straight from the botanist's dirty, grubby hands to your stomach."
 	product_slogans = "Eat fresh!;You didn't really want meat anyway.;Caution: May contain essential vitamins and nutrients."
+	req_access_txt = "0"
 
 	allow_insert(var/obj/item/W, var/mob/user)
 		if(!istype(W,/obj/item/weapon/grown) && !istype(W,/obj/item/weapon/reagent_containers/food/snacks/grown) && !istype(W,/obj/item/stack/sheet/wood))

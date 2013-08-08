@@ -1,8 +1,8 @@
 /obj/item/device/portacrew
 	name = "Crew Monitor"
 	desc = "Monitors crew status on the go."
-	icon = 'icons/obj/terminals.dmi'
-	icon_state = "newscaster_off"
+	icon = 'icons/obj/computer.dmi'
+	icon_state = "medlaptop"
 
 	var/list/tracked = list()
 
