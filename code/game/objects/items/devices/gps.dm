@@ -1,7 +1,7 @@
 /obj/item/device/gps
 	name = "Space Positioning System"
 	desc = "Helping lost spacemen find their way through the galaxy since 3016."
-	icon = 'obj/telescience.dmi'
+	icon = 'icons/obj/telescience.dmi'
 	icon_state = "gps-c"
 	w_class = 2.0
 	flags = FPRINT | TABLEPASS
