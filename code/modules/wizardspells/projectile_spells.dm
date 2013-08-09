@@ -124,9 +124,7 @@
 	while(counter--)
 		var/mob/target = pick_n_take(possible_targets)
 		var/turf/end = get_turf(target)
-		var/turf/near = get_step_rand(get_step_towards(start,target))
-		if(prob(25)) near = get_step_rand(near)
-		fire(new projectile_type(near), target, near, end, caster)
+		fire(new projectile_type(start), target, start, end, caster)
 
 		if(!possible_targets.len && counter && backup.len) // Ensure it doesn't double up unless there are not enough targets
 			possible_targets = backup.Copy()

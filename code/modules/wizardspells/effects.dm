@@ -225,7 +225,7 @@
 	name = "magic blade"
 	icon_state = "render"
 	damage_type = BRUTE
-	damage = 35
+	damage = 12
 	weaken = 1
 
 /obj/item/projectile/magic/homing
@@ -278,7 +278,7 @@
 
 	icon_state = "render"
 	damage_type = BRUTE
-	damage = 35
+	damage = 15
 	weaken = 1
 	on_hit(var/atom/movable/target, var/blocked = 0)
 		if(target != caster)

@@ -61,7 +61,7 @@ effective or pretty fucking useless.
 	name = "Health Analyzer"
 	icon_state = "health"
 	item_state = "analyzer"
-	desc = "A hand-held body scanner able to distinguish vital signs of the subject."
+	desc = "A powerful radiation source disguised as a common medical scanner."
 	flags = FPRINT | TABLEPASS | CONDUCT
 	slot_flags = SLOT_BELT
 	throwforce = 3

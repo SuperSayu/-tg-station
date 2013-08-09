@@ -306,15 +306,12 @@
 			speak(vend_reply)
 			last_reply = world.time
 
-			use_power(5)
-			if(icon_vend) //Show the vending animation if needed
-				flick(icon_vend,src)
-			spawn(vend_delay)
-				vend(R.product_path)
-				vend_ready = 1
-				return
-
-			updateUsrDialog()
+		use_power(5)
+		if(icon_vend) //Show the vending animation if needed
+			flick(icon_vend,src)
+		spawn(vend_delay)
+			vend(R.product_path)
+			vend_ready = 1
 			return
 
 		updateUsrDialog()

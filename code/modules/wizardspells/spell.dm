@@ -67,6 +67,9 @@
 
 		if("learn" in href_list)
 			if(src in usr.spell_list) return
+
+			usr.spell_list -= null // just in case something was deleted
+
 			if(usr.spell_list.len >= max_spells)
 				var/choice = input(usr,"You have reached your limit; forget which spell?","Forget spell",null) as null|anything in usr.spell_list
 				if(choice)

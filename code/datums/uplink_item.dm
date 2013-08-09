@@ -140,6 +140,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/stealthy_weapons/blowgun
 	name = "Blowgun"
+	desc = "Disguised as a cigar, this can hold one syringe and shoot it a short distance."
 	item = /obj/item/clothing/mask/blowgun
 	cost = 1
 
@@ -157,6 +158,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/stealthy_weapons/irradscanner
 	name = "Irradiation Device"
+	desc = "Disguised as a health analyzer, this can seriously irradiate a target, causing genetic abnormalities and sickness."
 	item = /obj/item/device/irradscanner
 	cost = 3
 

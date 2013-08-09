@@ -182,9 +182,9 @@
 	incantation = "TARCOL MINTI ZHERI"
 	incant_volume = 1
 	require_clothing = 0
-	chargemax = 30
+	chargemax = 70
 
-	var/duration = 900
+	var/duration = 600
 
 /obj/effect/knowspell/summon/target/forcewall/before_cast(var/mob/caster,var/atom/target)
 	var/turf/T = get_turf(target)
@@ -452,7 +452,7 @@
 	prevent_centcom = 0
 	require_clothing = 0
 
-	incantation = "HONK"
+	incantation = "EI HONK"
 	incant_volume = 2
 
 	spawns_possible = list(/obj/item/weapon/bananapeel/wizard, /obj/item/weapon/bananapeel/wizard, /obj/item/weapon/bananapeel/wizard, /obj/item/weapon/bananapeel, /obj/item/weapon/soap)

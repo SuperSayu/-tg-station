@@ -55,10 +55,10 @@ obj/item/weapon/gun/energy/staff
 
 	process()
 		charge_tick++
-		if(charge_tick < 4) return 0
+		if(charge_tick < 6) return 0
 		charge_tick = 0
 		if(!power_supply) return 0
-		power_supply.give(200)
+		power_supply.give(100)
 		return 1
 
 	update_icon()

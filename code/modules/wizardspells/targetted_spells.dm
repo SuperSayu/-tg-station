@@ -22,7 +22,7 @@
 
 	var/pick_eye_holders = 0 // checks cameras and AI eyes
 
-	var/casting_window = 50 // grace period.  You have this long after the select window pops up to select someone that has gone out of range, in deciseconds.
+	var/casting_window = 40 // grace period.  You have this long after the select window pops up to select someone that has gone out of range, in deciseconds.
 
 
 	proc/scan(mob/caster as mob)
@@ -315,6 +315,27 @@
 		target.equip_to_slot(magichead, slot_wear_mask)
 		flick("e_flash", target.flash)
 
+/obj/effect/knowspell/target/flesh_to_stone
+	name = "flesh to stone"
+	desc = "Turns a target into a statue for a little while.  They can break out, but destroying the statue kills them."
+
+	pick_living = 1
+	pick_human = 1
+	pick_monkey = 1
+	pick_clientless = 1
+	pick_self = 0
+	range = 1
+	visible_range = 1
+
+	chargemax = 600
+	incantation = "STAUN EI"
+	incant_volume = 2
+
+	cast(var/mob/caster,var/mob/target)
+		target.Stun(2)
+		new /obj/structure/closet/statue(get_turf(target),target)
+
+
 /obj/effect/knowspell/target/mindswap
 	name = "mindswap"
 	desc = "Switch minds with another living creature."
@@ -520,7 +541,7 @@
 	pick_self = 0
 	pick_clientless = 1
 	chargemax = 300
-	remove_after = 3000
+	remove_after = 1200
 
 	possible_mutations = list("Clumsiness" = CLUMSY, "Epileptic Siezures" = EPILEPSY, "Coughing fits" = COUGHING, "Beguiled Tongue" = TOURETTES, "Blindness" = BLIND, "Muteness" = MUTE, "Deafness" = DEAF,  "Nearsightedness" = NEARSIGHTED)
 	incantations = list("Clumsiness" = "DRO PSI DESI", "Epileptic Siezures" = "NURV USDIS", "Coughing fits" = "BAHD JOHK", "Beguiled Tongue" = "FUCK SHIT", "Blindness" = "HELL UNKELL", "Muteness" = "SI LENDED", "Deafness" = "HEER NO",  "Nearsightedness" = "KLO PSI")

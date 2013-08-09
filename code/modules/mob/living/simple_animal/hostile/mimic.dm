@@ -127,7 +127,7 @@
 // Copy Mimic
 //
 
-var/global/list/protected_objects = list(/obj/structure/table, /obj/structure/cable, /obj/structure/window)
+var/global/list/protected_objects = list(/obj/structure/table, /obj/structure/cable, /obj/structure/window) // /obj/structure/closet/statue - keeping it for now
 
 /mob/living/simple_animal/hostile/mimic/copy
 

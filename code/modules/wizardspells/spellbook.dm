@@ -179,6 +179,7 @@
 		/obj/effect/knowspell/summon/world/bananas,
 		/obj/effect/knowspell/summon/nearby/creature,
 		/obj/effect/knowspell/target/horsemask,
+		/obj/effect/knowspell/target/flesh_to_stone,
 		/obj/effect/knowspell/target/mutate/bad
 	)
 /obj/item/weapon/magic/spellbook/combat
