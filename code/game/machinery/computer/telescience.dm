@@ -54,7 +54,7 @@
 	return
 
 /obj/machinery/computer/telescience/proc/telefail()
-	if(prob(65))
+	if(prob(55))
 		for(var/mob/O in hearers(src, null))
 			O.show_message("\red The telepad weakly fizzles.", 2)
 		for(var/obj/machinery/telepad/E in world)
@@ -63,12 +63,12 @@
 			s.set_up(5, 1, L)
 			s.start()
 		return
-	if(prob(10))
+	if(prob(20))
 		// Irradiate everyone in telescience!
 		for(var/obj/machinery/telepad/E in world)
 			var/L = get_turf(E)
 			for(var/mob/living/carbon/human/M in viewers(L, null))
-				M.apply_effect((rand(25, 50)), IRRADIATE, 0)
+				M.apply_effect((rand(50, 100)), IRRADIATE, 0)
 				M << "\red You feel irradiated."
 		return
 	if(prob(20))
@@ -93,10 +93,17 @@
 			var/L = get_turf(E)
 			var/blocked = list(/mob/living/simple_animal/hostile,
 				/mob/living/simple_animal/hostile/alien/queen/large,
+				/mob/living/simple_animal/hostile/pirate,
+				/mob/living/simple_animal/hostile/pirate/ranged,
+				/mob/living/simple_animal/hostile/russian,
+				/mob/living/simple_animal/hostile/russian/ranged,
+				/mob/living/simple_animal/hostile/syndicate,
+				/mob/living/simple_animal/hostile/syndicate/melee,
+				/mob/living/simple_animal/hostile/syndicate/melee/space,
+				/mob/living/simple_animal/hostile/syndicate/ranged,
+				/mob/living/simple_animal/hostile/syndicate/ranged/space,
 				/mob/living/simple_animal/hostile/retaliate,
-				/mob/living/simple_animal/hostile/retaliate/clown,
-				/mob/living/simple_animal/hostile/giant_spider/nurse,
-				/mob/living/simple_animal/hostile/blobspore)
+				/mob/living/simple_animal/hostile/giant_spider/nurse)
 			var/list/hostiles = typesof(/mob/living/simple_animal/hostile) - blocked
 			playsound(L, 'sound/effects/phasein.ogg', 100, 1)
 			for(var/mob/living/carbon/human/M in viewers(L, null))
@@ -181,7 +188,7 @@
 			dosend()
 			if(teles_left == 0)
 				for(var/mob/O in hearers(src, null))
-					O.show_message("/red The telepad has become uncalibrated.", 2)
+					O.show_message("\red The telepad has become uncalibrated.", 2)
 		else
 			telefail()
 		return
