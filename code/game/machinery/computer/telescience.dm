@@ -92,7 +92,7 @@
 		for(var/obj/machinery/telepad/E in world)
 			var/L = get_turf(E)
 			var/blocked = list(/mob/living/simple_animal/hostile,
-				/mob/living/simple_animal/hostile/alien/queen/large
+				/mob/living/simple_animal/hostile/alien/queen/large,
 				/mob/living/simple_animal/hostile/pirate,
 				/mob/living/simple_animal/hostile/pirate/ranged,
 				/mob/living/simple_animal/hostile/russian,
