@@ -18,6 +18,10 @@
 /area/pirate/hold
 	name = "Treasure Hold"
 
+/area/crew_quarters/public_garden
+	name = "Public Garden"
+	icon_state = "green"
+
 // Additional holodeck areas
 /area/holodeck/source_transit
 	name = "Transit Demo"
@@ -36,7 +40,7 @@
 	name = "Lounge"
 
 
-// Not used - Theater holodeck
+// Theater holodeck
 /area/holodeck/betadeck
 	name = "\improper Holodeck Beta"
 	luminosity = 0.5

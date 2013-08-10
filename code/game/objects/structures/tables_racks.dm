@@ -628,7 +628,7 @@
 
 	if(isrobot(user))
 		return
-	user.drop_item(loc)
+	user.drop_item(src)
 	return 1
 
 /obj/structure/rack/meteorhit(obj/O as obj)
