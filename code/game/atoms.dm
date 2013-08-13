@@ -1115,35 +1115,15 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 	return
 
 /atom/proc/AltClick()
-
-	/* // NOT UNTIL I FIGURE OUT A GOOD WAY TO DO THIS SHIT
-	if((HULK in usr.mutations) || (SUPRSTR in usr.augmentations))
-		if(!istype(src, /obj/item) && !istype(src, /mob) && !istype(src, /turf))
-			if(!usr.get_active_hand())
-
-				var/liftable = 0
-				for(var/x in liftable_structures)
-					if(findtext("[src.type]", "[x]"))
-						liftable = 1
-						break
-
-				if(liftable)
-
-					add_fingerprint(usr)
-					var/obj/item/weapon/grab/G = new /obj/item/weapon/grab(usr)
-					G.assailant = usr
-					usr.put_in_active_hand(G)
-					G.structure = src
-					G.synch()
-
-					visible_message("\red [usr] has picked up [src]!")
-
-					return
-				else
-					usr << "\red You can't pick this up!"
-	*/
-
+	var/turf/T = get_turf(src)
+	T.AltClick()
 	return
+/turf/AltClick()
+	if(!usr) return
+	if(usr.listed_turf == src)
+		usr.listed_turf = null
+	else
+		usr.listed_turf = src
 
 /atom/proc/CtrlClick()
 	if(hascall(src,"pull"))

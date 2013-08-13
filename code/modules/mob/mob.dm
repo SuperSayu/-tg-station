@@ -654,6 +654,15 @@ note dizziness decrements automatically in the mob's Life() proc.
 			else
 				stat(null,"MasterController-ERROR")
 
+	if(listed_turf)
+		if(get_dist(listed_turf,src) > 1)
+			listed_turf = null
+		else
+			statpanel(listed_turf.name,listed_turf.name,listed_turf)
+			for(var/atom/A in listed_turf)
+				if(A.invisibility > see_invisible)
+					continue
+				statpanel(listed_turf.name,A.name,A)
 
 	if(spell_list.len)
 		for(var/obj/effect/proc_holder/spell/S in spell_list)
