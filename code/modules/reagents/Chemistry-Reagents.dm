@@ -999,7 +999,7 @@ datum
 			name = "Adminordrazine"
 			id = "adminordrazine"
 			description = "It's magic. We don't have to explain it."
-			reagent_state = LIQUID
+			reagent_state = GAS
 			color = "#C8A5DC" // rgb: 200, 165, 220
 
 			on_mob_life(var/mob/living/carbon/M as mob)

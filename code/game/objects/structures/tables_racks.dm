@@ -297,7 +297,7 @@
 		user << "\blue Now disassembling table"
 		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user,50))
-			new /obj/item/weapon/table_parts( src.loc )
+			new part_type(src.loc)
 			playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 			//SN src = null
 			del(src)

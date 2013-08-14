@@ -52,7 +52,7 @@
 	if(!istype(M))
 		return ..()
 
-	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != "head")
+	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != "head" && user.zone_sel.selecting != "mouth")
 		return ..()
 
 	if (src.icon_state == "forkloaded") //This is a poor way of handling it, but a proper rewrite of the fork to allow for a more varied foodening can happen when I'm in the mood. --NEO

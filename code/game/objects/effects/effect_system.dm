@@ -1075,10 +1075,7 @@ steam.start() -- spawns the effect
 
 	set_up (amt, loc, flash = 0, flash_fact = 0)
 		amount = amt
-		if(istype(loc, /turf/))
-			location = loc
-		else
-			location = get_turf(loc)
+		location = get_turf(loc)
 
 		flashing = flash
 		flashing_factor = flash_fact

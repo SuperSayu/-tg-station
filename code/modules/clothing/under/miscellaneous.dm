@@ -120,13 +120,13 @@
 	icon_state = "rainbow"
 	item_state = "rainbow"
 	color = "rainbow"
-
+/*
 /obj/item/clothing/under/cloud
 	name = "cloud"
 	desc = "cloud"
 	icon_state = "cloud"
 	color = "cloud"
-
+*/
 /obj/item/clothing/under/gimmick/rank/captain/suit
 	name = "captain's suit"
 	desc = "A green suit and yellow necktie. Exemplifies authority."

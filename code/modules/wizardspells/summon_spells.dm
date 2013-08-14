@@ -274,11 +274,16 @@
 	open_rifts(T)
 	incant(caster)
 	return 1
-/obj/effect/knowspell/summon/nearby/start_recharge()
-	spawn(spawn_time_min) // delay start of recharge
-		while(charge < chargemax)
-			sleep(1)
-			charge++
+/obj/effect/knowspell/summon/nearby/after_cast()
+	if(rechargable)
+		charge = 0
+		spawn(spawn_time_min)
+			start_recharge()
+	else
+		charge = max(0,charge-1)
+		spawn(spawn_time_max)
+			if(src && charge <= 0)
+				del src
 
 
 /obj/effect/knowspell/summon/nearby/carp
