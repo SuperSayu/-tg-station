@@ -22,10 +22,10 @@
 			return
 		if(2.0)
 			if (prob(70))
-				src.mineralAmt -= 1 //some of the stuff gets blown up
+				src.mineralAmt += 1 //some of the stuff gets blown up in a parallel dimension and appears here! I can't think of a better explanation sorry Sayu
 				src.gets_drilled()
 		if(1.0)
-			src.mineralAmt -= 2 //some of the stuff gets blown up
+			src.mineralAmt += 2 //some of the stuff gets blown up in a parallel dimension and appears here!
 			src.gets_drilled()
 	return
 
