@@ -27,10 +27,10 @@
 			H.facial_hair_style = new_style
 
 		//handle normal hair
-		var/new_style2 = input(user, "Select a hair style", "Grooming")  as null|anything in hair_styles_list
+		new_style = input(user, "Select a hair style", "Grooming")  as null|anything in hair_styles_list
 		if(userloc != H.loc) return	//no tele-grooming
 		if(new_style)
-			H.hair_style = new_style2
+			H.hair_style = new_style
 
 		H.update_hair()
 
