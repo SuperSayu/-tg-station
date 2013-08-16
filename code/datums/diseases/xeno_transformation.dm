@@ -50,12 +50,7 @@
 		if(5)
 			affected_mob <<"\red Your skin feels impossibly calloused..."
 			affected_mob.adjustToxLoss(10)
-			affected_mob.updatehealth()
-			if(prob(40))
-				if(gibbed != 0) return 0
-				var/turf/T = find_loc(affected_mob)
-				gibs(T)
-				src.cure(0)
-				gibbed = 1
-				affected_mob:Alienize()
-
+			new /obj/effect/gibspawner/human(affected_mob.loc)
+			var/mob/living/carbon/human/H = affected_mob
+			H.Alienize()
+			src.cure(0)
