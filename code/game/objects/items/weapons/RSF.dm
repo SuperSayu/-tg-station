@@ -64,6 +64,8 @@ RSF
 /obj/item/weapon/rsf/afterattack(atom/A, mob/user as mob)
 	if (!(istype(A, /obj/structure/table) || istype(A, /turf/simulated/floor)))
 		return
+	if(matter <= 0)
+		return
 
 	if (istype(A, /obj/structure/table) && mode == 1)
 		if (istype(A, /obj/structure/table) && matter >= 1)
