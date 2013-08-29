@@ -53,6 +53,7 @@
 			return 1
 
 		if("harm")
+			var/can_break = 0
 			M.attack_log += text("\[[time_stamp()]\] <font color='red'>Punched [src.name] ([src.ckey])</font>")
 			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been punched by [M.name] ([M.ckey])</font>")
 
@@ -79,12 +80,28 @@
 				visible_message("<span class='warning'>[M] has attempted to [attack_verb] [src]!</span>")
 				return 0
 
+			if(!M.reagents.has_reagent("morphine"))
+				if(prob(55))
+					if(!lying)
+						if("left arm" in M.broken || "right arm" in M.broken)
+							M << "\red You painfully dislodge your broken arm!"
+							M.emote("scream")
+							M.Stun(2)
+							playsound(M.loc, 'weapons/pierce.ogg', 25)
+					else if("left leg" in M.broken || "right leg" in M.broken)
+						M << "\red You painfully dislodge your broken leg!"
+						M.emote("scream")
+						M.Stun(2)
+						playsound(M.loc, 'weapons/pierce.ogg', 25)
+					visible_message("<span class='warning'>[M] has attempted to [attack_verb] [src]!</span>")
+					return 0
 
 			var/datum/limb/affecting = get_organ(ran_zone(M.zone_sel.selecting))
 			var/armor_block = run_armor_check(affecting, "melee")
 
 			if(HULK in M.mutations)
 				damage += 5
+				can_break = 1
 
 			switch(attack_verb)
 				if("slash")
@@ -103,6 +120,27 @@
 				forcesay(hit_appends)
 			else if(lying)
 				forcesay(hit_appends)
+
+			if(can_break && prob(10))
+				var/hit_area = parse_zone(affecting.name)
+				if(hit_area in broken)
+					return
+				var/hit_name
+				if(hit_area == "head")
+					hit_name = "skull"
+				else if(hit_area == "chest")
+					hit_name = "ribs"
+				else
+					hit_name = hit_area
+				broken += hit_area
+				playsound(src, 'weapons/pierce.ogg', 50)
+				var/breaknoise = pick("snap","crack","pop","crick")
+				if(affecting != "chest")
+					visible_message("<span class='danger'>[src]'s [hit_name] breaks with a [breaknoise]!</span>", \
+									"<span class='userdanger'>Your [hit_name] breaks with a [breaknoise]!</span>")
+				else
+					visible_message("<span class='danger'>[src]'s [hit_name] break with a [breaknoise]!</span>", \
+									"<span class='userdanger'>Your [hit_name] break with a [breaknoise]!</span>")
 
 		if("disarm")
 			M.attack_log += text("\[[time_stamp()]\] <font color='red'>Disarmed [src.name] ([src.ckey])</font>")

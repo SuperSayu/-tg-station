@@ -101,7 +101,7 @@
 		</head>
 
 		<body>
-		<iframe width='100%' height='97%' src="http://wiki.nanotrasen.com/index.php?title=Hacking&printable=yes&remove_links=1" frameborder="0" id="main_frame"></iframe>
+		<iframe width='100%' height='97%' src="http://wiki.ss13.eu/index.php/Hacking&printable=yes&remove_links=1" frameborder="0" id="main_frame"></iframe>
 		</body>
 
 		</html>
@@ -609,7 +609,7 @@
 		</head>
 
 		<body>
-		<iframe width='100%' height='97%' src="http://wiki.nanotrasen.com/index.php?title=Space_Law&printable=yes&remove_links=1" frameborder="0" id="main_frame"></iframe>
+		<iframe width='100%' height='97%' src="http://wiki.ss13.eu/index.php/Space_Law&printable=yes&remove_links=1" frameborder="0" id="main_frame"></iframe>
 		</body>
 
 		</html>
@@ -627,7 +627,7 @@
 		</head>
 
 		<body>
-		<iframe width='100%' height='97%' src="http://wiki.nanotrasen.com/index.php?title=Guide_to_engineering&printable=yes&remove_links=1" frameborder="0" id="main_frame"></iframe>
+		<iframe width='100%' height='97%' src="http://wiki.ss13.eu/index.php/Guide_to_engineering&printable=yes&remove_links=1" frameborder="0" id="main_frame"></iframe>
 		</body>
 
 		</html>
@@ -814,4 +814,30 @@
 			<b>Disk, Code, Safety, Timer, Disk, RUN!</b><br>
 			Intelligence Analysts believe that normal Nanotrasen procedure is for the Captain to secure the nuclear authorisation disk.<br>
 			Good luck!
+			</html>"}
+
+/obj/item/weapon/book/manual/bones
+	name = "Spooky Scary Skeletons: Bones 101"
+	icon_state = "bookHacking"
+	author = "Spookie S. Skellington"
+	title = "Spooky Scary Skeletons: Bones 101"
+	dat = {"<html>
+			Spooky Scary Skeletons: A Guide to Broken Bones<br>
+			So you're in the medbay, dicking around, slipping people with space lube and force-feeding them drugs when SUDDENLY a man bursts through the window - he's shrieking and screaming and his bones are going POP CRICK CRACK! "OH GOD," he shouts, wiggling his broken arms around, "THE CLOWN BEAT ME WITH A TOOLBOX AND NOW ALL OF MY BONES ARE BROKEN"<br>
+			<br>
+			<b>DON'T PANIC</b><br>
+			<br>
+			There is a very simple way to cure broken bones!<br>
+			Cryoxadone and clonexadone will slowly mend broken bones as long as your body temperature is low enough!<br>
+			Also, for temporary relief, morphine can be perscribed. Be warned: morphine does not actually heal broken bones but instead helps your patient ignore the godawful agony, and the blood going entirely out of his body!<br>
+			Morphine is 3 parts sleep toxin and 2 parts sulphuric acid. It results in 5 parts.<br>
+			<br>
+			<b>What Do Broken Bones <i>Do</i>?</b><br>
+			Each bone of yours has a different function, and this function will be disrupted when said bone is broken!<br>
+			<b>Broken Legs:</b> The patient will walk with a limp, and occasionally they will displace the broken bone and freeze in pain and agony! This is very detrimental to your patient's health.<br>
+			<b>Broken Arms:</b> It is hard for your patient to operate machinery and objects with their arms broken. If your patient attempts to use an object on someone, they might accidentaly displace the broken bone as well as drop what they are holding!<br>
+			<b>Broken Ribs:</b> Broken ribs will cause internal bleeding, causing the patient to slowly lose health and make it hard for them to breathe.<br>
+			<b>Broken Skull:</b> A broken skull will cause the patient to suffer short, occasional blackouts. They will also have a minor tendency of experiencing bouts of severe brain damage.<br>
+			<br>
+			Now you know what to do! Go out there and <i>practice medicine</i>!
 			</html>"}

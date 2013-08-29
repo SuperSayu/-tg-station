@@ -80,6 +80,9 @@
 		//Random events (vomiting etc)
 		handle_random_events()
 
+		// Broken bones
+		handle_bones()
+
 	//Handle temperature/pressure differences between body and environment
 	handle_environment(environment)
 
@@ -170,7 +173,7 @@
 			if((COLD_RESISTANCE in mutations) || (prob(1)))
 				heal_organ_damage(0,1)
 
-		if ((HULK in mutations) && health <= 25)
+		if((HULK in mutations) && health <= 25)
 			mutations.Remove(HULK)
 			update_mutations()		//update our mutation overlays
 			src << "\red You suddenly feel very weak."
@@ -226,7 +229,11 @@
 	proc/breathe()
 
 		if(reagents.has_reagent("lexorin")) return
+		if("chest" in broken && prob(50)) return
 		if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell)) return
+
+		if(gasping)
+			gasping--
 
 		var/datum/gas_mixture/environment = loc.return_air()
 		var/datum/air_group/breath
@@ -854,6 +861,14 @@
 					Paralyse(3)
 					setHalLoss(99)
 
+			//Blood loss
+			if(getBruteLoss() >= 50 && prob(15))
+				adjustBruteLoss(3)
+				var/turf/pos = get_turf(src)
+				pos.add_blood_floor(src)
+				playsound(pos, 'sound/effects/splat.ogg', 10, 1)
+				src << "<span class='warning'>Your wounds start to bleed...</span>"
+
 			if(paralysis)
 				AdjustParalysis(-1)
 				blinded = 1
@@ -950,6 +965,7 @@
 						I = image("icon" = 'icons/mob/screen_full.dmi', "icon_state" = "passage9")
 					if(-INFINITY to -95)
 						I = image("icon" = 'icons/mob/screen_full.dmi', "icon_state" = "passage10")
+				// no reason to not let morphine users see they're dying
 				damageoverlay.overlays += I
 		else
 			//Oxygen damage overlay
@@ -970,7 +986,8 @@
 						I = image("icon" = 'icons/mob/screen_full.dmi', "icon_state" = "oxydamageoverlay6")
 					if(45 to INFINITY)
 						I = image("icon" = 'icons/mob/screen_full.dmi', "icon_state" = "oxydamageoverlay7")
-				damageoverlay.overlays += I
+				if(!reagents.has_reagent("morphine"))
+					damageoverlay.overlays += I
 
 			//Fire and Brute damage overlay (BSSR)
 			var/hurtdamage = src.getBruteLoss() + src.getFireLoss() + damageoverlaytemp
@@ -990,7 +1007,8 @@
 						I = image("icon" = 'icons/mob/screen_full.dmi', "icon_state" = "brutedamageoverlay5")
 					if(85 to INFINITY)
 						I = image("icon" = 'icons/mob/screen_full.dmi', "icon_state" = "brutedamageoverlay6")
-				damageoverlay.overlays += I
+				if(!reagents.has_reagent("morphine"))
+					damageoverlay.overlays += I
 
 		if( stat == DEAD )
 			sight |= (SEE_TURFS|SEE_MOBS|SEE_OBJS)
@@ -1091,7 +1109,7 @@
 				switch(hal_screwyhud)
 					if(1)	healths.icon_state = "health6"
 					if(2)	healths.icon_state = "health7"
-					else
+					else if(!reagents.has_reagent("morphine"))
 						switch(health - halloss)
 							if(100 to INFINITY)		healths.icon_state = "health0"
 							if(80 to 100)			healths.icon_state = "health1"
@@ -1100,6 +1118,8 @@
 							if(20 to 40)			healths.icon_state = "health4"
 							if(0 to 20)				healths.icon_state = "health5"
 							else					healths.icon_state = "health6"
+					else
+						healths.icon_state = "health?"
 
 			if(nutrition_icon)
 				switch(nutrition)
@@ -1109,7 +1129,7 @@
 					if(150 to 250)					nutrition_icon.icon_state = "nutrition3"
 					else							nutrition_icon.icon_state = "nutrition4"
 
-			if(pressure)
+			if(pressure && !reagents.has_reagent("morphine"))
 				pressure.icon_state = "pressure[pressure_alert]"
 
 			if(pullin)
@@ -1118,17 +1138,17 @@
 //			if(rest)	//Not used with new UI
 //				if(resting || lying || sleeping)		rest.icon_state = "rest1"
 //				else									rest.icon_state = "rest0"
-			if(toxin)
+			if(toxin && !reagents.has_reagent("morphine"))
 				if(hal_screwyhud == 4 || toxins_alert)	toxin.icon_state = "tox1"
 				else									toxin.icon_state = "tox0"
-			if(oxygen)
+			if(oxygen && !reagents.has_reagent("morphine"))
 				if(hal_screwyhud == 3 || oxygen_alert)	oxygen.icon_state = "oxy1"
 				else									oxygen.icon_state = "oxy0"
-			if(fire)
+			if(fire && !reagents.has_reagent("morphine"))
 				if(fire_alert)							fire.icon_state = "fire[fire_alert]" //fire_alert is either 0 if no alert, 1 for cold and 2 for heat.
 				else									fire.icon_state = "fire0"
 
-			if(bodytemp)
+			if(bodytemp && !reagents.has_reagent("morphine"))
 				switch(bodytemperature) //310.055 optimal body temp
 					if(370 to INFINITY)		bodytemp.icon_state = "temp4"
 					if(350 to 370)			bodytemp.icon_state = "temp3"
@@ -1217,6 +1237,21 @@
 	proc/handle_changeling()
 		if(mind && mind.changeling)
 			mind.changeling.regenerate()
+
+	proc/handle_bones()
+		if("chest" in broken)
+			// internal bleeding(?)
+			if(prob(65))
+				adjustBruteLoss(1)
+		if("head" in broken)
+			if(prob(5) && stat == CONSCIOUS)
+				sleeping = 2
+				adjustBruteLoss(2)
+			if(prob(25))
+				adjustBrainLoss(1)
+		if((dna) && dna.mutantrace == "slime" || dna.mutantrace == "plant")
+			// ugly hack to stop slimepeople and plantpeople from breaking their nonexistant bones
+			broken = list()
 
 #undef HUMAN_MAX_OXYLOSS
 #undef HUMAN_CRIT_MAX_OXYLOSS

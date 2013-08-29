@@ -24,6 +24,11 @@
 		for(var/obj/effect/decal/cleanable/blood/B in src.loc)
 			if(B != src)
 				del(B)
+	spawn(12000) // 20 minutes
+		icon_state += "-old"
+		name = "dried blood"
+		desc = "Looks like it's been here a while.  Eew."
+		blood_DNA = list()
 
 /obj/effect/decal/cleanable/blood/splatter
 	random_icon_states = list("gibbl1", "gibbl2", "gibbl3", "gibbl4", "gibbl5")

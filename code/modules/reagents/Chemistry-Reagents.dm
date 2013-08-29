@@ -999,7 +999,7 @@ datum
 			name = "Adminordrazine"
 			id = "adminordrazine"
 			description = "It's magic. We don't have to explain it."
-			reagent_state = GAS
+			reagent_state = LIQUID
 			color = "#C8A5DC" // rgb: 200, 165, 220
 
 			on_mob_life(var/mob/living/carbon/M as mob)
@@ -1167,13 +1167,17 @@ datum
 			reagent_state = LIQUID
 			color = "#C8A5DC" // rgb: 200, 165, 220
 
-			on_mob_life(var/mob/living/M as mob)
+			on_mob_life(var/mob/living/carbon/human/M as mob)
 				if(!M) M = holder.my_atom
 				if(M.bodytemperature < 170)
 					M.adjustCloneLoss(-1)
 					M.adjustOxyLoss(-3)
 					M.heal_organ_damage(3,3)
 					M.adjustToxLoss(-3)
+					for(var/b in M.broken)
+						if(prob(2))
+							M << "<span class='notice'>You feel your broken [b] mend...</span>"
+							M.broken -= b
 				..()
 				return
 
@@ -1184,7 +1188,7 @@ datum
 			reagent_state = LIQUID
 			color = "#C8A5DC" // rgb: 200, 165, 220
 
-			on_mob_life(var/mob/living/M as mob)
+			on_mob_life(var/mob/living/carbon/human/M as mob)
 				if(!M) M = holder.my_atom
 				if(M.bodytemperature < 170)
 					M.adjustCloneLoss(-3)
@@ -1192,6 +1196,10 @@ datum
 					M.heal_organ_damage(3,3)
 					M.adjustToxLoss(-3)
 					M.status_flags &= ~DISFIGURED
+					for(var/b in M.broken)
+						if(prob(4))
+							M << "<span class='notice'>You feel your broken [b] mend...</span>"
+							M.broken -= b
 				..()
 				return
 
@@ -1301,6 +1309,13 @@ datum
 				M.confused = 0
 				..()
 				return
+
+		morphine
+			name = "Morphine"
+			id = "morphine"
+			description = "A drug that relieves pain but does not heal any damage. It will prevent limping and adverse effects caused by the pain of having a broken bone."
+			reagent_state = LIQUID
+			color = "#EEEEEE"
 
 //////////////////////////Poison stuff///////////////////////
 

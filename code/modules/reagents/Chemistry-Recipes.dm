@@ -465,6 +465,13 @@ datum
 			required_reagents = list("capsaicin" = 1, "ethanol" = 5)
 			result_amount = 5
 
+		morphine
+			name = "Morphine"
+			id = "morphine"
+			result = "morphine"
+			required_reagents = list("stoxin" = 3, "sacid" = 2)
+			result_amount = 5
+
 		virus_food
 			name = "Virus Food"
 			id = "virusfood"
