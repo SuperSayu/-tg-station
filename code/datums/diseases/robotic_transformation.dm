@@ -50,16 +50,8 @@
 		if(5)
 			affected_mob <<"\red Your skin feels as if it's about to burst off..."
 			affected_mob.adjustToxLoss(10)
-			affected_mob.updatehealth()
-			if(prob(40)) //So everyone can feel like robot Seth Brundle
-				if(src.gibbed != 0) return 0
-				var/turf/T = find_loc(affected_mob)
-				gibs(T)
-				src.cure(0)
-				gibbed = 1
-				var/mob/living/carbon/human/H = affected_mob
-				if(istype(H) && !jobban_isbanned(affected_mob, "Cyborg"))
-					H.Robotize()
-				else
-					affected_mob.death(1)
-
+			new /obj/effect/gibspawner/human(affected_mob.loc)
+			var/mob/living/carbon/human/H = affected_mob
+			if(istype(H) && !jobban_isbanned(affected_mob, "Cyborg"))
+				H.Robotize()
+			src.cure(0)
