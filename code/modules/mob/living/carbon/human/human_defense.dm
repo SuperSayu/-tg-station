@@ -121,7 +121,7 @@ emp_act
 
 	// Broken arms are no good for combat!
 	var/arm = user.get_active_hand()
-	if(!user.reagents.has_reagent("morphine") && prob(65))
+	if(!user.reagents.has_reagent("morphine") && prob(35))
 		if(arm == l_hand && "left arm" in user.broken)
 			user << "\red You painfully dislodge your broken left arm!"
 			user.emote("scream")
@@ -130,7 +130,7 @@ emp_act
 			var/datum/limb/larm = get_organ("l_arm")
 			user.apply_damage(rand(2,7), BRUTE, larm)
 			playsound(user.loc, 'weapons/pierce.ogg', 25)
-			visible_message("<span class='warning'>[user] has attempted to [I.attack_verb] [src] with [I]!</span>")
+			visible_message("<span class='warning'>[user] has attempted to [pick(I.attack_verb)] [src] with [I]!</span>")
 			user.drop_item()
 			return 0
 		else if(arm == r_hand && "right arm" in user.broken)
@@ -141,7 +141,7 @@ emp_act
 			var/datum/limb/rarm = get_organ("r_arm")
 			user.apply_damage(rand(2,7), BRUTE, rarm)
 			playsound(user.loc, 'weapons/pierce.ogg', 25)
-			visible_message("<span class='warning'>[user] has attempted to [I.attack_verb] [src] with [I]!</span>")
+			visible_message("<span class='warning'>[user] has attempted to [pick(I.attack_verb)] [src] with [I]!</span>")
 			user.drop_item()
 			return 0
 
