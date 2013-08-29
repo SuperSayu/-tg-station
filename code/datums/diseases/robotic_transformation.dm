@@ -52,5 +52,6 @@
 			affected_mob.adjustToxLoss(10)
 			new /obj/effect/gibspawner/human(affected_mob.loc)
 			var/mob/living/carbon/human/H = affected_mob
-			H.Robotize()
+			if(istype(H) && !jobban_isbanned(affected_mob, "Cyborg"))
+				H.Robotize()
 			src.cure(0)
