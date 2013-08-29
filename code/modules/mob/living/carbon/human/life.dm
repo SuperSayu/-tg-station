@@ -1241,8 +1241,9 @@
 	proc/handle_bones()
 		if("chest" in broken)
 			// internal bleeding(?)
+			var/datum/limb/affecting = get_organ("chest")
 			if(prob(65))
-				adjustBruteLoss(1)
+				apply_damage(1, BRUTE, affecting)
 		if("head" in broken)
 			if(prob(5) && stat == CONSCIOUS)
 				sleeping = 2

@@ -80,19 +80,20 @@
 				visible_message("<span class='warning'>[M] has attempted to [attack_verb] [src]!</span>")
 				return 0
 
-			if(!M.reagents.has_reagent("morphine"))
-				if(prob(55))
-					if(!lying)
-						if("left arm" in M.broken || "right arm" in M.broken)
-							M << "\red You painfully dislodge your broken arm!"
-							M.emote("scream")
-							M.Stun(2)
-							playsound(M.loc, 'weapons/pierce.ogg', 25)
-					else if("left leg" in M.broken || "right leg" in M.broken)
-						M << "\red You painfully dislodge your broken leg!"
+			if(!M.reagents.has_reagent("morphine") && prob(65))
+				if(!lying)
+					if("left arm" in M.broken || "right arm" in M.broken)
+						M << "\red You painfully dislodge your broken arm!"
 						M.emote("scream")
 						M.Stun(2)
 						playsound(M.loc, 'weapons/pierce.ogg', 25)
+						visible_message("<span class='warning'>[M] has attempted to [attack_verb] [src]!</span>")
+						return 0
+				else if("left leg" in M.broken || "right leg" in M.broken)
+					M << "\red You painfully dislodge your broken leg!"
+					M.emote("scream")
+					M.Stun(2)
+					playsound(M.loc, 'weapons/pierce.ogg', 25)
 					visible_message("<span class='warning'>[M] has attempted to [attack_verb] [src]!</span>")
 					return 0
 
@@ -118,8 +119,10 @@
 								"<span class='userdanger'>[M] has weakened [src]!</span>")
 				apply_effect(4, WEAKEN, armor_block)
 				forcesay(hit_appends)
+				gasping = 2
 			else if(lying)
 				forcesay(hit_appends)
+				gasping = 2
 
 			if(can_break && prob(10))
 				var/hit_area = parse_zone(affecting.name)
@@ -157,6 +160,7 @@
 				visible_message("<span class='danger'>[M] has pushed [src]!</span>",
 								"<span class='userdanger'>[M] has pushed [src]!</span>")
 				forcesay(hit_appends)
+				gasping = 2
 				return
 
 			if(randn <= 45)

@@ -121,22 +121,29 @@ emp_act
 
 	// Broken arms are no good for combat!
 	var/arm = user.get_active_hand()
-	if(arm == l_hand && "left arm" in user.broken)
-		user << "\red You painfully dislodge your broken left arm!"
-		user.emote("scream")
-		user.drop_item()
-		user.Stun(2)
-		playsound(user.loc, 'weapons/pierce.ogg', 25)
-		visible_message("<span class='warning'>[user] has attempted to [I.attack_verb] [src] with [I]!</span>")
-		return 0
-	else if(arm == r_hand && "right arm" in user.broken)
-		user << "\red You painfully dislodge your broken right arm!"
-		user.emote("scream")
-		user.drop_item()
-		user.Stun(2)
-		playsound(user.loc, 'weapons/pierce.ogg', 25)
-		visible_message("<span class='warning'>[user] has attempted to [I.attack_verb] [src] with [I]!</span>")
-		return 0
+	if(!user.reagents.has_reagent("morphine") && prob(65))
+		if(arm == l_hand && "left arm" in user.broken)
+			user << "\red You painfully dislodge your broken left arm!"
+			user.emote("scream")
+			user.Stun(2)
+			user.Weaken(2)
+			var/datum/limb/larm = get_organ("l_arm")
+			user.apply_damage(rand(2,7), BRUTE, larm)
+			playsound(user.loc, 'weapons/pierce.ogg', 25)
+			visible_message("<span class='warning'>[user] has attempted to [I.attack_verb] [src] with [I]!</span>")
+			user.drop_item()
+			return 0
+		else if(arm == r_hand && "right arm" in user.broken)
+			user << "\red You painfully dislodge your broken right arm!"
+			user.emote("scream")
+			user.Stun(2)
+			user.Weaken(2)
+			var/datum/limb/rarm = get_organ("r_arm")
+			user.apply_damage(rand(2,7), BRUTE, rarm)
+			playsound(user.loc, 'weapons/pierce.ogg', 25)
+			visible_message("<span class='warning'>[user] has attempted to [I.attack_verb] [src] with [I]!</span>")
+			user.drop_item()
+			return 0
 
 	if(I.attack_verb.len)
 		visible_message("<span class='danger'>[src] has been [pick(I.attack_verb)] in the [hit_area] with [I] by [user]!</span>", \
@@ -219,7 +226,7 @@ emp_act
 			gasping = 2
 
 	var/breakchance = ((I.force / 4) * I.w_class) / 2
-	src << "\red [breakchance]% chance of breaking."
+	//src << "\red [breakchance]% chance of breaking."
 	if(I.damtype == BRUTE && I.w_class > 1 && prob(breakchance))
 		// sticks and stones will break your bones
 		if(hit_area in broken)

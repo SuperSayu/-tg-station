@@ -145,6 +145,8 @@
 	var/shielded = 0
 	var/b_loss = null
 	var/f_loss = null
+	var/break_chance = 35
+
 	switch (severity)
 		if (1.0)
 			b_loss += 500
@@ -161,7 +163,7 @@
 		if (2.0)
 			if (!shielded)
 				b_loss += 60
-
+				break_chance += 35
 			f_loss += 60
 
 			if (prob(getarmor(null, "bomb")))
@@ -175,7 +177,8 @@
 				Paralyse(10)
 
 		if(3.0)
-			b_loss += 30
+			b_loss += 15
+			break_chance += 10
 			if (prob(getarmor(null, "bomb")))
 				b_loss = b_loss/2
 			if (!istype(ears, /obj/item/clothing/ears/earmuffs))
@@ -199,15 +202,42 @@
 				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05)
 			if("r_leg")
 				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05)
-	if(update)	update_damage_overlays(0)
 
+	for(var/datum/limb/bone in organs)
+		var/affecting = get_organ(bone)
+		if(!bone in broken && prob(break_chance))
+			broken += bone
+			playsound(src, 'weapons/pierce.ogg', 50)
+			var/breaknoise = pick("snap","crack","pop","crick")
+			if(affecting != "chest")
+				visible_message("<span class='danger'>[src]'s [affecting] breaks with a [breaknoise]!</span>", \
+								"<span class='userdanger'>Your [affecting] breaks with a [breaknoise]!</span>")
+			else
+				visible_message("<span class='danger'>[src]'s [affecting] break with a [breaknoise]!</span>", \
+								"<span class='userdanger'>Your [affecting] break with a [breaknoise]!</span>")
+			if(break_chance >= 3)
+				break_chance -= 3
+			else
+				break_chance = 0
+
+	if(update)	update_damage_overlays(0)
 
 /mob/living/carbon/human/blob_act()
 	if(stat == 2)	return
-	show_message("\red The blob attacks you!")
 	var/dam_zone = pick("chest", "l_hand", "r_hand", "l_leg", "r_leg")
 	var/datum/limb/affecting = get_organ(ran_zone(dam_zone))
-	apply_damage(rand(30,40), BRUTE, affecting, run_armor_check(affecting, "melee"))
+	apply_damage(rand(20,30), BRUTE, affecting, run_armor_check(affecting, "melee"))
+	show_message("\red The blob attacks your [affecting]!")
+	if(prob(rand(5,10)))
+		broken += affecting
+		playsound(src, 'weapons/pierce.ogg', 50)
+		var/breaknoise = pick("snap","crack","pop","crick")
+		if(affecting != "chest")
+			visible_message("<span class='danger'>[src]'s [affecting] breaks with a [breaknoise]!</span>", \
+							"<span class='userdanger'>Your [affecting] breaks with a [breaknoise]!</span>")
+		else
+			visible_message("<span class='danger'>[src]'s [affecting] break with a [breaknoise]!</span>", \
+							"<span class='userdanger'>Your [affecting] break with a [breaknoise]!</span>")
 	return
 
 /mob/living/carbon/human/meteorhit(O as obj)
@@ -224,6 +254,15 @@
 			if(affecting.take_damage((istype(O, /obj/effect/meteor/small) ? 10 : 25), 30))
 				update_damage_overlays(0)
 		updatehealth()
+		if(!affecting in broken) // there's no avoiding it, you got hit by a fucking meteor
+			playsound(src, 'weapons/pierce.ogg', 50)
+			var/breaknoise = pick("snap","crack","pop","crick")
+			if(affecting != "chest")
+				visible_message("<span class='danger'>[src]'s [affecting] breaks with a [breaknoise]!</span>", \
+								"<span class='userdanger'>Your [affecting] breaks with a [breaknoise]!</span>")
+			else
+				visible_message("<span class='danger'>[src]'s [affecting] break with a [breaknoise]!</span>", \
+								"<span class='userdanger'>Your [affecting] break with a [breaknoise]!</span>")
 	return
 
 
