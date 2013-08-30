@@ -132,3 +132,55 @@
 	layer = 2
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("smashed_pie")
+
+/obj/effect/decal/cleanable/trail
+	icon = 'icons/effects/footprints.dmi'
+	gender = PLURAL
+	density = 0
+	anchored = 1
+	layer = 2
+
+/obj/effect/decal/cleanable/trail/bloodtrail
+	name = "bloody footprints"
+	desc = "Look, Pheonix, they're leading away from the crime scene!"
+	icon_state = "blood2"
+
+/obj/effect/decal/cleanable/trail/bloodtrail/paw
+	name = "bloody pawprints"
+	desc = "Perhaps it's a miniature Bigfoot?"
+	icon_state = "bloodpaw2"
+
+/obj/effect/decal/cleanable/trail/bloodtrail/xeno
+	name = "bloody clawprints"
+	desc = "The hunt is on!"
+	icon_state = "bloodclaw2"
+
+/obj/effect/decal/cleanable/trail/oiltrail
+	name = "oily footprints"
+	desc = "Look at what pollution has wrought."
+	icon_state = "oil2"
+
+/obj/effect/decal/cleanable/trail/oiltrail/paw
+	name = "oily pawprints"
+	desc = "Somewhere, Space PETA is having a fit."
+	icon_state = "oilpaw2"
+
+/obj/effect/decal/cleanable/trail/oiltrail/xeno
+	name = "oily clawprints"
+	desc = "Quick, set it on fire!"
+	icon_state = "oilclaw2"
+
+/obj/effect/decal/cleanable/trail/xenotrail
+	name = "green bloody footprints"
+	desc = "A satisfying end to the xeno menace."
+	icon_state = "xeno2"
+
+/obj/effect/decal/cleanable/trail/xenotrail/paw
+	name = "green bloody pawprints"
+	desc = "Maybe they're in cahoots?"
+	icon_state = "xenopaw2"
+
+/obj/effect/decal/cleanable/trail/xenotrail/xeno
+	name = "green bloody clawprints"
+	desc = "Somewhere out there is one pissed off xeno."
+	icon_state = "xenoclaw2"

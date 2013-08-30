@@ -65,6 +65,10 @@
 	shadeColour = input(user, "Please select the shade colour.", "Crayon colour") as color
 	return
 
+/obj/item/toy/crayon/rainbow/magic
+	name = "Magic Crayon"
+	instant = 1
+
 /obj/item/toy/crayon/afterattack(atom/target, mob/user as mob)
 	if(istype(target,/turf/simulated/floor))
 		var/drawtype = input("Choose what you'd like to draw.", "Crayon scribbles") in list("graffiti","rune","letter")
@@ -95,5 +99,18 @@
 			if(uses <= 0)
 				user << "\red You ate your crayon!"
 				del(src)
+	else if(M.stat)
+		if(istype(M, /mob/living/carbon/human))
+			user << "You start drawing around [M.name]'s body... "
+			if(instant || do_after(user, 50))
+				var/obj/effect/decal/cleanable/body/b = new /obj/effect/decal/cleanable/body(M.loc)
+				b.Color(colourName)
+				user << "You finish drawing."
+				uses--
+				if(!uses)
+					user << "\red You used up your crayon!"
+					del(src)
+		else
+			..()
 	else
 		..()

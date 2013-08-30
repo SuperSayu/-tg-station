@@ -7,6 +7,32 @@
 				src.nutrition -= HUNGER_FACTOR/10
 		if((FAT in src.mutations) && src.m_intent == "run" && src.bodytemperature <= 360)
 			src.bodytemperature += 2
+	if(trail > 0)
+		var/obj/effect/decal/cleanable/trail/t
+		switch(trailtype)
+			if("blood")
+				if(istype(src, /mob/living/carbon/human))
+					t = new /obj/effect/decal/cleanable/trail/bloodtrail(src.loc)
+				if(istype(src, /mob/living/carbon/monkey))
+					t = new /obj/effect/decal/cleanable/trail/bloodtrail/paw(src.loc)
+				if(istype(src, /mob/living/carbon/alien/humanoid))
+					t = new /obj/effect/decal/cleanable/trail/bloodtrail/xeno(src.loc)
+			if("oil")
+				if(istype(src, /mob/living/carbon/human))
+					t = new /obj/effect/decal/cleanable/trail/oiltrail(src.loc)
+				if(istype(src, /mob/living/carbon/monkey))
+					t = new /obj/effect/decal/cleanable/trail/oiltrail/paw(src.loc)
+				if(istype(src, /mob/living/carbon/alien/humanoid))
+					t = new /obj/effect/decal/cleanable/trail/oiltrail/xeno(src.loc)
+			if("xeno")
+				if(istype(src, /mob/living/carbon/human))
+					t = new /obj/effect/decal/cleanable/trail/xenotrail(src.loc)
+				if(istype(src, /mob/living/carbon/monkey))
+					t = new /obj/effect/decal/cleanable/trail/xenotrail/paw(src.loc)
+				if(istype(src, /mob/living/carbon/alien/humanoid))
+					t = new /obj/effect/decal/cleanable/trail/xenotrail/xeno(src.loc)
+		t.dir = src.dir
+		trail--
 
 /mob/living/carbon/relaymove(var/mob/user, direction)
 	if(user in src.stomach_contents)

@@ -125,6 +125,7 @@
 				gasping = 2
 
 			if(can_break && prob(10))
+				// HULK SMASH
 				var/hit_area = parse_zone(affecting.name)
 				if(hit_area in broken)
 					return
@@ -137,7 +138,7 @@
 					hit_name = hit_area
 				broken += hit_area
 				playsound(src, 'weapons/pierce.ogg', 50)
-				var/breaknoise = pick("snap","crack","pop","crick")
+				var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
 				if(affecting != "chest")
 					visible_message("<span class='danger'>[src]'s [hit_name] breaks with a [breaknoise]!</span>", \
 									"<span class='userdanger'>Your [hit_name] breaks with a [breaknoise]!</span>")

@@ -347,12 +347,14 @@ var/list/blood_splatter_icons = list()
 	blood_DNA[M.dna.unique_enzymes] = M.dna.blood_type
 	return 1 //we applied blood to the item
 
-/turf/simulated/add_blood(mob/living/carbon/M)
+/turf/simulated/add_blood(mob/living/carbon/M, var/obj/item/I)
 	if(..() == 0)	return 0
 
 	var/obj/effect/decal/cleanable/blood/B = locate() in contents	//check for existing blood splatter
 	if(!B)	B = new /obj/effect/decal/cleanable/blood(src)			//make a bloood splatter if we couldn't find one
 	B.blood_DNA[M.dna.unique_enzymes] = M.dna.blood_type
+	if(I)
+		B.cause = "[I.name]"
 	return 1 //we bloodied the floor
 
 /mob/living/carbon/human/add_blood(mob/living/carbon/M)
@@ -1115,15 +1117,35 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 	return
 
 /atom/proc/AltClick()
-	var/turf/T = get_turf(src)
-	T.AltClick()
+
+	/* // NOT UNTIL I FIGURE OUT A GOOD WAY TO DO THIS SHIT
+	if((HULK in usr.mutations) || (SUPRSTR in usr.augmentations))
+		if(!istype(src, /obj/item) && !istype(src, /mob) && !istype(src, /turf))
+			if(!usr.get_active_hand())
+
+				var/liftable = 0
+				for(var/x in liftable_structures)
+					if(findtext("[src.type]", "[x]"))
+						liftable = 1
+						break
+
+				if(liftable)
+
+					add_fingerprint(usr)
+					var/obj/item/weapon/grab/G = new /obj/item/weapon/grab(usr)
+					G.assailant = usr
+					usr.put_in_active_hand(G)
+					G.structure = src
+					G.synch()
+
+					visible_message("\red [usr] has picked up [src]!")
+
+					return
+				else
+					usr << "\red You can't pick this up!"
+	*/
+
 	return
-/turf/AltClick()
-	if(!usr) return
-	if(usr.listed_turf == src)
-		usr.listed_turf = null
-	else
-		usr.listed_turf = src
 
 /atom/proc/CtrlClick()
 	if(hascall(src,"pull"))

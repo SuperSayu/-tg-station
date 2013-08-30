@@ -130,7 +130,7 @@ emp_act
 			var/datum/limb/larm = get_organ("l_arm")
 			user.apply_damage(rand(2,7), BRUTE, larm)
 			playsound(user.loc, 'weapons/pierce.ogg', 25)
-			visible_message("<span class='warning'>[user] has attempted to [pick(I.attack_verb)] [src] with [I]!</span>")
+			visible_message("<span class='warning'>[user] has attempted to attack [src] with [I]!</span>")
 			user.drop_item()
 			return 0
 		else if(arm == r_hand && "right arm" in user.broken)
@@ -141,7 +141,7 @@ emp_act
 			var/datum/limb/rarm = get_organ("r_arm")
 			user.apply_damage(rand(2,7), BRUTE, rarm)
 			playsound(user.loc, 'weapons/pierce.ogg', 25)
-			visible_message("<span class='warning'>[user] has attempted to [pick(I.attack_verb)] [src] with [I]!</span>")
+			visible_message("<span class='warning'>[user] has attempted to attack [src] with [I]!</span>")
 			user.drop_item()
 			return 0
 
@@ -165,7 +165,7 @@ emp_act
 			bloody = 1
 			var/turf/location = loc
 			if(istype(location, /turf/simulated))
-				location.add_blood(src)
+				location.add_blood(src, I)
 			if(ishuman(user))
 				var/mob/living/carbon/human/H = user
 				if(get_dist(H, src) <= 1)	//people with TK won't get smeared with blood
@@ -225,25 +225,32 @@ emp_act
 		if(I.force >= 10 && I.w_class >= 4 && prob(66))
 			gasping = 2
 
-	var/breakchance = ((I.force / 4) * I.w_class) / 2
+	var/breakchance = (I.force / 4) * I.w_class
 	//src << "\red [breakchance]% chance of breaking."
-	if(I.damtype == BRUTE && I.w_class > 1 && prob(breakchance))
+	if(I.damtype == BRUTE && I.w_class > 1)
 		// sticks and stones will break your bones
 		if(hit_area in broken)
 			return
 		var/hit_name
-		if(hit_area == "head")
-			hit_name = "skull"
-		else if(hit_area == "chest")
-			hit_name = "ribs"
-		else
+		switch(hit_area)
+			if("head")
+				hit_name = "skull"
+				breakchance /= 4
+			if("chest")
+				hit_name = "ribs"
+				breakchance /= 2
+		if(!hit_name)
 			hit_name = hit_area
-		broken += hit_area
-		if(armor >= 1)
+			breakchance *= 1.5
+		if(HULK in user.mutations)
+			// HULK SMASH
+			breakchance *= 2
+		if(armor >= 2)
 			return
-		else
+		else if(prob(breakchance))
+			broken += hit_area
 			playsound(src, 'weapons/pierce.ogg', 50)
-			var/breaknoise = pick("snap","crack","pop","crick")
+			var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
 			if(hit_area != "chest")
 				visible_message("<span class='danger'>[src]'s [hit_name] breaks with a [breaknoise]!</span>", \
 								"<span class='userdanger'>Your [hit_name] breaks with a [breaknoise]!</span>")

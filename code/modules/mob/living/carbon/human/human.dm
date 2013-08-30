@@ -203,18 +203,22 @@
 			if("r_leg")
 				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05)
 
-	for(var/datum/limb/bone in organs)
-		var/affecting = get_organ(bone)
+	var/list/bones = list("chest", "head", "left arm", "right arm", "left leg", "right leg")
+	for(var/bone in bones)
 		if(!bone in broken && prob(break_chance))
 			broken += bone
 			playsound(src, 'weapons/pierce.ogg', 50)
-			var/breaknoise = pick("snap","crack","pop","crick")
-			if(affecting != "chest")
-				visible_message("<span class='danger'>[src]'s [affecting] breaks with a [breaknoise]!</span>", \
-								"<span class='userdanger'>Your [affecting] breaks with a [breaknoise]!</span>")
+			if(bone == "chest")
+				bone = "ribs"
+			else if(bone == "head")
+				bone = "skull"
+			var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
+			if(bone != "ribs")
+				visible_message("<span class='danger'>[src]'s [bone] breaks with a [breaknoise]!</span>", \
+								"<span class='userdanger'>Your [bone] breaks with a [breaknoise]!</span>")
 			else
-				visible_message("<span class='danger'>[src]'s [affecting] break with a [breaknoise]!</span>", \
-								"<span class='userdanger'>Your [affecting] break with a [breaknoise]!</span>")
+				visible_message("<span class='danger'>[src]'s [bone] break with a [breaknoise]!</span>", \
+								"<span class='userdanger'>Your [bone] break with a [breaknoise]!</span>")
 			if(break_chance >= 3)
 				break_chance -= 3
 			else
@@ -231,7 +235,7 @@
 	if(prob(rand(5,10)))
 		broken += affecting
 		playsound(src, 'weapons/pierce.ogg', 50)
-		var/breaknoise = pick("snap","crack","pop","crick")
+		var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
 		if(affecting != "chest")
 			visible_message("<span class='danger'>[src]'s [affecting] breaks with a [breaknoise]!</span>", \
 							"<span class='userdanger'>Your [affecting] breaks with a [breaknoise]!</span>")
@@ -256,11 +260,12 @@
 		updatehealth()
 		if(!affecting in broken) // there's no avoiding it, you got hit by a fucking meteor
 			playsound(src, 'weapons/pierce.ogg', 50)
-			var/breaknoise = pick("snap","crack","pop","crick")
+			var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
 			if(affecting != "chest")
 				visible_message("<span class='danger'>[src]'s [affecting] breaks with a [breaknoise]!</span>", \
 								"<span class='userdanger'>Your [affecting] breaks with a [breaknoise]!</span>")
 			else
+				affecting = "ribs"
 				visible_message("<span class='danger'>[src]'s [affecting] break with a [breaknoise]!</span>", \
 								"<span class='userdanger'>Your [affecting] break with a [breaknoise]!</span>")
 	return

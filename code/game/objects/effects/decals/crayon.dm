@@ -33,3 +33,21 @@
 
 		overlays += mainOverlay
 		overlays += shadeOverlay
+
+/obj/effect/decal/cleanable/body
+	name = "body marking"
+	desc = "It shows the area where a body was..."
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "body-"
+	layer = 2.1
+	anchored = 1
+
+/obj/effect/decal/cleanable/body/New()
+	..()
+	if(src.loc && isturf(src.loc))
+		for(var/obj/effect/decal/cleanable/body/B in src.loc)
+			if(B != src)
+				del(B)
+
+/obj/effect/decal/cleanable/body/proc/Color(var/bodycolor)
+	icon_state += bodycolor
