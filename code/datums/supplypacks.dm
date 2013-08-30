@@ -129,6 +129,15 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	containername = "special ops crate"
 	hidden = 1
 
+/datum/supply_packs/emergency/evil // sayustation
+	name = "Evil Incorporated(R) Crate of Evil(TM)"
+	contains = list()
+	cost = 200
+	containertype = /obj/structure/largecrate/evil
+	containername = "large crate"
+	hidden = 1
+	New()
+		manifest = "<ul><li>Love, sunshine, and perfect happiness.</li></ul>"
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////// Security ////////////////////////////////////////
@@ -600,6 +609,11 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	group = supply_organic
 	containertype = /obj/structure/closet/crate/freezer
 
+/datum/supply_packs/organic/fastfood
+	name = "Fast Food delivery"
+	contains = list(/obj/item/weapon/storage/box/spacemeal,/obj/item/weapon/storage/box/spacemeal,/obj/item/weapon/storage/box/spacemeal,/obj/item/weapon/storage/box/spacemeal)
+	cost = 30
+	containername = "fast food delivery"
 
 /datum/supply_packs/organic/food
 	name = "Food crate"
@@ -656,12 +670,26 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	containertype = /obj/structure/largecrate/chick
 	containername = "chicken crate"
 
-/datum/supply_packs/organic/lisa
+/datum/supply_packs/organic/corgi
 	name = "Corgi Crate"
 	contains = list()
 	cost = 50
-	containertype = /obj/structure/largecrate/lisa
+	containertype = /obj/structure/largecrate/corgi
 	containername = "corgi crate"
+
+/datum/supply_packs/organic/pug
+	name = "Pug Crate"
+	contains = list()
+	cost = 50
+	containertype = /obj/structure/largecrate/pug
+	containername = "pug crate"
+
+/datum/supply_packs/organic/cat
+	name = "Cat Crate"
+	contains = list()
+	cost = 50
+	containertype = /obj/structure/largecrate/cat
+	containername = "cat crate"
 
 ////// hippy gear
 
@@ -764,6 +792,17 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	cost = 20
 	containername = "sandstone blocks crate"
 
+/datum/supply_packs/materials/chemicals // sayustation
+	name = "Chemistry Starter Kit"
+	contains = list()
+	cost = 150
+	containertype = /obj/structure/closet/crate/secure/chemicals
+	containername = "Chemistry Starter Kit"
+
+	New()
+		manifest += "<ul>"
+		manifest += "<li> A basic set of chemical elements for the do-it-yourselfer</li>"
+		manifest += "</ul>"
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////// Miscellaneous ///////////////////////////////////
@@ -786,6 +825,14 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	cost = 8
 	containertype = /obj/structure/largecrate
 	containername = "water tank crate"
+
+/datum/supply_packs/misc/empty_vender // sayustation
+	name = "Do-it-yourself Vending Machine"
+	cost = 100
+
+	contains = list(/obj/machinery/vending/refillable/generic)
+	containertype = /obj/structure/largecrate
+	containername = "vending machine crate"
 
 
 ///////////// Paper Work
@@ -833,7 +880,7 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 					/obj/item/weapon/caution,
 					/obj/item/weapon/caution,
 					/obj/item/weapon/storage/bag/trash,
-					/obj/item/weapon/reagent_containers/spray/cleaner,
+					/obj/item/weapon/reagent_containers/spray/chemsprayer/cleanblaster,
 					/obj/item/weapon/reagent_containers/glass/rag,
 					/obj/item/weapon/grenade/chem_grenade/cleaner,
 					/obj/item/weapon/grenade/chem_grenade/cleaner,
@@ -927,10 +974,34 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	cost = 30
 	containername = "crate"	//let's keep it subtle, eh?
 	contraband = 1
+/datum/supply_packs/misc/randomised/contraband/chemicals // sayustation
+	name = "Grey-market Chemicals Grab Pack"
+	num_contained = 12
+	contains = list(/obj/item/weapon/reagent_containers/glass/bottle/random_chem,
+					/obj/item/weapon/reagent_containers/glass/bottle/random_base_chem,
+					/obj/item/weapon/reagent_containers/glass/bottle/random_reagent,
+					/obj/item/weapon/storage/pill_bottle/random_meds)
+	cost = 150
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Unregulated Chemicals Crate"
+	contraband = 1
 
-/datum/supply_packs/pug
-	name = "Pug Crate"
-	contains = list()
+	New()
+		manifest += "<ul>"
+		manifest += "<li> [num_contained] bottles of unregulated chemicals </li>"
+		manifest += "</ul>"
+
+/datum/supply_packs/misc/randomised/contraband/novelty // sayustation
+	name = "Colonel Sassacres Chest of Dautingly Frivolous Weaponry"
+	num_contained	= 3
 	cost = 50
-	containertype = /obj/structure/largecrate/pug
-	containername = "pug crate"
+	contains = list(/obj/item/weapon/sord, /obj/item/weapon/grenade/clusterbuster/banquet/child,
+					/obj/item/weapon/grenade/clusterbuster/aviary, /obj/item/weapon/grenade/chem_grenade/lube,
+					/obj/item/weapon/grenade/clusterbuster/fluffy, /obj/item/weapon/grenade/clusterbuster/lube,
+					/obj/item/weapon/grenade/clusterbuster/smoke, /obj/item/weapon/grenade/clusterbuster/soap,
+					/obj/item/weapon/bikehorn, /obj/item/weapon/reagent_containers/spray/chemsprayer/honkmaster,
+					/obj/item/weapon/gun/projectile/automatic/clown, /obj/item/weapon/reagent_containers/spray/chemsprayer/dirtblaster)
+	containertype = /obj/structure/closet/crate/secure
+	containername = "Chest of Dautingly Frivolous Weaponry"
+	access = access_clown
+	contraband = 1

@@ -282,51 +282,6 @@
 		return
 
 
-/datum/supply_packs/chemicals
-	name = "Chemistry Starter Kit"
-	contains = list()
-	cost = 150
-	containertype = /obj/structure/closet/crate/secure/chemicals
-	containername = "Chemistry Starter Kit"
-
-	New()
-		manifest += "<ul>"
-		manifest += "<li> A basic set of chemical elements for the do-it-yourselfer</li>"
-		manifest += "</ul>"
-
-/datum/supply_packs/randomised/chemicals
-	name = "Grey-market Chemicals Grab Pack"
-	num_contained = 12
-	contains = list(/obj/item/weapon/reagent_containers/glass/bottle/random_chem,
-					/obj/item/weapon/reagent_containers/glass/bottle/random_base_chem,
-					/obj/item/weapon/reagent_containers/glass/bottle/random_reagent,
-					/obj/item/weapon/storage/pill_bottle/random_meds)
-	cost = 150
-	containertype = /obj/structure/closet/crate/secure
-	containername = "Unregulated Chemicals Crate"
-	contraband = 1
-
-	New()
-		manifest += "<ul>"
-		manifest += "<li> [num_contained] bottles of unregulated chemicals </li>"
-		manifest += "</ul>"
-
-/datum/supply_packs/randomised/contaband/novelty
-	name = "Colonel Sassacres Chest of Dautingly Frivolous Weaponry"
-	num_contained	= 3
-	cost = 50
-	contains = list(/obj/item/weapon/sord, /obj/item/weapon/grenade/clusterbuster/banquet/child,
-					/obj/item/weapon/grenade/clusterbuster/aviary, /obj/item/weapon/grenade/chem_grenade/lube,
-					/obj/item/weapon/grenade/clusterbuster/fluffy, /obj/item/weapon/grenade/clusterbuster/lube,
-					/obj/item/weapon/grenade/clusterbuster/smoke, /obj/item/weapon/grenade/clusterbuster/soap,
-					/obj/item/weapon/bikehorn, /obj/item/weapon/reagent_containers/spray/chemsprayer/honkmaster,
-					/obj/item/weapon/gun/projectile/automatic/clown, /obj/item/weapon/reagent_containers/spray/chemsprayer/dirtblaster)
-	containertype = /obj/structure/closet/crate/secure
-	containername = "Chest of Dautingly Frivolous Weaponry"
-	access = access_clown
-	contraband = 1
-
-
 // -------------------------------------
 //          Do not order this.
 //  If you order this, do not open it.
@@ -355,15 +310,6 @@
 		else
 			..()
 
-/datum/supply_packs/evil
-	name = "Evil Incorporated(R) Crate of Evil(TM)"
-	contains = list()
-	cost = 200
-	containertype = /obj/structure/largecrate/evil
-	containername = "large crate"
-	hidden = 1
-	New()
-		manifest = "<ul><li>Love, sunshine, and perfect happiness.</li></ul>"
 
 //
 //
