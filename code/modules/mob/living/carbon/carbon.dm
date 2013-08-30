@@ -290,7 +290,7 @@
 			O.show_message("You hear something squeezing through the ventilation ducts.",2)
 
 		sleep(travel_time)
-*/
+
 
 		if(!target_vent)	return
 		if(target_vent.welded)			//the vent can be welded while alien scrolled through the list or travelled.
@@ -300,7 +300,7 @@
 		var/area/new_area = get_area(loc)
 		if(new_area)
 			new_area.Entered(src)
-
+*/
 
 /mob/living/carbon/clean_blood()
 	. = ..()

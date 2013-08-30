@@ -674,7 +674,7 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	name = "Corgi Crate"
 	contains = list()
 	cost = 50
-	containertype = /obj/structure/largecrate/corgi
+	containertype = /obj/structure/largecrate/lisa
 	containername = "corgi crate"
 
 /datum/supply_packs/organic/pug

@@ -330,7 +330,7 @@
 //
 /obj/effect/knowspell/summon/world
 	var/list/targets
-	var/list/spawns_possible = list(/obj/item/toy/waterflower = list("name" = "evil flower"))		 // path = list(variable changes)
+	var/list/spawns_possible = list(/obj/item/weapon/reagent_containers/spray/waterflower = list("name" = "evil flower"))		 // path = list(variable changes)
 
 /obj/effect/knowspell/summon/world/proc/summon_effect(var/atom/target)
 	return 1

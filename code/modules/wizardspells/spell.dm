@@ -257,8 +257,6 @@
 
 	proc/start_fire(var/turf/simulated/floor/TSF)
 		if(!istype(TSF)) return
-		if(TSF.parent && TSF.parent.group_processing)
-			TSF.parent.suspend_group_processing()
 		var/datum/gas_mixture/napalm = new
 
 		napalm.toxins = 20
@@ -266,12 +264,15 @@
 		napalm.temperature = 2400
 
 		TSF.assume_air(napalm)
-		spawn(0) TSF.hotspot_expose(700, 400)
+		spawn(0)
+			TSF.hotspot_expose(700, 400)
+
 
 	// These are ways in which the spell can be cast.
 	// Click is used when you click the name in the spell pane, because you are technically clicking on the actual object.  Don't ask.
 	Click()
 		prepare(usr)
+		return 1
 
 	verb/manual_cast()
 		set name = "cast spell"
@@ -291,5 +292,5 @@
 
 /proc/magic_soundfx()
 	return pick("poof","pak","pik","pok","doof","dop","dap","dwip","swhop","spoik","twaaa","flip","foip","frap","zuu","zaa",
-						"chinp","choo","flok","zip","shaa","moo","haunting moo","chirp","chwap","snik","snap","snorp","fizzle","shaz","shazbot",
-						"dlop","plop","oink","haunting oink","zing","zang","zoom","bing","boop","flap","choink","snizzle","sizzle","fart")
+						"chinp","choo","flok","zip","shaa","moo","chirp","chwap","snik","snap","snorp","fizzle","shaz","shazbot",
+						"dlop","plop","oink","zing","zang","zoom","bing","boop","flap","choink","snizzle","sizzle","fart")

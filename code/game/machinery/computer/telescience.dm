@@ -76,8 +76,6 @@
 		for(var/obj/machinery/telepad/E in world)
 			var/L = get_turf(E)
 			for(var/turf/simulated/floor/target_tile in range(0,L))
-				if(target_tile.parent && target_tile.parent.group_processing)
-					target_tile.parent.suspend_group_processing()
 				var/datum/gas_mixture/napalm = new
 				napalm.toxins = 25
 				napalm.temperature = 2000

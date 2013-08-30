@@ -43,7 +43,6 @@
 	/area/shuttle/escape_pod5/station,
 	/area/shuttle/mining/station,
 	/area/shuttle/transport1/station,
-	/area/shuttle/prison/station,
 	/area/shuttle/specops/station)
 
 	impact_area = locate(pick(the_station_areas - safe_areas))	//need to locate() as it's just a list of paths.

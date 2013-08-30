@@ -540,11 +540,6 @@ Rise of the bots
 /datum/round_event/ion_storm/bot_storm
 	aiLawChange = 0
 	botEmagChance = 100
-	if(botEmagChance)
-		for(var/obj/machinery/bot/bot in machines)
-			if(prob(botEmagChance))
-				bot.Emag()
-
 
 #undef ION_RANDOM
 #undef ION_ANNOUNCE
