@@ -80,10 +80,11 @@ var/global/mulebot_count = 0
 			radio_controller.add_object(src, control_freq, filter = RADIO_MULEBOT)
 			radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
 
-		mulebot_count += 1
-		if(!suffix)
-			suffix = "#[mulebot_count]"
-		name = "Mulebot ([suffix])"
+		if(get_turf(loc))
+			mulebot_count++
+			if(!suffix)
+				suffix = "#[mulebot_count]"
+			name = "Mulebot ([suffix])"
 
 
 	verbs -= /atom/movable/verb/pull

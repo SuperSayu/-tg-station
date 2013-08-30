@@ -18,16 +18,14 @@
 			return "[src] is deactivated."
 
 	hear_talk(mob/living/M as mob, msg)
-		if(secured)
-			if(listening)
-				recorded = msg
-				listening = 0
-				var/turf/T = get_turf(src)	//otherwise it won't work in hand
-				T.visible_message("\icon[src] beeps, \"Activation message is '[recorded]'.\"")
-			else
-				if(findtext(msg, recorded))
-					spawn(1) // give the message time to be heard by everyone else
-						pulse(0)
+		if(listening)
+			recorded = msg
+			listening = 0
+			var/turf/T = get_turf(src)	//otherwise it won't work in hand
+			T.visible_message("\icon[src] beeps, \"Activation message is '[recorded]'.\"")
+		else
+			if(findtext(msg, recorded))
+				pulse(0)
 
 	activate()
 		return // previously this toggled listning when not in a holder, that's a little silly.  It was only called in attack_self that way.

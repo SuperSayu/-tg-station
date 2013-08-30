@@ -112,7 +112,7 @@
 	if(istype(I,/obj/item/weapon/hand_labeler))
 		var/obj/item/weapon/hand_labeler/HL = I
 		if(length(HL.label))
-			label = HL.label
+			label = " ([HL.label])"
 			return 0
 		else
 			if(label)

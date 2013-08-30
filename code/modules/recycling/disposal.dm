@@ -27,22 +27,28 @@
 	// find the attached trunk (if present) and init gas resvr.
 /obj/machinery/disposal/New()
 	..()
-	spawn(5)
-		trunk = locate() in src.loc
-		if(!trunk)
-			mode = 0
-			flush = 0
-		else
-			trunk.linked = src	// link the pipe trunk to self
+	trunk = locate() in src.loc
+	if(!trunk)
+		mode = 0
+		flush = 0
+	else
+		trunk.linked = src	// link the pipe trunk to self
 
-		air_contents = new/datum/gas_mixture()
-		//gas.volume = 1.05 * CELLSTANDARD
-		update()
+	air_contents = new/datum/gas_mixture()
+	//gas.volume = 1.05 * CELLSTANDARD
+	update()
 
 /obj/machinery/disposal/Del()
 	for(var/atom/movable/AM in contents)
 		AM.loc = src.loc
 	..()
+
+/obj/machinery/disposal/initialize() //this will remove around 5kpa from a turf, add it to the disposal air and then add it back to the turf, basically it spawns air depending on the turf air.
+	var/atom/L = loc
+	var/datum/gas_mixture/env = L.return_air()
+	var/datum/gas_mixture/removed = env.remove(SEND_PRESSURE)
+	air_contents.merge(removed)
+	env.merge(removed)
 
 	// attack by item places it in to disposal
 /obj/machinery/disposal/attackby(var/obj/item/I, var/mob/user)
@@ -368,6 +374,7 @@
 		//Actually transfer the gas
 		var/datum/gas_mixture/removed = env.remove(transfer_moles)
 		air_contents.merge(removed)
+		air_update_turf()
 
 
 	// if full enough, switch to ready mode
@@ -1212,6 +1219,7 @@
 	var/active = 0
 	var/turf/target	// this will be where the output objects are 'thrown' to.
 	var/mode = 0
+	var/start_eject = 0
 
 	New()
 		..()
@@ -1229,10 +1237,13 @@
 	proc/expel(var/obj/structure/disposalholder/H)
 
 		flick("outlet-open", src)
-		playsound(src, 'sound/machines/warning-buzzer.ogg', 50, 0, 0)
-		sleep(20)	//wait until correct animation frame
-		playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
-
+		if((start_eject + 30) < world.time)
+			start_eject = world.time
+			playsound(src, 'sound/machines/warning-buzzer.ogg', 50, 0, 0)
+			sleep(20)
+			playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
+		else
+			sleep(20)
 		if(H)
 			for(var/atom/movable/AM in H)
 				AM.loc = src.loc

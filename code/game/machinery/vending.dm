@@ -473,7 +473,7 @@
 	products = list(	/obj/item/device/flashlight = 5,/obj/item/weapon/wirecutters = 1, /obj/item/weapon/reagent_containers/glass/bucket = 2, /obj/item/weapon/soap = 3,
 						/obj/item/weapon/clipboard = 2, /obj/item/weapon/tray = 2, /obj/item/stack/sheet/cardboard = 5, /obj/item/device/camera = 1, /obj/item/weapon/paper_bin = 2)
 	premium = list(	/obj/item/weapon/rsf = 1)
-	contraband = list(/obj/item/device/assembly/prox_sensor = 5,/obj/item/device/assembly/igniter = 3,/obj/item/device/assembly/signaler = 4,/obj/item/device/assembly/timer = 2)
+	contraband = list(/obj/item/device/assembly/prox_sensor = 5,/obj/item/device/assembly/igniter = 3,/obj/item/device/assembly/signaler = 4,/obj/item/device/assembly/timer = 2, /obj/item/device/assembly/voice = 2)
 	product_ads = "Only the finest!;Have some tools.;The most robust equipment.;The finest gear in space!"
 
 /obj/machinery/vending/coffee
@@ -632,7 +632,7 @@
 					/obj/item/seeds/cabbageseed = 3,/obj/item/seeds/grapeseed = 3,/obj/item/seeds/pumpkinseed = 3,/obj/item/seeds/cherryseed = 3)
 	contraband = list(/obj/item/seeds/amanitamycelium = 2,/obj/item/seeds/glowshroom = 2,/obj/item/seeds/libertymycelium = 2,/obj/item/seeds/nettleseed = 2,
 						/obj/item/seeds/plumpmycelium = 2,/obj/item/seeds/reishimycelium = 2)
-	premium = list(/obj/item/toy/waterflower = 1)
+	premium = list(/obj/item/weapon/reagent_containers/spray/waterflower = 1)
 
 	allow_insert(var/obj/item/I)
 		if(istype(I,/obj/item/seeds))

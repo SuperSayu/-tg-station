@@ -217,7 +217,7 @@
 				new src.type(tunnel, rand(10, 15), 0, dir,crack)
 			else
 				SpawnFloor(tunnel)
-		else if(!istype(tunnel, src.parent)) // We hit space/normal/wall, stop our tunnel.
+		else //if(!istype(tunnel, src.parent)) // We hit space/normal/wall, stop our tunnel.
 			break
 
 		// Chance to change our direction left or right.
