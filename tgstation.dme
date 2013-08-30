@@ -1139,6 +1139,7 @@
 #include "code\modules\surgery\helpers.dm"
 #include "code\modules\surgery\implant_removal.dm"
 #include "code\modules\surgery\lipoplasty.dm"
+#include "code\modules\surgery\omnitalk.dm"
 #include "code\modules\surgery\plastic_surgery.dm"
 #include "code\modules\surgery\surgery.dm"
 #include "code\modules\surgery\surgery_step.dm"
