@@ -203,27 +203,22 @@
 	hitop
 		name = "Hitop"
 		icon_state = "hair_hitop"
-		gender = MALE
 
 	mohawk
 		name = "Mohawk"
 		icon_state = "hair_d"
-		gender = MALE // gross
 
 	jensen
 		name = "Adam Jensen Hair"
 		icon_state = "hair_jensen"
-		gender = MALE
 
 	gelled
 		name = "Gelled Back"
 		icon_state = "hair_gelled"
-		gender = FEMALE
 
 	spiky
 		name = "Spiky"
 		icon_state = "hair_spikey"
-		gender = MALE
 
 	kusangi
 		name = "Kusanagi Hair"
@@ -232,32 +227,26 @@
 	kagami
 		name = "Pigtails"
 		icon_state = "hair_kagami"
-		gender = FEMALE
 
 	himecut
 		name = "Hime Cut"
 		icon_state = "hair_himecut"
-		gender = FEMALE
 
 	braid
 		name = "Floorlength Braid"
 		icon_state = "hair_braid"
-		gender = FEMALE
 
 	odango
 		name = "Odango"
 		icon_state = "hair_odango"
-		gender = FEMALE
 
 	ombre
 		name = "Ombre"
 		icon_state = "hair_ombre"
-		gender = FEMALE
 
 	updo
 		name = "Updo"
 		icon_state = "hair_updo"
-		gender = FEMALE
 
 	skinhead
 		name = "Skinhead"
@@ -266,24 +255,21 @@
 	balding
 		name = "Balding Hair"
 		icon_state = "hair_e"
-		gender = MALE // turnoff!
 
 	bald
 		name = "Bald"
 		icon_state = null
-		gender = MALE
 
 /////////////////////////////
 // Facial Hair Definitions //
 /////////////////////////////
 /datum/sprite_accessory/facial_hair
 	icon = 'icons/mob/human_face.dmi'
-	gender = MALE // barf (unless you're a dorf, dorfs dig chix /w beards :P)
+	gender = NEUTER
 
 	shaved
 		name = "Shaved"
 		icon_state = null
-		gender = NEUTER
 
 	watson
 		name = "Watson Mustache"
@@ -362,128 +348,105 @@
 ///////////////////////////
 /datum/sprite_accessory/underwear
 	icon = 'icons/mob/underwear.dmi'
+	gender = NEUTER
 
 	nude
 		name = "Nude"
 		icon_state = null
-		gender = NEUTER
+
 
 	male_white
 		name = "Mens White"
 		icon_state = "male_white"
-		gender = MALE
 
 	male_grey
 		name = "Mens Grey"
 		icon_state = "male_grey"
-		gender = MALE
 
 	male_green
 		name = "Mens Green"
 		icon_state = "male_green"
-		gender = MALE
 
 	male_blue
 		name = "Mens Blue"
 		icon_state = "male_blue"
-		gender = MALE
 
 	male_black
 		name = "Mens Black"
 		icon_state = "male_black"
-		gender = MALE
 
 	male_mankini
 		name = "Mankini"
 		icon_state = "male_mankini"
-		gender = MALE
 
 	male_hearts
 		name = "Mens Hearts Boxer"
 		icon_state = "male_hearts"
-		gender = MALE
 
 	male_blackalt
 		name = "Mens Black Boxer"
 		icon_state = "male_blackalt"
-		gender = MALE
 
 	male_greyalt
 		name = "Mens Grey Boxer"
 		icon_state = "male_greyalt"
-		gender = MALE
 
 	male_stripe
 		name = "Mens Striped Boxer"
 		icon_state = "male_stripe"
-		gender = MALE
 
 	male_kinky
 		name = "Mens Kinky"
 		icon_state = "male_kinky"
-		gender = MALE
 
 	male_red
 		name = "Mens Red"
 		icon_state = "male_red"
-		gender = MALE
 
 	female_red
 		name = "Ladies Red"
 		icon_state = "female_red"
-		gender = FEMALE
 
 	female_white
 		name = "Ladies White"
 		icon_state = "female_white"
-		gender = FEMALE
 
 	female_yellow
 		name = "Ladies Yellow"
 		icon_state = "female_yellow"
-		gender = FEMALE
 
 	female_blue
 		name = "Ladies Blue"
 		icon_state = "female_blue"
-		gender = FEMALE
 
 	female_black
 		name = "Ladies Black"
 		icon_state = "female_black"
-		gender = FEMALE
 
 	female_thong
 		name = "Ladies Thong"
 		icon_state = "female_thong"
-		gender = FEMALE
 
 	female_babydoll
 		name = "Babydoll"
 		icon_state = "female_babydoll"
-		gender = FEMALE
 
 	female_babyblue
 		name = "Ladies Baby-Blue"
 		icon_state = "female_babyblue"
-		gender = FEMALE
 
 	female_green
 		name = "Ladies Green"
 		icon_state = "female_green"
-		gender = FEMALE
 
 	female_pink
 		name = "Ladies Pink"
 		icon_state = "female_pink"
-		gender = FEMALE
 
 	female_kinky
 		name = "Ladies Kinky"
 		icon_state = "female_kinky"
-		gender = FEMALE
 
 	female_tankini
 		name = "Tankini"
 		icon_state = "female_tankini"
-		gender = FEMALE
