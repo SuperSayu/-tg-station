@@ -117,12 +117,9 @@
 	charge_counter = charge_max
 
 /obj/effect/proc_holder/spell/Click()
-	..()
-
-	if(!cast_check())
-		return
-
-	choose_targets()
+	if(cast_check())
+		choose_targets()
+	return 1
 
 /obj/effect/proc_holder/spell/proc/choose_targets(mob/user = usr) //depends on subtype - /targeted or /aoe_turf
 	return

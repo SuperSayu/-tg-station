@@ -53,6 +53,8 @@ RSF
 /obj/item/weapon/rsf/afterattack(atom/A, mob/user as mob)
 	if (!(istype(A, /obj/structure/table) || istype(A, /turf/simulated/floor)))
 		return
+	if(matter <= 0)
+		return
 
 	user << "Dispensing [mode_names[mode]]..."
 	playsound(src.loc, 'sound/machines/click.ogg', 10, 1)
