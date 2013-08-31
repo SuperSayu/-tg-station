@@ -67,6 +67,13 @@
 		if(T.Adjacent(neighbor,src)) return 1
 	return 0
 
+/obj/item/Adjacent(var/atom/neighbor, var/recurse = 1)
+	if(istype(loc,/obj/item))
+		if(recurse)
+			return loc.Adjacent(neighbor,recurse-1)
+		return 0
+	return ..()
+
 /*
 	This checks if you there is uninterrupted airspace between that turf and this one.
 	This is defined as any dense ON_BORDER object, or any dense object without throwpass.

@@ -64,6 +64,7 @@
 /obj/structure/largecrate/pug/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/crowbar))
 		new /mob/living/simple_animal/pug(loc)
+		new /obj/item/weapon/pet_collar(loc)
 	..()
 
 /obj/structure/largecrate/cow

@@ -26,6 +26,7 @@
 
 /obj/item/weapon/rcs/Del()
 	processing_objects.Remove(src)
+	..()
 
 /obj/item/weapon/rcs/process()
 	if(rcharges > 10)
