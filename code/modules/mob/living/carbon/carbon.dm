@@ -32,6 +32,10 @@
 				if(istype(src, /mob/living/carbon/alien/humanoid))
 					t = new /obj/effect/decal/cleanable/trail/xenotrail/xeno(src.loc)
 		t.dir = src.dir
+		if(t.loc && isturf(t.loc))
+			for(var/obj/effect/decal/cleanable/trail/T in src.loc)
+				if(T.dir == t.dir && T != t)
+					del(T)
 		trail--
 
 /mob/living/carbon/relaymove(var/mob/user, direction)
