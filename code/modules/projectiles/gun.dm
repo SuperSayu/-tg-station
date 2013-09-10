@@ -4,7 +4,7 @@
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "detective"
 	item_state = "gun"
-	flags =  FPRINT | TABLEPASS | CONDUCT |  USEDELAY
+	flags =  FPRINT | TABLEPASS | CONDUCT
 	slot_flags = SLOT_BELT
 	m_amt = 2000
 	w_class = 3.0
@@ -100,7 +100,7 @@
 			user.visible_message("<span class='danger'>[user] fires [src]!</span>", "<span class='danger'>You fire [src]!</span>", "You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
 
 		prepare_shot(in_chamber)				//Set the projectile's properties
-		
+
 
 
 		if(targloc == curloc)			//Fire the projectile
@@ -108,7 +108,7 @@
 			del(in_chamber)
 			update_icon()
 			return
-		in_chamber.original = target		
+		in_chamber.original = target
 		in_chamber.loc = get_turf(user)
 		in_chamber.starting = get_turf(user)
 		in_chamber.current = curloc
