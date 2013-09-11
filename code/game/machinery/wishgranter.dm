@@ -54,9 +54,6 @@
 		if (!(TK in user.mutations))
 			user.mutations.Add(TK)
 
-		if(!(HEAL in user.mutations))
-			user.mutations.Add(HEAL)
-
 		user.update_mutations()
 
 		ticker.mode.traitors += user.mind

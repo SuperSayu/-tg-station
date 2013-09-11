@@ -48,13 +48,10 @@
 #define STOPSPRESSUREDMAGE 1	//This flag is used on the flags variable for SUIT and HEAD items which stop pressure damage. Note that the flag 1 was previous used as ONBACK, so it is possible for some code to use (flags & 1) when checking if something can be put on your back. Replace this code with (inv_flags & SLOT_BACK) if you see it anywhere
 //To successfully stop you taking all pressure damage you must have both a suit and head item with this flag.
 
-#define TABLEPASS 2			// can pass by a table or rack ~ apparently actually unused, uses pass_flags instead
-
 #define MASKINTERNALS	8	// mask allows internals
 //#define SUITSPACE		8	// suit protects against space
 
 #define USEDELAY 	16		// 1 second extra delay on use (Can be used once every 2s)
-#define NODELAY 	32768	// 1 second attackby delay skipped (Can be used once every 0.2s). Most objects have a 1s attackby delay, which doesn't require a flag.
 #define NOSHIELD	32		// weapon not affected by shield
 #define CONDUCT		64		// conducts electricity (metal etc.)
 #define FPRINT		256		// takes a fingerprint
@@ -157,20 +154,6 @@
 #define THERMAL_PROTECTION_HAND_RIGHT	0.025
 
 
-//bitflags for mutations
-	// Extra powers:
-#define SHADOW			(1<<10)	// shadow teleportation (create in/out portals anywhere) (25%)
-#define SCREAM			(1<<11)	// supersonic screaming (25%)
-#define EXPLOSIVE		(1<<12)	// exploding on-demand (15%)
-#define REGENERATION	(1<<13)	// superhuman regeneration (30%)
-#define REPROCESSOR		(1<<14)	// eat anything (50%)
-#define SHAPESHIFTING	(1<<15)	// take on the appearance of anything (40%)
-#define PHASING			(1<<16)	// ability to phase through walls (40%)
-#define SHIELD			(1<<17)	// shielding from all projectile attacks (30%)
-#define SHOCKWAVE		(1<<18)	// attack a nearby tile and cause a massive shockwave, knocking most people on their asses (25%)
-#define ELECTRICITY		(1<<19)	// ability to shoot electric attacks (15%)
-
-
 // String identifiers for associative list lookup
 
 // mob/var/list/mutations
@@ -188,17 +171,6 @@
 
 	// Extra powers:
 #define LASER			9 	// harm intent - click anywhere to shoot lasers from eyes
-#define HEAL			10 	// healing people with hands
-#define SHADOW			11 	// shadow teleportation (create in/out portals anywhere) (25%)
-#define SCREAM			12 	// supersonic screaming (25%)
-#define EXPLOSIVE		13 	// exploding on-demand (15%)
-#define REGENERATION	14 	// superhuman regeneration (30%)
-#define REPROCESSOR		15 	// eat anything (50%)
-#define SHAPESHIFTING	16 	// take on the appearance of anything (40%)
-#define PHASING			17 	// ability to phase through walls (40%)
-#define SHIELD			18 	// shielding from all projectile attacks (30%)
-#define SHOCKWAVE		19 	// attack a nearby tile and cause a massive shockwave, knocking most people on their asses (25%)
-#define ELECTRICITY		20 	// ability to shoot electric attacks (15%)
 
 //disabilities
 #define NEARSIGHTED		1
@@ -238,11 +210,6 @@
 #define SHOCK	8
 #define SAFE	16
 
-#define GAS_O2 	(1 << 0)
-#define GAS_N2	(1 << 1)
-#define GAS_PL	(1 << 2)
-#define GAS_CO2	(1 << 3)
-#define GAS_N2O	(1 << 4)
 
 
 var/list/accessable_z_levels = list("1" = 5, "3" = 10, "4" = 15, "5" = 10, "6" = 60)

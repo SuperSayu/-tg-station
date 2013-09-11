@@ -31,7 +31,7 @@
 
 	New()
 		..()
-		if(jumpsuit_choices.len == 1)
+		if(jumpsuit_choices.len == 1) // these are global lists, they are at null location for technical reasons
 			for(var/U in typesof(/obj/item/clothing/under) - forbidden)
 				var/obj/item/clothing/C = new U
 				jumpsuit_choices += C

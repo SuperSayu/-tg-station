@@ -34,7 +34,7 @@
 	icon_state = "pda"
 	item_state = "electronic"
 	w_class = 2.0
-	flags = FPRINT | TABLEPASS | ONBELT
+	flags = FPRINT  | ONBELT
 
 	var/owner = null
 	var/default_cartridge = null // Access level defined by cartridge

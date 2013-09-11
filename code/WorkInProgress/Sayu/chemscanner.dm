@@ -3,7 +3,7 @@
 	desc = "Has a portable centrifuge for reagent separation and analysis."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "adv_spectrometer"
-	flags = FPRINT | TABLEPASS | NOREACT
+	flags = FPRINT  | NOREACT
 	var/internal_volume = 10 // not meant for mass usage
 
 	var/obj/item/weapon/reagent_containers/B1 = null

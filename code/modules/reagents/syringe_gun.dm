@@ -67,7 +67,7 @@
 /obj/item/clothing/mask/blowgun
 	name = "cigar tube"
 	desc = "A hollow device around the right shape and size to fire syringes if you blow hard enough."
-	flags = TABLEPASS|USEDELAY|FPRINT // We have to add usedelay to get afterattack at distance for some reason
+	flags = USEDELAY|FPRINT // We have to add usedelay to get afterattack at distance for some reason
 	icon_state = "cigaroff"
 	item_state = "cigaroff"
 	var/obj/item/weapon/reagent_containers/syringe/ammo = null

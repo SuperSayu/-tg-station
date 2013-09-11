@@ -2,7 +2,7 @@
 /obj/item/clothing/suit/armor
 	allowed = list(/obj/item/weapon/gun/energy,/obj/item/weapon/reagent_containers/spray/pepper,/obj/item/weapon/gun/projectile,/obj/item/ammo_magazine,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs)
 	body_parts_covered = CHEST
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 
 	cold_protection = CHEST|GROIN
 	min_cold_protection_temperature = ARMOR_MIN_TEMP_PROTECT
@@ -16,7 +16,7 @@
 	icon_state = "armor"
 	item_state = "armor"
 	blood_overlay_type = "armor"
-	flags = FPRINT | TABLEPASS | ONESIZEFITSALL
+	flags = FPRINT  | ONESIZEFITSALL
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 
 
@@ -75,7 +75,7 @@
 	item_state = "swat_suit"
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	body_parts_covered = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
 	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_magazine,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/emergency_oxygen)
 	slowdown = 1
@@ -113,7 +113,7 @@
 	item_state = "reactiveoff"
 	blood_overlay_type = "armor"
 	slowdown = 1
-	flags = FPRINT | TABLEPASS | ONESIZEFITSALL
+	flags = FPRINT  | ONESIZEFITSALL
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/reactive/IsShield()

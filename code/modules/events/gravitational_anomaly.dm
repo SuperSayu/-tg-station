@@ -16,7 +16,7 @@
 			M << sound('sound/AI/granomalies.ogg')
 
 /datum/round_event/gravitational_anomaly/setup()
-	endWhen = rand(50, 200)
+	endWhen = rand(40, 90)
 
 /datum/round_event/gravitational_anomaly/start()
 	var/turf/T = pick(blobstart)
