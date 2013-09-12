@@ -15,14 +15,13 @@
 	origin_tech = "combat=1"
 	attack_verb = list("struck", "hit", "bashed")
 
-	var/fire_sound = 'sound/weapons/Gunshot.ogg'
+	var/fire_sound = "gunshot"
 	var/obj/item/projectile/in_chamber = null
 	var/caliber = ""
 	var/silenced = 0
 	var/recoil = 0
 	var/ejectshell = 1
 	var/clumsy_check = 1
-
 
 	proc/load_into_chamber()
 		return 0
@@ -104,6 +103,7 @@
 			user.visible_message("<span class='danger'>[user] fires [src]!</span>", "<span class='danger'>You fire [src]!</span>", "You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
 
 		prepare_shot(in_chamber)				//Set the projectile's properties
+
 
 
 		if(targloc == curloc)			//Fire the projectile
