@@ -153,6 +153,9 @@ turf/simulated/proc/share_temperature_mutual_solid(turf/simulated/sharer, conduc
 
 		if(istype(enemy_tile,/turf/simulated))
 			var/turf/simulated/enemy_simulated = enemy_tile
+			if(!enemy_simulated.air)
+				atmos_adjacent_turfs &= ~direction
+				continue
 
 			if(current_cycle > enemy_simulated.current_cycle)
 				enemy_simulated.archive()

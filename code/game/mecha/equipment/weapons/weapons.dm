@@ -393,7 +393,7 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/mousetrap_mortar
 	name = "Mousetrap Mortar"
 	icon_state = "mecha_mousetrapmrtr"
-	projectile = /obj/item/device/assembly/mousetrap
+	projectile = /obj/item/device/assembly/mousetrap/armed
 	fire_sound = 'sound/items/bikehorn.ogg'
 	projectiles = 15
 	missile_speed = 1.5

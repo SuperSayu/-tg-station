@@ -894,6 +894,8 @@ What are the archived variables for?
 				sharer.temperature += heat/sharer.heat_capacity
 
 	compare(datum/gas_mixture/sample)
+		if(!sample)
+			return 0
 		if((abs(oxygen-sample.oxygen) > MINIMUM_AIR_TO_SUSPEND) && \
 			((oxygen < (1-MINIMUM_AIR_RATIO_TO_SUSPEND)*sample.oxygen) || (oxygen > (1+MINIMUM_AIR_RATIO_TO_SUSPEND)*sample.oxygen)))
 			return 0

@@ -358,18 +358,20 @@
 /obj/item/weapon/grenade/clusterbuster/inferno
 	name = "Little Boy"
 	payload = /obj/item/weapon/grenade/chem_grenade/incendiary
+/obj/item/weapon/grenade/clusterbuster/apocalypsefake
+	name = "Fun Bomb"
+	desc = "Not like the other bomb."
+	payload = /obj/item/toy/spinningtoy
 
 // Grenades that should never see the light of day
 /obj/item/weapon/grenade/clusterbuster/apocalypse
 	name = "Apocalypse Bomb"
 	desc = "No matter what, do not EVER use this."
 	payload = /obj/machinery/singularity
-/obj/item/weapon/grenade/clusterbuster/apocalypse/fake
-	payload = /obj/item/toy/spinningtoy
 
 /obj/item/weapon/grenade/clusterbuster/ultima
-	name = "The Final Boss"
-	desc = "For when you really, truly need to kill people."
+	name = "Earth Shattering Kaboom"
+	desc = "Contains one Aludium Q-36 explosive space modulator."
 	payload = /obj/item/weapon/grenade/chem_grenade/explosion
 
 /obj/item/weapon/grenade/clusterbuster/lube

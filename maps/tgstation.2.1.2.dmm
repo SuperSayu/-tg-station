@@ -82,7 +82,7 @@
 "abD" = (/turf/simulated/floor{dir = 9; icon_state = "warning"},/area/security/warden)
 "abE" = (/turf/simulated/floor{dir = 1; icon_state = "warning"},/area/security/warden)
 "abF" = (/obj/structure/table/woodentable,/obj/machinery/newscaster/security_unit{pixel_x = -30; pixel_y = 0},/turf/simulated/floor/carpet,/area/security/hos)
-"abG" = (/obj/structure/stool/bed/chair/office/dark,/obj/effect/landmark/start{name = "Head of Security"},/obj/machinery/door_control{id = "tele1"; name = "Telescience Viewing Window"; pixel_x = 0; pixel_y = 0; req_access_txt = "2"},/obj/machinery/door_control{id = "Prison Gate"; name = "Prison Wing Lockdown"; pixel_x = -28; pixel_y = 7; req_access_txt = "2"},/turf/simulated/floor/carpet,/area/security/hos)
+"abG" = (/obj/structure/stool/bed/chair/office/dark,/obj/effect/landmark/start{name = "Head of Security"},/obj/machinery/door_control{id = "tele1"; name = "Telescience Viewing Window"; pixel_x = -28; pixel_y = -4; req_access_txt = "2"},/obj/machinery/door_control{id = "Prison Gate"; name = "Prison Wing Lockdown"; pixel_x = -28; pixel_y = 7; req_access_txt = "2"},/turf/simulated/floor/carpet,/area/security/hos)
 "abH" = (/turf/simulated/floor/carpet,/area/security/hos)
 "abI" = (/obj/machinery/keycard_auth{pixel_x = 24; pixel_y = 10},/obj/machinery/hologram/holopad,/obj/machinery/light{dir = 4; icon_state = "tube1"},/turf/simulated/floor/carpet,/area/security/hos)
 "abJ" = (/obj/structure/sign/securearea{desc = "A warning sign which reads 'EXTERNAL AIRLOCK'"; icon_state = "space"; layer = 4; name = "EXTERNAL AIRLOCK"; pixel_x = -32; pixel_y = 0},/turf/simulated/floor/plating,/area/security/main)

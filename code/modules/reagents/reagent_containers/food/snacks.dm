@@ -2347,6 +2347,19 @@
 		update_icon()
 		return
 	..()
+/obj/item/pizzabox/delivery
+	New()
+		..()
+		var/list/pizza_types = list(/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/margherita,/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/meatpizza,/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/mushroompizza,/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/vegetablepizza)
+		var/ptype = pick(pizza_types)
+		pizza = new ptype(src)
+		while(boxes.len < rand(1,5)) // yes that rand() is not constant I do realize
+			var/obj/item/pizzabox/PB = new(src)
+			ptype = pick(pizza_types)
+			PB.pizza = new ptype(PB)
+			boxes += PB
+		update_icon()
+
 
 /obj/item/weapon/reagent_containers/food/snacks/cracker
 	name = "cracker"
