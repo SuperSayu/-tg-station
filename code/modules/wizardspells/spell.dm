@@ -18,7 +18,11 @@
 		after_cast: Begins spell recharge / decreases use counter.
 
 */
-
+// castingmode - used my magic items
+var/const/CAST_SPELL = 1	// Normal spell: shows up in spell tab, can be learned
+var/const/CAST_SELF = 2		// Magic items: Use-self
+var/const/CAST_MELEE = 4	// Magic items: Attack
+var/const/CAST_RANGED = 8	// Magic items: afterattack
 
 /obj/effect/knowspell
 	name = "bullshit spell effect"
@@ -37,25 +41,30 @@
 
 	var/allow_stuncast = 0 // Cast when stunned/weakened
 	var/allow_nonhuman = 1
+	var/castingmode = CAST_SPELL	// enchantment: what kind of item it can take
+	var/complexity = 1				// enchantment: serious spells require serious items
 
 	New()
 		..()
 		charge = chargemax
 
-	proc/describe(var/allow_cast = 1, var/allow_learn = 1, var/add_description = 1)
+	proc/describe(var/allow_cast = 1, var/allow_learn = 1, var/add_description = 1, var/remove_from = null)
 		var/castblock = ""
 		var/learnblock = ""
+		var/removeblock = ""
 		if(allow_cast)
 			castblock = "<a href='?\ref[src];cast'>\[Cast\]</a>"
-		if(allow_learn)
+		if(allow_learn && castingmode&CAST_SPELL)
 			learnblock = "<a href='?\ref[src];learn'>\[Learn\]</a>"
+		if(isobj(remove_from))
+			removeblock = "<a href='?\ref[remove_from];remove=\ref[src]'>\[Remove Scroll\]</a>"
 
 		var/uses = (rechargable?"[charge/10] second\s":"[charge] uses")
 		var/descblock = ""
 		if(add_description)
 			descblock = "<i>[desc]</i><br>"
 
-		return "<h4>[name] [castblock]([uses]) [learnblock]</h4>[descblock]"
+		return "<h4>[name] [castblock]([uses]) [learnblock] [removeblock]</h4>[descblock]"
 
 	Topic(href,list/href_list)
 		if(usr.stat) return
@@ -81,7 +90,7 @@
 			loc = usr
 			usr.spell_list += src
 			//usr.spell_list = sortAtom(usr.spell_list)
-			if(istype(oldloc))
+			if(isobj(oldloc))
 				oldloc.interact()
 			return 1
 
@@ -89,6 +98,8 @@
 		return charge_check() && stat_check(caster) && centcom_check(caster) && clothing_check(caster)
 
 	proc/clothing_check(var/mob/living/carbon/human/H)
+		if(istype(loc,/obj))
+			return 1
 		if(!istype(H))
 			if(require_clothing)
 				H << "<span class='notice'>You don't feel human enough!</span>"
@@ -118,10 +129,19 @@
 		if(rechargable)
 			return charge >= chargemax
 		else
-			return charge >= 0
+			return charge > 0
 
 	proc/stat_check(var/mob/living/caster)
 		if(!caster || caster.stat) return 0
+
+		if(istype(loc,/obj/item/weapon/magic)) // magic items: must be held
+			if(loc.loc != caster) return 0
+			if(caster.get_active_hand() != loc && caster.get_inactive_hand() != loc)
+				var/mob/living/carbon/human/H = caster
+				if(!istype(H) || H.gloves != loc) // magic gloves
+					return 0 // hands only
+			return 1 // no other checks
+
 		if(!allow_nonhuman)
 			if(!istype(caster,/mob/living/carbon/human))
 				caster << "<span class='notice'>You don't feel human enough!</span>"
@@ -143,7 +163,10 @@
 
 	proc/centcom_check(var/mob/caster)
 		var/turf/T = get_turf(caster)
-		return (!prevent_centcom || !T || T.z != 2)
+		. = (!prevent_centcom || !T || T.z != 2)
+		if(!.)
+			caster << "Powerful energies prevent you from using that here."
+		return .
 
 
 
@@ -170,8 +193,12 @@
 		else
 			charge = max(charge-1, 0)
 			if(charge <= 0)
-				spawn()
-					del src
+				if(istype(loc,/obj/item/weapon/magic))
+					var/obj/item/weapon/magic/M = loc
+					M.dispell(1) // will delete us
+				else
+					spawn()
+						del src
 		return 1
 
 	proc/start_recharge()
@@ -186,6 +213,8 @@
 
 	proc/incant(var/mob/caster, var/target = null)
 		if(!incant_volume) return
+		if(istype(loc,/obj/item/weapon/magic))
+			return
 
 		var/text = incantation
 		if(prob(50)) //Auto-mute? Fuck that noise
@@ -205,8 +234,12 @@
 				I:spell = src
 				I.name = name
 				I.desc = desc
-			else
-				caster << "\blue You need an empty hand to cast [src] properly."
+				return
+			else if(istype(I,/obj/item/weapon/magic) && I == loc)
+				if(I:castingmode&CAST_RANGED)
+					caster << "\blue You can cast through [I] by pointing it at the target."
+					return
+			caster << "\blue You need an empty hand to cast [src] properly."
 			return
 		caster.put_in_active_hand(new /obj/item/weapon/magic/spell_thrower(caster,src))
 
@@ -271,6 +304,9 @@
 	// These are ways in which the spell can be cast.
 	// Click is used when you click the name in the spell pane, because you are technically clicking on the actual object.  Don't ask.
 	Click()
+		if(!(castingmode&CAST_SPELL))
+			usr << "You can't cast this spell without help."
+			return
 		prepare(usr)
 		return 1
 
@@ -279,6 +315,9 @@
 		set category = "IC"
 		set src in usr
 
+		if(!(castingmode&CAST_SPELL))
+			usr << "You can't cast this spell without help."
+			return
 		prepare(usr)
 
 	// These are for enchanted items.  Whatever you do with the enchanted item, it should call the same proc here.
@@ -286,6 +325,7 @@
 	proc/attack(mob/living/M as mob, mob/living/caster as mob, def_zone)
 		return
 	proc/attack_self(mob/living/caster as mob)
+		prepare(caster)
 		return
 	proc/afterattack(atom/target, mob/living/caster as mob)
 		return
@@ -294,3 +334,25 @@
 	return pick("poof","pak","pik","pok","doof","dop","dap","dwip","swhop","spoik","twaaa","flip","foip","frap","zuu","zaa",
 						"chinp","choo","flok","zip","shaa","moo","chirp","chwap","snik","snap","snorp","fizzle","shaz","shazbot",
 						"dlop","plop","oink","zing","zang","zoom","bing","boop","flap","choink","snizzle","sizzle","fart")
+
+
+// used in mob/stat()
+/mob/proc/list_wizspells()
+/*
+	if(spell_list.len)
+		for(var/obj/effect/proc_holder/spell/S in spell_list)
+			switch(S.charge_type)
+				if("recharge")
+					statpanel("Spells","[S.charge_counter/10.0]/[S.charge_max/10]",S)
+				if("charges")
+					statpanel("Spells","[S.charge_counter]/[S.charge_max]",S)
+				if("holdervar")
+					statpanel("Spells","[S.holder_var_type] [S.holder_var_amount]",S)
+*/
+	for(var/obj/effect/knowspell/KS in src.contents)
+		if(KS.rechargable)
+			statpanel("Spells","[KS.charge/10.0]/[KS.chargemax/10]",KS)
+		else
+			statpanel("Spells","[KS.charge] left",KS)
+	if(l_hand) l_hand.Stat("Left hand")
+	if(r_hand) r_hand.Stat("Right hand")

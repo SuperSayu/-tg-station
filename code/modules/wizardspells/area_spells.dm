@@ -1,6 +1,8 @@
 /obj/effect/knowspell/area
 	var/visible_range = 0
 	var/range = 6
+	castingmode = CAST_SPELL|CAST_SELF
+
 	activate(mob/caster, list/target)
 		if(cast_check(caster))
 
@@ -23,6 +25,7 @@
 
 	incantation = "NEC CANTIO"
 	incant_volume = 2
+	complexity = 2 // cast from orb but not scroll
 
 	cast(mob/caster, list/target)
 		for(var/atom/movable/AM in target)

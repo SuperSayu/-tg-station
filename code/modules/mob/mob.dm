@@ -654,7 +654,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 			else
 				stat(null,"MasterController-ERROR")
 
-	if(listed_turf)
+	if(listed_turf && client)
 		if(get_dist(listed_turf,src) > 1)
 			listed_turf = null
 		else
@@ -664,22 +664,7 @@ note dizziness decrements automatically in the mob's Life() proc.
 					continue
 				statpanel(listed_turf.name,A.name,A)
 
-	if(spell_list.len)
-		for(var/obj/effect/proc_holder/spell/S in spell_list)
-			switch(S.charge_type)
-				if("recharge")
-					statpanel("Spells","[S.charge_counter/10.0]/[S.charge_max/10]",S)
-				if("charges")
-					statpanel("Spells","[S.charge_counter]/[S.charge_max]",S)
-				if("holdervar")
-					statpanel("Spells","[S.holder_var_type] [S.holder_var_amount]",S)
-	for(var/obj/effect/knowspell/KS in src.contents)
-		if(KS.rechargable)
-			statpanel("Spells","[KS.charge/10.0]/[KS.chargemax/10]",KS)
-		else
-			statpanel("Spells","[KS.charge] left",KS)
-	if(l_hand) l_hand.Stat()
-	if(r_hand) r_hand.Stat()
+	list_wizspells()
 
 
 // facing verbs

@@ -23,14 +23,66 @@
 	var/pick_eye_holders = 0 // checks cameras and AI eyes
 
 	var/casting_window = 40 // grace period.  You have this long after the select window pops up to select someone that has gone out of range, in deciseconds.
+	castingmode = CAST_SPELL|CAST_MELEE
 
+
+	proc/accept(var/mob/M, var/mob/caster)
+		if(!ismob(M)) return 0
+		if(!M.client && !pick_clientless)	// 1: No client
+			return 0
+		if(M == caster)						// 2: yourself
+			return pick_self
+
+		var/turf/T = get_turf(M)			// 3: in range
+
+		if(get_dist(T,caster) > range)
+			if(pick_eye_holders && M.client && M.client.eye != M) // 3.5: If your eye is in range but you are not (cameras, AI)
+				T = get_turf(M.client.eye)
+				if(get_dist(caster,T) > range)
+					return 0
+			else
+				return 0
+
+		if(istype(M,/mob/dead))				// 4: Non-living (ghosts and brains)
+			return pick_ghost
+
+		if(istype(M,/mob/living/carbon/brain))
+			return pick_brain
+
+		if((M.stat & DEAD) && !pick_dead)	// 5: stat checks
+			return 0
+
+		if(!(M.stat & DEAD) && !pick_living)
+			return 0
+
+		if(istype(M,/mob/living/silicon/ai)) // 6: silicons
+			return pick_ai
+
+		if(istype(M,/mob/living/silicon/robot))
+			return pick_robot
+
+		if(istype(M,/mob/living/silicon/pai))
+			return pick_pai
+
+		if(istype(M,/mob/living/simple_animal)) // 7: animals
+			return pick_animal
+
+		if(istype(M,/mob/living/carbon/human)) // 8: carbons
+			return pick_human
+
+		if(istype(M,/mob/living/carbon/monkey))
+			return pick_monkey
+
+		if(istype(M,/mob/living/carbon/alien))
+			return pick_xeno
+
+		if(istype(M,/mob/living/carbon/slime))
+			return pick_slime
 
 	proc/scan(mob/caster as mob)
 		set background=1
 
 		var/list/target = list()
-
-		var/turf/T0 = get_turf(caster.loc)
 
 		var/list/master_list
 		if(pick_clientless)
@@ -39,79 +91,8 @@
 			master_list = player_list
 
 		for(var/mob/M in master_list)
-
-			if(!M.client && !pick_clientless)	// 1: No client
-				continue
-
-			if(M == caster)						// 2: yourself
-				if(pick_self)
-					target += M
-				continue
-
-			var/turf/T = get_turf(M)			// 3: in range
-
-			if(get_dist(T,T0) > range)
-				if(pick_eye_holders && M.client && M.client.eye != M) // 3.5: If your eye is in range but you are not (cameras, AI)
-					T = get_turf(M.client.eye)
-					if(get_dist(T0,T) > range)
-						continue
-				else
-					continue
-
-			if(istype(M,/mob/dead))				// 4: Non-living (ghosts and brains)
-				if(pick_ghost)
-					target += M
-				continue
-			if(istype(M,/mob/living/carbon/brain))
-				if(pick_brain)
-					target += M
-				continue
-
-			if((M.stat & DEAD) && !pick_dead)	// 5: stat checks
-				continue
-
-			if(!(M.stat & DEAD) && !pick_living)
-				continue
-
-			if(istype(M,/mob/living/silicon/ai)) // 6: silicons
-				if(pick_ai)
-					target += M
-				continue
-
-			if(istype(M,/mob/living/silicon/robot))
-				if(pick_robot)
-					target += M
-				continue
-
-			if(istype(M,/mob/living/silicon/pai))
-				if(pick_pai)
-					target += M
-				continue
-
-			if(istype(M,/mob/living/simple_animal)) // 7: animals
-				if(pick_animal)
-					target += M
-				continue
-
-			if(istype(M,/mob/living/carbon/human)) // 8: carbons
-				if(pick_human)
-					target += M
-				continue
-
-			if(istype(M,/mob/living/carbon/monkey))
-				if(pick_monkey)
-					target += M
-				continue
-
-			if(istype(M,/mob/living/carbon/alien))
-				if(pick_xeno)
-					target += M
-				continue
-
-			if(istype(M,/mob/living/carbon/slime))
-				if(pick_slime)
-					target += M
-				continue
+			if(accept(M,caster))
+				target |= M
 
 		return target
 
@@ -130,8 +111,6 @@
 		while(caster && !istype(caster)) // find the first mob
 			caster = caster.loc
 		if(!caster)
-			spawn(1)
-				del src
 			return PROCESS_KILL
 
 		send_byjax(caster,"[name].browser","targets",targets_window())
@@ -151,6 +130,13 @@
 		if("target" in href_list)
 			var/atom/target = locate(href_list["target"])
 			activate(usr,target)
+
+	attack(mob/victim, mob/caster)
+		if(accept(victim,caster))
+			activate(caster,victim)
+	afterattack(mob/victim, mob/caster)
+		if(!istype(victim) || !accept(victim,caster)) return // accept also range checks
+		activate(caster,victim)
 
 /obj/effect/knowspell/target/disintegrate
 	name = "disintegrate"
@@ -172,6 +158,7 @@
 	pick_xeno = 1
 	pick_monkey = 1
 	pick_human = 1
+	castingmode = CAST_MELEE
 
 	cast(mob/caster, mob/target)
 		if(istype(target))
@@ -289,6 +276,34 @@
 		caster << "\blue [target.real_name]'s eyes glow momentarily."
 		caster.mind.store_memory("[target.real_name] owes you their life.")
 
+/obj/effect/knowspell/target/resurrect/heal
+	name = "heal"
+	desc = "Rejuvenates the living."
+
+	incantation = "FIR STAID"
+	incant_volume = 1
+	chargemax = 1200
+
+	pick_self = 1
+	pick_living = 1
+	pick_dead = 0
+	pick_robot = 1
+	pick_animal = 1
+	pick_clientless = 1
+
+	range = 1
+	visible_range = 1
+
+	pick_xeno = 1
+	pick_monkey = 1
+	pick_human = 1
+	pick_slime = 1
+	pick_brain = 0
+
+	inspire_loyalty()
+		return
+
+
 /obj/effect/knowspell/target/horsemask
 	name = "curse of the horseman"
 	desc = "Curses men with the face of a horse."
@@ -314,6 +329,13 @@
 								"<span class='danger'>Your face burns up, and shortly after the fire you realise you have the face of a horse!</span>")
 		target.equip_to_slot(magichead, slot_wear_mask)
 		flick("e_flash", target.flash)
+		spawn(1200)
+			if(magichead)
+				magichead.canremove = 1
+				magichead.voicechange = 0
+				var/mob/M = magichead.loc
+				if(istype(M))
+					M << "Your face feels a little better now."
 
 /obj/effect/knowspell/target/flesh_to_stone
 	name = "flesh to stone"
@@ -481,7 +503,7 @@
 
 		var/answer = input(caster, "Select a mutation:","Mutation",null) in selected
 
-		if(!isnull(answer))
+		if(!isnull(answer) && cast_check(caster))
 
 			mutation = possible_mutations[answer]
 			add_string = describe_addition[answer]

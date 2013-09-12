@@ -7,159 +7,133 @@
 	Each spellbook has a number of spells you can only learn once.  When the spellbook has nothing more to give, it goes away.
 
 	Specials are one-time effects as well, but you may only select so many specials out of any given spellbook, rather than being able to take your fill.
-
-	By default you can conjure three spellbooks from the main book.  Whatever you get out of those spellbooks is all you've got.
 */
-/var/const/max_spells = 5 // total spells a mob may learn under the new system
+/var/const/max_spells = 3 // total spells a mob may learn under the new system
 /var/list/spells = typesof(/obj/effect/knowspell) // for badmin verb
 
 
-/obj/item/weapon/magic/spellbook
-	name = "wizard's spellbook"
-	desc = "Magically delicious."
-	icon = 'icons/obj/library.dmi'
-	icon_state ="book"
-	w_class = 2.0
-	flags = FPRINT | TABLEPASS
+/*
+	Master spellbook for copying spells from
+*/
 
+/obj/structure/wizard/spellbook
+	name = "wizard's spellbook"
+	desc = "A spellbook on a pedestal."
+
+	// temporary icon
+	icon = 'icons/obj/cult.dmi'
+	icon_state = "tomealtar"
+	density = 1
+	throwpass = 1
+	anchored = 1
+
+	var/decay = 0
+
+	var/charges = 0 // maximum number of specials that can be taken from this pedestal
 	var/list/spawn_spells = list()
-	var/specials_left = 0
 
 	New()
 		..()
 		for(var/typekey in spawn_spells)
 			if(ispath(typekey)) new typekey(src)
 
-	attack_self(mob/user as mob)
-		if(!contents.len && !specials_left)
-			usr << "[src] crumbles to dust."
-			usr << browse(null,"window=spellbook")
-			del src
-			return
-		user << browse(list_spells(usr),"window=spellbook")
-	interact()
-		if(!contents.len && !specials_left)
-			usr << "[src] crumbles to dust."
-			usr << browse(null,"window=spellbook")
-			del src
-			return
-		usr << browse(list_spells(usr),"window=spellbook")
+		while(decay > 0 && (charges || contents.len))
+			if(charges && prob(50))
+				charges--
+				decay--
+				continue
 
-	proc/list_spells(mob/user as mob)
-		var/dat = "<center><h3>[name]</h3><i>You know [user.spell_list.len]/[max_spells] spells</i></center>"
-		for(var/obj/effect/knowspell/KS in src)
-			dat += KS.describe(allow_cast = 0)
-		if(specials_left)
-			dat += list_specials()
-		return dat
+			var/obj/effect/knowspell/KS = pick(contents)
+			if(KS)
+				del KS
+				decay--
+				continue
+
+
+	attack_hand(mob/user)
+		if(!contents.len && charges <= 0)
+			user << browse(null, "window=master_spell")
+			del src
+		var/html = "<i>You know [user.spell_list.len]/[max_spells] spells.</i><hr>"
+		for(var/obj/effect/knowspell/ks in src)
+			html += ks.describe(allow_cast = 0, remove_from = src)
+
+		if(charges)
+			html += list_specials()
+
+		user << browse(html, "window=master_spell; size=700x500")
+	interact()
+		attack_hand(usr)
 
 	proc/list_specials()
 		return
 
-/obj/item/weapon/magic/spellbook/basic
-	specials_left = 3
+	Topic(href,href_list)
+		if(!Adjacent(usr)) return
+		if("remove" in href_list)
+			var/obj/effect/knowspell/KS = locate(href_list["remove"])
+			if(!KS || !(KS in src))
+				attack_hand(usr)
+				return
+			new /obj/item/weapon/magic/scroll(loc,KS)
+			attack_hand(usr)
+
+
+/obj/structure/wizard/spellbook/specials
+	name = "ragged spellbook"
+	desc = "This spellbook is falling apart; you may not be able to take everything."
+	charges = 2
 	list_specials()
-		var/dat = "You may select up to [specials_left]:<br>"
-		dat += "<a href='?\ref[src];travel'>Conjure Book of Travel</a><br>"
-		dat += "<a href='?\ref[src];summon'>Conjure Book of Conjuration</a><br>"
-		dat += "<a href='?\ref[src];insanity'>Conjure Book of Madness</a><br>"
-		dat += "<a href='?\ref[src];combat'>Conjure Book of War</a><br>"
-		dat += "<a href='?\ref[src];subterfuge'>Conjure Book of Peace</a><br>"
-		dat += "<a href='?\ref[src];honk'>Conjure Book of Tricks</a> (best gifted to a mutual enemy)<br>"
-		dat += "<a href='?\ref[src];equip'>Conjure Equipment Handbook</a><br>"
-		return dat
-
-	Topic(href,list/href_list)
-		if(!specials_left)
-			return
-
-		if("travel" in href_list)
-			specials_left--
-			usr.put_in_hands(new /obj/item/weapon/magic/spellbook/travel(get_turf(src)))
-			return
-		if("summon" in href_list)
-			specials_left--
-			usr.put_in_hands(new /obj/item/weapon/magic/spellbook/conjurations(get_turf(src)))
-			return
-		if("insanity" in href_list)
-			specials_left--
-			usr.put_in_hands(new /obj/item/weapon/magic/spellbook/insanity(get_turf(src)))
-			return
-		if("combat" in href_list)
-			specials_left--
-			usr.put_in_hands(new /obj/item/weapon/magic/spellbook/combat(get_turf(src)))
-			return
-		if("subterfuge" in href_list)
-			specials_left--
-			usr.put_in_hands(new /obj/item/weapon/magic/spellbook/subterfuge(get_turf(src)))
-			return
-		if("honk" in href_list)
-			specials_left--
-			usr.put_in_hands(new /obj/item/weapon/magic/spellbook/honk(get_turf(src)))
-			return
-		if("equip" in href_list)
-			specials_left--
-			usr.put_in_hands(new /obj/item/weapon/magic/spellbook/equip(get_turf(src)))
-			return
-
-/obj/item/weapon/magic/spellbook/equip
-	name = "seer's catalogue" // with apologies to everyone except Dominic Deegan
-	desc = "Guaranteed to have everything you need."
-	specials_left = 2
-	list_specials()
-		var/dat = "You may select up to [specials_left]:<br>"
+		var/dat = "[charges] pages left:<br>"
 		dat += "<a href='?\ref[src];armor'>Spell of Conjure Wizard Armor</a><br>"
-		dat += "<a href='?\ref[src];change'>Spell of Conjure Staff of Change</a><br>"
-		dat += "<a href='?\ref[src];animate'>Spell of Conjure Staff of Animation</a><br>"
-		dat += "<a href='?\ref[src];scry'>Spell of Conjure Orb of Scrying</a><br>"
+		dat += "<a href='?\ref[src];change'>Spell of Change</a> (as Staff of Change)<br>"
+		dat += "<a href='?\ref[src];animate'>Spell of Animation</a><br>"
+		dat += "<a href='?\ref[src];disintegrate'>Spell of Disintegrate</a><br>"
+		dat += "<a href='?\ref[src];stone'>Spell of Flesh to Stone</a><br>"
 		dat += "<a href='?\ref[src];soulstone'>Spell of Artificer</a> ( Comes with a belt of soul stones )<br>"
 		dat += "<a href='?\ref[src];guns'>Spell of Summon Guns</a> ( Global spell - Affects all players )<br>"
-		return dat
-
-	// The difference from the normal version is that you can cast spells from this.
-	// Note that the only case where a spell will sit in this book is if you are full of spells and choose not to forget any.
-	// But you didn't waste the special in that case...
-	list_spells(mob/user as mob)
-		var/dat = "<center><h3>[name]</h3><i>You know [user.spell_list.len]/[max_spells] spells</i></center>"
-		for(var/obj/effect/knowspell/KS in src)
-			dat += KS.describe()
-		if(specials_left)
-			dat += list_specials()
+		dat += "<a href='?\ref[src];heal'>Spell of Healing</a><br>"
 		return dat
 
 	Topic(href,list/href_list)
-		if(!specials_left) return
+		if(charges<=0) return
 		var/obj/effect/knowspell/KS = null
 		if("armor" in href_list)
 			KS = new /obj/effect/knowspell/summon/here/wizard_armor(src)
 		if("change" in href_list)
-			KS = new /obj/effect/knowspell/summon/here/staff_change(src)
+			KS = new /obj/effect/knowspell/projectile/throw/change(src)
 		if("animate" in href_list)
-			KS = new /obj/effect/knowspell/summon/here/staff_animation(src)
-		if("scry" in href_list)
-			KS = new /obj/effect/knowspell/summon/here/orb_scrying(src)
+			KS = new /obj/effect/knowspell/projectile/throw/animate(src)
+		if("disintegrate" in href_list)
+			KS = new /obj/effect/knowspell/target/disintegrate(src)
+		if("stone" in href_list)
+			KS = new /obj/effect/knowspell/target/flesh_to_stone(src)
 		if("soulstone" in href_list)
 			KS = new /obj/effect/knowspell/summon/here/artificer(src)
 			new /obj/item/weapon/storage/belt/soulstone/full(get_turf(src))
 		if("guns" in href_list)
 			KS = new /obj/effect/knowspell/summon/world/guns(src)
+		if("heal" in href_list)
+			KS = new /obj/effect/knowspell/target/resurrect/heal(src)
 
 		if(KS)
-			KS.Topic("learn",list("learn"))
-			specials_left--
+			new /obj/item/weapon/magic/scroll(loc,KS)
+			charges--
+		attack_hand(usr)
 
 
-/obj/item/weapon/magic/spellbook/travel
+/obj/structure/wizard/spellbook/travel
 	name = "book of Travel"
 	spawn_spells = list(
 		/obj/effect/knowspell/summon/here/portal,
 		/obj/effect/knowspell/self/teleport,
 		/obj/effect/knowspell/self/blink,
 		/obj/effect/knowspell/self/jaunt,
+		/obj/effect/knowspell/self/shadowstep,
 		/obj/effect/knowspell/area/knock
 		)
 
-/obj/item/weapon/magic/spellbook/conjurations
+/obj/structure/wizard/spellbook/conjurations
 	name = "book of Conjuration"
 	desc = "Full of summoning spells of various types."
 	spawn_spells = list(
@@ -172,46 +146,46 @@
 		)
 
 
-/obj/item/weapon/magic/spellbook/insanity
+/obj/structure/wizard/spellbook/insanity
 	name = "book of Madness"
 	desc = "This book is well worn; it seems to have been read by many people."
 	spawn_spells = list(
 		/obj/effect/knowspell/summon/world/bananas,
 		/obj/effect/knowspell/summon/nearby/creature,
 		/obj/effect/knowspell/target/horsemask,
-		/obj/effect/knowspell/target/flesh_to_stone,
 		/obj/effect/knowspell/target/mutate/bad
 	)
-/obj/item/weapon/magic/spellbook/combat
+/obj/structure/wizard/spellbook/combat
 	name = "book of War"
 	desc = "Crush your enemies, see them driven before you, and hear the lamentations of their women."
 	spawn_spells = list(
 		/obj/effect/knowspell/projectile/throw/fireball,
 		/obj/effect/knowspell/projectile/throw/knives,
+		/obj/effect/knowspell/projectile/throw/frost,
 		/obj/effect/knowspell/projectile/scatter/knives,
-		/obj/effect/knowspell/target/disintegrate,
 		/obj/effect/knowspell/target/mutate/good
 	)
-/obj/item/weapon/magic/spellbook/subterfuge
+/obj/structure/wizard/spellbook/subterfuge
 	name = "book of Peace"
 	desc = "You are a little surprised this gets read at all."
 	spawn_spells = list(
 		/obj/effect/knowspell/target/resurrect,
 		/obj/effect/knowspell/area/blind,
 		/obj/effect/knowspell/area/emp,
+		/obj/effect/knowspell/self/ghostize,
 		/obj/effect/knowspell/projectile/scatter/magicmissile,
 		/obj/effect/knowspell/projectile/scatter/forcearrow,
 		/obj/effect/knowspell/summon/world/puppies,
 		/obj/effect/knowspell/target/mindswap
 	)
-/obj/item/weapon/magic/spellbook/honk
+/obj/structure/wizard/spellbook/honk
 	name = "book of Tricks"
 	desc = "hehehe... HAHAHAHAHAHAHAHAHA"
 	spawn_spells = list(
 		/obj/effect/knowspell/summon/target/banana,
 		/obj/effect/knowspell/summon/world/bananas,
-		/obj/effect/knowspell/summon/world/puppies,
 		/obj/effect/knowspell/target/mutate/bad,
 		/obj/effect/knowspell/area/blind,
-		/obj/effect/knowspell/area/knock
+		/obj/effect/knowspell/area/knock,
+		/obj/effect/knowspell/projectile/throw/sweep
 	)

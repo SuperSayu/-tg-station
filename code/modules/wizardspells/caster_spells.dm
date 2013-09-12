@@ -1,3 +1,5 @@
+/obj/effect/knowspell/self/castingmode = CAST_SPELL|CAST_SELF
+
 /obj/effect/knowspell/self/teleport
 	name = "teleport"
 	desc = "Sends you to a random location in the target area."
@@ -10,6 +12,8 @@
 	var/turf/target_turf = null
 
 	incant(var/mob/caster, var/area/target)
+		if(istype(loc,/obj/item/weapon/magic))
+			return
 		var/speech = incantation
 		if(prob(50))//Auto-mute? Fuck that noise
 			speech = replacetext(incantation," ","`")
@@ -24,6 +28,8 @@
 		var/A = input(caster, "Area to teleport to", "Teleport", null) in teleportlocs
 		if(A)
 			activate(caster, teleportlocs[A])
+			// magic items note: activate() checks to make sure the item is still in hand
+			// you cannot put an enchanted item in your pocket after getting the select popup
 
 	before_cast(var/mob/caster, var/area/target)
 		if(!istype(target))
@@ -88,3 +94,54 @@
 	cast(var/mob/caster)
 		var/obj/effect/spelleffect/jaunt/J = new(caster.loc)
 		J.start(caster)
+
+/obj/effect/knowspell/self/ghostize
+	name = "astral projection"
+	desc = "Detaches your mind and sends it to the world of the dead, where you can learn their secrets."
+
+	chargemax = 400
+	incant_volume = 1
+	allow_nonhuman = 1
+	incantation = "AD ASTRA" // wait hang on that's actual latin, foul, foul
+
+	cast(var/mob/caster)
+		caster << "\blue You can see...everything!"
+		caster.ghostize(1)
+
+/obj/effect/knowspell/self/shadowstep
+	name = "shadow step"
+	desc = "Jumps from one shadow to another."
+
+	chargemax = 50
+	incant_volume = 0
+	incantation = "NINJA"
+	allow_stuncast = 1 // although you can't actually do this with a targetted spell
+	allow_nonhuman = 1
+	require_clothing = 0
+	prevent_centcom = 1
+	castingmode = CAST_SPELL|CAST_RANGED
+
+	prepare(mob/caster)
+		if(!cast_check(caster))
+			return
+		create_spellthrower(caster)
+	afterattack(atom/target, mob/living/caster) // click map to cast
+		activate(caster,get_turf(target))
+	before_cast(var/mob/caster, var/turf/target)
+		var/turf/T = get_turf(caster)
+		if(!T || T.lighting_lumcount > 1)
+			caster << "\red The shadows aren't dark enough here!"
+			return 0
+		if(!target || target.lighting_lumcount > 1)
+			caster << "\red The shadows aren't dark enough there!"
+			return 0
+		if(target.density)
+			caster << "\red That's obstructed."
+			return 0
+		for(var/obj/O in target)
+			if(O.density && !(O.flags&ON_BORDER))
+				caster << "\red That's obstructed."
+				return 0
+		return ..()
+	cast(var/mob/caster, var/turf/target)
+		caster.loc = target

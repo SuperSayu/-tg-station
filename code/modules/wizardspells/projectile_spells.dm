@@ -11,6 +11,7 @@
 		return
 	P.original = target
 	P.starting = start
+	P.firer = user
 	if(!target || !end) // scatter randomly, this is magic
 		P.yo = rand(-5,5)
 		P.xo = rand(-5,5)
@@ -49,7 +50,8 @@
 			while(counter--)
 				fire(new projectile_type(start),target,start,end, caster)
 				if(projectile_spread == 1) // string out the shots over time
-					sleep(2)
+					sleep(5)
+					start = get_turf(caster)
 	else
 		var/dir_out = get_dir(start,end)
 		var/dir_ccw = turn(dir_out,90)
@@ -67,7 +69,7 @@
 					ccw = get_step(ccw, dir_ccw)
 					fire(new projectile_type(start),target,start,ccw, caster)
 
-
+/obj/effect/knowspell/projectile/throw/castingmode = CAST_SPELL|CAST_RANGED
 /obj/effect/knowspell/projectile/throw/prepare(mob/user as mob)
 	if(!cast_check(user))
 		return
@@ -102,11 +104,60 @@
 	incantation = "SLIZEN DIZE"
 	incant_volume = 2
 
+/obj/effect/knowspell/projectile/throw/change
+	name = "bolt of change"
+	desc = "Transforms the target.  Too powerful to cast without a magic item."
+	castingmode = CAST_RANGED
+
+	projectile_count = 1
+	projectile_spread = 0
+	projectile_type = /obj/item/projectile/change
+
+	chargemax = 200
+	incantation = "TRUMAN STAR"
+	incant_volume = 2
+
+/obj/effect/knowspell/projectile/throw/animate
+	name = "animation ray"
+	desc = "Brings objects to life."
+
+	projectile_count = 1
+	projectile_spread = 0
+	projectile_type = /obj/item/projectile/animate
+
+	chargemax = 400
+	incantation = "FAN TA ZIA"
+	incant_volume = 2
+
+/obj/effect/knowspell/projectile/throw/frost
+	name = "frost bolt"
+	desc = "Lower's your opponent's temperature.  May cause cold burns."
+
+	projectile_count = 2
+	projectile_spread = 1
+	projectile_type = /obj/item/projectile/magic/cold
+
+	chargemax = 40
+	incantation = "FROS TIS"
+	incant_volume = 1
+
+/obj/effect/knowspell/projectile/throw/sweep
+	name = "sweeping bolt"
+	desc = "Cleans up scum, living or otherwise."
+	projectile_count = 3
+	projectile_spread = 2
+	projectile_type = /obj/item/projectile/magic/sweep
+
+	chargemax = 95
+	incantation = "CLIN SWIP"
+	incant_volume = 2
+
 // /obj/effect/knowspell/projectile/throw/thunder
 /obj/effect/knowspell/projectile/scatter
 	var/target_lying = 1
 	var/target_dead = 0
 	var/target_animals = 0
+	castingmode = CAST_SPELL|CAST_SELF
 
 /obj/effect/knowspell/projectile/scatter/cast(var/mob/caster as mob)
 	var/turf/start = get_turf(caster)

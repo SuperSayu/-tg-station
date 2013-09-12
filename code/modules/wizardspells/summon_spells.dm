@@ -1,3 +1,5 @@
+
+/obj/effect/knowspell/summon/castingmode = CAST_SPELL|CAST_SELF|CAST_MELEE
 //
 // Summon here: Drops it in the caster's square.  This is used for creating legacy enchanted items as well.
 //
@@ -17,7 +19,7 @@
 		new /obj/structure/constructshell(T)
 		return 1
 	return 0
-
+/*
 /obj/effect/knowspell/summon/here/staff_change
 	name = "conjure staff of change"
 	desc = "One time use.  Calls forth a Staff of Change for altering your enemies."
@@ -75,7 +77,7 @@
 			caster << "\blue The walls suddenly disappear."
 		return 1
 	return 0
-
+*/
 /obj/effect/knowspell/summon/here/wizard_armor
 	name = "conjure wizard armor"
 	desc = "One time use.  Calls forth a full set of space-worthy wizard armor."
@@ -135,12 +137,15 @@
 // Summon at target: Creates a spell thrower and casts on the targeted square
 //
 /obj/effect/knowspell/summon/target
+	castingmode = CAST_SPELL | CAST_RANGED | CAST_MELEE
 
 /obj/effect/knowspell/summon/target/prepare(mob/user as mob)
 	if(!cast_check(user))
 		return
 	create_spellthrower(user)
 
+/obj/effect/knowspell/summon/target/attack(atom/target, mob/living/caster) //
+	activate(caster,get_turf(target))
 /obj/effect/knowspell/summon/target/afterattack(atom/target, mob/living/caster) // click map to cast
 	activate(caster,get_turf(target))
 
@@ -204,7 +209,7 @@
 /obj/effect/knowspell/summon/target/banana
 	name = "magical banana peel"
 	desc = "Creates an infinitely replicating, time-limited magical slipping tool"
-	charge = 150
+	charge = 35
 	incantation = "BANAN HOK"
 	incant_volume = 2
 	require_clothing = 0
@@ -221,7 +226,7 @@
 /obj/effect/knowspell/summon/target/smoke
 	name = "smoke cloud"
 	desc = "Creates a cloud of thick choking smoke."
-	chargemax = 120
+	chargemax = 115
 
 	incantation = ""
 	incant_volume = 0
@@ -235,7 +240,7 @@
 	return 0
 
 //
-// Summon nearby: Summons in a number of nearby squares.  There is a delay on this summon; if you move or are interrupted the spell will fizzle.
+// Summon nearby: Summons in a number of nearby squares.
 //
 /obj/effect/knowspell/summon/nearby
 	var/spawn_count = 1
@@ -243,7 +248,8 @@
 	var/spawn_time_min = 40
 	var/spawn_time_max = 60
 
-/obj/effect/knowspell/summon/nearby/proc/open_rifts(var/turf/center)
+/obj/effect/knowspell/summon/nearby/proc/open_rifts(var/mob/caster)
+	var/turf/center = get_turf(caster)
 	if(!center)
 		return 0
 
@@ -256,10 +262,12 @@
 	var/sc = spawn_count
 	if(!turfs.len)
 		loc << "The gateway refuses to open!"
+		return 0
 
 	while(sc-- && turfs.len)
 		var/turf/T = pick(turfs)
-		new /obj/effect/spelleffect/summon(T, loc, rand(spawn_time_min,spawn_time_max),src)
+		new /obj/effect/spelleffect/summon(T, caster, rand(spawn_time_min,spawn_time_max),src)
+	return 1
 
 // The casting step is done by the gateway effects, jump from before cast to after cast
 /obj/effect/knowspell/summon/nearby/activate(var/mob/caster)
@@ -271,9 +279,11 @@
 	var/turf/T = get_turf(caster)
 	if(!T)
 		return 0
-	open_rifts(T)
-	incant(caster)
-	return 1
+	caster.Stun(spawn_time_min/2)
+	if(open_rifts(caster))
+		incant(caster)
+		return 1
+	return 0
 /obj/effect/knowspell/summon/nearby/after_cast()
 	if(rechargable)
 		charge = 0
@@ -331,6 +341,7 @@
 /obj/effect/knowspell/summon/world
 	var/list/targets
 	var/list/spawns_possible = list(/obj/item/weapon/reagent_containers/spray/waterflower = list("name" = "evil flower"))		 // path = list(variable changes)
+	castingmode = CAST_SPELL
 
 /obj/effect/knowspell/summon/world/proc/summon_effect(var/atom/target)
 	return 1

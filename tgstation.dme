@@ -1154,6 +1154,7 @@
 #include "code\modules\wizardspells\projectile_spells.dm"
 #include "code\modules\wizardspells\spell.dm"
 #include "code\modules\wizardspells\spellbook.dm"
+#include "code\modules\wizardspells\structures.dm"
 #include "code\modules\wizardspells\summon_spells.dm"
 #include "code\modules\wizardspells\targetted_spells.dm"
 #include "code\WorkInProgress\buildmode.dm"

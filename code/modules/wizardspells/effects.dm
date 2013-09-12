@@ -12,8 +12,8 @@
 	New(var/L,var/mob/caster, var/complete_time, var/obj/effect/knowspell/spell)
 		..(L)
 		SetLuminosity(1)
-		spawn(0)
-			if(do_after(caster, complete_time) && src && loc && spell)
+		spawn(complete_time)
+			if(prob(88) && src && loc && spell)
 				spell.cast(caster,loc)
 				loc = null
 			else
@@ -43,6 +43,8 @@
 		spawn(duration)
 			del src
 	process()
+		if(prob(10))
+			step_rand(src)
 
 /obj/effect/spelleffect/forcewall
 	name = "wall of force"
@@ -187,6 +189,54 @@
 	damage = 12
 	weaken = 1
 
+/obj/item/projectile/magic/cold
+	name = "frost bolt"
+	icon = 'icons/obj/projectiles.dmi'
+	icon_state = "ice_2"
+	damage_type = BURN
+	damage = 5
+
+	on_hit(var/atom/target, var/blocked = 0)
+		for(var/mob/M in range(1,target))
+			M.bodytemperature = max(0,M.bodytemperature - 20)
+		if(air_master)
+			for(var/turf/simulated/floor/TSF in range(1,target))
+				if(TSF.air)
+					TSF.air.temperature = max(0,TSF.air.temperature - 10)
+					air_master.add_to_active(TSF,0)
+		..()
+/obj/item/projectile/magic/sweep
+	name = "sweeping bolt"
+	icon = 'icons/obj/projectiles.dmi'
+	icon_state = "neurotoxin"
+	nodamage = 1
+	damage = 0
+	throwforce = 2
+	Move()
+		..()
+		for(var/obj/effect/decal/cleanable/DC in loc)
+			del DC
+		for(var/atom/movable/I in loc)
+			if(I==src || I.anchored || prob(50)) continue
+			step(I,dir)
+			if(ismob(I) && prob(50))
+				I:Weaken(1)
+	on_hit(var/atom/movable/target)
+		for(var/obj/effect/decal/cleanable/DC in get_turf(target))
+			del DC
+		if(!istype(target) || target.anchored) return
+		if(target == caster) return
+		var/turf/throw_target = get_turf(target)
+		var/counter = 5
+
+		while(counter--)
+			throw_target = get_step_away(throw_target,starting,40)
+		if(!throw_target) return
+		var/mob/living/ML = target
+		if(istype(ML))
+			ML.Weaken(1)
+		target.throw_at(throw_target,rand(throwforce,throwforce*2),1)
+
 /obj/item/projectile/magic/homing
 	var/homing_speed = 3
 	duration = 50
@@ -229,7 +279,7 @@
 	icon_state = "magicmd"
 	New()
 		..()
-		spawn(20)
+		spawn(25)
 			del src
 
 /obj/item/projectile/magic/homing/knives
