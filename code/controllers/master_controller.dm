@@ -99,6 +99,13 @@ datum/controller/game_controller/proc/setup_objects()
 	for(var/turf/simulated/floor/F in world)
 		F.MakeDirty()
 
+	world << "\red \b Everyday I'm shufflin'..."
+	sleep(-1)
+	for(var/typekey in the_station_areas)
+		for(var/subtype in typesof(typekey))
+			shuffle_area(locate(subtype))
+	distribute_secrets()
+
 	world << "\red \b Initializations complete."
 	sleep(-1)
 
