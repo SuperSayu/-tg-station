@@ -4,7 +4,7 @@
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "detective"
 	item_state = "gun"
-	flags =  FPRINT  | CONDUCT |  USEDELAY
+	flags =  FPRINT | CONDUCT
 	slot_flags = SLOT_BELT
 	m_amt = 2000
 	w_class = 3.0
@@ -105,12 +105,12 @@
 
 		prepare_shot(in_chamber)				//Set the projectile's properties
 
+
 		if(targloc == curloc)			//Fire the projectile
 			user.bullet_act(in_chamber)
 			del(in_chamber)
 			update_icon()
 			return
-
 		in_chamber.original = target
 		in_chamber.loc = get_turf(user)
 		in_chamber.starting = get_turf(user)

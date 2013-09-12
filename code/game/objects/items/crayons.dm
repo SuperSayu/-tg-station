@@ -65,11 +65,8 @@
 	shadeColour = input(user, "Please select the shade colour.", "Crayon colour") as color
 	return
 
-/obj/item/toy/crayon/rainbow/magic
-	name = "Magic Crayon"
-	instant = 1
-
-/obj/item/toy/crayon/afterattack(atom/target, mob/user as mob)
+/obj/item/toy/crayon/afterattack(atom/target, mob/user as mob, proximity)
+	if(!proximity) return
 	if(istype(target,/turf/simulated/floor))
 		var/drawtype = input("Choose what you'd like to draw.", "Crayon scribbles") in list("graffiti","rune","letter")
 		switch(drawtype)

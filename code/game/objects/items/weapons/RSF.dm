@@ -50,7 +50,8 @@ RSF
 		mode = 1
 	user << "\blue Changing dispensing mode to '[mode_names[mode]]'."
 
-/obj/item/weapon/rsf/afterattack(atom/A, mob/user as mob)
+/obj/item/weapon/rsf/afterattack(atom/A, mob/user as mob, proximity)
+	if(!proximity) return
 	if (!(istype(A, /obj/structure/table) || istype(A, /turf/simulated/floor)))
 		return
 	if(matter <= 0)

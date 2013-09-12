@@ -218,11 +218,6 @@
 /obj/structure/table/blob_act()
 	damage(66,BRUTELOSS)
 
-
-/obj/structure/table/hand_p(mob/user as mob)
-	return src.attack_paw(user)
-
-
 /obj/structure/table/attack_paw(mob/user)
 	if(HULK in user.mutations)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))

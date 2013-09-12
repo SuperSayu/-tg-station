@@ -109,10 +109,7 @@
 /obj/structure/cable/proc/get_powernet()			//TODO: remove this as it is obsolete
 	return powernet
 
-/obj/structure/cable/attack_hand(mob/user)
-	if(ishuman(user))
-		if(istype(user:gloves, /obj/item/clothing/gloves/space_ninja)&&user:gloves:candrain&&!user:gloves:draining)
-			call(/obj/item/clothing/gloves/space_ninja/proc/drain)("WIRE",src,user:wear_suit)
+/obj/structure/cable/attack_tk(mob/user)
 	return
 /obj/structure/cable/attack_tk(mob/user)
 	return
@@ -221,7 +218,7 @@
 	throw_range = 5
 	m_amt = 50
 	g_amt = 20
-	flags = USEDELAY | FPRINT | CONDUCT
+	flags = FPRINT | CONDUCT
 	slot_flags = SLOT_BELT
 	item_state = "coil_red"
 	attack_verb = list("whipped", "lashed", "disciplined", "flogged")

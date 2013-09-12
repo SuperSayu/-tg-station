@@ -208,7 +208,8 @@
 
 
 
-	afterattack(obj/target, mob/user , flag)
+	afterattack(obj/target, mob/user, proximity)
+		if(!proximity) return // not adjacent
 		for(var/type in can_be_placed_into)
 			if(istype(target, type))
 				return

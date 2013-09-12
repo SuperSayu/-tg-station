@@ -8,7 +8,8 @@
 	volume = 5
 	var/filled = 0
 
-	afterattack(obj/target, mob/user , flag)
+	afterattack(obj/target, mob/user , proximity)
+		if(!proximity) return
 		if(!target.reagents) return
 
 		if(istype(target,/mob/living/simple_animal/corgi/puppy/sgt_pepper) && user.a_intent == "help")

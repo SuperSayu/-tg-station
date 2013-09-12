@@ -197,7 +197,6 @@ LINEN BINS
 
 
 	add_fingerprint(user)
-	add_fingerprint(user)
 /obj/structure/bedsheetbin/fire_act()
 	if(prob(15 - amount))
 		del src

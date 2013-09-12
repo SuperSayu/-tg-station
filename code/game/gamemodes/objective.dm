@@ -287,6 +287,10 @@ datum/objective/steal
 		"the hypospray" = /obj/item/weapon/reagent_containers/hypospray,
 		"the nuclear authentication disk" = /obj/item/weapon/disk/nuclear,
 		"an ablative armor vest" = /obj/item/clothing/suit/armor/laserproof,
+		"the reactive teleport armor" = /obj/item/clothing/suit/armor/reactive,
+		"a laser pointer" = /obj/item/device/laser_pointer,
+
+Nobody takes these seriously anyways -- Ikki
 
 // If you want to remove these this is the place to do it
 // I don't, though. -Sayu

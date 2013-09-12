@@ -12,5 +12,6 @@
 #maps/RandomZLevels/wildwest.dmm
 #maps/RandomZLevels/challenge.dmm
 #maps/RandomZLevels/listeningpost.dmm
+#maps/RandomZLevels/spacehotel.dmm
 #maps/RandomZLevels/arcticwaste.dmm
 #maps/RandomZLevels/SS21.dmm

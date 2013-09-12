@@ -244,10 +244,7 @@
 	mymob.toxin.screen_loc = ui_toxin
 
 	mymob.internals = new /obj/screen()
-	if(("internal" in mymob.vars) && mymob:internal) // currently on
-		mymob.internals.icon_state = "internal1"
-	else
-		mymob.internals.icon_state = "internal0"
+	mymob.internals.icon_state = "internal0"
 	mymob.internals.name = "internal"
 	mymob.internals.screen_loc = ui_internal
 

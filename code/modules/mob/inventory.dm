@@ -79,7 +79,7 @@
 	if(W)
 		if(client)	client.screen -= W
 		u_equip(W)
-		if(!W) return // some "items" delete when dropped
+		if(!W) return 1 // self destroying objects (tk, grabs)
 		W.layer = initial(W.layer)
 		W.loc = loc
 

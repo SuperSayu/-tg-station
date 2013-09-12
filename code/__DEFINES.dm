@@ -51,7 +51,7 @@
 #define MASKINTERNALS	8	// mask allows internals
 //#define SUITSPACE		8	// suit protects against space
 
-#define USEDELAY 	16		// 1 second extra delay on use (Can be used once every 2s)
+#define USEDELAY 	16		// For adding extra delay to heavy items, not currently used
 #define NOSHIELD	32		// weapon not affected by shield
 #define CONDUCT		64		// conducts electricity (metal etc.)
 #define FPRINT		256		// takes a fingerprint

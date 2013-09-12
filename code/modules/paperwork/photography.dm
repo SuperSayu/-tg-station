@@ -104,7 +104,7 @@
 	icon_state = "camera"
 	item_state = "electropack"
 	w_class = 2.0
-	flags = FPRINT | CONDUCT | USEDELAY
+	flags = FPRINT | CONDUCT
 	slot_flags = SLOT_BELT
 	m_amt = 2000
 	var/pictures_max = 10

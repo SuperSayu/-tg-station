@@ -1,14 +1,42 @@
 
 // Humans
-/mob/living/carbon/human/UnarmedAttack(var/atom/A)
+/mob/living/carbon/human/UnarmedAttack(var/atom/A, var/proximity)
+	var/obj/item/clothing/gloves/G = gloves // not typecast specifically enough in defines
+
+	// Special glove functions:
+	// If the gloves do anything, have them return 1 to stop
+	// normal attack_hand() here.
+
+	if(proximity && istype(G) && G.Touch(A,1))
+		return
+
 	A.attack_hand(src)
 /atom/proc/attack_hand(mob/user as mob)
 	return
 
 /mob/living/carbon/human/RestrainedClickOn(var/atom/A)
-	A.hand_h(src)
-/atom/proc/hand_h(mob/user as mob)			//human (hand) - restrained
 	return
+
+/mob/living/carbon/human/RangedAttack(var/atom/A)
+	if(!gloves && !mutations.len) return
+	var/obj/item/clothing/gloves/G = gloves
+	if((LASER in mutations) && a_intent == "harm")
+		LaserEyes(A) // moved into a proc below
+
+	else if(istype(G) && G.Touch(A,0)) // for magic gloves
+		return
+
+	else if(TK in mutations)
+		switch(get_dist(src,A))
+			if(1 to 5) // not adjacent may mean blocked by window
+				next_move += 2
+			if(5 to 7)
+				next_move += 5
+			if(8 to 15)
+				next_move += 10
+			if(16 to 128)
+				return
+		A.attack_tk(src)
 
 
 // Animals & All Unspecified
@@ -17,8 +45,6 @@
 /atom/proc/attack_animal(mob/user as mob)
 	return
 /mob/living/RestrainedClickOn(var/atom/A)
-	A.hand_a(src)
-/atom/proc/hand_an(mob/user as mob)
 	return
 
 
@@ -27,11 +53,32 @@
 	A.attack_paw(src)
 /atom/proc/attack_paw(mob/user as mob)
 	return
-/mob/living/carbon/monkey/RestrainedClickOn(var/atom/A)
-	A.hand_p(src)
-/atom/proc/hand_p(mob/user as mob)			//monkey (paw) - restrained
-	return
 
+
+/mob/living/carbon/monkey/RestrainedClickOn(var/atom/A)
+	if(a_intent != "harm" || !ismob(A)) return
+	if(istype(wear_mask, /obj/item/clothing/mask/muzzle))
+		return
+	var/mob/living/carbon/ML = A
+	var/dam_zone = pick("chest", "l_hand", "r_hand", "l_leg", "r_leg")
+	var/datum/limb/affecting = null
+	if(ishuman(ML)) // why the hell is this not more general
+		affecting = ML:get_organ(ran_zone(dam_zone))
+	var/armor = ML.run_armor_check(affecting, "melee")
+	if(prob(75))
+		ML.apply_damage(rand(1,3), BRUTE, affecting, armor)
+		for(var/mob/O in viewers(ML, null))
+			O.show_message("\red <B>[name] has bit [ML]!</B>", 1)
+		if(armor >= 2) return
+		if(ishuman(ML))
+			ML = ML.monkeyize()
+		if(ismonkey(ML))
+			for(var/datum/disease/D in viruses)
+				if(istype(D, /datum/disease/jungle_fever))
+					ML.contract_disease(D,1,0)
+	else
+		for(var/mob/O in viewers(ML, null))
+			O.show_message("\red <B>[src] has attempted to bite [ML]!</B>", 1)
 
 //Aliens - Defaults to same as monkey in most places
 /mob/living/carbon/alien/humanoid/UnarmedAttack(var/atom/A)
@@ -40,9 +87,6 @@
 	attack_paw(user)
 	return
 /mob/living/carbon/alien/humanoid/RestrainedClickOn(var/atom/A)
-	A.hand_al(src)
-/atom/proc/hand_al(mob/user as mob)			//alien - restrained
-	hand_p(user)
 	return
 
 // Babby aliens
@@ -58,8 +102,6 @@
 /atom/proc/attack_slime(mob/user as mob)
 	return
 /mob/living/carbon/slime/RestrainedClickOn(var/atom/A)
-	A.hand_s(src)
-/atom/proc/hand_s(mob/user as mob)			//slime - restrained
 	return
 
 /mob/new_player/ClickOn()
