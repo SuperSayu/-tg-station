@@ -423,6 +423,10 @@
 			adjustOxyLoss(-10)
 			adjustFireLoss(-10)
 			sleep(10)
+		for(var/bone in broken)
+			src << "<span class='notice'>We feel our broken [bone] mend...</span>"
+			broken -= bone
+			sleep(10)
 
 	feedback_add_details("changeling_powers","RR")
 	return 1

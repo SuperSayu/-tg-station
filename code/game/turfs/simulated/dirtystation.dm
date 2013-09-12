@@ -6,6 +6,8 @@
 /obj/effect/decal/cleanable/blood/old
 	name = "dried blood"
 	desc = "Looks like it's been here a while.  Eew."
+	old = 1
+
 	New()
 		..()
 		icon_state += "-old"

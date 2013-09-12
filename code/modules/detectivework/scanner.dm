@@ -69,7 +69,7 @@
 		var/list/blood = list()
 		var/list/fibers = list()
 		var/list/reagents = list()
-
+		var/weight = 0
 		var/target_name = A.name
 
 		// Start gathering
@@ -105,6 +105,11 @@
 							var/blood_type = R.data["blood_type"]
 							blood[blood_DNA] = blood_type
 
+			if(istype(A, /obj/effect/decal/cleanable/blood))
+				var/obj/effect/decal/cleanable/blood/B = A
+				if(B.weight)
+					weight = B.weight
+
 		// We gathered everything. Create a fork and slowly display the results to the holder of the scanner.
 
 		spawn(0)
@@ -125,8 +130,20 @@
 				sleep(30)
 				add_log("<span class='info'><B>Blood:</B></span>")
 				found_something = 1
+				var/w_desc
 				for(var/B in blood)
 					add_log("Type: <font color='red'>[blood[B]]</font> DNA: <font color='red'>[B]</font>")
+					switch(weight)
+						if(1)
+							w_desc = "lightweight"
+						if(2)
+							w_desc = "small"
+						if(3)
+							w_desc = "normal-sized"
+					if(weight > 3)
+						w_desc = "heavy"
+					if(weight > 0)
+						add_log("This blood splatter was caused by a <font color='red'>[w_desc]</font> object.")
 
 			//Fibers
 			if(fibers && fibers.len)

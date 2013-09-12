@@ -8,7 +8,7 @@
 	if (istype(loc, /turf/space)) return -1 // It's hard to be slowed down in space by... anything
 
 	var/health_deficiency = (100 - health - halloss)
-	if(health_deficiency >= 40) tally += (health_deficiency / 25)
+	if(health_deficiency >= 40 && !reagents.has_reagent("morphine")) tally += (health_deficiency / 25)
 
 	var/hungry = (500 - nutrition)/5 // So overeat would be 100 and default level would be 80
 	if (hungry >= 70) tally += hungry/50
@@ -24,7 +24,40 @@
 	if (bodytemperature < 283.222)
 		tally += (283.222 - bodytemperature) / 10 * 1.75
 
+	if("left leg" in broken && !reagents.has_reagent("morphine"))
+		tally += 1
+
+	if("right leg" in broken && !reagents.has_reagent("morphine"))
+		tally += 1
+
 	return (tally+config.human_delay)
+
+/mob/living/carbon/human/Move()
+	// ugh this looks so ugly
+	var/last_break = 0
+	if(prob(2) && !reagents.has_reagent("morphine") && !last_break)
+		if("left leg" in broken)
+			src << "\red Pain shoots up your left leg!"
+			var/datum/limb/affecting = get_organ("l_leg")
+			apply_damage(rand(2,7), BRUTE, affecting)
+			Stun(2)
+			playsound(src, 'weapons/pierce.ogg', 25)
+			last_break = 1
+			spawn(50)
+				last_break = 0
+			return
+		if("right leg" in broken)
+			src << "\red Pain shoots up your right leg!"
+			var/datum/limb/affecting = get_organ("r_leg")
+			apply_damage(rand(2,7), BRUTE, affecting)
+			Stun(2)
+			playsound(src, 'weapons/pierce.ogg', 25)
+			last_break = 1
+			spawn(50)
+				last_break = 0
+			return
+	else
+		..()
 
 /mob/living/carbon/human/Process_Spacemove(var/check_drift = 0)
 	//Can we act

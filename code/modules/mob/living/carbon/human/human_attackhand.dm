@@ -53,6 +53,7 @@
 			return 1
 
 		if("harm")
+			var/can_break = 0
 			M.attack_log += text("\[[time_stamp()]\] <font color='red'>Punched [src.name] ([src.ckey])</font>")
 			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been punched by [M.name] ([M.ckey])</font>")
 
@@ -79,12 +80,29 @@
 				visible_message("<span class='warning'>[M] has attempted to [attack_verb] [src]!</span>")
 				return 0
 
+			if(!M.reagents.has_reagent("morphine") && prob(65))
+				if(!lying)
+					if("left arm" in M.broken || "right arm" in M.broken)
+						M << "\red You painfully dislodge your broken arm!"
+						M.emote("scream")
+						M.Stun(2)
+						playsound(M.loc, 'weapons/pierce.ogg', 25)
+						visible_message("<span class='warning'>[M] has attempted to [attack_verb] [src]!</span>")
+						return 0
+				else if("left leg" in M.broken || "right leg" in M.broken)
+					M << "\red You painfully dislodge your broken leg!"
+					M.emote("scream")
+					M.Stun(2)
+					playsound(M.loc, 'weapons/pierce.ogg', 25)
+					visible_message("<span class='warning'>[M] has attempted to [attack_verb] [src]!</span>")
+					return 0
 
 			var/datum/limb/affecting = get_organ(ran_zone(M.zone_sel.selecting))
 			var/armor_block = run_armor_check(affecting, "melee")
 
 			if(HULK in M.mutations)
 				damage += 5
+				can_break = 1
 
 			switch(attack_verb)
 				if("slash")
@@ -101,8 +119,32 @@
 								"<span class='userdanger'>[M] has weakened [src]!</span>")
 				apply_effect(4, WEAKEN, armor_block)
 				forcesay(hit_appends)
+				gasping = 2
 			else if(lying)
 				forcesay(hit_appends)
+				gasping = 2
+
+			if(can_break && prob(10))
+				// HULK SMASH
+				var/hit_area = parse_zone(affecting.name)
+				if(hit_area in broken)
+					return
+				var/hit_name
+				if(hit_area == "head")
+					hit_name = "skull"
+				else if(hit_area == "chest")
+					hit_name = "ribs"
+				else
+					hit_name = hit_area
+				broken += hit_area
+				playsound(src, 'weapons/pierce.ogg', 50)
+				var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
+				if(affecting != "chest")
+					visible_message("<span class='danger'>[src]'s [hit_name] breaks with a [breaknoise]!</span>", \
+									"<span class='userdanger'>Your [hit_name] breaks with a [breaknoise]!</span>")
+				else
+					visible_message("<span class='danger'>[src]'s [hit_name] break with a [breaknoise]!</span>", \
+									"<span class='userdanger'>Your [hit_name] break with a [breaknoise]!</span>")
 
 		if("disarm")
 			M.attack_log += text("\[[time_stamp()]\] <font color='red'>Disarmed [src.name] ([src.ckey])</font>")
@@ -119,6 +161,7 @@
 				visible_message("<span class='danger'>[M] has pushed [src]!</span>",
 								"<span class='userdanger'>[M] has pushed [src]!</span>")
 				forcesay(hit_appends)
+				gasping = 2
 				return
 
 			if(randn <= 45)

@@ -1,6 +1,9 @@
 /turf/simulated
 	name = "station"
 	var/wet = 0
+	var/bloody = 0		// for blood trails
+	var/oily = 0		// for oil trails
+	var/xenobloody = 0	//for xenoblood trails
 	var/image/wet_overlay = null
 
 	var/thermite = 0
@@ -71,6 +74,22 @@
 					M << "\blue You slipped on the floor!"
 					playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
 					M.Weaken(10)
+
+		if(!istype(M, /mob/living/carbon/slime))
+			if(bloody > 0)
+				M.trail += 10
+				M.trailtype = "blood"
+				bloody -= 10
+
+			if(oily > 0)
+				M.trail += 10
+				M.trailtype = "oil"
+				oily -= 10
+
+			if(xenobloody > 0)
+				M.trail += 10
+				M.trailtype = "xeno"
+				xenobloody -= 10
 
 	..()
 /turf/simulated/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
