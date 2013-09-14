@@ -3,7 +3,7 @@
 
 /obj/item/weapon/contract
 	name = "contract"
-	desc = "A magic contract previously signed by an apprentice. In exchange for instruction in the magical arts, they are bound to answer your call for aid."
+	desc = "A magic contract previously signed by a sucke--err, an apprentice. In exchange for instruction in the magical arts, they are bound to answer your call for aid."
 	icon = 'icons/obj/wizard.dmi'
 	icon_state ="scroll2"
 	throw_speed = 1

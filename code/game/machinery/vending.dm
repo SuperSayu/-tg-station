@@ -684,10 +684,11 @@
 					/obj/item/clothing/head/wizard/red = 1,/obj/item/clothing/suit/wizrobe/red = 1,
 					/obj/item/clothing/shoes/sandal = 2,
 					/obj/item/weapon/magic/blade = 1, /obj/item/weapon/magic/staff = 2, /obj/item/weapon/magic/staff/broom = 1,
-					/obj/item/weapon/magic/orb = 1, /obj/item/weapon/magic/spellbook = 1)
+					/obj/item/weapon/magic/orb = 1)
+	premium = list(/obj/item/clothing/gloves/magic = 2, /obj/item/clothing/gloves/white/tkglove = 1, /obj/item/weapon/magic/spellbook = 1)
 	contraband = list(/obj/item/weapon/reagent_containers/glass/bottle/wizarditis = 1)	//No one can get to the machine to hack it anyways; for the lulz - Microwave
 
-/obj/machinery/vending/autodrobe
+/obj/machinery/vending/refillable/wardrobe/autodrobe
 	name = "\improper AutoDrobe"
 	desc = "A vending machine for costumes."
 	icon_state = "theater"

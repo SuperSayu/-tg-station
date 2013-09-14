@@ -85,7 +85,7 @@
 	charges = 2
 	list_specials()
 		var/dat = "[charges] pages left:<br>"
-		dat += "<a href='?\ref[src];armor'>Spell of Conjure Wizard Armor</a><br>"
+		dat += "<a href='?\ref[src];armor'>Spell of Conjure Wizard Armor</a> ( Comes with enchantable gloves )<br>"
 		dat += "<a href='?\ref[src];change'>Spell of Change</a> (as Staff of Change)<br>"
 		dat += "<a href='?\ref[src];animate'>Spell of Animation</a><br>"
 		dat += "<a href='?\ref[src];disintegrate'>Spell of Disintegrate</a><br>"
@@ -93,6 +93,7 @@
 		dat += "<a href='?\ref[src];soulstone'>Spell of Artificer</a> ( Comes with a belt of soul stones )<br>"
 		dat += "<a href='?\ref[src];guns'>Spell of Summon Guns</a> ( Global spell - Affects all players )<br>"
 		dat += "<a href='?\ref[src];heal'>Spell of Healing</a><br>"
+		dat += "<a href='?\ref[src];tkglove'>Astral Gloves</a><br>"
 		return dat
 
 	Topic(href,list/href_list)
@@ -115,6 +116,9 @@
 			KS = new /obj/effect/knowspell/summon/world/guns(src)
 		if("heal" in href_list)
 			KS = new /obj/effect/knowspell/target/resurrect/heal(src)
+		if("tkglove" in href_list)
+			new /obj/item/clothing/gloves/white/tkglove(get_turf(src))
+			charges--
 
 		if(KS)
 			new /obj/item/weapon/magic/scroll(loc,KS)
@@ -170,7 +174,6 @@
 	desc = "You are a little surprised this gets read at all."
 	spawn_spells = list(
 		/obj/effect/knowspell/target/resurrect,
-		/obj/effect/knowspell/area/blind,
 		/obj/effect/knowspell/area/emp,
 		/obj/effect/knowspell/self/ghostize,
 		/obj/effect/knowspell/projectile/scatter/magicmissile,

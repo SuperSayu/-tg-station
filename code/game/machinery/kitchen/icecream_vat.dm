@@ -54,12 +54,12 @@ var/list/ingredients_source = list(
 	density = 1
 	anchored = 0
 	var/list/ingredients = list()
-	var/dispense_flavour = 0
+	var/dispense_flavour = 1
 	var/obj/item/weapon/reagent_containers/glass/held_container
 
 /obj/machinery/icecream_vat/New()
 	..()
-
+	create_reagents(50)
 	while(ingredients.len < 11)
 		ingredients.Add(5)
 
@@ -95,16 +95,16 @@ var/list/ingredients_source = list(
 			if(!I.ice_creamed)
 				if(ingredients[ICECREAM_VANILLA] > 0)
 					var/flavour_name = get_icecream_flavour_string(dispense_flavour)
-					if(ingredients[dispense_flavour] > 0)
+					if(dispense_flavour < 11 && ingredients[dispense_flavour] > 0)
 						src.visible_message("\icon[src] <span class='info'>[user] scoops delicious [flavour_name] flavoured icecream into [I].</span>")
 						ingredients[dispense_flavour] -= 1
 						ingredients[ICECREAM_VANILLA] -= 1
 
 						I.add_ice_cream(dispense_flavour)
 						if(held_container)
-							held_container.reagents.trans_to(I, 2)
-						else
-							reagents.add_reagent("sugar", 1, 2)
+							held_container.reagents.trans_to(I, 10)
+						if(I.reagents.total_volume < 10)
+							I.reagents.add_reagent("sugar", 10 - I.reagents.total_volume)
 					else
 						user << "<span class='warning'>There is not enough [flavour_name] flavouring left! Insert more of the required ingredients.</span>"
 				else
@@ -217,10 +217,11 @@ var/list/ingredients_source = list(
 	layer = 3.1
 	var/ice_creamed = 0
 	var/cone_type
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/icecream/New()
-	create_reagents(5)
-	reagents.add_reagent("nutriment", 1, 1)
+	create_reagents(20)
+	reagents.add_reagent("nutriment", 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/icecream/proc/add_ice_cream(var/flavour)
 	var/flavour_name = get_icecream_flavour_string(flavour)

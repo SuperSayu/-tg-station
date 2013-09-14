@@ -1250,7 +1250,7 @@
 				adjustBruteLoss(2)
 			if(prob(25))
 				adjustBrainLoss(1)
-		if((dna) && dna.mutantrace == "slime" || dna.mutantrace == "plant")
+		if(dna && (dna.mutantrace == "slime" || dna.mutantrace == "plant"))
 			// ugly hack to stop slimepeople and plantpeople from breaking their nonexistant bones
 			broken = list()
 

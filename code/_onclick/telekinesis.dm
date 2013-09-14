@@ -3,6 +3,7 @@
 
 	This needs more thinking out, but I might as well.
 */
+var/const/tk_maxrange = 15
 
 // click on atom with an empty hand, not Adjacent
 /atom/proc/attack_tk(mob/user)
@@ -28,13 +29,13 @@
 
 /obj/item/attack_tk(mob/user)
 	if(user.stat || !isturf(loc)) return
-	if((TK in user.mutations) && !user.get_active_hand()) // both should already be true to get here
+	if(!user.get_active_hand()) // both should already be true to get here
 		var/obj/item/tk_grab/O = new(src)
 		user.put_in_active_hand(O)
 		O.host = user
 		O.focus_object(src)
-	else
-		warning("Strange attack_tk(): TK([TK in user.mutations]) empty hand([!user.get_active_hand()])")
+	//else
+//		warning("Strange attack_tk(): TK([TK in user.mutations]) empty hand([!user.get_active_hand()])")
 	return
 
 
@@ -84,8 +85,10 @@
 			del(src)
 			return
 		if(!(TK in host.mutations))
-			del(src)
-			return
+			var/mob/living/carbon/human/H = user
+			if(!istype(H) || !H.gloves || !istype(H.gloves, /obj/item/clothing/gloves/white/tkglove))
+				del(src)
+				return
 		if(isobj(target))
 			if(!target.loc || !isturf(target.loc))
 				del(src)
@@ -151,27 +154,12 @@
 			overlays += icon(focus.icon,focus.icon_state)
 		return
 
-/*Not quite done likely needs to use something thats not get_step_to
-	proc/check_path()
-		var/turf/ref = get_turf(src.loc)
-		var/turf/target = get_turf(focus.loc)
-		if(!ref || !target)	return 0
-		var/distance = get_dist(ref, target)
-		if(distance >= 10)	return 0
-		for(var/i = 1 to distance)
-			ref = get_step_to(ref, target, 0)
-		if(ref != target)	return 0
-		return 1
-*/
-
-//equip_to_slot_or_del(obj/item/W, slot, del_on_fail = 1)
-/*
-		if(istype(user, /mob/living/carbon))
-			if(user:mutations & TK && get_dist(source, user) <= 7)
-				if(user:get_active_hand())	return 0
-				var/X = source:x
-				var/Y = source:y
-				var/Z = source:z
-
-*/
-
+/obj/item/clothing/gloves/white/tkglove
+	name = "astral gloves"
+	desc = "As distant as the stars, even when they cover your hands.  Gives a peculiar sensation."
+	siemens_coefficient = 0
+	permeability_coefficient = 0.05
+	Touch(atom/A, proximity)
+		if(!proximity)
+			A.attack_tk(loc)
+		return 0

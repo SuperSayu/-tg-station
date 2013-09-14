@@ -3,7 +3,7 @@
 	var/projectile_count = 1
 	var/projectile_spread = 0 // 0: none; 1: repeat-fire; 2: spread-fire;
 
-/obj/effect/knowspell/projectile/proc/fire(var/obj/item/projectile/P, var/atom/target, var/turf/start, var/turf/end, var/mob/user)
+/obj/effect/knowspell/projectile/proc/fire(var/obj/item/projectile/magic/P, var/atom/target, var/turf/start, var/turf/end, var/mob/user, var/sidestep = 0, var/sidestep_dir = 0)
 	P.shot_from = src
 	if(start == end)			//Fire the projectile
 		user.bullet_act(P)
@@ -12,6 +12,8 @@
 	P.original = target
 	P.starting = start
 	P.firer = user
+	P.sidestep = sidestep
+	P.sidestep_dir = sidestep_dir
 	if(!target || !end) // scatter randomly, this is magic
 		P.yo = rand(-5,5)
 		P.xo = rand(-5,5)
@@ -25,6 +27,9 @@
 		P.original = target
 		P.current = start
 	else
+		while(sidestep)
+			end = get_step(end,sidestep_dir)
+			sidestep--
 		P.yo = end.y - start.y
 		P.xo = end.x - start.x
 		P.current = target
@@ -57,17 +62,15 @@
 		var/dir_ccw = turn(dir_out,90)
 		var/dir_cw = turn(dir_out,-90)
 		var/counter = projectile_count
+		var/outsteps = 0
 		spawn()
 			fire(new projectile_type(start),target,start,end, caster)
 			counter--
-			var/turf/cw = end
-			var/turf/ccw = end
 			while(counter--)
-				cw = get_step(cw, dir_cw)
-				fire(new projectile_type(start),target,start,cw, caster)
+				outsteps++
+				fire(new projectile_type(start),target,start,end, caster,outsteps,dir_cw)
 				if(counter--)
-					ccw = get_step(ccw, dir_ccw)
-					fire(new projectile_type(start),target,start,ccw, caster)
+					fire(new projectile_type(start),target,start,end, caster,outsteps,dir_ccw)
 
 /obj/effect/knowspell/projectile/throw/castingmode = CAST_SPELL|CAST_RANGED
 /obj/effect/knowspell/projectile/throw/prepare(mob/user as mob)

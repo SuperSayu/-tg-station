@@ -12,8 +12,10 @@
 	var/turf/target_turf = null
 
 	incant(var/mob/caster, var/area/target)
-		if(istype(loc,/obj/item/weapon/magic))
-			return
+		var/level = incant_volume
+		if(istype(loc,/obj/item))
+			level--
+		if(level < 1) return
 		var/speech = incantation
 		if(prob(50))//Auto-mute? Fuck that noise
 			speech = replacetext(incantation," ","`")
@@ -129,10 +131,10 @@
 		activate(caster,get_turf(target))
 	before_cast(var/mob/caster, var/turf/target)
 		var/turf/T = get_turf(caster)
-		if(!T || T.lighting_lumcount > 1)
+		if(!T || T.lighting_lumcount > 2)
 			caster << "\red The shadows aren't dark enough here!"
 			return 0
-		if(!target || target.lighting_lumcount > 1)
+		if(!target || target.lighting_lumcount > 2)
 			caster << "\red The shadows aren't dark enough there!"
 			return 0
 		if(target.density)

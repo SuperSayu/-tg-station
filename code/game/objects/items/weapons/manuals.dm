@@ -7,7 +7,7 @@
 	unique = 1   // 0 - Normal book, 1 - Should not be treated as normal book, unable to be copied, unable to be modified
 /obj/item/weapon/book/manual/random
 	New()
-		var/newtype = pick(typesof(/obj/item/weapon/book/manual) - /obj/item/weapon/book/manual - /obj/item/weapon/book/manual/random - /obj/item/weapon/book/manual/nuclear)
+		var/newtype = pick(typesof(/obj/item/weapon/book/manual) - /obj/item/weapon/book/manual - /obj/item/weapon/book/manual/random - /obj/item/weapon/book/manual/nuclear - /obj/item/weapon/book/manual/wizard)
 		new newtype(loc)
 		del src
 

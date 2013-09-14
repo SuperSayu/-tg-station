@@ -41,7 +41,7 @@
 			var/datum/limb/affecting = get_organ("l_leg")
 			apply_damage(rand(2,7), BRUTE, affecting)
 			Stun(2)
-			playsound(src, 'weapons/pierce.ogg', 25)
+			playsound(src, 'sound/weapons/pierce.ogg', 25)
 			last_break = 1
 			spawn(50)
 				last_break = 0
@@ -51,7 +51,7 @@
 			var/datum/limb/affecting = get_organ("r_leg")
 			apply_damage(rand(2,7), BRUTE, affecting)
 			Stun(2)
-			playsound(src, 'weapons/pierce.ogg', 25)
+			playsound(src, 'sound/weapons/pierce.ogg', 25)
 			last_break = 1
 			spawn(50)
 				last_break = 0

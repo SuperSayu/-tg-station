@@ -207,6 +207,12 @@
 	return
 
 /atom/proc/AltClick(var/mob/user)
+	var/turf/T = get_turf(src)
+	if(T && T.Adjacent(user))
+		if(user.listed_turf == T)
+			user.listed_turf = null
+		else
+			user.listed_turf = T
 	return
 
 // this was moved mostly in order to avoid use of the : path operator

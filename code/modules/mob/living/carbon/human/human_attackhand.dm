@@ -86,14 +86,14 @@
 						M << "\red You painfully dislodge your broken arm!"
 						M.emote("scream")
 						M.Stun(2)
-						playsound(M.loc, 'weapons/pierce.ogg', 25)
+						playsound(M.loc, 'sound/weapons/pierce.ogg', 25)
 						visible_message("<span class='warning'>[M] has attempted to [attack_verb] [src]!</span>")
 						return 0
 				else if("left leg" in M.broken || "right leg" in M.broken)
 					M << "\red You painfully dislodge your broken leg!"
 					M.emote("scream")
 					M.Stun(2)
-					playsound(M.loc, 'weapons/pierce.ogg', 25)
+					playsound(M.loc, 'sound/weapons/pierce.ogg', 25)
 					visible_message("<span class='warning'>[M] has attempted to [attack_verb] [src]!</span>")
 					return 0
 
@@ -137,7 +137,7 @@
 				else
 					hit_name = hit_area
 				broken += hit_area
-				playsound(src, 'weapons/pierce.ogg', 50)
+				playsound(src, 'sound/weapons/pierce.ogg', 50)
 				var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
 				if(affecting != "chest")
 					visible_message("<span class='danger'>[src]'s [hit_name] breaks with a [breaknoise]!</span>", \

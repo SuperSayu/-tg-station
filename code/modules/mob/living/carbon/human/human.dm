@@ -56,14 +56,21 @@
 
 		//BubbleWrap: people in handcuffs are always switched around as if they were on 'help' intent to prevent a person being pulled from being seperated from their puller
 		if((tmob.a_intent == "help" || tmob.restrained()) && (a_intent == "help" || src.restrained()) && tmob.canmove && canmove) // mutual brohugs all around!
-			var/turf/oldloc = loc
+			/*var/turf/oldloc = loc
 			loc = tmob.loc
-			tmob.loc = oldloc
-			now_pushing = 0
-			for(var/mob/living/carbon/slime/slime in view(1,tmob))
-				if(slime.Victim == tmob)
-					slime.UpdateFeed()
-			return
+
+			tmob.loc = oldloc*/
+			var/turf/oldloc = tmob.loc
+			density = 0
+			step_towards(tmob,loc)
+			density = 1
+			if(tmob in loc)
+				step_towards(src,oldloc)
+				now_pushing = 0
+				for(var/mob/living/carbon/slime/slime in view(1,tmob))
+					if(slime.Victim == tmob)
+						slime.UpdateFeed()
+				return
 
 		if(tmob.r_hand && istype(tmob.r_hand, /obj/item/weapon/shield/riot))
 			if(prob(99))
@@ -208,7 +215,7 @@
 	for(var/bone in bones)
 		if(!bone in broken && prob(break_chance))
 			broken += bone
-			playsound(src, 'weapons/pierce.ogg', 50)
+			playsound(src, 'sound/weapons/pierce.ogg', 50)
 			if(bone == "chest")
 				bone = "ribs"
 			else if(bone == "head")
@@ -235,7 +242,7 @@
 	show_message("\red The blob attacks your [affecting]!")
 	if(prob(rand(5,10)))
 		broken += affecting
-		playsound(src, 'weapons/pierce.ogg', 50)
+		playsound(src, 'sound/weapons/pierce.ogg', 50)
 		var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
 		if(affecting != "chest")
 			visible_message("<span class='danger'>[src]'s [affecting] breaks with a [breaknoise]!</span>", \
@@ -260,7 +267,7 @@
 				update_damage_overlays(0)
 		updatehealth()
 		if(!affecting in broken) // there's no avoiding it, you got hit by a fucking meteor
-			playsound(src, 'weapons/pierce.ogg', 50)
+			playsound(src, 'sound/weapons/pierce.ogg', 50)
 			var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
 			if(affecting != "chest")
 				visible_message("<span class='danger'>[src]'s [affecting] breaks with a [breaknoise]!</span>", \

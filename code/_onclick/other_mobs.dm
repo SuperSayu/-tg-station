@@ -1,5 +1,6 @@
 
 // Humans
+// proximity: if 1, being done normally.  If 0, an unarmed attack is being done, ex, by telekinesis.
 /mob/living/carbon/human/UnarmedAttack(var/atom/A, var/proximity)
 	var/obj/item/clothing/gloves/G = gloves // not typecast specifically enough in defines
 

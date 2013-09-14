@@ -387,7 +387,7 @@ steam.start() -- spawns the effect
 /obj/effect/effect/bad_smoke/Move()
 	..()
 	for(var/mob/living/carbon/M in get_turf(src))
-		if (M.internal != null && M.wear_mask && (M.wear_mask.flags & MASKINTERNALS))
+		if (M.wear_mask && (M.wear_mask.flags & MASKINTERNALS) && (M.internal != null || (M.wear_mask.flags & BLOCK_GAS_SMOKE_EFFECT)))
 		else
 			M.drop_item()
 			M.adjustOxyLoss(1)
@@ -410,7 +410,7 @@ steam.start() -- spawns the effect
 /obj/effect/effect/bad_smoke/HasEntered(mob/living/carbon/M as mob )
 	..()
 	if(istype(M, /mob/living/carbon))
-		if (M.internal != null && M.wear_mask && (M.wear_mask.flags & MASKINTERNALS))
+		if (M.wear_mask && (M.wear_mask.flags & MASKINTERNALS) && (M.internal != null || (M.wear_mask.flags & BLOCK_GAS_SMOKE_EFFECT)))
 			return
 		else
 			M.drop_item()
@@ -618,7 +618,7 @@ steam.start() -- spawns the effect
 /obj/effect/effect/sleep_smoke/Move()
 	..()
 	for(var/mob/living/carbon/M in get_turf(src))
-		if (M.internal != null && M.wear_mask && (M.wear_mask.flags & MASKINTERNALS))
+		if (M.wear_mask && (M.wear_mask.flags & MASKINTERNALS) && (M.internal != null || (M.wear_mask.flags & BLOCK_GAS_SMOKE_EFFECT)))
 //		if (M.wear_suit, /obj/item/clothing/suit/wizrobe && (M.hat, /obj/item/clothing/head/wizard) && (M.shoes, /obj/item/clothing/shoes/sandal))  // I'll work on it later
 		else
 			M.drop_item()
@@ -633,7 +633,7 @@ steam.start() -- spawns the effect
 /obj/effect/effect/sleep_smoke/HasEntered(mob/living/carbon/M as mob )
 	..()
 	if(istype(M, /mob/living/carbon))
-		if (M.internal != null && M.wear_mask && (M.wear_mask.flags & MASKINTERNALS))
+		if (M.wear_mask && (M.wear_mask.flags & MASKINTERNALS) && (M.internal != null || (M.wear_mask.flags & BLOCK_GAS_SMOKE_EFFECT)))
 //		if (M.wear_suit, /obj/item/clothing/suit/wizrobe && (M.hat, /obj/item/clothing/head/wizard) && (M.shoes, /obj/item/clothing/shoes/sandal)) // Work on it later
 			return
 		else

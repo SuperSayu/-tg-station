@@ -222,7 +222,8 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 
 		switch(incant_volume)
 			if(2)
-				caster.say(text)
+				spawn
+					caster.say(text)
 			if(1)
 				caster.whisper(text)
 
@@ -322,7 +323,7 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 
 	// These are for enchanted items.  Whatever you do with the enchanted item, it should call the same proc here.
 	// The spell thrower also uses the same system.
-	proc/attack(mob/living/M as mob, mob/living/caster as mob, def_zone)
+	proc/attack(mob/living/M as mob, mob/living/caster as mob, def_zone) // note for my purposes attack here does not just mean mobs, be advised
 		return
 	proc/attack_self(mob/living/caster as mob)
 		prepare(caster)
@@ -356,3 +357,6 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 			statpanel("Spells","[KS.charge] left",KS)
 	if(l_hand) l_hand.Stat("Left hand")
 	if(r_hand) r_hand.Stat("Right hand")
+/mob/living/carbon/human/list_wizspells()
+	..()
+	if(gloves) gloves.Stat()

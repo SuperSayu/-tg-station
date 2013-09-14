@@ -129,7 +129,7 @@ emp_act
 			user.Weaken(2)
 			var/datum/limb/larm = get_organ("l_arm")
 			user.apply_damage(rand(2,7), BRUTE, larm)
-			playsound(user.loc, 'weapons/pierce.ogg', 25)
+			playsound(user.loc, 'sound/weapons/pierce.ogg', 25)
 			visible_message("<span class='warning'>[user] has attempted to attack [src] with [I]!</span>")
 			user.drop_item()
 			return 0
@@ -140,7 +140,7 @@ emp_act
 			user.Weaken(2)
 			var/datum/limb/rarm = get_organ("r_arm")
 			user.apply_damage(rand(2,7), BRUTE, rarm)
-			playsound(user.loc, 'weapons/pierce.ogg', 25)
+			playsound(user.loc, 'sound/weapons/pierce.ogg', 25)
 			visible_message("<span class='warning'>[user] has attempted to attack [src] with [I]!</span>")
 			user.drop_item()
 			return 0
@@ -249,7 +249,7 @@ emp_act
 			return
 		else if(prob(breakchance))
 			broken += hit_area
-			playsound(src, 'weapons/pierce.ogg', 50)
+			playsound(src, 'sound/weapons/pierce.ogg', 50)
 			var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
 			if(hit_area != "chest")
 				visible_message("<span class='danger'>[src]'s [hit_name] breaks with a [breaknoise]!</span>", \

@@ -1,5 +1,5 @@
 //
-// Originally, and maybe again someday, I was planning on actual enchanted magic items.  You can see how this helps along that path.
+// Todo: Higher level enchantables that you have to get with a crafting spell and exotic materials
 //
 
 
@@ -222,3 +222,52 @@
 				return
 			new /obj/item/weapon/magic/scroll(get_turf(loc),KS)
 			attack_self(usr)
+
+/obj/item/clothing/gloves/magic
+	name = "enchantable gloves"
+	desc = "Woven from hairs of a deceased creature of legend, and dyed the color it hated most."
+	icon_state = "purple"
+	item_state = "purplegloves"
+	color="purple"
+	var/obj/effect/knowspell/spell = null
+	var/noun = "gloves"
+	var/castingmode = CAST_MELEE|CAST_RANGED
+
+	Touch(var/atom/A, var/proximity)
+		var/mob/user = loc
+		if(!spell || !spell.cast_check(user)) return 0
+		if(proximity)
+			if(spell.castingmode & CAST_MELEE)
+				spell.attack(A,user)
+				return 1
+		else
+			if(spell.castingmode & CAST_RANGED)
+				spell.afterattack(A,user)
+	Stat()
+		if(spell)
+			statpanel("Spells","Gloves")
+			if(spell.rechargable)
+				statpanel("Spells","[spell.charge/10.0]/[spell.chargemax/10]",spell.name)
+			else
+				statpanel("Spells","[spell.charge] left",spell.name)
+
+	proc/dispell(var/violent = 0)
+		if(spell)
+			if(violent)
+				del spell
+			else
+				spell = null
+			update_icon()
+	examine()
+		..()
+		if(spell)
+			if(spell.incantation && spell.incant_volume)
+				usr << "An arcane phrase is engraved in a ring of glowing letters: '[spell.incantation]'"
+			else
+				usr << "An arcane glyph is engraved on it."
+	update_icon()
+		if(spell)
+			name = "[noun] of [spell.name]"
+		else
+			name = initial(name)
+

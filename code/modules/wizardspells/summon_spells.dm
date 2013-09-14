@@ -92,7 +92,7 @@
 	var/turf/T = get_turf(caster)
 	if(T)
 		new /obj/item/clothing/shoes/sandal(T) //In case they've lost them.
-		new /obj/item/clothing/gloves/purple(T)
+		new /obj/item/clothing/gloves/magic(T)
 		new /obj/item/clothing/suit/space/rig/wizard(T)
 		new /obj/item/clothing/head/helmet/space/rig/wizard(T)
 		return 1

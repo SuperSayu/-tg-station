@@ -65,7 +65,7 @@
 		create_reagents(15)
 */
 /obj/item/clothing/mask/blowgun
-	name = "cigar tube"
+	name = "Cheap-looking Cigar"
 	desc = "A hollow device around the right shape and size to fire syringes if you blow hard enough."
 	flags = USEDELAY|FPRINT // We have to add usedelay to get afterattack at distance for some reason
 	icon_state = "cigaroff"
