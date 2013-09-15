@@ -692,20 +692,6 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	containertype = /obj/structure/closet/critter/pug
 	containername = "pug crate"
 
-/datum/supply_packs/organic/pug
-	name = "Pug Crate"
-	contains = list()
-	cost = 50
-	containertype = /obj/structure/largecrate/pug
-	containername = "pug crate"
-
-/datum/supply_packs/organic/cat
-	name = "Cat Crate"
-	contains = list()
-	cost = 50
-	containertype = /obj/structure/largecrate/cat
-	containername = "cat crate"
-
 ////// hippy gear
 
 /datum/supply_packs/organic/hydroponics // -- Skie

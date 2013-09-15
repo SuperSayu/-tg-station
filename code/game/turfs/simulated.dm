@@ -76,20 +76,23 @@
 					M.Weaken(10)
 
 		if(!istype(M, /mob/living/carbon/slime))
-			if(bloody > 0)
-				M.trail += 10
-				M.trailtype = "blood"
-				bloody -= 10
-
-			if(oily > 0)
-				M.trail += 10
-				M.trailtype = "oil"
-				oily -= 10
-
+			var/amount = max(M.trail,rand(4,8))
 			if(xenobloody > 0)
-				M.trail += 10
+				M.trail = amount
 				M.trailtype = "xeno"
-				xenobloody -= 10
+				xenobloody = max(xenobloody-amount,0)
+
+			else if(bloody > 0)
+				M.trail = amount
+				M.trailtype = "blood"
+				bloody = max(bloody-amount,0)
+
+			else if(oily > 0)
+				M.trail = amount
+				M.trailtype = "oil"
+				oily = max(oily-amount,0)
+
+
 
 	..()
 /turf/simulated/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)

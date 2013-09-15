@@ -11,6 +11,7 @@
 	var/last_change = 0
 	var/target_area = /area/holodeck/alphadeck
 	var/offline_area = /area/holodeck/source_plating
+	var/pettype = "dogs"
 
 	attack_ai(var/mob/user as mob)
 		return src.attack_hand(user)
@@ -34,9 +35,12 @@
 		dat += "<A href='?src=\ref[src];beach=1'>((Beach))</A><BR>"
 		dat += "<A href='?src=\ref[src];party=1'>((Party Room))</A><BR>"
 		dat += "<A href='?src=\ref[src];transit=1'>((Transit system demo))</A><BR>"
+		dat += "<A href='?src=\ref[src];pets=1'>((Pet Room))</A><BR>"
+		dat += " - Pet preference: <a href='?src=\ref[src];pettype=1'>[pettype]</a><br>"
 		if(emagged | issilicon(user))
 			dat += "<A href='?src=\ref[src];medical=1'>((Emergency Medical Center))</A><BR>"
 			dat += "Caution: Holographic medical facilities for emergency use only. <BR>"
+
 
 		dat += "<span class='notice'>Please ensure that only holographic weapons are used in the holodeck if a combat simulation has been loaded.</span><BR>"
 
@@ -74,7 +78,7 @@
 	Topic(href, href_list)
 		if(..())
 			return
-		if((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
+		if(Adjacent(usr) || istype(usr, /mob/living/silicon))
 			usr.set_machine(src)
 
 			if(href_list["loadarea"])
@@ -96,6 +100,39 @@
 				target = locate(/area/holodeck/source_lounge)
 				if(target)
 					loadProgram(target)
+			else if(href_list["pets"])
+				target = locate(/area/holodeck/source_puppy)
+				if(target)
+					loadProgram(target)
+			else if(href_list["pettype"])
+				var/list/next_pettype = list(
+					"dogs" = "cats",
+					"cats" = "chicks",
+					"chicks" = "dogs")
+				if(emagged)
+					next_pettype = list(
+						"dogs" = "cats",
+						"cats" = "chicks",
+						"chicks" = "goats",
+						"goats" = "ghosts",
+						"ghosts" = "clowns",
+						"clowns" = "dogs")
+				if(pettype in next_pettype)
+					pettype = next_pettype[pettype]
+				else
+					pettype = "dogs"
+				for(var/mob/M in holographic_items)
+					derez(M)
+				for(var/obj/effect/landmark/L in linkedholodeck)
+					if(L.name == "Holopet Spawn")
+						petspawn(L.loc)
+				for(var/mob/M in holographic_items)
+					step_rand(M)
+					step_rand(M)
+				for(var/obj/effect/decal/cleanable/EDC in linkedholodeck)
+					if(EDC in holographic_items) continue
+					del EDC
+
 			else if(href_list["boxingcourt"])
 				target = locate(/area/holodeck/source_boxingcourt)
 				if(target)
@@ -161,6 +198,7 @@
 				else
 					message_admins("[key_name_admin(usr)] restored the holodeck's safeties")
 					log_game("[key_name(usr)] restored the holodeck's safeties")
+
 
 			src.add_fingerprint(usr)
 		src.updateUsrDialog()
@@ -325,8 +363,22 @@
 		togglePower(0)
 	else
 		togglePower(1)
-
-
+/obj/machinery/computer/HolodeckControl/proc/petspawn(var/turf/T)
+	switch(pettype)
+		if("dogs")
+			var/dogtype = pick(/mob/living/simple_animal/corgi,/mob/living/simple_animal/corgi/Lisa,/mob/living/simple_animal/corgi/puppy,/mob/living/simple_animal/pug)
+			holographic_items += new dogtype(T)
+		if("cats")
+			holographic_items += new /mob/living/simple_animal/cat(T)
+		if("chicks")
+			holographic_items += new /mob/living/simple_animal/chick(T)
+		if("goats")
+			holographic_items += new /mob/living/simple_animal/hostile/retaliate/goat(T)
+		if("ghosts")
+			var/ghosttype = pick(/mob/living/simple_animal/hostile/retaliate/ghost,/mob/living/simple_animal/hostile/retaliate/skeleton,/mob/living/simple_animal/hostile/retaliate/zombie)
+			holographic_items += new ghosttype(T)
+		if("clowns")
+			holographic_items += new /mob/living/simple_animal/hostile/retaliate/clown(T)
 /obj/machinery/computer/HolodeckControl/proc/loadProgram(var/area/A, var/force = 0, var/delay = 0)
 
 	if(world.time < (last_change + 25) && !force)
@@ -376,7 +428,11 @@
 						T.hotspot_expose(50000,50000,1)
 			if(L.name=="Holocarp Spawn")
 				new /mob/living/simple_animal/hostile/carp(L.loc)
-
+			if(L.name == "Holopet Spawn")
+				petspawn(L.loc)
+		for(var/mob/M in holographic_items)
+			step_rand(M)
+			step_rand(M)
 
 /obj/machinery/computer/HolodeckControl/proc/emergencyShutdown()
 	if(!istype(target,/area/holodeck/source_plating))

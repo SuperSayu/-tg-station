@@ -25,7 +25,7 @@
 	..()
 	var/turf/simulated/cur_turf = get_turf(src.loc)
 	if(istype(cur_turf, /turf/simulated) && !old)
-		cur_turf.bloody = 30
+		cur_turf.bloody = rand(10,20)
 		cur_turf.oily = 0
 		cur_turf.xenobloody = 0
 	if(istype(src, /obj/effect/decal/cleanable/blood/gibs))

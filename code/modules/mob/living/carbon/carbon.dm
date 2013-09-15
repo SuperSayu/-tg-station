@@ -7,7 +7,7 @@
 				src.nutrition -= HUNGER_FACTOR/10
 		if((FAT in src.mutations) && src.m_intent == "run" && src.bodytemperature <= 360)
 			src.bodytemperature += 2
-	if(trail > 0)
+	if(trail > 0 && prob(30))
 		var/obj/effect/decal/cleanable/trail/t
 		switch(trailtype)
 			if("blood")

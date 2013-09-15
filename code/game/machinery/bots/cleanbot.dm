@@ -29,6 +29,7 @@
 	var/screwloose = 0
 	var/oddbutton = 0
 	var/blood = 1
+	var/prints = 1
 	var/list/target_types = list()
 	var/obj/effect/decal/cleanable/target
 	var/obj/effect/decal/cleanable/oldtarget
@@ -90,6 +91,7 @@ Maintenance panel panel is [src.open ? "opened" : "closed"]"},
 text("<A href='?src=\ref[src];operation=start'>[src.on ? "On" : "Off"]</A>"))
 	if(!src.locked || issilicon(user))
 		dat += text({"<BR>Cleans Blood: []<BR>"}, text("<A href='?src=\ref[src];operation=blood'>[src.blood ? "Yes" : "No"]</A>"))
+		dat += text({"<BR>Clean Footprints[]<BR>"},text("<A href='?src=\ref[src];operation=prints'>[src.prints ? "Yes" : "No"]</A>"))
 		dat += text({"<BR>Patrol station: []<BR>"}, text("<A href='?src=\ref[src];operation=patrol'>[src.should_patrol ? "Yes" : "No"]</A>"))
 	//	dat += text({"<BR>Beacon frequency: []<BR>"}, text("<A href='?src=\ref[src];operation=freq'>[src.beacon_freq]</A>"))
 	if(src.open && !src.locked)
@@ -116,6 +118,10 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 				turn_on()
 		if("blood")
 			src.blood =!src.blood
+			src.get_targets()
+			src.updateUsrDialog()
+		if("prints")
+			src.prints = !src.prints
 			src.get_targets()
 			src.updateUsrDialog()
 		if("patrol")
@@ -307,6 +313,10 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 		target_types += /obj/effect/decal/cleanable/blood/
 		target_types += /obj/effect/decal/cleanable/blood/gibs/
 		target_types += /obj/effect/decal/cleanable/dirt
+	if(src.prints)
+		target_types += /obj/effect/decal/cleanable/trail/bloodtrail
+		target_types += /obj/effect/decal/cleanable/trail/oiltrail
+		target_types += /obj/effect/decal/cleanable/trail/xenotrail
 
 /obj/machinery/bot/cleanbot/proc/clean(var/obj/effect/decal/cleanable/target)
 	src.anchored = 1

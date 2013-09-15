@@ -38,6 +38,8 @@
 
 /area/holodeck/source_lounge
 	name = "Lounge"
+/area/holodeck/source_puppy
+	name = "Puppy Lounge"
 
 
 // Theater holodeck

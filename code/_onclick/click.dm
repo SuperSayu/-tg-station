@@ -19,8 +19,8 @@
 
 
 /mob/proc/face_atom(var/atom/A)
-	if(!canface()) return
-	if( !A || !x || !y || !A.x || !A.y ) return
+//	if(!canface()) return
+	if( buckled || !A || !x || !y || !A.x || !A.y ) return
 	var/dx = A.x - x
 	var/dy = A.y - y
 	if(!dx && !dy) return

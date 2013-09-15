@@ -96,11 +96,13 @@
 					dat += "<A href='?src=\ref[src];action=create;item=rh'>Robust Harvest</A> <FONT COLOR=blue>(25)</FONT> | <A href='?src=\ref[src];action=create;item=rh5'>x5</A><BR>"
 					dat += "Leather<BR>"
 					dat += "<A href='?src=\ref[src];action=create;item=wallet'>Wallet</A> <FONT COLOR=blue>(100)</FONT><BR>"
+					dat += "<A href='?src=\ref[src];action=create;item=collar'>Pet Collar</A> <FONT COLOR=blue>(100)</FONT><BR>"
 					dat += "<A href='?src=\ref[src];action=create;item=gloves'>Botanical gloves</A> <FONT COLOR=blue>(250)</FONT><BR>"
 					dat += "<A href='?src=\ref[src];action=create;item=tbelt'>Utility belt</A> <FONT COLOR=blue>(300)</FONT><BR>"
 					dat += "<A href='?src=\ref[src];action=create;item=satchel'>Leather Satchel</A> <FONT COLOR=blue>(400)</FONT><BR>"
-					//dat += "Other<BR>"
-					//dat += "<A href='?src=\ref[src];action=create;item=monkey'>Monkey</A> <FONT COLOR=blue>(500)</FONT><BR>"
+					dat += "Other<BR>"
+					dat += "<a href='?src=\ref[src];action=create;item=soap'>Deluxe Soap</A> <FONT COLOR=blue>(200)</FONT><BR>"
+					dat += "<A href='?src=\ref[src];action=create;item=monkey'>Monkey</A> <FONT COLOR=blue>(500)</FONT><BR>"
 				else
 					dat += "<BR><FONT COLOR=red>No beaker inside. Please insert a beaker.</FONT><BR>"
 			if("nopoints")
@@ -203,6 +205,12 @@
 		if("wallet")
 			if (check_cost(100)) return 0
 			else new/obj/item/weapon/storage/wallet(src.loc)
+		if("collar")
+			if (check_cost(100)) return 0
+			else new/obj/item/weapon/pet_collar(src.loc)
+		if("soap")
+			if (check_cost(100)) return 0
+			else new/obj/item/weapon/soap/deluxe(src.loc)
 		if("gloves")
 			if (check_cost(250)) return 0
 			else new/obj/item/clothing/gloves/botanic_leather(src.loc)
@@ -212,9 +220,9 @@
 		if("satchel")
 			if (check_cost(400)) return 0
 			else new/obj/item/weapon/storage/backpack/satchel(src.loc)
-		//if("monkey")
-		//	if (check_cost(500)) return 0
-		//	else new/mob/living/carbon/monkey(src.loc)
+		if("monkey")
+			if (check_cost(500)) return 0
+			else new/obj/item/weapon/reagent_containers/food/snacks/monkeycube(src.loc)
 	processing = 0
 	menustat = "complete"
 	update_icon()

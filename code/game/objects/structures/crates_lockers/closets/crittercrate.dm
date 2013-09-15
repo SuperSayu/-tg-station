@@ -25,13 +25,15 @@
 			var/num = rand(4, 6)
 			for(var/i = 0, i < num, i++)
 				new content_mob(loc)
+				if(prob(50))
+					new /obj/item/weapon/pet_collar(loc)
 		else if(content_mob == /mob/living/simple_animal/corgi)
-			var/num = rand(0, 1)
-			if(num) //No more matriarchy for cargo
-				content_mob = /mob/living/simple_animal/corgi/Lisa
+			content_mob = pick(/mob/living/simple_animal/corgi/,/mob/living/simple_animal/corgi/Lisa,/mob/living/simple_animal/corgi/puppy)
 			new content_mob(loc)
+			new /obj/item/weapon/pet_collar(loc)
 		else
 			new content_mob(loc)
+			new /obj/item/weapon/pet_collar(loc)
 		already_opened = 1
 	..()
 
