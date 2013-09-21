@@ -859,7 +859,7 @@
 					setHalLoss(99)
 
 			//Blood loss
-			if(getBruteLoss() >= 50 && prob(15) && getBruteLoss() <= 105 && !paralysis)
+			if(getBruteLoss() >= 50 && prob(15) && getBruteLoss() <= maxHealth+5 && !paralysis)
 				adjustBruteLoss(rand(2,4))
 				var/turf/pos = get_turf(src)
 				pos.add_blood_floor(src)
