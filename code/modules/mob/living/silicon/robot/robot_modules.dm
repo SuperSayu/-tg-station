@@ -142,7 +142,7 @@
 
 	New()
 		..()
-		modules += new /obj/item/weapon/soap/nanotrasen(src)
+		modules += new /obj/item/weapon/soap/borg(src)
 		modules += new /obj/item/weapon/storage/bag/trash(src)
 		modules += new /obj/item/weapon/mop(src)
 		modules += new /obj/item/device/lightreplacer(src)
