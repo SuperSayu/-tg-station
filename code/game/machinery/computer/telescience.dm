@@ -10,11 +10,10 @@
 	var/x_co	// X coordinate
 	var/y_co	// Y coordinate
 	var/z_co	// Z coordinate
-
-/obj/machinery/computer/telescience/New()
-	teles_left = rand(8,12)
-	x_off = rand(-10,10)
-	y_off = rand(-10,10)
+	var/trueX	// X + offset
+	var/trueY	// Y + offset
+	var/obj/machinery/telepad
+	var/tele_id = "Telesci"
 
 /obj/machinery/computer/telescience/update_icon()
 	if(stat & BROKEN)
@@ -53,42 +52,29 @@
 	popup.open()
 	return
 
-/obj/machinery/computer/telescience/proc/telefail()
-	if(prob(55))
-		for(var/mob/O in hearers(src, null))
-			O.show_message("\red The telepad weakly fizzles.", 2)
-		for(var/obj/machinery/telepad/E in world)
-			var/L = get_turf(E)
+/obj/machinery/computer/telescience/proc/telefail(var/level)
+	var/teleturf = get_turf(telepad)
+	switch(level)
+		if(1)
+			for(var/mob/O in hearers(telepad, null))
+				O.show_message("\red The telepad weakly fizzles.", 2)
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(5, 1, L)
+			s.set_up(5, 1, teleturf)
 			s.start()
-		return
-	if(prob(20))
-		// Irradiate everyone in telescience!
-		for(var/obj/machinery/telepad/E in world)
-			var/L = get_turf(E)
-			for(var/mob/living/carbon/human/M in viewers(L, null))
+		if(2)
+			for(var/mob/living/carbon/human/M in viewers(telepad, null))
 				M.apply_effect((rand(50, 100)), IRRADIATE, 0)
 				M << "\red You feel irradiated."
-		return
-	if(prob(20))
-		// So let's set the world on fire...
-		for(var/obj/machinery/telepad/E in world)
-			var/L = get_turf(E)
-			for(var/turf/simulated/floor/target_tile in range(0,L))
+		if(3)
+			for(var/turf/simulated/floor/target_tile in range(0,telepad))
 				var/datum/gas_mixture/napalm = new
 				napalm.toxins = 25
 				napalm.temperature = 2000
 				target_tile.assume_air(napalm)
 				spawn (0) target_tile.hotspot_expose(700, 400)
-		for(var/mob/O in hearers(src, null))
-			O.show_message("\red The telepad sets on fire!", 2)
-		return
-	if(prob(5))
-		// They did the mash! (They did the monster mash!) The monster mash! (It was a graveyard smash!)
-		// copied from gold slime code because it's efficient
-		for(var/obj/machinery/telepad/E in world)
-			var/L = get_turf(E)
+			for(var/mob/O in hearers(telepad, null))
+				O.show_message("\red The telepad sets on fire!", 2)
+		if(4)
 			var/blocked = list(/mob/living/simple_animal/hostile,
 				/mob/living/simple_animal/hostile/alien/queen/large,
 				/mob/living/simple_animal/hostile/pirate,
@@ -103,143 +89,107 @@
 				/mob/living/simple_animal/hostile/retaliate,
 				/mob/living/simple_animal/hostile/giant_spider/nurse)
 			var/list/hostiles = typesof(/mob/living/simple_animal/hostile) - blocked
-			playsound(L, 'sound/effects/phasein.ogg', 100, 1)
-			for(var/mob/living/carbon/human/M in viewers(L, null))
+			playsound(teleturf, 'sound/effects/phasein.ogg', 100, 1)
+			for(var/mob/living/carbon/human/M in viewers(telepad, null))
 				flick("e_flash", M.flash)
 			var/chosen = pick(hostiles)
 			var/mob/living/simple_animal/hostile/H = new chosen
-			H.loc = L
-			return
-		return
+			H.loc = teleturf
 	return
 
-/obj/machinery/computer/telescience/proc/dosend()
-	var/trueX = (x_co + x_off)
-	var/trueY = (y_co + y_off)
-	for(var/obj/machinery/telepad/E in world)
-		var/L = get_turf(E)
-		var/target = locate(trueX, trueY, z_co)
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(5, 1, L)
-		s.start()
-		flick("pad-beam", E)
-		usr << "\blue Teleport successful."
-		for(var/obj/item/OI in L)
-			do_teleport(OI, target, 0)
-		for(var/obj/structure/closet/OC in L)
-			do_teleport(OC, target, 0)
-		for(var/mob/living/carbon/MO in L)
-			do_teleport(MO, target, 0)
-		for(var/mob/living/simple_animal/SA in L)
-			do_teleport(SA, target, 0)
+/obj/machinery/computer/telescience/proc/teleprep(var/type)
+	if(!telepad)
+		usr << "\red Error: no associated telepad. Please recalibrate and try again."
 		return
-	return
-
-/obj/machinery/computer/telescience/proc/doreceive()
-	var/trueX = (x_co + x_off)
-	var/trueY = (y_co + y_off)
-	for(var/obj/machinery/telepad/E in world)
-		var/L = get_turf(E)
-		var/T = locate(trueX, trueY, z_co)
-		var/G = get_turf(T)
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(5, 1, L)
-		s.start()
-		flick("pad-beam", E)
-		usr << "\blue Teleport successful."
-		for(var/obj/item/ROI in G)
-			do_teleport(ROI, E, 0)
-		for(var/obj/structure/closet/ROC in G)
-			do_teleport(ROC, E, 0)
-		for(var/mob/living/carbon/RMO in G)
-			do_teleport(RMO, E, 0)
-		for(var/mob/living/simple_animal/RSA in G)
-			do_teleport(RSA, E, 0)
-		return
-	return
-
-/obj/machinery/computer/telescience/proc/telesend()
-	if(x_co == "")
-		usr << "\red Error: set coordinates."
-		return
-	if(y_co == "")
-		usr << "\red Error: set coordinates."
-		return
-	if(z_co == "")
-		usr << "\red Error: set coordinates."
-		return
-	if(x_co < 11 || x_co > 245)
-		telefail()
-		usr << "\red Error: X is less than 11 or greater than 245."
-		return
-	if(y_co < 11 || y_co > 245)
-		telefail()
-		usr << "\red Error: Y is less than 11 or greater than 245."
-		return
-	if(z_co == 2 || z_co < 1 || z_co > 6)
-		telefail()
-		usr << "\red Error: Z is less than 1, greater than 6, or equal to 2."
+	var/numpick
+	var/failure = checkFail()
+	if(failure > 0)
+		numpick = pick(1,1,1,1,1,2,2,2,2,3)
+		telefail(numpick)
 		return
 	if(teles_left > 0)
 		if(prob(75))
 			teles_left -= 1
-			dosend()
+			tele(type)
 			if(teles_left == 0)
 				for(var/mob/O in hearers(src, null))
 					O.show_message("\red The telepad has become uncalibrated.", 2)
-		else
-			telefail()
-		return
-	else	// oh no, the telepad is uncalibrated!
+			return
+	else
 		if(prob(35))
-			// 35% chance it will work
-			dosend()
+			tele(type)
 		else
-			// OH NO YOU IDIOT
-			telefail()
+			numpick = pick(1,1,1,2,2,3,4)
+			telefail(numpick)
 		return
+	numpick = pick(1,1,1,1,1,2,2,2,2,3)
+	telefail(numpick)
 	return
 
-/obj/machinery/computer/telescience/proc/telereceive()
-	// basically the same thing
-	if(x_co == "")
-		usr << "\red Error: set coordinates."
-		return
-	if(y_co == "")
-		usr << "\red Error: set coordinates."
-		return
-	if(z_co == "")
-		usr << "\red Error: set coordinates."
-		return
-	if(x_co < 11 || x_co > 245)
-		telefail()
-		usr << "\red Error: X is less than 11 or greater than 245."
-		return
-	if(y_co < 11 || y_co > 245)
-		telefail()
-		usr << "\red Error: Y is less than 11 or greater than 245."
-		return
-	if(z_co == 2 || z_co < 1 || z_co > 6)
-		telefail()
-		usr << "\red Error: Z is less than 1, greater than 6, or equal to 2."
-		return
-	if(teles_left > 0)
-		if(prob(85))
-			teles_left -= 1
-			doreceive()
-			if(teles_left == 0)
-				for(var/mob/O in hearers(src, null))
-					O.show_message("\red The telepad has become uncalibrated.", 2)
-		else
-			telefail()
-		return
-	else
-		if(prob(55))
-			doreceive()
-		else
-			telefail()
-		return
+/obj/machinery/computer/telescience/proc/tele(var/type)
+	var/tele = get_turf(telepad)
+	trueX = (x_co + x_off)
+	trueY = (y_co + y_off)
+	var/target = locate(trueX, trueY, z_co)
+	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+	s.set_up(5, 1, tele)
+	s.start()
+	flick("pad-beam", telepad)
+	var/list/teleportables = list()
+	switch(type)
+		if(0)
+			for(var/atom/A in tele)
+				if(!istype(A, /obj/machinery) && !istype(A, /obj/effect) && !istype(A, /mob/living/silicon/ai) && !istype(A, /obj/item/device/radio/intercom) && !istype(A, /obj/structure/closet/secure_closet/brig))
+					if(istype(A, /obj/structure))
+						if(istype(A, /obj/structure/closet))
+							teleportables += A
+							usr << "Teleportables added [A]"
+					else
+						teleportables += A
+						usr << "Teleportables added [A]"
+				else
+					usr << "Warning: [A] in blacklist"
+			for(var/atom/T in teleportables)
+				do_teleport(T, target, 0)
+			usr << "\blue Teleport successful."
+		if(1)
+			for(var/atom/A in tele)
+				if(!istype(A, /obj/machinery) && !istype(A, /obj/effect) && !istype(A, /mob/living/silicon/ai) && !istype(A, /obj/item/device/radio/intercom) && !istype(A, /obj/structure/closet/secure_closet/brig))
+					if(istype(A, /obj/structure))
+						if(istype(A, /obj/structure/closet))
+							teleportables += A
+							usr << "Teleportables added [A]"
+					else
+						teleportables += A
+						usr << "Teleportables added [A]"
+				else
+					usr << "Warning: [A] in blacklist"
+			for(var/atom/T in teleportables)
+				do_teleport(T, tele, 0)
+			usr << "\blue Teleport successful."
 	return
+
+/obj/machinery/computer/telescience/proc/checkFail()
+	var/fail = 0
+	if(x_co == "")
+		usr << "\red Error: set X coordinates."
+		fail = 1
+	if(y_co == "")
+		usr << "\red Error: set Y coordinates."
+		fail = 1
+	if(z_co == "")
+		usr << "\red Error: set Z coordinates."
+		fail = 1
+	if(x_co < 11 || x_co > 245)
+		usr << "\red Error: X is less than 11 or greater than 245."
+		fail = 1
+	if(y_co < 11 || y_co > 245)
+		usr << "\red Error: Y is less than 11 or greater than 245."
+		fail = 1
+	if(z_co == 2 || z_co < 1 || z_co > 6)
+		usr << "\red Error: Z is less than 1, greater than 6, or equal to 2."
+		fail = 1
+	return fail
 
 /obj/machinery/computer/telescience/Topic(href, href_list)
 	if(..())
@@ -263,19 +213,23 @@
 		z_co = text2num(z_co)
 		return
 	if(href_list["send"])
-		telesend()
+		teleprep(0)
 		return
 	if(href_list["receive"])
-		telereceive()
+		teleprep(1)
 		return
 	if(href_list["recal"])
-		teles_left = rand(7,10)
+		if(telepad == null)
+			for(var/obj/machinery/telepad/T in range(src,10))
+				if(T.tele_id == tele_id)
+					telepad = T
+		if(!telepad)	return
+		var/teleturf = get_turf(telepad)
+		teles_left = rand(8,12)
 		x_off = rand(-10,10)
 		y_off = rand(-10,10)
-		for(var/obj/machinery/telepad/E in world)
-			var/L = get_turf(E)
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(5, 1, L)
-			s.start()
+		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		s.set_up(5, 1, teleturf)
+		s.start()
 		usr << "\blue Calibration successful."
 		return
