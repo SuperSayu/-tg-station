@@ -143,12 +143,8 @@
 					if(istype(A, /obj/structure))
 						if(istype(A, /obj/structure/closet))
 							teleportables += A
-							usr << "Teleportables added [A]"
 					else
 						teleportables += A
-						usr << "Teleportables added [A]"
-				else
-					usr << "Warning: [A] in blacklist"
 			for(var/atom/T in teleportables)
 				do_teleport(T, target, 0)
 			usr << "\blue Teleport successful."
@@ -158,12 +154,8 @@
 					if(istype(A, /obj/structure))
 						if(istype(A, /obj/structure/closet))
 							teleportables += A
-							usr << "Teleportables added [A]"
 					else
 						teleportables += A
-						usr << "Teleportables added [A]"
-				else
-					usr << "Warning: [A] in blacklist"
 			for(var/atom/T in teleportables)
 				do_teleport(T, tele, 0)
 			usr << "\blue Teleport successful."
