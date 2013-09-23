@@ -194,10 +194,12 @@
 	cast(mob/caster, mob/living/target) // todo flashy flash flash
 		check_dna_integrity(target)
 		if(!istype(target,/mob/living/carbon/brain)) // not brain, becomes a spooky scary skeleton
-			target.revive() //nonhumans come back to life normally
+
 			if(istype(target,/mob/living/carbon/human))
 				var/mob/living/carbon/human/H = target
-				if(H.dna && H.dna.mutantrace != "skeleton")
+
+				if(H.stat == 2 && H.dna && H.dna.mutantrace != "skeleton")
+					target.revive()
 					H.dna.mutantrace = "skeleton"
 					updateappearance(H)
 					inspire_loyalty(caster, H)
