@@ -106,6 +106,7 @@
 	throw_speed = 4
 	throw_range = 20
 	var/uses = 10
+	var/usesize = 1
 
 /obj/item/weapon/soap/nanotrasen
 	desc = "A Nanotrasen brand bar of soap. Smells of plasma."
@@ -120,7 +121,12 @@
 /obj/item/weapon/soap/syndie
 	desc = "An untrustworthy bar of soap. Smells of fear."
 	icon_state = "soapsyndie"
-	uses = 40
+	usesize = 0
+
+/obj/item/weapon/soap/borg
+	desc = "A very durable bar of robo-soap."
+	icon_state = "soapdeluxe"
+	usesize = 0
 
 /obj/item/weapon/bikehorn
 	name = "bike horn"

@@ -51,13 +51,15 @@
 				return
 
 		M.stop_pulling()
-		M << "\blue You slipped on the [name]!"
+		M << "\blue You slipped on the [name]! It disintegrates with a \i [magic_soundfx()]"
 		playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
 		M.Stun(4)
 		M.Weaken(2)
 		walk_rand(new src.type(loc),walk_delay)
 		while(prob(15))
 			walk_rand(new src.type(loc),walk_delay)
+		del src
+		return
 
 /*
  * Soap
@@ -94,7 +96,7 @@
 		for(var/obj/effect/decal/cleanable/C in target)
 			if(uses <= 0 || cleaned > 3) break
 			cleaned++
-			uses--
+			uses-=usesize
 			del C
 		if(cleaned > 0)
 			usr << "<span class='notice'>You clean \the [target.name].</span>"
@@ -103,7 +105,7 @@
 			del(src)
 	else if(istype(target,/obj/effect/decal/cleanable))
 		user << "<span class='notice'>You scrub \the [target.name] out.</span>"
-		src.uses--
+		uses-=usesize
 		del(target)
 		if(src.uses<=0)
 			user << "<span class='notice'>That's the last of this bar of soap.</span>"
@@ -113,7 +115,7 @@
 	else
 		user << "<span class='notice'>You clean \the [target.name].</span>"
 		target.clean_blood()
-		uses--
+		uses-=usesize
 		if(uses<=0)
 			user << "<span class='notice'>That's the last of this bar of soap.</span>"
 			del(src)
@@ -122,8 +124,8 @@
 /obj/item/weapon/soap/attack(mob/target as mob, mob/user as mob)
 	if(target && user && ishuman(target) && ishuman(user) && !target.stat && !user.stat && user.zone_sel &&user.zone_sel.selecting == "mouth" )
 		user.visible_message("\red \the [user] washes \the [target]'s mouth out with soap!")
-		src.uses--
-		if(src.uses<=0)
+		uses-=usesize
+		if(uses<=0)
 			user << "<span class='notice'>That's the last of this bar of soap.</span>"
 			del(src)
 		return
@@ -131,6 +133,13 @@
 	return
 /obj/item/weapon/soap/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I,/obj/item/weapon/kitchenknife) || istype(I,/obj/item/weapon/kitchen/utensil/knife) || istype(I,/obj/item/weapon/butch))
+
+		//no splitting infinite soap
+		if(usesize == 0)
+			user << "You try to split the soap in twain, but alas, it is too though."
+		return
+
+
 		//Split the soap in two.  Other bladed implements could do this, but it would be pretty awkward.  That's my excuse...
 		if(uses <= 5)
 			user << "You try to split the soap in twain, but end up destroying it."
