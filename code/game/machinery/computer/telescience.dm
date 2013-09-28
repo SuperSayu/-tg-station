@@ -139,21 +139,31 @@
 	switch(type)
 		if(0)
 			for(var/atom/A in tele)
-				if(!istype(A, /obj/machinery) && !istype(A, /obj/effect) && !istype(A, /mob/living/silicon/ai) && !istype(A, /obj/item/device/radio/intercom) && !istype(A, /obj/structure/closet/secure_closet/brig))
+				if(!istype(A, /obj/effect) && !istype(A, /mob/living/silicon/ai) && !istype(A, /obj/item/device/radio/intercom) && !istype(A, /obj/structure/closet/secure_closet/brig))
 					if(istype(A, /obj/structure))
-						if(istype(A, /obj/structure/closet))
-							teleportables += A
+						var/obj/structure/S = A
+						if(!S.anchored)
+							teleportables += S
+					else if(istype(A, /obj/machinery))
+						var/obj/machinery/M = A
+						if(!M.anchored)
+							teleportables += M
 					else
 						teleportables += A
 			for(var/atom/T in teleportables)
 				do_teleport(T, target, 0)
 			usr << "\blue Teleport successful."
 		if(1)
-			for(var/atom/A in tele)
-				if(!istype(A, /obj/machinery) && !istype(A, /obj/effect) && !istype(A, /mob/living/silicon/ai) && !istype(A, /obj/item/device/radio/intercom) && !istype(A, /obj/structure/closet/secure_closet/brig))
+			for(var/atom/A in target)
+				if(!istype(A, /obj/effect) && !istype(A, /mob/living/silicon/ai) && !istype(A, /obj/item/device/radio/intercom))
 					if(istype(A, /obj/structure))
-						if(istype(A, /obj/structure/closet))
-							teleportables += A
+						var/obj/structure/S = A
+						if(!S.anchored)
+							teleportables += S
+					else if(istype(A, /obj/machinery))
+						var/obj/machinery/M = A
+						if(!M.anchored)
+							teleportables += M
 					else
 						teleportables += A
 			for(var/atom/T in teleportables)
@@ -213,8 +223,7 @@
 	if(href_list["recal"])
 		if(telepad == null)
 			for(var/obj/machinery/telepad/T in range(src,10))
-				if(T.tele_id == tele_id)
-					telepad = T
+				telepad = T
 		if(!telepad)	return
 		var/teleturf = get_turf(telepad)
 		teles_left = rand(8,12)
