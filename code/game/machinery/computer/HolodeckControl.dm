@@ -374,7 +374,7 @@
 		if("cats")
 			holographic_items += new /mob/living/simple_animal/cat(T)
 		if("chicks")
-			holographic_items += new /mob/living/simple_animal/chick(T)
+			holographic_items += new /mob/living/simple_animal/chick{never_grow = 1}(T)
 		if("goats")
 			holographic_items += new /mob/living/simple_animal/hostile/retaliate/goat(T)
 		if("ghosts")

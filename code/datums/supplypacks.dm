@@ -682,15 +682,21 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	containertype = /obj/structure/closet/critter/corgi
 	containername = "corgi crate"
 /datum/supply_packs/organic/cat
-	name = "Cat crate"
+	name = "Cat Crate"
 	cost = 40
 	containertype = /obj/structure/closet/critter/cat
 	containername = "cat crate"
 /datum/supply_packs/organic/pug
-	name = "Pug crate"
+	name = "Pug Crate"
 	cost = 50
 	containertype = /obj/structure/closet/critter/pug
 	containername = "pug crate"
+/datum/supply_packs/organic/collars
+	name = "Pet Collars"
+	cost = 25
+	containertype = /obj/structure/closet/crate
+	contains = list(/obj/item/weapon/storage/box/collars,/obj/item/weapon/storage/box/collars,/obj/item/weapon/storage/box/collars)
+	containername = "pet supplies"
 
 ////// hippy gear
 

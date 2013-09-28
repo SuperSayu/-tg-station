@@ -178,6 +178,7 @@
 	attacktext = "kicks"
 	health = 1
 	var/amount_grown = 0
+	var/never_grow = 0
 	pass_flags = PASSTABLE | PASSGRILLE
 
 /mob/living/simple_animal/chick/New()
@@ -189,7 +190,7 @@
 	. =..()
 	if(!.)
 		return
-	if(!stat)
+	if(!stat && !never_grow)
 		amount_grown += rand(1,2)
 		if(amount_grown >= 100)
 			new /mob/living/simple_animal/chicken(src.loc)
