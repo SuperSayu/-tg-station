@@ -1142,9 +1142,10 @@ datum
 					M.heal_organ_damage(3,3)
 					M.adjustToxLoss(-3)
 					for(var/b in M.broken)
-						if(prob(2))
+						if(prob(7))
 							M << "<span class='notice'>You feel your broken [b] mend...</span>"
 							M.broken -= b
+							M.adjustBruteLoss(-5)
 				..()
 				return
 
@@ -1164,9 +1165,10 @@ datum
 					M.adjustToxLoss(-3)
 					M.status_flags &= ~DISFIGURED
 					for(var/b in M.broken)
-						if(prob(4))
+						if(prob(14))
 							M << "<span class='notice'>You feel your broken [b] mend...</span>"
 							M.broken -= b
+							M.adjustBruteLoss(-5)
 				..()
 				return
 

@@ -232,9 +232,6 @@
 		if("chest" in broken && prob(50)) return
 		if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell)) return
 
-		if(gasping)
-			gasping--
-
 		var/datum/gas_mixture/environment = loc.return_air()
 		var/datum/gas_mixture/breath
 		// HACK NEED CHANGING LATER
@@ -862,8 +859,9 @@
 					setHalLoss(99)
 
 			//Blood loss
-			if(getBruteLoss() >= 50 && prob(15))
-				adjustBruteLoss(3)
+			var/tot_damage = maxHealth-health
+			if(getBruteLoss() >= 50 && prob(15) && tot_damage<=105 && !paralysis)
+				adjustBruteLoss(rand(2,4))
 				var/turf/pos = get_turf(src)
 				pos.add_blood_floor(src)
 				playsound(pos, 'sound/effects/splat.ogg', 10, 1)
@@ -924,6 +922,9 @@
 
 			if(druggy)
 				druggy = max(druggy-1, 0)
+
+			if(gasping)
+				gasping--
 		return 1
 
 	proc/handle_regular_hud_updates()

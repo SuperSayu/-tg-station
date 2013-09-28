@@ -92,6 +92,16 @@
 		dat +=  "<div class='line'><div class='statusLabel'>\> Burn Severity:</div><div class='progressBar'><div style='width: [round(occupant.getFireLoss())]%;' class='progressFill bad'></div></div><div class='statusValue'>[round(occupant.getFireLoss())]%</div></div>"
 		dat +=  "<div class='line'><div class='statusLabel'>Body Temperature:</div><div class='statusValue'>[round(occupant.bodytemperature)]</div></div>"
 
+		for(var/bone in occupant.broken)
+			var/bone_name
+			if(bone == "chest")
+				bone_name = "ribs"
+			if(bone == "head")
+				bone_name = "skull"
+			if(bone != "chest" && bone != "head")
+				bone_name = bone
+			dat +=  "<div class='line'><span class='bad'>Broken [bone_name] detected.</span></div>"
+
 	var/temp_text = ""
 	if(air_contents.temperature > T0C)
 		temp_text = "<span class='bad'>[air_contents.temperature]</span>"
