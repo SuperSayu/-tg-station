@@ -38,6 +38,13 @@
 			return
 		else
 			user << "\red The plating is going to need some support."
+	if(istype(C,/obj/item/stack/sheet/rglass))
+		var/obj/structure/lattice/L = locate(/obj/structure/lattice, src)
+		if(L)
+			var/obj/item/stack/S = C
+			S.use(1)
+			ChangeTurf(/turf/simulated/floor/plating/glass)
+			return
 	return
 
 

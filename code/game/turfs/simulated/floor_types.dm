@@ -112,6 +112,30 @@
 		..()
 		name = "plating"
 
+/turf/simulated/floor/plating/glass
+	name = "glass plating"
+	icon_state = "glassplating"
+	icon_plating = "glassplating"
+	floor_tile = null
+	intact = 0
+	lighting_lumcount = 2 // transparent floor
+
+	New()
+		..()
+		underlays += image('icons/turf/space.dmi',icon_state = "[((x + y) ^ ~(x * y) + z) % 25]")
+
+/turf/simulated/floor/plating/airless/glass
+	name = "glass plating"
+	icon_state = "glassplating"
+	icon_plating = "glassplating"
+	floor_tile = null
+	intact = 0
+	lighting_lumcount = 2 // transparent floor
+
+	New()
+		..()
+		underlays += image('icons/turf/space.dmi',icon_state = "[((x + y) ^ ~(x * y) + z) % 25]")
+
 /turf/simulated/floor/bluegrid
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "bcircuit"
