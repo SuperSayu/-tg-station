@@ -136,8 +136,8 @@
 	req_access_txt = "46" // access_theatre
 	products = list(/obj/item/weapon/lipstick = 1, /obj/item/weapon/lipstick/black = 1, /obj/item/weapon/lipstick/jade = 1, /obj/item/weapon/lipstick/purple = 1,
 					/obj/item/weapon/razor = 1, /obj/item/toy/gun = 2, /obj/item/toy/ammo/gun = 4,/obj/item/weapon/gun/energy/laser/practice = 2,
-					/obj/item/toy/snappop = 10, /obj/item/device/violin = 1)
-	premium = list(/obj/item/clothing/under/actorsuit = 2)
+					/obj/item/toy/snappop = 10, /obj/item/device/violin = 1, /obj/item/clothing/gloves/ring/plastic/random = 3)
+	premium = list(/obj/item/clothing/under/actorsuit = 2,/obj/item/clothing/gloves/ring/gold = 2, /obj/item/clothing/gloves/ring/silver = 1)
 	contraband = list( /obj/item/toy/sword = 3, /obj/item/toy/crossbow = 2, /obj/item/toy/blink, /obj/item/toy/spinningtoy)
 
 // Modified version of previous

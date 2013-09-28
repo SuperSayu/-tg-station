@@ -136,10 +136,6 @@ Please contact me on #coderbus IRC. ~Carnie x
 		if(stealth)
 			icon = 'icons/mob/human.dmi'
 			icon_state = "body_lying_cloaked"
-			var/image/I	= overlays_lying[L_HAND_LAYER]
-			if(istype(I))	overlays += I
-			I 			= overlays_lying[R_HAND_LAYER]
-			if(istype(I))	overlays += I
 		else
 			icon_state = "[base_icon_state]_l"
 			for(var/thing in overlays_lying)

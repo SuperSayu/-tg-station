@@ -370,7 +370,8 @@
 		if(!prob(reliability))
 			var/turf/simulated/T = loc
 			if(istype(T) && T.air)
-				T.air.toxins++
+				T.air.toxins+= 0.5
+				air_update_turf()
 			if(!prob(reliability))
 				breakdown(src,reliability)
 		return

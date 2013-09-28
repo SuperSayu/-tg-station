@@ -22,9 +22,6 @@
 		return
 	return
 
-/obj/effect/portal/attack_ghost(mob/user as mob)
-	src.teleport(user)
-
 /obj/effect/portal/New(loc, turf/target, creator, lifespan=300)
 	portals += src
 	src.loc = loc

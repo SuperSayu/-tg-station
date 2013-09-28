@@ -10,7 +10,7 @@
 	castingmode = CAST_SPELL|CAST_SELF|CAST_MELEE
 
 	attack(atom/target, mob/caster)
-		activate(caster, target)
+		activate(caster, target) // always returns 0
 
 	activate(mob/caster, list/target = null)
 		var/lesser = 0
@@ -28,6 +28,7 @@
 			if(before_cast(caster,target))
 				cast(caster,target)
 				after_cast(caster,target,lesser)
+				return 1
 	after_cast(caster,target,lesser)
 		if(rechargable && lesser)
 			charge = chargemax / 2
@@ -94,6 +95,7 @@
 	visible_range = 0
 	range = 3
 
+	allow_stuncast = 1
 	incantation = "AULIE OXIN FIERA"
 	incant_volume = 1
 	castingmode = CAST_SPELL|CAST_SELF|CAST_MELEE
@@ -111,3 +113,36 @@
 
 			spawn
 				D.open()
+
+/obj/effect/knowspell/area/lock
+	name = "hold portal"
+	desc = "An old wizard trick for closing doors."
+
+	chargemax = 300
+	require_clothing = 0
+
+	visible_range = 1
+	range = 4
+
+	allow_stuncast = 1
+	incantation = "TERA LOCHA"
+	incant_volume =  1
+	castingmode = CAST_SPELL|CAST_SELF|CAST_MELEE
+
+	attack(atom/target, mob/caster)
+		return activate(caster, target) // return yes if cast
+
+
+	before_cast(mob/caster, list/target)
+		for(var/obj/machinery/door/D in target)
+			..()
+			return 1
+		return 0
+
+	cast(mob/caster, list/target)
+		for(var/obj/machinery/door/D in target)
+			spawn
+				D.close()
+				if(istype(D,/obj/machinery/door/airlock))
+					D:locked = 1
+					D.update_icon()

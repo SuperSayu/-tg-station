@@ -9,8 +9,20 @@
 	on_hit(var/atom/change)
 		wabbajack(change)
 
+/obj/item/projectile/magic/change
+	name = "bolt of change"
+	icon_state = "ice_1"
+	damage = 0
+	damage_type = BURN
+	nodamage = 1
+	flag = "energy"
 
-/obj/item/projectile/change/proc/wabbajack (mob/M as mob in living_mob_list)
+	on_hit(var/atom/change)
+		wabbajack(change)
+
+
+/obj/item/projectile/proc/wabbajack (mob/M as mob in living_mob_list)
+	if(istype(M,/mob/living/simple_animal/hostile/mimic)) return
 	if(istype(M, /mob/living) && M.stat != DEAD)
 		if(M.monkeyizing)	return
 		M.monkeyizing = 1

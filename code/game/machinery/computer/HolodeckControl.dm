@@ -307,6 +307,9 @@
 
 		for(var/item in holographic_items)
 			if(!(get_area(item) in linkedholodeck.related))
+				if(ismob(item) && emagged)
+					holographic_items -= item
+					continue
 				derez(item, 0)
 
 
@@ -430,9 +433,10 @@
 				new /mob/living/simple_animal/hostile/carp(L.loc)
 			if(L.name == "Holopet Spawn")
 				petspawn(L.loc)
-		for(var/mob/M in holographic_items)
+		for(var/mob/living/simple_animal/M in holographic_items)
 			step_rand(M)
 			step_rand(M)
+			M.renamable = 0
 
 /obj/machinery/computer/HolodeckControl/proc/emergencyShutdown()
 	if(!istype(target,/area/holodeck/source_plating))
@@ -520,7 +524,7 @@
 
 	New()
 		floor_tile.New() //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
-		src.icon_state = "speedspace_ew_[(x+rand(0,28))%14+1]"
+		src.icon_state = "speedspace_ew_[(x + 5*y + (y%2+1)*7)%15+1]"
 		..()
 
 

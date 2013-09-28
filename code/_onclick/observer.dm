@@ -12,9 +12,28 @@
 	else
 		loc = get_turf(A)
 
-/mob/dead/observer/ClickOn(var/atom/A)
+/mob/dead/observer/ClickOn(var/atom/A,var/params)
 	if(world.time <= next_move) return
 	next_move = world.time + 8
+
+	if(client.buildmode)
+		build_click(src, client.buildmode, params, A)
+		return
+
+	var/list/modifiers = params2list(params)
+	if("middle" in modifiers)
+		MiddleClickOn(A)
+		return
+	if("shift" in modifiers)
+		ShiftClickOn(A)
+		return
+	if("ctrl" in modifiers)
+		CtrlClickOn(A)
+		return
+	if("alt" in modifiers)
+		AltClickOn(A)
+		return
+
 	// You are responsible for checking config.ghost_interaction when you override this function
 	// Not all of them require checking, see below
 	A.attack_ghost(src)

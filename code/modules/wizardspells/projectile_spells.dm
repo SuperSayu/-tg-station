@@ -114,7 +114,7 @@
 
 	projectile_count = 1
 	projectile_spread = 0
-	projectile_type = /obj/item/projectile/change
+	projectile_type = /obj/item/projectile/magic/change
 
 	chargemax = 200
 	incantation = "TRUMAN STAR"
@@ -126,7 +126,7 @@
 
 	projectile_count = 1
 	projectile_spread = 0
-	projectile_type = /obj/item/projectile/animate
+	projectile_type = /obj/item/projectile/magic/animate
 
 	chargemax = 400
 	incantation = "FAN TA ZIA"

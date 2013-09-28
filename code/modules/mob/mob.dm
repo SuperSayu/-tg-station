@@ -658,11 +658,11 @@ note dizziness decrements automatically in the mob's Life() proc.
 		if(get_dist(listed_turf,src) > 1)
 			listed_turf = null
 		else
-			statpanel(listed_turf.name,listed_turf.name,listed_turf)
+			statpanel(listed_turf.name,null,listed_turf)
 			for(var/atom/A in listed_turf)
 				if(A.invisibility > see_invisible)
 					continue
-				statpanel(listed_turf.name,A.name,A)
+				statpanel(listed_turf.name,null,A)
 
 	list_wizspells()
 
@@ -712,8 +712,11 @@ note dizziness decrements automatically in the mob's Life() proc.
 		regenerate_icons()
 	else if( lying != lying_prev )
 		update_icons()
+		lying_change()
 
 	return canmove
+
+/mob/proc/lying_change()
 
 
 /mob/verb/eastface()

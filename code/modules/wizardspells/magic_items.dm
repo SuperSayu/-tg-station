@@ -238,8 +238,8 @@
 		if(!spell || !spell.cast_check(user)) return 0
 		if(proximity)
 			if(spell.castingmode & CAST_MELEE)
-				spell.attack(A,user)
-				return 1
+				return spell.attack(A,user)
+
 		else
 			if(spell.castingmode & CAST_RANGED)
 				spell.afterattack(A,user)

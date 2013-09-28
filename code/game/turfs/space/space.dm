@@ -43,8 +43,11 @@
 		if(L)
 			var/obj/item/stack/S = C
 			S.use(1)
+			del(L)
 			ChangeTurf(/turf/simulated/floor/plating/glass)
 			return
+		else
+			user << "\red The plating is going to need some support."
 	return
 
 

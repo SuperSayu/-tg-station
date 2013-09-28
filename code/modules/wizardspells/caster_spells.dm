@@ -7,6 +7,7 @@
 	require_clothing = 1
 	incantation = "SCYAR NILA"
 	incant_volume = 2
+	allow_stuncast = 1
 
 	chargemax = 600
 	var/turf/target_turf = null
@@ -56,23 +57,31 @@
 
 	require_clothing = 0
 	incant_volume = 0
-	chargemax = 20
+	chargemax = 35
 	prevent_centcom = 1
 	allow_stuncast = 1
+	castingmode = CAST_SPELL|CAST_SELF|CAST_MELEE
 
 	var/turf/target_turf = null
 
-	before_cast(var/mob/caster)
+	prepare(mob/caster)
+		activate(caster,caster)
+
+	attack(atom/target,mob/caster)
+		if(ismob(target))
+			activate(caster,target)
+
+	before_cast(var/mob/caster,var/mob/target)
 		..()
-		var/list/possible_turfs = teleport_filter(range(caster,6))
+		var/list/possible_turfs = teleport_filter(range(caster,6) - range(caster,1))
 		if(!possible_turfs.len)
 			caster << "\red The magic refuses to activate!"
 			return 0
 		target_turf = pick(possible_turfs)
 		return 1
-	cast(var/mob/caster)
-		var/atom/oldloc = caster.loc
-		caster.loc = target_turf
+	cast(var/mob/caster,var/mob/target)
+		var/atom/oldloc = target.loc
+		target.loc = target_turf
 		smoke_cloud(oldloc, get_dist(oldloc,target_turf),pick(0,0,0,1))
 		return 1
 

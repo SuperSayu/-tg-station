@@ -495,7 +495,7 @@
 		return
 	if (pulling.anchored)
 		return
-	if (pulling.Adjacent(src))
+	if (!Adjacent(pulling))
 		return
 	if (ismob(pulling))
 		var/mob/M = pulling

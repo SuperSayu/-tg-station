@@ -154,6 +154,7 @@
 	name = "book of Madness"
 	desc = "This book is well worn; it seems to have been read by many people."
 	spawn_spells = list(
+		/obj/effect/knowspell/area/lock,
 		/obj/effect/knowspell/summon/world/bananas,
 		/obj/effect/knowspell/summon/nearby/creature,
 		/obj/effect/knowspell/target/horsemask,
@@ -186,7 +187,6 @@
 	desc = "hehehe... HAHAHAHAHAHAHAHAHA"
 	spawn_spells = list(
 		/obj/effect/knowspell/summon/target/banana,
-		/obj/effect/knowspell/summon/world/bananas,
 		/obj/effect/knowspell/target/mutate/bad,
 		/obj/effect/knowspell/area/blind,
 		/obj/effect/knowspell/area/knock,

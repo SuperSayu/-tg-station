@@ -27,6 +27,8 @@
 
 
 	proc/accept(var/mob/M, var/mob/caster)
+		if(istype(M,/obj/item/organ/brain) || istype(M,/obj/item/device/soulstone))
+			M = locate(/mob/living) in M
 		if(!ismob(M)) return 0
 		if(!M.client && !pick_clientless)	// 1: No client
 			return 0
@@ -46,7 +48,7 @@
 		if(istype(M,/mob/dead))				// 4: Non-living (ghosts and brains)
 			return pick_ghost
 
-		if(istype(M,/mob/living/carbon/brain))
+		if(istype(M,/mob/living/carbon/brain) || istype(M,/mob/living/simple_animal/shade))
 			return pick_brain
 
 		if((M.stat & DEAD) && !pick_dead)	// 5: stat checks

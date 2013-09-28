@@ -62,7 +62,17 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 		var/uses = (rechargable?"[charge/10] second\s":"[charge] uses")
 		var/descblock = ""
 		if(add_description)
-			descblock = "<i>[desc]</i><br>"
+			if(incant_volume)
+				descblock += "Verbal component.  "
+			if(require_clothing)
+				descblock += "Requires wizard garb.  "
+			else
+				descblock += "Robeless spell.  "
+			if(!allow_stuncast)
+				descblock += "Cannot cast while stunned.  "
+			if(prevent_centcom)
+				descblock += "Cannot cast on the wizard sanctuary / in hyperspace."
+			descblock += "<br><i>[desc]</i><br>"
 
 		return "<h4>[name] [castblock]([uses]) [learnblock] [removeblock]</h4>[descblock]"
 
@@ -280,7 +290,7 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 	proc/teleport_filter(var/list/possible_turfs)
 		var/list/result = list()
 		turf_search:
-			for(var/turf/T in possible_turfs)
+			for(var/turf/simulated/T in possible_turfs)
 				if(T.density) continue
 				if(T.flags&NOJAUNT) continue
 				for(var/atom/A in T)
@@ -323,7 +333,7 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 
 	// These are for enchanted items.  Whatever you do with the enchanted item, it should call the same proc here.
 	// The spell thrower also uses the same system.
-	proc/attack(mob/living/M as mob, mob/living/caster as mob, def_zone) // note for my purposes attack here does not just mean mobs, be advised
+	proc/attack(atom/target as mob, mob/living/caster as mob, def_zone) // note for my purposes attack here does not just mean mobs, be advised
 		return
 	proc/attack_self(mob/living/caster as mob)
 		prepare(caster)

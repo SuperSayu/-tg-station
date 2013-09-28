@@ -37,7 +37,7 @@
 		return
 	next_click = world.time + 1
 
-	if(client.buildmode) // comes after object.Click to allow buildmode gui objects to be clicked
+	if(client.buildmode)
 		build_click(src, client.buildmode, params, A)
 		return
 
@@ -89,50 +89,65 @@
 
 		return
 
+	var/d = get_dist(src,A)
+
 	// operate two levels deep here (item in backpack in src; NOT item in box in backpack in src)
-	if(A == loc || (A in loc) || (A in contents) || (A.loc in contents))
+	if(d < 3) // 3 only because we have at least one two-tile object in the game
+		if(!d && (A == loc || A.loc in (contents + src + loc) ))
 
-		// faster access to objects already on you
-		if(A in contents)
-			next_move = world.time + 6 // on your person
-		else
-			next_move = world.time + 8 // in a box/bag or in your square
+			// faster access to objects already on you
+			if(A in contents)
+				next_move = world.time + 6 // on your person
+			else
+				next_move = world.time + 8 // in a box/bag or in your square
 
-		// No adjacency needed
-		if(W)
-			if(W.flags&USEDELAY)
-				next_move += 5
-
-			var/resolved = A.attackby(W,src)
-			if(!resolved && A && W)
-				W.afterattack(A,src,1,params) // 1 indicates adjacency
-		else
-			UnarmedAttack(A)
-		return
-
-	if(!isturf(loc)) // This is going to stop you from telekinesing from inside a closet, but I don't shed many tears for that
-		return
-
-	if(isturf(A) || isturf(A.loc) || (A.loc && isturf(A.loc.loc)))
-		next_move = world.time + 10
-
-		if(A.Adjacent(src)) // see adjacent.dm
+			// No adjacency needed
 			if(W)
 				if(W.flags&USEDELAY)
 					next_move += 5
 
-				// Return 1 in attackby() to prevent afterattack() effects (when safely moving items for example)
 				var/resolved = A.attackby(W,src)
 				if(!resolved && A && W)
-					W.afterattack(A,src,1,params) // 1: clicking something Adjacent
+					W.afterattack(A,src,1,params) // 1 indicates adjacency
 			else
-				UnarmedAttack(A, 1)
+				UnarmedAttack(A)
 			return
-		else // non-adjacent click
-			if(W)
-				W.afterattack(A,src,0,params) // 0: not Adjacent
-			else
-				RangedAttack(A, params)
+
+		if(!isturf(loc)) // This is going to stop you from telekinesing from inside a closet, but I don't shed many tears for that
+			return
+
+
+		var/list/turf_potentials = list(A)
+		if(A.loc) turf_potentials = list(A, A.loc, A.loc.loc)	// If A is a turf, A is in a turf, or A's location is in a turf:
+														// Allows us to click turfs, exposed objects, and things in a storage box
+		if(locate(/turf) in turf_potentials)
+			next_move = world.time + 10
+
+			if(A.Adjacent(src)) // see adjacent.dm
+				if(W)
+					if(W.flags&USEDELAY)
+						next_move += 5
+
+					// Return 1 in attackby() to prevent afterattack() effects (when safely moving items for example)
+					var/resolved = A.attackby(W,src)
+					if(!resolved && A && W)
+						W.afterattack(A,src,1,params) // 1: clicking something Adjacent
+				else
+					UnarmedAttack(A, 1)
+				return
+			else // non-adjacent click
+				if(W)
+					W.afterattack(A,src,0,params) // 0: not Adjacent
+				else
+					RangedAttack(A, params)
+	else // non-adjacent click
+		if(!isturf(loc)) // This is going to stop you from telekinesing from inside a closet, but I don't shed many tears for that
+			return
+
+		if(W)
+			W.afterattack(A,src,0,params) // 0: not Adjacent
+		else
+			RangedAttack(A, params)
 
 	return
 
@@ -213,6 +228,8 @@
 			user.listed_turf = null
 		else
 			user.listed_turf = T
+			if(user.client)
+				user.client.statpanel = T.name
 	return
 
 // this was moved mostly in order to avoid use of the : path operator

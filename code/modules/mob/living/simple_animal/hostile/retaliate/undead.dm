@@ -1,9 +1,10 @@
 // This is important
 /mob/living/attack_ghost(mob/dead/observer/user)
-	if(prob(80)) return
-
+	if(prob(80)) return ..()
+	var/found = 0
 	for(var/mob/living/simple_animal/hostile/retaliate/R in range(4,src))
-		if(R.faction != "undead" || prob(50)) continue
+		if(R.faction != "undead" || R == src || prob(50)) continue
+		found = 1
 		R.enemies ^= src
 		if(src in R.enemies)
 			R.visible_message("[R]'s head swivels eerily towards [src].")
@@ -11,6 +12,8 @@
 			R.visible_message("[R] stares at [src] for a minute before turning away.")
 			if(R.target == src)
 				R.target = null
+	if(!found)
+		return ..()
 
 
 /mob/living/simple_animal/hostile/retaliate/ghost
