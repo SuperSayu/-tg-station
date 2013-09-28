@@ -640,6 +640,22 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 		if(pestlevel >= 5) // Visual aid for those blind
 			user << "The [src] is filled with tiny worms!"
 		user << "" // Empty line for readability.
+/obj/machinery/hydroponics/attack_ghost(mob/user as mob)
+	if(planted)
+		user << "[src] has \blue [myseed.plantname] \black planted."
+		if(dead)
+			user << "It's dead."
+		else if(health <= (myseed.endurance / 2))
+			user << "The plant looks unhealthy."
+	else
+		user << "[src] is empty."
+	user << "Water: [waterlevel]/100"
+	user << "Nutrient: [nutrilevel]/10"
+	if(weedlevel >= 5) // Visual aid for those blind
+		user << "The [src] is filled with weeds!"
+	if(pestlevel >= 5) // Visual aid for those blind
+		user << "The [src] is filled with tiny worms!"
+	user << "" // Empty line for readability.
 
 /obj/item/seeds/proc/harvest(mob/user = usr)
 	var/obj/machinery/hydroponics/parent = loc //for ease of access

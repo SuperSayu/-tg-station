@@ -789,6 +789,7 @@
 #include "code\modules\events\spacevine.dm"
 #include "code\modules\events\spider_infestation.dm"
 #include "code\modules\events\spontaneous_appendicitis.dm"
+#include "code\modules\events\spooky.dm"
 #include "code\modules\events\vent_clog.dm"
 #include "code\modules\events\weightless.dm"
 #include "code\modules\events\wormholes.dm"

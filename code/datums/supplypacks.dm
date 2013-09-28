@@ -516,6 +516,7 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 					/obj/item/weapon/reagent_containers/glass/bottle/liver_enhance_virion,
 					/obj/item/weapon/reagent_containers/glass/bottle/fake_gbs,
 					/obj/item/weapon/reagent_containers/glass/bottle/magnitis,
+					/obj/item/weapon/reagent_containers/glass/bottle/lizardvirus,
 					/obj/item/weapon/reagent_containers/glass/bottle/pierrot_throat,
 					/obj/item/weapon/reagent_containers/glass/bottle/brainrot,
 					/obj/item/weapon/reagent_containers/glass/bottle/hullucigen_virion,
