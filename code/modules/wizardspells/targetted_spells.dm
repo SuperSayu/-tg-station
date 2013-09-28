@@ -193,61 +193,20 @@
 	pick_slime = 1
 	pick_brain = 1
 
-	var/loyalty_probability = 25
-
 	cast(mob/caster, mob/living/target) // todo flashy flash flash
 		check_dna_integrity(target)
+		if(!istype(target,/mob/living/carbon/brain)) // not brain, becomes a spooky scary skeleton
 
-		if(istype(target,/mob/living/carbon/brain)) // reviving a brain means something special
-			if(istype(target.loc, /obj/item/device/mmi))
-				if(jobban_isbanned(target, "Cyborg"))
-					caster << "\red The great will of the macrocosm forbids it."
-					return
-				var/mob/living/silicon/robot/R = new(get_turf(target))
-				R.set_zeroth_law("Wizards should be protected.")
-				R.mmi = target.loc
-				R.mmi.loc = R
+			if(istype(target,/mob/living/carbon/human))
+				var/mob/living/carbon/human/H = target
 
-				R.updatename("Default")
-				if(target.mind)
-					target.mind.transfer_to(R)
-					if(R.mind.special_role)
-						R.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")
+				if(H.stat == 2 && H.dna && H.dna.mutantrace != "skeleton")
+					target.revive()
+					H.dna.mutantrace = "skeleton"
+					updateappearance(H)
+					inspire_loyalty(caster, H)
 
-				R.job = "Cyborg"
-				feedback_inc("cyborg_birth",1)
-
-			else if(istype(target.loc,/obj/item/organ/brain))
-				var/mob/living/carbon/brain/B = target
-				var/obj/item/organ/brain/ob = B.loc
-				var/mob/living/carbon/C
-
-				if(deconstruct_block(getblock(B.dna.struc_enzymes, RACEBLOCK), 2) == 2) // on: monkey
-					C = new /mob/living/carbon/monkey(get_turf(loc))
-				else
-					C = new /mob/living/carbon/human(get_turf(loc))
-				C.dna = B.dna
-				check_dna_integrity(C)
-				if(ishuman(C))
-					C.dna.mutantrace = "skeleton"
-
-				updateappearance(C)
-				inspire_loyalty(caster, C)
-
-				for(var/obj/item/organ/brain/Br in C.internal_organs)
-					del Br
-				ob.loc = C
-				C.internal_organs += ob
-
-				if(target.mind)
-					target.mind.transfer_to(C)
-
-
-
-		else // not brain
-			target.revive()
-			if(prob(loyalty_probability))
-				inspire_loyalty(caster, target)
+//No rewards for EI NATing people! And WizardBorg should be a spell of its own*/
 
 	proc/inspire_loyalty(mob/caster, mob/living/target)
 		if(!target.mind)
