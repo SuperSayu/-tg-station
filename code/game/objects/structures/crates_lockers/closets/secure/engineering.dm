@@ -29,6 +29,7 @@
 		new /obj/item/clothing/mask/gas(src)
 		new /obj/item/device/multitool(src)
 		new /obj/item/device/flash(src)
+		new /obj/item/clothing/gloves/ring(src)
 		return
 
 

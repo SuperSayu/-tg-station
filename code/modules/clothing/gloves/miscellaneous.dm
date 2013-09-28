@@ -49,6 +49,7 @@
 	item_state = "lgloves"
 	siemens_coefficient = 0.30
 	permeability_coefficient = 0.01
+	print_clarity = 25
 	color="white"
 
 	cmo

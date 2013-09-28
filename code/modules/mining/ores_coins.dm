@@ -146,7 +146,20 @@
 		overlays = list()
 		string_attached = null
 		user << "\blue You detach the string from the coin."
-	else ..()
+	else if(istype(W,/obj/item/weapon/weldingtool))
+		var/obj/item/weapon/weldingtool/WT = W
+		if(WT.welding && WT.remove_fuel(0, user))
+			var/typelist = list("iron" = /obj/item/clothing/gloves/ring,
+								"silver" = /obj/item/clothing/gloves/ring/silver,
+								"gold" = /obj/item/clothing/gloves/ring/gold,
+								"plasma" = /obj/item/clothing/gloves/ring/plasma,
+								"uranium" = /obj/item/clothing/gloves/ring/uranium)
+			var/typekey = typelist[cmineral]
+			if(ispath(typekey))
+				user << "\blue You make [src] into a ring."
+				new typekey(get_turf(loc))
+				del src
+		..()
 
 /obj/item/weapon/coin/attack_self(mob/user as mob)
 	if(cooldown < world.time - 15)

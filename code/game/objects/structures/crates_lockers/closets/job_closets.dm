@@ -95,3 +95,5 @@
 	new /obj/item/clothing/suit/lawyer/purpjacket(src)
 	new /obj/item/clothing/shoes/brown(src)
 	new /obj/item/clothing/shoes/black(src)
+	if(prob(25))
+		new /obj/item/clothing/gloves/ring/gold(src)

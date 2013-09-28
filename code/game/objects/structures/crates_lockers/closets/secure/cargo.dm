@@ -36,6 +36,7 @@
 		new /obj/item/clothing/shoes/brown(src)
 		new /obj/item/device/radio/headset/headset_cargo(src)
 		new /obj/item/clothing/gloves/black(src)
+		new /obj/item/clothing/gloves/ring/plasma{stud=1}(src)
 //		new /obj/item/weapon/cartridge/quartermaster(src)
 		new /obj/item/clothing/suit/fire/firefighter(src)
 		new /obj/item/weapon/tank/emergency_oxygen(src)

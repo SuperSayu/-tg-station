@@ -100,10 +100,9 @@ atom/proc/add_fibers(mob/living/carbon/human/M)
 				H.gloves.add_fingerprint(M)
 
 			//Deal with gloves the pass finger/palm prints.
-			if(H.gloves != src)
-				if(prob(75) && istype(H.gloves, /obj/item/clothing/gloves/latex))
-					return 0
-				else if(H.gloves && !istype(H.gloves, /obj/item/clothing/gloves/latex))
+			if(H.gloves != src && H.gloves)
+				var/obj/item/clothing/gloves/G = H.gloves
+				if(istype(G) && !prob(G.print_clarity))
 					return 0
 
 		//More adminstuffz

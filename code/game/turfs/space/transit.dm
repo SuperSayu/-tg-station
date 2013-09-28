@@ -7,6 +7,9 @@
 
 /turf/space/transit/north // moving to the north
 
+	New()
+		..()
+		icon_state = "speedspace_ns_[(y+((x*(x+1))^(~x)))%15+1]"
 	pushdirection = SOUTH  // south because the space tile is scrolling south
 
 	//IF ANYONE KNOWS A MORE EFFICIENT WAY OF MANAGING THESE SPRITES, BE MY GUEST.
@@ -42,6 +45,9 @@
 		icon_state = "speedspace_ns_15"
 
 /turf/space/transit/east // moving to the east
+	New()
+		..()
+		icon_state = "speedspace_ew_[(x+((y*(y+1))^(~y)))%15+1]"
 
 	pushdirection = WEST
 
