@@ -225,7 +225,7 @@ emp_act
 		if(I.force > 10 || I.force >= 5 && prob(33))
 			forcesay(hit_appends)	//forcesay checks stat already.
 
-	var/breakchance = (I.force / 5) * I.w_class-1
+	var/breakchance = (I.force / 5) * (I.w_class-1)
 	//src << "\red [breakchance]% chance of breaking."
 	if(I.damtype == BRUTE && I.w_class > 1)
 		// sticks and stones will break your bones
