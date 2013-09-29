@@ -1283,10 +1283,15 @@ datum
 		morphine
 			name = "Morphine"
 			id = "morphine"
-			description = "A drug that relieves pain but does not heal any damage. It will prevent limping and adverse effects caused by the pain of having a broken bone."
+			description = "A drug that relieves pain. It will prevent limping and adverse effects caused by the pain of having a broken bone."
 			reagent_state = LIQUID
 			color = "#EEEEEE"
 
+			on_mob_life(var/mob/living/M as mob)
+				if(!M) M = holder.my_atom
+				M.adjustHalLoss(-5);
+				..()
+				return
 //////////////////////////Poison stuff///////////////////////
 
 		toxin

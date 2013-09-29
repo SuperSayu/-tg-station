@@ -35,7 +35,7 @@ emp_act
 				return -1 // complete projectile permutation
 
 	if(istype(P, /obj/item/projectile/bullet))
-		gasping = 2
+		forcesay(hit_appends)
 
 	if(check_shields(P.damage, "the [P.name]"))
 		P.on_hit(src, 2)
@@ -125,24 +125,26 @@ emp_act
 		if(arm == l_hand && "left arm" in user.broken)
 			user << "\red You painfully dislodge your broken left arm!"
 			user.emote("scream")
-			user.Stun(2)
-			user.Weaken(2)
+			//user.Stun(2)
+			//user.Weaken(2)
 			var/datum/limb/larm = get_organ("l_arm")
 			user.apply_damage(rand(2,7), BRUTE, larm)
 			playsound(user.loc, 'sound/weapons/pierce.ogg', 25)
 			visible_message("<span class='warning'>[user] has attempted to attack [src] with [I]!</span>")
-			user.drop_item()
+			if(I && I.w_class == 1)
+				user.drop_item()
 			return 0
 		else if(arm == r_hand && "right arm" in user.broken)
 			user << "\red You painfully dislodge your broken right arm!"
 			user.emote("scream")
-			user.Stun(2)
-			user.Weaken(2)
+			//user.Stun(2)
+			//user.Weaken(2)
 			var/datum/limb/rarm = get_organ("r_arm")
 			user.apply_damage(rand(2,7), BRUTE, rarm)
 			playsound(user.loc, 'sound/weapons/pierce.ogg', 25)
 			visible_message("<span class='warning'>[user] has attempted to attack [src] with [I]!</span>")
-			user.drop_item()
+			if(I && I.w_class == 1)
+				user.drop_item()
 			return 0
 
 	if(I.attack_verb.len)
@@ -222,10 +224,8 @@ emp_act
 
 		if(I.force > 10 || I.force >= 5 && prob(33))
 			forcesay(hit_appends)	//forcesay checks stat already.
-		if(I.force >= 10 && I.w_class >= 4 && prob(66))
-			gasping = 1
 
-	var/breakchance = (I.force / 4) * I.w_class
+	var/breakchance = (I.force / 5) * I.w_class-1
 	//src << "\red [breakchance]% chance of breaking."
 	if(I.damtype == BRUTE && I.w_class > 1)
 		// sticks and stones will break your bones
@@ -235,10 +235,9 @@ emp_act
 		switch(hit_area)
 			if("head")
 				hit_name = "skull"
-				breakchance /= 4
+				breakchance /= 2
 			if("chest")
 				hit_name = "ribs"
-				breakchance /= 2
 		if(!hit_name)
 			hit_name = hit_area
 			breakchance *= 1.5

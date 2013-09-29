@@ -153,7 +153,7 @@
 	var/shielded = 0
 	var/b_loss = null
 	var/f_loss = null
-	var/break_chance = 35
+	var/break_chance = 0
 
 	switch (severity)
 		if (1.0)
@@ -171,7 +171,7 @@
 		if (2.0)
 			if (!shielded)
 				b_loss += 60
-				break_chance += 35
+				break_chance += 10
 			f_loss += 60
 
 			if (prob(getarmor(null, "bomb")))
@@ -186,7 +186,7 @@
 
 		if(3.0)
 			b_loss += 15
-			break_chance += 10
+			break_chance += 25
 			if (prob(getarmor(null, "bomb")))
 				b_loss = b_loss/2
 			if (!istype(ears, /obj/item/clothing/ears/earmuffs))

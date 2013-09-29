@@ -7,6 +7,7 @@
 	use_power = 1
 	idle_power_usage = 2
 	active_power_usage = 50
+	var/tele_id = "placeholder"
 
 /obj/machinery/telepad_cargo
 	name = "cargo telepad"
