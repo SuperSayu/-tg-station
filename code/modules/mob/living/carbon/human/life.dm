@@ -229,7 +229,6 @@
 	proc/breathe()
 
 		if(reagents.has_reagent("lexorin")) return
-		if("chest" in broken && prob(30)) return
 		if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell)) return
 
 		var/datum/gas_mixture/environment = loc.return_air()
@@ -1243,11 +1242,16 @@
 			mind.changeling.regenerate()
 
 	proc/handle_bones()
-		if(dna && (dna.mutantrace == "slime" || dna.mutantrace == "plant"))
+		for(var/datum/limb/temp in organs)
+			if(temp.broken)
+				if(dna && (dna.mutantrace == "slime" || dna.mutantrace == "plant"))
+					temp.mendbone()
 			// ugly hack to stop slimepeople and plantpeople from breaking their nonexistant bones
-			broken = list()
-		if("head" in broken && prob(15) && getBrainLoss()<30)
-			adjustBrainLoss(1)
+			if(temp.name == "head" && prob(15) && getBrainLoss()<31)
+				adjustBrainLoss(1)
+
+			if(temp.name == "chest" && prob(35))
+				gasping++
 
 #undef HUMAN_MAX_OXYLOSS
 #undef HUMAN_CRIT_MAX_OXYLOSS

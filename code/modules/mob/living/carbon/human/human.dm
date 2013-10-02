@@ -196,6 +196,7 @@
 				Paralyse(10)
 
 	var/update = 0
+	var/broke = 0
 	for(var/datum/limb/temp in organs)
 		switch(temp.name)
 			if("head")
@@ -210,29 +211,12 @@
 				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05)
 			if("r_leg")
 				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05)
-
-	var/list/bones = list("chest", "head", "left arm", "right arm", "left leg", "right leg")
-	for(var/bone in bones)
-		if(!bone in broken && prob(break_chance))
-			broken += bone
-			playsound(src, 'sound/weapons/pierce.ogg', 50)
-			if(bone == "chest")
-				bone = "ribs"
-			else if(bone == "head")
-				bone = "skull"
-			var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
-			if(bone != "ribs")
-				visible_message("<span class='danger'>[src]'s [bone] breaks with a [breaknoise]!</span>", \
-								"<span class='userdanger'>Your [bone] breaks with a [breaknoise]!</span>")
-			else
-				visible_message("<span class='danger'>[src]'s [bone] break with a [breaknoise]!</span>", \
-								"<span class='userdanger'>Your [bone] break with a [breaknoise]!</span>")
-			if(break_chance >= 3)
-				break_chance -= 3
-			else
-				break_chance = 0
+		if(prob(break_chance))
+			broke |= temp.breakbone()
 
 	if(update)	update_damage_overlays(0)
+	if(broke)
+		playsound(src, 'sound/weapons/pierce.ogg', 50)
 
 /mob/living/carbon/human/blob_act()
 	if(stat == 2)	return
@@ -240,16 +224,6 @@
 	var/datum/limb/affecting = get_organ(ran_zone(dam_zone))
 	apply_damage(rand(20,30), BRUTE, affecting, run_armor_check(affecting, "melee"))
 	show_message("\red The blob attacks your [affecting]!")
-	if(prob(rand(5,10)))
-		broken += affecting
-		playsound(src, 'sound/weapons/pierce.ogg', 50)
-		var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
-		if(affecting != "chest")
-			visible_message("<span class='danger'>[src]'s [affecting] breaks with a [breaknoise]!</span>", \
-							"<span class='userdanger'>Your [affecting] breaks with a [breaknoise]!</span>")
-		else
-			visible_message("<span class='danger'>[src]'s [affecting] break with a [breaknoise]!</span>", \
-							"<span class='userdanger'>Your [affecting] break with a [breaknoise]!</span>")
 	return
 
 /mob/living/carbon/human/meteorhit(O as obj)
@@ -266,16 +240,7 @@
 			if(affecting.take_damage((istype(O, /obj/effect/meteor/small) ? 10 : 25), 30))
 				update_damage_overlays(0)
 		updatehealth()
-		if(!affecting in broken) // there's no avoiding it, you got hit by a fucking meteor
-			playsound(src, 'sound/weapons/pierce.ogg', 50)
-			var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
-			if(affecting != "chest")
-				visible_message("<span class='danger'>[src]'s [affecting] breaks with a [breaknoise]!</span>", \
-								"<span class='userdanger'>Your [affecting] breaks with a [breaknoise]!</span>")
-			else
-				affecting = "ribs"
-				visible_message("<span class='danger'>[src]'s [affecting] break with a [breaknoise]!</span>", \
-								"<span class='userdanger'>Your [affecting] break with a [breaknoise]!</span>")
+
 	return
 
 

@@ -8,6 +8,7 @@
 	var/brute_dam = 0
 	var/burn_dam = 0
 	var/max_damage = 0
+	var/broken = 0
 
 /datum/limb/chest
 	name = "chest"
@@ -130,6 +131,32 @@
 		return 1
 	return 0
 
+/datum/limb/proc/breakbone()
+	if(broken)
+		return 0
+
+	/var/bonename = getBoneName()
+	var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
+	visible_message("<span class='danger'>[src]'s [bonename] breaks with a [breaknoise]!</span>", \
+						"<span class='userdanger'>Your [bonename] breaks with a [breaknoise]!</span>")
+	broken = 1
+
+	return 1
+
+/datum/limb/proc/mendbone()
+	if(!broken)
+		return
+
+	broken = 0
+
+	/var/bonename = getBoneName()
+	if(bonename == "chest")
+		bonename = "ribs"
+	else if(bonename == "head")
+		bonename = "skull"
+	src << "<span class='notice'>Your feel your broken [bonename] mend...</span>"
+
+
 //Returns a display name for the organ
 /datum/limb/proc/getDisplayName()
 	switch(name)
@@ -137,4 +164,14 @@
 		if("r_leg")		return "right leg"
 		if("l_arm")		return "left arm"
 		if("r_arm")		return "right arm"
+		else			return name
+
+/datum/limb/proc/getBoneName()
+	switch(name)
+		if("l_leg")		return "left leg"
+		if("r_leg")		return "right leg"
+		if("l_arm")		return "left arm"
+		if("r_arm")		return "right arm"
+		if("chest")		return "ribcage"
+		if("head")		return "skull"
 		else			return name

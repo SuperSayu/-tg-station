@@ -120,32 +120,25 @@ emp_act
 		return 0
 
 	// Broken arms are no good for combat!
-	var/arm = user.get_active_hand()
+	var/hand = user.get_active_hand()
 	if(!user.reagents.has_reagent("morphine") && prob(35))
-		if(arm == l_hand && "left arm" in user.broken)
-			user << "\red You painfully dislodge your broken left arm!"
-			user.emote("scream")
-			//user.Stun(2)
-			//user.Weaken(2)
-			var/datum/limb/larm = get_organ("l_arm")
-			user.apply_damage(rand(2,7), BRUTE, larm)
-			playsound(user.loc, 'sound/weapons/pierce.ogg', 25)
-			visible_message("<span class='warning'>[user] has attempted to attack [src] with [I]!</span>")
-			if(I && I.w_class == 1)
-				user.drop_item()
-			return 0
-		else if(arm == r_hand && "right arm" in user.broken)
-			user << "\red You painfully dislodge your broken right arm!"
-			user.emote("scream")
-			//user.Stun(2)
-			//user.Weaken(2)
-			var/datum/limb/rarm = get_organ("r_arm")
-			user.apply_damage(rand(2,7), BRUTE, rarm)
-			playsound(user.loc, 'sound/weapons/pierce.ogg', 25)
-			visible_message("<span class='warning'>[user] has attempted to attack [src] with [I]!</span>")
-			if(I && I.w_class == 1)
-				user.drop_item()
-			return 0
+		var/datum/limb/arm = null
+		if(hand == l_hand)
+			arm = get_organ("l_arm")
+
+		if(hand == r_hand)
+			arm = get_organ("r_arm")
+
+			if(arm && arm.broken)
+				var/bonename = arm.getBoneName()
+				user << "\red You painfully dislodge your broken [bonename]!"
+				user.apply_damage(rand(1,3), HALLOSS, arm)
+				playsound(user.loc, 'sound/weapons/pierce.ogg', 25)
+				visible_message("<span class='warning'>[user] has attempted to attack [src] with [I]!</span>")
+				user.emote("scream")
+				if(I && I.w_class == 1)
+					user.drop_item()
+				return 0
 
 	if(I.attack_verb.len)
 		visible_message("<span class='danger'>[src] has been [pick(I.attack_verb)] in the [hit_area] with [I] by [user]!</span>", \
@@ -225,34 +218,8 @@ emp_act
 		if(I.force > 10 || I.force >= 5 && prob(33))
 			forcesay(hit_appends)	//forcesay checks stat already.
 
-	var/breakchance = (I.force / 5) * (I.w_class-1)
+	var/breakchance = (I.force / 5) * I.w_class
 	//src << "\red [breakchance]% chance of breaking."
-	if(I.damtype == BRUTE && I.w_class > 1)
+	if(I.damtype == BRUTE && I.w_class > 1 && prob(breakchance))
 		// sticks and stones will break your bones
-		if(hit_area in broken)
-			return
-		var/hit_name
-		switch(hit_area)
-			if("head")
-				hit_name = "skull"
-				breakchance /= 2
-			if("chest")
-				hit_name = "ribs"
-		if(!hit_name)
-			hit_name = hit_area
-			breakchance *= 1.5
-		if(HULK in user.mutations)
-			// HULK SMASH
-			breakchance *= 2
-		if(armor >= 2)
-			return
-		else if(prob(breakchance))
-			broken += hit_area
-			playsound(src, 'sound/weapons/pierce.ogg', 50)
-			var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
-			if(hit_area != "chest")
-				visible_message("<span class='danger'>[src]'s [hit_name] breaks with a [breaknoise]!</span>", \
-								"<span class='userdanger'>Your [hit_name] breaks with a [breaknoise]!</span>")
-			else
-				visible_message("<span class='danger'>[src]'s [hit_name] break with a [breaknoise]!</span>", \
-								"<span class='userdanger'>Your [hit_name] break with a [breaknoise]!</span>")
+		affecting.breakbone()
