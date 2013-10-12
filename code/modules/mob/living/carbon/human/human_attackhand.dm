@@ -84,7 +84,7 @@
 
 			if(!M.reagents.has_reagent("morphine") && prob(65))
 				for(var/datum/limb/temp in M.organs)
-					/var/bonename = temp.getBoneName()
+					var/bonename = temp.getBoneName()
 					if(temp.broken && bonename !="ribcage" && temp!= "skull")
 
 						if((!lying && (bonename == "left arm" || bonename == "right arm")) || (lying && (bonename == "left leg" || bonename == "right leg")))

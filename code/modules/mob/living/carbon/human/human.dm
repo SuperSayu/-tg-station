@@ -212,7 +212,7 @@
 			if("r_leg")
 				update |= temp.take_damage(b_loss * 0.05, f_loss * 0.05)
 		if(prob(break_chance))
-			broke |= temp.breakbone()
+			broke |= temp.breakbone(src)
 
 	if(update)	update_damage_overlays(0)
 	if(broke)

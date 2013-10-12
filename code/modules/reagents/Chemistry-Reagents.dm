@@ -1141,10 +1141,9 @@ datum
 					M.adjustOxyLoss(-3)
 					M.heal_organ_damage(3,3)
 					M.adjustToxLoss(-3)
-					for(var/b in M.broken)
+					for(var/datum/limb/temp in M.organs)
 						if(prob(7))
-							M << "<span class='notice'>You feel your broken [b] mend...</span>"
-							M.broken -= b
+							temp.mendbone()
 							M.adjustBruteLoss(-5)
 				..()
 				return
@@ -1164,11 +1163,11 @@ datum
 					M.heal_organ_damage(3,3)
 					M.adjustToxLoss(-3)
 					M.status_flags &= ~DISFIGURED
-					for(var/b in M.broken)
+					for(var/datum/limb/temp in M.organs)
 						if(prob(14))
-							M << "<span class='notice'>You feel your broken [b] mend...</span>"
-							M.broken -= b
+							temp.mendbone()
 							M.adjustBruteLoss(-5)
+
 				..()
 				return
 

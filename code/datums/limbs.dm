@@ -131,30 +131,30 @@
 		return 1
 	return 0
 
-/datum/limb/proc/breakbone()
+/datum/limb/proc/breakbone(mob/living/carbon/human/H)
 	if(broken)
 		return 0
 
-	/var/bonename = getBoneName()
+	var/bonename = getBoneName()
 	var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
-	visible_message("<span class='danger'>[src]'s [bonename] breaks with a [breaknoise]!</span>", \
+	H.visible_message("<span class='danger'>[src]'s [bonename] breaks with a [breaknoise]!</span>", \
 						"<span class='userdanger'>Your [bonename] breaks with a [breaknoise]!</span>")
 	broken = 1
 
 	return 1
 
-/datum/limb/proc/mendbone()
+/datum/limb/proc/mendbone(mob/living/carbon/human/H)
 	if(!broken)
 		return
 
 	broken = 0
 
-	/var/bonename = getBoneName()
+	var/bonename = getBoneName()
 	if(bonename == "chest")
 		bonename = "ribs"
 	else if(bonename == "head")
 		bonename = "skull"
-	src << "<span class='notice'>Your feel your broken [bonename] mend...</span>"
+	H << "<span class='notice'>Your feel your broken [bonename] mend...</span>"
 
 
 //Returns a display name for the organ
