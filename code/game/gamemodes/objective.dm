@@ -294,15 +294,15 @@ datum/objective/steal
 // I don't, though. -Sayu
 
 		"a captain's jumpsuit" = /obj/item/clothing/under/rank/captain,
-		"a research director's jumpsuit" = /obj/item/clothing/under/rank/research_director,
-		"a chief engineer's jumpsuit" = /obj/item/clothing/under/rank/chief_engineer,
-		"a chief medical officer's jumpsuit" = /obj/item/clothing/under/rank/chief_medical_officer,
+//		"a research director's jumpsuit" = /obj/item/clothing/under/rank/research_director,
+//		"a chief engineer's jumpsuit" = /obj/item/clothing/under/rank/chief_engineer,
+//		"a chief medical officer's jumpsuit" = /obj/item/clothing/under/rank/chief_medical_officer,
 		"a head of security's jumpsuit" = /obj/item/clothing/under/rank/head_of_security,
 		"a head of personnel's jumpsuit" = /obj/item/clothing/under/rank/head_of_personnel,
 
         "the captain's PDA cartridge" = /obj/item/weapon/cartridge/captain,
         "the head of personnel's PDA cartridge" = /obj/item/weapon/cartridge/hop,
-        "the chief engineer's PDA cartridge" = /obj/item/weapon/cartridge/ce,
+//      "the chief engineer's PDA cartridge" = /obj/item/weapon/cartridge/ce,
         "the head of security's PDA cartridge" = /obj/item/weapon/cartridge/hos,
 //        "the chief medical officer's PDA cartridge" = /obj/item/weapon/cartridge/cmo,
 //        "the research director's PDA cartridge" = /obj/item/weapon/cartridge/rd,
@@ -315,20 +315,20 @@ datum/objective/steal
 //        "the captain's gloves" = /obj/item/clothing/gloves/captain,
         "a live facehugger" = /obj/item/clothing/mask/facehugger,
         "the monitor decryption key" = /obj/item/weapon/paper/monitorkey,
-        "a 'Freeform' core AI module" = /obj/item/weapon/aiModule/freeformcore,
+//        "a 'Freeform' core AI module" = /obj/item/weapon/aiModule/freeformcore,
         "an 'Astleymov' core AI module" = /obj/item/weapon/aiModule/rickrules,
 		"a dermal armor patch" = /obj/item/clothing/head/helmet/HoS/dermal,
 		"an AI upload construction circuit board" = /obj/item/weapon/circuitboard/aiupload,
-		"a cyborg upload construction circuit board" = /obj/item/weapon/circuitboard/borgupload,
-		"an AI core construction circuit board" = /obj/item/weapon/circuitboard/aicore,
+//		"a cyborg upload construction circuit board" = /obj/item/weapon/circuitboard/borgupload,
+//		"an AI core construction circuit board" = /obj/item/weapon/circuitboard/aicore,
 
 //		"a syndicate balloon" = /obj/item/toy/syndicateballoon, // fuck you you don't get to buy anything else with telecrystals today
 		"four unique blood samples" = /obj/item/weapon/reagent_containers,
 		"four unique identification cards" = /obj/item/weapon/card/id,
 		"50 units of unstable mutagen" = /obj/item/weapon/reagent_containers,
-		"50 units of chloral hydrate" = /obj/item/weapon/reagent_containers,
+	//	"50 units of chloral hydrate" = /obj/item/weapon/reagent_containers,
 		"50 units polytrinic acid" = /obj/item/weapon/reagent_containers,
-		"50 units of thermite" = /obj/item/weapon/reagent_containers,
+	//	"50 units of thermite" = /obj/item/weapon/reagent_containers,
 		"7 different kinds of alcohol" = /obj/item/weapon/reagent_containers, // can you get some beer while you're there, we seem to be out
 	//	"a telecomms hub circuit board" = /obj/item/weapon/circuitboard/telecomms/hub // this might be difficult to steal, if you are not R&D
 		"a red telephone" = /obj/item/weapon/phone
