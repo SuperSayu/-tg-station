@@ -834,10 +834,10 @@
 			<br>
 			<b>What Do Broken Bones <i>Do</i>?</b><br>
 			Each bone of yours has a different function, and this function will be disrupted when said bone is broken!<br>
-			<b>Broken Legs:</b> The patient will walk with a limp, and occasionally they will displace the broken bone and freeze in pain and agony! This is very detrimental to your patient's health.<br>
-			<b>Broken Arms:</b> It is hard for your patient to operate machinery and objects with their arms broken. If your patient attempts to use an object on someone, they might accidentaly displace the broken bone as well as drop what they are holding!<br>
-			<b>Broken Ribs:</b> Broken ribs will cause internal bleeding, causing the patient to slowly lose health and make it hard for them to breathe.<br>
-			<b>Broken Skull:</b> A broken skull will cause the patient to suffer short, occasional blackouts. They will also have a minor tendency of experiencing bouts of severe brain damage.<br>
+			<b>Broken Legs:</b> The patient will walk with a limp, and occasionally they will displace the broken bone!<br>
+			<b>Broken Arms:</b> It is hard for your patient to operate machinery and objects with their arms broken. If your patient attempts to use an object on someone, they might accidentaly displace the broken bone as well as drop what they are holding, if the item was hard to grip!<br>
+			<b>Broken Ribs:</b> Broken ribs will make it hard for your patients to breathe.<br>
+			<b>Broken Skull:</b> A broken skull has a minor tendency of inflicting bouts of severe brain damage.<br>
 			<br>
 			Now you know what to do! Go out there and <i>practice medicine</i>!
 			</html>"}

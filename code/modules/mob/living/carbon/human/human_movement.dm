@@ -24,11 +24,11 @@
 	if (bodytemperature < 283.222)
 		tally += (283.222 - bodytemperature) / 10 * 1.75
 
-	if("left leg" in broken && !reagents.has_reagent("morphine"))
+	if(("left leg" in broken) && ("right leg" in broken) && !reagents.has_reagent("morphine"))
 		tally += 1
 
-	if("right leg" in broken && !reagents.has_reagent("morphine"))
-		tally += 1
+	/*if("right leg" in broken && !reagents.has_reagent("morphine"))
+		tally += 1*/
 
 	return (tally+config.human_delay)
 
@@ -39,8 +39,9 @@
 		if("left leg" in broken)
 			src << "\red Pain shoots up your left leg!"
 			var/datum/limb/affecting = get_organ("l_leg")
-			apply_damage(rand(2,7), BRUTE, affecting)
-			Stun(2)
+			apply_damage(rand(0,1), HALLOSS, affecting)
+			//Stun(2)
+			emote("scream")
 			playsound(src, 'sound/weapons/pierce.ogg', 25)
 			last_break = 1
 			spawn(50)
@@ -49,8 +50,9 @@
 		if("right leg" in broken)
 			src << "\red Pain shoots up your right leg!"
 			var/datum/limb/affecting = get_organ("r_leg")
-			apply_damage(rand(2,7), BRUTE, affecting)
-			Stun(2)
+			apply_damage(rand(0,1), HALLOSS, affecting)
+			//Stun(2)
+			emote("scream")
 			playsound(src, 'sound/weapons/pierce.ogg', 25)
 			last_break = 1
 			spawn(50)

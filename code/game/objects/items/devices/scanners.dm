@@ -129,6 +129,11 @@ MASS SPECTROMETER
 				user.show_message(text("<span class='notice'>\t []: []-[]", capitalize(org.getDisplayName()), (org.burn_dam > 0) ? "<font color='#FF8000'>[org.burn_dam]</font>" : 0, (org.brute_dam > 0) ? "<font color='red'>[org.brute_dam]</font></span>" : 0), 1)
 		else
 			user.show_message("<span class='notice'>\t Limbs are OK.</span>",1)
+		for(var/datum/limb/temp in H.organs)
+			if(temp.broken)
+				var/bone_name = temp.getBoneName()
+				user.show_message(text("<span class='alert'>Warning: Subject's [bone_name] is broken.</span>"), 1)
+
 
 	// Damage descriptions
 
@@ -141,18 +146,7 @@ MASS SPECTROMETER
 		if(!D.hidden[SCANNER])
 			user.show_message(text("<span class='warning'><b>Warning: [D.form] Detected</b>\nName: [D.name].\nType: [D.spread].\nStage: [D.stage]/[D.max_stages].\nPossible Cure: [D.cure]</span>"))
 
-	var/bone_name
-	for(var/bone in M.broken)
-		if(bone == "chest")
-			bone_name = "ribs"
-		else if(bone == "head")
-			bone_name = "skull"
-		else
-			bone_name = bone
-		if(bone_name != "ribs")
-			user.show_message(text("<span class='alert'>Warning: Subject's [bone_name] is broken.</span>"), 1)
-		else
-			user.show_message(text("<span class='alert'>Warning: Subject's [bone_name] are broken.</span>"), 1)
+
 	if (M.reagents && M.reagents.get_reagent_amount("inaprovaline"))
 		user.show_message(text("<span class='notice'>Bloodstream Analysis located [M.reagents:get_reagent_amount("inaprovaline")] units of rejuvenation chemicals.</span>"), 1)
 	if (M.getBrainLoss() >= 100 || !M.getorgan(/obj/item/organ/brain))

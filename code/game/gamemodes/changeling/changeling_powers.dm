@@ -274,6 +274,12 @@
 	radiation = 0
 	heal_overall_damage(getBruteLoss(), getFireLoss())
 	reagents.clear_reagents()
+
+	if(istype(src,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = src
+		for(var/datum/limb/temp in H.organs)
+			temp.mendbone()
+
 	src << "<span class='notice'>We have regenerated.</span>"
 
 	status_flags &= ~(FAKEDEATH)
@@ -285,6 +291,7 @@
 
 	feedback_add_details("changeling_powers","CR")
 	return 1
+
 
 //Recover from stuns.
 /mob/living/carbon/proc/changeling_unstun()
@@ -423,10 +430,11 @@
 			adjustOxyLoss(-10)
 			adjustFireLoss(-10)
 			sleep(10)
-		for(var/bone in broken)
-			src << "<span class='notice'>We feel our broken [bone] mend...</span>"
-			broken -= bone
-			sleep(10)
+
+	if(istype(src,/mob/living/carbon/human))
+		var/mob/living/carbon/human/H = src
+		for(var/datum/limb/temp in H.organs)
+			temp.mendbone()
 
 	feedback_add_details("changeling_powers","RR")
 	return 1

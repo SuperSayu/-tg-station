@@ -68,6 +68,8 @@
 						attack_verb = "scratch"
 					if("plant")
 						attack_verb = "slash"
+					if("skeleton")
+						attack_verb = "scares"
 
 			var/damage = rand(0, 9)
 			if(!damage)
@@ -81,21 +83,16 @@
 				return 0
 
 			if(!M.reagents.has_reagent("morphine") && prob(65))
-				if(!lying)
-					if("left arm" in M.broken || "right arm" in M.broken)
-						M << "\red You painfully dislodge your broken arm!"
-						M.emote("scream")
-						M.Stun(2)
-						playsound(M.loc, 'sound/weapons/pierce.ogg', 25)
-						visible_message("<span class='warning'>[M] has attempted to [attack_verb] [src]!</span>")
-						return 0
-				else if("left leg" in M.broken || "right leg" in M.broken)
-					M << "\red You painfully dislodge your broken leg!"
-					M.emote("scream")
-					M.Stun(2)
-					playsound(M.loc, 'sound/weapons/pierce.ogg', 25)
-					visible_message("<span class='warning'>[M] has attempted to [attack_verb] [src]!</span>")
-					return 0
+				for(var/datum/limb/temp in M.organs)
+					var/bonename = temp.getBoneName()
+					if(temp.broken && bonename !="ribcage" && temp!= "skull")
+
+						if((!lying && (bonename == "left arm" || bonename == "right arm")) || (lying && (bonename == "left leg" || bonename == "right leg")))
+							M << "\red You painfully dislodge your broken [bonename]!"
+							playsound(M.loc, 'sound/weapons/pierce.ogg', 25)
+							M.emote("scream")
+							visible_message("<span class='warning'>[M] has attempted to [attack_verb] [src]!</span>")
+							return 0
 
 			var/datum/limb/affecting = get_organ(ran_zone(M.zone_sel.selecting))
 			var/armor_block = run_armor_check(affecting, "melee")
@@ -119,32 +116,12 @@
 								"<span class='userdanger'>[M] has weakened [src]!</span>")
 				apply_effect(4, WEAKEN, armor_block)
 				forcesay(hit_appends)
-				gasping = 2
 			else if(lying)
 				forcesay(hit_appends)
-				gasping = 2
 
 			if(can_break && prob(10))
 				// HULK SMASH
-				var/hit_area = parse_zone(affecting.name)
-				if(hit_area in broken)
-					return
-				var/hit_name
-				if(hit_area == "head")
-					hit_name = "skull"
-				else if(hit_area == "chest")
-					hit_name = "ribs"
-				else
-					hit_name = hit_area
-				broken += hit_area
-				playsound(src, 'sound/weapons/pierce.ogg', 50)
-				var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
-				if(affecting != "chest")
-					visible_message("<span class='danger'>[src]'s [hit_name] breaks with a [breaknoise]!</span>", \
-									"<span class='userdanger'>Your [hit_name] breaks with a [breaknoise]!</span>")
-				else
-					visible_message("<span class='danger'>[src]'s [hit_name] break with a [breaknoise]!</span>", \
-									"<span class='userdanger'>Your [hit_name] break with a [breaknoise]!</span>")
+				affecting.breakbone()
 
 		if("disarm")
 			M.attack_log += text("\[[time_stamp()]\] <font color='red'>Disarmed [src.name] ([src.ckey])</font>")
@@ -161,7 +138,6 @@
 				visible_message("<span class='danger'>[M] has pushed [src]!</span>",
 								"<span class='userdanger'>[M] has pushed [src]!</span>")
 				forcesay(hit_appends)
-				gasping = 2
 				return
 
 			if(randn <= 45)

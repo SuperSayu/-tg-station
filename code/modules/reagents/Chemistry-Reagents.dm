@@ -1141,10 +1141,9 @@ datum
 					M.adjustOxyLoss(-3)
 					M.heal_organ_damage(3,3)
 					M.adjustToxLoss(-3)
-					for(var/b in M.broken)
+					for(var/datum/limb/temp in M.organs)
 						if(prob(7))
-							M << "<span class='notice'>You feel your broken [b] mend...</span>"
-							M.broken -= b
+							temp.mendbone()
 							M.adjustBruteLoss(-5)
 				..()
 				return
@@ -1164,11 +1163,11 @@ datum
 					M.heal_organ_damage(3,3)
 					M.adjustToxLoss(-3)
 					M.status_flags &= ~DISFIGURED
-					for(var/b in M.broken)
+					for(var/datum/limb/temp in M.organs)
 						if(prob(14))
-							M << "<span class='notice'>You feel your broken [b] mend...</span>"
-							M.broken -= b
+							temp.mendbone()
 							M.adjustBruteLoss(-5)
+
 				..()
 				return
 
@@ -1283,10 +1282,15 @@ datum
 		morphine
 			name = "Morphine"
 			id = "morphine"
-			description = "A drug that relieves pain but does not heal any damage. It will prevent limping and adverse effects caused by the pain of having a broken bone."
+			description = "A drug that relieves pain. It will prevent limping and adverse effects caused by the pain of having a broken bone."
 			reagent_state = LIQUID
 			color = "#EEEEEE"
 
+			on_mob_life(var/mob/living/M as mob)
+				if(!M) M = holder.my_atom
+				M.adjustHalLoss(-5);
+				..()
+				return
 //////////////////////////Poison stuff///////////////////////
 
 		toxin

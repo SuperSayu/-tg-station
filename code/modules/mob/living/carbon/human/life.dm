@@ -229,7 +229,6 @@
 	proc/breathe()
 
 		if(reagents.has_reagent("lexorin")) return
-		if("chest" in broken && prob(50)) return
 		if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell)) return
 
 		var/datum/gas_mixture/environment = loc.return_air()
@@ -860,8 +859,9 @@
 
 			//Blood loss
 			var/tot_damage = maxHealth-health
-			if(getBruteLoss() >= 50 && prob(15) && tot_damage<=105 && !paralysis)
-				adjustBruteLoss(rand(2,4))
+			if(getBruteLoss() >= 50 && prob(20))
+				if(tot_damage<=105 && !paralysis)
+					adjustBruteLoss(rand(1,2))
 				var/turf/pos = get_turf(src)
 				pos.add_blood_floor(src)
 				playsound(pos, 'sound/effects/splat.ogg', 10, 1)
@@ -1139,27 +1139,29 @@
 //			if(rest)	//Not used with new UI
 //				if(resting || lying || sleeping)		rest.icon_state = "rest1"
 //				else									rest.icon_state = "rest0"
-			if(toxin && !reagents.has_reagent("morphine"))
-				if(hal_screwyhud == 4 || toxins_alert)	toxin.icon_state = "tox1"
-				else									toxin.icon_state = "tox0"
-			if(oxygen && !reagents.has_reagent("morphine"))
-				if(hal_screwyhud == 3 || oxygen_alert)	oxygen.icon_state = "oxy1"
-				else									oxygen.icon_state = "oxy0"
-			if(fire && !reagents.has_reagent("morphine"))
-				if(fire_alert)							fire.icon_state = "fire[fire_alert]" //fire_alert is either 0 if no alert, 1 for cold and 2 for heat.
-				else									fire.icon_state = "fire0"
 
-			if(bodytemp && !reagents.has_reagent("morphine"))
-				switch(bodytemperature) //310.055 optimal body temp
-					if(370 to INFINITY)		bodytemp.icon_state = "temp4"
-					if(350 to 370)			bodytemp.icon_state = "temp3"
-					if(335 to 350)			bodytemp.icon_state = "temp2"
-					if(320 to 335)			bodytemp.icon_state = "temp1"
-					if(300 to 320)			bodytemp.icon_state = "temp0"
-					if(295 to 300)			bodytemp.icon_state = "temp-1"
-					if(280 to 295)			bodytemp.icon_state = "temp-2"
-					if(260 to 280)			bodytemp.icon_state = "temp-3"
-					else					bodytemp.icon_state = "temp-4"
+			if(!reagents.has_reagent("morphine"))
+				if(toxin)
+					if(hal_screwyhud == 4 || toxins_alert)	toxin.icon_state = "tox1"
+					else									toxin.icon_state = "tox0"
+				if(oxygen)
+					if(hal_screwyhud == 3 || oxygen_alert)	oxygen.icon_state = "oxy1"
+					else									oxygen.icon_state = "oxy0"
+				if(fire)
+					if(fire_alert)							fire.icon_state = "fire[fire_alert]" //fire_alert is either 0 if no alert, 1 for cold and 2 for heat.
+					else									fire.icon_state = "fire0"
+
+				if(bodytemp)
+					switch(bodytemperature) //310.055 optimal body temp
+						if(370 to INFINITY)		bodytemp.icon_state = "temp4"
+						if(350 to 370)			bodytemp.icon_state = "temp3"
+						if(335 to 350)			bodytemp.icon_state = "temp2"
+						if(320 to 335)			bodytemp.icon_state = "temp1"
+						if(300 to 320)			bodytemp.icon_state = "temp0"
+						if(295 to 300)			bodytemp.icon_state = "temp-1"
+						if(280 to 295)			bodytemp.icon_state = "temp-2"
+						if(260 to 280)			bodytemp.icon_state = "temp-3"
+						else					bodytemp.icon_state = "temp-4"
 
 //	This checks how much the mob's eyewear impairs their vision
 			if(tinttotal >= TINT_IMPAIR)
@@ -1240,20 +1242,16 @@
 			mind.changeling.regenerate()
 
 	proc/handle_bones()
-		if("chest" in broken)
-			// internal bleeding(?)
-			var/datum/limb/affecting = get_organ("chest")
-			if(prob(65))
-				apply_damage(1, BRUTE, affecting)
-		if("head" in broken)
-			if(prob(5) && stat == CONSCIOUS)
-				sleeping = 2
-				adjustBruteLoss(2)
-			if(prob(25))
-				adjustBrainLoss(1)
-		if(dna && (dna.mutantrace == "slime" || dna.mutantrace == "plant"))
+		for(var/datum/limb/temp in organs)
+			if(temp.broken)
+				if(dna && (dna.mutantrace == "slime" || dna.mutantrace == "plant"))
+					temp.mendbone()
 			// ugly hack to stop slimepeople and plantpeople from breaking their nonexistant bones
-			broken = list()
+			if(temp.name == "head" && prob(15) && getBrainLoss()<31)
+				adjustBrainLoss(1)
+
+			if(temp.name == "chest" && prob(35))
+				gasping++
 
 #undef HUMAN_MAX_OXYLOSS
 #undef HUMAN_CRIT_MAX_OXYLOSS
