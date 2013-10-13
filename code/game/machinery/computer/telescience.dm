@@ -213,8 +213,7 @@
 	if(href_list["recal"])
 		if(telepad == null)
 			for(var/obj/machinery/telepad/T in range(src,10))
-				if(T.tele_id == tele_id)
-					telepad = T
+				telepad = T
 		if(!telepad)	return
 		var/teleturf = get_turf(telepad)
 		teles_left = rand(8,12)
