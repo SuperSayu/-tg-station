@@ -130,10 +130,12 @@
 				steal_objective.find_target()
 				traitor.objectives += steal_objective
 
-				steal_objective = new
-				steal_objective.owner = traitor
-				steal_objective.find_target()
-				traitor.objectives += steal_objective
+				if(num_players()<12)
+					steal_objective = new
+					steal_objective.owner = traitor
+					steal_objective.find_target()
+					traitor.objectives += steal_objective
+
 		switch(rand(1,100))
 			if(1 to 25)
 				var/datum/objective/assassinate/kill_objective = new
