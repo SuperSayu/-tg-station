@@ -54,12 +54,12 @@ var/list/ingredients_source = list(
 	density = 1
 	anchored = 0
 	var/list/ingredients = list()
-	var/dispense_flavour = 1
+	var/dispense_flavour = ICECREAM_VANILLA
 	var/obj/item/weapon/reagent_containers/glass/held_container
 
 /obj/machinery/icecream_vat/New()
 	..()
-	create_reagents(50)
+
 	while(ingredients.len < 11)
 		ingredients.Add(5)
 
@@ -86,7 +86,10 @@ var/list/ingredients_source = list(
 	else
 		dat += "No beaker inserted. "
 	dat += "<a href='?src=\ref[src];refresh=1'>Refresh</a> <a href='?src=\ref[src];close=1'>Close</a>"
-	user << browse(dat,"window=icecreamvat;size=600x400")
+
+	var/datum/browser/popup = new(user, "icecreamvat","Icecream Vat", 700, 400, src)
+	popup.set_content(dat)
+	popup.open()
 
 /obj/machinery/icecream_vat/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers))
@@ -95,7 +98,7 @@ var/list/ingredients_source = list(
 			if(!I.ice_creamed)
 				if(ingredients[ICECREAM_VANILLA] > 0)
 					var/flavour_name = get_icecream_flavour_string(dispense_flavour)
-					if(dispense_flavour < 11 && ingredients[dispense_flavour] > 0)
+					if(ingredients[dispense_flavour] > 0)
 						src.visible_message("\icon[src] <span class='info'>[user] scoops delicious [flavour_name] flavoured icecream into [I].</span>")
 						ingredients[dispense_flavour] -= 1
 						ingredients[ICECREAM_VANILLA] -= 1
@@ -213,7 +216,7 @@ var/list/ingredients_source = list(
 	name = "ice cream cone"
 	desc = "Delicious waffle cone, but no ice cream."
 	icon = 'icons/obj/kitchen.dmi'
-	icon_state = "icecream_cone"
+	icon_state = "icecream_cone_waffle" //default for admin-spawned cones, href_list["cone"] should overwrite this all the time
 	layer = 3.1
 	var/ice_creamed = 0
 	var/cone_type

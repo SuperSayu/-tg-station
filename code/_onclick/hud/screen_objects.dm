@@ -1,8 +1,10 @@
 /*
 	Screen objects
-	Todo: do better
+	Todo: improve/re-implement
 
-	Screen objects are only used for the hud and should not appear anywhere else
+	Screen objects are only used for the hud and should not appear anywhere "in-game".
+	They are used with the client/screen list and the screen_loc var.
+	For more information, see the byond documentation on the screen_loc and screen vars.
 */
 /obj/screen
 	name = ""
@@ -44,7 +46,7 @@
 		return 1
 	if(usr.next_move >= world.time)
 		return
-	usr.next_move = world.time + 10
+	usr.next_move = world.time + 6
 
 	if(usr.stat || usr.restrained() || usr.stunned || usr.lying)
 		return 1
@@ -82,6 +84,8 @@
 	if(world.time <= usr.next_move)
 		return 1
 	if(usr.stat || usr.paralysis || usr.stunned || usr.weakened)
+		return 1
+	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
 		return 1
 	if(master)
 		var/obj/item/I = usr.get_active_hand()
@@ -169,6 +173,8 @@
 			usr.hud_used.hidden_inventory_update()
 
 		if("equip")
+			if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
+				return 1
 			if(ishuman(usr))
 				var/mob/living/carbon/human/H = usr
 				H.quick_equip()
@@ -290,37 +296,16 @@
 				usr:uneq_active()
 
 		if("module1")
-			if(usr:module_state_1)
-				if(usr:module_active != usr:module_state_1)
-					usr:inv1.icon_state = "inv1 +a"
-					usr:inv2.icon_state = "inv2"
-					usr:inv3.icon_state = "inv3"
-					usr:module_active = usr:module_state_1
-				else
-					usr:inv1.icon_state = "inv1"
-					usr:module_active = null
+			if(istype(usr, /mob/living/silicon/robot))
+				usr:toggle_module(1)
 
 		if("module2")
-			if(usr:module_state_2)
-				if(usr:module_active != usr:module_state_2)
-					usr:inv1.icon_state = "inv1"
-					usr:inv2.icon_state = "inv2 +a"
-					usr:inv3.icon_state = "inv3"
-					usr:module_active = usr:module_state_2
-				else
-					usr:inv2.icon_state = "inv2"
-					usr:module_active = null
+			if(istype(usr, /mob/living/silicon/robot))
+				usr:toggle_module(2)
 
 		if("module3")
-			if(usr:module_state_3)
-				if(usr:module_active != usr:module_state_3)
-					usr:inv1.icon_state = "inv1"
-					usr:inv2.icon_state = "inv2"
-					usr:inv3.icon_state = "inv3 +a"
-					usr:module_active = usr:module_state_3
-				else
-					usr:inv3.icon_state = "inv3"
-					usr:module_active = null
+			if(istype(usr, /mob/living/silicon/robot))
+				usr:toggle_module(3)
 
 		else
 			return 0
@@ -332,6 +317,8 @@
 	if(world.time <= usr.next_move)
 		return 1
 	if(usr.stat || usr.paralysis || usr.stunned || usr.weakened)
+		return 1
+	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
 		return 1
 	switch(name)
 		if("r_hand")

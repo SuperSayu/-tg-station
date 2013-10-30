@@ -50,8 +50,8 @@
 				if(istype(src, /mob/living/carbon/human))
 					var/mob/living/carbon/human/H = src
 					var/organ = H.get_organ("chest")
-					if (istype(organ, /datum/limb))
-						var/datum/limb/temp = organ
+					if (istype(organ, /obj/item/organ/limb))
+						var/obj/item/organ/limb/temp = organ
 						if(temp.take_damage(d, 0))
 							H.update_damage_overlays(0)
 					H.updatehealth()
@@ -176,7 +176,7 @@
 				"<span class='notice'>[src] examines \himself.", \
 				"<span class='notice'>You check yourself for injuries.</span>")
 
-			for(var/datum/limb/org in H.organs)
+			for(var/obj/item/organ/limb/org in H.organs)
 				var/status = ""
 				var/brutedamage = org.brute_dam
 				var/burndamage = org.burn_dam
@@ -238,7 +238,7 @@
 	return 0
 
 // ++++ROCKDTBEN++++ MOB PROCS //END
-/*
+
 /mob/living/carbon/proc/handle_ventcrawl(var/obj/machinery/atmospherics/unary/vent_pump/vent_found = null) // -- TLE -- Merged by Carn
 	if(stat)
 		src << "You must be conscious to do this!"
@@ -246,6 +246,7 @@
 	if(lying)
 		src << "You can't vent crawl while you're stunned!"
 		return
+
 	if(vent_found) // one was passed in, probably from vent/AltClick()
 		if(vent_found.welded)
 			src << "That vent is welded shut."
@@ -321,7 +322,6 @@
 
 		sleep(travel_time)
 
-
 		if(!target_vent)	return
 		if(target_vent.welded)			//the vent can be welded while alien scrolled through the list or travelled.
 			target_vent = vent_found 	//travel back. No additional time required.
@@ -330,7 +330,7 @@
 		var/area/new_area = get_area(loc)
 		if(new_area)
 			new_area.Entered(src)
-*/
+
 
 /mob/living/carbon/clean_blood()
 	. = ..()
@@ -425,11 +425,6 @@
 
 
 		item.throw_at(target, item.throw_range, item.throw_speed)
-
-
-/mob/living/carbon/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	..()
-	bodytemperature = max(bodytemperature, BODYTEMP_HEAT_DAMAGE_LIMIT+10)
 
 /mob/living/carbon/can_use_hands()
 	if(handcuffed)
@@ -562,11 +557,11 @@
 	..()
 
 
-/mob/living/carbon/say(var/message)
+/mob/living/carbon/say(var/message, var/bubble_type)
 	if(istype(wear_mask, /obj/item/clothing/mask/muzzle))
 		return
 
-	..(message)
+	..(message, bubble_type)
 
 /mob/living/carbon/proc/is_mutantrace(var/mrace)
 	if(mrace)
@@ -574,3 +569,12 @@
 			return 1
 	else
 		return src.dna && src.dna.mutantrace ? 1 : 0
+
+/mob/living/carbon/getTrail()
+	if(getBruteLoss() < 300)
+		if(prob(50))
+			return "ltrails_1"
+		return "ltrails_2"
+	else if(prob(50))
+		return "trails_1"
+	return "trails_2"

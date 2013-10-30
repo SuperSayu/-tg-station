@@ -350,6 +350,14 @@
 	else
 		icon_state = icon_opened
 
+// Objects that try to exit a locker by stepping were doing so successfully,
+// and due to an oversight in turf/Enter() were going through walls.  That
+// should be independently resolved, but this is also an interesting twist.
+/obj/structure/closet/Exit(atom/movable/AM)
+	open()
+	if(AM.loc == src) return 0
+	return 1
+
 /obj/structure/closet/fire_act(air,temp,volume)
 	if(prob(1))
 		del src

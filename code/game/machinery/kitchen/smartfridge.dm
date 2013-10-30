@@ -175,7 +175,7 @@
 	if(..())
 		return
 	usr.set_machine(src)
-
+	
 	if("bagvend" in href_list) // bag seeds and dispense
 		var/N = href_list["bagvend"]
 		var/amount = text2num(href_list["amount"])

@@ -114,7 +114,7 @@ var/global/list/uneatable = list(
 
 /obj/machinery/singularity/proc/admin_investigate_setup()
 	last_warning = world.time
-	var/count = locate(/obj/machinery/containment_field) in orange(30, src)
+	var/count = locate(/obj/machinery/field/containment) in orange(30, src)
 	if(!count)	message_admins("A singulo has been created without containment fields active ([x],[y],[z])",1)
 	investigate_log("was created. [count?"":"<font color='red'>No containment fields were active</font>"]","singulo")
 
@@ -405,9 +405,9 @@ var/global/list/uneatable = list(
 /obj/machinery/singularity/proc/can_move(var/turf/T)
 	for(var/obj/machinery/M in T)
 		switch(M.type)
-			if(/obj/machinery/containment_field,/obj/machinery/shieldwall)
+			if(/obj/machinery/field/containment,/obj/machinery/shieldwall)
 				return 0
-			if(/obj/machinery/field_generator,/obj/machinery/shieldwallgen)
+			if(/obj/machinery/field/generator,/obj/machinery/shieldwallgen)
 				if(M:active)
 					return 0
 	return 1
@@ -510,7 +510,7 @@ var/global/list/uneatable = list(
 	..()
 	world << "<font size='15' color='red'><b>NAR-SIE HAS RISEN</b></font>"
 	if(emergency_shuttle)
-		emergency_shuttle.incall(0.5) // Cannot recall
+		emergency_shuttle.incall(0.3) // Cannot recall
 
 /obj/machinery/singularity/narsie/process()
 	eat()

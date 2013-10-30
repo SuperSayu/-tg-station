@@ -162,20 +162,22 @@
 	throw_range = 5
 	w_class = 2.0
 	force_unwielded = 3
-	force_wielded = 40 // Was 30, Buffed - RR
+	force_wielded = 34
 	wieldsound = 'sound/weapons/saberon.ogg'
 	unwieldsound = 'sound/weapons/saberoff.ogg'
 	flags = FPRINT  | NOSHIELD
 	origin_tech = "magnets=3;syndicate=4"
-	color = "green"
+	item_color = "green"
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
+	var/hacked = 0
+	reflect_chance = 0
 
 /obj/item/weapon/twohanded/dualsaber/New()
-	color = pick("red", "blue", "green", "purple")
+	item_color = pick("red", "blue", "green", "purple")
 
 /obj/item/weapon/twohanded/dualsaber/update_icon()
 	if(wielded)
-		icon_state = "dualsaber[color][wielded]"
+		icon_state = "dualsaber[item_color][wielded]"
 	else
 		icon_state = "dualsaber0"
 	clean_blood()//blood overlays get weird otherwise, because the sprite changes.
@@ -199,13 +201,42 @@
 	else
 		return 0
 
+/obj/item/weapon/twohanded/dualsaber/wield() //Specific wield () hulk checks due to reflect_chance var for balance issues
+	wielded = 1
+	var/mob/living/M = loc
+	if(istype(loc, /mob/living))
+		if (HULK in M.mutations)
+			loc << "<span class='warning'>You lack the grace to wield this to its full extent.</span>"
+	force = force_wielded
+	name = "[initial(name)] (Wielded)"
+	update_icon()
+
+/obj/item/weapon/twohanded/dualsaber/IsReflect()
+	if(wielded)
+		var/mob/living/M = loc
+		if(istype(loc, /mob/living))
+			if (HULK in M.mutations)
+				return
+			return 1
+
 /obj/item/weapon/twohanded/dualsaber/green
 	New()
-		color = "green"
+		item_color = "green"
 
 /obj/item/weapon/twohanded/dualsaber/red
 	New()
-		color = "red"
+		item_color = "red"
+
+/obj/item/weapon/twohanded/dualsaber/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	..()
+	if(istype(W, /obj/item/device/multitool))
+		if(hacked == 0)
+			hacked = 1
+			user << "<span class='warning'>2XRNBW_ENGAGE</span>"
+			item_color = "rainbow"
+			update_icon()
+		else
+			user << "<span class='warning'>It's starting to look like a triple rainbow - no, nevermind.</span>"
 
 
 //spears
@@ -226,3 +257,4 @@
 /obj/item/weapon/twohanded/spear/update_icon()
 	icon_state = "spearglass[wielded]"
 	return
+

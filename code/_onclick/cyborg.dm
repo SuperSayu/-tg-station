@@ -2,7 +2,8 @@
 	Cyborg ClickOn()
 
 	Cyborgs have no range restriction on attack_robot(), because it is basically an AI click.
-	However, they do have a range restriction on item use.
+	However, they do have a range restriction on item use, so they cannot do without the
+	adjacency code.
 */
 
 /mob/living/silicon/robot/ClickOn(var/atom/A, var/params)
@@ -15,17 +16,17 @@
 		return
 
 	var/list/modifiers = params2list(params)
-	if("middle" in modifiers)
+	if(modifiers["middle"])
 		MiddleClickOn(A)
 		return
-	if("shift" in modifiers)
+	if(modifiers["shift"])
 		ShiftClickOn(A)
 		return
-	if("ctrl" in modifiers)
-		CtrlClickOn(A)
-		return
-	if("alt" in modifiers)
+	if(modifiers["alt"]) // alt and alt-gr (rightalt)
 		AltClickOn(A)
+		return
+	if(modifiers["ctrl"])
+		CtrlClickOn(A)
 		return
 
 	if(stat || lockcharge || weakened || stunned || paralysis)
@@ -93,6 +94,24 @@
 			W.afterattack(A, src, 0, params)
 			return
 	return
+
+//Middle click cycles through selected modules.
+/mob/living/silicon/robot/MiddleClickOn(var/atom/A)
+	cycle_modules()
+	return
+
+/*
+	As with AI, these are not used in click code,
+	because the code for robots is specific, not generic.
+
+	If you would like to add advanced features to robot
+	clicks, you can do so here, but you will have to
+	change attack_robot() above to the proper function
+*/
+/mob/living/silicon/robot/UnarmedAttack(atom/A)
+	A.attack_robot(src)
+/mob/living/silicon/robot/RangedAttack(atom/A)
+	A.attack_robot(src)
 
 /atom/proc/attack_robot(mob/user as mob)
 	attack_ai(user)

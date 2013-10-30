@@ -30,6 +30,9 @@
 		cur_turf.xenobloody = 0
 	if(istype(src, /obj/effect/decal/cleanable/blood/gibs))
 		return
+	remove_ex_blood()
+
+/obj/effect/decal/cleanable/blood/proc/remove_ex_blood() //removes existant blood on the turf
 	if(src.loc && isturf(src.loc))
 		// lame copypasta time
 		for(var/obj/effect/decal/cleanable/blood/B in src.loc)
@@ -58,6 +61,18 @@
 	gender = PLURAL
 	random_icon_states = null
 
+/obj/effect/decal/cleanable/trail_holder //not a child of blood on purpose
+	name = "blood"
+	icon_state = "blank"
+	desc = "Your instincts say you shouldn't be following these."
+	gender = PLURAL
+	density = 0
+	anchored = 1
+	layer = 2
+	random_icon_states = null
+	var/list/existing_dirs = list()
+	blood_DNA = list()
+
 /obj/effect/decal/cleanable/blood/gibs
 	name = "gibs"
 	desc = "They look bloody and gruesome."
@@ -68,6 +83,12 @@
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "gibbl5"
 	random_icon_states = list("gib1", "gib2", "gib3", "gib4", "gib5", "gib6")
+
+/obj/effect/decal/cleanable/blood/gibs/ex_act(severity)
+	return
+
+/obj/effect/decal/cleanable/blood/gibs/remove_ex_blood()
+    return
 
 /obj/effect/decal/cleanable/blood/gibs/up
 	random_icon_states = list("gib1", "gib2", "gib3", "gib4", "gib5", "gib6","gibup1","gibup1","gibup1")

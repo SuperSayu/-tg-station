@@ -313,6 +313,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 		target_types += /obj/effect/decal/cleanable/blood/
 		target_types += /obj/effect/decal/cleanable/blood/gibs/
 		target_types += /obj/effect/decal/cleanable/dirt
+		target_types += /obj/effect/decal/cleanable/trail_holder
 	if(src.prints)
 		target_types += /obj/effect/decal/cleanable/trail/bloodtrail
 		target_types += /obj/effect/decal/cleanable/trail/oiltrail

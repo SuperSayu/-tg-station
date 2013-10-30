@@ -53,10 +53,16 @@ obj/machinery/recharger/attackby(obj/item/weapon/G, mob/user)
 		use_power = 1
 		update_icon()
 
-
 obj/machinery/recharger/attack_paw(mob/user)
 	return attack_hand(user)
 
+/obj/machinery/recharger/attack_tk(mob/user)
+	if(charging)
+		charging.update_icon()
+		charging.loc = loc
+		charging = null
+		use_power = 1
+		update_icon()
 
 obj/machinery/recharger/process()
 	if(stat & (NOPOWER|BROKEN) || !anchored)

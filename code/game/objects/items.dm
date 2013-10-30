@@ -26,7 +26,7 @@
 
 	//Since any item can now be a piece of clothing, this has to be put here so all items share it.
 	var/flags_inv //This flag is used to determine when items in someone's inventory cover others. IE helmets making it so you can't see glasses, etc.
-	var/color = null
+	var/item_color = null
 	var/body_parts_covered = 0 //see setup.dm for appropriate bit flags
 	//var/heat_transfer_coefficient = 1 //0 prevents all transfers, 1 is invisible
 	var/gas_transfer_coefficient = 1 // for leaking gas from turf to mask and vice-versa (for masks right now, but at some point, i'd like to include space helmets)
@@ -37,6 +37,7 @@
 	var/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	var/list/allowed = null //suit storage stuff.
 	var/obj/item/device/uplink/hidden/hidden_uplink = null // All items can have an uplink hidden inside, just remember to add the triggers.
+	var/reflect_chance = 0 //This var dictates what % of a time an object will reflect an energy based weapon's shot
 
 /obj/item/device
 	icon = 'icons/obj/device.dmi'
@@ -447,6 +448,10 @@
 /obj/item/proc/IsShield()
 	return 0
 
+/obj/item/proc/IsReflect(var/def_zone) //This proc determines if and at what% an object will reflect energy projectiles if it's in l_hand,r_hand or wear_suit
+	if(prob(reflect_chance))
+		return 1
+
 /obj/item/proc/eyestab(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 
 	var/mob/living/carbon/human/H = M
@@ -496,9 +501,11 @@
 			"\red You stab yourself in the eyes with [src]!" \
 		)
 	if(istype(M, /mob/living/carbon/human))
-		var/datum/limb/affecting = M:get_organ("head")
+		var/mob/living/carbon/human/U = M
+		var/obj/item/organ/limb/affecting = U.get_organ("head")
 		if(affecting.take_damage(7))
-			M:update_damage_overlays(0)
+			U.update_damage_overlays(0)
+
 	else
 		M.take_organ_damage(7)
 	M.eye_blurry += rand(3,4)

@@ -14,6 +14,7 @@
 /datum/game_mode/revolution
 	name = "revolution"
 	config_tag = "revolution"
+	antag_flag = BE_REV
 	restricted_jobs = list("Security Officer", "Warden", "Detective", "AI", "Cyborg","Captain", "Head of Personnel", "Head of Security", "Chief Engineer", "Research Director", "Chief Medical Officer")
 	required_players = 10
 	required_enemies = 1
@@ -44,33 +45,27 @@
 	if(config.protect_roles_from_antagonist)
 		restricted_jobs += protected_jobs
 
-	var/list/datum/mind/possible_headrevs = get_players_for_role(BE_REV)
-
 	var/head_check = 0
 	for(var/mob/new_player/player in player_list)
 		if(player.mind.assigned_role in command_positions)
 			head_check = 1
 			break
 
-	if(!head_check)
-		return 0
-
-	for(var/datum/mind/player in possible_headrevs)
-		if(player.assigned_role in restricted_jobs)
-			possible_headrevs -= player
-		//for(var/job in restricted_jobs)//Removing heads and such from the list
-			//if(player.assigned_role == job)
+	for(var/datum/mind/player in antag_candidates)
+		for(var/job in restricted_jobs)//Removing heads and such from the list
+			if(player.assigned_role == job)
+				antag_candidates -= player
 
 
 	for (var/i=1 to max_headrevs)
-		if (possible_headrevs.len==0)
+		if (antag_candidates.len==0)
 			break
-		var/datum/mind/lenin = pick(possible_headrevs)
-		possible_headrevs -= lenin
+		var/datum/mind/lenin = pick(antag_candidates)
+		antag_candidates -= lenin
 		head_revolutionaries += lenin
 		log_game("[lenin.key] (ckey) has been selected as a head rev")
 
-	if(head_revolutionaries.len==0) //||(!head_check))
+	if((head_revolutionaries.len < required_enemies)||(!head_check))
 		return 0
 
 	return 1
@@ -361,10 +356,10 @@
 	var/list/targets = list()
 
 	if(head_revolutionaries.len || istype(ticker.mode,/datum/game_mode/revolution))
-		var/text = "<FONT size = 2><B>The head revolutionaries were:</B></FONT>"
+		var/text = "<br><font size=3><b>The head revolutionaries were:</b></font>"
 
 		for(var/datum/mind/headrev in head_revolutionaries)
-			text += "<br>[headrev.key] was [headrev.name] ("
+			text += "<br><b>[headrev.key]</b> was <b>[headrev.name]</b> ("
 			if(headrev.current)
 				if(headrev.current.stat == DEAD)
 					text += "died"
@@ -373,21 +368,22 @@
 				else
 					text += "survived the revolution"
 				if(headrev.current.real_name != headrev.name)
-					text += " as [headrev.current.real_name]"
+					text += " as <b>[headrev.current.real_name]</b>"
 			else
 				text += "body destroyed"
 			text += ")"
 
 			for(var/datum/objective/mutiny/objective in headrev.objectives)
 				targets |= objective.target
+		text += "<br>"
 
 		world << text
 
 	if(revolutionaries.len || istype(ticker.mode,/datum/game_mode/revolution))
-		var/text = "<FONT size = 2><B>The revolutionaries were:</B></FONT>"
+		var/text = "<br><font size=3><b>The revolutionaries were:</b></font>"
 
 		for(var/datum/mind/rev in revolutionaries)
-			text += "<br>[rev.key] was [rev.name] ("
+			text += "<br><b>[rev.key]</b> was <b>[rev.name]</b> ("
 			if(rev.current)
 				if(rev.current.stat == DEAD)
 					text += "died"
@@ -396,23 +392,24 @@
 				else
 					text += "survived the revolution"
 				if(rev.current.real_name != rev.name)
-					text += " as [rev.current.real_name]"
+					text += " as <b>[rev.current.real_name]</b>"
 			else
 				text += "body destroyed"
 			text += ")"
+		text += "<br>"
 
 		world << text
 
 
 	if( head_revolutionaries.len || revolutionaries.len || istype(ticker.mode,/datum/game_mode/revolution) )
-		var/text = "<FONT size = 2><B>The heads of staff were:</B></FONT>"
+		var/text = "<br><font size=3><b>The heads of staff were:</b></font>"
 
 		var/list/heads = get_all_heads()
 		for(var/datum/mind/head in heads)
 			var/target = (head in targets)
 			if(target)
 				text += "<font color='red'>"
-			text += "<br>[head.key] was [head.name] ("
+			text += "<br><b>[head.key]</b> was <b>[head.name]</b> ("
 			if(head.current)
 				if(head.current.stat == DEAD)
 					text += "died"
@@ -421,12 +418,13 @@
 				else
 					text += "survived the revolution"
 				if(head.current.real_name != head.name)
-					text += " as [head.current.real_name]"
+					text += " as <b>[head.current.real_name]</b>"
 			else
 				text += "body destroyed"
 			text += ")"
 			if(target)
 				text += "</font>"
+		text += "<br>"
 
 		world << text
 

@@ -172,4 +172,4 @@
 	var/robot_talk_understand = 0
 	var/alien_talk_understand = 0
 
-	var/turf/listed_turf = null
+	var/turf/listed_turf = null	//the current turf being examined in the stat panel

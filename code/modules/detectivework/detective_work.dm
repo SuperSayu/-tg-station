@@ -140,7 +140,7 @@ atom/proc/add_fibers(mob/living/carbon/human/M)
 
 	if(!islist(fingerprints))
 		fingerprints = list()
-	if(!islist(A.fingerprintshidden))
+	if(!islist(fingerprintshidden))
 		fingerprintshidden = list()
 
 	// Transfer

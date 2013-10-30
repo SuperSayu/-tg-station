@@ -40,7 +40,7 @@
 	proc/triggered(mob/target as mob, var/type = "feet")
 		if(!armed)
 			return
-		var/datum/limb/affecting = null
+		var/obj/item/organ/limb/affecting = null
 		if(ishuman(target))
 			var/mob/living/carbon/human/H = target
 			switch(type)
@@ -97,7 +97,7 @@
 		..()
 
 
-	HasEntered(var/atom/movable/AM as mob|obj)
+	Crossed(var/atom/movable/AM as mob|obj)
 		if(armed)
 			if(ishuman(AM))
 				var/mob/living/carbon/H = AM

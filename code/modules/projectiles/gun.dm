@@ -34,6 +34,9 @@
 		proj.silenced = silenced
 		return
 
+	proc/shoot_with_empty_chamber(mob/living/user as mob|obj)
+		user << "<span class='warning'>*click*</span>"
+		return
 
 	emp_act(severity)
 		for(var/obj/O in contents)
@@ -84,6 +87,12 @@
 		var/turf/curloc = user.loc
 		var/turf/targloc = get_turf(target)
 		if (!istype(targloc) || !istype(curloc))
+			return
+
+		if(!special_check(user))
+			return
+		if(!load_into_chamber())
+			shoot_with_empty_chamber(user)
 			return
 
 		if(!in_chamber)

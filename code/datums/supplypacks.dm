@@ -57,7 +57,7 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 		if(!path)	continue
 		var/atom/movable/AM = new path()
 		manifest += "<li>[AM.name]</li>"
-		AM.loc = null	//just to make sure they're deleted by the garbage collector
+		del AM	//just to make sure they're deleted, no longer garbage collected, as there are way to many objects in crates that have other references.
 	manifest += "</ul>"
 
 
@@ -304,6 +304,12 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	cost = 20
 	containername = "chemical implant crate"
 
+/datum/supply_packs/security/armory/exileimp
+	name = "Exile implants crate"
+	contains = list (/obj/item/weapon/storage/box/exileimp)
+	cost = 30
+	containername = "exile implant crate"
+
 /datum/supply_packs/security/securitybarriers
 	name = "Security Barriers"
 	contains = list(/obj/machinery/deployable/barrier,
@@ -414,8 +420,8 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 
 /datum/supply_packs/engineering/engine/field_gen
 	name = "Field Generator crate"
-	contains = list(/obj/machinery/field_generator,
-					/obj/machinery/field_generator)
+	contains = list(/obj/machinery/field/generator,
+					/obj/machinery/field/generator)
 	cost = 10
 	containername = "field generator crate"
 
@@ -897,8 +903,9 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	containername = "janitorial supplies"
 
 /datum/supply_packs/misc/janitor/janicart
-	name = "Janitorial Cart crate"
-	contains = list(/obj/structure/janitorialcart)
+	name = "Janitorial Cart and Galoshes crate"
+	contains = list(/obj/structure/janitorialcart,
+					/obj/item/clothing/shoes/galoshes)
 	cost = 10
 	containertype = /obj/structure/largecrate
 	containername = "janitorial cart crate"

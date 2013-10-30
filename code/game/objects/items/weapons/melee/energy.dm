@@ -1,5 +1,6 @@
 /obj/item/weapon/melee/energy
 	var/active = 0
+	flags = FPRINT | TABLEPASS | NOBLOODY
 
 	suicide_act(mob/user)
 		viewers(user) << pick("\red <b>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</b>", \
@@ -36,6 +37,7 @@
 	flags = FPRINT  | NOSHIELD
 	origin_tech = "magnets=3;syndicate=4"
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
+	var/hacked = 0
 
 /obj/item/weapon/melee/energy/sword/pirate
 	name = "energy cutlass"

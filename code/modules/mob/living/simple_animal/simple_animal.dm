@@ -83,7 +83,7 @@
 		return 0
 
 
-	if(health < 1)
+	if(health < 1 && stat != DEAD)
 		Die()
 
 	if(health > maxHealth)
@@ -260,6 +260,7 @@
 	if(!P.nodamage)
 		adjustBruteLoss(P.damage)
 	P.on_hit(src)
+	Proj.on_hit(src, 0)
 	return 0
 
 
@@ -488,7 +489,7 @@
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
 	health = Clamp(health - damage, 0, maxHealth)
-	if(health < 1)
+	if(health < 1 && stat != DEAD)
 		Die()
 
 /mob/living/simple_animal/proc/SA_attackable(target)
@@ -501,3 +502,11 @@
 		if (M.occupant)
 			return 0
 	return 1
+
+
+/mob/living/simple_animal/update_fire()
+	return
+/mob/living/simple_animal/IgniteMob()
+	return
+/mob/living/simple_animal/ExtinguishMob()
+	return
