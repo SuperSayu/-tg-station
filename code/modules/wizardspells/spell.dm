@@ -8,9 +8,9 @@
 		attack_self(), attack(), afterattack() - When an enchanted item / spellthrower  is used, the item's attacks translate to equivalent calls on the spell.
 
 	- before casting
-		Prepare: You have not yet begun to cast; this is the *default starting point*.  If you want to create a spellthrower, or other strange cast effect, do it here.
+		Prepare: You have not yet begun to cast; this is the *default starting point*.  If you want to create a spellthrower, or other strange cast method, do it here.
 		Activation: Runs the casting checks, and before_cast(), then casts if they all succeed
-		before_cast: You are can cast and are in the process of it but have not yet committed to it.  Returning 0 cancels the cast, 1 continues.  Incantation usually happens here.
+		before_cast: You can cast and are in the process of it but have not yet committed to it.  Returning 0 cancels the cast, 1 continues.  Incantation usually happens here.
 		* cast_check() runs all the default checks.  arguably you could make them all the same function but it's more readable when they're separate.
 
 	- casting
@@ -18,7 +18,7 @@
 		after_cast: Begins spell recharge / decreases use counter.
 
 */
-// castingmode - used my magic items
+// castingmode - used by magic items
 var/const/CAST_SPELL = 1	// Normal spell: shows up in spell tab, can be learned
 var/const/CAST_SELF = 2		// Magic items: Use-self
 var/const/CAST_MELEE = 4	// Magic items: Attack

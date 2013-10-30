@@ -6,6 +6,7 @@
 	hub = "Exadv1.spacestation13"
 	hub_password = "SORRYNOPASSWORD"
 	name = "Sayustation 13"
+	visibility = 0 // do not advertise
 
 /*
 This is for any host that would like their server to appear on the main SS13 hub.

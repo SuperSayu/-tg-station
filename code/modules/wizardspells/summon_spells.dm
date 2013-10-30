@@ -257,6 +257,8 @@
 	for(var/turf/T in range(center,spawn_radius))
 		if(T.flags&NOJAUNT)
 			continue
+		if(get_dist(T,center) < 2) // elbow room
+			continue
 		turfs += T
 
 	var/sc = spawn_count
@@ -279,7 +281,7 @@
 	var/turf/T = get_turf(caster)
 	if(!T)
 		return 0
-	caster.Stun(spawn_time_min/2)
+	caster.Stun(spawn_time_min/20)
 	if(open_rifts(caster))
 		incant(caster)
 		return 1
@@ -291,7 +293,7 @@
 			start_recharge()
 	else
 		charge = max(0,charge-1)
-		spawn(spawn_time_max)
+		spawn(spawn_time_max * 2)
 			if(src && charge <= 0)
 				del src
 
