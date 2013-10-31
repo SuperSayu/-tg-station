@@ -52,8 +52,6 @@
 			if(player.assigned_role == job)
 				antag_candidates -= player
 
-	possible_traitors -= modePlayer // traitorchan: no changeling+traitors
-
 	for(var/j = modePlayer.len, j < num_traitors, j++)
 		if (!antag_candidates.len)
 			break

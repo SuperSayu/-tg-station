@@ -1018,5 +1018,5 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 					/obj/item/weapon/gun/projectile/automatic/clown, /obj/item/weapon/reagent_containers/spray/chemsprayer/dirtblaster)
 	containertype = /obj/structure/closet/crate/secure
 	containername = "Chest of Dautingly Frivolous Weaponry"
-	access = access_clown
+	access = access_theatre
 	contraband = 1

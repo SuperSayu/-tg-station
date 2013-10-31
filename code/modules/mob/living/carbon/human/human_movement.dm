@@ -38,7 +38,7 @@
 	if(prob(2) && !reagents.has_reagent("morphine") && !last_break)
 		if("left leg" in broken)
 			src << "\red Pain shoots up your left leg!"
-			var/datum/limb/affecting = get_organ("l_leg")
+			var/obj/item/organ/limb/affecting = get_organ("l_leg")
 			apply_damage(rand(2,7), BRUTE, affecting)
 			Stun(2)
 			playsound(src, 'sound/weapons/pierce.ogg', 25)
@@ -48,7 +48,7 @@
 			return
 		if("right leg" in broken)
 			src << "\red Pain shoots up your right leg!"
-			var/datum/limb/affecting = get_organ("r_leg")
+			var/obj/item/organ/limb/affecting = get_organ("r_leg")
 			apply_damage(rand(2,7), BRUTE, affecting)
 			Stun(2)
 			playsound(src, 'sound/weapons/pierce.ogg', 25)

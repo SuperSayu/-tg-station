@@ -450,7 +450,7 @@
 			item_color = clr
 		else
 			..()
-	HasEntered(AM as mob|obj)
+	Crossed(AM as mob|obj)
 		if(istype(AM,/mob/living/carbon/human) && prob(50))
 			var/obj/effect/decal/cleanable/egg_smudge/ES = new(src.loc)
 			ES.pixel_x = pixel_x

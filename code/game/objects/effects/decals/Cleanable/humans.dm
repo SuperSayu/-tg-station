@@ -31,6 +31,13 @@
 	if(istype(src, /obj/effect/decal/cleanable/blood/gibs))
 		return
 	remove_ex_blood()
+	spawn(12000) // 20 minutes
+		icon_state += "-old"
+		name = "dried blood"
+		desc = "Looks like it's been here a while.  Eew."
+		blood_DNA = list()
+		if(istype(cur_turf, /turf/simulated))
+			cur_turf.bloody = 0
 
 /obj/effect/decal/cleanable/blood/proc/remove_ex_blood() //removes existant blood on the turf
 	if(src.loc && isturf(src.loc))
@@ -44,13 +51,7 @@
 		for(var/obj/effect/decal/cleanable/oil/B in src.loc)
 			if(B != src)
 				del(B)
-	spawn(12000) // 20 minutes
-		icon_state += "-old"
-		name = "dried blood"
-		desc = "Looks like it's been here a while.  Eew."
-		blood_DNA = list()
-		if(istype(cur_turf, /turf/simulated))
-			cur_turf.bloody = 0
+
 
 /obj/effect/decal/cleanable/blood/splatter
 	random_icon_states = list("gibbl1", "gibbl2", "gibbl3", "gibbl4", "gibbl5")

@@ -1260,7 +1260,7 @@
 	proc/handle_bones()
 		if("chest" in broken)
 			// internal bleeding(?)
-			var/datum/limb/affecting = get_organ("chest")
+			var/obj/item/organ/limb/affecting = get_organ("chest")
 			if(prob(65))
 				apply_damage(1, BRUTE, affecting)
 		if("head" in broken)

@@ -533,12 +533,6 @@
 
 	return message
 
-			if(message)
-				M.add_ion_law(message)
-				M << "<br>"
-				M << "\red [message] ...LAWS UPDATED"
-				M << "<br>"
-
 /****
 
 Rise of the bots

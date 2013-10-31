@@ -5,7 +5,7 @@
 	desc = "Used to adjust your appearance while on the holodeck."
 	icon_state = "overalls"
 	item_state = "lb_suit"
-	color = "overalls"
+	item_color = "overalls"
 
 	var/global/list/jumpsuit_choices = list("None")
 	var/obj/item/clothing/under/jumpsuit = null
@@ -129,7 +129,7 @@
 			name = jumpsuit.name
 			icon_state = jumpsuit.icon_state
 			item_state = jumpsuit.item_state
-			color = jumpsuit.color
+			item_color = jumpsuit.item_color
 			if(istype(H))
 				H.update_inv_w_uniform()	//so our overlays update.
 		else
@@ -137,7 +137,7 @@
 			name = initial(name)
 			icon_state = initial(icon_state)
 			item_state = initial(item_state)
-			color = initial(color)
+			item_color = initial(item_color)
 			if(istype(H))
 				H.update_inv_w_uniform()	//so our overlays update.
 		mic.icon_state = icon_state
@@ -241,10 +241,10 @@
 	name = "clown's holographic jumpsuit"
 	icon_state = "clown"
 	item_state = "clown"
-	color = "clown"
+	item_color = "clown"
 
 /obj/item/clothing/under/actorsuit/mime
 	name = "mime's holographic jumpsuit"
 	icon_state = "mime"
 	item_state = "mime"
-	color = "mime"
+	item_color = "mime"

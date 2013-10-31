@@ -260,7 +260,6 @@
 	if(!P.nodamage)
 		adjustBruteLoss(P.damage)
 	P.on_hit(src)
-	Proj.on_hit(src, 0)
 	return 0
 
 

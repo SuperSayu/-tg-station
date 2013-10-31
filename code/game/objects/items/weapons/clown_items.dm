@@ -35,7 +35,7 @@
 		if(src)
 			del src
 
-/obj/item/weapon/bananapeel/wizard/HasEntered(AM as mob|obj)
+/obj/item/weapon/bananapeel/wizard/Crossed(AM as mob|obj)
 	if (istype(AM, /mob/living/carbon))
 		var/mob/M =	AM
 
@@ -83,7 +83,7 @@
 			step_rand(src)
 			if(oldloc != loc)
 				for(var/mob/living/carbon/human/H in loc)
-					HasEntered(H)
+					Crossed(H)
 
 /obj/item/weapon/soap/afterattack(atom/target, mob/user as mob, proximity)
 	if(!proximity) return

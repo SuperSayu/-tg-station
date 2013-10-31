@@ -228,7 +228,7 @@
 	desc = "Woven from hairs of a deceased creature of legend, and dyed the color it hated most."
 	icon_state = "purple"
 	item_state = "purplegloves"
-	color="purple"
+	item_color="purple"
 	var/obj/effect/knowspell/spell = null
 	var/noun = "gloves"
 	var/castingmode = CAST_MELEE|CAST_RANGED

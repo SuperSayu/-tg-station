@@ -138,7 +138,7 @@
 					/obj/item/weapon/razor = 1, /obj/item/toy/gun = 2, /obj/item/toy/ammo/gun = 4,/obj/item/weapon/gun/energy/laser/practice = 2,
 					/obj/item/toy/snappop = 10, /obj/item/device/violin = 1, /obj/item/clothing/gloves/ring/plastic/random = 3)
 	premium = list(/obj/item/clothing/under/actorsuit = 2,/obj/item/clothing/gloves/ring/gold = 2, /obj/item/clothing/gloves/ring/silver = 1)
-	contraband = list( /obj/item/toy/sword = 3, /obj/item/toy/crossbow = 2, /obj/item/toy/blink, /obj/item/toy/spinningtoy)
+	contraband = list( /obj/item/toy/sword = 3, /obj/item/toy/crossbow = 2, /obj/item/toy/AI = 1, /obj/item/toy/spinningtoy = 1)
 
 // Modified version of previous
 /obj/machinery/vending/refillable/cart

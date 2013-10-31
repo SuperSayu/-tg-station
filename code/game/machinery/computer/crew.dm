@@ -49,7 +49,6 @@ proc/crewmonitor(mob/user)
 
 
 				var/life_status = "[H.stat > 1 ? "<span class='bad'>Deceased</span>" : "<span class='good'>Living</span>"]"
-				var/damage_report = "(<font color='teal'>[dam1]</font>/<font color='green'>[dam2]</font>/<font color='orange'>[dam3]</font>/<font color='red'>[dam4]</font>)"
 
 				if(ID)
 					log += "<tr><td width='40%'>[ID.registered_name] ([ID.assignment])</td>"
@@ -62,7 +61,7 @@ proc/crewmonitor(mob/user)
 					var/dam2 = round(H.getToxLoss(),1)
 					var/dam3 = round(H.getFireLoss(),1)
 					var/dam4 = round(H.getBruteLoss(),1)
-					damage_report = "(<font color='blue'>[dam1]</font>/<font color='green'>[dam2]</font>/<font color='orange'>[dam3]</font>/<font color='red'>[dam4]</font>)"
+					damage_report = "(<font color='teal'>[dam1]</font>/<font color='green'>[dam2]</font>/<font color='orange'>[dam3]</font>/<font color='red'>[dam4]</font>)"
 
 				switch(U.sensor_mode)
 					if(1)

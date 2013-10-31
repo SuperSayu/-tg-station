@@ -65,11 +65,6 @@
 		for(var/job in restricted_jobs)//Removing heads and such from the list
 			if(player.assigned_role == job)
 				antag_candidates -= player
-	var/cultist_amount
-	if(player_list.len > (required_players * 2))
-		cultist_amount = recommended_enemies
-	else
-		cultist_amount = required_enemies
 
 	for(var/cultists_number = 1 to recommended_enemies)
 		if(!antag_candidates.len)

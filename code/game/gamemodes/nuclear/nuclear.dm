@@ -32,10 +32,10 @@
 	var/agent_number = 0
 	var/n_players = num_players()
 
-	if(possible_syndicates.len < 1)
+	if(antag_candidates.len < 1)
 		return 0
 
-	if(possible_syndicates.len > agents_possible)
+	if(antag_candidates.len > agents_possible)
 		agent_number = agents_possible
 	else
 		agent_number = antag_candidates.len

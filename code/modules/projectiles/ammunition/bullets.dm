@@ -95,7 +95,7 @@
 	icon_state = "blshell" //someone, draw the icon, please.
 	projectile_type = "/obj/item/projectile/bullet/dart"
 	m_amt = 12500
-	
+
 	New()
 		..()
 		flags |= NOREACT
@@ -117,7 +117,7 @@
 	icon_state = "banana_peel"
 	projectile_type = "/obj/item/projectile/reagent/bananacreme"
 
-	HasEntered(AM as mob|obj)
+	Crossed(AM as mob|obj)
 		if(BB)
 			return // not really a peel if it's full
 		if (istype(AM, /mob/living/carbon))

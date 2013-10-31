@@ -545,9 +545,9 @@
 	// Side and a drink:
 	var/side = pick(/obj/item/weapon/reagent_containers/food/snacks/fries,/obj/item/weapon/reagent_containers/food/snacks/cheesyfries,
 					/obj/item/weapon/reagent_containers/food/snacks/hotchili)
-	var/drink = pick(/obj/item/weapon/reagent_containers/food/drinks/cola,/obj/item/weapon/reagent_containers/food/drinks/dr_gibb,
-					/obj/item/weapon/reagent_containers/food/drinks/lemon_lime,/obj/item/weapon/reagent_containers/food/drinks/space_mountain_wind,
-					/obj/item/weapon/reagent_containers/food/drinks/space_up,/obj/item/weapon/reagent_containers/food/drinks/starkist)
+	var/drink = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb,
+					/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lemon_lime,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind,
+					/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist)
 	new side(src)
 	new drink(src)
 	new /obj/item/toy/random(src)

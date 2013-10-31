@@ -231,7 +231,7 @@ var/global/list/uneatable = list(
 	var/outer_range = max(grav_pull,decay_range,consume_range)
 	for(var/atom/X in orange(outer_range,src))
 		if(istype(X,/turf/space)) continue
-		if(X.type in list(/obj/machinery/containment_field,/obj/machinery/shieldwall))
+		if(X.type in list(/obj/machinery/field/containment,/obj/machinery/shieldwall))
 			new_contained = 1 // These stabilize space and keep gravity decay from getting out of hand
 			continue
 
