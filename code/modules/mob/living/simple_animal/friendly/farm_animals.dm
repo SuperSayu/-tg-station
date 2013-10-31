@@ -193,7 +193,8 @@
 	if(!stat && !never_grow)
 		amount_grown += rand(1,2)
 		if(amount_grown >= 100)
-			new /mob/living/simple_animal/chicken(src.loc)
+			var/mob/living/simple_animal/chicken/adult = new /mob/living/simple_animal/chicken(src.loc)
+			adult.name = src.name
 			del(src)
 
 var/const/MAX_CHICKENS = 50
