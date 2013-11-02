@@ -6,11 +6,6 @@
 	// Needed so when they die they can talk in dead chat normally without needing to ghost.
 	if(stat != DEAD)
 
-		if(gasping)	// sometimes you get winded by blunt objects or bullets
-			if(length(message) >= 1)
-				emote("gasp")
-				return
-
 		//Mimes dont speak! Changeling hivemind and emotes are allowed.
 		if(!IsVocal())
 			if(length(message) >= 2)

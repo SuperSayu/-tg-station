@@ -230,8 +230,6 @@ emp_act
 
 		if(I.force > 10 || I.force >= 5 && prob(33))
 			forcesay(hit_appends)	//forcesay checks stat already.
-		if(I.force >= 10 && I.w_class >= 4 && prob(66))
-			gasping = 1
 
 	var/breakchance = (I.force / 4) * I.w_class
 	//src << "\red [breakchance]% chance of breaking."

@@ -68,6 +68,8 @@
 						attack_verb = "scratch"
 					if("plant")
 						attack_verb = "slash"
+					if("skeleton")
+						attack_verb = "scares"
 
 			var/damage = rand(0, 9)
 			if(!damage)
@@ -119,10 +121,8 @@
 								"<span class='userdanger'>[M] has weakened [src]!</span>")
 				apply_effect(4, WEAKEN, armor_block)
 				forcesay(hit_appends)
-				gasping = 2
 			else if(lying)
 				forcesay(hit_appends)
-				gasping = 2
 
 			if(can_break && prob(10))
 				// HULK SMASH
@@ -161,7 +161,6 @@
 				visible_message("<span class='danger'>[M] has pushed [src]!</span>",
 								"<span class='userdanger'>[M] has pushed [src]!</span>")
 				forcesay(hit_appends)
-				gasping = 2
 				return
 
 			if(randn <= 45)
