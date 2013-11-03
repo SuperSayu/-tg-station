@@ -955,18 +955,18 @@ obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 				beaker_contents += "Nothing<br>"*/
 
 
-				dat = {"
-		<b>Processing chamber contains:</b><br>
-		[processing_chamber]<br>
-		[beaker_contents]<hr>
-		"}
-				if (is_beaker_ready && !is_chamber_empty && !(stat & (NOPOWER|BROKEN)))
-					dat += "<A href='?src=\ref[src];action=grind'>Grind the reagents</a><BR>"
-					dat += "<A href='?src=\ref[src];action=juice'>Juice the reagents</a><BR><BR>"
-				if(holdingitems && holdingitems.len > 0)
-					dat += "<A href='?src=\ref[src];action=eject'>Eject the reagents</a><BR>"
-				if (beaker)
-					dat += "<A href='?src=\ref[src];action=detach'>Detach the beaker</a><BR>"
+			dat = {"
+	<b>Processing chamber contains:</b><br>
+	[processing_chamber]<br>
+	[beaker_contents]<hr>
+	"}
+			if (is_beaker_ready && !is_chamber_empty && !(stat & (NOPOWER|BROKEN)))
+				dat += "<A href='?src=\ref[src];action=grind'>Grind the reagents</a><BR>"
+				dat += "<A href='?src=\ref[src];action=juice'>Juice the reagents</a><BR><BR>"
+			if(holdingitems && holdingitems.len > 0)
+				dat += "<A href='?src=\ref[src];action=eject'>Eject the reagents</a><BR>"
+			if (beaker)
+				dat += "<A href='?src=\ref[src];action=detach'>Detach the beaker</a><BR>"
 	else
 		dat += "Please wait..."
 	user << browse("<HEAD><TITLE>All-In-One Grinder</TITLE></HEAD><TT>[dat]</TT>", "window=reagentgrinder")
