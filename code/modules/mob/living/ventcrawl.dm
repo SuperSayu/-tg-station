@@ -25,9 +25,6 @@
 		return
 	user.Move(T) // broken pipe
 
-/obj/machinery/atmospherics/return_air()
-	return null // this is usually overwritten, be safe when it's not
-
 /obj/machinery/atmospherics/Entered(mob/M)
 	if(istype(M) && M.client)
 		M.client.perspective = EYE_PERSPECTIVE
