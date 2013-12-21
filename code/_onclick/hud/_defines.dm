@@ -63,10 +63,10 @@
 #define ui_borg_panel "14:28,2:7"
 
 //Upper-middle right (damage indicators)
-#define ui_toxin "14:28,13:27"
-#define ui_fire "14:28,12:25"
-#define ui_oxygen "14:28,11:23"
-#define ui_pressure "14:28,10:21"
+#define ui_toxin "14:28,13:19"
+#define ui_fire "14:28,12:18"
+#define ui_oxygen "14:28,11:22"
+#define ui_pressure "14:28,11:3"
 
 #define ui_alien_toxin "14:28,13:25"
 #define ui_alien_fire "14:28,12:25"
