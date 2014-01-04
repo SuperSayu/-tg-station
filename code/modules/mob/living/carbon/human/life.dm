@@ -877,13 +877,13 @@
 					setHalLoss(99)
 
 			//Blood loss
-			var/tot_damage = maxHealth-health
-			if(getBruteLoss() >= 50 && prob(15) && tot_damage<=105 && !paralysis)
-				adjustBruteLoss(rand(2,4))
+			//var/tot_damage = maxHealth-health
+			if(getBruteLoss() >= 50 && prob(15) && !paralysis)
+				adjustHalLoss(rand(0,1))
 				var/turf/pos = get_turf(src)
 				pos.add_blood_floor(src)
 				playsound(pos, 'sound/effects/splat.ogg', 10, 1)
-				src << "<span class='warning'>Your wounds start to bleed...</span>"
+				src << "<span class='warning'>Your feel woozy...</span>"
 
 			if(paralysis)
 				AdjustParalysis(-1)
@@ -1262,16 +1262,16 @@
 			// internal bleeding(?)
 			var/obj/item/organ/limb/affecting = get_organ("chest")
 			if(prob(65))
-				apply_damage(1, BRUTE, affecting)
+				apply_damage(1, HALLOSS, affecting)
 		if("head" in broken)
-			if(prob(5) && stat == CONSCIOUS)
-				sleeping = 2
-				adjustBruteLoss(2)
+			//if(prob(5) && stat == CONSCIOUS)
+				//sleeping = 2
+				//adjustBruteLoss(2)
 			if(prob(25))
-				adjustBrainLoss(1)
-		if(dna && (dna.mutantrace == "slime" || dna.mutantrace == "plant"))
+				adjustHalLoss(2)
+		//if(dna && (dna.mutantrace == "slime" || dna.mutantrace == "plant"))
 			// ugly hack to stop slimepeople and plantpeople from breaking their nonexistant bones
-			broken = list()
+			//broken = list()
 
 #undef HUMAN_MAX_OXYLOSS
 #undef HUMAN_CRIT_MAX_OXYLOSS

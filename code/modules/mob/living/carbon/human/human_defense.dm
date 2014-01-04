@@ -133,25 +133,25 @@ emp_act
 		if(arm == l_hand && "left arm" in user.broken)
 			user << "\red You painfully dislodge your broken left arm!"
 			user.emote("scream")
-			user.Stun(2)
-			user.Weaken(2)
+		//	user.Stun(2)
+		//	user.Weaken(2)
 			var/obj/item/organ/limb/larm = get_organ("l_arm")
-			user.apply_damage(rand(2,7), BRUTE, larm)
+			user.apply_damage(rand(1,2), HALLOSS, larm)
 			playsound(user.loc, 'sound/weapons/pierce.ogg', 25)
-			visible_message("<span class='warning'>[user] has attempted to attack [src] with [I]!</span>")
-			user.drop_item()
-			return 0
+		//	visible_message("<span class='warning'>[user] has attempted to attack [src] with [I]!</span>")
+		//	user.drop_item()
+		//	return 0
 		else if(arm == r_hand && "right arm" in user.broken)
 			user << "\red You painfully dislodge your broken right arm!"
 			user.emote("scream")
-			user.Stun(2)
-			user.Weaken(2)
+		//	user.Stun(2)
+	//		user.Weaken(2)
 			var/obj/item/organ/limb/rarm = get_organ("r_arm")
-			user.apply_damage(rand(2,7), BRUTE, rarm)
+			user.apply_damage(rand(1,2), HALLOSS, rarm)
 			playsound(user.loc, 'sound/weapons/pierce.ogg', 25)
-			visible_message("<span class='warning'>[user] has attempted to attack [src] with [I]!</span>")
-			user.drop_item()
-			return 0
+	//		visible_message("<span class='warning'>[user] has attempted to attack [src] with [I]!</span>")
+	//		user.drop_item()
+	//		return 0
 
 	if(I.attack_verb.len)
 		visible_message("<span class='danger'>[src] has been [pick(I.attack_verb)] in the [hit_area] with [I] by [user]!</span>", \
