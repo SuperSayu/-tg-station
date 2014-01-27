@@ -19,7 +19,7 @@
 	desc = "A wrench with common uses. Can be found in your hand."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "wrench"
-	flags = FPRINT | CONDUCT
+	flags = CONDUCT
 	slot_flags = SLOT_BELT
 	force = 5.0
 	throwforce = 7.0
@@ -37,7 +37,7 @@
 	desc = "You can be totally screwy with this."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "screwdriver"
-	flags = FPRINT | CONDUCT
+	flags = CONDUCT
 	slot_flags = SLOT_BELT
 	force = 5.0
 	w_class = 1.0
@@ -49,8 +49,8 @@
 	attack_verb = list("stabbed")
 
 	suicide_act(mob/user)
-		viewers(user) << pick("\red <b>[user] is stabbing the [src.name] into \his temple! It looks like \he's trying to commit suicide.</b>", \
-							"\red <b>[user] is stabbing the [src.name] into \his heart! It looks like \he's trying to commit suicide.</b>")
+		viewers(user) << pick("<span class='suicide'>[user] is stabbing the [src.name] into \his temple! It looks like \he's trying to commit suicide.</span>", \
+							"<span class='suicide'>[user] is stabbing the [src.name] into \his heart! It looks like \he's trying to commit suicide.</span>")
 		return(BRUTELOSS)
 
 /obj/item/weapon/screwdriver/New()
@@ -97,7 +97,7 @@
 	desc = "This cuts wires."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "cutters"
-	flags = FPRINT | CONDUCT
+	flags = CONDUCT
 	slot_flags = SLOT_BELT
 	force = 6.0
 	throw_speed = 2
@@ -129,7 +129,7 @@
 	name = "welding tool"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "welder"
-	flags = FPRINT | CONDUCT
+	flags = CONDUCT
 	slot_flags = SLOT_BELT
 	force = 3
 	throwforce = 5
@@ -150,7 +150,8 @@
 
 /obj/item/weapon/weldingtool/examine()
 	set src in usr
-	usr << "[src] \icon[src] contains [get_fuel()]/[max_fuel] units of fuel!"
+	..()
+	usr << "It contains [get_fuel()]/[max_fuel] units of fuel!"
 
 
 /obj/item/weapon/weldingtool/attackby(obj/item/I, mob/user)
@@ -159,6 +160,24 @@
 	if(istype(I, /obj/item/stack/rods))
 		flamethrower_rods(I, user)
 	..()
+
+
+/obj/item/weapon/weldingtool/attack(mob/living/carbon/human/H, mob/user)
+	var/obj/item/organ/limb/affecting = H.get_organ(check_zone(user.zone_sel.selecting))
+
+	if(istype(H))
+		if(affecting.status == ORGAN_ROBOTIC)
+			if(src.remove_fuel(0))
+				src.item_heal_robotic(H, user, 30, 0)
+				return
+			else
+				user << "<span class='warning'>Need more welding fuel!</span>"
+				return
+		else
+			return ..()
+
+	else
+		return ..()
 
 
 /obj/item/weapon/weldingtool/process()
@@ -399,7 +418,7 @@
 	desc = "Used to hit floors"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "crowbar"
-	flags = FPRINT | CONDUCT
+	flags = CONDUCT
 	slot_flags = SLOT_BELT
 	force = 5.0
 	throwforce = 7.0

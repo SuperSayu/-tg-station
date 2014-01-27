@@ -60,7 +60,6 @@
 		if(reinf) new /obj/item/stack/rods( loc)
 	del(src)
 
-
 /obj/structure/window/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
@@ -104,6 +103,7 @@
 
 /obj/structure/window/attack_tk(mob/user as mob)
 	user.visible_message("<span class='notice'>Something knocks on [src].</span>")
+	add_fingerprint(user)
 	playsound(loc, 'sound/effects/Glasshit.ogg', 50, 1)
 
 /obj/structure/window/attack_hand(mob/user as mob)
@@ -118,6 +118,7 @@
 		del(src)
 	else
 		user.visible_message("<span class='notice'>[user] knocks on [src].</span>")
+		add_fingerprint(user)
 		playsound(loc, 'sound/effects/Glasshit.ogg', 50, 1)
 
 
@@ -151,14 +152,15 @@
 	attack_generic(M, M.melee_damage_upper)
 
 
-/obj/structure/window/attack_slime(mob/user as mob)
-	if(!isslimeadult(user)) return
+/obj/structure/window/attack_slime(mob/living/carbon/slime/user as mob)
+	if(!user.is_adult) return
 	attack_generic(user, rand(10, 15))
 
 
 /obj/structure/window/attackby(obj/item/I, mob/user)
 	if(!can_be_reached(user))
 		return 1 //returning 1 will skip the afterattack()
+	add_fingerprint(user)
 	if(istype(I, /obj/item/weapon/screwdriver))
 		if(reinf && state >= 1)
 			state = 3 - state
@@ -178,6 +180,21 @@
 		state = 1 - state
 		playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
 		user << (state ? "<span class='notice'>You have pried the window into the frame.</span>" : "<span class='notice'>You have pried the window out of the frame.</span>")
+	else if(istype(I, /obj/item/weapon/wrench) && !anchored)
+		if(reinf)
+			var/obj/item/stack/sheet/rglass/RG = new (user.loc)
+			RG.add_fingerprint(user)
+			if(is_fulltile()) //fulltiles drop two panes
+				RG = new (user.loc)
+				RG.add_fingerprint(user)
+		else
+			var/obj/item/stack/sheet/glass/G = new (user.loc)
+			G.add_fingerprint(user)
+			if(is_fulltile())
+				G = new (user.loc)
+				G.add_fingerprint(user)
+		playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
+		src.Del(1)
 	else
 		if(I.damtype == BRUTE || I.damtype == BURN)
 			hit(I.force)
@@ -232,6 +249,7 @@
 //	updateSilicate()
 	air_update_turf(1)
 	ini_dir = dir
+	add_fingerprint(usr)
 	return
 
 
@@ -248,6 +266,7 @@
 //	updateSilicate()
 	air_update_turf(1)
 	ini_dir = dir
+	add_fingerprint(usr)
 	return
 
 
@@ -289,20 +308,20 @@
 
 	return
 
-/obj/structure/window/Del()
+/obj/structure/window/Del(quiet)
 	density = 0
 	air_update_turf(1)
-	if(!holo)
+	if(!holo && !quiet)
 		playsound(src, "shatter", 70, 1)
 	update_nearby_icons()
 	loc = null //garbage collect
 
 
 /obj/structure/window/Move()
-	air_update_turf(1)
+	var/turf/T = loc
 	..()
 	dir = ini_dir
-	air_update_turf(1)
+	move_update_air(T)
 
 /obj/structure/window/CanAtmosPass(turf/T)
 	if(get_dir(loc, T) == dir)

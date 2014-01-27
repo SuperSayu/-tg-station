@@ -71,8 +71,12 @@ var/global/list/uneatable = list(
 /obj/machinery/singularity/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			del(src)
-			return
+			if(prob(25))
+				investigate_log("has been destroyed by an explosion.","singulo")
+				del(src)
+				return
+			else
+				energy += 50
 		if(2.0 to 3.0)
 
 			energy -= round((rand(20,60)/2),1)
@@ -204,6 +208,7 @@ var/global/list/uneatable = list(
 
 /obj/machinery/singularity/proc/check_energy()
 	if(energy <= 0)
+		investigate_log("collapsed.","singulo")
 		del(src)
 		return 0
 	switch(energy)//Some of these numbers might need to be changed up later -Mport
@@ -223,7 +228,7 @@ var/global/list/uneatable = list(
 
 
 /obj/machinery/singularity/proc/eat()
-	set background = 1
+	set background = BACKGROUND_ENABLED
 	if(defer_powernet_rebuild != 2)
 		defer_powernet_rebuild = 1
 	// Let's just make this one loop.
@@ -284,6 +289,7 @@ var/global/list/uneatable = list(
 				if(H.mind.assigned_role == "Clown")
 					gain = rand(-300, 200) // HONK
 
+		investigate_log(" has consumed [key_name(A)].","singulo") //Oh that's where the clown ended up!
 		spawn()
 			A:gib()
 		sleep(1)
@@ -620,7 +626,7 @@ var/global/list/uneatable = list(
 	grav_pull = 0
 
 /obj/machinery/singularity/narsie/wizard/eat()
-	set background = 1
+	set background = BACKGROUND_ENABLED
 	if(defer_powernet_rebuild != 2)
 		defer_powernet_rebuild = 1
 	for(var/atom/X in orange(consume_range,src))

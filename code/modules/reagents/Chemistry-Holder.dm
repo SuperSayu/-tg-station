@@ -271,9 +271,9 @@ datum
 									feedback_add_details("chemical_reaction","[C.result]|[C.result_amount*multiplier]")
 									multiplier = max(multiplier, 1) //this shouldnt happen ...
 									add_reagent(C.result, C.result_amount*multiplier)
-								
+
 								var/list/seen = viewers(4, get_turf(my_atom))
-								
+
 								if(!istype(my_atom, /mob)) // No bubbling mobs
 									for(var/mob/M in seen)
 										M << "\blue \icon[my_atom] The solution begins to bubble."
@@ -284,7 +284,7 @@ datum
 									if(ME2.Uses <= 0) // give the notification that the slime core is dead
 										for(var/mob/M in seen)
 											M << "\blue \icon[my_atom] The [my_atom]'s power is consumed in the reaction."
-											ME2.name = "used slime extract"
+											ME2.name = "\improper used slime extract"
 											ME2.desc = "This extract has been used up."
 
 								playsound(get_turf(my_atom), 'sound/effects/bubbles.ogg', 80, 1)
@@ -407,6 +407,11 @@ datum
 
 				return 1
 
+			add_reagent_list(var/list/list_reagents, var/list/data=null) // Like add_reagent but you can enter a list. Format it like this: list("toxin" = 10, "beer" = 15)
+				for(var/r_id in list_reagents)
+					var/amt = list_reagents[r_id]
+					add_reagent(r_id, amt, data)
+
 			remove_reagent(var/reagent, var/amount, var/safety)//Added a safety check for the trans_id_to
 
 				if(!isnum(amount)) return 1
@@ -485,5 +490,7 @@ datum
 // Convenience proc to create a reagents holder for an atom
 // Max vol is maximum volume of holder
 atom/proc/create_reagents(var/max_vol)
+	if(reagents)
+		reagents.delete()
 	reagents = new/datum/reagents(max_vol)
 	reagents.my_atom = src

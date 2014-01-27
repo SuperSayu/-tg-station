@@ -9,11 +9,10 @@ MASS SPECTROMETER
 
 */
 /obj/item/device/t_scanner
-	name = "T-ray scanner"
+	name = "\improper T-ray scanner"
 	desc = "A terahertz-ray emitter and scanner used to detect underfloor objects such as cables and pipes."
 	icon_state = "t-ray0"
 	var/on = 0
-	flags = FPRINT
 	slot_flags = SLOT_BELT
 	w_class = 2
 	item_state = "electronic"
@@ -61,11 +60,11 @@ MASS SPECTROMETER
 
 
 /obj/item/device/healthanalyzer
-	name = "Health Analyzer"
+	name = "health analyzer"
 	icon_state = "health"
 	item_state = "analyzer"
 	desc = "A hand-held body scanner able to distinguish vital signs of the subject."
-	flags = FPRINT  | CONDUCT
+	flags = CONDUCT
 	slot_flags = SLOT_BELT
 	throwforce = 3
 	w_class = 1.0
@@ -180,7 +179,7 @@ MASS SPECTROMETER
 	icon_state = "atmos"
 	item_state = "analyzer"
 	w_class = 2.0
-	flags = FPRINT | CONDUCT
+	flags = CONDUCT
 	slot_flags = SLOT_BELT
 	throwforce = 5
 	throw_speed = 4
@@ -247,7 +246,7 @@ MASS SPECTROMETER
 	icon_state = "spectrometer"
 	item_state = "analyzer"
 	w_class = 2.0
-	flags = FPRINT | CONDUCT | OPENCONTAINER
+	flags = CONDUCT | OPENCONTAINER
 	slot_flags = SLOT_BELT
 	throwforce = 5
 	throw_speed = 4

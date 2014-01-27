@@ -40,14 +40,14 @@
 	set src in usr
 
 	if (t)
-		src.name = text("Data Disk- '[]'", t)
+		src.name = text("data disk- '[]'", t)
 	else
-		src.name = "Data Disk"
+		src.name = "data disk"
 	src.add_fingerprint(usr)
 	return
 
 /obj/item/weapon/card/data/clown
-	name = "coordinates to clown planet"
+	name = "\proper the coordinates to clown planet"
 	icon_state = "data"
 	item_state = "card-id"
 	layer = 3
@@ -183,6 +183,11 @@
 	item_state = "orange-id"
 	assignment = "Prisoner"
 	registered_name = "Scum"
+	var/goal = 0 //How far from freedom?
+	var/points = 0
+
+/obj/item/weapon/card/id/prisoner/attack_self(mob/user as mob)
+	usr << "You have accumulated [points] out of the [goal] points you need for freedom."
 
 /obj/item/weapon/card/id/prisoner/one
 	name = "Prisoner #13-001"

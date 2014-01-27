@@ -1,28 +1,31 @@
 /mob/living/carbon/human/movement_delay()
-	var/tally = 0
+	if(istype(loc, /turf/space))
+		return -1	//It's hard to be slowed down in space by... anything
+	if(reagents.has_reagent("hyperzine"))
+		return -1
+	if(reagents.has_reagent("nuka_cola"))
+		return -1
 
-	if(reagents.has_reagent("hyperzine")) return -1
-
-	if(reagents.has_reagent("nuka_cola")) return -1
-
-	if (istype(loc, /turf/space)) return -1 // It's hard to be slowed down in space by... anything
-
+	. = 0
 	var/health_deficiency = (100 - health - halloss)
-	if(health_deficiency >= 40 && !reagents.has_reagent("morphine")) tally += (health_deficiency / 25)
+	if(health_deficiency >= 40 && !reagents.has_reagent("morphine"))
+		. += (health_deficiency / 25)
 
-	var/hungry = (500 - nutrition)/5 // So overeat would be 100 and default level would be 80
-	if (hungry >= 70) tally += hungry/50
+	var/hungry = (500 - nutrition) / 5	//So overeat would be 100 and default level would be 80
+	if(hungry >= 70)
+		. += hungry / 50
 
 	if(wear_suit)
-		tally += wear_suit.slowdown
-
+		. += wear_suit.slowdown
 	if(shoes)
-		tally += shoes.slowdown
+		. += shoes.slowdown
+	if(back)
+		. += back.slowdown
 
-	if(FAT in src.mutations)
-		tally += 1.5
-	if (bodytemperature < 283.222)
-		tally += (283.222 - bodytemperature) / 10 * 1.75
+	if(FAT in mutations)
+		. += 1.5
+	if(bodytemperature < 283.222)
+		. += (283.222 - bodytemperature) / 10 * 1.75
 
 	if(("left leg" in broken) && ("right leg" in broken) && !reagents.has_reagent("morphine"))
 		tally += 1
@@ -91,3 +94,9 @@
 
 	prob_slip = round(prob_slip)
 	return(prob_slip)
+
+
+/mob/living/carbon/human/slip(var/s_amount, var/w_amount, var/obj/O, var/lube)
+	if(isobj(shoes) && (shoes.flags&NOSLIP) && !(lube&GALOSHES_DONT_HELP))
+		return 0
+	.=..()

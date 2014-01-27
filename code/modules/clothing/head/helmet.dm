@@ -2,7 +2,7 @@
 	name = "helmet"
 	desc = "Standard Security gear. Protects the head from impacts."
 	icon_state = "helmet"
-	flags = FPRINT  | HEADCOVERSEYES
+	flags = HEADCOVERSEYES
 	item_state = "helmet"
 	armor = list(melee = 50, bullet = 15, laser = 50,energy = 10, bomb = 25, bio = 0, rad = 0)
 	flags_inv = HIDEEARS|HIDEEYES
@@ -11,6 +11,21 @@
 	heat_protection = HEAD
 	max_heat_protection_temperature = HELMET_MAX_TEMP_PROTECT
 	loose = 4
+
+/obj/item/clothing/head/helmet/HoS
+	name = "head of security hat"
+	desc = "The hat of the Head of Security. For showing the officers who's in charge."
+	icon_state = "hoscap"
+	flags = HEADCOVERSEYES
+	armor = list(melee = 80, bullet = 60, laser = 50,energy = 10, bomb = 25, bio = 10, rad = 0)
+	flags_inv = 0
+	flags_inv = HIDEEARS
+
+/obj/item/clothing/head/helmet/HoS/dermal
+	name = "Dermal Armour Patch"
+	desc = "You're not quite sure how you manage to take it on and off, but it implants nicely in your head."
+	icon_state = "dermal"
+	item_state = "dermal"
 
 /obj/item/clothing/head/helmet/roman
 	name = "roman helmet"
@@ -37,7 +52,7 @@
 	desc = "It's a helmet specifically designed to protect against close range attacks."
 	icon_state = "riot"
 	item_state = "helmet"
-	flags = FPRINT|HEADCOVERSEYES
+	flags = HEADCOVERSEYES
 	armor = list(melee = 82, bullet = 15, laser = 5,energy = 5, bomb = 5, bio = 2, rad = 0)
 	flags_inv = HIDEEARS
 
@@ -45,7 +60,7 @@
 	name = "\improper SWAT helmet"
 	desc = "They're often used by highly trained Swat Members."
 	icon_state = "swat"
-	flags = FPRINT | HEADCOVERSEYES
+	flags = HEADCOVERSEYES
 	item_state = "swat"
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 50, bio = 10, rad = 0)
 	flags_inv = HIDEEARS|HIDEEYES
@@ -59,7 +74,7 @@
 	name = "\improper Thunderdome helmet"
 	desc = "<i>'Let the battle commence!'</i>"
 	icon_state = "thunderdome"
-	flags = FPRINT | HEADCOVERSEYES
+	flags = HEADCOVERSEYES
 	item_state = "thunderdome"
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 10, bomb = 25, bio = 10, rad = 0)
 	cold_protection = HEAD
@@ -71,7 +86,7 @@
 	name = "gladiator helmet"
 	desc = "Ave, Imperator, morituri te salutant."
 	icon_state = "gladiator"
-	flags = FPRINT|HEADCOVERSEYES|HEADCOVERSMOUTH|BLOCKHAIR
+	flags = HEADCOVERSEYES|HEADCOVERSMOUTH|BLOCKHAIR
 	item_state = "gladiator"
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES
 	loose = 0 // full-head objects (almost) never fall off

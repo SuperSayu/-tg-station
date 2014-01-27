@@ -60,7 +60,7 @@ emp_act
 			return -1 // complete projectile permutation
 
 	if(check_shields(P.damage, "the [P.name]"))
-		P.on_hit(src, 2)
+		P.on_hit(src, 2, def_zone)
 		return 2
 	return (..(P , def_zone))
 
@@ -161,38 +161,37 @@ emp_act
 						"<span class='userdanger'>[src] has been attacked in the [hit_area] with [I] by [user]!</span>")
 
 	var/armor = run_armor_check(affecting, "melee", "<span class='warning'>Your armour has protected your [hit_area].</span>", "<span class='warning'>Your armour has softened a hit to your [hit_area].</span>")
-	if(armor >= 2)	return 0
+	if(armor >= 100)	return 0
 	if(!I.force)	return 0
+	var/Iforce = I.force //to avoid runtimes on the forcesay checks at the bottom. Some items might delete themselves if you drop them. (stunning yourself, ninja swords)
 
 	apply_damage(I.force, I.damtype, affecting, armor , I)
 
 	var/bloody = 0
 	if(((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && prob(25 + (I.force * 2)))
-		I.add_blood(src)	//Make the weapon bloody, not the person.
-		if(prob(I.force * 2))	//blood spatter!
-			bloody = 1
-			var/turf/location = loc
-			if(istype(location, /turf/simulated))
-				location.add_blood(src, I)
-			if(ishuman(user))
-				var/mob/living/carbon/human/H = user
-				if(get_dist(H, src) <= 1)	//people with TK won't get smeared with blood
-					if(H.wear_suit)
-						H.wear_suit.add_blood(src)
-						H.update_inv_wear_suit(0)	//updates mob overlays to show the new blood (no refresh)
-					else if(H.w_uniform)
-						H.w_uniform.add_blood(src)
-						H.update_inv_w_uniform(0)	//updates mob overlays to show the new blood (no refresh)
-					if (H.gloves)
-						var/obj/item/clothing/gloves/G = H.gloves
-						G.add_blood(H)
-						G.transfer_blood = 2
-						G.bloody_hands_mob = H
-					else
-						H.add_blood(H)
-						H.bloody_hands = 2
-						H.bloody_hands_mob = H
-					H.update_inv_gloves()	//updates on-mob overlays for bloody hands and/or bloody gloves
+		if(affecting.status == ORGAN_ORGANIC)
+			I.add_blood(src)	//Make the weapon bloody, not the person.
+			if(prob(I.force * 2))	//blood spatter!
+				bloody = 1
+				var/turf/location = loc
+				if(istype(location, /turf/simulated))
+					location.add_blood(src)
+				if(ishuman(user))
+					var/mob/living/carbon/human/H = user
+					if(get_dist(H, src) <= 1)	//people with TK won't get smeared with blood
+						if(H.wear_suit)
+							H.wear_suit.add_blood(src)
+							H.update_inv_wear_suit(0)	//updates mob overlays to show the new blood (no refresh)
+						else if(H.w_uniform)
+							H.w_uniform.add_blood(src)
+							H.update_inv_w_uniform(0)	//updates mob overlays to show the new blood (no refresh)
+						if (H.gloves)
+							var/obj/item/clothing/gloves/G = H.gloves
+							G.add_blood(H)
+						else
+							H.add_blood(H)
+						H.update_inv_gloves()	//updates on-mob overlays for bloody hands and/or bloody gloves
+
 
 		switch(hit_area)
 			if("head")	//Harder to score a stun but if you do it lasts a bit longer
@@ -263,3 +262,20 @@ emp_act
 			else
 				visible_message("<span class='danger'>[src]'s [hit_name] break with a [breaknoise]!</span>", \
 								"<span class='userdanger'>Your [hit_name] break with a [breaknoise]!</span>")
+
+
+/mob/living/carbon/human/emp_act(severity)
+
+	for(var/obj/item/organ/limb/L in src.organs)
+		if(L.status == ORGAN_ROBOTIC)
+			switch(severity)
+				if(1)
+					L.take_damage(20)
+					src.Stun(rand(1,10))
+				if(2)
+					L.take_damage(10)
+					src.Stun(rand(1,5))
+
+
+			src << "<span class='danger'>Error, electormagnetic pulse detected in cyber limb!</span>"
+	..()

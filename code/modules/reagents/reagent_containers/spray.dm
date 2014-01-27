@@ -4,7 +4,7 @@
 	icon = 'icons/obj/janitor.dmi'
 	icon_state = "cleaner"
 	item_state = "cleaner"
-	flags = TABLEPASS|OPENCONTAINER|FPRINT|NOBLUDGEON
+	flags = OPENCONTAINER | NOBLUDGEON
 	slot_flags = SLOT_BELT
 	throwforce = 3
 	w_class = 2.0
@@ -43,7 +43,7 @@
 	var/obj/effect/decal/chempuff/D = new/obj/effect/decal/chempuff(get_turf(src))
 	D.create_reagents(amount_per_transfer_from_this)
 	reagents.trans_to(D, amount_per_transfer_from_this, 1/3)
-	D.icon += mix_color_from_reagents(D.reagents.reagent_list)
+	D.color = mix_color_from_reagents(D.reagents.reagent_list)
 
 	spawn(0)
 		for(var/i=0, i<3, i++)
@@ -181,7 +181,7 @@
 		D.create_reagents(amount_per_transfer_from_this)
 		src.reagents.trans_to(D, amount_per_transfer_from_this)
 
-		D.icon += mix_color_from_reagents(D.reagents.reagent_list)
+		D.color = mix_color_from_reagents(D.reagents.reagent_list)
 
 		Sprays[i] = D
 
@@ -222,6 +222,14 @@
 		message_admins("[key_name_admin(user)] fired Space lube from \a [src].")
 		log_game("[key_name(user)] fired Space lube from \a [src].")
 	return
+
+/obj/item/weapon/reagent_containers/spray/chemsprayer/bioterror/New()
+	..()
+	reagents.add_reagent("spore", 150)
+	reagents.add_reagent("cryptobiolin", 150)
+	reagents.add_reagent("mutagen", 150)
+	reagents.add_reagent("chloralhydrate", 150)
+
 
 /obj/item/weapon/reagent_containers/spray/chemsprayer/honkmaster
 	name = "Honkblaster Unlimited"

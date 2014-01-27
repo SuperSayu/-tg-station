@@ -1,7 +1,8 @@
 /obj/effect/decal/cleanable/crayon
 	name = "rune"
 	desc = "A rune drawn in crayon."
-	icon = 'icons/obj/rune.dmi'
+	icon = 'icons/effects/crayondecal.dmi'
+	icon_state = "rune1"
 	layer = 2.1
 	anchored = 1
 
@@ -12,7 +13,7 @@
 		return
 
 
-	New(location,main = "#FFFFFF",shade = "#000000",var/type = "rune")
+	New(location,main = "#FFFFFF", var/type = "rune")
 		..()
 		loc = location
 
@@ -25,15 +26,9 @@
 			if("graffiti")
 				type = pick("amyjon","face","matt","revolution","engie","guy","end","dwarf","uboa")
 
-		var/icon/mainOverlay = new/icon('icons/effects/crayondecal.dmi',"[type]",2.1)
-		var/icon/shadeOverlay = new/icon('icons/effects/crayondecal.dmi',"[type]s",2.1)
 
-		mainOverlay.Blend(main,ICON_ADD)
-		shadeOverlay.Blend(shade,ICON_ADD)
-
-		overlays += mainOverlay
-		overlays += shadeOverlay
-
+		icon_state = type
+		color = main
 /obj/effect/decal/cleanable/body
 	name = "body marking"
 	desc = "It shows the area where a body was..."
@@ -48,6 +43,3 @@
 		for(var/obj/effect/decal/cleanable/body/B in src.loc)
 			if(B != src)
 				del(B)
-
-/obj/effect/decal/cleanable/body/proc/Color(var/bodycolor)
-	icon_state += bodycolor

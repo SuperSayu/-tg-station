@@ -52,6 +52,8 @@
 		// dumb and hardcoded but I don't care~
 		config.server_name += " #[(world.port % 1000) / 100]"
 
+	timezoneOffset = text2num(time2text(0,"hh")) * 36000
+
 	makepowernets()
 
 	sun = new /datum/sun()
@@ -88,6 +90,12 @@
 	process_ghost_teleport_locs()	//Sets up ghost teleport locations.
 	sleep_offline = 1
 
+	#ifdef MAP_NAME
+	map_name = "[MAP_NAME]"
+	#else
+	map_name = "Unknown"
+	#endif
+
 	spawn(3000)		//so we aren't adding to the round-start lag
 		if(config.kick_inactive)
 			KickInactiveClients()
@@ -106,12 +114,13 @@
 //		world << "End of Topic() call."
 //		..()
 
+
 /world/Topic(T, addr, master, key)
 	diary << "TOPIC: \"[T]\", from:[addr], master:[master], key:[key]"
 
 	if (T == "ping")
 		var/x = 1
-		for (var/client/C)
+		for (var/client/C in clients)
 			x++
 		return x
 
@@ -124,6 +133,7 @@
 
 	else if (T == "status")
 		var/list/s = list()
+		// Please add new status indexes under the old ones, for the server banner (until that gets reworked)
 		s["version"] = game_version
 		s["mode"] = master_mode
 		s["respawn"] = config ? abandon_allowed : 0
@@ -131,22 +141,23 @@
 		s["vote"] = config.allow_vote_mode
 		s["ai"] = config.allow_ai
 		s["host"] = host ? host : null
-		s["players"] = list()
-		var/n = 0
-		var/admins = 0
 
-		for(var/client/C in clients)
+		var/admins = 0
+		for(var/client/C in admins)
 			if(C.holder)
 				if(C.holder.fakekey)
 					continue	//so stealthmins aren't revealed by the hub
 				admins++
-			s["player[n]"] = C.key
-			n++
-		s["players"] = n
 
+		s["active_players"] = get_active_player_count()
+		s["players"] = clients.len
 		s["revision"] = revdata.revision
 		s["revision_date"] = revdata.date
 		s["admins"] = admins
+		s["gamestate"] = 1
+		if(ticker)
+			s["gamestate"] = ticker.current_state
+		s["map_name"] = map_name ? map_name : "Unknown"
 
 		return list2params(s)
 
@@ -176,7 +187,7 @@
 #define INACTIVITY_KICK	6000	//10 minutes in ticks (approx.)
 /world/proc/KickInactiveClients()
 	spawn(-1)
-		set background = 1
+		set background = BACKGROUND_ENABLED
 		while(1)
 			sleep(INACTIVITY_KICK)
 			for(var/client/C in clients)
@@ -265,7 +276,7 @@
 		features += "hosted by <b>[config.hostedby]</b>"
 
 	if (features)
-		s += ": [dd_list2text(features, ", ")]"
+		s += ": [list2text(features, ", ")]"
 
 	/* does this help? I do not know */
 	if (src.status != s)

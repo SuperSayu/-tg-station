@@ -97,7 +97,7 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 				//Cutting this wire electrifies the door, so that the next person to touch the door without insulated gloves gets electrocuted.
 				if(A.secondsElectrified != -1)
 					A.shockedby += text("\[[time_stamp()]\][usr](ckey:[usr.ckey])")
-					usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Electrified the [A.name] at [A.x] [A.y] [A.z]</font>")
+					add_logs(usr, A, "electrified", admin=0, addition="at [A.x],[A.y],[A.z]")
 					A.secondsElectrified = -1
 			else
 				if(A.secondsElectrified == -1)
@@ -164,7 +164,7 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 			if(A.secondsElectrified==0)
 				if(usr)
 					A.shockedby += text("\[[time_stamp()]\][usr](ckey:[usr.ckey])")
-					usr.attack_log += text("\[[time_stamp()]\] <font color='red'>Electrified the [A.name] at [A.x] [A.y] [A.z]</font>")
+					add_logs(usr, A, "electrified", admin=0, addition="at [A.x],[A.y],[A.z]")
 				else
 					A.shockedby += "\[[timestamp()]\](No usr - timer/trigger activated)"
 				A.secondsElectrified = 30

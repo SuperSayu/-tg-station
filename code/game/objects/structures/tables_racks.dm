@@ -19,9 +19,7 @@
 	anchored = 1.0
 	layer = 2.8
 	throwpass = 1	//You can throw objects over this, despite it's density.")
-
-	var/strong = 0 // 0: weak; 1: reinforced+weakened; 2:reinforced; 3: cannot disassemble
-	var/part_type = /obj/item/weapon/table_parts
+	var/parts = /obj/item/weapon/table_parts
 
 /obj/structure/table/New()
 	..()
@@ -185,60 +183,85 @@
 		else
 			dir = 2
 
-/obj/structure/table/proc/breakdown(var/parts_probability = 100)
-	if(prob(parts_probability) && ispath(part_type))
-		new part_type(src.loc)
-	spawn(1)
-		del src
-
-/obj/structure/table/proc/damage(var/amount, var/damtype = BRUTELOSS) // BRUTELOSS, FIRELOSS, etc
-	if(strong == 3) return
-	if(strong == 2)
-		amount = round(amount/2)
-	reliability -= amount
-	if(!prob(reliability))
-		breakdown(reliability)
-
 /obj/structure/table/ex_act(severity)
 	switch(severity)
 		if(1.0)
 			del(src)
 			return
 		if(2.0)
-			damage(25,BRUTELOSS)
+			if (prob(50))
+				del(src)
+				return
 		if(3.0)
-			damage(10,BRUTELOSS)
+			if (prob(25))
+				src.density = 0
+		else
 	return
 
-/obj/structure/table/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(exposed_temperature < (T0C+300)) // this is the autoignition point of wood apparently
-		return
-	damage(5,FIRELOSS)
 
 /obj/structure/table/blob_act()
-	damage(66,BRUTELOSS)
+	if(prob(75))
+		if(istype(src, /obj/structure/table/woodentable))
+			new /obj/item/weapon/table_parts/wood( src.loc )
+			del(src)
+			return
+		new /obj/item/weapon/table_parts( src.loc )
+		del(src)
+		return
 
 /obj/structure/table/attack_paw(mob/user)
 	if(HULK in user.mutations)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-		visible_message("<span class='danger'>[user] smashes [src]!</span>")
-		damage(33, BRUTELOSS)
+		visible_message("<span class='danger'>[user] smashes the table apart!</span>")
+		if(istype(src, /obj/structure/table/reinforced))
+			new /obj/item/weapon/table_parts/reinforced(loc)
+		else if(istype(src, /obj/structure/table/woodentable))
+			new/obj/item/weapon/table_parts/wood(loc)
+		else
+			new /obj/item/weapon/table_parts(loc)
+		density = 0
+		del(src)
 
 
 /obj/structure/table/attack_alien(mob/user)
 	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
-	damage(50,BRUTELOSS)
+	if(istype(src, /obj/structure/table/reinforced))
+		new /obj/item/weapon/table_parts/reinforced(loc)
+	else if(istype(src, /obj/structure/table/woodentable))
+		new/obj/item/weapon/table_parts/wood(loc)
+	else
+		new /obj/item/weapon/table_parts(loc)
+	density = 0
+	del(src)
+
 
 /obj/structure/table/attack_animal(mob/living/simple_animal/user)
 	if(user.wall_smash)
-		visible_message("<span class='danger'>[user] smashes [src]!</span>")
-		damage(20,BRUTELOSS)
+		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
+		if(istype(src, /obj/structure/table/reinforced))
+			new /obj/item/weapon/table_parts/reinforced(loc)
+		else if(istype(src, /obj/structure/table/woodentable))
+			new/obj/item/weapon/table_parts/wood(loc)
+		else
+			new /obj/item/weapon/table_parts(loc)
+		density = 0
+		del(src)
+
+
+
 
 /obj/structure/table/attack_hand(mob/user)
 	if(HULK in user.mutations)
+		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-		visible_message("<span class='danger'>[user] smashes [src]!</span>")
-		damage(40,BRUTELOSS)
+		if(istype(src, /obj/structure/table/reinforced))
+			new /obj/item/weapon/table_parts/reinforced(loc)
+		else if(istype(src, /obj/structure/table/woodentable))
+			new/obj/item/weapon/table_parts/wood(loc)
+		else
+			new /obj/item/weapon/table_parts(loc)
+		density = 0
+		del(src)
 
 /obj/structure/table/attack_tk() // no telehulk sorry
 	return
@@ -251,7 +274,9 @@
 	else
 		return 0
 
+
 /obj/structure/table/MouseDrop_T(obj/O, mob/user)
+	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
 	if ((!( istype(O, /obj/item) ) || user.get_active_hand() != O))
 		return
 	if(istype(O,/obj/item/weapon/grab))
@@ -262,19 +287,15 @@
 			O.loc = loc
 			O:dropped(user)
 		return
-
 	user.drop_item()
 	if (O.loc != src.loc)
 		step(O, get_dir(O, src))
-	if(O.loc == src.loc)
-		if(!prob(reliability))
-			visible_message("<span class='danger'>[src] breaks!</span>")
 	return
 
 
-/obj/structure/table/attackby(obj/item/W, mob/user)
-	if (istype(W, /obj/item/weapon/grab) && get_dist(src, user) < 2)
-		var/obj/item/weapon/grab/G = W
+/obj/structure/table/attackby(obj/item/I, mob/user)
+	if (istype(I, /obj/item/weapon/grab) && get_dist(src, user) < 2)
+		var/obj/item/weapon/grab/G = I
 		if(G.affecting.buckled)
 			user << "<span class='notice'>[G.affecting] is buckled to [G.affecting.buckled]!</span>"
 			return
@@ -287,40 +308,11 @@
 		G.affecting.Weaken(5)
 		G.affecting.visible_message("<span class='danger'>[G.assailant] pushes [G.affecting] onto [src].</span>", \
 									"<span class='userdanger'>[G.assailant] pushes [G.affecting] onto [src].</span>")
-		del(W)
+		del(I)
 		return
 
-	if (strong < 2 && istype(W, /obj/item/weapon/wrench))
-		user << "\blue Now disassembling table"
-		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-		if(do_after(user,50))
-			new part_type(src.loc)
-			playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
-			//SN src = null
-			del(src)
-		return
-	if(istype(W,/obj/item/weapon/weldingtool) && strong < 3)
-		var/obj/item/weapon/weldingtool/WT = W
-		if(WT.welding && WT.remove_fuel(0, user))
-			switch(strong)
-				if(2)
-					user << "\blue Now weakening [src]"
-					playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
-					if (do_after(user, 50))
-						if(!src || !WT.isOn()) return
-						user << "\blue [src] weakened"
-						strong = 1
-				if(1)
-					user << "\blue Now strengthening [src]"
-					playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
-					if (do_after(user, 50))
-						if(!src || !WT.isOn()) return
-						user << "\blue [src] strengthened"
-						strong = 2
-				if(0)
-					visible_message("<span class='warning'>[user] slices [src] with [WT]!</span>")
-					damage(10,FIRELOSS)
-			return
+	if (istype(I, /obj/item/weapon/wrench))
+		table_destroy(2, user)
 
 	var/obj/effect/spacevine/vine = locate() in loc
 	if(vine) // don't drop things on tables when trying to attack spacevines
@@ -332,23 +324,51 @@
 			W.dropped(user)
 		return
 
-	if(istype(W, /obj/item/weapon/melee/energy/blade))
-		var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
-		spark_system.set_up(5, 0, src.loc)
-		spark_system.start()
+	if(istype(I, /obj/item/weapon/melee/energy/blade))
+		var/datum/effect/effect/system/spark_spread/SS = new /datum/effect/effect/system/spark_spread()
+		SS.set_up(5, 0, src.loc)
+		SS.start()
 		playsound(src.loc, 'sound/weapons/blade1.ogg', 50, 1)
 		playsound(src.loc, "sparks", 50, 1)
-		visible_message("<span class='danger'>[user] slices [src] apart!</span>")
-		damage(60, FIRELOSS)
+		table_destroy(1, user)
+
+	if(!(((I.flags & ABSTRACT)))) //WE NEED MORE PAREMS
+		user.drop_item(src)
+
+/obj/structure/table/proc/table_destroy(var/destroy_type, var/mob/user as mob)
+
+/*
+Destroy type values:
+1 = Destruction, Actually destroyed
+2 = Deconstruction.
+*/
+
+	if(destroy_type == 1)
+		user.visible_message("<span class='notice'>The table was sliced apart by [user]!</span>")
+		new parts( src.loc )
+		del(src)
 		return
 
-	user.drop_item(src)
+	if(destroy_type == 2)
+		if(istype(src, /obj/structure/table/reinforced))
+			var/obj/structure/table/reinforced/RT = src
+			if(RT.status == 1)
+				user << "<span class='notice'>Now disassembling the reinforced table</span>"
+				playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+				if (do_after(user, 50))
+					new parts( src.loc )
+					playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
+					del(src)
+				return
+		else
+			user << "<span class='notice'>Now disassembling table</span>"
+			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+			if (do_after(user, 50))
+				new parts( src.loc )
+				playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
+				del(src)
+			return
 
-	if(!prob(reliability)) // damaged
-		visible_message("\red [src] breaks!")
-		breakdown(reliability)
-		return
-	return 1
 
 
 /*
@@ -358,83 +378,14 @@
 	name = "wooden table"
 	desc = "Do not apply fire to this. Rumour says it burns easily."
 	icon_state = "woodtable"
-	part_type = /obj/item/weapon/table_parts/wood
-
-// I imagine this flies in the face of proper interaction with the air system
-// and you know what
-// I have no fucking idea
-// let's see how it works -Sayu
-/obj/structure/table/woodentable/damage(var/amount, var/damtype)
-	if(damtype == FIRELOSS)
-		reliability -= amount * 2
-		if(!prob(reliability))
-			var/turf/simulated/T = loc
-			if(istype(T) && T.air)
-				T.air.toxins+= 0.5
-				air_update_turf()
-			if(!prob(reliability))
-				breakdown(src,reliability)
-		return
-	..()
+	parts = /obj/item/weapon/table_parts/wood
 
 
-
-/*
-/obj/structure/table/woodentable/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(!prob(reliability)) // damaged by fire
-		visible_message("\red [src] breaks!")
-		if(prob(reliability))
-			new /obj/item/weapon/table_parts/wood(src.loc)
-		del(src)
-		return
-
-	if (istype(W, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = W
-		if(G.affecting.buckled)
-			user << "<span class='notice'>[G.affecting] is buckled to [G.affecting.buckled]!</span>"
-			return
-		if(G.state < GRAB_AGGRESSIVE)
-			user << "<span class='notice'>You need a better grip to do that!</span>"
-			return
-		if(!G.confirm())
-			return
-		G.affecting.loc = src.loc
-		G.affecting.Weaken(5)
-		visible_message("\red [G.assailant] puts [G.affecting] on the table.")
-		del(W)
-		return
-	if (istype(W, /obj/item/weapon/wrench))
-		user << "\blue Now disassembling the wooden table"
-		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-		sleep(50)
-		new /obj/item/weapon/table_parts/wood( src.loc )
-		playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
-		del(src)
-		return
-	var/obj/effect/spacevine/vine = locate() in loc
-	if(vine) // don't drop things on tables when trying to attack spacevines
-		return vine.attackby(W,user)
-
-	if(isrobot(user))
-		if(istype(W,/obj/item/weapon/tray))
-			W.loc = loc
-			W.dropped(user)
-		return
-	if(istype(W, /obj/item/weapon/melee/energy/blade))
-		var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
-		spark_system.set_up(5, 0, src.loc)
-		spark_system.start()
-		playsound(src.loc, 'sound/weapons/blade1.ogg', 50, 1)
-		playsound(src.loc, "sparks", 50, 1)
-		for(var/mob/O in viewers(user, 4))
-			O.show_message("\blue The wooden table was sliced apart by [user]!", 1, "\red You hear wood coming apart.", 2)
-		new /obj/item/weapon/table_parts/wood( src.loc )
-		del(src)
-		return
-
-	user.drop_item(src)
-	return 1
-*/
+/obj/structure/table/woodentable/poker //No specialties, Just a mapping object.
+	name = "gambling table"
+	desc = "A seedy table for seedy dealings in seedy places."
+	icon_state = "pokertable"
+	parts = /obj/item/weapon/table_parts/wood/poker
 
 /*
  * Reinforced tables
@@ -443,7 +394,8 @@
 	name = "reinforced table"
 	desc = "A version of the four legged table. It is stronger."
 	icon_state = "reinftable"
-	strong = 2
+	parts = /obj/item/weapon/table_parts/reinforced
+	var/status = 2
 
 
 
@@ -464,23 +416,6 @@
 	desc = "A version of the four legged table with multiple layers of metal."
 /*
 /obj/structure/table/reinforced/attackby(obj/item/weapon/W as obj, mob/user as mob)
-
-	if (istype(W, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = W
-		if(G.affecting.buckled)
-			user << "<span class='notice'>[G.affecting] is buckled to [G.affecting.buckled]!</span>"
-			return
-		if(G.state < GRAB_AGGRESSIVE)
-			user << "<span class='notice'>You need a better grip to do that!</span>"
-			return
-		if(!G.confirm())
-			return
-		G.affecting.loc = src.loc
-		G.affecting.Weaken(5)
-		visible_message("\red [G.assailant] puts [G.affecting] on the table.")
-		del(W)
-		return
-
 	if (istype(W, /obj/item/weapon/weldingtool))
 		var/obj/effect/spacevine/vine = locate() in loc
 		if(vine) // don't disassemble tables when trying to attack spacevines
@@ -503,51 +438,7 @@
 					user << "\blue Table strengthened"
 					src.status = 2
 			return
-
-		if(isrobot(user))
-			if(istype(W,/obj/item/weapon/tray))
-				W.loc = loc
-				W.dropped(user)
-			return
-		user.drop_item(src)
-		//if(W && W.loc)	W.loc = src.loc
-		return
-
-	if (istype(W, /obj/item/weapon/wrench))
-		if(src.status == 1)
-			user << "\blue Now disassembling the reinforced table"
-			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-			if (do_after(user, 50))
-				new /obj/item/weapon/table_parts/reinforced( src.loc )
-				playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
-				del(src)
-			return
-	var/obj/effect/spacevine/vine = locate() in loc
-	if(vine) // don't drop things on tables when trying to attack spacevines
-		return vine.attackby(W,user)
-
-	if(isrobot(user))
-		if(istype(W,/obj/item/weapon/tray))
-			W.loc = loc
-			W.dropped(user)
-		return
-
-	if(istype(W, /obj/item/weapon/melee/energy/blade))
-		var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
-		spark_system.set_up(5, 0, src.loc)
-		spark_system.start()
-		playsound(src.loc, 'sound/weapons/blade1.ogg', 50, 1)
-		playsound(src.loc, "sparks", 50, 1)
-		for(var/mob/O in viewers(user, 4))
-			O.show_message("\blue The reinforced table was sliced apart by [user]!", 1, "\red You hear metal coming apart.", 2)
-		new /obj/item/weapon/table_parts/reinforced( src.loc )
-		del(src)
-		return
-
-	user.drop_item(src)
-	//if(W && W.loc)	W.loc = src.loc
-	return 1
-*/
+	..()
 
 /*
  * Racks
@@ -558,7 +449,6 @@
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "rack"
 	density = 1
-	flags = FPRINT
 	anchored = 1.0
 	throwpass = 1	//You can throw objects over this, despite it's density.
 
@@ -637,7 +527,7 @@
 	if(HULK in user.mutations)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
-		new /obj/item/weapon/table_parts(loc)
+		new /obj/item/weapon/rack_parts(loc)
 		density = 0
 		del(src)
 
@@ -666,3 +556,4 @@
 		del(src)
 /obj/structure/rack/attack_tk() // no telehulk sorry
 	return
+

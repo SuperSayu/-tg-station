@@ -30,6 +30,9 @@
 		else if(content_mob == /mob/living/simple_animal/corgi)
 			content_mob = pick(/mob/living/simple_animal/corgi/,/mob/living/simple_animal/corgi/Lisa,/mob/living/simple_animal/corgi/puppy)
 			new content_mob(loc)
+		else if(content_mob == /mob/living/simple_animal/cat)
+			if(prob(50))
+				content_mob = /mob/living/simple_animal/cat/Proc
 			new /obj/item/weapon/pet_collar(loc)
 		else
 			new content_mob(loc)

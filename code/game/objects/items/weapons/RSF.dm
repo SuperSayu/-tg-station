@@ -14,7 +14,6 @@ RSF
 	var/matter = 0
 	var/matter_max = 20
 	var/mode = 1
-	flags = 0
 	w_class = 3.0
 
 	var/list/mode_names = list("Dosh","Drinking glass", "Paper","Pen","Dice Pack", "Cigarette")

@@ -168,6 +168,10 @@ datum/objective/hijack
 		if(issilicon(owner.current))
 			return 0
 		var/area/shuttle = locate(/area/shuttle/escape/centcom)
+
+		if(!(get_turf(owner.current) in shuttle))
+			return 0
+
 		var/list/protected_mobs = list(/mob/living/silicon/ai, /mob/living/silicon/pai)
 		for(var/mob/living/player in player_list)
 			if(player.type in protected_mobs)	continue
@@ -214,7 +218,7 @@ datum/objective/silence
 					var/turf/T = get_turf(player)
 					if(!T)	continue
 					switch(T.loc.type)
-						if(/area/shuttle/escape/centcom, /area/shuttle/escape_pod1/centcom, /area/shuttle/escape_pod2/centcom, /area/shuttle/escape_pod3/centcom, /area/shuttle/escape_pod5/centcom)
+						if(/area/shuttle/escape/centcom, /area/shuttle/escape_pod1/centcom, /area/shuttle/escape_pod2/centcom, /area/shuttle/escape_pod3/centcom, /area/shuttle/escape_pod4/centcom)
 							return 0
 		return 1
 
@@ -248,7 +252,7 @@ datum/objective/escape
 			return 1
 		if(istype(check_area, /area/shuttle/escape_pod3/centcom))
 			return 1
-		if(istype(check_area, /area/shuttle/escape_pod5/centcom))
+		if(istype(check_area, /area/shuttle/escape_pod4/centcom))
 			return 1
 		else
 			return 0
@@ -292,7 +296,6 @@ datum/objective/steal
 		"the nuclear authentication disk" = /obj/item/weapon/disk/nuclear,
 		"an ablative armor vest" = /obj/item/clothing/suit/armor/laserproof,
 		"the reactive teleport armor" = /obj/item/clothing/suit/armor/reactive,
-		"a laser pointer" = /obj/item/device/laser_pointer,
 
 // If you want to remove these this is the place to do it
 // I don't, though. -Sayu
@@ -347,7 +350,7 @@ datum/objective/steal
 		"10 diamonds" = /obj/item/stack/sheet/mineral/diamond,
 		"50 gold bars" = /obj/item/stack/sheet/mineral/gold,
 		"25 refined uranium bars" = /obj/item/stack/sheet/mineral/uranium,
-
+		"a laser pointer" = /obj/item/device/laser_pointer,
 	)
 
 	// These lists forbid antagonist types from getting certain steal requests

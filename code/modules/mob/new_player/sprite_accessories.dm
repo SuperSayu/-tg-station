@@ -265,6 +265,10 @@
 		name = "Bald"
 		icon_state = null
 
+	parted
+		name = "Side Part"
+		icon_state = "hair_part"
+
 /////////////////////////////
 // Facial Hair Definitions //
 /////////////////////////////

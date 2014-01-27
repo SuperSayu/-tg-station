@@ -48,5 +48,6 @@
 		new /obj/item/clothing/suit/armor/reactive(src)
 		new /obj/item/device/flash(src)
 		new /obj/item/device/laser_pointer(src)
+		new /obj/item/clothing/under/rank/research_director/alt(src)
 		new /obj/item/clothing/gloves/ring/plasma(src)
 		return

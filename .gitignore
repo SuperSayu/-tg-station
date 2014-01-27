@@ -1,9 +1,12 @@
 .svn
-/*.lk
+*.lk
 *.sav
-/*.rsc
+
+#Compiled files and other files generated during compilation.
+*.dmb
+*.rsc
+*.lk
+*.int
+/data/mode.txt
 /maps/backup
-/*.dmb
-/data/*.bdb
-/data/*.ban
-/*.int
+

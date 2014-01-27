@@ -47,7 +47,7 @@
 	icon_state = "lightreplacer0"
 	item_state = "electronic"
 
-	flags = FPRINT | CONDUCT
+	flags = CONDUCT
 	slot_flags = SLOT_BELT
 	origin_tech = "magnets=3;materials=2"
 
@@ -198,7 +198,7 @@
 	emagged = !emagged
 	playsound(src.loc, "sparks", 100, 1)
 	if(emagged)
-		name = "Shortcircuited [initial(name)]"
+		name = "shortcircuited [initial(name)]"
 	else
 		name = initial(name)
 	update_icon()
@@ -212,6 +212,16 @@
 		return 1
 	else
 		return 0
+
+/obj/item/device/lightreplacer/cyborg
+
+/obj/item/device/lightreplacer/proc/janicart_insert(mob/user, obj/structure/janitorialcart/J)
+	J.put_in_cart(src, user)
+	J.myreplacer = src
+	J.update_icon()
+
+/obj/item/device/lightreplacer/cyborg/janicart_insert(mob/user, obj/structure/janitorialcart/J)
+	return
 
 #undef LIGHT_OK
 #undef LIGHT_EMPTY

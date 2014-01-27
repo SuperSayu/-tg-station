@@ -192,7 +192,6 @@
 	var/visible = 0.0
 	var/left = null
 	anchored = 1.0
-	flags = 0
 
 
 /obj/effect/beam/i_beam/proc/hit()

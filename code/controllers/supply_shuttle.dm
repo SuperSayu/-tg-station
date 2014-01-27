@@ -89,7 +89,7 @@ var/list/known_tech = list()
 
 
 /obj/machinery/computer/ordercomp
-	name = "Supply Ordering Console"
+	name = "supply ordering console"
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "request"
 	circuit = /obj/item/weapon/circuitboard/ordercomp
@@ -126,6 +126,8 @@ var/list/known_tech = list()
 	var/plasma_per_point = 2 // 2 plasma for 1 point
 	var/plant_per_point = 5
 	var/centcom_message = "" // Remarks from Centcom on how well you checked the last order.
+	// Unique typepaths for unusual things we've already sent CentComm, associated with their potencies
+	var/list/discoveredPlants = list()
 	//control
 	var/ordernum
 	var/list/shoppinglist = list()
@@ -151,7 +153,7 @@ var/list/known_tech = list()
 	proc/process()
 
 		spawn(0)
-			set background = 1
+			set background = BACKGROUND_ENABLED
 			while(1)
 				if(processing)
 					iteration++
@@ -234,7 +236,7 @@ var/list/known_tech = list()
 		var/plant_count = 0
 
 		centcom_message = ""
-
+		
 		for(var/atom/movable/MA in shuttle)
 			if(MA.anchored)	continue
 
@@ -289,6 +291,23 @@ var/list/known_tech = list()
 					if(istype(A, /obj/item/stack/sheet/mineral/plasma))
 						var/obj/item/stack/sheet/mineral/plasma/P = A
 						plasma_count += P.amount
+					
+					if(istype(A, /obj/item/seeds))
+						var/obj/item/seeds/S = A
+						if(S.rarity == 0) // Mundane species
+							centcom_message += "<font color=red>+0</font>: We don't need samples of mundane species \"[capitalize(S.species)]\".<BR>"
+						else if(discoveredPlants[S.type]) // This species has already been sent to CentComm
+							var/potDiff = S.potency - discoveredPlants[S.type] // Compare it to the previous best
+							if(potDiff > 0) // This sample is better
+								discoveredPlants[S.type] = S.potency
+								centcom_message += "<font color=green>+[potDiff]</font>: New sample of \"[capitalize(S.species)]\" is superior.  Good work.<BR>"
+								points += potDiff
+							else // This sample is worthless
+								centcom_message += "<font color=red>+0</font>: New sample of \"[capitalize(S.species)]\" is not more potent than existing sample ([discoveredPlants[S.type]] potency).<BR>"
+						else // This is a new discovery!
+							discoveredPlants[S.type] = S.potency
+							centcom_message += "<font color=green>+[S.rarity]</font>: New species discovered: \"[capitalize(S.species)]\".  Excellent work.<BR>"
+							points += S.rarity // That's right, no bonus for potency.  Send a crappy sample first to "show improvement" later
 
 
 					//Sell tech
@@ -311,7 +330,7 @@ var/list/known_tech = list()
 						plant_count += 1
 
 			del(MA)
-
+		
 		if(plasma_count)
 			centcom_message += "<font color=green>+[round(plasma_count/plasma_per_point)]</font>: Received [plasma_count] units of exotic material.<BR>"
 			points += round(plasma_count / plasma_per_point)
@@ -412,7 +431,7 @@ var/list/known_tech = list()
 		return
 
 /obj/item/weapon/paper/manifest
-	name = "Supply Manifest"
+	name = "supply manifest"
 	var/erroneous = 0
 	var/points = 0
 	var/ordernumber = 0
@@ -498,7 +517,7 @@ var/list/known_tech = list()
 
 		supply_shuttle.ordernum++
 		var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(loc)
-		reqform.name = "Requisition Form - [P.name]"
+		reqform.name = "requisition form - [P.name]"
 		reqform.info += "<h3>[station_name] Supply Requisition Form</h3><hr>"
 		reqform.info += "INDEX: #[supply_shuttle.ordernum]<br>"
 		reqform.info += "REQUESTED BY: [idname]<br>"
@@ -547,7 +566,7 @@ var/list/known_tech = list()
 
 /obj/machinery/computer/supplycomp/attack_hand(var/mob/user as mob)
 	if(!allowed(user))
-		user << "\red Access Denied."
+		user << "<span class='warning'> Access Denied.</span>"
 		return
 
 	if(..())
@@ -563,7 +582,7 @@ var/list/known_tech = list()
 		<HR>\nSupply Points: [supply_shuttle.points]<BR>\n<BR>
 		[supply_shuttle.moving ? "\n*Must be away to order items*<BR>\n<BR>":supply_shuttle.at_station ? "\n*Must be away to order items*<BR>\n<BR>":"\n<A href='?src=\ref[src];order=categories'>Order items</A><BR>\n<BR>"]
 		[supply_shuttle.moving ? "\n*Shuttle already called*<BR>\n<BR>":supply_shuttle.at_station ? "\n<A href='?src=\ref[src];send=1'>Send away</A><BR>\n<BR>":"\n<A href='?src=\ref[src];send=1'>Send to station</A><BR>\n<BR>"]
-		[supply_shuttle.shuttle_loan ? (supply_shuttle.shuttle_loan.dispatched ? "\n*Shuttle loaned to CentComm*<BR>\n<BR>" : "\n<A href='?src=\ref[src];send=1;loan=1'>Loan shuttle to CentComm (5 mins duration)</A><BR>\n<BR>") : "\n*No pending external shuttle requests*<BR>\n<BR>"]
+		[supply_shuttle.shuttle_loan ? (supply_shuttle.shuttle_loan.dispatched ? "\n*Shuttle loaned to Centcom*<BR>\n<BR>" : "\n<A href='?src=\ref[src];send=1;loan=1'>Loan shuttle to Centcom (5 mins duration)</A><BR>\n<BR>") : "\n*No pending external shuttle requests*<BR>\n<BR>"]
 		\n<A href='?src=\ref[src];viewrequests=1'>View requests</A><BR>\n<BR>
 		\n<A href='?src=\ref[src];vieworders=1'>View orders</A><BR>\n<BR>
 		\n<A href='?src=\ref[user];mach_close=computer'>Close</A><BR>
@@ -575,7 +594,7 @@ var/list/known_tech = list()
 
 /obj/machinery/computer/supplycomp/attackby(I as obj, user as mob)
 	if(istype(I,/obj/item/weapon/card/emag) && !hacked)
-		user << "\blue Special supplies unlocked."
+		user << "<span class='notice'> Special supplies unlocked.</span>"
 		hacked = 1
 		req_access = list()
 		return
@@ -607,7 +626,7 @@ var/list/known_tech = list()
 					supply_shuttle.sell()
 					supply_shuttle.send()
 					supply_shuttle.shuttle_loan.loan_shuttle()
-					temp = "The supply shuttle has been loaned to CentComm.<BR><BR><A href='?src=\ref[src];mainmenu=1'>Main Menu</A>"
+					temp = "The supply shuttle has been loaned to Centcom.<BR><BR><A href='?src=\ref[src];mainmenu=1'>Main Menu</A>"
 					post_signal("supply")
 				else
 					temp = "You can not loan the supply shuttle at this time.<BR><BR><A href='?src=\ref[src];mainmenu=1'>Main Menu</A>"
@@ -621,7 +640,7 @@ var/list/known_tech = list()
 			if(href_list["loan"] && supply_shuttle.shuttle_loan)
 				if(!supply_shuttle.shuttle_loan.dispatched)
 					supply_shuttle.shuttle_loan.loan_shuttle()
-					temp = "The supply shuttle has been loaned to CentComm.<BR><BR><A href='?src=\ref[src];mainmenu=1'>Main Menu</A>"
+					temp = "The supply shuttle has been loaned to Centcom.<BR><BR><A href='?src=\ref[src];mainmenu=1'>Main Menu</A>"
 					post_signal("supply")
 				else
 					temp = "You can not loan the supply shuttle at this time.<BR><BR><A href='?src=\ref[src];mainmenu=1'>Main Menu</A>"
@@ -689,7 +708,7 @@ var/list/known_tech = list()
 
 		supply_shuttle.ordernum++
 		var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(loc)
-		reqform.name = "Requisition Form - [P.name]"
+		reqform.name = "requisition form - [P.name]"
 		reqform.info += "<h3>[station_name] Supply Requisition Form</h3><hr>"
 		reqform.info += "INDEX: #[supply_shuttle.ordernum]<br>"
 		reqform.info += "REQUESTED BY: [idname]<br>"

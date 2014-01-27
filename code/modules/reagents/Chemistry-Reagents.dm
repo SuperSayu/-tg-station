@@ -214,27 +214,13 @@ datum
 			id = "water"
 			description = "A ubiquitous chemical substance that is composed of hydrogen and oxygen."
 			reagent_state = LIQUID
-			color = "#0064C8" // rgb: 0, 100, 200
+			color = "#AAAAAA77" // rgb: 170, 170, 170, 77 (alpha)
 
 			reaction_turf(var/turf/simulated/T, var/volume)
 				if (!istype(T)) return
 				src = null
 				if(volume >= 3)
-					if(T.wet >= 1) return
-					T.wet = 1
-					if(T.wet_overlay)
-						T.overlays -= T.wet_overlay
-						T.wet_overlay = null
-					T.wet_overlay = image('icons/effects/water.dmi',T,"wet_floor")
-					T.overlays += T.wet_overlay
-
-					spawn(800)
-						if (!istype(T)) return
-						if(T.wet >= 2) return
-						T.wet = 0
-						if(T.wet_overlay)
-							T.overlays -= T.wet_overlay
-							T.wet_overlay = null
+					T.MakeSlippery()
 
 				for(var/mob/living/carbon/slime/M in T)
 					M.adjustToxLoss(rand(15,20))
@@ -308,15 +294,7 @@ datum
 				if (!istype(T)) return
 				src = null
 				if(volume >= 1)
-					if(T.wet >= 2) return
-					T.wet = 2
-					spawn(800)
-						if (!istype(T)) return
-						T.wet = 0
-						if(T.wet_overlay)
-							T.overlays -= T.wet_overlay
-							T.wet_overlay = null
-						return
+					T.MakeSlippery(2)
 
 		slimetoxin
 			name = "Mutation Toxin"
@@ -648,7 +626,7 @@ datum
 		virus_food
 			name = "Virus Food"
 			id = "virusfood"
-			description = "A mixture of water, milk, and oxygen. Virus cells can use this mixture to reproduce."
+			description = "A mixture of water and milk. Virus cells can use this mixture to reproduce."
 			reagent_state = LIQUID
 			nutriment_factor = 2 * REAGENTS_METABOLISM
 			color = "#899613" // rgb: 137, 150, 19
@@ -722,9 +700,9 @@ datum
 					if(!istype(T, /turf/space))
 						new /obj/effect/decal/cleanable/greenglow(T)
 
-		aluminum
-			name = "Aluminum"
-			id = "aluminum"
+		aluminium
+			name = "Aluminium"
+			id = "aluminium"
 			description = "A silvery white and ductile member of the boron group of chemical elements."
 			reagent_state = SOLID
 			color = "#A8A8A8" // rgb: 168, 168, 168
@@ -1341,7 +1319,7 @@ datum
 			id = "plasma"
 			description = "Plasma in its liquid form."
 			reagent_state = LIQUID
-			color = "#E71B00" // rgb: 231, 27, 0
+			color = "#DB2D08" // rgb: 219, 45, 8
 			toxpwr = 3
 
 			on_mob_life(var/mob/living/M as mob)
@@ -1690,6 +1668,22 @@ datum
 			toxpwr = 2
 			meltprob = 30
 
+		toxin/coffeepowder
+			name = "Coffee Grounds"
+			id = "coffeepowder"
+			description = "Finely ground coffee beans, used to make coffee."
+			reagent_state = SOLID
+			color = "#5B2E0D" // rgb: 91, 46, 13
+			toxpwr = 0.5
+
+		toxin/teapowder
+			name = "Ground Tea Leaves"
+			id = "teapowder"
+			description = "Finely shredded tea leaves, used for making tea."
+			reagent_state = SOLID
+			color = "#7F8400" // rgb: 127, 132, 0
+			toxpwr = 0.5
+
 /////////////////////////Coloured Crayon Powder////////////////////////////
 //For colouring in /proc/mix_color_from_reagents
 
@@ -1709,52 +1703,42 @@ datum
 			name = "Red Crayon Powder"
 			id = "redcrayonpowder"
 			colorname = "red"
-			color = "#DA0000" // red
-			New()
-				..()
 
 		crayonpowder/orange
 			name = "Orange Crayon Powder"
 			id = "orangecrayonpowder"
 			colorname = "orange"
 			color = "#FF9300" // orange
-			New()
-				..()
-
 
 		crayonpowder/yellow
 			name = "Yellow Crayon Powder"
 			id = "yellowcrayonpowder"
 			colorname = "yellow"
 			color = "#FFF200" // yellow
-			New()
-				..()
-
 
 		crayonpowder/green
 			name = "Green Crayon Powder"
 			id = "greencrayonpowder"
 			colorname = "green"
 			color = "#A8E61D" // green
-			New()
-				..()
-
 
 		crayonpowder/blue
 			name = "Blue Crayon Powder"
 			id = "bluecrayonpowder"
 			colorname = "blue"
 			color = "#00B7EF" // blue
-			New()
-				..()
 
 		crayonpowder/purple
 			name = "Purple Crayon Powder"
 			id = "purplecrayonpowder"
 			colorname = "purple"
 			color = "#DA00FF" // purple
-			New()
-				..()
+
+		crayonpowder/invisible
+			name = "Invisible Crayon Powder"
+			id = "invisiblecrayonpowder"
+			colorname = "invisible"
+			color = "#FFFFFF00" // white + no alpha
 
 
 /////////////////////////Food Reagents////////////////////////////
@@ -1996,10 +1980,10 @@ datum
 				..()
 				return
 
-		psilocybin
-			name = "Psilocybin"
-			id = "psilocybin"
-			description = "A strong psycotropic derived from certain species of mushroom."
+		mushroomhallucinogen
+			name = "Mushroom Hallucinogen"
+			id = "mushroomhallucinogen"
+			description = "A strong hallucinogenic drug derived from certain species of mushroom."
 			color = "#E700E7" // rgb: 231, 0, 231
 
 			on_mob_life(var/mob/living/M as mob)
@@ -2080,21 +2064,7 @@ datum
 				if (!istype(T)) return
 				src = null
 				if(volume >= 3)
-					if(T.wet >= 1) return
-					T.wet = 1
-					if(T.wet_overlay)
-						T.overlays -= T.wet_overlay
-						T.wet_overlay = null
-					T.wet_overlay = image('icons/effects/water.dmi',T,"wet_floor")
-					T.overlays += T.wet_overlay
-
-					spawn(800)
-						if (!istype(T)) return
-						if(T.wet >= 2) return
-						T.wet = 0
-						if(T.wet_overlay)
-							T.overlays -= T.wet_overlay
-							T.wet_overlay = null
+					T.MakeSlippery()
 				var/hotspot = (locate(/obj/effect/hotspot) in T)
 				if(hotspot)
 					var/datum/gas_mixture/lowertemp = T.remove_air( T:air:total_moles() )

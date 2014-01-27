@@ -3,7 +3,6 @@
 	desc = "Should anything ever go wrong..."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "red_phone"
-	flags = FPRINT | CONDUCT
 	force = 3.0
 	throwforce = 2.0
 	throw_speed = 1
@@ -27,7 +26,6 @@
 	anchored = 0.0
 	var/matter = 0
 	var/mode = 1
-	flags = 0
 	w_class = 3.0
 
 /obj/item/weapon/spacecash
@@ -160,7 +158,6 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "cane"
 	item_state = "stick"
-	flags = FPRINT | CONDUCT
 	force = 5.0
 	throwforce = 7.0
 	w_class = 2.0
@@ -201,6 +198,7 @@
 	throwforce = 0
 	w_class = 3.0
 	origin_tech = "materials=1"
+	slowdown = 7
 	var/breakouttime = 300	//Deciseconds = 30s = 0.5 minute
 
 /obj/item/weapon/legcuffs/beartrap
@@ -212,7 +210,7 @@
 	var/armed = 0
 
 	suicide_act(mob/user)
-		viewers(user) << "\red <b>[user] is putting the [src.name] on \his head! It looks like \he's trying to commit suicide.</b>"
+		viewers(user) << "<span class='suicide'>[user] is putting the [src.name] on \his head! It looks like \he's trying to commit suicide.</span>"
 		return (BRUTELOSS)
 
 /obj/item/weapon/legcuffs/beartrap/attack_self(mob/user as mob)
@@ -272,45 +270,6 @@
 	flags = FPRINT | CONDUCT
 	m_amt = 3750
 
-/*/obj/item/weapon/syndicate_uplink
-	name = "station bounced radio"
-	desc = "Remain silent about this..."
-	icon = 'icons/obj/radio.dmi'
-	icon_state = "radio"
-	var/temp = null
-	var/uses = 10.0
-	var/selfdestruct = 0.0
-	var/traitor_frequency = 0.0
-	var/mob/currentUser = null
-	var/obj/item/device/radio/origradio = null
-	flags = FPRINT  | CONDUCT | ONBELT
-	w_class = 2.0
-	item_state = "radio"
-	throw_speed = 4
-	throw_range = 20
-	m_amt = 100
-	origin_tech = "magnets=2;syndicate=3"*/
-
-/obj/item/weapon/SWF_uplink
-	name = "station-bounced radio"
-	desc = "used to comunicate it appears."
-	icon = 'icons/obj/radio.dmi'
-	icon_state = "radio"
-	var/temp = null
-	var/uses = 4.0
-	var/selfdestruct = 0.0
-	var/traitor_frequency = 0.0
-	var/obj/item/device/radio/origradio = null
-	flags = FPRINT | CONDUCT
-	slot_flags = SLOT_BELT
-	item_state = "radio"
-	throwforce = 5
-	w_class = 2.0
-	throw_speed = 4
-	throw_range = 20
-	m_amt = 100
-	origin_tech = "magnets=1"
-
 /obj/item/weapon/staff
 	name = "wizards staff"
 	desc = "Apparently a staff used by the wizard."
@@ -321,7 +280,7 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = 2.0
-	flags = FPRINT  | NOSHIELD
+	flags = NOSHIELD
 	attack_verb = list("bludgeoned", "whacked", "disciplined")
 
 /obj/item/weapon/staff/broom
@@ -341,7 +300,7 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = 2.0
-	flags = FPRINT  | NOSHIELD
+	flags = NOSHIELD
 
 /obj/item/weapon/table_parts
 	name = "table parts"
@@ -367,12 +326,18 @@
 	icon_state = "wood_tableparts"
 	flags = null
 
+/obj/item/weapon/table_parts/wood/poker
+	name = "poker table parts"
+	desc = "Keep away from fire, and keep near seedy dealers."
+	icon_state = "poker_tableparts"
+	flags = null
+
 /obj/item/weapon/module
 	icon = 'icons/obj/module.dmi'
 	icon_state = "std_module"
 	w_class = 2.0
 	item_state = "electronic"
-	flags = FPRINT|CONDUCT
+	flags = CONDUCT
 	var/mtype = 1						// 1=electronic 2=hardware
 
 /obj/item/weapon/module/card_reader
@@ -405,7 +370,7 @@
 	desc = "Meat that appears...strange..."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "meat"
-	flags = FPRINT  | CONDUCT
+	flags = CONDUCT
 	w_class = 1.0
 	origin_tech = "biotech=2"
 
@@ -414,7 +379,7 @@
 	desc = "A very sharp axe blade upon a short fibremetal handle. It has a long history of chopping things, but now it is used for chopping wood."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "hatchet"
-	flags = FPRINT  | CONDUCT
+	flags = CONDUCT
 	force = 12.0
 	w_class = 1.0
 	throwforce = 15.0
@@ -437,7 +402,7 @@
 	throw_speed = 1
 	throw_range = 3
 	w_class = 4.0
-	flags = FPRINT  | NOSHIELD
+	flags = CONDUCT | NOSHIELD
 	slot_flags = SLOT_BACK
 	origin_tech = "materials=2;combat=2"
 	attack_verb = list("chopped", "sliced", "cut", "reaped")
@@ -460,7 +425,7 @@
 	w_class = 1
 	throwforce = 2
 	var/cigarcount = 6
-	flags = ONBELT  */
+*/
 
 /obj/item/weapon/pai_cable
 	desc = "A flexible coated cable with a universal jack on one end."

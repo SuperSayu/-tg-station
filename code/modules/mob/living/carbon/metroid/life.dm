@@ -9,9 +9,9 @@
 
 /mob/living/carbon/slime/Life()
 	set invisibility = 0
-	set background = 1
+	set background = BACKGROUND_ENABLED
 
-	if (src.monkeyizing)
+	if (src.notransform)
 		return
 
 	..()
@@ -55,7 +55,7 @@
 
 	var/hungry = 0
 	var/starving = 0
-	if(istype(src, /mob/living/carbon/slime/adult))
+	if(is_adult)
 		switch(nutrition)
 			if(400 to 1100) hungry = 1
 			if(0 to 399)
@@ -232,7 +232,7 @@
 
 /mob/living/carbon/slime/proc/handle_regular_status_updates()
 
-	if(istype(src, /mob/living/carbon/slime/adult))
+	if(is_adult)
 		health = 200 - (getOxyLoss() + getToxLoss() + getFireLoss() + getBruteLoss() + getCloneLoss())
 	else
 		health = 150 - (getOxyLoss() + getToxLoss() + getFireLoss() + getBruteLoss() + getCloneLoss())
@@ -313,7 +313,7 @@
 /mob/living/carbon/slime/proc/handle_nutrition()
 
 	if(prob(20))
-		if(istype(src, /mob/living/carbon/slime/adult)) nutrition-=rand(4,6)
+		if(is_adult) nutrition-=rand(4,6)
 		else nutrition-=rand(2,3)
 
 	if(nutrition <= 0)
@@ -323,7 +323,7 @@
 			adjustToxLoss(rand(0,5))
 
 	else
-		if(istype(src, /mob/living/carbon/slime/adult))
+		if(is_adult)
 			if(nutrition >= 1000)
 				if(prob(40)) amount_grown++
 
@@ -332,36 +332,12 @@
 				if(prob(40)) amount_grown++
 
 	if(amount_grown >= 10 && !Victim && !Target)
-		if(istype(src, /mob/living/carbon/slime/adult))
-			if(!client)
-				for(var/i=1,i<=4,i++)
-					var/newslime
-					if(prob(70))
-						newslime = primarytype
-					else
-						newslime = slime_mutation[rand(1,4)]
+		if(!ckey)
+			if(is_adult)
+				Reproduce()
 
-					var/mob/living/carbon/slime/M = new newslime(loc)
-					M.powerlevel = round(powerlevel/4)
-					M.Friends = Friends
-					M.tame = tame
-					M.rabid = rabid
-					M.Discipline = Discipline
-					if(i != 1) step_away(M,src)
-					feedback_add_details("slime_babies_born","slimebirth_[replacetext(M.colour," ","_")]")
-				del(src)
-
-		else
-			if(!client)
-				var/mob/living/carbon/slime/adult/A = new adulttype(src.loc)
-				A.nutrition = nutrition
-//				A.nutrition += 100
-				A.powerlevel = max(0, powerlevel-1)
-				A.Friends = Friends
-				A.tame = tame
-				A.rabid = rabid
-				del(src)
-
+			else
+				Evolve()
 
 /mob/living/carbon/slime/proc/handle_targets()
 	if(Tempstun)
@@ -406,7 +382,7 @@
 
 		var/hungry = 0 // determines if the slime is hungry
 		var/starving = 0 // determines if the slime is starving-hungry
-		if(istype(src, /mob/living/carbon/slime/adult)) // 1200 max nutrition
+		if(is_adult) // 1200 max nutrition
 			switch(nutrition)
 				if(601 to 900)
 					if(prob(25)) hungry = 1//Ensures they continue eating, but aren't as aggressive at the same time
@@ -438,7 +414,7 @@
 						continue
 
 					if(issilicon(L))
-						if(!istype(src, /mob/living/carbon/slime/adult)) //Non-starving diciplined adult slimes wont eat things
+						if(!is_adult) //Non-starving diciplined adult slimes wont eat things
 							if(!starving && Discipline > 0)
 								continue
 
@@ -455,7 +431,7 @@
 								if(H.dna.mutantrace == "slime")
 									continue
 
-						if(!istype(src, /mob/living/carbon/slime/adult)) //Non-starving diciplined adult slimes wont eat things
+						if(!is_adult) //Non-starving diciplined adult slimes wont eat things
 							if(!starving && Discipline > 0)
 								continue
 
@@ -479,7 +455,7 @@
 
 
 			if((hungry || starving) && targets.len > 0)
-				if(!istype(src, /mob/living/carbon/slime/adult))
+				if(!is_adult)
 					if(!starving)
 						for(var/mob/living/carbon/C in targets)
 							if(!Discipline && prob(5))

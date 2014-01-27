@@ -55,11 +55,6 @@ BLIND     // can't see anything
 	attack_verb = list("challenged")
 	var/print_clarity = 0 // probability of prints passing through
 
-/obj/item/clothing/gloves/examine()
-	set src in usr
-	..()
-	return
-
 // Called just before an attack_hand(), in mob/UnarmedAttack()
 /obj/item/clothing/gloves/proc/Touch(var/atom/A, var/proximity)
 	return 0 // return 1 to cancel attack_hand()
@@ -78,6 +73,11 @@ BLIND     // can't see anything
 	icon = 'icons/obj/clothing/masks.dmi'
 	body_parts_covered = HEAD
 	slot_flags = SLOT_MASK
+
+
+//Override this to modify speech like luchador masks.
+/obj/item/clothing/mask/proc/speechModification(message)
+	return message
 
 //Shoes
 /obj/item/clothing/shoes
@@ -98,7 +98,6 @@ BLIND     // can't see anything
 	icon = 'icons/obj/clothing/suits.dmi'
 	name = "suit"
 	var/fire_resist = T0C+100
-	flags = FPRINT  | ONESIZEFITSALL
 	allowed = list(/obj/item/weapon/tank/emergency_oxygen)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	slot_flags = SLOT_OCLOTHING
@@ -111,7 +110,7 @@ BLIND     // can't see anything
 	name = "space helmet"
 	icon_state = "space"
 	desc = "A special helmet designed for work in a hazardous, low-pressure environment."
-	flags = FPRINT  | HEADCOVERSEYES | BLOCKHAIR | HEADCOVERSMOUTH | STOPSPRESSUREDMAGE
+	flags = HEADCOVERSEYES | BLOCKHAIR | HEADCOVERSMOUTH | STOPSPRESSUREDMAGE | THICKMATERIAL
 	item_state = "space"
 	permeability_coefficient = 0.01
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
@@ -131,7 +130,7 @@ BLIND     // can't see anything
 	w_class = 4//bulky item
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.02
-	flags = FPRINT  | STOPSPRESSUREDMAGE
+	flags = STOPSPRESSUREDMAGE | THICKMATERIAL
 	body_parts_covered = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen)
 	slowdown = 3
@@ -149,7 +148,6 @@ BLIND     // can't see anything
 	name = "under"
 	body_parts_covered = CHEST|GROIN|LEGS|ARMS
 	permeability_coefficient = 0.90
-	flags = FPRINT
 	slot_flags = SLOT_ICLOTHING
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	var/fitted = 1// For use in alternate clothing styles for women, if clothes vary from a jumpsuit in shape, set this to 0
@@ -172,6 +170,12 @@ BLIND     // can't see anything
 			hastie = I
 			I.loc = src
 			user << "<span class='notice'>You attach [I] to [src].</span>"
+			I.transform *= 0.5	//halve the size so it doesn't overpower the under
+			I.pixel_x += 8
+			I.pixel_y -= 8
+			I.layer = FLOAT_LAYER
+			overlays += I
+
 
 			if(istype(loc, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = loc
@@ -194,7 +198,7 @@ BLIND     // can't see anything
 		if(3)
 			usr << "Its vital tracker and tracking beacon appear to be enabled."
 	if(hastie)
-		usr << "\A [hastie] is clipped to it."
+		usr << "\A [hastie] is attached to it."
 
 atom/proc/generate_uniform(index,t_color)
 	var/icon/female_uniform_icon	= icon("icon"='icons/mob/uniform.dmi', "icon_state"="[t_color]_s")
@@ -238,6 +242,11 @@ atom/proc/generate_uniform(index,t_color)
 	if(usr.stat) return
 
 	if(hastie)
+		hastie.transform *= 2
+		hastie.pixel_x -= 8
+		hastie.pixel_y += 8
+		hastie.layer = initial(hastie.layer)
+		overlays = null
 		usr.put_in_hands(hastie)
 		hastie = null
 

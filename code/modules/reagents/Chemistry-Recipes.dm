@@ -53,7 +53,7 @@ datum
 			name = "Silicate"
 			id = "silicate"
 			result = "silicate"
-			required_reagents = list("aluminum" = 1, "silicon" = 1, "oxygen" = 1)
+			required_reagents = list("aluminium" = 1, "silicon" = 1, "oxygen" = 1)
 			result_amount = 3
 */
 		stoxin
@@ -102,7 +102,7 @@ datum
 			name = "Thermite"
 			id = "thermite"
 			result = "thermite"
-			required_reagents = list("aluminum" = 1, "iron" = 1, "oxygen" = 1)
+			required_reagents = list("aluminium" = 1, "iron" = 1, "oxygen" = 1)
 			result_amount = 3
 
 		lexorin
@@ -316,7 +316,7 @@ datum
 			name = "Flash powder"
 			id = "flash_powder"
 			result = null
-			required_reagents = list("aluminum" = 1, "potassium" = 1, "sulfur" = 1 )
+			required_reagents = list("aluminium" = 1, "potassium" = 1, "sulfur" = 1 )
 			result_amount = null
 			on_reaction(var/datum/reagents/holder, var/created_volume)
 				var/location = get_turf(holder.my_atom)
@@ -345,7 +345,7 @@ datum
 			name = "Napalm"
 			id = "napalm"
 			result = null
-			required_reagents = list("aluminum" = 1, "plasma" = 1, "sacid" = 1 )
+			required_reagents = list("aluminium" = 1, "plasma" = 1, "sacid" = 1 )
 			result_amount = 1
 			on_reaction(var/datum/reagents/holder, var/created_volume)
 				var/turf/simulated/T = get_turf(holder.my_atom)
@@ -467,7 +467,7 @@ datum
 			name = "Virus Food"
 			id = "virusfood"
 			result = "virusfood"
-			required_reagents = list("water" = 5, "milk" = 5, "oxygen" = 5)
+			required_reagents = list("water" = 5, "milk" = 5)
 			result_amount = 15
 
 		mix_virus
@@ -475,8 +475,9 @@ datum
 			id = "mixvirus"
 			result = "blood"
 			required_reagents = list("virusfood" = 5)
-			required_catalysts = list("blood")
-			var/level = 2
+			required_catalysts = list("blood" = 5)
+			var/level_min = 0
+			var/level_max = 2
 
 			on_reaction(var/datum/reagents/holder, var/created_volume)
 
@@ -484,7 +485,7 @@ datum
 				if(B && B.data)
 					var/datum/disease/advance/D = locate(/datum/disease/advance) in B.data["viruses"]
 					if(D)
-						D.Evolve(level - rand(0, 2))
+						D.Evolve(level_min, level_max)
 
 
 			mix_virus_2
@@ -492,20 +493,23 @@ datum
 				name = "Mix Virus 2"
 				id = "mixvirus2"
 				required_reagents = list("mutagen" = 5)
-				level = 4
+				level_min = 2
+				level_max = 4
 
 			mix_virus_3
 
 				name = "Mix Virus 3"
 				id = "mixvirus3"
 				required_reagents = list("plasma" = 5)
-				level = 6
+				level_min = 4
+				level_max = 6
 
 			rem_virus
 
 				name = "Devolve Virus"
 				id = "remvirus"
-				required_reagents = list("synaptizine" = 5)
+				required_reagents = list("synaptizine" = 1)
+				required_catalysts = list("blood" = 1)
 
 				on_reaction(var/datum/reagents/holder, var/created_volume)
 
@@ -562,7 +566,7 @@ datum
 			name = "Metal Foam"
 			id = "metalfoam"
 			result = null
-			required_reagents = list("aluminum" = 3, "foaming_agent" = 1, "pacid" = 1)
+			required_reagents = list("aluminium" = 3, "foaming_agent" = 1, "pacid" = 1)
 			result_amount = 5
 
 			on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -1478,6 +1482,38 @@ datum
 								M.client.screen -= blueeffect
 								blueeffect.loc = null
 
+						var/turf/newloc = locate(A.x + x_distance, A.y + y_distance, TO.z) // calculate the new place
+						if(!A.Move(newloc)) // if the atom, for some reason, can't move, FORCE them to move! :) We try Move() first to invoke any movement-related checks the atom needs to perform after moving
+							A.loc = locate(A.x + x_distance, A.y + y_distance, TO.z)
+
+						spawn()
+							if(ismob(A) && !(A in flashers)) // don't flash if we're already doing an effect
+								var/mob/M = A
+								if(M.client)
+									var/obj/blueeffect = new /obj(src)
+									blueeffect.screen_loc = "WEST,SOUTH to EAST,NORTH"
+									blueeffect.icon = 'icons/effects/effects.dmi'
+									blueeffect.icon_state = "shieldsparkles"
+									blueeffect.layer = 17
+									blueeffect.mouse_opacity = 0
+									M.client.screen += blueeffect
+									sleep(20)
+									M.client.screen -= blueeffect
+									del(blueeffect)
+		slimecrystal
+			name = "Slime Crystal"
+			id = "m_crystal"
+			result = null
+			required_reagents = list("blood" = 5)
+			result_amount = 1
+			required_container = /obj/item/slime_extract/bluespace
+			required_other = 1
+			on_reaction(var/datum/reagents/holder, var/created_volume)
+				feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
+				if(holder.my_atom)
+					var/obj/item/bluespace_crystal/BC = new(get_turf(holder.my_atom))
+					BC.visible_message("<span class='notice'>The [BC.name] appears out of thin air!</span>")
+
 //Cerulean
 
 		slimepsteroid2
@@ -1584,6 +1620,20 @@ datum
 			id = "hot_coco"
 			result = "hot_coco"
 			required_reagents = list("water" = 5, "coco" = 1)
+			result_amount = 5
+
+		coffee
+			name = "Coffee"
+			id = "coffee"
+			result = "coffee"
+			required_reagents = list("coffeepowder" = 1, "water" = 5)
+			result_amount = 5
+
+		tea
+			name = "Tea"
+			id = "tea"
+			result = "tea"
+			required_reagents = list("teapowder" = 1, "water" = 5)
 			result_amount = 5
 
 		soysauce
@@ -2116,7 +2166,7 @@ datum
 			name = "Hippies Delight"
 			id = "hippiesdelight"
 			result = "hippiesdelight"
-			required_reagents = list("psilocybin" = 1, "gargleblaster" = 1)
+			required_reagents = list("mushroomhallucinogen" = 1, "gargleblaster" = 1)
 			result_amount = 2
 
 		bananahonk
@@ -2144,5 +2194,5 @@ datum
 			name = "Thirteen Loko"
 			id = "thirteenloko"
 			result = "thirteenloko"
-			required_reagents = list("vodka" = 1, "coffee" = 1, "orangejuice" = 1)
+			required_reagents = list("vodka" = 1, "coffee" = 1, "limejuice" = 1)
 			result_amount = 3

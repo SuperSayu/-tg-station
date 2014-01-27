@@ -17,7 +17,6 @@
 				bag = new/obj/item/weapon/storage/bag/seeds(O.loc)
 		while(t_amount < t_max)
 			var/obj/item/seeds/t_prod = new F.seed(O.loc)
-			t_prod.species = F.species
 			t_prod.lifespan = F.lifespan
 			t_prod.endurance = F.endurance
 			t_prod.maturation = F.maturation
@@ -45,7 +44,6 @@
 				bag = new/obj/item/weapon/storage/bag/seeds(O.loc)
 		while(t_amount < t_max)
 			var/obj/item/seeds/t_prod = new F.seed(O.loc)
-			t_prod.species = F.species
 			t_prod.lifespan = F.lifespan
 			t_prod.endurance = F.endurance
 			t_prod.maturation = F.maturation

@@ -81,10 +81,10 @@ var/global/mulebot_count = 0
 			radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
 
 		if(get_turf(loc))
-			mulebot_count++
+			mulebot_count += 1
 			if(!suffix)
 				suffix = "#[mulebot_count]"
-			name = "Mulebot ([suffix])"
+			name = "mulebot [suffix]"
 
 
 	verbs -= /atom/movable/verb/pull
@@ -331,7 +331,7 @@ var/global/mulebot_count = 0
 				refresh=1
 				if(new_id)
 					suffix = new_id
-					name = "Mulebot ([suffix])"
+					name = "\improper Mulebot ([suffix])"
 					updateDialog()
 
 			if("sethome")

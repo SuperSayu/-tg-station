@@ -9,13 +9,12 @@
 	throw_speed = 2
 	throw_range = 5
 	w_class = 3.0
-	flags = 0
 	var/created_name = "Cleanbot"
 
 
 //Cleanbot
 /obj/machinery/bot/cleanbot
-	name = "Cleanbot"
+	name = "\improper Cleanbot"
 	desc = "A little cleaning robot, he looks so excited!"
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "cleanbot0"
@@ -165,7 +164,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 		src.screwloose = 1
 
 /obj/machinery/bot/cleanbot/process()
-	set background = 1
+	set background = BACKGROUND_ENABLED
 
 	if(!src.on)
 		return
@@ -179,19 +178,8 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	if(src.screwloose && prob(5))
 		if(istype(loc,/turf/simulated))
 			var/turf/simulated/T = src.loc
-			if(T.wet < 1)
-				T.wet = 1
-				if(T.wet_overlay)
-					T.overlays -= T.wet_overlay
-					T.wet_overlay = null
-				T.wet_overlay = image('icons/effects/water.dmi',T,"wet_floor")
-				T.overlays += T.wet_overlay
-				spawn(800)
-					if (istype(T) && T.wet < 2)
-						T.wet = 0
-						if(T.wet_overlay)
-							T.overlays -= T.wet_overlay
-							T.wet_overlay = null
+			T.MakeSlippery()
+
 	if(src.oddbutton && prob(5))
 		visible_message("Something flies out of [src]. He seems to be acting oddly.")
 		var/obj/effect/decal/cleanable/blood/gibs/gib = new /obj/effect/decal/cleanable/blood/gibs(src.loc)

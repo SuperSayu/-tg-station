@@ -13,7 +13,7 @@
 			loot += text2path(entry)
 	if(istype(loot) && loot.len && lootcount >= 1)
 		for(lootcount--)
-			if(!loot.len) return
+			if(!loot.len) break
 			var/lootspawn = pick(loot)
 			if(!lootdoubles)
 				loot.Remove(lootspawn)
