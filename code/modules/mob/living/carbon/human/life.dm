@@ -941,8 +941,6 @@
 			if(druggy)
 				druggy = max(druggy-1, 0)
 
-			if(gasping)
-				gasping--
 		return 1
 
 	proc/handle_regular_hud_updates()
