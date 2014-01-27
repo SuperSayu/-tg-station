@@ -940,9 +940,6 @@
 
 			if(druggy)
 				druggy = max(druggy-1, 0)
-
-			if(gasping)
-				gasping--
 		return 1
 
 	proc/handle_regular_hud_updates()
@@ -1033,7 +1030,7 @@
 			sight |= (SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			see_in_dark = 8
 			if(!druggy)		see_invisible = SEE_INVISIBLE_LEVEL_TWO
-			if(healths)		healths.icon_state = "health7"	//DEAD healthmeter
+			if(healths)		healths.icon_state = "dead"	//DEAD healthmeter
 		else
 			sight &= ~(SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			if(dna)
@@ -1126,17 +1123,21 @@
 
 			if(healths)
 				switch(hal_screwyhud)
-					if(1)	healths.icon_state = "health6"
-					if(2)	healths.icon_state = "health7"
+					if(1)	healths.icon_state = "health0"
+					if(2)	healths.icon_state = "dead"
 					else if(!reagents.has_reagent("morphine"))
 						switch(health - halloss)
-							if(100 to INFINITY)		healths.icon_state = "health0"
-							if(80 to 100)			healths.icon_state = "health1"
-							if(60 to 80)			healths.icon_state = "health2"
-							if(40 to 60)			healths.icon_state = "health3"
-							if(20 to 40)			healths.icon_state = "health4"
-							if(0 to 20)				healths.icon_state = "health5"
-							else					healths.icon_state = "health6"
+							if(100 to INFINITY)		healths.icon_state = "health10"
+							if(90 to 100)			healths.icon_state = "health9"
+							if(80 to 90)			healths.icon_state = "health8"
+							if(70 to 80)			healths.icon_state = "health7"
+							if(60 to 70)			healths.icon_state = "health6"
+							if(50 to 60)			healths.icon_state = "health5"
+							if(40 to 50)			healths.icon_state = "health4"
+							if(30 to 40)			healths.icon_state = "health3"
+							if(15 to 30)			healths.icon_state = "health2"
+							if(0 to 15)				healths.icon_state = "health1"
+							else					healths.icon_state = "health0"
 					else
 						healths.icon_state = "health?"
 
