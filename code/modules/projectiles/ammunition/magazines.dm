@@ -155,7 +155,7 @@
 /obj/item/ammo_box/magazine/bananacreme
 	name = "magazine (banana creme)"
 	icon_state = "clown"
-	ammo_type = "/obj/item/ammo_casing/bananacreme"
+	ammo_type = /obj/item/ammo_casing/shotgun/dart/bananacreme
 	caliber = "honk"
 	max_ammo = 20
 	origin_tech = null

@@ -139,6 +139,7 @@
 	density = 0
 	anchored = 1
 	layer = 2
+	alpha = 192
 
 /obj/effect/decal/cleanable/trail/bloodtrail
 	name = "bloody footprints"

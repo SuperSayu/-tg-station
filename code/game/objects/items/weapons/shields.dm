@@ -130,6 +130,12 @@
 		else
 			cloaked_user = null
 
+	if(cloaked_user && prob(42))
+		var/new_alpha = pick(0,cloaked_user.alpha,10,10,20)
+		if(cloaked_user.luminosity) new_alpha *= 2
+		if(cloaked_user.alpha != new_alpha)
+			animate(cloaked_user,alpha=new_alpha,time=5,loop=0,easing=BOUNCE_EASING)
+
 
 /obj/item/weapon/cloaking_device/dropped(mob/user as mob)
 	if(active) // did you seriously just drop an invisible thing

@@ -10,7 +10,8 @@
 	var/enchanted_state = null // icon state when spell is present
 	var/dormant_state = null
 	var/noun = null // for renaming: [noun] of [spell]
-	var/castingmode = 0 // during enchantment, only allow magic that
+	var/castingmode = 0 // during enchantment, only allow magic
+	slot_flags = SLOT_BELT
 
 	New(L,newspell)
 		..()
@@ -85,6 +86,7 @@
 	w_class = 10.0
 	layer = 20
 	castingmode = CAST_RANGED
+	slot_flags = 0
 
 	var/last_throw = 0
 
@@ -137,6 +139,7 @@
 	icon_state = "orb"
 	w_class = 2
 	castingmode = CAST_SELF
+	slot_flags = 0
 
 /obj/item/weapon/magic/staff
 	name = "magic staff"
@@ -147,6 +150,7 @@
 	force = 3
 	w_class = 4
 	castingmode = CAST_RANGED
+	slot_flags = SLOT_BACK
 
 /obj/item/weapon/magic/staff/broom
 	name = "bewitched broom"
@@ -163,6 +167,7 @@
 
 	force = 5
 	castingmode = CAST_MELEE
+	slot_flags = SLOT_BACK | SLOT_BELT
 
 // doesn't get enchanted, instead gets filled with scrolls
 // You cannot cast from a spellbook and you cannot remove scrolls
@@ -229,20 +234,33 @@
 	icon_state = "purple"
 	item_state = "purplegloves"
 	item_color="purple"
+	slot_flags = SLOT_GLOVES|SLOT_POCKET|SLOT_BELT
 	var/obj/effect/knowspell/spell = null
 	var/noun = "gloves"
 	var/castingmode = CAST_MELEE|CAST_RANGED
+	action_button_name = "Toggle Casting"
+	var/casting = 1
+
+	ui_action_click()
+		casting = !casting
+		usr << "[src] is [casting?"now":"no longer"] casting on everything you touch or gesture at."
 
 	Touch(var/atom/A, var/proximity)
+		if(!casting || !spell || !ismob(loc)) return
 		var/mob/user = loc
-		if(!spell || !spell.cast_check(user)) return 0
 		if(proximity)
 			if(spell.castingmode & CAST_MELEE)
-				return spell.attack(A,user)
+				if(spell.cast_check(user))
+					spell.attack(A,user)
+					return 1
+				return 0
 
 		else
 			if(spell.castingmode & CAST_RANGED)
-				spell.afterattack(A,user)
+				if(spell.cast_check(user))
+					spell.afterattack(A,user)
+					return 1
+				return 0
 	Stat()
 		if(spell)
 			statpanel("Spells","Gloves")
@@ -271,3 +289,8 @@
 		else
 			name = initial(name)
 
+/obj/item/weapon/storage/belt/bluespace/wizard
+	name = "wizard's belt of holding"
+	desc = "Comfortable, adequate support, and it fits just right... this is TRUE magic."
+	reliability = 100
+	max_combined_w_class = 16 // not as good as technology

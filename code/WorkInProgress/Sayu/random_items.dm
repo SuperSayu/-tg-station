@@ -66,7 +66,7 @@
 	identify_probability = 0
 	New()
 		..()
-		var/global/list/chems_only = list("slimejelly","blood","water","lube","anti_toxin","toxin","cyanide","stoxin","inaprovaline","space_drugs","serotrotium","oxygen","copper","nitrogen","hydrogen","potassium","mercury","sulfur","carbon","chlorine","fluorine","sodium","phosphorus","lithium","sugar","sacid","pacid","glycerol","radium","ryetalyn","thermite","mutagen","virusfood","iron","gold","silver","uranium","aluminum","silicon","fuel","cleaner","plantbgone","plasma","leporazine","cryptobiolin","lexorin","kelotane","dermaline","dexalin","dexalinp","tricordrazine","synaptizine","impedrezene","hyronalin","arithrazine","alkysine","imidazoline","bicaridine","hyperzine","cryoxadone","clonexadone","spaceacillin","carpotoxin","zombiepowder","mindbreaker","fluorosurfactant","foaming_agent","ethanol","ammonia","diethylamine","ethylredoxrazine","chloralhydrate","lipozine","condensedcapsaicin","frostoil","amatoxin","psilocybin","enzyme","nothing","doctorsdelight","antifreeze","neurotoxin")
+		var/global/list/chems_only = list("slimejelly","blood","water","lube","anti_toxin","toxin","cyanide","stoxin","inaprovaline","space_drugs","serotrotium","oxygen","copper","nitrogen","hydrogen","potassium","mercury","sulfur","carbon","chlorine","fluorine","sodium","phosphorus","lithium","sugar","sacid","pacid","glycerol","radium","ryetalyn","thermite","mutagen","virusfood","iron","gold","silver","uranium","aluminium","silicon","fuel","cleaner","plantbgone","plasma","leporazine","cryptobiolin","lexorin","kelotane","dermaline","dexalin","dexalinp","tricordrazine","synaptizine","impedrezene","hyronalin","arithrazine","alkysine","imidazoline","bicaridine","hyperzine","cryoxadone","clonexadone","spaceacillin","carpotoxin","zombiepowder","mindbreaker","fluorosurfactant","foaming_agent","ethanol","ammonia","diethylamine","ethylredoxrazine","chloralhydrate","lipozine","condensedcapsaicin","frostoil","amatoxin","psilocybin","enzyme","nothing","doctorsdelight","antifreeze","neurotoxin")
 		var/global/list/rare_chems = list("minttoxin","nanites","xenomicrobes","adminordrazine")
 
 		var/datum/reagent/R = pick(chems_only + rare_chems)
@@ -88,7 +88,7 @@
 	identify_probability = 0
 	New()
 		..()
-		var/global/list/base_chems = list("water","oxygen","nitrogen","hydrogen","potassium","mercury","carbon","chlorine","fluorine","phosphorus","lithium","sulfur","sacid","radium","iron","aluminum","silicon","sugar","ethanol")
+		var/global/list/base_chems = list("water","oxygen","nitrogen","hydrogen","potassium","mercury","carbon","chlorine","fluorine","phosphorus","lithium","sulfur","sacid","radium","iron","aluminium","silicon","sugar","ethanol")
 		var/datum/reagent/R = pick(base_chems)
 		reagents.add_reagent(R,rand(2,6)*5)
 		name = "unlabelled bottle"
@@ -209,14 +209,15 @@
 	New()
 		..()
 		sleep(2)
-		var/global/list/base_chems = list("water","oxygen","nitrogen","hydrogen","potassium","mercury","carbon","chlorine","fluorine","phosphorus","lithium","sulfur","sacid","radium","iron","aluminum","silicon","sugar","ethanol")
+		var/global/list/base_chems = list("water","oxygen","nitrogen","hydrogen","potassium","mercury","carbon","chlorine","fluorine","phosphorus","lithium","sulfur","sacid","radium","iron","aluminium","silicon","sugar","ethanol")
 		for(var/chem in base_chems)
 			var/obj/item/weapon/reagent_containers/glass/bottle/B = new(src)
 			B.reagents.add_reagent(chem,B.volume)
 			if(prob(85))
 				var/datum/reagent/r = chemical_reagents_list[chem]
-				B.name	= "[r.name] bottle"
-				B.identify_probability = 100
+				if(r) // someone may have changed reagent names on me again
+					B.name	= "[r.name] bottle"
+					B.identify_probability = 100
 			else
 				B.name	= "unlabelled bottle"
 				B.desc	= "Looks like the label fell off."
@@ -242,7 +243,7 @@
 	anchored = 0
 	New()
 		while(contents.len < 10)
-			var/ptype = pick(/obj/item/weapon/reagent_containers/food/snacks/grown/apple,/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
+			var/ptype = pick(/obj/item/weapon/reagent_containers/food/snacks/grown/apple, /obj/item/weapon/reagent_containers/food/snacks/grown/banana,
 							 /obj/item/weapon/reagent_containers/food/snacks/grown/berries, /obj/item/weapon/reagent_containers/food/snacks/grown/cabbage,
 							 /obj/item/weapon/reagent_containers/food/snacks/grown/carrot, /obj/item/weapon/reagent_containers/food/snacks/grown/cherries,
 							 /obj/item/weapon/reagent_containers/food/snacks/grown/chili, /obj/item/weapon/reagent_containers/food/snacks/grown/cocoapod,

@@ -15,7 +15,7 @@
 	origin_tech = "bluespace=4"
 	can_hold = list()
 	New()
-		if(prob(5))
+		if(prob(5) && (type == /obj/item/weapon/storage/belt/bluespace))
 			//Sometimes people choose justice.
 			//Sometimes justice chooses you.
 			visible_message("That doesn't look like a normal Toolbelt of Holding...")

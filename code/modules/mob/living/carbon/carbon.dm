@@ -7,7 +7,7 @@
 				src.nutrition -= HUNGER_FACTOR/10
 		if((FAT in src.mutations) && src.m_intent == "run" && src.bodytemperature <= 360)
 			src.bodytemperature += 2
-	if(trail > 0 && prob(30))
+	if(trail > 0 && prob(40))
 		var/obj/effect/decal/cleanable/trail/t
 		switch(trailtype)
 			if("blood")
@@ -31,11 +31,21 @@
 					t = new /obj/effect/decal/cleanable/trail/xenotrail/paw(src.loc)
 				if(istype(src, /mob/living/carbon/alien/humanoid))
 					t = new /obj/effect/decal/cleanable/trail/xenotrail/xeno(src.loc)
-		t.dir = src.dir
-		if(t.loc && isturf(t.loc))
-			for(var/obj/effect/decal/cleanable/trail/T in src.loc)
-				if(T.dir == t.dir && T != t)
-					del(T)
+		if(t)
+			t.dir = src.dir
+			t.alpha = min(224,trail*32 + pick(64,32,16,0,0,-16,-32,-64))
+			if(t.alpha <= 0)
+				t.alpha = 16
+			if(t.alpha <= 64)
+				spawn(300)
+					if(t) t.alpha /= 2
+			if(t.alpha <= 32)
+				spawn(600)
+					if(t) del t
+			if(t.loc && isturf(t.loc))
+				for(var/obj/effect/decal/cleanable/trail/T in src.loc)
+					if(T.dir == t.dir && T != t)
+						del(T)
 		trail--
 
 /mob/living/carbon/movement_delay()
@@ -614,5 +624,7 @@ var/const/GALOSHES_DONT_HELP = 8
 		playsound(loc, 'sound/misc/slip.ogg', 50, 1, -3)
 		Stun(s_amount)
 		Weaken(w_amount)
+		if(prob(45) && istype(O) && !O.anchored)
+			step_rand(O)
 		return 1
 	return 0 // no success. Used in clown pda and wet floors

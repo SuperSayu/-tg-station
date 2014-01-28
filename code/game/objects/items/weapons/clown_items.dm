@@ -62,6 +62,12 @@
 	if (istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
 		M.slip(3, 2, src)
+		if(CLUMSY in M.mutations)
+			uses++ // murphy's law compels you
+		else
+			uses--
+		if(uses <= 0)
+			del src
 
 /obj/item/weapon/soap/afterattack(atom/target, mob/user as mob, proximity)
 	if(!proximity) return

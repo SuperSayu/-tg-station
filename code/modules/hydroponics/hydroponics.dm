@@ -22,7 +22,7 @@
 	var/obj/item/seeds/myseed = null	//The currently planted seed
 	var/unwrenchable = 1
 
-	pixel_y=8
+	pixel_y=2
 
 
 /obj/machinery/hydroponics/proc/FindConnected()

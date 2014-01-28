@@ -124,12 +124,13 @@ Please contact me on #coderbus IRC. ~Carnie x
 				break
 
 	if(stealth)
-		var/new_alpha = pick(0,5,5,5,5,5,10,15)
+		var/new_alpha = pick(5,alpha,10,10,20)
+		if(luminosity) alpha *= 2
 		if(alpha != new_alpha)
-			animate(src,alpha=new_alpha,time=10,loop=0)
+			animate(src,alpha=new_alpha,time=15,loop=0,easing=ELASTIC_EASING)
 	else
 		if(alpha != 255)
-			animate(src,alpha=255,time=20,loop=0)
+			animate(src,alpha=255,time=12,loop=0,easing=CUBIC_EASING)
 
 	update_transform()
 
