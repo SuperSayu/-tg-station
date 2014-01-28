@@ -65,35 +65,21 @@
 	icon_state = "clown"
 	item_state = "clowngun"
 	w_class = 3.0
-	max_shells = 20
-	caliber = "honk"
-	ammo_type = "/obj/item/ammo_casing/bananacreme"
+	mag_type = /obj/item/ammo_box/magazine/bananacreme
 	fire_sound = 'sound/items/bikehorn.ogg'
-	load_method = 2
 	clumsy_check = 0
+	origin_tech = null
 
 
 	New()
 		..()
-		empty_mag = new /obj/item/ammo_magazine/bananacreme/empty(src)
 		update_icon()
 		return
 
-
-	fireat(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params)
-		..()
-		if(!loaded.len && empty_mag)
-			empty_mag.loc = get_turf(src.loc)
-			empty_mag = null
-			playsound(user, 'sound/weapons/smg_empty_alarm.ogg', 40, 1)
-			update_icon()
-		return
-
-
 	update_icon()
 		..()
-		if(empty_mag)
-			icon_state = "clown-[round(loaded.len,4)]"
+		if(magazine)
+			icon_state = "clown-[round(get_ammo(0),4)]"
 		else
 			icon_state = "clown"
 		return

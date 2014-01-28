@@ -162,8 +162,8 @@
 		if(air_group || (height==0)) return 1
 
 		if(istype(mover, /obj/item/projectile))
-			var/obj/item/projectile/other = mover
-			if(istype(mover,/obj/item/projectile/magic) && other.shot_from == shot_from)
+			var/obj/item/projectile/magic/other = mover
+			if(istype(other) && caster && other.caster == caster)
 				return 1
 			return prob(90)
 		else

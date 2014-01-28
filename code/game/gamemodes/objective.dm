@@ -323,7 +323,7 @@ datum/objective/steal
         "a live facehugger" = /obj/item/clothing/mask/facehugger,
         "the monitor decryption key" = /obj/item/weapon/paper/monitorkey,
 //        "a 'Freeform' core AI module" = /obj/item/weapon/aiModule/freeformcore,
-        "an 'Astleymov' core AI module" = /obj/item/weapon/aiModule/rickrules,
+        "an 'Astleymov' core AI module" = /obj/item/weapon/aiModule/core/full/rickrules,
 		"a dermal armor patch" = /obj/item/clothing/head/helmet/HoS/dermal,
 		"an AI upload construction circuit board" = /obj/item/weapon/circuitboard/aiupload,
 //		"a cyborg upload construction circuit board" = /obj/item/weapon/circuitboard/borgupload,

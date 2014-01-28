@@ -125,30 +125,10 @@
 	if(cloaked_user != loc)
 		if(cloaked_user)
 			cloaked_user.update_icons()
-		cloaked_user = loc
-
-	var/mob/living/carbon/human/H = cloaked_user
-	H.overlays = list()
-	var/image/I
-	if(H.lying)
-		// oh hey look they #undefine the constants outside of update_icons, that's nice
-		I = H.overlays_lying[2] // left hand
-		if(istype(I))
-			H.overlays += I
-
-		I = H.overlays_lying[1] // right hand
-		if(istype(I))
-			H.overlays += I
-	else
-		// oh hey look they #undefine the constants outside of update_icons, that's nice
-		I = H.overlays_standing[2] // left hand
-		if(istype(I))
-			H.overlays += I
-
-		I = H.overlays_standing[1] // right hand
-		if(istype(I))
-			H.overlays += I
-
+		if(ismob(loc))
+			cloaked_user = loc
+		else
+			cloaked_user = null
 
 
 /obj/item/weapon/cloaking_device/dropped(mob/user as mob)

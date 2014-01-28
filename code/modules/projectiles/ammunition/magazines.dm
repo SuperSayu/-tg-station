@@ -151,3 +151,11 @@
 /obj/item/ammo_box/magazine/m762/update_icon()
 	..()
 	icon_state = "[initial(icon_state)]-[round(ammo_count(),10)]"
+
+/obj/item/ammo_box/magazine/bananacreme
+	name = "magazine (banana creme)"
+	icon_state = "clown"
+	ammo_type = "/obj/item/ammo_casing/bananacreme"
+	caliber = "honk"
+	max_ammo = 20
+	origin_tech = null

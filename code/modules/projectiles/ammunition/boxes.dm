@@ -59,10 +59,4 @@
 	origin_tech = "combat=2"
 	ammo_type = /obj/item/ammo_casing/a12mm
 	max_ammo = 30
-/obj/item/ammo_magazine/bananacreme
-	name = "magazine (banana creme)"
-	icon_state = "clown"
-	ammo_type = "/obj/item/ammo_casing/bananacreme"
-	max_ammo = 20
-/obj/item/ammo_magazine/bananacreme/empty
-	max_ammo = 0
+

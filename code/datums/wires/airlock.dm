@@ -166,7 +166,7 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 					A.shockedby += text("\[[time_stamp()]\][usr](ckey:[usr.ckey])")
 					add_logs(usr, A, "electrified", admin=0, addition="at [A.x],[A.y],[A.z]")
 				else
-					A.shockedby += "\[[timestamp()]\](No usr - timer/trigger activated)"
+					A.shockedby += "\[[time_stamp()]\](No usr - timer/trigger activated)"
 				A.secondsElectrified = 30
 				spawn(10)
 					if(A)

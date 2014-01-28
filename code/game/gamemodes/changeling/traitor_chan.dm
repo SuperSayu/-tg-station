@@ -45,7 +45,7 @@
 				possible_traitors -= player
 
 	//if(config.traitor_scaling)
-	traitors_possible = scale_antags()
+	//traitors_possible = scale_antags()
 
 	// No more than three lings, but allow them to be a
 	// greater portion of the antagonist docket if the

@@ -395,15 +395,15 @@
 
 	spawns_possible = list(
 		/obj/item/weapon/gun/energy/taser, /obj/item/weapon/gun/energy/gun, /obj/item/weapon/gun/energy/laser,/obj/item/weapon/gun/projectile,
-		/obj/item/weapon/gun/projectile/detective,/obj/item/weapon/gun/projectile/automatic/c20r,/obj/item/weapon/gun/energy/gun/nuclear,
-		/obj/item/weapon/gun/projectile/deagle/camo,/obj/item/weapon/gun/projectile/gyropistol,/obj/item/weapon/gun/energy/pulse_rifle,
-		/obj/item/weapon/gun/projectile/pistol,/obj/item/weapon/gun/energy/lasercannon,/obj/item/weapon/gun/projectile/shotgun/pump,
-		/obj/item/weapon/gun/projectile/shotgun/pump,/obj/item/weapon/gun/projectile/shotgun/pump/combat,/obj/item/weapon/gun/projectile/mateba,
+		/obj/item/weapon/gun/projectile/revolver/detective,/obj/item/weapon/gun/projectile/automatic/c20r,/obj/item/weapon/gun/energy/gun/nuclear,
+		/obj/item/weapon/gun/projectile/automatic/deagle/camo,/obj/item/weapon/gun/projectile/automatic/gyropistol,/obj/item/weapon/gun/energy/pulse_rifle,
+		/obj/item/weapon/gun/projectile/automatic/pistol,/obj/item/weapon/gun/energy/lasercannon,/obj/item/weapon/gun/projectile/shotgun,
+		/obj/item/weapon/gun/projectile/shotgun/combat,/obj/item/weapon/gun/projectile/revolver/mateba,
 		/obj/item/weapon/gun/projectile/automatic,/obj/item/weapon/gun/projectile/automatic/mini_uzi,/obj/item/weapon/gun/energy/crossbow,
 		/obj/item/weapon/gun/projectile/automatic/l6_saw)
 
 /obj/effect/knowspell/summon/world/guns/summon_effect(var/atom/A)
-	if(istype(A,/obj/item/weapon/gun/projectile/pistol))
+	if(istype(A,/obj/item/weapon/gun/projectile/automatic/pistol))
 		new /obj/item/weapon/silencer(A.loc)
 	return 1
 

@@ -51,7 +51,7 @@
 // -------------------------------------
 //              I'm sorry
 // -------------------------------------
-/obj/item/weapon/aiModule/rickrules
+/obj/item/weapon/aiModule/core/full/rickrules
 	name = "'Astleymov' Core AI Module"
 	desc = "An 'Astleymov' Core AI Module: 'Reconfigures the AI's core laws.'"
 	origin_tech = "programming=4"

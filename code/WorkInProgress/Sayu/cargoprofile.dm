@@ -155,7 +155,7 @@
 	blacklist = null
 	whitelist = list(/obj/item/weapon/tank,/obj/item/weapon/reagent_containers,
 					/obj/item/stack/medical,/obj/item/weapon/storage/pill_bottle,/obj/item/weapon/gun/syringe,
-					/obj/item/weapon/plastique,/obj/item/weapon/grenade,/obj/item/ammo_magazine,
+					/obj/item/weapon/plastique,/obj/item/weapon/grenade,/obj/item/ammo_box,
 					/obj/item/weapon/gun/grenadelauncher,/obj/item/weapon/flamethrower,	/obj/item/weapon/lighter,
 					/obj/item/weapon/match,/obj/item/weapon/weldingtool)
 
@@ -556,7 +556,7 @@
 		return "[garbletext(copytext(Text,l/2,0))][pick("#","|","/","*",".","."," ","."," "," ")]"
 
 	proc/garble_keeptags(var/Text)
-		var/list/L = stringsplit(Text,">")
+		var/list/L = text2list(Text,">")
 		var/result = ""
 		for(var/string in L)
 			var/index = findtextEx(string,"<")

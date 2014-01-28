@@ -28,9 +28,9 @@
 		. += (283.222 - bodytemperature) / 10 * 1.75
 
 	if(("left leg" in broken) && ("right leg" in broken) && !reagents.has_reagent("morphine"))
-		tally += 1
+		. += 1
 
-	return (tally+config.human_delay)
+	return (. +config.human_delay)
 
 /mob/living/carbon/human/Move()
 	// ugh this looks so ugly

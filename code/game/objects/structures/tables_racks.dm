@@ -276,7 +276,6 @@
 
 
 /obj/structure/table/MouseDrop_T(obj/O, mob/user)
-	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
 	if ((!( istype(O, /obj/item) ) || user.get_active_hand() != O))
 		return
 	if(istype(O,/obj/item/weapon/grab))
@@ -316,12 +315,12 @@
 
 	var/obj/effect/spacevine/vine = locate() in loc
 	if(vine) // don't drop things on tables when trying to attack spacevines
-		return vine.attackby(W,user)
+		return vine.attackby(I,user)
 
 	if(isrobot(user))
-		if(istype(W,/obj/item/weapon/tray))
-			W.loc = loc
-			W.dropped(user)
+		if(istype(I,/obj/item/weapon/tray))
+			I.loc = loc
+			I.dropped(user)
 		return
 
 	if(istype(I, /obj/item/weapon/melee/energy/blade))
@@ -397,24 +396,6 @@ Destroy type values:
 	parts = /obj/item/weapon/table_parts/reinforced
 	var/status = 2
 
-
-
-/obj/structure/table/holotable
-	name = "table"
-	desc = "A square piece of metal standing on four metal legs. It can not move."
-	icon = 'icons/obj/structures.dmi'
-	icon_state = "table"
-	strong = 3
-
-/obj/structure/table/holotable/wood
-	name = "wooden table"
-	icon_state = "woodtable"
-	desc = "A classic design in a classic material."
-
-/obj/structure/table/holotable/reinforced
-	name = "reinforced table"
-	desc = "A version of the four legged table with multiple layers of metal."
-/*
 /obj/structure/table/reinforced/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/weldingtool))
 		var/obj/effect/spacevine/vine = locate() in loc
@@ -439,6 +420,21 @@ Destroy type values:
 					src.status = 2
 			return
 	..()
+
+/obj/structure/table/holotable
+	name = "table"
+	desc = "A square piece of metal standing on four metal legs. It can not move."
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "table"
+
+/obj/structure/table/holotable/wood
+	name = "wooden table"
+	icon_state = "woodtable"
+	desc = "A classic design in a classic material."
+
+/obj/structure/table/holotable/reinforced
+	name = "reinforced table"
+	desc = "A version of the four legged table with multiple layers of metal."
 
 /*
  * Racks

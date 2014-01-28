@@ -244,7 +244,6 @@
 			if(AM.loc.y != loc.y-1) return
 		if(WEST)
 			if(AM.loc.x != loc.x-1) return
-		if(istype(AM, /obj/item/projectile))	return
 
 	if(istype(AM, /obj))
 		var/obj/O = AM

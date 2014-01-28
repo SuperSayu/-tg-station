@@ -4,7 +4,7 @@
 	var/projectile_spread = 0 // 0: none; 1: repeat-fire; 2: spread-fire;
 
 /obj/effect/knowspell/projectile/proc/fire(var/obj/item/projectile/magic/P, var/atom/target, var/turf/start, var/turf/end, var/mob/user, var/sidestep = 0, var/sidestep_dir = 0)
-	P.shot_from = src
+//	P.shot_from = src
 	if(start == end)			//Fire the projectile
 		user.bullet_act(P)
 		del(P)

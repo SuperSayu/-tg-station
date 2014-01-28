@@ -160,5 +160,5 @@ datum/design/bluespace_belt
 	req_tech = list("bluespace" = 4, "materials" = 6)
 	build_type = PROTOLATHE
 	materials = list("$gold" = 1500, "$diamond" = 3000, "$uranium" = 1000)
-	reliability_base = 80
+	//reliability_base = 80
 	build_path = "/obj/item/weapon/storage/belt/bluespace"

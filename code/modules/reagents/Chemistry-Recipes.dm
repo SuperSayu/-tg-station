@@ -1482,24 +1482,6 @@ datum
 								M.client.screen -= blueeffect
 								blueeffect.loc = null
 
-						var/turf/newloc = locate(A.x + x_distance, A.y + y_distance, TO.z) // calculate the new place
-						if(!A.Move(newloc)) // if the atom, for some reason, can't move, FORCE them to move! :) We try Move() first to invoke any movement-related checks the atom needs to perform after moving
-							A.loc = locate(A.x + x_distance, A.y + y_distance, TO.z)
-
-						spawn()
-							if(ismob(A) && !(A in flashers)) // don't flash if we're already doing an effect
-								var/mob/M = A
-								if(M.client)
-									var/obj/blueeffect = new /obj(src)
-									blueeffect.screen_loc = "WEST,SOUTH to EAST,NORTH"
-									blueeffect.icon = 'icons/effects/effects.dmi'
-									blueeffect.icon_state = "shieldsparkles"
-									blueeffect.layer = 17
-									blueeffect.mouse_opacity = 0
-									M.client.screen += blueeffect
-									sleep(20)
-									M.client.screen -= blueeffect
-									del(blueeffect)
 		slimecrystal
 			name = "Slime Crystal"
 			id = "m_crystal"

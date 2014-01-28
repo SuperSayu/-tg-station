@@ -233,11 +233,11 @@ var/list/uplink_items = list()
 	cost = 3
 	excludefrom = list(/datum/game_mode/nuclear)
 
-/datum/uplink_item/stealthy_weapons/blowgun
-	name = "Blowgun"
-	desc = "Disguised as a cigar, this can hold one syringe and shoot it a short distance."
-	item = /obj/item/clothing/mask/blowgun
-	cost = 1
+///datum/uplink_item/stealthy_weapons/blowgun
+//	name = "Blowgun"
+//	desc = "Disguised as a cigar, this can hold one syringe and shoot it a short distance."
+//	item = /obj/item/clothing/mask/blowgun
+//	cost = 1
 
 /datum/uplink_item/stealthy_weapons/soap
 	name = "Syndicate Soap"

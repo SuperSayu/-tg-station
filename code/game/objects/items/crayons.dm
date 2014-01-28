@@ -98,7 +98,7 @@
 			user << "You start drawing around [M.name]'s body... "
 			if(instant || do_after(user, 50))
 				var/obj/effect/decal/cleanable/body/b = new /obj/effect/decal/cleanable/body(M.loc)
-				b.Color(colourName)
+				b.color = colourName
 				user << "You finish drawing."
 				uses--
 				if(!uses)

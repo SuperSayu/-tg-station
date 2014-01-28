@@ -123,25 +123,13 @@ Please contact me on #coderbus IRC. ~Carnie x
 				stealth = 1
 				break
 
-	if(lying)
-		if(stealth)
-			icon = 'icons/mob/human.dmi'
-			icon_state = "body_lying_cloaked"
-		else
-			icon_state = "[base_icon_state]_l"
-			for(var/thing in overlays_lying)
-				if(thing)	overlays += thing
+	if(stealth)
+		var/new_alpha = pick(0,5,5,5,5,5,10,15)
+		if(alpha != new_alpha)
+			animate(src,alpha=new_alpha,time=10,loop=0)
 	else
-		if(stealth)
-			icon_state = "body_cloaked"
-			if(overlays_standing[L_HAND_LAYER])
-				overlays += overlays_standing[L_HAND_LAYER]
-			if(overlays_standing[R_HAND_LAYER])
-				overlays += overlays_standing[R_HAND_LAYER]
-		else
-			icon_state = "[base_icon_state]_s"
-			for(var/thing in overlays_standing)
-				if(thing)	overlays += thing
+		if(alpha != 255)
+			animate(src,alpha=255,time=20,loop=0)
 
 	update_transform()
 

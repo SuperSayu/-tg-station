@@ -246,7 +246,7 @@ turf/simulated/floor/proc/update_icon()
 
 /turf/simulated/floor/proc/break_tile()
 	if(istype(src,/turf/simulated/floor/engine)) return
-	if(istype(src,/turf/simulated/floor/plating/airless/asteroid))
+	if(istype(src,/turf/simulated/floor/plating/asteroid/airless))
 		src:gets_dug()
 		return
 	if(istype(src,/turf/simulated/floor/mech_bay_recharge_floor))

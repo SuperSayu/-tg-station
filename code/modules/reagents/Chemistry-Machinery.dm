@@ -860,15 +860,15 @@ obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 	if(istype(O, /obj/item/weapon/storage/bag/plants))
 
 		if(is_type_in_list(O, dried_items))
-				if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
-						var/obj/item/weapon/reagent_containers/food/snacks/grown/G = O
-						if(!G.dry)
-								user << "<span class='notice'>You must dry that first!</span>"
-								return 1
+			if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
+				var/obj/item/weapon/reagent_containers/food/snacks/grown/G = O
+				if(!G.dry)
+					user << "<span class='notice'>You must dry that first!</span>"
+					return 1
 
 		if(holdingitems && holdingitems.len >= limit)
-				usr << "The machine cannot hold anymore items."
-				return 1
+			usr << "The machine cannot hold anymore items."
+			return 1
 		for (var/obj/item/weapon/reagent_containers/food/snacks/grown/G in O.contents)
 			O.contents -= G
 			G.loc = src

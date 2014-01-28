@@ -247,7 +247,6 @@
 
 /turf/simulated/floor/plating/asteroid/airless/cave
 	var/length = 100
-	var/crack = 0
 
 /turf/simulated/floor/plating/asteroid/airless/cave/New(loc, var/length, var/go_backwards = 1, var/exclude_dir = -1)
 
@@ -256,9 +255,6 @@
 		src.length = rand(25, 50)
 	else
 		src.length = length
-	if(isnull(force_crack))
-		if(prob(25))
-			crack = 1
 
 	// Get our directiosn
 	var/forward_cave_dir = pick(alldirs - exclude_dir)
@@ -296,7 +292,7 @@
 		if(istype(tunnel))
 			// Small chance to have forks in our tunnel; otherwise dig our tunnel.
 			if(i > 3 && prob(20))
-				new src.type(tunnel, rand(10, 15), 0, dir,crack)
+				new src.type(tunnel, rand(10, 15), 0, dir)
 			else
 				SpawnFloor(tunnel)
 		else //if(!istype(tunnel, src.parent)) // We hit space/normal/wall, stop our tunnel.
