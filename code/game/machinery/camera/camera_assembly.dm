@@ -10,7 +10,7 @@
 	g_amt = 300
 
 	//	Motion, EMP-Proof, X-Ray
-	var/list/obj/item/possible_upgrades = list(/obj/item/device/assembly/prox_sensor, /obj/item/stack/sheet/mineral/plasma, /obj/item/weapon/reagent_containers/food/snacks/grown/carrot)
+	var/list/obj/item/possible_upgrades = list(/obj/item/device/assembly/prox_sensor, /obj/item/stack/sheet/mineral/plasma, /obj/item/weapon/reagent_containers/food/snacks/grown/carrot, /obj/item/device/flashlight)
 	var/list/upgrades = list()
 	var/state = 0
 	var/busy = 0
@@ -91,6 +91,8 @@
 				var/obj/machinery/camera/C = new(src.loc)
 				src.loc = C
 				C.assembly = src
+				if(locate(/obj/item/device/flashlight) in src)
+					C.cam_luminosity = 5
 
 				C.auto_turn()
 

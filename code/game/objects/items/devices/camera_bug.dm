@@ -3,7 +3,8 @@
 #define NETWORK_BUG		2
 #define SABOTAGE_BUG	3
 #define ADVANCED_BUG	4
-#define ADMIN_BUG		5
+#define AI_BUG			5
+#define ADMIN_BUG		6
 
 #define BUGMODE_LIST	0
 #define BUGMODE_MONITOR	1
@@ -20,6 +21,7 @@
 	item_state	= "camera_bug"
 	throw_speed	= 4
 	throw_range	= 20
+	action_button_name = "check camera bug"
 
 	var/obj/machinery/camera/current = null
 	var/obj/item/expansion = null
@@ -40,6 +42,15 @@
 	var/last_found = null
 	var/last_seen = null
 
+/obj/item/device/camera_bug/ai
+	name = "Supplemental Camera Interface"
+	bugtype = AI_BUG
+	verb/show_interface()
+		set category="AI Commands"
+		set name="Show Camera Monitor"
+		interact(usr)
+
+
 /obj/item/device/camera_bug/New()
 	..()
 	processing_objects += src
@@ -54,6 +65,7 @@
 	interact(user)
 
 /obj/item/device/camera_bug/check_eye(var/mob/user as mob)
+	if(issilicon(user)) return 1
 	if (user.stat || loc != user || !user.canmove || user.blinded || !current)
 		user.reset_view(null)
 		user.unset_machine()
@@ -70,7 +82,7 @@
 	return 1
 
 /obj/item/device/camera_bug/proc/get_cameras()
-	if(bugtype != last_bugtype || ( (bugtype in list(UNIVERSAL_BUG,NETWORK_BUG,ADMIN_BUG)) && world.time > (last_net_update + 100)))
+	if(bugtype != last_bugtype || ( (bugtype in list(UNIVERSAL_BUG,NETWORK_BUG,AI_BUG,ADMIN_BUG)) && world.time > (last_net_update + 100)))
 		bugged_cameras = list()
 		last_bugtype = bugtype
 		for(var/obj/machinery/camera/camera in cameranet.cameras)
@@ -83,7 +95,7 @@
 				if(UNIVERSAL_BUG)
 					if(camera.bug)
 						bugged_cameras[camera.c_tag] = camera
-				if(NETWORK_BUG,ADMIN_BUG)
+				if(NETWORK_BUG,AI_BUG,ADMIN_BUG)
 					if(length(list("SS13","MINE")&camera.network))
 						bugged_cameras[camera.c_tag] = camera
 	bugged_cameras = sortAssoc(bugged_cameras)
@@ -106,11 +118,13 @@
 						functions = " - <a href='?src=\ref[src];emp=\ref[C]'>\[Disable\]</a>"
 					if(ADVANCED_BUG)
 						functions = " - <a href='?src=\ref[src];monitor=\ref[C]'>\[Monitor\]</a>"
+					if(AI_BUG)
+						functions = " - <a href='?src=\ref[src];monitor=\ref[C]'>\[Monitor\]</a> <a href='?src=\ref[src];light=\ref[C]'>\[[C.luminosity?"Deactivate":"Activate"] Light\]</a>"
 					if(ADMIN_BUG)
 						if(C.bug == src)
-							functions = " - <a href='?src=\ref[src];monitor=\ref[C]'>\[Monitor\]</a> <a href='?src=\ref[src];emp=\ref[C]'>\[Disable\]</a>"
+							functions = " - <a href='?src=\ref[src];monitor=\ref[C]'>\[Monitor\]</a>  <a href='?src=\ref[src];light=\ref[C]'>\[[C.luminosity?"Deactivate":"Activate"] Light\]</a> <a href='?src=\ref[src];emp=\ref[C]'>\[Disable\]</a>"
 						else
-							functions = " - <a href='?src=\ref[src];monitor=\ref[C]'>\[Monitor\]</a>"
+							functions = " - <a href='?src=\ref[src];monitor=\ref[C]'>\[Monitor\]</a>  <a href='?src=\ref[src];light=\ref[C]'>\[[C.luminosity?"Deactivate":"Activate"] Light\]</a>"
 				html += "<tr><td><a href='?src=\ref[src];view=\ref[C]'>[entry]</a></td><td>[functions]</td></tr>"
 
 		if(BUGMODE_MONITOR)
@@ -140,7 +154,16 @@
 						if(!s) s = "00"
 						html += "Last seen near [outstring] ([m]:[s] minute\s ago)<br>"
 				else
-					html += "Not yet seen."
+					html += "Not yet seen.<br>"
+				if(bugtype == AI_BUG || bugtype == ADMIN_BUG)
+					var/mob/living/carbon/human/H = tracking
+					var/level = 0
+					if(istype(H))
+						html += "<br>Suit sensor data:<br>"
+						var/obj/item/clothing/under/U = H.w_uniform
+						if(istype(U) && U.has_sensor)
+							level = U.sensor_mode
+						html += health_report(H,level) // In case the above doesn't happen, it's basically "Unavailable"
 			else
 				track_mode = BUGMODE_LIST
 				return .(cameras)
@@ -149,9 +172,12 @@
 /obj/item/device/camera_bug/proc/camera_report()
 	// this should only be called if current exists
 	var/dat = ""
+
 	if(current && current.can_use())
+		dat += "Light is <a href='?\ref[src];light=\ref[current]'>[current.luminosity?"on":"off"]</a><hr>"
 		var/list/seen = current.can_see()
 		var/list/names = list()
+		var/empty = 1
 		for(var/obj/machinery/singularity/S in seen) // god help you if you see more than one
 			if(S.name in names)
 				names[S.name]++
@@ -162,6 +188,7 @@
 			var/stage = round(S.current_size / 2)+1
 			dat += " (Stage [stage])"
 			dat += " <a href='?\ref[src];track=\ref[S]'>\[Track\]</a><br>"
+			empty = 0
 
 		for(var/obj/mecha/M in seen)
 			if(M.name in names)
@@ -171,7 +198,7 @@
 				names[M.name] = 1
 				dat += "[M.name]"
 			dat += " <a href='?\ref[src];track=\ref[M]'>\[Track\]</a><br>"
-
+			empty = 0
 
 		for(var/mob/living/M in seen)
 			if(M.name in names)
@@ -185,11 +212,38 @@
 			if(M.lying)
 				dat += " (Laying down)"
 			dat += " <a href='?\ref[src];track=\ref[M]'>\[Track\]</a><br>"
-		if(length(dat) == 0)
+			empty = 0
+		if(empty)
 			dat += "No motion detected."
 		return dat
 	else
 		return "Camera Offline<br>"
+
+/obj/item/device/camera_bug/proc/health_report(var/mob/living/M, var/sensor_mode)
+	if(sensor_mode < 1)
+		return "Unavailable"
+	var/turf/pos = get_turf(M)
+	if(pos.z != 1)
+		return "Unavailable"
+
+	var/life_status = "[M.stat > 1 ? "<span class='bad'>Deceased</span>" : "<span class='good'>Living</span>"]"
+
+	var/damage_report
+	if(sensor_mode > 1)
+		var/dam1 = round(M.getOxyLoss(),1)
+		var/dam2 = round(M.getToxLoss(),1)
+		var/dam3 = round(M.getFireLoss(),1)
+		var/dam4 = round(M.getBruteLoss(),1)
+		damage_report = "(<font color='teal'>[dam1]</font>/<font color='green'>[dam2]</font>/<font color='orange'>[dam3]</font>/<font color='red'>[dam4]</font>)"
+
+	switch(sensor_mode)
+		if(1)
+			return life_status
+		if(2)
+			return "[life_status] [damage_report]"
+		if(3)
+			var/area/player_area = get_area(M)
+			return "[life_status] [damage_report]<br>[format_text(player_area.name)] ([pos.x], [pos.y])"
 
 /obj/item/device/camera_bug/Topic(var/href,var/list/href_list)
 	if(usr != loc)
@@ -205,7 +259,8 @@
 		if(C)
 			track_mode = BUGMODE_MONITOR
 			current = C
-			usr.reset_view(null)
+			if(!isAI(usr))
+				usr.reset_view(null)
 			interact()
 	if("track" in href_list)
 		var/atom/A = locate(href_list["track"])
@@ -224,7 +279,8 @@
 		interact()
 		return
 	if("close" in href_list)
-		usr.reset_view(null)
+		if(!isAI(usr))
+			usr.reset_view(null)
 		usr.unset_machine()
 		current = null
 		return // I do not <- I do not remember what I was going to write in this comment -Sayu, sometime later
@@ -245,12 +301,18 @@
 					interact()
 				else
 					usr.unset_machine()
-					usr.reset_view(null)
+					if(!isAI(usr))
+						usr.reset_view(null)
 					usr << browse(null, "window=camerabug")
 			return
 		else
 			usr.unset_machine()
-			usr.reset_view(null)
+			if(!isAI(usr))
+				usr.reset_view(null)
+	if("light" in href_list)
+		var/obj/machinery/camera/C = locate(href_list["light"])
+		if(istype(C) && C.can_use())
+			C.toggle_light()
 
 	interact()
 
@@ -326,7 +388,7 @@
 		/obj/item/weapon/stock_parts/subspace/transmitter = NETWORK_BUG,
 
 		/obj/item/device/detective_scanner = ADVANCED_BUG,
-		/obj/item/device/paicard = ADVANCED_BUG,
+		/obj/item/device/paicard = AI_BUG,
 		/obj/item/weapon/stock_parts/scanning_module = ADVANCED_BUG
 		)
 
@@ -349,6 +411,7 @@
 #undef NETWORK_BUG
 #undef SABOTAGE_BUG
 #undef ADVANCED_BUG
+#undef AI_BUG
 #undef ADMIN_BUG
 
 #undef BUGMODE_LIST

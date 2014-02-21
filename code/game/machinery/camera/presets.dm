@@ -21,6 +21,10 @@
 	..()
 	upgradeMotion()
 
+/obj/machinery/camera/bright/New()
+	..()
+	upgradeLight()
+
 // ALL UPGRADES
 
 /obj/machinery/camera/all/New()
@@ -28,6 +32,8 @@
 	upgradeEmpProof()
 	upgradeXRay()
 	upgradeMotion()
+	upgradeLight()
+
 
 // AUTONAME
 
@@ -75,3 +81,6 @@
 // If you are upgrading Motion, and it isn't in the camera's New(), add it to the machines list.
 /obj/machinery/camera/proc/upgradeMotion()
 	assembly.upgrades.Add(new /obj/item/device/assembly/prox_sensor(assembly))
+/obj/machinery/camera/proc/upgradeLight()
+	assembly.upgrades.Add(new /obj/item/device/flashlight(assembly))
+	cam_luminosity = 5

@@ -3,9 +3,9 @@
 	desc = "It's used to monitor rooms."
 	icon = 'icons/obj/monitors.dmi'
 	icon_state = "camera"
-	use_power = 2
-	idle_power_usage = 5
-	active_power_usage = 10
+	use_power = 1
+	idle_power_usage = 10 // lights off
+	active_power_usage = 13 // lights on
 	layer = 5
 
 	var/datum/wires/camera/wires = null // Wires datum
@@ -17,6 +17,7 @@
 	var/invuln = null
 	var/obj/item/device/camera_bug/bug = null
 	var/obj/item/weapon/camera_assembly/assembly = null
+	var/cam_luminosity = 2
 
 	//OTHER
 
@@ -35,6 +36,7 @@
 	assembly.state = 4
 	assembly.anchored = 1
 	assembly.update_icon()
+	if(prob(25)) cam_luminosity += pick(1,1,0,-1)
 
 	/* // Use this to look for cameras that have the same c_tag.
 	for(var/obj/machinery/camera/C in cameranet.cameras)
@@ -101,6 +103,18 @@
 	if(!istype(user))
 		return
 	user.electrocute_act(10, src)
+
+/obj/machinery/camera/proc/toggle_light()
+	if(stat&(NOPOWER|BROKEN|EMPED) || luminosity)
+		SetLuminosity(0)
+		use_power = 1
+	else
+		SetLuminosity(cam_luminosity)
+		use_power = 2
+
+/obj/machinery/camera/attack_ai(mob/user)
+	toggle_light()
+	user << "[luminosity?"Enabled":"Disabled"] camera light."
 
 /obj/machinery/camera/attack_paw(mob/living/carbon/alien/humanoid/user as mob)
 	if(!istype(user))
@@ -199,6 +213,7 @@
 				visible_message("\red \The [src] deactivates!")
 			playsound(src.loc, 'sound/items/Wirecutter.ogg', 100, 1)
 			icon_state = "[initial(icon_state)]1"
+			if(luminosity) toggle_light()
 
 		else
 			if(user)
@@ -208,6 +223,7 @@
 				visible_message("\red \the [src] reactivates!")
 			playsound(src.loc, 'sound/items/Wirecutter.ogg', 100, 1)
 			icon_state = initial(icon_state)
+
 
 	// now disconnect anyone using the camera
 	//Apparently, this will disconnect anyone even if the camera was re-activated.
@@ -229,10 +245,14 @@
 	for(var/mob/living/silicon/S in mob_list)
 		S.cancelAlarm("Camera", get_area(src), list(src), src)
 
+/obj/machinery/camera/power_change()
+	..()
+	if(stat&NOPOWER && luminosity)
+		toggle_light()
 /obj/machinery/camera/proc/can_use()
 	if(!status)
 		return 0
-	if(stat & EMPED)
+	if(stat & (EMPED|NOPOWER))
 		return 0
 	return 1
 

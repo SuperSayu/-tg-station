@@ -12,6 +12,8 @@
 
 		src.updatehealth()
 
+		update_action_buttons()
+
 		if (src.malfhack)
 			if (src.malfhack.aidisabled)
 				src << "\red ERROR: APC access disabled, hack attempt canceled."
@@ -22,6 +24,8 @@
 		if (src.health <= config.health_threshold_dead)
 			death()
 			return
+
+		lightNearbyCamera()
 
 		if (src.machine)
 			if (!( src.machine.check_eye(src) ))

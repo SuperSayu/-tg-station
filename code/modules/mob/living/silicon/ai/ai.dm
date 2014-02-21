@@ -87,6 +87,8 @@ var/list/ai_list = list()
 
 	aiMulti = new(src)
 	aicamera = new/obj/item/device/camera/ai_camera(src)
+	new /obj/item/device/camera_bug/ai(src)
+	new /obj/item/device/portacrew/ai(src)
 
 	if (istype(loc, /turf))
 		verbs.Add(/mob/living/silicon/ai/proc/ai_call_shuttle,/mob/living/silicon/ai/proc/ai_camera_track, \
@@ -228,6 +230,7 @@ var/list/ai_list = list()
 	set category = "AI Commands"
 	set name = "Crew Monitoring Console"
 	crewmonitor(src)
+
 /mob/living/silicon/ai/proc/ai_call_shuttle()
 	set category = "AI Commands"
 	set name = "Call Emergency Shuttle"
@@ -441,6 +444,11 @@ var/list/ai_list = list()
 		updatehealth()
 
 /mob/living/silicon/ai/reset_view(atom/A)
+	if(A)
+		switchCamera(A)
+	else
+		view_core()
+	/*
 	if(current)
 		current.SetLuminosity(0)
 	if(istype(A,/obj/machinery/camera))
@@ -448,7 +456,7 @@ var/list/ai_list = list()
 	..()
 	if(istype(A,/obj/machinery/camera))
 		if(camera_light_on)	A.SetLuminosity(AI_CAMERA_LUMINOSITY)
-		else				A.SetLuminosity(0)
+		else				A.SetLuminosity(0)*/
 
 
 /mob/living/silicon/ai/proc/switchCamera(var/obj/machinery/camera/C)
@@ -679,7 +687,7 @@ var/list/ai_list = list()
 			var/obj/machinery/camera/camera = near_range_camera(src.eyeobj)
 			if(camera && src.current != camera)
 				src.current.SetLuminosity(0)
-				if(!camera.light_disabled)
+				if(!camera.light_disabled && !camera.luminosity)
 					src.current = camera
 					src.current.SetLuminosity(AI_CAMERA_LUMINOSITY)
 				else
