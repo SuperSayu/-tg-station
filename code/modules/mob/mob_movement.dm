@@ -6,6 +6,9 @@
 		if ((other_mobs && moving_mob.other_mobs))
 			return 1
 		return (!mover.density || !density || lying)
+	else if(istype(mover,/obj/item/projectile/magic))
+		var/obj/item/projectile/magic/M = mover
+		return (M.caster == src || !mover.density || !density || lying)
 	else
 		return (!mover.density || !density || lying)
 	return

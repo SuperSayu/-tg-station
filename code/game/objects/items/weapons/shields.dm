@@ -52,23 +52,8 @@
 
 /obj/item/weapon/shield/energy/IsShield()
 	return (active)
-/obj/item/weapon/cloaking_device
-	name = "cloaking device"
-	desc = "Use this to become invisible to the human eyesocket."
-	icon = 'icons/obj/device.dmi'
-	icon_state = "shield0"
-	var/active = 0.0
-	flags = FPRINT | CONDUCT
-	item_state = "electronic"
-	throwforce = 10.0
-	throw_speed = 2
-	throw_range = 10
-	w_class = 2.0
-	origin_tech = "magnets=3;syndicate=4"
-	var/active_power_use = 15
 
-	var/mob/living/cloaked_user = null
-	var/obj/item/weapon/cell/battery
+
 /obj/item/weapon/shield/energy/IsReflect()
 	return (active)
 
@@ -93,6 +78,26 @@
 		user << "<span class='notice'>[src] can now be concealed.</span>"
 		reflect_chance = 0
 	add_fingerprint(user)
+
+/obj/item/weapon/cloaking_device
+	name = "cloaking device"
+	desc = "Use this to become invisible to the human eyesocket."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "shield0"
+	var/active = 0.0
+	flags = FPRINT | CONDUCT
+	item_state = "electronic"
+	throwforce = 10.0
+	throw_speed = 2
+	throw_range = 10
+	w_class = 2.0
+	origin_tech = "magnets=3;syndicate=4"
+	var/active_power_use = 15
+	var/mob/living/cloaked_user = null
+	var/obj/item/weapon/cell/battery
+
+	action_button_name = "Activate Cloak"
+
 /obj/item/weapon/cloaking_device/New()
 	..()
 	processing_objects.Add(src)

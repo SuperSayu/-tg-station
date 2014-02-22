@@ -29,7 +29,7 @@
 	brainmob.dna = H.dna
 	brainmob.timeofhostdeath = H.timeofdeath
 	if(H.mind)
-		H.mind.transfer_to(brainmob)
+		H.mind.clone_to(brainmob)
 	brainmob << "<span class='notice'>You feel slightly disoriented. That's normal when you're just a brain.</span>"
 
 
@@ -81,16 +81,12 @@
 			M.ghostize()
 
 		if(brainmob.mind)
-			brainmob.mind.transfer_to(M)
+			brainmob.mind.clone_to(M)
 		else
 			M.key = brainmob.key
 
 		M.internal_organs += src
 		loc = null
-
-		//Update the body's icon so it doesnt appear debrained anymore
-		if(ishuman(M))
-			H.update_hair(0)
 
 		//Update the body's icon so it doesnt appear debrained anymore
 		if(ishuman(M))

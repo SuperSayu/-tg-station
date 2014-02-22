@@ -3,7 +3,7 @@
 	if(prob(80)) return ..()
 	var/found = 0
 	for(var/mob/living/simple_animal/hostile/retaliate/R in range(4,src))
-		if(R.faction != "undead" || R == src || prob(50)) continue
+		if(R.faction != "undead" || R == src || !prob(R.retaliate_chance)) continue
 		found = 1
 		R.enemies ^= src
 		if(src in R.enemies)
@@ -25,7 +25,7 @@
 	density = 0 // ghost
 	invisibility = 60 // no seriously ghost
 	speak_chance = 0 // fyi, ghost
-
+	retaliate_chance = 20
 
 	response_help = "passes through" // by the way ghost
 	response_disarm = "shoves"
@@ -69,6 +69,7 @@
 	..()
 /mob/living/simple_animal/hostile/retaliate/ghost/Die()
 	new /obj/item/weapon/ectoplasm(loc)
+	Retaliate()
 	del src
 	return
 
@@ -86,6 +87,7 @@
 	speed = -1
 	maxHealth = 20
 	health = 20
+	retaliate_chance = 30
 
 	harm_intent_damage = 10
 	melee_damage_lower = 5
@@ -107,6 +109,7 @@
 
 /mob/living/simple_animal/hostile/retaliate/skeleton/Die()
 	new /obj/effect/decal/remains/human(loc)
+	Retaliate()
 	del src
 	return
 
@@ -124,6 +127,7 @@
 	speed = -1
 	maxHealth = 20
 	health = 20
+	retaliate_chance = 10
 
 	harm_intent_damage = 10
 	melee_damage_lower = 5
@@ -145,5 +149,6 @@
 
 /mob/living/simple_animal/hostile/retaliate/zombie/Die()
 	new /obj/effect/decal/cleanable/blood/gibs/old(loc)
+	Retaliate()
 	del src
 	return

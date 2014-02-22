@@ -2,22 +2,22 @@
 	name 			= "Radiation Flux"
 	typepath 		= /datum/round_event/radiation_flux
 	max_occurrences = 2
-	weight 			= 5
-	minimumCrew		= 5
+	weight 			= 4
+	minimumCrew		= 1
 
 /datum/round_event_control/energetic_flux/pota
 	name 			= "Planet of the Apes Radiation Flux"
 	typepath 		= /datum/round_event/radiation_flux/pota
 	max_occurrences = 2
-	weight 			= 5
-	minimumCrew		= 5
+	weight 			= 6
+	minimumCrew		= 8
 
 /datum/round_event_control/energetic_flux/ffour
 	name 			= "Fantastic Four Radiation Flux"
 	typepath 		= /datum/round_event/radiation_flux/ffour
 	max_occurrences = 2
-	weight 			= 5
-	minimumCrew		= 5
+	weight 			= 8
+	minimumCrew		= 4
 
 
 /datum/round_event/radiation_flux
@@ -25,27 +25,11 @@
 	startWhen		= 21
 	var/area/impact_area
 	var/max_range = 10
-	var/min_rad = 25
-	var/max_rad = 125
+	var/min_rad = 5
+	var/max_rad = 67
 
 /datum/round_event/radiation_flux/setup()
-	var/list/safe_areas = list(
-	/area/turret_protected/ai,
-	/area/turret_protected/ai_upload,
-	/area/engine,
-	/area/solar,
-	/area/holodeck,
-	/area/shuttle/arrival,
-	/area/shuttle/escape/station,
-	/area/shuttle/escape_pod1/station,
-	/area/shuttle/escape_pod2/station,
-	/area/shuttle/escape_pod3/station,
-	/area/shuttle/escape_pod4/station,
-	/area/shuttle/mining/station,
-	/area/shuttle/transport1/station,
-	/area/shuttle/specops/station)
-
-	impact_area = locate(pick(the_station_areas - safe_areas))	//need to locate() as it's just a list of paths.
+	impact_area = findEventArea()
 	startWhen = rand(14,35)
 
 /datum/round_event/radiation_flux/announce()

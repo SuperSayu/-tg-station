@@ -19,3 +19,10 @@
 
 	T = pick_n_take(secret_points)
 	new /obj/structure/closet/crate/secure/chemicals{locked=0}(T)
+
+	T = pick_n_take(secret_points)
+	new /obj/item/robot_parts/robot_suit(T)
+
+	if(prob(25))
+		T = pick_n_take(secret_points)
+		new /obj/item/weapon/storage/belt/bluespace(T)

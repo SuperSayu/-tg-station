@@ -42,6 +42,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/ownjob = null //related to above
 
 	var/obj/item/device/paicard/pai = null	// A slot for a personal AI device
+	action_button_name = "Examine PDA"
 
 /obj/item/device/pda/medical
 	default_cartridge = /obj/item/weapon/cartridge/medical
@@ -183,15 +184,16 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 // Special AI/pAI PDAs that cannot explode.
 /obj/item/device/pda/ai
-	icon_state = "NONE"
+	icon_state = "pda-clear"
 	ttone = "data"
 	detonate = 0
+	action_button_name = null
 
-/obj/item/device/pda/ai/attack_self(mob/user as mob)
+/*/obj/item/device/pda/ai/attack_self(mob/user as mob)
 	if ((honkamt > 0) && (prob(60)))//For clown virus.
 		honkamt--
 		playsound(loc, 'sound/items/bikehorn.ogg', 30, 1)
-	return
+		return*/
 
 /obj/item/device/pda/ai/pai
 	ttone = "assist"

@@ -70,9 +70,20 @@
 
 /obj/item/robot_parts/robot_suit/New()
 	..()
-	src.updateicon()
+	src.update_icon()
 
-/obj/item/robot_parts/robot_suit/proc/updateicon()
+/obj/item/robot_parts/robot_suit/initialize()
+	if(isturf(loc) && prob(50))
+		if(prob(25)) l_arm = new(src)
+		if(prob(25)) r_arm = new(src)
+		if(prob(25)) l_leg = new(src)
+		if(prob(25)) r_leg = new(src)
+		if(prob(25)) chest = new(src)
+		if(prob(25)) head = new(src)
+		if(prob(5)) created_name = new_station_name() // This is psychic clowning no moon alpha, reporting for duty
+		update_icon()
+
+/obj/item/robot_parts/robot_suit/update_icon()
 	src.overlays.Cut()
 	if(src.l_arm)
 		src.overlays += "l_arm+o"
@@ -111,28 +122,28 @@
 		user.drop_item()
 		W.loc = src
 		src.l_leg = W
-		src.updateicon()
+		src.update_icon()
 
 	if(istype(W, /obj/item/robot_parts/r_leg))
 		if(src.r_leg)	return
 		user.drop_item()
 		W.loc = src
 		src.r_leg = W
-		src.updateicon()
+		src.update_icon()
 
 	if(istype(W, /obj/item/robot_parts/l_arm))
 		if(src.l_arm)	return
 		user.drop_item()
 		W.loc = src
 		src.l_arm = W
-		src.updateicon()
+		src.update_icon()
 
 	if(istype(W, /obj/item/robot_parts/r_arm))
 		if(src.r_arm)	return
 		user.drop_item()
 		W.loc = src
 		src.r_arm = W
-		src.updateicon()
+		src.update_icon()
 
 	if(istype(W, /obj/item/robot_parts/chest))
 		if(src.chest)	return
@@ -140,7 +151,7 @@
 			user.drop_item()
 			W.loc = src
 			src.chest = W
-			src.updateicon()
+			src.update_icon()
 		else if(!W:wires)
 			user << "\blue You need to attach wires to it first!"
 		else
@@ -152,7 +163,7 @@
 			user.drop_item()
 			W.loc = src
 			src.head = W
-			src.updateicon()
+			src.update_icon()
 		else
 			user << "\blue You need to attach a flash to it first!"
 
@@ -197,7 +208,7 @@
 			O.custom_name = created_name
 			O.updatename("Default")
 
-			M.brainmob.mind.transfer_to(O)
+			M.brainmob.mind.clone_to(O)
 
 			if(O.mind && O.mind.special_role)
 				O.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")

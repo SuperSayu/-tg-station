@@ -21,6 +21,8 @@
 		. += shoes.slowdown
 	if(back)
 		. += back.slowdown
+	if(legcuffed)
+		. += legcuffed.slowdown
 
 	if(FAT in mutations)
 		. += 1.5

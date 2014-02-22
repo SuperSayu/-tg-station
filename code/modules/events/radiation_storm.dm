@@ -26,7 +26,7 @@
 		for(var/a in protected_areas)
 			if(istype(T.loc, a))
 				skip = 1
-				continue
+				break
 
 		if(skip)	continue
 

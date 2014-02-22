@@ -1,5 +1,6 @@
 /mob/living/simple_animal/hostile/retaliate
 	var/list/enemies = list()
+	var/retaliate_chance = 60
 
 /mob/living/simple_animal/hostile/retaliate/Found(var/atom/A)
 	if(isliving(A))
@@ -41,7 +42,8 @@
 
 	for(var/mob/living/simple_animal/hostile/retaliate/H in around)
 		if(!attack_same && !H.attack_same && H.faction == faction)
-			H.enemies |= enemies
+			if(prob(H.retaliate_chance))
+				H.enemies |= enemies
 	return 0
 
 /mob/living/simple_animal/hostile/retaliate/adjustBruteLoss(var/damage)

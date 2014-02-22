@@ -7,7 +7,7 @@
 /datum/round_event/anomaly/anomaly_bluespace
 	startWhen = 3
 	announceWhen = 10
-	endWhen = 55
+	endWhen = 90
 
 
 /datum/round_event/anomaly/anomaly_bluespace/announce()

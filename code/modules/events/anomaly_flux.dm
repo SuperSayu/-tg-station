@@ -7,7 +7,7 @@
 /datum/round_event/anomaly/anomaly_flux
 	startWhen = 3
 	announceWhen = 20
-	endWhen = 60
+	endWhen = 95
 
 
 /datum/round_event/anomaly/anomaly_flux/announce()

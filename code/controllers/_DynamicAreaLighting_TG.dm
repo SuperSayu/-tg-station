@@ -75,7 +75,7 @@ datum/light_source
 		// before we apply the effect we remove the light's current effect.
 		for(var/turf/T in effect)	// negate the effect of this light source
 			T.update_lumcount(-effect[T])
-		effect.Cut()					// clear the effect list
+		effect.len = 0					// clear the effect list
 
 	proc/add_effect()
 		// only do this if the light is turned on and is on the map
@@ -86,7 +86,7 @@ datum/light_source
 
 			// why was this looping through all the turfs twice
 			effect = list()
-			for(var/turf/T in view(owner.get_light_range(),owner))
+			for(var/turf/T in view(owner.get_light_range()*1.25,get_turf(owner)))
 				var/delta_lumen = lum(T)
 				if(delta_lumen > 0)
 					effect[T] = delta_lumen
@@ -111,7 +111,7 @@ datum/light_source
 
 	proc/lum(turf/A)
 #ifdef LIGHTING_CIRCULAR
-		return owner.luminosity - cheap_hypotenuse(A.x,A.y,__x,__y)
+		return owner.luminosity - cheap_hypotenuse(A.x,A.y,__x,__y)*0.8
 #else
 		return owner.luminosity - max(abs(A.x-__x),abs(A.y-__y))
 #endif

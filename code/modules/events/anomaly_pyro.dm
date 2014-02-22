@@ -7,7 +7,7 @@
 /datum/round_event/anomaly/anomaly_pyro
 	startWhen = 10
 	announceWhen = 3
-	endWhen = 70
+	endWhen = 110
 
 
 /datum/round_event/anomaly/anomaly_pyro/announce()

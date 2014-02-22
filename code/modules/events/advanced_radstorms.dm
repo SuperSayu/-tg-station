@@ -44,6 +44,14 @@
 			var/turf/T = get_turf(L)
 			if(!T || T.z != 1)			continue
 
+			var/skip = 0
+			for(var/a in protected_areas)
+				if(istype(T.loc, a))
+					skip = 1
+					break
+
+			if(skip)	continue
+
 			L.apply_effect(rand(0,75),IRRADIATE)
 			if((ishuman(L) || ismonkey(L)) &&  rad_armorcheck(L))
 				var/mob/living/carbon/C = L
@@ -81,6 +89,14 @@
 			var/turf/T = get_turf(C)
 			if(!T || T.z != 1)			continue
 
+			var/skip = 0
+			for(var/a in protected_areas)
+				if(istype(T.loc, a))
+					skip = 1
+					break
+
+			if(skip)	continue
+
 			C.apply_effect(rand(25,125),IRRADIATE)
 			if((ishuman(C) || ismonkey(C)) &&  rad_armorcheck(C,0.33))
 				var/mob/living/carbon/L = C // fuck you, anyone else who's reading this
@@ -99,6 +115,14 @@
 		for(var/mob/living/C in living_mob_list)
 			var/turf/T = get_turf(C)
 			if(!T || T.z != 1)			continue
+
+			var/skip = 0
+			for(var/a in protected_areas)
+				if(istype(T.loc, a))
+					skip = 1
+					break
+
+			if(skip)	continue
 
 			C.apply_effect(rand(0,75),IRRADIATE)
 			if(ishuman(C) &&  rad_armorcheck(C,1))

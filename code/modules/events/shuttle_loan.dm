@@ -2,6 +2,7 @@
 #define RUSKY_PARTY 2
 #define SPIDER_GIFT 3
 #define DEPARTMENT_RESUPPLY 4
+#define FLEEING_WIZARD 5
 
 /datum/round_event_control/shuttle_loan
 	name = "Shuttle loan"
@@ -17,7 +18,7 @@
 	var/dispatched = 0
 
 /datum/round_event/shuttle_loan/start()
-	dispatch_type = pick(HIJACK_SYNDIE, RUSKY_PARTY, SPIDER_GIFT, DEPARTMENT_RESUPPLY)
+	dispatch_type = pick(HIJACK_SYNDIE, RUSKY_PARTY, SPIDER_GIFT, DEPARTMENT_RESUPPLY,FLEEING_WIZARD)
 
 /datum/round_event/shuttle_loan/announce()
 	supply_shuttle.shuttle_loan = src
@@ -32,6 +33,9 @@
 			command_alert("Seems we've ordered doubles of our department resupply packages this month. Can we send them to you?","Centcom Supply Department")
 			thanks_msg = "The shuttle will be returned in 5 minutes."
 			bonus_points = 0
+		if(FLEEING_WIZARD)
+			command_alert("A rogue wizard is offering to pay us off with artifacts if we help him hide from his master.  Can he borrow the shuttle for a bit?","Centcom Witness Protection Program")
+			thanks_msg = "The shuttle will be returned in 5 minutes."
 
 /datum/round_event/shuttle_loan/proc/loan_shuttle()
 	command_alert(thanks_msg, "Cargo shuttle commandeered by Centcom.")
@@ -51,6 +55,8 @@
 			supply_shuttle.centcom_message += "<font color=blue>Spider Clan gift incoming.</font>"
 		if(DEPARTMENT_RESUPPLY)
 			supply_shuttle.centcom_message += "<font color=blue>Department resupply incoming.</font>"
+		if(FLEEING_WIZARD)
+			supply_shuttle.centcom_message += "<font color=blue>Artifact shuttle incoming.</font>"
 
 /datum/round_event/shuttle_loan/tick()
 	if(dispatched)
@@ -183,6 +189,19 @@
 					var/turf/T = pick(empty_shuttle_turfs)
 					var/spawn_type = pick(/obj/effect/decal/cleanable/flour, /obj/effect/decal/cleanable/robot_debris, /obj/effect/decal/cleanable/oil)
 					new spawn_type(T)
+			if(FLEEING_WIZARD)
+				if(prob(78))
+					for(var/i=0,i<3,i++)
+						var/turf/T = pick(empty_shuttle_turfs)
+						var/spawn_type = pick(/obj/item/clothing/gloves/magic/shadow,/obj/item/weapon/magic/spellbook/mime,/obj/item/weapon/magic/staff/broom/sweep,/obj/item/weapon/magic/staff/force,
+								/obj/item/weapon/magic/wand/fire,/obj/item/weapon/magic/wand/light,/obj/item/weapon/magic/wand/frost,/obj/item/weapon/magic/wand/prank,/obj/item/weapon/magic/wand/boost,
+								/obj/item/weapon/magic/orb/portal,/obj/item/weapon/magic/orb/scrying)
+						new spawn_type(T)
+				else
+					hgibs(pick(empty_shuttle_turfs))
+					shuttle_spawns.Add(/mob/living/simple_animal/hostile/creature)
+					shuttle_spawns.Add(/mob/living/simple_animal/hostile/creature)
+					shuttle_spawns.Add(/mob/living/simple_animal/hostile/retaliate/ghost)
 
 		var/false_positive = 0
 		while(shuttle_spawns.len > 0 && empty_shuttle_turfs.len > 0)
@@ -204,3 +223,4 @@
 #undef RUSKY_PARTY
 #undef SPIDER_GIFT
 #undef DEPARTMENT_RESUPPLY
+#undef FLEEING_WIZARD
