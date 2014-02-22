@@ -23,6 +23,11 @@
 	var/collection_mode = 1;  //0 = pick one at a time, 1 = pick all on tile, 2 = pick all of a type
 
 
+// called by table shuffle; used by some boxes, but not all.
+// returns a list of items to distribute.
+/obj/item/weapon/storage/proc/init_scatter()
+	return list()
+
 /obj/item/weapon/storage/MouseDrop(obj/over_object)
 	if(ismob(usr)) //all the check for item manipulation are in other places, you can safely open any storages as anything and its not buggy, i checked
 		var/mob/M = usr

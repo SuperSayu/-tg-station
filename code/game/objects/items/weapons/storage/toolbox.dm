@@ -16,6 +16,14 @@
 	New()
 		..()
 
+/obj/item/weapon/storage/toolbox/init_scatter()
+	var/list/l = list()
+	while(contents.len && prob(25))
+		var/obj/O = pick(contents)
+		remove_from_storage(O,loc)
+		l += O
+	return l
+
 /obj/item/weapon/storage/toolbox/emergency
 	name = "emergency toolbox"
 	icon_state = "red"
@@ -82,3 +90,5 @@
 		new /obj/item/weapon/cable_coil(src,30,color)
 		new /obj/item/weapon/wirecutters(src)
 		new /obj/item/device/multitool(src)
+	init_scatter()
+		return list()

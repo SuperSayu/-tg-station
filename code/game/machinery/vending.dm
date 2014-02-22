@@ -58,6 +58,9 @@
 
 	var/obj/item/weapon/vending_refill/refill_canister = null		//The type of refill canisters used by this machine.
 
+	var/initvend_minimum		= 0
+	var/initvend_maximum		= 1
+
 /obj/machinery/vending/New()
 	..()
 	wires = new(src)
@@ -75,6 +78,23 @@
 		build_inventory(premium, 0, 1)
 		power_change()
 
+// this vends a bunch of items at roundstart which the table shuffle
+// code will put randomly around the room.
+/obj/machinery/vending/proc/init_vend()
+	if(!products.len) return list()
+	var/amount = rand(initvend_minimum,initvend_maximum)
+	if(!amount) return list()
+	var/list/stuff = list()
+	var/tries = 3 // in case of soldoutvender
+	while(amount && tries)
+		var/entry = pick(products)
+		if(products[entry] > 0)
+			stuff += new entry(loc)
+			products[entry]--
+			amount--
+		else
+			tries--
+	return stuff
 
 /obj/machinery/vending/ex_act(severity)
 	switch(severity)
@@ -520,6 +540,9 @@
 	product_ads = "Drink up!;Booze is good for you!;Alcohol is humanity's best friend.;Quite delighted to serve you!;Care for a nice, cold beer?;Nothing cures you like booze!;Have a sip!;Have a drink!;Have a beer!;Beer is good for you!;Only the finest alcohol!;Best quality booze since 2053!;Award-winning wine!;Maximum alcohol!;Man loves beer.;A toast for progress!"
 	req_access_txt = "25"
 	refill_canister = /obj/item/weapon/vending_refill/boozeomat
+	initvend_minimum = 3
+	initvend_maximum = 7
+
 
 /obj/machinery/vending/refillable/assist
 	products = list(	/obj/item/device/flashlight = 5,/obj/item/weapon/wirecutters = 1, /obj/item/weapon/reagent_containers/glass/bucket = 2, /obj/item/weapon/soap = 3,
@@ -527,6 +550,7 @@
 	premium = list(	/obj/item/weapon/rsf = 1)
 	contraband = list(/obj/item/device/assembly/prox_sensor = 5,/obj/item/device/assembly/igniter = 3,/obj/item/device/assembly/signaler = 4,/obj/item/device/assembly/timer = 2, /obj/item/device/assembly/voice = 2)
 	product_ads = "Only the finest!;Have some tools.;The most robust equipment.;The finest gear in space!"
+	initvend_maximum = 5
 
 /obj/machinery/vending/coffee
 	name = "hot drinks machine"
@@ -538,6 +562,8 @@
 	products = list(/obj/item/weapon/reagent_containers/food/drinks/coffee = 25,/obj/item/weapon/reagent_containers/food/drinks/tea = 25,/obj/item/weapon/reagent_containers/food/drinks/h_chocolate = 25)
 	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/ice = 10)
 	refill_canister = /obj/item/weapon/vending_refill/coffee
+	initvend_minimum = 1
+	initvend_maximum = 3
 
 
 /obj/machinery/vending/refillable/food/snack
@@ -552,6 +578,8 @@
 					/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers = 6)
 	contraband = list(/obj/item/weapon/reagent_containers/food/snacks/syndicake = 6)
 	refill_canister = /obj/item/weapon/vending_refill/snack
+	initvend_minimum = 1
+	initvend_maximum = 3
 
 
 /obj/machinery/vending/sustenance
@@ -577,6 +605,8 @@
 					/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lemon_lime = 10)
 	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/thirteenloko = 5)
 	refill_canister = /obj/item/weapon/vending_refill/cola
+	initvend_minimum = 1
+	initvend_maximum = 3
 
 //This one's from bay12
 /obj/machinery/vending/cart
@@ -601,6 +631,7 @@
 	contraband = list(/obj/item/weapon/lighter/zippo = 4)
 	premium = list(/obj/item/clothing/mask/cigarette/cigar/havana = 2)
 	refill_canister = /obj/item/weapon/vending_refill/cigarette
+
 
 /obj/machinery/vending/medical
 	name = "\improper NanoMed Plus"
@@ -655,6 +686,7 @@
 	icon_state = "sec"
 	icon_deny = "sec-deny"
 	req_access_txt = "1"
+	initvend_maximum = 5
 	products = list(/obj/item/weapon/handcuffs = 8,/obj/item/weapon/grenade/flashbang = 4,/obj/item/device/flash = 5,
 					/obj/item/weapon/reagent_containers/food/snacks/donut/normal = 12,/obj/item/weapon/storage/box/evidence = 6)
 	contraband = list(/obj/item/clothing/glasses/sunglasses = 2,/obj/item/weapon/storage/fancy/donut_box = 2)
@@ -666,6 +698,7 @@
 	product_ads = "We like plants!;Don't you want some?;The greenest thumbs ever.;We like big plants.;Soft soil..."
 	icon_state = "nutri"
 	icon_deny = "nutri-deny"
+	initvend_maximum = 3
 	products = list(/obj/item/nutrient/ez = 35,/obj/item/nutrient/l4z = 25,/obj/item/nutrient/rh = 15,/obj/item/weapon/pestspray = 20,
 					/obj/item/weapon/reagent_containers/syringe = 5,/obj/item/weapon/storage/bag/plants = 5)
 	contraband = list(/obj/item/weapon/reagent_containers/glass/bottle/ammonia = 10,/obj/item/weapon/reagent_containers/glass/bottle/diethylamine = 5)
@@ -683,6 +716,20 @@
 			user << "[src] refuses [I]."
 			return 0
 		return 1
+	init_vend()
+		var/list/oldstuff = ..()
+		var/list/plots = list()
+		for(var/obj/machinery/hydroponics/H in range(7))
+			plots += H
+		for(var/obj/item/I in oldstuff)
+			if(!plots.len) break
+			if(prob(55)) continue
+			oldstuff -= I
+			var/obj/machinery/hydroponics/H = pick_n_take(plots)
+			I.loc = H.loc
+			step_rand(I)
+			step_rand(I)
+		return oldstuff // to table shuffle
 
 /obj/machinery/vending/refillable/hydroseeds
 	name = "\improper MegaSeed Servitor"
@@ -700,6 +747,8 @@
 	contraband = list(/obj/item/seeds/amanitamycelium = 2,/obj/item/seeds/glowshroom = 2,/obj/item/seeds/libertymycelium = 2,/obj/item/seeds/nettleseed = 2,
 						/obj/item/seeds/plumpmycelium = 2,/obj/item/seeds/reishimycelium = 2)
 	premium = list(/obj/item/weapon/reagent_containers/spray/waterflower = 1)
+	initvend_minimum = 1
+	initvend_maximum = 4
 
 	allow_insert(var/obj/item/I)
 		if(istype(I,/obj/item/seeds))
@@ -731,6 +780,24 @@
 				usr << "\red There are no seeds in [W]!"
 			return
 		..(W,user)
+	init_vend()
+		var/list/oldstuff = ..()
+		var/list/plots = list()
+		for(var/obj/machinery/hydroponics/H in range(7))
+			plots += H
+		if(plots.len)
+			for(var/obj/item/seeds/S in oldstuff)
+				if(prob(15) || !S) continue
+				oldstuff -= S
+				var/obj/machinery/hydroponics/H = pick_n_take(plots)
+				if(prob(15))
+					S.loc = H
+					H.myseed = S
+				else
+					S.loc = H.loc
+					step_rand(S)
+					step_rand(S)
+		return oldstuff // to table shuffle
 
 /obj/machinery/vending/refillable/hydroseeds/empty
 	products = list()
@@ -750,10 +817,12 @@
 	products = list(/obj/item/clothing/head/wizard = 1,/obj/item/clothing/suit/wizrobe = 1,
 					/obj/item/clothing/head/wizard/red = 1,/obj/item/clothing/suit/wizrobe/red = 1,
 					/obj/item/clothing/shoes/sandal = 2,
-					/obj/item/weapon/magic/blade = 1, /obj/item/weapon/magic/staff = 2, /obj/item/weapon/magic/staff/broom = 1,
+					/obj/item/weapon/magic/wand = 3, /obj/item/weapon/magic/blade = 0, /obj/item/weapon/magic/staff = 2, /obj/item/weapon/magic/staff/broom = 1,
 					/obj/item/weapon/magic/orb = 2, /obj/item/weapon/magic/spellbook = 1)
 	premium = list(/obj/item/clothing/gloves/magic = 2, /obj/item/clothing/gloves/white/tkglove = 1)
 	contraband = list(/obj/item/weapon/reagent_containers/glass/bottle/wizarditis = 1)	//No one can get to the machine to hack it anyways; for the lulz - Microwave
+	initvend_minimum = 4
+	initvend_maximum = 10
 
 /obj/machinery/vending/refillable/wardrobe/autodrobe
 	name = "\improper AutoDrobe"
@@ -783,6 +852,14 @@
 	contraband = list(/obj/item/clothing/suit/cardborg = 1,/obj/item/clothing/head/cardborg = 1,/obj/item/clothing/suit/judgerobe = 1,/obj/item/clothing/head/powdered_wig = 1,/obj/item/weapon/gun/magic/wand = 1)
 	premium = list(/obj/item/clothing/suit/hgpirate = 1, /obj/item/clothing/head/hgpiratecap = 1, /obj/item/clothing/head/helmet/roman = 1, /obj/item/clothing/head/helmet/roman/legionaire = 1, /obj/item/clothing/under/roman = 1, /obj/item/clothing/shoes/roman = 1, /obj/item/weapon/shield/riot/roman = 1)
 	refill_canister = /obj/item/weapon/vending_refill/autodrobe
+	initvend_minimum = 2
+	initvend_maximum = 15
+	init_vend()
+		. = ..()
+		for(var/obj/item/I in .) // you can tell I hold the cleanliness of actors in the highest of esteem
+			spawn(10)
+				step_rand(I)	// or maybe it's just nanotrasen folk
+				step_rand(I)
 
 /obj/machinery/vending/refillable/dinnerware
 	name = "dinnerware"
@@ -810,6 +887,8 @@
 					/obj/item/weapon/wrench = 5,/obj/item/device/analyzer = 5,/obj/item/device/t_scanner = 5,/obj/item/weapon/screwdriver = 5)
 	contraband = list(/obj/item/weapon/weldingtool/hugetank = 2,/obj/item/clothing/gloves/fyellow = 2)
 	premium = list(/obj/item/clothing/gloves/yellow = 1)
+	initvend_maximum = 4
+	initvend_minimum = 1
 
 /obj/machinery/vending/engivend
 	name = "\improper Engi-Vend"
@@ -820,6 +899,8 @@
 	products = list(/obj/item/clothing/glasses/meson = 2,/obj/item/device/multitool = 4,/obj/item/weapon/airlock_electronics = 10,/obj/item/weapon/module/power_control = 10,/obj/item/weapon/airalarm_electronics = 10,/obj/item/weapon/cell/high = 10)
 	contraband = list(/obj/item/weapon/cell/potato = 3)
 	premium = list(/obj/item/weapon/storage/belt/utility = 3)
+	initvend_maximum = 5
+	initvend_minimum = 1
 
 //This one's from bay12
 /obj/machinery/vending/engineering

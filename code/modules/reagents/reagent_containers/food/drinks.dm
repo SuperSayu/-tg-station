@@ -112,6 +112,10 @@
 		else
 			usr << "\blue \The [src] is full!"
 
+	initialize()
+		while(reagents.total_volume && prob(45))
+			reagents.remove_any(gulp_size)
+		..()
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Drinks. END

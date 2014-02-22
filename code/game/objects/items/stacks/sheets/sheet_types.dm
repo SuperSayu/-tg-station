@@ -143,3 +143,9 @@ var/global/list/datum/stack_recipe/cardboard_recipes = list ( \
 /obj/item/stack/sheet/cardboard/New(var/loc, var/amount=null)
 		recipes = cardboard_recipes
 		return ..()
+/obj/item/stack/sheet/cardboard/initialize()
+	if(isturf(loc))
+		if(prob(45))
+			var/datum/stack_recipe/R = pick(recipes)
+			step_rand(new R.result_type(loc))
+			del src

@@ -21,6 +21,30 @@
 	var/dry = 0
 	icon = 'icons/obj/harvest.dmi'
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/initialize()
+	if(isturf(loc))
+		if(prob(40) && slice_path && slices_num)
+			var/reagents_per_slice = reagents.total_volume/slices_num
+			for(var/i=1 to slices_num)
+				var/obj/slice = new slice_path (src.loc)
+				if(prob(25)) step_rand(slice)
+				reagents.trans_to(slice,reagents_per_slice)
+			del src
+		if(prob(33) || reagents.total_volume <= bitesize)
+			if(trash)
+				var/obj/O = new trash(loc)
+				do
+					step_rand(O)
+				while(prob(34))
+			del src
+		if(prob(82))
+			dry = 1
+			color = "#ad7257"
+		if(prob(66))
+			bitecount++
+			reagents.remove_any(bitesize)
+	..()
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/New(newloc,newpotency)
 	if (!isnull(newpotency))
 		potency = newpotency

@@ -41,6 +41,11 @@
 		return
 	..() // Fallthrough to item/attackby() so that bags can pick seeds up
 
+/obj/item/seeds/initialize()
+	if(isturf(loc) && prob(42))
+		harvest(null)
+		del(src)
+
 /obj/item/seeds/chiliseed
 	name = "pack of chili seeds"
 	desc = "These seeds grow into chili plants. HOT! HOT! HOT!"
@@ -82,6 +87,8 @@
 	var/realName = null
 	var/datum/mind/mind = null
 	gender = MALE
+/obj/item/seeds/replicapod/initialize()
+	return
 
 /obj/item/seeds/grapeseed
 	name = "pack of grape seeds"
@@ -1091,6 +1098,9 @@
 	plant_type = 0
 	growthstages = 2
 	rarity = 50 // Seems admin-only.
+
+/obj/item/seeds/gatfruit/initialize()
+	return
 
 /obj/item/seeds/coffee_arabica_seed
 	name = "pack of coffee arabica seeds"

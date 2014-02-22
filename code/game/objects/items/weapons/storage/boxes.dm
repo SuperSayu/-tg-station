@@ -94,6 +94,16 @@
 		new /obj/item/clothing/gloves/latex(src)
 		new /obj/item/clothing/gloves/latex(src)
 		new /obj/item/clothing/gloves/latex(src)
+	init_scatter()
+		var/list/l = list()
+		while(contents.len && prob(21))
+			var/obj/O = pick(contents)
+			remove_from_storage(O,loc)
+			if(prob(45))
+				del O
+				O = new /obj/item/latexballon(loc)
+			l += O
+		return l
 
 /obj/item/weapon/storage/box/masks
 	name = "box of sterile masks"
@@ -479,6 +489,17 @@
 			processing_objects.Add(W)
 		W.update_icon()
 		return
+	initialize()
+		if(isturf(loc))
+			while(prob(45) && contents.len)
+				var/obj/item/weapon/match/C = pick(contents)
+				remove_from_storage(C,loc)
+				step_rand(C)
+				while(prob(33)) step_rand(C)
+				if(prob(35))
+					C.icon_state = "match_burnt"
+					C.lit = -1
+
 
 /obj/item/weapon/storage/box/lights
 	name = "box of replacement bulbs"

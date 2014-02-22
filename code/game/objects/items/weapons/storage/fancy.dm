@@ -50,12 +50,22 @@
 	storage_slots = 6
 	can_hold = list("/obj/item/weapon/reagent_containers/food/snacks/donut")
 
-
 /obj/item/weapon/storage/fancy/donut_box/New()
 	..()
 	for(var/i=1; i <= storage_slots; i++)
 		new /obj/item/weapon/reagent_containers/food/snacks/donut/normal(src)
 	return
+
+/obj/item/weapon/storage/fancy/donut_box/init_scatter()
+	var/list/l = list()
+	while(contents.len && prob(45))
+		var/obj/O = pick(contents)
+		remove_from_storage(O,loc)
+		if(prob(45))
+			del(O)
+			continue
+		l += O
+	return l
 
 /*
  * Egg Box
@@ -123,6 +133,11 @@
 	new /obj/item/toy/crayon/purple(src)
 	update_icon()
 
+/obj/item/weapon/storage/fancy/crayons/initialize() // but... there's no red
+	if(isturf(loc))
+		del(pick(contents)) // why is there no red crayon
+		update_icon()	// someone tell me why
+
 /obj/item/weapon/storage/fancy/crayons/update_icon()
 	overlays = list() //resets list
 	overlays += image('icons/obj/crayons.dmi',"crayonbox")
@@ -163,10 +178,16 @@
 		new /obj/item/clothing/mask/cigarette(src)
 	create_reagents(15 * storage_slots)//so people can inject cigarettes without opening a packet, now with being able to inject the whole one
 
-/obj/item/weapon/storage/fancy/cigarettes/Del()
-	del(reagents)
-	..()
-
+/obj/item/weapon/storage/fancy/cigarettes/init_scatter()
+	var/list/l = list()
+	while(contents.len && prob(45))
+		var/obj/O = pick(contents)
+		remove_from_storage(O,loc)
+		if(prob(45))
+			del(O)
+			O = new /obj/item/weapon/cigbutt(loc)
+		l += O
+	return l
 
 /obj/item/weapon/storage/fancy/cigarettes/update_icon()
 	icon_state = "[initial(icon_state)][contents.len]"

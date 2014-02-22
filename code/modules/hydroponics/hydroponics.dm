@@ -784,10 +784,17 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
 /obj/item/seeds/proc/harvest(mob/user = usr)
 	var/obj/machinery/hydroponics/parent = loc //for ease of access
+	var/yieldmod = 0.5
+	if(istype(parent))
+		yieldmod = parent.yieldmod
+	else parent=null
 	var/t_amount = 0
+	var/dest
+	if(user) dest = user.loc
+	else dest = loc
 
-	while(t_amount < (yield * parent.yieldmod))
-		var/obj/item/weapon/reagent_containers/food/snacks/grown/t_prod = new product(user.loc, potency) // User gets a consumable
+	while(t_amount < (yield * yieldmod))
+		var/obj/item/weapon/reagent_containers/food/snacks/grown/t_prod = new product(dest, potency) // User gets a consumable
 		if(!t_prod)	return
 		t_prod.seed = type
 		t_prod.lifespan = lifespan
@@ -799,7 +806,7 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 		t_prod.plant_type = plant_type
 		t_amount++
 
-	parent.update_tray()
+	if(parent) parent.update_tray()
 /*
 /obj/item/seeds/grassseed/harvest(mob/user = usr)
 	var/obj/machinery/hydroponics/parent = loc //for ease of access
@@ -899,7 +906,7 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 			podman.real_name = "Pod Person [rand(0,999)]"
 		var/oldactive = mind.active
 		mind.active = 1
-		mind.transfer_to(podman)
+		mind.clone_to(podman)
 		mind.active = oldactive
 			// -- Mode/mind specific stuff goes here. TODO! Broken :( Should be merged into mob/living/Login
 		switch(ticker.mode.name)

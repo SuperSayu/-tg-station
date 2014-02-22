@@ -12,6 +12,32 @@
 	var/wrapped = 0
 	var/dried_type = null
 
+/obj/item/weapon/reagent_containers/food/snacks/initialize()
+	if(isturf(loc))
+		if(prob(40) && slice_path && slices_num)
+			var/reagents_per_slice = reagents.total_volume/slices_num
+			for(var/i=1 to slices_num)
+				var/obj/slice = new slice_path (src.loc)
+				if(prob(25)) step_rand(slice)
+				reagents.trans_to(slice,reagents_per_slice)
+			del src
+		if(prob(33) || reagents.total_volume <= bitesize)
+			if(trash)
+				var/obj/O = new trash(loc)
+				do
+					step_rand(O)
+				while(prob(34))
+			del src
+		if(prob(34))
+			if(dried_type)
+				new dried_type(loc)
+				del src
+		if(prob(66))
+			bitecount++
+			reagents.remove_any(bitesize)
+	..()
+
+
 
 	//Placeholder for effect that trigger on eating that aren't tied to reagents.
 /obj/item/weapon/reagent_containers/food/snacks/proc/On_Consume()
@@ -2251,6 +2277,12 @@
 	var/obj/item/weapon/reagent_containers/food/snacks/sliceable/pizza/pizza // Content pizza
 	var/list/boxes = list() // If the boxes are stacked, they come here
 	var/boxtag = ""
+
+/obj/item/pizzabox/initialize()
+	if(isturf(loc) && !pizza && prob(65))
+		open = 1
+		ismessy = 1
+		update_icon()
 
 /obj/item/pizzabox/update_icon()
 	overlays = list()

@@ -100,6 +100,17 @@
 	w_class = 3.0
 	var/amount = 25.0
 
+	initialize()
+		for(var/obj/item/I in range(3))
+			if(I.anchored || prob(95)) continue
+			if(istype(I,type)) continue
+			var/obj/item/smallDelivery/P = new(I.loc)
+			P.wrapped = I
+			I.loc = P
+			var/i = round(I.w_class)
+			if(i in list(1,2,3,4,5))
+				P.icon_state = "deliverycrate[i]"
+				P.w_class = i
 
 	afterattack(var/obj/target as obj, mob/user as mob, proximity)
 		if(!proximity) return
