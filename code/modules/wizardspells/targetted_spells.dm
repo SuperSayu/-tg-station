@@ -23,7 +23,7 @@
 	var/pick_eye_holders = 0 // checks cameras and AI eyes
 
 	var/casting_window = 40 // grace period.  You have this long after the select window pops up to select someone that has gone out of range, in deciseconds.
-	castingmode = CAST_SPELL|CAST_MELEE
+	castingmode = CAST_SPELL|CAST_MELEE|CAST_RANGED
 
 
 	proc/accept(var/mob/M, var/mob/caster)
@@ -144,6 +144,8 @@
 	name = "disintegrate"
 	desc = "Reduces the target to a bloody (or oily) mess."
 
+	wand_state = "deathwand"
+
 	incantation = "EI NATH"
 	incant_volume = 2
 	chargemax = 600
@@ -175,6 +177,9 @@
 	name = "resurrect"
 	desc = "Returns the dead to their former self."
 
+	wand_state = "revivewand"
+	staff_state = "healing"
+
 	incantation = "H TANI E"
 	incant_volume = 1
 	chargemax = 600
@@ -192,6 +197,8 @@
 	pick_human = 1
 	pick_slime = 1
 	pick_brain = 1
+
+	castingmode = CAST_SPELL|CAST_MELEE //  too powerful for ranged casting
 
 	cast(mob/caster, mob/living/target) // todo flashy flash flash
 		check_dna_integrity(target)
@@ -241,6 +248,9 @@
 	name = "heal"
 	desc = "Rejuvenates the living."
 
+	wand_state = "revivewand"
+	staff_state = "healing"
+
 	incantation = "FIR STAID"
 	incant_volume = 1
 	chargemax = 1200
@@ -260,6 +270,7 @@
 	pick_human = 1
 	pick_slime = 1
 	pick_brain = 0
+	castingmode = CAST_MELEE|CAST_RANGED
 
 	inspire_loyalty()
 		return
@@ -280,6 +291,8 @@
 	chargemax = 250
 	incantation = "KN'A FTAGHU, PUCK 'BTHNK!"
 	incant_volume = 2
+	castingmode = CAST_SPELL|CAST_MELEE
+	var/duration = 1200
 
 	cast(mob/caster, mob/living/carbon/human/target)
 		var/obj/item/clothing/mask/horsehead/magichead = new /obj/item/clothing/mask/horsehead
@@ -290,7 +303,7 @@
 								"<span class='danger'>Your face burns up, and shortly after the fire you realise you have the face of a horse!</span>")
 		target.equip_to_slot(magichead, slot_wear_mask)
 		flick("e_flash", target.flash)
-		spawn(1200)
+		spawn(duration)
 			if(magichead)
 				magichead.canremove = 1
 				magichead.voicechange = 0
@@ -301,6 +314,8 @@
 /obj/effect/knowspell/target/flesh_to_stone
 	name = "flesh to stone"
 	desc = "Turns a target into a statue for a little while.  They can break out, but destroying the statue kills them."
+
+	wand_state = "polywand"
 
 	pick_living = 1
 	pick_human = 1
@@ -322,6 +337,9 @@
 /obj/effect/knowspell/target/mindswap
 	name = "mindswap"
 	desc = "Switch minds with another living creature."
+
+	mindswap_forget_chance = 0
+	cloning_forget_chance = 100 // NOOOOOOO wait who am I kidding that means they killed the wizard
 
 	pick_living = 1
 	pick_human = 1
@@ -432,8 +450,13 @@
 	pick_living = 1
 	pick_dead = 1
 
+	wand_state = "polywand"
+	staff_state = "animate"
+
 	require_clothing = 1
 	var/remove_after = 900
+	var/allow_choice = 1 // if 0, a possible mutation is chosen randomly
+
 	var/list/possible_mutations // name = mutation ID
 	var/list/incantations		// name = incantation
 	var/list/describe_addition	// name = blurb (to recipient)
@@ -461,8 +484,11 @@
 		if(!selected.len)
 			caster << "This spell can do no more to [target==caster?"you":"[target]"]!"
 			return 0
-
-		var/answer = input(caster, "Select a mutation:","Mutation",null) in selected
+		var/answer
+		if(allow_choice)
+			answer = input(caster, "Select a mutation:","Mutation",null) in selected
+		else
+			answer = pick(selected)
 
 		if(!isnull(answer) && cast_check(caster))
 
@@ -503,6 +529,8 @@
 	desc = "Contains a number of selectable, beneficial qualities for you or your allies.  90 second duration."
 	chargemax = 450
 	pick_self = 1
+
+	staff_state = "healing"
 
 	possible_mutations = list("Hulkitis" = HULK, "Telekinesis" = TK, "Cold Resistance" = COLD_RESISTANCE, "X-ray vision" = XRAY, "Laser Eyes" = LASER)
 	incantations = list("Hulkitis" = "BIRUZ BANNAR", "Telekinesis" = "JIN GREI", "X-ray vision" = "ZU PERMA NAI", "Cold Resistance" = "JONIST ORM",
@@ -597,3 +625,78 @@
 					target.update_mutations()
 					target << "\red [tempstring]"
 					scatter_lightning(target)
+
+/obj/effect/knowspell/target/gender_swap
+	name = "Swap Gender"
+	desc = "A routine prank at wizard school."
+	pick_self = 1
+	pick_living = 1
+	pick_dead = 1
+	pick_clientless = 1
+	pick_human = 1
+	pick_animal = 1
+	pick_monkey = 1
+	chargemax = 400
+
+	cast(var/mob/caster, var/mob/target)
+		if(prob(9))
+			target.gender = "NEUTER"
+		else
+			switch(target.gender)
+				if("MALE")
+					target.gender = "FEMALE"
+				if("FEMALE")
+					target.gender = "MALE"
+				if("NEUTER","PLURAL")
+					target.gender = pick("MALE","FEMALE","NEUTER","PLURAL")
+		updateappearance(target)
+
+/obj/effect/knowspell/target/make_bald
+	name = "Embalden"
+	desc = "Removes a person's hair and beard all at once."
+	before_cast(var/mob/caster, var/mob/target)
+	pick_self = 1
+	pick_living = 1
+	pick_dead = 1
+	pick_clientless = 1
+	pick_human = 1
+
+	before_cast(var/mob/caster, var/mob/living/carbon/human/target)
+		if(!istype(target)) return 0
+		if(target.hair_style && target.hair_style != "shaved" && target.get_organ(/obj/item/organ/brain)) // debrained = no hair
+			return 1
+		if(target.facial_hair_style && target.facial_hair_style != "shaved")
+			return 1
+		caster << "[target] is already as bald as \he can be!"
+		return 0
+
+	cast(var/mob/caster, var/mob/living/carbon/human/target)
+		if(!istype(target)) return
+		target.hair_style = "shaved"
+		target.facial_hair_style = "shaved"
+		target.update_hair()
+
+// this is for the wand of pranks
+/obj/effect/knowspell/target/prank
+	name = "Prank"
+	desc = "One of several magical effects will happen.  Gosh!"
+	pick_living = 1
+	pick_dead = 1
+	pick_clientless = 1
+	pick_human = 1
+	chargemax = 100
+	New()
+		new/obj/effect/knowspell/target/make_bald(src)
+		new/obj/effect/knowspell/target/gender_swap(src)
+		new/obj/effect/knowspell/target/mutate/bad{allow_choice = 0}(src)
+		new/obj/effect/knowspell/summon/target/banana(src)
+		new/obj/effect/knowspell/target/horsemask{duration=200;incantation="PUCK BTHNK"}(src) // minor version
+		..()
+
+	activate(var/mob/caster, var/mob/target)
+		var/list/candidates = contents.Copy()
+		while(candidates.len)
+			var/obj/effect/knowspell/selected = pick_n_take(candidates)
+			if(selected.activate(caster,target))
+				after_cast(caster) // recharge here too
+				return 1

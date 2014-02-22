@@ -7,14 +7,34 @@
 /obj/effect/knowspell/area
 	var/visible_range = 0
 	var/range = 6
+	var/directcast_charge = 0 // charge lost when casting on something
 	castingmode = CAST_SPELL|CAST_SELF|CAST_MELEE
 
 	attack(atom/target, mob/caster)
 		activate(caster, target) // always returns 0
+	afterattack(atom/target, mob/caster)
+		activate(caster, target)
+
+	cast_check(caster,lesser)
+		return charge_check(caster,lesser) && stat_check(caster) && centcom_check(caster) && clothing_check(caster)
+
+	charge_check(caster,lesser)
+		if(rechargable)
+			if(lesser && directcast_charge)
+				return charge >= directcast_charge
+			else
+				return charge >= chargemax
+		else
+			return charge > 0
+
 
 	activate(mob/caster, list/target = null)
 		var/lesser = 0
-		if(cast_check(caster))
+		if(isloc(target))
+			var/atom/A = get_turf(target)
+			target = A.contents + A
+			lesser = 1 // targetting only one square
+		if(cast_check(caster,lesser))
 			if(!target)
 				if(visible_range)
 					target = view(caster,range)
@@ -31,7 +51,7 @@
 				return 1
 	after_cast(caster,target,lesser)
 		if(rechargable && lesser)
-			charge = chargemax / 2
+			charge -= directcast_charge
 			start_recharge()
 			return
 		..()
@@ -40,9 +60,12 @@
 	name = "disable technology"
 	desc = "Causes an electromagnetic wave that wreaks havoc on electronics."
 
+	wand_state = "revivewand"
+
 	require_clothing = 0
 	range = 3
 	chargemax = 400
+	directcast_charge = 100
 
 	incantation = "NEC CANTIO"
 	incant_volume = 2
@@ -64,6 +87,7 @@
 	visible_range  = 1
 	range = 5
 	chargemax = 300
+	directcast_charge = 75 // you are likely to miss anyway
 
 	incantation = "FLASH A-AAAA"
 	incant_volume = 2
@@ -89,7 +113,10 @@
 	name = "knock"
 	desc = "An old wizard trick for opening doors."
 
+	wand_state = "doorwand"
+
 	chargemax = 200
+	directcast_charge = 100
 	require_clothing  = 0
 
 	visible_range = 0
@@ -118,7 +145,10 @@
 	name = "hold portal"
 	desc = "An old wizard trick for closing doors."
 
+	wand_state = "doorwand"
+
 	chargemax = 300
+	directcast_charge = 150
 	require_clothing = 0
 
 	visible_range = 1
@@ -146,3 +176,23 @@
 				if(istype(D,/obj/machinery/door/airlock))
 					D:locked = 1
 					D.update_icon()
+
+/obj/effect/knowspell/area/grease
+	name = "grease"
+	desc = "An old wizard trick for slipping up foes."
+
+	chargemax = 550
+	require_clothing = 1
+
+	visible_range = 1
+	range = 3
+	allow_stuncast = 1
+	incantation = "WOT SEA FLOOR"
+	castingmode = CAST_SPELL | CAST_SELF | CAST_RANGED
+	afterattack(atom/A, mob/caster)
+		var/turf/T = get_turf(A)
+		activate(caster,view(T,range))
+
+	cast(mob/caster, list/target)
+		for(var/turf/simulated/T in target)
+			T.MakeSlippery(pick(1,2,2,2))

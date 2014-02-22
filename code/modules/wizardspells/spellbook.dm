@@ -190,5 +190,8 @@
 		/obj/effect/knowspell/target/mutate/bad,
 		/obj/effect/knowspell/area/blind,
 		/obj/effect/knowspell/area/knock,
-		/obj/effect/knowspell/projectile/throw/sweep
+		/obj/effect/knowspell/area/grease,
+		/obj/effect/knowspell/projectile/throw/sweep,
+		/obj/effect/knowspell/target/prank
+//		/obj/effect/knowspell/target/gender_swap // reserved
 	)

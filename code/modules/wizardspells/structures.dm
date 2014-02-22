@@ -98,5 +98,17 @@
 	attackby(obj/item/I,mob/user)
 		var/newname = input(user,"Give [I] a new name:","Rename item",null) as text|null
 		if(!newname || length(newname) < 2 || !Adjacent(user) || length(newname) > 24) return
-		I.name = newname
+		if(istype(I,/obj/item/weapon/magic/scroll))
+			var/obj/item/weapon/magic/scroll/S = I
+			if(S.rolled)
+				S.rolled_name = newname
+			else
+				S.magic_name = newname
+			S.update_icon()
+		else if(istype(I,/obj/item/weapon/magic))
+			var/obj/item/weapon/magic/M = I
+			M.magic_name = newname
+			M.update_icon()
+		else
+			I.name = newname
 		user << "You give [I] a new name."

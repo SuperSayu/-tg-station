@@ -175,7 +175,7 @@
 		spawn(duration)
 			del src // why are these not dying
 	process()
-		if(kill_count < 1)
+		if(kill_count < 1 || bumped)
 			delete()
 			return
 		kill_count--

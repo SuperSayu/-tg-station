@@ -86,6 +86,8 @@
 	desc = "Throws an exploding firebolt.  Some danger of friendly fire."
 	require_clothing = 1
 
+	wand_state = "firewand"
+
 	projectile_count = 1
 	projectile_spread = 0
 	projectile_type = /obj/item/projectile/magic/fireball
@@ -112,6 +114,8 @@
 	desc = "Transforms the target.  Too powerful to cast without a magic item."
 	castingmode = CAST_RANGED
 
+	wand_state = "polywand"
+
 	projectile_count = 1
 	projectile_spread = 0
 	projectile_type = /obj/item/projectile/magic/change
@@ -123,6 +127,9 @@
 /obj/effect/knowspell/projectile/throw/animate
 	name = "animation ray"
 	desc = "Brings objects to life."
+
+	wand_state = "polywand"
+	staff_state = "animate"
 
 	projectile_count = 1
 	projectile_spread = 0
@@ -147,6 +154,9 @@
 /obj/effect/knowspell/projectile/throw/sweep
 	name = "sweeping bolt"
 	desc = "Cleans up scum, living or otherwise."
+
+	staff_state = "generic"
+
 	projectile_count = 3
 	projectile_spread = 2
 	projectile_type = /obj/item/projectile/magic/sweep
@@ -178,7 +188,8 @@
 	while(counter--)
 		var/mob/target = pick_n_take(possible_targets)
 		var/turf/end = get_turf(target)
-		fire(new projectile_type(start), target, start, end, caster)
+		var/turf/s = get_step_rand(start)
+		fire(new projectile_type(s), target, s, end, caster)
 
 		if(!possible_targets.len && counter && backup.len) // Ensure it doesn't double up unless there are not enough targets
 			possible_targets = backup.Copy()

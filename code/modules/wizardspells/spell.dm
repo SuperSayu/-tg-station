@@ -29,6 +29,8 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 	desc = "incredibly shitty spell"
 	unacidable = 1
 
+	var/cloning_forget_chance = 10
+	var/mindswap_forget_chance = 5
 
 	var/require_clothing = 1	// 1: requires garb
 	var/prevent_centcom = 0	// 1: prevent cast on Centcom level
@@ -41,12 +43,24 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 
 	var/allow_stuncast = 0 // Cast when stunned/weakened
 	var/allow_nonhuman = 1
+	var/allow_cyborg = 1 // borging magic brains = ???
 	var/castingmode = CAST_SPELL	// enchantment: what kind of item it can take
 	var/complexity = 1				// enchantment: serious spells require serious items
+	var/panel = "Spells"
+	var/wand_state = null	// icon state when placed in a wand
+	var/staff_state = null	// icon state when placed in a staff (not broom)
 
-	New()
+	New(var/atom/NL, var/override_robeless = 0)
 		..()
 		charge = chargemax
+		if(isturf(loc))
+			new /obj/item/weapon/magic/scroll{rolled = 1}(loc,src) // will put us inside a scroll if we are spawned
+			if(prob(32))
+				override_robeless = 1
+
+		// In some cases we may want arbitrary spells to be castable by whomever
+		if(override_robeless)
+			require_clothing = 0
 
 	proc/describe(var/allow_cast = 1, var/allow_learn = 1, var/add_description = 1, var/remove_from = null)
 		var/castblock = ""
@@ -73,6 +87,26 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 			if(prevent_centcom)
 				descblock += "Cannot cast on the wizard sanctuary / in hyperspace."
 			descblock += "<br><i>[desc]</i><br>"
+			if(castingmode > CAST_SPELL)
+				var/g = null // gloves
+				var/b = null // blades
+				var/w = null // wands
+				var/s = null // staves
+				var/o = null // orbs
+				if(castingmode&CAST_MELEE)
+					g = "gloves "
+					b = "blades "
+					w = "wands "
+				if(castingmode&CAST_RANGED)
+					g = "gloves "
+					b = "blades "
+					w = "wands "
+					s = "staves "
+				if(castingmode&CAST_SELF)
+					o = "orbs "
+				descblock += "Enchantable: [g][b][w][s][o]"
+
+
 
 		return "<h4>[name] [castblock]([uses]) [learnblock] [removeblock]</h4>[descblock]"
 
@@ -105,7 +139,7 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 			return 1
 
 	proc/cast_check(var/mob/caster)
-		return charge_check() && stat_check(caster) && centcom_check(caster) && clothing_check(caster)
+		return charge_check(caster) && stat_check(caster) && centcom_check(caster) && clothing_check(caster)
 
 	proc/clothing_check(var/mob/living/carbon/human/H)
 		if(istype(loc,/obj))
@@ -135,7 +169,7 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 
 		return 1
 
-	proc/charge_check()
+	proc/charge_check(var/mob/caster)
 		if(rechargable)
 			return charge >= chargemax
 		else
@@ -187,7 +221,8 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 		if(cast_check(user) && before_cast(user,target))
 			cast(user,target)
 			after_cast(user,target)
-		return
+			return 1
+		return 0
 
 	proc/before_cast(var/mob/caster, target = null)
 		incant(caster, target)
@@ -362,11 +397,12 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 */
 	for(var/obj/effect/knowspell/KS in src.contents)
 		if(KS.rechargable)
-			statpanel("Spells","[KS.charge/10.0]/[KS.chargemax/10]",KS)
+			statpanel(KS.panel,"[KS.charge/10.0]/[KS.chargemax/10]",KS)
 		else
-			statpanel("Spells","[KS.charge] left",KS)
+			statpanel(KS.panel,"[KS.charge] left",KS)
 	if(l_hand) l_hand.Stat("Left hand")
 	if(r_hand) r_hand.Stat("Right hand")
+
 /mob/living/carbon/human/list_wizspells()
 	..()
 	if(gloves) gloves.Stat()

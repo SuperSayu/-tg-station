@@ -102,6 +102,8 @@
 	name = "portal"
 	desc = "Conjures a portal to and from a distant location."
 
+	wand_state = "telewand"
+
 	chargemax = 600
 
 	incantation = "Rasonicus Nai"
@@ -168,6 +170,8 @@
 	name = "magical fire"
 	desc = "Creates a magical field of fire."
 
+	wand_state = "firewand"
+
 	chargemax = 250
 
 	incantation = "BURNUS THATUS"
@@ -183,6 +187,8 @@
 	name = "forcewall"
 	desc = "Creates an impenetrable barrier"
 	charge = 100
+
+	wand_state = "telewand"
 
 	incantation = "TARCOL MINTI ZHERI"
 	incant_volume = 1
@@ -408,6 +414,7 @@
 	return 1
 
 /obj/effect/knowspell/summon/world/guns/target_effect(var/mob/living/carbon/human/H)
+	H.loc.visible_message("\i[magic_soundfx()]")
 	if(!istype(H) || H.stat == 2 || !(H.client) || is_special_character(H)) return 1
 	if(prob(25))
 		ticker.mode.traitors += H.mind

@@ -11,6 +11,7 @@
 	var/dormant_state = null
 	var/noun = null // for renaming: [noun] of [spell]
 	var/castingmode = 0 // during enchantment, only allow magic
+	var/magic_name = null // the renaming pylon should take priority here
 	slot_flags = SLOT_BELT
 
 	New(L,newspell)
@@ -25,9 +26,11 @@
 	attack_self(user)
 		if(spell && (castingmode & CAST_SELF))
 			spell.prepare(user)
-	afterattack(target,user, proximity)
+	afterattack(target,mob/user, proximity)
 		if(!spell) return
 		if(proximity)
+			if(target in user.contents)
+				return // should prevent you from casting on your backpack if the item cannot fit, among other undesirable effects
 			if(castingmode & spell.castingmode & CAST_MELEE)
 				spell.attack(target,user)
 		else
@@ -77,6 +80,8 @@
 			name = initial(name)
 			if(dormant_state)
 				icon_state = dormant_state
+		if(magic_name)
+			name = magic_name // renaming pylon
 
 /obj/item/weapon/magic/spell_thrower
 	name = "spell thrower"
@@ -125,11 +130,55 @@
 	noun = "scroll"
 	enchanted_state = "scroll"
 	dormant_state = "blank"
+	var/rolled = 0
+	var/rolled_name = "scroll of paper"
+
+	New()
+		..()
+		if(rolled) roll_scroll() // just in case
 
 	castingmode = CAST_SPELL
 	attack_self(mob/user)
+		if(rolled)
+			rolled = 0
+			pixel_x = rand(-2,2)
+			pixel_y = rand(-1,1)
+			verbs |= /obj/item/weapon/magic/scroll/verb/roll_scroll
+			update_icon()
+			return
 		if(spell)
 			user << browse(spell.describe(),"window=scroll")
+	update_icon()
+		if(rolled)
+			name = rolled_name // overwritten by naming pylon
+			desc = "Who rolls up paper nowadays?"
+			if(spell)
+				icon_state = "scroll_sealed"
+			else
+				icon_state = "scroll_rolled"
+			return
+		else
+			desc = initial(desc)
+			..()
+	examine()
+		if(spell) // prevent the glyph from being read until it is opened
+			var/o = spell.incant_volume
+			spell.incant_volume = 0
+			..()
+			spell.incant_volume = o
+		else
+			..()
+
+
+	verb/roll_scroll()
+		set category="Object"
+		set name="Roll Scroll"
+		set desc="Rolls up a magic scroll to hide its identity."
+		rolled = 1
+		pixel_x = rand(-5,5)
+		pixel_y = rand(-10,10)
+		update_icon()
+		verbs -= /obj/item/weapon/magic/scroll/verb/roll_scroll
 
 /obj/item/weapon/magic/orb
 	name = "crystal orb"
@@ -152,11 +201,23 @@
 	castingmode = CAST_RANGED
 	slot_flags = SLOT_BACK
 
+	update_icon()
+		if(spell && spell.staff_state)
+			enchanted_state = "[noun]_[spell.staff_state]"
+			dormant_state = "[noun]"
+		else
+			enchanted_state = null
+			dormant_state = null
+
+		..()
+
 /obj/item/weapon/magic/staff/broom
 	name = "bewitched broom"
 	icon_state = "broom"
 	noun = "broom"
 	force = 0
+
+
 
 /obj/item/weapon/magic/blade
 	name = "sacrificial knife"
@@ -169,6 +230,27 @@
 	castingmode = CAST_MELEE
 	slot_flags = SLOT_BACK | SLOT_BELT
 
+/obj/item/weapon/magic/wand
+	name = "magician's enchantable wand"
+	desc = "Not to be confused with a magician's OTHER wand."
+	icon = 'icons/obj/wizard.dmi'
+	icon_state = "nothingwand"
+	noun = "wand"
+	force = 0
+	w_class = 2
+	castingmode = CAST_RANGED|CAST_MELEE
+	slot_flags = SLOT_BELT|SLOT_POCKET
+
+	update_icon()
+		if(spell && spell.wand_state)
+			enchanted_state = spell.wand_state
+			dormant_state = "[enchanted_state]-drained"
+		else
+			enchanted_state = null
+			dormant_state = null
+
+		..()
+
 // doesn't get enchanted, instead gets filled with scrolls
 // You cannot cast from a spellbook and you cannot remove scrolls
 // You can only learn from it
@@ -179,7 +261,7 @@
 	icon_state ="book"
 	w_class = 2.0
 	flags = FPRINT
-	var/const/maxscrolls = 4
+	var/maxscrolls = 5
 	var/list/spawn_spells = list()
 
 	New()
@@ -189,6 +271,9 @@
 	examine()
 		..()
 		usr << "Contains [contents.len]/[maxscrolls] scrolls."
+
+	update_icon()
+		return
 
 	attack_self(mob/user as mob)
 		usr = user
@@ -240,6 +325,13 @@
 	var/castingmode = CAST_MELEE|CAST_RANGED
 	action_button_name = "Toggle Casting"
 	var/casting = 1
+	var/spawn_spelltype = null
+
+	New()
+		if(ispath(spawn_spelltype,/obj/effect/knowspell))
+			spell = new spawn_spelltype(src)
+			update_icon()
+		..()
 
 	ui_action_click()
 		casting = !casting

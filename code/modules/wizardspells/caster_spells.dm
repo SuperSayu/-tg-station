@@ -19,7 +19,7 @@
 		if(level < 1) return
 		var/speech = incantation
 		if(prob(50))//Auto-mute? Fuck that noise
-			speech = replacetext(incantation," ","`")
+			speech = replacetext(incantation," ",pick("`","'","-","~"))
 		speech += " [uppertext(target.name)]"
 		switch(incant_volume)
 			if(2)
@@ -54,6 +54,8 @@
 /obj/effect/knowspell/self/blink
 	name = "blink"
 	desc = "Sends you a short distance."
+
+	wand_state = "telewand"
 
 	require_clothing = 0
 	incant_volume = 0
@@ -109,6 +111,8 @@
 /obj/effect/knowspell/self/ghostize
 	name = "astral projection"
 	desc = "Detaches your mind and sends it to the world of the dead, where you can learn their secrets."
+
+	wand_state = "deathwand"
 
 	chargemax = 400
 	incant_volume = 1

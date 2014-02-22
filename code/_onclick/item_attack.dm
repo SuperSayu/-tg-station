@@ -25,6 +25,9 @@
 
 	if (!istype(M)) // not sure if this is the right thing...
 		return
+	if(!force && (flags&NOBLUDGEON))
+		return
+
 	var/messagesource = M
 
 	if (istype(M,/mob/living/carbon/brain))
