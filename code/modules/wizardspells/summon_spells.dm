@@ -1,5 +1,6 @@
 
 /obj/effect/knowspell/summon/castingmode = CAST_SPELL|CAST_SELF|CAST_MELEE
+
 //
 // Summon here: Drops it in the caster's square.  This is used for creating legacy enchanted items as well.
 //
@@ -83,6 +84,7 @@
 	desc = "One time use.  Calls forth a full set of space-worthy wizard armor."
 	rechargable = 0
 	chargemax = 1
+	castingmode = CAST_SPELL|CAST_SELF
 
 	incantation = ""
 	incant_volume = 0
@@ -101,8 +103,7 @@
 /obj/effect/knowspell/summon/here/portal
 	name = "portal"
 	desc = "Conjures a portal to and from a distant location."
-
-	wand_state = "telewand"
+	castingmode = CAST_SPELL|CAST_SELF
 
 	chargemax = 600
 

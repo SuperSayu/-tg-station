@@ -86,7 +86,6 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 				descblock += "Cannot cast while stunned.  "
 			if(prevent_centcom)
 				descblock += "Cannot cast on the wizard sanctuary / in hyperspace."
-			descblock += "<br><i>[desc]</i><br>"
 			if(castingmode > CAST_SPELL)
 				var/g = null // gloves
 				var/b = null // blades
@@ -104,7 +103,8 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 					s = "staves "
 				if(castingmode&CAST_SELF)
 					o = "orbs "
-				descblock += "Enchantable: [g][b][w][s][o]"
+				descblock += "<br><b>Enchantable:</b> [g][b][w][s][o]"
+			descblock += "<br><i>[desc]</i><br>"
 
 
 

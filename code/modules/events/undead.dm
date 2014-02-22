@@ -4,17 +4,19 @@
 	max_occurrences = 1
 
 /datum/round_event/undead
-	var/spawn_prob = 8
+	var/spawn_prob = 5
 	startWhen = 2
 	announceWhen = 3
 	var/selected_z = 1
 	setup()
-		selected_z = pick(1,3,4,5)
+		selected_z = pick(300;1,3,4,5)
 		if(selected_z == 1)
 			var/datum/round_event/electrical_storm/RS = new
 			RS.lightsoutAmount = pick(2,2,3)
 			RS.start()
 			RS.kill()
+		if(selected_z == 5) // mining level = lots of shadow
+			spawn_prob = 0.125
 	start()
 		for(var/area/A)
 			if(A.luminosity) continue // prevents all tiles that have any light in them
@@ -22,7 +24,7 @@
 			if(A.type == /area) continue
 			var/list/turflist = list()
 			for(var/turf/T in A)
-				if(T.z != selected_z) continue
+				if(T.z != selected_z) break
 				if(istype(T,/turf/space) || T.density) continue
 				if(locate(/mob/living) in T) continue
 				var/okay = 1
@@ -47,4 +49,4 @@
 			if(M.z == selected_z)
 				M << "You feel [pick("a chill","a deathly chill","the undead","dirty", "creeped out","afraid","fear")]!"
 		for(var/mob/dead/D in player_list)
-			D << "You feel dark energies pull back towards the living world, but it quickly fades."
+			D << "You feel dark energies pull you back towards the living world, but it quickly fades."

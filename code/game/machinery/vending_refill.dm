@@ -107,7 +107,7 @@
 	name = "do-it-yourself vend-o-mat"
 	desc = "Filled with dreams--YOUR dreams.  Which is to say, empty."
 	allow_insert(var/obj/item/I)
-		if(istype(I))
+		if(istype(I) && !(I.flags&ABSTRACT))
 			return 1
 		return 0
 	New()

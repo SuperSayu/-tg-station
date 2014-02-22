@@ -7,7 +7,6 @@
 	* add Programmable Machines and programmable machine circuit boards (optional)
 	* add Random Drinks cabinet to bar in place of booze cabinet
 	* more maint closets around R&D
-	* Mirror near Genetics
 
 	* redo Misc Research
 
@@ -18,8 +17,6 @@
 
 	* Maint room - Meeting hall
 	* Maint room - Oh god honk
-	* Chemistry starter kit hidden somewhere
-	* Murder mystery
 
 	* Box of collars in art storage
 	* Sheet snatchers in mining
@@ -42,6 +39,11 @@
 		* Actual holodeck area covering theater
 		* Make sure you can reach the computer without losing holographic clothes
 		* One for each area in /area/holodeck/theater; see WorkInProgress/Sayu/Sayustation_areas.dm
+
+	* Wizard Sanctuary
+		* Enchanting stuff
+		* In Hyperspace
+		* Wizard ship Oshit
 
 	? hyronalin dispenser to genetics
 
