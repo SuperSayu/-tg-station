@@ -19,8 +19,8 @@
 	health = 75
 	speed = -1
 	harm_intent_damage = 8
-	melee_damage_lower = 10
-	melee_damage_upper = 10
+	melee_damage_lower = 2
+	melee_damage_upper = 8
 	attacktext = "attacks"
 	attack_sound = 'sound/items/bikehorn.ogg'
 
@@ -37,3 +37,4 @@
 	heat_damage_per_tick = 15	//amount of damage applied if animal's body temperature is higher than maxbodytemp
 	cold_damage_per_tick = 10	//same as heat_damage_per_tick, only if the bodytemperature it's lower than minbodytemp
 	unsuitable_atoms_damage = 10
+	retaliate_chance = 15 // HEY HEY HEY HOOOOOONK

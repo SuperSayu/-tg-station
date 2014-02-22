@@ -1,6 +1,6 @@
 /mob/living/simple_animal/hostile/retaliate
 	var/list/enemies = list()
-	var/retaliate_chance = 60
+	var/retaliate_chance = 40
 
 /mob/living/simple_animal/hostile/retaliate/Found(var/atom/A)
 	if(isliving(A))
