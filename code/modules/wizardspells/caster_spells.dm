@@ -46,7 +46,7 @@
 		return 1
 
 	cast(var/mob/caster)
-		caster.loc = target_turf
+		caster.forceMove(target_turf)
 		smoke_cloud(caster)
 		return 1
 

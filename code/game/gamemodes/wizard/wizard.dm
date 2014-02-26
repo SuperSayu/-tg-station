@@ -289,17 +289,39 @@
 			else
 				text += "<br><font color='red'><B>The wizard has failed!</B></font>"
 				feedback_add_details("wizard_success","FAIL")
-			if(wizard.current && wizard.current.spell_list)
+			if(wizard.learned_spells.len)
 				text += "<br><B>[wizard.name] used the following spells: </B>"
 				var/i = 1
-				for(var/obj/effect/proc_holder/spell/S in wizard.current.spell_list)
-					text += "[S.name]"
-					if(wizard.current.spell_list.len > i)
+				for(var/key in wizard.learned_spells)
+					var/obj/effect/knowspell/KS = new key(null)
+					text += "[KS.name]"
+					if(wizard.learned_spells.len > i)
 						text += ", "
 					i++
 			text += "<br>"
-
 		world << text
+	if(artifacts_used.len)
+		var/text = "<font size=3><b>The following magical artifacts were recovered:</b></font>"
+		for(var/entry in artifacts_used)
+			if(!entry) continue
+			text += "<br>[entry]" // these are text strings generated when the artifact leaves the wizard ship or arrives via shuttle loan
+			var/obj/item/weapon/magic/M = artifacts_used[entry]
+			if(!M)
+				text += " (destroyed)"
+			else if(istype(M) && !M.spell)
+				text += " (dispelled)"
+			else
+				var/mob/holder = get(M.loc, /mob)
+				if(holder)
+					text += " held by [holder.real_name] \icon[M.loc]"
+			var/area/A = get_area(M.loc)
+			switch(A.type)
+				if(/area/shuttle/escape/centcom,/area/shuttle/escape_pod1/centcom,/area/shuttle/escape_pod2/centcom,/area/shuttle/escape_pod3/centcom,/area/shuttle/escape_pod4/centcom)
+					text += " (escaped the station)"
+				if(/area)
+					text += " (lost in space)"
+
+		world << text + "<br>"
 	return 1
 
 //OTHER PROCS

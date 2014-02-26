@@ -1237,6 +1237,7 @@
 #include "code\modules\wizardspells\mime.dm"
 #include "code\modules\wizardspells\paper.dm"
 #include "code\modules\wizardspells\projectile_spells.dm"
+#include "code\modules\wizardspells\round_end_tally.dm"
 #include "code\modules\wizardspells\spell.dm"
 #include "code\modules\wizardspells\spellbook.dm"
 #include "code\modules\wizardspells\structures.dm"

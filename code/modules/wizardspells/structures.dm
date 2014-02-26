@@ -109,6 +109,14 @@
 			var/obj/item/weapon/magic/M = I
 			M.magic_name = newname
 			M.update_icon()
+		else if(istype(I,/obj/item/clothing/gloves/magic))
+			var/obj/item/clothing/gloves/magic/M = I
+			M.magic_name = newname
+			M.update_icon()
+		else if(istype(I,/obj/item/clothing/gloves/white/tkglove))
+			var/obj/item/clothing/gloves/white/tkglove/T = I
+			T.magic_name = newname
+			T.name = newname
 		else
 			I.name = newname
 		user << "You give [I] a new name."

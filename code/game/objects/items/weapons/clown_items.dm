@@ -47,8 +47,8 @@
 		M.stop_pulling()
 		M << "\blue You slipped on the [name]! It disintegrates with a \i [magic_soundfx()]"
 		playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
-		M.Stun(4)
-		M.Weaken(2)
+		M.Stun(2)
+		M.Weaken(1)
 		walk_rand(new src.type(loc),walk_delay)
 		while(prob(15))
 			walk_rand(new src.type(loc),walk_delay)

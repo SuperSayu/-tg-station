@@ -23,6 +23,9 @@ var/const/CAST_SPELL = 1	// Normal spell: shows up in spell tab, can be learned
 var/const/CAST_SELF = 2		// Magic items: Use-self
 var/const/CAST_MELEE = 4	// Magic items: Attack
 var/const/CAST_RANGED = 8	// Magic items: afterattack
+// used to keep track of what wizards learned (or lizards wearned)
+/datum/mind/var/list/learned_spells = list()
+
 
 /obj/effect/knowspell
 	name = "bullshit spell effect"
@@ -85,7 +88,7 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 			if(!allow_stuncast)
 				descblock += "Cannot cast while stunned.  "
 			if(prevent_centcom)
-				descblock += "Cannot cast on the wizard sanctuary / in hyperspace."
+				descblock += "Cannot cast in hyperspace."
 			if(castingmode > CAST_SPELL)
 				var/g = null // gloves
 				var/b = null // blades
@@ -130,12 +133,18 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 					del choice
 			if(usr.spell_list.len >= max_spells || (src in usr.spell_list))
 				return
-			var/obj/oldloc = loc
+			var/obj/item/weapon/magic/oldloc = loc
 			loc = usr
 			usr.spell_list += src
+			if(usr.mind)
+				usr.mind.learned_spells |= type
 			//usr.spell_list = sortAtom(usr.spell_list)
 			if(isobj(oldloc))
-				oldloc.interact()
+				if(istype(oldloc))
+					oldloc.spell = null
+					oldloc.update_icon()
+				else
+					oldloc.interact()
 			return 1
 
 	proc/cast_check(var/mob/caster)
@@ -237,11 +246,14 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 			start_recharge()
 		else
 			charge = max(charge-1, 0)
+			if(caster && caster.mind)
+				caster.mind.learned_spells |= type // if cast from a scroll or object, record it
 			if(charge <= 0)
 				if(istype(loc,/obj/item/weapon/magic))
 					var/obj/item/weapon/magic/M = loc
 					M.dispell(1) // will delete us
 				else
+
 					spawn()
 						del src
 		return 1

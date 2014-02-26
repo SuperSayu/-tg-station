@@ -82,6 +82,13 @@
 				icon_state = dormant_state
 		if(magic_name)
 			name = magic_name // renaming pylon
+	// creates a descriptive string for round-end accounting
+	proc/describe()
+		if(!spell) return null
+		if(magic_name)
+			return "\icon[src] [magic_name] ([noun] of [spell.name])"
+		else
+			return "\icon[src] [noun] of [spell.name]"
 
 /obj/item/weapon/magic/spell_thrower
 	name = "spell thrower"
@@ -119,6 +126,8 @@
 
 	Stat()
 		return // you already know this spell
+	describe()
+		return null
 
 /obj/item/weapon/magic/scroll
 	name = "magic scroll"
@@ -161,13 +170,36 @@
 			desc = initial(desc)
 			..()
 	examine()
-		if(spell) // prevent the glyph from being read until it is opened
+		if(spell && rolled) // prevent the glyph from being read until it is opened
 			var/o = spell.incant_volume
 			spell.incant_volume = 0
 			..()
 			spell.incant_volume = o
 		else
 			..()
+	describe()
+		if(!spell) return null
+		if(rolled_name)
+			var/or = rolled
+			rolled = 1
+			update_icon()
+			. = "\icon[src] [rolled_name]: "
+			rolled = 0
+			update_icon()
+			. += ..() // funname (scroll of wabberjack)
+			rolled = or
+			update_icon()
+			return .
+		if(rolled)
+			. = "\icon[src] [name]: "
+			rolled = 0
+			update_icon()
+			. += ..()
+			rolled = 1
+			update_icon()
+			return .
+		return ..()
+
 
 
 	verb/roll_scroll()
@@ -273,6 +305,7 @@
 		usr << "Contains [contents.len]/[maxscrolls] scrolls."
 
 	update_icon()
+		if(magic_name) name = magic_name
 		return
 
 	attack_self(mob/user as mob)
@@ -303,6 +336,15 @@
 			M.spell.loc = src
 			user.drop_item()
 			del M
+	describe()
+		if(!contents.len)
+			return null
+		if(magic_name)
+			. = "\icon[src] [magic_name] (spellbook):<br>"
+		for(var/obj/effect/knowspell/KS in src)
+			. += "\t * [KS]<br>"
+		return
+
 	Topic(href,list/href_list)
 		if(!Adjacent(usr)) return
 		if("remove" in href_list)
@@ -326,6 +368,7 @@
 	action_button_name = "Toggle Casting"
 	var/casting = 1
 	var/spawn_spelltype = null
+	var/magic_name = null
 
 	New()
 		if(ispath(spawn_spelltype,/obj/effect/knowspell))
@@ -376,10 +419,18 @@
 			else
 				usr << "An arcane glyph is engraved on it."
 	update_icon()
-		if(spell)
+		if(magic_name)
+			name = magic_name
+		else if(spell)
 			name = "[noun] of [spell.name]"
 		else
 			name = initial(name)
+	proc/describe()
+		if(!spell) return null
+		if(magic_name)
+			return "\icon[src] [magic_name] ([noun] of [spell.name])"
+		else
+			return "\icon[src] [noun] of [spell.name]"
 
 /obj/item/weapon/storage/belt/bluespace/wizard
 	name = "wizard's belt of holding"

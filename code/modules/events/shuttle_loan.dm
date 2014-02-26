@@ -196,7 +196,9 @@
 						var/spawn_type = pick(/obj/item/clothing/gloves/magic/shadow,/obj/item/weapon/magic/spellbook/mime,/obj/item/weapon/magic/staff/broom/sweep,/obj/item/weapon/magic/staff/force,
 								/obj/item/weapon/magic/wand/fire,/obj/item/weapon/magic/wand/light,/obj/item/weapon/magic/wand/frost,/obj/item/weapon/magic/wand/prank,/obj/item/weapon/magic/wand/boost,
 								/obj/item/weapon/magic/orb/portal,/obj/item/weapon/magic/orb/scrying)
-						new spawn_type(T)
+						var/obj/item/weapon/magic/M = new spawn_type(T)
+						if(istype(M))
+							artifacts_used[M.describe()] = M
 				else
 					hgibs(pick(empty_shuttle_turfs))
 					shuttle_spawns.Add(/mob/living/simple_animal/hostile/creature)

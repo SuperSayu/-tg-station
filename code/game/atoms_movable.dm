@@ -43,6 +43,8 @@
 	if(destination)
 		if(loc)
 			loc.Exited(src)
+			var/area/A = get_area(loc)
+			A.Exited(src)
 		loc = destination
 		loc.Entered(src)
 		for(var/atom/movable/AM in loc)
