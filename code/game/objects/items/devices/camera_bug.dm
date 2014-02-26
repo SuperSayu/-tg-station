@@ -44,6 +44,7 @@
 
 /obj/item/device/camera_bug/ai
 	name = "Supplemental Camera Interface"
+	skip_bugcheck = 1
 	bugtype = AI_BUG
 	verb/show_interface()
 		set category="AI Commands"
@@ -56,7 +57,7 @@
 	processing_objects += src
 
 /obj/item/device/camera_bug/interact(var/mob/user = usr)
-	var/datum/browser/popup = new(user, "camerabug","Camera Bug",nref=src)
+	var/datum/browser/popup = new(user, "camerabug","Camera Bug",550,500,src)
 	popup.set_content(menu(get_cameras()))
 	popup.open()
 
@@ -114,11 +115,13 @@
 				var/obj/machinery/camera/C = cameras[entry]
 				var/functions = ""
 				switch(bugtype)
+					if(VANILLA_BUG,UNIVERSAL_BUG) // not network bug
+						functions = " - <a href='?src=\ref[src];light=\ref[C]'>\[[C.luminosity?"Deactivate":"Activate"] Light\]</a>"
 					if(SABOTAGE_BUG)
-						functions = " - <a href='?src=\ref[src];emp=\ref[C]'>\[Disable\]</a>"
-					if(ADVANCED_BUG)
-						functions = " - <a href='?src=\ref[src];monitor=\ref[C]'>\[Monitor\]</a>"
-					if(AI_BUG)
+						functions = " - <a href='?src=\ref[src];emp=\ref[C]'>\[Disable\]</a> <a href='?src=\ref[src];light=\ref[C]'>\[[C.luminosity?"Deactivate":"Activate"] Light\]</a>"
+					//if(ADVANCED_BUG)
+					//	functions = " - <a href='?src=\ref[src];monitor=\ref[C]'>\[Monitor\]</a>"
+					if(ADVANCED_BUG,AI_BUG)
 						functions = " - <a href='?src=\ref[src];monitor=\ref[C]'>\[Monitor\]</a> <a href='?src=\ref[src];light=\ref[C]'>\[[C.luminosity?"Deactivate":"Activate"] Light\]</a>"
 					if(ADMIN_BUG)
 						if(C.bug == src)

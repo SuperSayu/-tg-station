@@ -107,6 +107,7 @@
 	active=0
 	if(cloaked_user)
 		cloaked_user.update_icons()
+	processing_objects.Remove(src)
 	..()
 
 /obj/item/weapon/cloaking_device/process()
@@ -135,8 +136,9 @@
 		else
 			cloaked_user = null
 
-	if(cloaked_user && prob(42))
-		var/new_alpha = pick(0,cloaked_user.alpha,10,10,20)
+	if(cloaked_user && (cloaked_user.alpha > 20 || prob(42)))
+		var/old_alpha = min(cloaked_user.alpha,64) // this was making us not cloak sometimes, better bring it down
+		var/new_alpha = pick(0,old_alpha,10,10,20)
 		if(cloaked_user.luminosity) new_alpha *= 2
 		if(cloaked_user.alpha != new_alpha)
 			animate(cloaked_user,alpha=new_alpha,time=5,loop=0,easing=BOUNCE_EASING)
@@ -151,12 +153,11 @@
 
 /obj/item/weapon/cloaking_device/pickup(mob/user as mob)
 	if(active)
-		icon = initial(icon)
 		icon_state = initial(icon_state)
 		spawn(5) // we are not yet inside you
 			cloaked_user = user
 			user.update_icons() // we want to be inside you
-				// yes we do
+			update_icon()// yes we do
 	..()
 /obj/item/weapon/cloaking_device/on_enter_storage()
 	if(active)

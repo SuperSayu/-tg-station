@@ -719,10 +719,10 @@ obj/item/toy/cards/cardhand/attack_self(mob/user as mob)
 	interact(user)
 
 obj/item/toy/cards/cardhand/interact(mob/user)
-	var/dat = "You have:<BR>"
+	var/dat = "<a href='?src=\ref[src];showhand'>Show Hand</a><br><br>You have:<BR>"
 	for(var/t in currenthand)
 		dat += "<A href='?src=\ref[src];pick=[t]'>A [t].</A><BR>"
-	dat += "Which card will you remove next?"
+	dat += "<br>Which card will you remove next?"
 	var/datum/browser/popup = new(user, "cardhand", "Hand of Cards", 400, 240)
 	popup.set_title_image(user.browse_rsc_icon(src.icon, src.icon_state))
 	popup.set_content(dat)
@@ -736,6 +736,12 @@ obj/item/toy/cards/cardhand/Topic(href, href_list)
 		return
 	var/mob/living/carbon/human/cardUser = usr
 	var/O = src
+	if("showhand" in href_list)
+		var/h = currenthand[1]
+		for(var/i in 2 to currenthand.len)
+			h += ", [currenthand[i]]"
+		usr.visible_message("[usr] shows their hand: [h]")
+
 	if(href_list["pick"])
 		if (cardUser.get_item_by_slot(slot_l_hand) == src || cardUser.get_item_by_slot(slot_r_hand) == src)
 			var/choice = href_list["pick"]

@@ -124,7 +124,7 @@ Please contact me on #coderbus IRC. ~Carnie x
 				break
 
 	if(stealth)
-		var/new_alpha = pick(5,alpha,10,10,20)
+		var/new_alpha = pick(5,min(alpha,64),10,10,20)
 		if(luminosity) alpha *= 2
 		if(alpha != new_alpha)
 			animate(src,alpha=new_alpha,time=15,loop=0,easing=ELASTIC_EASING)

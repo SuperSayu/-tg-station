@@ -101,6 +101,7 @@
 					dat += "<A href='?src=\ref[src];action=create;item=tbelt'>Utility belt</A> <FONT COLOR=blue>(300)</FONT><BR>"
 					dat += "<A href='?src=\ref[src];action=create;item=satchel'>Leather Satchel</A> <FONT COLOR=blue>(400)</FONT><BR>"
 					dat += "Other<BR>"
+					dat += "<a href='?src=\ref[src];action=create;item=carpet;amt=5'>Carpet Tile x5</a> <a href='?src=\ref[src];action=create;item=carpet;amt=25'>(x25)</a> <a href='?src=\ref[src];action=create;item=carpet;amt=50'>(x50)</a> <FONT COLOR=blue>(5/20/40)</FONT><br>"
 					dat += "<a href='?src=\ref[src];action=create;item=soap'>Deluxe Soap</A> <FONT COLOR=blue>(200)</FONT><BR>"
 					dat += "<A href='?src=\ref[src];action=create;item=monkey'>Monkey</A> <FONT COLOR=blue>(500)</FONT><BR>"
 				else
@@ -161,7 +162,7 @@
 		sleep(30)
 		return 0
 
-/obj/machinery/biogenerator/proc/create_product(var/item)
+/obj/machinery/biogenerator/proc/create_product(var/item, var/amt)
 	switch(item)
 		if("milk")
 			if (check_cost(20)) return 0
@@ -220,6 +221,17 @@
 		if("satchel")
 			if (check_cost(400)) return 0
 			else new/obj/item/weapon/storage/backpack/satchel(src.loc)
+		if("carpet")
+			switch(amt)
+				if("5")
+					if(check_cost(5)) return 0
+					new /obj/item/stack/tile/carpet{amount=5}(src.loc)
+				if("25")
+					if(check_cost(20)) return 0
+					new /obj/item/stack/tile/carpet{amount=25}(src.loc)
+				if("50")
+					if(check_cost(40)) return 0
+					new /obj/item/stack/tile/carpet{amount=50}(src.loc)
 		if("monkey")
 			if (check_cost(500)) return 0
 			else new/obj/item/weapon/reagent_containers/food/snacks/monkeycube(src.loc)
@@ -243,7 +255,7 @@
 				beaker = null
 				update_icon()
 		if("create")
-			create_product(href_list["item"],text2num(href_list["cost"]))
+			create_product(href_list["item"],href_list["amt"])
 		if("menu")
 			menustat = "menu"
 	updateUsrDialog()
