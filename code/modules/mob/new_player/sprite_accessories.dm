@@ -103,12 +103,10 @@
 	pompadour
 		name = "Pompadour"
 		icon_state = "hair_pompadour"
-		gender = MALE
 
 	quiff
 		name = "Quiff"
 		icon_state = "hair_quiff"
-		gender = MALE
 
 	bedhead
 		name = "Bedhead"
@@ -125,37 +123,30 @@
 	beehive
 		name = "Beehive"
 		icon_state = "hair_beehive"
-		gender = FEMALE
 
 	bobcurl
 		name = "Bobcurl"
 		icon_state = "hair_bobcurl"
-		gender = FEMALE
 
 	bob
 		name = "Bob"
 		icon_state = "hair_bobcut"
-		gender = FEMALE
 
 	bowl
 		name = "Bowl"
 		icon_state = "hair_bowlcut"
-		gender = MALE
 
 	buzz
 		name = "Buzzcut"
 		icon_state = "hair_buzzcut"
-		gender = MALE
 
 	crew
 		name = "Crewcut"
 		icon_state = "hair_crewcut"
-		gender = MALE
 
 	combover
 		name = "Combover"
 		icon_state = "hair_combover"
-		gender = MALE
 
 	devillock
 		name = "Devil Lock"
@@ -164,7 +155,6 @@
 	dreadlocks
 		name = "Dreadlocks"
 		icon_state = "hair_dreads"
-		gender = MALE // okay.jpg
 
 	curls
 		name = "Curls"
@@ -181,12 +171,10 @@
 	afro_large
 		name = "Big Afro"
 		icon_state = "hair_bigafro"
-		gender = MALE
 
 	sargeant
 		name = "Flat Top"
 		icon_state = "hair_sargeant"
-		gender = MALE
 
 	emo
 		name = "Emo"
@@ -225,7 +213,7 @@
 		icon_state = "hair_kusanagi"
 
 	kagami
-		name = "Pigtails"
+		name = "Kagami"
 		icon_state = "hair_kagami"
 
 	himecut
@@ -255,7 +243,6 @@
 	longbangs
 		name = "Long Bangs"
 		icon_state = "hair_lbangs"
-		gender = FEMALE
 
 	balding
 		name = "Balding Hair"
@@ -268,6 +255,39 @@
 	parted
 		name = "Side Part"
 		icon_state = "hair_part"
+
+	braid
+		name = "Braided"
+		icon_state = "hair_braid"
+
+	bun
+		name = "Bun Head"
+		icon_state = "hair_bun"
+
+	side_tail
+		name = "Side Pony"
+		icon_state = "hair_sidetail"
+
+	long_over_eye
+		name = "Over Eye"
+		icon_state = "hair_longovereye"
+
+	front_braid
+		name = "Braided Front"
+		icon_state = "hair_braidfront"
+
+	antenna
+		name = "Ahoge"
+		icon_state = "hair_antenna"
+
+	pigtail
+		name = "Pigtails"
+		icon_state = "hair_pigtails"
+		gender = FEMALE
+
+	protagonist
+		name = "Slightly Long"
+		icon_state = "hair_protagonist"
 
 /////////////////////////////
 // Facial Hair Definitions //
