@@ -75,5 +75,5 @@
 								animate(blueeffect,alpha=128,time=10,easing=SINE_EASING|EASE_IN|EASE_OUT,loop=2)
 								sleep(20)
 								M.client.screen -= blueeffect
-								del(blueeffect)
-			del(newAnomaly)
+								qdel(blueeffect)
+			qdel(newAnomaly)

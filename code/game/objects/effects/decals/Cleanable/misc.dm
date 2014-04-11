@@ -21,7 +21,7 @@
 	New()
 		..()
 		spawn(1200)// 2 minutes
-			del(src)
+			qdel(src)
 
 /obj/effect/decal/cleanable/dirt
 	name = "dirt"
@@ -101,7 +101,7 @@
 			name = "crusty dried vomit"
 			desc = "You try not to look at the chunks, and fail."
 
-	Del()
+	Destroy()
 		for(var/datum/disease/D in viruses)
 			D.cure(0)
 		..()

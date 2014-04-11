@@ -81,7 +81,7 @@
 				uses--
 				if(!uses)
 					user << "\red You used up your crayon!"
-					del(src)
+					qdel(src)
 	return
 
 /obj/item/toy/crayon/attack(mob/M as mob, mob/user as mob)
@@ -92,7 +92,7 @@
 			uses -= 5
 			if(uses <= 0)
 				user << "\red You ate your crayon!"
-				del(src)
+				qdel(src)
 	else if(M.stat)
 		if(istype(M, /mob/living/carbon/human))
 			user << "You start drawing around [M.name]'s body... "

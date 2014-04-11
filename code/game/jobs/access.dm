@@ -73,7 +73,6 @@
 /var/const/access_cent_living = 105//Living quarters.
 /var/const/access_cent_storage = 106//Generic storage areas.
 /var/const/access_cent_teleporter = 107//Teleporter.
-/var/const/access_cent_creed = 108//Creed's office.
 /var/const/access_cent_captain = 109//Captain's office/ID comp/AI.
 
 	//The Syndicate
@@ -83,29 +82,6 @@
 /obj/var/req_access_txt = "0"
 /obj/var/list/req_one_access = null
 /obj/var/req_one_access_txt = "0"
-
-/obj/New()
-	..()
-	//NOTE: If a room requires more than one access (IE: Morgue + medbay) set the req_acesss_txt to "5;6" if it requires 5 and 6
-	if(src.req_access_txt)
-		var/list/req_access_str = text2list(req_access_txt,";")
-		if(!req_access)
-			req_access = list()
-		for(var/x in req_access_str)
-			var/n = text2num(x)
-			if(n)
-				req_access += n
-
-	if(src.req_one_access_txt)
-		var/list/req_one_access_str = text2list(req_one_access_txt,";")
-		if(!req_one_access)
-			req_one_access = list()
-		for(var/x in req_one_access_str)
-			var/n = text2num(x)
-			if(n)
-				req_one_access += n
-
-
 
 //returns 1 if this mob has sufficient access to use this object
 /obj/proc/allowed(mob/M)
@@ -142,12 +118,27 @@
 	if(!istype(I))
 		return check_access_list(null)
 	return check_access_list(I.GetAccess())
-
-/obj/proc/check_access_list(var/list/L)
-	if(!istype(src.req_access, /list))
+	//These generations have been moved out of /obj/New() because they were slowing down the creation of objects that never even used the access system.
+	if(!src.req_access)
 		src.req_access = list()
-	if(!istype(src.req_one_access, /list))
+		if(src.req_access_txt)
+			var/list/req_access_str = text2list(req_access_txt,";")
+			for(var/x in req_access_str)
+				var/n = text2num(x)
+				if(n)
+					req_access += n
+
+	if(!src.req_one_access)
 		src.req_one_access = list()
+		if(src.req_one_access_txt)
+			var/list/req_one_access_str = text2list(req_one_access_txt,";")
+			for(var/x in req_one_access_str)
+				var/n = text2num(x)
+				if(n)
+					req_one_access += n
+
+	if(!istype(src.req_access, /list)) //something's very wrong
+		return 1
 
 	if(!src.req_access.len && !src.req_one_access.len) //no requirements
 		return 1
@@ -194,7 +185,7 @@
 		if("Research Officer")
 			return list(access_cent_general, access_cent_specops, access_cent_medical, access_cent_teleporter, access_cent_storage)
 		if("BlackOps Commander")
-			return list(access_cent_general, access_cent_thunder, access_cent_specops, access_cent_living, access_cent_storage, access_cent_creed)
+			return list(access_cent_general, access_cent_thunder, access_cent_specops, access_cent_living, access_cent_storage)
 		if("Supreme Commander")
 			return get_all_centcom_access()
 		if("Centcom Commander")
@@ -228,7 +219,7 @@
 		if(2) //medbay
 			return list(access_medical, access_genetics, access_morgue, access_chemistry, access_virology, access_surgery, access_cmo)
 		if(3) //research
-			return list(access_research, access_tox, access_tox_storage, access_robotics, access_xenobiology, access_rd, access_mineral_storeroom)
+			return list(access_research, access_tox, access_tox_storage, access_robotics, access_xenobiology, access_rd)
 		if(4) //engineering and maintenance
 			return list(access_construction, access_maint_tunnels, access_engine, access_engine_equip, access_external_airlocks, access_tech_storage, access_atmospherics, access_tcomsat, access_ce)
 		if(5) //command
@@ -236,7 +227,7 @@
 		if(6) //station general
 			return list(access_kitchen,access_bar, access_hydroponics, access_janitor, access_chapel_office, access_crematorium, access_library, access_theatre, access_lawyer)
 		if(7) //supply
-			return list(access_mailsorting, access_mining, access_mining_station, access_cargo, access_qm)
+			return list(access_mailsorting, access_mining, access_mining_station, access_mineral_storeroom, access_cargo, access_qm)
 
 /proc/get_region_accesses_name(var/code)
 	switch(code)
@@ -383,7 +374,7 @@
 		if(access_sec_doors)
 			return "Brig"
 		if(access_mineral_storeroom)
-			return "Mineral Storeroom"
+			return "Mineral Storage"
 
 /proc/get_centcom_access_desc(A)
 	switch(A)
@@ -401,8 +392,6 @@
 			return "Code Blue"
 		if(access_cent_specops)
 			return "Code Black"
-		if(access_cent_creed)
-			return "Code Silver"
 		if(access_cent_captain)
 			return "Code Gold"
 

@@ -42,7 +42,7 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/used_light = 0
 	var/used_environ = 0
 
-	var/has_gravity = 1
+	var/has_gravity = 0
 
 	var/no_air = null
 	var/area/master				// master area used for power calcluations
@@ -86,10 +86,8 @@ proc/process_ghost_teleport_locs()
 		if(istype(AR, /area/turret_protected/aisat) || istype(AR, /area/derelict) || istype(AR, /area/tdome))
 			ghostteleportlocs += AR.name
 			ghostteleportlocs[AR.name] = AR
-		var/list/L = get_area_turfs(AR.type)
-		if(!L || !L.len) continue
-		var/turf/picked = pick(L)
-		if (picked.z == 1 || picked.z == 5 || picked.z == 3)
+		var/turf/picked = safepick(get_area_turfs(AR.type))
+		if (picked && (picked.z == 1 || picked.z == 5 || picked.z == 3))
 			ghostteleportlocs += AR.name
 			ghostteleportlocs[AR.name] = AR
 
@@ -312,6 +310,7 @@ proc/process_ghost_teleport_locs()
 	name = "\improper Centcom"
 	icon_state = "centcom"
 	requires_power = 0
+	has_gravity = 1
 
 /area/centcom/control
 	name = "\improper Centcom Docks"
@@ -337,6 +336,7 @@ proc/process_ghost_teleport_locs()
 	name = "\improper Syndicate Mothership"
 	icon_state = "syndie-ship"
 	requires_power = 0
+	has_gravity = 1
 
 /area/syndicate_mothership/control
 	name = "\improper Syndicate Control Room"
@@ -348,12 +348,13 @@ proc/process_ghost_teleport_locs()
 
 //EXTRA
 
-/area/asteroid					// -- TLE
+/area/asteroid
 	name = "\improper Asteroid"
 	icon_state = "asteroid"
 	requires_power = 0
+	has_gravity = 1
 
-/area/asteroid/cave				// -- TLE
+/area/asteroid/cave
 	name = "\improper Asteroid - Underground"
 	icon_state = "cave"
 	requires_power = 0
@@ -362,19 +363,10 @@ proc/process_ghost_teleport_locs()
 	name = "\improper Asteroid - Artifact"
 	icon_state = "cave"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+/area/asteroid/artifactroom/New()
+	..()
+	lighting_use_dynamic = 1
+	InitializeLighting()
 
 /area/planet/clown
 	name = "\improper Clown Planet"
@@ -390,6 +382,7 @@ proc/process_ghost_teleport_locs()
 	name = "\improper Thunderdome"
 	icon_state = "thunder"
 	requires_power = 0
+	has_gravity = 1
 	shuffled = 1
 
 /area/tdome/tdome1
@@ -419,6 +412,7 @@ proc/process_ghost_teleport_locs()
 /area/syndicate_station/start
 	name = "\improper Syndicate Forward Operating Base"
 	icon_state = "yellow"
+	has_gravity = 1
 
 /area/syndicate_station/southwest
 	name = "\improper south-west of SS13"
@@ -460,6 +454,7 @@ proc/process_ghost_teleport_locs()
 	name = "\improper Wizard's Den"
 	icon_state = "yellow"
 	requires_power = 0
+	has_gravity = 1
 
 
 
@@ -620,6 +615,10 @@ proc/process_ghost_teleport_locs()
 /area/maintenance/disposal
 	name = "Waste Disposal"
 	icon_state = "disposal"
+
+/area/maintenance/electrical
+	name = "Electrical Maintenance"
+	icon_state = "yellow"
 
 //Hallway
 
@@ -845,6 +844,10 @@ proc/process_ghost_teleport_locs()
 		name = "\improper Chief Engineer's office"
 		icon_state = "engine_control"
 
+	gravity_generator
+		name = "Gravity Generator Room"
+		icon_state = "blue"
+
 
 //Solars
 
@@ -1020,12 +1023,16 @@ proc/process_ghost_teleport_locs()
 	icon_state = "sec_prison"
 
 /area/security/processing
-	name = "\improper Prisoner Processing"
+	name = "\improper Labor Shuttle Dock"
 	icon_state = "sec_prison"
 
 /area/security/warden
-	name = "\improper Armory"
+	name = "\improper Brig Control"
 	icon_state = "Warden"
+
+/area/security/armory
+	name = "\improper Armory"
+	icon_state = "armory"
 
 /area/security/hos
 	name = "\improper Head of Security's Office"
@@ -1163,7 +1170,7 @@ proc/process_ghost_teleport_locs()
 	icon_state = "toxmix"
 
 /area/toxins/misc_lab
-	name = "\improper Miscellaneous Research"
+	name = "\improper Testing Lab"
 	icon_state = "toxmisc"
 
 /area/toxins/server
@@ -1226,10 +1233,12 @@ proc/process_ghost_teleport_locs()
 /area/djstation
 	name = "\improper Ruskie DJ Station"
 	icon_state = "DJ"
+	has_gravity = 1
 
 /area/djstation/solars
 	name = "\improper DJ Station Solars"
 	icon_state = "DJ"
+	has_gravity = 1
 
 //DERELICT
 
@@ -1354,6 +1363,9 @@ proc/process_ghost_teleport_locs()
 	icon_state = "yellow"
 
 //AI
+/area/ai_monitored/security/armory
+	name = "\improper Armory"
+	icon_state = "armory"
 
 /area/ai_monitored/storage/eva
 	name = "EVA Storage"
@@ -1487,6 +1499,7 @@ proc/process_ghost_teleport_locs()
 /area/awaymission
 	name = "\improper Strange Location"
 	icon_state = "away"
+	has_gravity = 1
 
 /area/awaymission/example
 	name = "\improper Strange Station"

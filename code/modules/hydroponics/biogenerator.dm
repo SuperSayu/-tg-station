@@ -52,11 +52,12 @@
 /obj/machinery/biogenerator/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/glass) && !panel_open)
 		if(beaker)
-			user << "<span class='warning'>The biogenerator already occuped.</span>"
+			user << "<span class='warning'>A container is already loaded into the machine.</span>"
 		else
 			user.unEquip(O)
 			O.loc = src
 			beaker = O
+			user << "<span class='notice'>You add the container to the machine.</span>"
 			updateUsrDialog()
 	else if(processing)
 		user << "<span class='warning'>The biogenerator is currently processing.</span>"
@@ -100,6 +101,9 @@
 				var/obj/item/weapon/reagent_containers/glass/B = beaker
 				B.loc = loc
 				beaker = null
+
+	if(exchange_parts(user, O))
+		return
 
 	default_deconstruction_crowbar(O)
 
@@ -155,7 +159,7 @@
 			dat += "Monkey: <a href='?src=\ref[src];action=create;item=monkey'>Make</a> ([500/efficiency])<BR>"
 			dat += "</div>"
 		else
-			dat += "<div class='statusDisplay'>No beaker inside, please insert beaker.</div>"
+			dat += "<div class='statusDisplay'>No container inside, please insert container.</div>"
 
 	var/datum/browser/popup = new(user, "biogen", name, 350, 520)
 	popup.set_content(dat)
@@ -179,7 +183,7 @@
 		if(I.reagents.get_reagent_amount("nutriment") < 0.1)
 			points += 1*productivity
 		else points += I.reagents.get_reagent_amount("nutriment")*10*productivity
-		del(I)
+		qdel(I)
 	if(S)
 		processing = 1
 		update_icon()

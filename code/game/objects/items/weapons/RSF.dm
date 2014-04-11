@@ -36,7 +36,7 @@ RSF
 		if ((matter + 10) > 30)
 			user << "The RSF cant hold any more matter."
 			return
-		del(W)
+		qdel(W)
 		matter += 10
 		playsound(src.loc, 'sound/machines/click.ogg', 10, 1)
 		user << "The RSF now holds [matter]/[matter_max] fabrication-units."

@@ -160,7 +160,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 			if(ismob(loc))
 				var/mob/M = loc
 				M.unEquip(src, 1)
-			del(src)
+			qdel(src)
 			return
 		if(reagents.get_reagent_amount("fuel")) // the fuel explodes, too, but much less violently
 			var/datum/effect/effect/system/reagents_explosion/e = new()
@@ -169,7 +169,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 			if(ismob(loc))
 				var/mob/M = loc
 				M.unEquip(src, 1)
-			del(src)
+			qdel(src)
 			return
 		flags &= ~NOREACT // allowing reagents to react after being lit
 		reagents.handle_reactions()
@@ -210,7 +210,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		if(ismob(loc))
 			M << "<span class='notice'>Your [name] goes out.</span>"
 			M.unEquip(src, 1)	//un-equip it so the overlays can update //Force the un-equip so the overlays update
-		del(src)
+		qdel(src)
 		return
 	if(location)
 		location.hotspot_expose(700, 5)
@@ -226,7 +226,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		new type_butt(T)
 		new /obj/effect/decal/cleanable/ash(T)
 		processing_objects.Remove(src)
-		del(src)
+		qdel(src)
 	return ..()
 
 /obj/item/clothing/mask/cigarette/attack(mob/living/carbon/M, mob/living/carbon/user)
@@ -362,7 +362,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 				name = "[O.name]-packed [initial(name)]"
 				if(O.reagents)
 					O.reagents.trans_to(src, O.reagents.total_volume)
-				del(O)
+				qdel(O)
 			else
 				user << "<span class='warning'>It has to be dried first.</span>"
 		else
@@ -540,8 +540,8 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 			user.put_in_active_hand(R)
 			user << "<span class='notice'>You roll the [target.name] into a rolling paper.</span>"
 			R.desc = "Dried [target.name] rolled up in a thin piece of paper."
-			del(target)
-			del(src)
+			qdel(target)
+			qdel(src)
 		else
 			user << "<span class='warning'>You need to dry this first.</span>"
 	else
@@ -579,7 +579,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		var/obj/item/weapon/rollingpaper/P = new /obj/item/weapon/rollingpaper(user.loc)
 		user.put_in_inactive_hand(P)
 		user << "You take the last paper out of the pack, and throw the pack away."
-		del(src)
+		qdel(src)
 
 /obj/item/weapon/rollingpaperpack/examine()
 	..()

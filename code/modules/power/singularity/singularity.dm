@@ -9,38 +9,31 @@ var/global/list/uneatable = list(
 	)*/
 
 /obj/machinery/singularity
-	name		= "gravitational singularity"
-	desc		= "A Gravitational Singularity."
-	icon		= 'icons/obj/singularity.dmi'
-	icon_state	= "singularity_s1"
-
-	anchored	= 1
-	density		= 1
-	layer		= 6
-	luminosity	= 6
-	unacidable	= 1 //Don't comment this out.
-	use_power	= 0
-
-	var/current_size		= 1
-	var/allowed_size		= 1
-	var/contained			= 1 //Are we going to move around?
-	var/force_contained		= 0 // if 1, keep existing value
-
-	var/energy				= 100 //How strong are we?
-	var/dissipate			= 1 //Do we lose energy over time?
-	var/dissipate_delay		= 10
-	var/dissipate_track		= 0
-	var/dissipate_strength	= 1 //How much energy do we lose?
-
-	var/move_self			= 1 //Do we move on our own?
-	var/grav_pull			= 4 //How many tiles out do we pull?
-	var/consume_range		= 0 //How many tiles out do we eat
-	var/decay_range			= 0 // At this range turfs and such fall apart
-
-	var/event_chance		= 15 //Prob for event each tick
-	var/target				= null //its target. moves towards the target if it has one
-	var/last_failed_movement= 0//Will not move in the same dir if it couldnt before, will help with the getting stuck on fields thing
-	var/teleport_del		= 0
+	name = "gravitational singularity"
+	desc = "A gravitational singularity."
+	icon = 'icons/obj/singularity.dmi'
+	icon_state = "singularity_s1"
+	anchored = 1
+	density = 1
+	layer = 6
+	luminosity = 6
+	unacidable = 1 //Don't comment this out.
+	use_power = 0
+	var/current_size = 1
+	var/allowed_size = 1
+	var/contained = 1 //Are we going to move around?
+	var/energy = 100 //How strong are we?
+	var/dissipate = 1 //Do we lose energy over time?
+	var/dissipate_delay = 10
+	var/dissipate_track = 0
+	var/dissipate_strength = 1 //How much energy do we lose?
+	var/move_self = 1 //Do we move on our own?
+	var/grav_pull = 4 //How many tiles out do we pull?
+	var/consume_range = 0 //How many tiles out do we eat
+	var/event_chance = 15 //Prob for event each tick
+	var/target = null //its target. moves towards the target if it has one
+	var/last_failed_movement = 0//Will not move in the same dir if it couldnt before, will help with the getting stuck on fields thing
+	var/teleport_del = 0
 	var/last_warning
 
 /obj/machinery/singularity/New(loc, var/starting_energy = 50, var/temp = 0)
@@ -48,9 +41,6 @@ var/global/list/uneatable = list(
 	admin_investigate_setup()
 
 	src.energy = starting_energy
-	if(temp)
-		spawn(temp)
-			del(src)
 	..()
 	for(var/obj/machinery/singularity_beacon/singubeacon in world)
 		if(singubeacon.active)
@@ -67,21 +57,21 @@ var/global/list/uneatable = list(
 /obj/machinery/singularity/blob_act(severity)
 	return
 
-
 /obj/machinery/singularity/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			if(prob(25))
-				investigate_log("has been destroyed by an explosion.","singulo")
-				del(src)
+			if(current_size <= 3)
+				investigate_log("has been destroyed by a heavy explosion.","singulo")
+				qdel(src)
 				return
 			else
-				energy += 50
-		if(2.0 to 3.0)
-
-			energy -= round((rand(20,60)/2),1)
-			return
+				energy -= round(((energy+1)/2),1)
+		if(2.0)
+			energy -= round(((energy+1)/3),1)
+		if(3.0)
+			energy -= round(((energy+1)/4),1)
 	return
+
 
 /obj/machinery/singularity/bullet_act(obj/item/projectile/P)
 	return 0 //Will there be an impact? Who knows.  Will we see it? No.
@@ -209,7 +199,7 @@ var/global/list/uneatable = list(
 /obj/machinery/singularity/proc/check_energy()
 	if(energy <= 0)
 		investigate_log("collapsed.","singulo")
-		del(src)
+		qdel(src)
 		return 0
 	switch(energy)//Some of these numbers might need to be changed up later -Mport
 		if(1 to 199)
@@ -229,8 +219,8 @@ var/global/list/uneatable = list(
 
 /obj/machinery/singularity/proc/eat()
 	set background = BACKGROUND_ENABLED
-	if(defer_powernet_rebuild != 2)
-		defer_powernet_rebuild = 1
+//	if(defer_powernet_rebuild != 2)
+//		defer_powernet_rebuild = 1
 	// Let's just make this one loop.
 	var/new_contained = 0
 	var/outer_range = max(grav_pull,decay_range,consume_range)
@@ -241,7 +231,13 @@ var/global/list/uneatable = list(
 			continue
 
 		var/dist = get_dist(X, src)
-
+/*				if(current_size >= 5)
+					var/list/handlist = list(H.l_hand, H.r_hand)
+					for(var/obj/item/hand in handlist)
+						if(prob(current_size * 5) && hand.w_class <= 2 && H.unEquip(hand))
+							step_towards(hand, src)
+							H << "<span class='warning'>\The [src] pulls \the [hand] from your grip!</span>"
+*/
 		if(dist <= consume_range)
 			consume(X)
 			continue
@@ -268,8 +264,8 @@ var/global/list/uneatable = list(
 	if(!force_contained)
 		contained = new_contained
 
-	if(defer_powernet_rebuild != 2)
-		defer_powernet_rebuild = 0
+	//if(defer_powernet_rebuild != 2)
+	//	defer_powernet_rebuild = 0
 	return
 
 
@@ -303,7 +299,7 @@ var/global/list/uneatable = list(
 		if(istype(A, /obj/machinery/singularity))//Welp now you did it
 			var/obj/machinery/singularity/S = A
 			src.energy += (S.energy/2)//Absorb most of it
-			del(S)
+			qdel(S)
 			var/dist = max((current_size - 2),1)
 			explosion(src.loc,(dist),(dist*2),(dist*4))
 			return//Quits here, the obj should be gone, hell we might be
@@ -315,7 +311,8 @@ var/global/list/uneatable = list(
 			O.z = 2
 		else
 			A.ex_act(1.0)
-			if(A) del(A)
+			if(A && isnull(A.gc_destroyed))
+				qdel(A)
 		gain = 2
 	else if(isturf(A))
 		var/turf/T = A
@@ -539,7 +536,7 @@ var/global/list/uneatable = list(
 	if(istype(A,/obj/))
 		var/obj/O = A
 		O.ex_act(1.0)
-		if(O) del(O)
+		if(O) qdel(O)
 
 	else if(isturf(A))
 		var/turf/T = A
@@ -627,13 +624,13 @@ var/global/list/uneatable = list(
 
 /obj/machinery/singularity/narsie/wizard/eat()
 	set background = BACKGROUND_ENABLED
-	if(defer_powernet_rebuild != 2)
-		defer_powernet_rebuild = 1
+//	if(defer_powernet_rebuild != 2)
+//		defer_powernet_rebuild = 1
 	for(var/atom/X in orange(consume_range,src))
 		if(isturf(X) || istype(X, /atom/movable))
 			consume(X)
-	if(defer_powernet_rebuild != 2)
-		defer_powernet_rebuild = 0
+//	if(defer_powernet_rebuild != 2)
+//		defer_powernet_rebuild = 0
 	return
 
 

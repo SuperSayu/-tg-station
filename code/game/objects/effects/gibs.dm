@@ -68,4 +68,4 @@
 							gib.streak(directions,gross)
 							if(gross) eviscera -= gross
 
-		del(src)
+		qdel(src)

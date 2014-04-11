@@ -96,6 +96,27 @@
 /obj/item/weapon/card/id/GetID()
 	return src
 
+/*
+Usage:
+update_label()
+	Sets the id name to whatever registered_name and assignment is
+
+update_label("John Doe", "Clowny")
+	Properly formats the name and occupation and sets the id name to the arguments
+*/
+/obj/item/weapon/card/id/proc/update_label(var/newname, var/newjob)
+	if(newname || newjob)
+		name = text("[][]",
+			(!newname)	? "identification card"	: "[newname]'s ID Card",
+			(!newjob)		? ""										: " ([newjob])"
+		)
+		return
+
+	name = text("[][]",
+		(!registered_name)	? "identification card"	: "[registered_name]'s ID Card",
+		(!assignment)				? ""										: " ([assignment])"
+	)
+
 /obj/item/weapon/card/id/verb/read()
 	set name = "Read ID Card"
 	set category = "Object"
@@ -147,7 +168,7 @@
 			src.registered_name = ""
 			return
 		src.assignment = u
-		src.name = "[src.registered_name]'s ID Card ([src.assignment])"
+		update_label()
 		user << "\blue You successfully forge the ID card."
 	else
 		..()

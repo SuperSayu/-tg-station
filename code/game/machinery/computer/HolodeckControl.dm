@@ -226,7 +226,7 @@
 	//		loadProgram(target)
 
 //This could all be done better, but it works for now.
-/obj/machinery/computer/HolodeckControl/Del()
+/obj/machinery/computer/HolodeckControl/Destroy()
 	emergencyShutdown()
 	..()
 
@@ -302,7 +302,7 @@
 	if(!silent)
 		var/obj/oldobj = obj
 		visible_message("The [oldobj.name] fades away!")
-	del(obj)
+	qdel(obj)
 
 /obj/machinery/computer/HolodeckControl/proc/checkInteg(var/area/A)
 	for(var/turf/T in A)
@@ -372,10 +372,10 @@
 		derez(item)
 
 	for(var/obj/effect/decal/cleanable/B in linkedholodeck)
-		del(B)
+		qdel(B)
 
 	for(var/mob/living/simple_animal/hostile/carp/C in linkedholodeck)
-		del(C)
+		qdel(C)
 
 	holographic_items = A.copy_contents_to(linkedholodeck , 1)
 
@@ -504,11 +504,17 @@
 	return
 	// HOLOFLOOR DOES NOT GIVE A FUCK
 
-/obj/item/clothing/gloves/boxing/hologlove
-	name = "boxing gloves"
-	desc = "Because you really needed another excuse to punch your crewmates."
-	icon_state = "boxing"
-	item_state = "boxing"
+/obj/structure/table/holotable/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
+		var/obj/item/weapon/grab/G = W
+		if(G.state < GRAB_AGGRESSIVE)
+			user << "\red You need a better grip to do that!"
+			return
+		G.affecting.loc = src.loc
+		G.affecting.Weaken(5)
+		visible_message("\red [G.assailant] puts [G.affecting] on the table.")
+		qdel(W)
+		return
 
 /obj/structure/holowindow
 	name = "reinforced window"
@@ -522,11 +528,8 @@
 	flags = ON_BORDER
 
 
-/obj/structure/holowindow/Del()
-	..()
-
 /obj/item/weapon/holo
-	damtype = HALLOSS
+	damtype = STAMINA
 
 /obj/item/weapon/holo/esword
 	desc = "May the force be with you. Sorta"
@@ -595,7 +598,7 @@
 	if((ishuman(hit_atom)))
 		var/mob/living/carbon/M = hit_atom
 		playsound(src, 'sound/items/dodgeball.ogg', 50, 1)
-		M.apply_damage(10, HALLOSS)
+		M.apply_damage(10, STAMINA)
 		if(prob(5))
 			M.Weaken(3)
 			visible_message("\red [M] is knocked right off \his feet!", 3)
@@ -618,7 +621,7 @@
 		G.affecting.loc = src.loc
 		G.affecting.Weaken(5)
 		visible_message("\red [G.assailant] dunks [G.affecting] into the [src]!", 3)
-		del(W)
+		qdel(W)
 		return
 	else if (istype(W, /obj/item) && get_dist(src,user)<2)
 		user.drop_item(src)
@@ -677,7 +680,7 @@
 
 	currentarea = get_area(src.loc)
 	if(!currentarea)
-		del(src)
+		qdel(src)
 
 	if(eventstarted)
 		usr << "The event has already begun!"
@@ -708,7 +711,7 @@
 	eventstarted = 1
 
 	for(var/obj/structure/holowindow/W in currentarea)
-		del(W)
+		qdel(W)
 
 	for(var/mob/M in currentarea)
 		M << "FIGHT!"

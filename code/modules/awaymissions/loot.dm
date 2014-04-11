@@ -19,4 +19,4 @@
 				loot.Remove(lootspawn)
 			if(ispath(lootspawn))
 				new lootspawn(get_turf(src))
-	del(src)
+	qdel(src)

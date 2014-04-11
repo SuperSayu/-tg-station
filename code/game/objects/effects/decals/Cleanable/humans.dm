@@ -13,7 +13,7 @@
 	var/weight = 0
 	blood_DNA = list()
 
-/obj/effect/decal/cleanable/blood/Del()
+/obj/effect/decal/cleanable/blood/Destroy()
 	for(var/datum/disease/D in viruses)
 		D.cure(0)
 	var/turf/simulated/cur_turf = get_turf(src.loc)
@@ -44,7 +44,7 @@
 		// lame copypasta time
 		for(var/obj/effect/decal/cleanable/blood/B in src.loc)
 			if(B != src)
-				del(B)
+				qdel(B)
 		for(var/obj/effect/decal/cleanable/xenoblood/B in src.loc)
 			if(B != src)
 				del(B)

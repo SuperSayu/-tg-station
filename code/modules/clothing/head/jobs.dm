@@ -28,6 +28,12 @@
 	max_heat_protection_temperature = SPACE_HELM_MAX_TEMP_PROTECT
 	loose = 18
 
+//Head of Personnel
+/obj/item/clothing/head/hopcap
+	name = "head of personnel's cap"
+	icon_state = "hopcap"
+	desc = "Glory to Nanotrasen."
+
 //Chaplain
 /obj/item/clothing/head/chaplain_hood
 	name = "chaplain's hood"

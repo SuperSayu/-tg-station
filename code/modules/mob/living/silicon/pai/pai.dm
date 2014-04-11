@@ -13,6 +13,7 @@
 	var/list/software = list()
 	var/userDNA		// The DNA string of our assigned user
 	var/obj/item/device/paicard/card	// The card we inhabit
+	var/obj/item/device/radio/radio		// Our primary radio
 
 	var/speakStatement = "states"
 	var/speakExclamation = "declares"
@@ -60,6 +61,10 @@
 	card = paicard
 	bug = new(src)
 	sradio = new(src)
+	if(card)
+		if(!card.radio)
+			card.radio = new /obj/item/device/radio(src.card)
+		radio = card.radio
 
 	//PDA
 	pda = new(src)

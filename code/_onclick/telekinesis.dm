@@ -34,8 +34,8 @@ var/const/tk_maxrange = 15
 		user.put_in_active_hand(O)
 		O.host = user
 		O.focus_object(src)
-	//else
-//		warning("Strange attack_tk(): TK([TK in user.mutations]) empty hand([!user.get_active_hand()])")
+//	else
+//		WARNING("Strange attack_tk(): TK([TK in user.mutations]) empty hand([!user.get_active_hand()])")
 	return
 
 
@@ -48,7 +48,7 @@ var/const/tk_maxrange = 15
 	desc = "Magic"
 	icon = 'icons/obj/magic.dmi'//Needs sprites
 	icon_state = "2"
-	flags = USEDELAY | NOBLUDGEON
+	flags = NOBLUDGEON | ABSTRACT
 	//item_state = null
 	w_class = 10.0
 	layer = 20
@@ -63,14 +63,14 @@ var/const/tk_maxrange = 15
 			if(focus.Adjacent(loc))
 				focus.loc = loc
 
-		del(src)
+		qdel(src)
 		return
 
 
 	//stops TK grabs being equipped anywhere but into hands
 	equipped(var/mob/user, var/slot)
 		if( (slot == slot_l_hand) || (slot== slot_r_hand) )	return
-		del(src)
+		qdel(src)
 		return
 
 
@@ -82,17 +82,25 @@ var/const/tk_maxrange = 15
 		if(!target || !user)	return
 		if(last_throw+3 > world.time)	return
 		if(!host)
-			del(src)
+			qdel(src)
 			return
 		if(!(TK in host.mutations))
-			var/mob/living/carbon/human/H = user
-			if(!istype(H) || !H.gloves || !istype(H.gloves, /obj/item/clothing/gloves/white/tkglove))
-				del(src)
-				return
+			qdel(src)
+			return
+		if(isobj(target) && !isturf(target.loc))
+			return
+
+		var/d = get_dist(user, target)
+		if(focus)
+			d = max(d,get_dist(user,focus)) // whichever is further
 		if(isobj(target))
 			if(!target.loc || !isturf(target.loc))
 				del(src)
 				return
+		if(d > tk_maxrange)
+			user << "<span class ='warning'>Your mind won't reach that far.</span>"
+			return
+
 		if(!focus)
 			focus_object(target, user)
 			return
@@ -121,10 +129,8 @@ var/const/tk_maxrange = 15
 
 	proc/focus_object(var/obj/target, var/mob/living/user)
 		if(!istype(target,/obj))	return//Cant throw non objects atm might let it do mobs later
-		if(target.anchored)
-			target.attack_hand(user) // you can use shit now!
-			return//No throwing anchored things
-		if(!isturf(target.loc))
+		if(target.anchored || !isturf(target.loc))
+			qdel(src)
 			return
 		focus = target
 		update_icon()
@@ -154,14 +160,26 @@ var/const/tk_maxrange = 15
 			overlays += icon(focus.icon,focus.icon_state)
 		return
 
-/obj/item/clothing/gloves/white/tkglove
-	name = "astral gloves"
-	desc = "As distant as the stars, even when they cover your hands.  Gives a peculiar sensation."
-	item_color = "astral"
-	siemens_coefficient = 0
-	permeability_coefficient = 0.05
-	var/magic_name = null
-	Touch(atom/A, proximity)
-		if(!proximity)
-			A.attack_tk(loc)
-		return 0
+/*Not quite done likely needs to use something thats not get_step_to
+	proc/check_path()
+		var/turf/ref = get_turf(src.loc)
+		var/turf/target = get_turf(focus.loc)
+		if(!ref || !target)	return 0
+		var/distance = get_dist(ref, target)
+		if(distance >= 10)	return 0
+		for(var/i = 1 to distance)
+			ref = get_step_to(ref, target, 0)
+		if(ref != target)	return 0
+		return 1
+*/
+
+//equip_to_slot_or_del(obj/item/W, slot, qdel_on_fail = 1)
+/*
+		if(istype(user, /mob/living/carbon))
+			if(user:mutations & TK && get_dist(source, user) <= 7)
+				if(user:get_active_hand())	return 0
+				var/X = source:x
+				var/Y = source:y
+				var/Z = source:z
+
+*/

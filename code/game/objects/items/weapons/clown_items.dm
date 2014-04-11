@@ -92,16 +92,15 @@
 	else if(istype(target,/obj/effect/decal/cleanable))
 		user << "<span class='notice'>You scrub \the [target.name] out.</span>"
 		uses-=usesize
-		del(target)
 		if(src.uses<=0)
 			user << "<span class='notice'>That's the last of this bar of soap.</span>"
-			del(src)
+			qdel(src)
 	else if(istype(target,/obj/structure) || istype(target,/obj/machinery))
 		return // I'm pretty sure these never get stained so you'd waste good soap on them
 	else
 		user << "<span class='notice'>You clean \the [target.name].</span>"
 		var/obj/effect/decal/cleanable/C = locate() in target
-		del(C)
+		qdel(C)
 		target.clean_blood()
 		uses-=usesize
 		if(uses<=0)

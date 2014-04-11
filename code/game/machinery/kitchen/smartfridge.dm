@@ -119,6 +119,7 @@
 		item_quants[n]++
 	else
 		item_quants[n] = 1
+	item_quants = sortAssoc(item_quants)
 
 /obj/machinery/smartfridge/proc/name_filter(var/n)
 	return sanitize_simple(n,list("'"="","+"=" ")) // these do not translate correctly in html links
@@ -308,7 +309,7 @@ obj/machinery/smartfridge/drying_rack/load() //For updating the filled overlay
 		else
 			var/dried = S.dried_type
 			new dried(src.loc)
-			del S
+			qdel(S)
 		return 1
 	return 0
 
