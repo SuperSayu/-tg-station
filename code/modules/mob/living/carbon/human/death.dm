@@ -8,7 +8,7 @@
 	..()
 
 /mob/living/carbon/human/spawn_gibs()
-	hgibs(loc, viruses, dna)
+	hgibs(loc, viruses, dna, organs)
 
 /mob/living/carbon/human/spawn_dust()
 	new /obj/effect/decal/remains/human(loc)

@@ -4,8 +4,8 @@
 	unless the "magic name" variable is set; in which case,
 	it will always be named that.
 
-	Scrolls have a rolled_name which can be set for when it
-	is rolled up.
+	Scrolls have a rolled_name which functions as magic_name
+	when the scroll is rolled up.
 */
 /obj/item/weapon/magic/orb/scrying
 	spawn_spelltype = /obj/effect/knowspell/self/ghostize
@@ -51,4 +51,3 @@
 	icon_state = "black"
 	item_state = "blackgloves"
 	spawn_spelltype = /obj/effect/knowspell/self/shadowstep
-

@@ -3,10 +3,10 @@
 	desc = "A powerful and versatile flashbulb device, with applications ranging from disorienting attackers to acting as visual receptors in robot production."
 	icon_state = "flash"
 	item_state = "flashbang"	//looks exactly like a flash (and nothing like a flashbang)
-	throwforce = 5
+	throwforce = 0
 	w_class = 1.0
-	throw_speed = 4
-	throw_range = 10
+	throw_speed = 3
+	throw_range = 7
 	flags = CONDUCT
 	origin_tech = "magnets=2;combat=1"
 

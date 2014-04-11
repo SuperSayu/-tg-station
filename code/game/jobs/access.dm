@@ -61,6 +61,7 @@
 /var/const/access_tcomsat = 61 // has access to the entire telecomms satellite / machinery
 /var/const/access_gateway = 62
 /var/const/access_sec_doors = 63 // Security front doors
+/var/const/access_mineral_storeroom = 64
 
 	//BEGIN CENTCOM ACCESS
 	/*Should leave plenty of room if we need to add more access levels.
@@ -153,6 +154,17 @@
 	if(!istype(L) || !L.len) // no access
 		return 0
 
+	var/list/diff = src.req_access - L
+	if(unlock_centcom) diff -= get_all_centcom_access()
+	if(diff.len)
+		return 0
+	if(src.req_one_access.len)
+		diff = src.req_one_access & L
+		if(diff.len)
+			return 1
+		return 0
+	return 1
+/*
 	for(var/req in src.req_access)
 		if(!(req in L)) //doesn't have this access
 			return 0
@@ -161,7 +173,7 @@
 			if(req in L) //has an access from the single access list
 				return 1
 		return 0
-	return 1
+	return 1*/
 
 /proc/get_centcom_access(job)
 	switch(job)
@@ -199,7 +211,7 @@
 	            access_hydroponics, access_library, access_lawyer, access_virology, access_cmo, access_qm, access_surgery,
 	            access_theatre, access_research, access_mining, access_mailsorting,
 	            access_heads_vault, access_mining_station, access_xenobiology, access_ce, access_hop, access_hos, access_RC_announce,
-	            access_keycard_auth, access_tcomsat, access_gateway)
+	            access_keycard_auth, access_tcomsat, access_gateway, access_mineral_storeroom)
 
 /proc/get_all_centcom_access()
 	return list(access_cent_general, access_cent_thunder, access_cent_specops, access_cent_medical, access_cent_living, access_cent_storage, access_cent_teleporter, access_cent_captain)
@@ -216,7 +228,7 @@
 		if(2) //medbay
 			return list(access_medical, access_genetics, access_morgue, access_chemistry, access_virology, access_surgery, access_cmo)
 		if(3) //research
-			return list(access_research, access_tox, access_tox_storage, access_robotics, access_xenobiology, access_rd)
+			return list(access_research, access_tox, access_tox_storage, access_robotics, access_xenobiology, access_rd, access_mineral_storeroom)
 		if(4) //engineering and maintenance
 			return list(access_construction, access_maint_tunnels, access_engine, access_engine_equip, access_external_airlocks, access_tech_storage, access_atmospherics, access_tcomsat, access_ce)
 		if(5) //command
@@ -370,6 +382,8 @@
 			return "Gateway"
 		if(access_sec_doors)
 			return "Brig"
+		if(access_mineral_storeroom)
+			return "Mineral Storeroom"
 
 /proc/get_centcom_access_desc(A)
 	switch(A)

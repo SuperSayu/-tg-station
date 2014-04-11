@@ -135,7 +135,7 @@
 	name = "Building Supplies"
 	id = "supplies"
 	blacklist = null
-	whitelist = list(/obj/item/weapon/cable_coil,/obj/item/stack/rods,
+	whitelist = list(/obj/item/stack/cable_coil,/obj/item/stack/rods,
 					/obj/item/stack/sheet/metal,/obj/item/stack/sheet/plasteel,
 					/obj/item/stack/sheet/glass,/obj/item/stack/sheet/rglass,
 					/obj/item/stack/tile,/obj/item/weapon/light,
@@ -245,7 +245,7 @@
 	//Note that this filters out blueprints because they are a paper item.  Do NOT throw out the station blueprints unless you be trollin'.
 	blacklist = null
 	whitelist = list(/obj/item/trash,/obj/item/toy,/obj/item/weapon/ectoplasm,/obj/item/weapon/bananapeel,/obj/item/weapon/broken_bottle,/obj/item/weapon/bikehorn,
-					/obj/item/weapon/cigbutt,/obj/item/weapon/contraband,/obj/item/weapon/corncob,/obj/item/weapon/paper,/obj/item/weapon/shard,
+					/obj/item/weapon/cigbutt,/obj/item/weapon/contraband,/obj/item/weapon/grown/corncob,/obj/item/weapon/paper,/obj/item/weapon/shard,
 					/obj/item/weapon/sord,/obj/item/weapon/photo,/obj/item/weapon/folder,
 					/obj/item/blueprints,/obj/item/weapon/contraband,/obj/item/weapon/kitchen,/obj/item/weapon/book,/obj/item/clothing/mask/facehugger)
 
@@ -375,7 +375,7 @@
 	universal = 1
 
 	blacklist = null
-	whitelist = list(/obj/item/stack,/obj/item/weapon/cable_coil)
+	whitelist = list(/obj/item/stack)
 
 	dedicated_path = /obj/machinery/programmable/stacker
 
@@ -399,25 +399,6 @@
 			I.loc = master
 			master.types[I.type] = src
 			return I.w_class
-		if(istype(W,/obj/item/weapon/cable_coil))
-			var/obj/item/weapon/cable_coil/I = W
-			if(!I.amount) // todo: am I making a bad assumption here?
-				del I
-				return
-			for(var/obj/item/weapon/cable_coil/O in master.contents)
-				if(O.type == I.type && O.amount < MAXCOIL)
-					if(I.amount + O.amount <= MAXCOIL)
-						O.amount += I.amount
-						del I
-						return O.w_class
-					var/leftover = I.amount + O.amount - MAXCOIL
-					O.amount = MAXCOIL
-					I.amount = leftover
-					continue
-			//end for
-			I.loc = master
-			master.types[I.type] = src
-			return I.w_class
 
 	//If the stack isn't finished yet, don't eject it
 	//unless this profile has been disabled.
@@ -427,11 +408,6 @@
 			if(src.enabled && (I.amount < I.max_amount))
 				return // Still needs to be stacked
 			..(W,D)
-		if(istype(W,/obj/item/weapon/cable_coil))
-			var/obj/item/weapon/cable_coil/I = W
-			if(src.enabled && (I.amount < MAXCOIL))
-				return // Still needs to be stacked
-			..(W,D)
 
 //Outlet stacker: used when the output square can be trusted.
 //Outputs immediately, adding to stacks in the outlet.
@@ -439,7 +415,7 @@
 	name = "Stack Items"
 	id = "ustacker"
 	blacklist = null
-	whitelist = list(/obj/item/stack,/obj/item/weapon/cable_coil)
+	whitelist = list(/obj/item/stack)
 
 	dedicated_path = /obj/machinery/programmable/unary/stacker
 
@@ -453,15 +429,6 @@
 				return 0
 			for(var/obj/item/stack/other in S.contents)
 				if(other.type == I.type && other != I && other.amount < other.max_amount)
-					return ..(W,S,remaining)
-			return 0
-
-		if(istype(W,/obj/item/weapon/cable_coil))
-			var/obj/item/weapon/cable_coil/I = W
-			if(I.amount >= MAXCOIL)
-				return 0
-			for(var/obj/item/weapon/cable_coil/other in S.contents)
-				if(other != I && other.amount < MAXCOIL)
 					return ..(W,S,remaining)
 			return 0
 
@@ -481,24 +448,6 @@
 			//end for
 			I.loc = D
 			return
-		if(istype(W,/obj/item/weapon/cable_coil))
-			var/obj/item/weapon/cable_coil/I = W
-			for(var/obj/item/weapon/cable_coil/O in D.contents)
-				if(O.type == I.type && O.amount < MAXCOIL)
-					if(I.amount + O.amount <= MAXCOIL) // Why did they make it a #define.
-						O.amount += I.amount
-						O.update_icon()
-						del I
-						return
-					var/leftover = I.amount + O.amount - MAXCOIL // That wasn't a question
-					O.amount = MAXCOIL // It was a complaint
-					I.amount = leftover
-					continue
-			//end for
-			I.loc = D
-			return
-
-
 
 //----------------------------------------------------------------------------
 // Dubious Overrides (For emag use)

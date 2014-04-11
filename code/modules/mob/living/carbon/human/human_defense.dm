@@ -60,7 +60,7 @@ emp_act
 			return -1 // complete projectile permutation
 
 	if(check_shields(P.damage, "the [P.name]"))
-		P.on_hit(src, 2, def_zone)
+		P.on_hit(src, 100, def_zone)
 		return 2
 	return (..(P , def_zone))
 
@@ -153,16 +153,19 @@ emp_act
 	//		user.drop_item()
 	//		return 0
 
-	if(I.attack_verb.len)
+	if(I.attack_verb && I.attack_verb.len)
 		visible_message("<span class='danger'>[src] has been [pick(I.attack_verb)] in the [hit_area] with [I] by [user]!</span>", \
 						"<span class='userdanger'>[src] has been [pick(I.attack_verb)] in the [hit_area] with [I] by [user]!</span>")
+	else if(I.force == 0)
+		visible_message("<span class='danger'>[src] has been [pick("tapped","patted")] on the [hit_area] with [I] by [user]!</span>", \
+						"<span class='userdanger'>[src] has been [pick("tapped","patted")] on the [hit_area] with [I] by [user]!</span>")
 	else
 		visible_message("<span class='danger'>[src] has been attacked in the [hit_area] with [I] by [user]!</span>", \
 						"<span class='userdanger'>[src] has been attacked in the [hit_area] with [I] by [user]!</span>")
 
+	if(!I.force)	return 0
 	var/armor = run_armor_check(affecting, "melee", "<span class='warning'>Your armour has protected your [hit_area].</span>", "<span class='warning'>Your armour has softened a hit to your [hit_area].</span>")
 	if(armor >= 100)	return 0
-	if(!I.force)	return 0
 
 	apply_damage(I.force, I.damtype, affecting, armor , I)
 

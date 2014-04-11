@@ -12,7 +12,7 @@
 /obj/effect/knowspell/mime/stat_check(var/mob/living/carbon/human/H)
 	. = ..()
 	if(. && require_miming)
-		if(istype(H) && H.miming)
+		if(istype(H) && H.mind && H.mind.miming)
 			return 1
 		H << "Mime abilities require adherence to the vow of sience!"
 		return 0
@@ -30,16 +30,16 @@
 
 /obj/effect/knowspell/mime/speech/charge_check(var/mob/living/carbon/human/caster)
 	. = ..()
-	if(!. && istype(caster))
-		if(caster.miming)
+	if(!. && istype(caster) && caster.mind)
+		if(caster.mind.miming)
 			caster << "<span class='notice'>You can't break your vow of silence that fast!</span>"
 		else
 			caster << "<span class='notice'>You'll have to wait before you can give your vow of silence again.</span>"
 
 /obj/effect/knowspell/mime/speech/cast(var/mob/living/carbon/human/caster)
-	if(!istype(caster)) return
-	caster.miming=!caster.miming
-	if(caster.miming)
+	if(!istype(caster) || !caster.mind) return
+	caster.mind.miming=!caster.mind.miming
+	if(caster.mind.miming)
 		caster << "<span class='notice'>You make a vow of silence.</span>"
 	else
 		caster << "<span class='notice'>You break your vow of silence.</span>"

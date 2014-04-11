@@ -1012,21 +1012,25 @@
 			damageoverlaytemp = 0 // We do this so we can detect if someone hits us or not.
 			if(hurtdamage)
 				var/image/I = image("icon" = 'icons/mob/screen_full.dmi', "icon_state" = "brutedamageoverlay0")
+				I.blend_mode = BLEND_ADD
 				switch(hurtdamage)
-					if(35 to 45)
+					if(5 to 15)
 						I.icon_state = "brutedamageoverlay1"
-					if(45 to 55)
+					if(15 to 30)
 						I.icon_state = "brutedamageoverlay2"
-					if(40 to 55)
+					if(30 to 45)
 						I.icon_state = "brutedamageoverlay3"
-					if(55 to 65)
+					if(45 to 70)
 						I.icon_state = "brutedamageoverlay4"
-					if(65 to 75)
+					if(70 to 85)
 						I.icon_state = "brutedamageoverlay5"
 					if(85 to INFINITY)
 						I.icon_state = "brutedamageoverlay6"
 				if(!reagents.has_reagent("morphine"))
+					var/image/black = image(I.icon, I.icon_state) //BLEND_ADD doesn't let us darken, so this is just to blacken the edge of the screen
+					black.color = "#170000"
 					damageoverlay.overlays += I
+					damageoverlay.overlays += black
 
 		if( stat == DEAD )
 			sight |= (SEE_TURFS|SEE_MOBS|SEE_OBJS)
@@ -1083,39 +1087,17 @@
 						see_invisible = SEE_INVISIBLE_LIVING
 
 			if(glasses)
-				if(istype(glasses, /obj/item/clothing/glasses/meson))
-					sight |= SEE_TURFS
-					see_invisible = SEE_INVISIBLE_MINIMUM
-				else if(istype(glasses, /obj/item/clothing/glasses/night))
-					see_in_dark = 5
-					see_invisible = SEE_INVISIBLE_MINIMUM
-				else if(istype(glasses, /obj/item/clothing/glasses/thermal))
-					sight |= SEE_MOBS
-					see_invisible = SEE_INVISIBLE_MINIMUM
-				else if(istype(glasses, /obj/item/clothing/glasses/material))
-					sight |= SEE_OBJS
-					see_invisible = SEE_INVISIBLE_MINIMUM
+				if(istype(glasses, /obj/item/clothing/glasses))
+					var/obj/item/clothing/glasses/G = glasses
+					sight |= G.vision_flags
+					see_in_dark = G.darkness_view
+					see_invisible = G.invis_view
+					if(G.hud)
+						G.process_hud(src)
 
-	/* HUD shit goes here, as long as it doesn't modify sight flags */
-	// The purpose of this is to stop xray and w/e from preventing you from using huds -- Love, Doohl
-
-				else if(istype(glasses, /obj/item/clothing/glasses/sunglasses))
-					see_in_dark = 1
-					if(istype(glasses, /obj/item/clothing/glasses/sunglasses/sechud))
-						var/obj/item/clothing/glasses/sunglasses/sechud/O = glasses
-						if(O.hud)		O.hud.process_hud(src)
-						see_invisible = SEE_INVISIBLE_LIVING
-
-				else if(istype(glasses, /obj/item/clothing/glasses/hud))
-					var/obj/item/clothing/glasses/hud/O = glasses
-					O.process_hud(src)
-					see_invisible = SEE_INVISIBLE_LIVING
-				else
-					see_invisible = SEE_INVISIBLE_LIVING
-					
 			if(druggy)	//Override for druggy
 				see_invisible = see_temp
-				
+
 			if(see_override)	//Override all
 				see_invisible = see_override
 

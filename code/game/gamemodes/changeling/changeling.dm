@@ -37,7 +37,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 
-	var/changeling_amount = 4 //hard limit on changelings if scaling is turned off
+	var/changeling_amount = 3 //hard limit on changelings if scaling is turned off
 
 /datum/game_mode/changeling/announce()
 	world << "<b>The current game mode is - Changeling!</b>"
@@ -283,9 +283,14 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 			U << "<span class='warning'>We could gain no benefit from absorbing a lesser creature.</span>"
 			return 0
 
-		if(T.dna in absorbed_dna)
-			U << "<span class='warning'>We already have that DNA in storage.</span>"
-			return 0
+		for(var/datum/dna/D in absorbed_dna)
+			if(T.dna.uni_identity == D.uni_identity)
+				if(T.dna.struc_enzymes == D.struc_enzymes)
+					if(T.dna.real_name == D.real_name)
+						if(T.dna.mutantrace == D.mutantrace)
+							if(T.dna.blood_type == D.blood_type)
+								U << "<span class='warning'>We already have that DNA in storage.</span>"
+								return 0
 
 		if(!check_dna_integrity(T))
 			U << "<span class='warning'>[T] is not compatible with our biology.</span>"
@@ -298,7 +303,13 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 /datum/changeling/proc/absorb_dna(mob/living/carbon/T)
 	shuffle_dna()
 	T.dna.real_name = T.real_name //Set this again, just to be sure that it's properly set.
-	absorbed_dna |= T.dna //And add the target DNA to our absorbed list.
+	var/datum/dna/new_dna = new T.dna.type
+	new_dna.uni_identity = T.dna.uni_identity
+	new_dna.struc_enzymes = T.dna.struc_enzymes
+	new_dna.real_name = T.dna.real_name
+	new_dna.mutantrace = T.dna.mutantrace
+	new_dna.blood_type = T.dna.blood_type
+	absorbed_dna |= new_dna //And add the target DNA to our absorbed list.
 	absorbedcount++ //all that done, let's increment the objective counter.
 
 /datum/changeling/proc/shuffle_dna()//boots out the stalest DNA.

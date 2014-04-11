@@ -296,7 +296,7 @@
 
 	cast(mob/caster, mob/living/carbon/human/target)
 		var/obj/item/clothing/mask/horsehead/magichead = new /obj/item/clothing/mask/horsehead
-		magichead.canremove = 0		//curses!
+		magichead.flags |= NODROP		//curses!
 		magichead.flags_inv = null	//so you can still see their face
 		magichead.voicechange = 1	//NEEEEIIGHH
 		target.visible_message(	"<span class='danger'>[target]'s face  lights up in fire, and after the event a horse's head takes its place!</span>", \
@@ -305,7 +305,7 @@
 		flick("e_flash", target.flash)
 		spawn(duration)
 			if(magichead)
-				magichead.canremove = 1
+				magichead.flags &= ~NODROP
 				magichead.voicechange = 0
 				var/mob/M = magichead.loc
 				if(istype(M))
@@ -381,10 +381,10 @@
 
 		//SPELL LOSS BEGIN
 		//NOTE: The caster must ALWAYS keep mind transfer, even when other spells are lost.
-		var/list/checked_spells = caster.spell_list
+		var/list/checked_spells = caster.mind.spell_list
 		checked_spells -= src //Remove Mind Transfer from the list.
 
-		if(caster.spell_list.len)//If they have any spells left over after mind transfer is taken out. If they don't, we don't need this.
+		if(caster.mind.spell_list.len)//If they have any spells left over after mind transfer is taken out. If they don't, we don't need this.
 			for(var/i=spell_loss_amount,(i>0&&checked_spells.len),i--)//While spell loss amount is greater than zero and checked_spells has spells in it, run this proc.
 				for(var/j=checked_spells.len,(j>0&&checked_spells.len),j--)//While the spell list to check is greater than zero and has spells in it, run this proc.
 					if(prob(base_spell_loss_chance))
@@ -396,7 +396,7 @@
 						base_spell_loss_chance += spell_loss_chance_modifier
 
 		checked_spells += src//Add back Mind Transfer.
-		caster.spell_list = checked_spells//Set caster spell list to whatever the new list is.
+		caster.mind.spell_list = checked_spells//Set caster spell list to whatever the new list is.
 		//SPELL LOSS END
 
 		//MIND TRANSFER BEGIN
@@ -409,28 +409,24 @@
 				target.verbs -= V
 
 		var/mob/dead/observer/ghost = target.ghostize(0)
-		ghost.spell_list = target.spell_list//If they have spells, transfer them. Now we basically have a backup mob.
 
 		caster.mind.transfer_to(target)
-		target.spell_list = caster.spell_list//Now they are inside the target's body.
-		for(var/obj/effect/KS in target.spell_list) // physically move spell object
+		for(var/obj/effect/KS in target.mind.spell_list) // physically move spell object
 			KS.loc = target
-
 		if(target.mind.special_verbs.len)//To add all the special verbs for the original caster.
 			for(var/V in caster.mind.special_verbs)//Not too important but could come into play.
 				caster.verbs += V
 
 		ghost.mind.transfer_to(caster)
 		caster.key = ghost.key	//have to transfer the key since the mind was not active
-		caster.spell_list = ghost.spell_list
-		for(var/obj/effect/KS in caster.spell_list)  // physically move spell object
+		for(var/obj/effect/KS in caster.mind.spell_list)  // physically move spell object
 			KS.loc = caster
 
 		// We're not deleting the spells when spell loss occurs so why the hell not give them to the other guy
 		for(var/obj/effect/knowspell/KS in caster.contents)
-			caster.spell_list |= KS
+			caster.mind.spell_list |= KS
 		for(var/obj/effect/knowspell/KS in target.contents)
-			target.spell_list |= KS
+			target.mind.spell_list |= KS
 
 		if(caster.mind.special_verbs.len)//If they had any special verbs, we add them here.
 			for(var/V in caster.mind.special_verbs)
@@ -451,7 +447,7 @@
 	pick_dead = 1
 
 	wand_state = "polywand"
-	staff_state = "animate"
+	staff_state = "animation"
 
 	require_clothing = 1
 	var/remove_after = 900

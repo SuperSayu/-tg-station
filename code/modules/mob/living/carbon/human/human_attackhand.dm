@@ -167,8 +167,7 @@
 			if(randn <= 45)
 				if(head)
 					var/obj/item/clothing/head/H = head
-					if(!istype(H) || prob(H.loose))
-						drop_from_inventory(H)
+					if((!istype(H) || prob(H.loose)) && unEquip(H))
 						if(prob(60))
 							step_rand(H)
 						if(stat == CONSCIOUS)
@@ -201,9 +200,9 @@
 				//End BubbleWrap
 
 				if(!talked)	//BubbleWrap
-					drop_item()
-					visible_message("<span class='danger'>[M] has disarmed [src]!</span>", \
-									"<span class='userdanger'>[M] has disarmed [src]!</span>")
+					if(drop_item())
+						visible_message("<span class='danger'>[M] has disarmed [src]!</span>", \
+										"<span class='userdanger'>[M] has disarmed [src]!</span>")
 				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 				return
 

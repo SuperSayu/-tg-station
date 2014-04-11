@@ -157,6 +157,11 @@
 			return
 		if(spell)
 			user << browse(spell.describe(),"window=scroll")
+	interact()
+		if(spell)
+			usr << browse(spell.describe(),"window=scroll")
+		else
+			usr << browse(null, "window=scroll")
 	update_icon()
 		if(rolled)
 			name = rolled_name // overwritten by naming pylon
@@ -319,7 +324,9 @@
 		usr << browse(list_spells(usr),"window=spellbook")
 
 	proc/list_spells(mob/user as mob)
-		var/dat = "<center><h3>[name]</h3><i>You know [user.spell_list.len]/[max_spells] spells</i></center>"
+		var/dat = ""
+		if(user.mind)
+			dat = "<center><h3>[name]</h3><i>You know [user.mind.spell_list.len]/[max_spells] spells</i></center>"
 		for(var/obj/effect/knowspell/KS in src)
 			dat += KS.describe(allow_cast = 0, remove_from = src)
 		return dat

@@ -39,10 +39,10 @@
 	// Fails the sniff test
 	var/global/list/smell_offensive = list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat/human, /obj/item/weapon/reagent_containers/food/snacks/meat/corgi,
-		/obj/item/weapon/reagent_containers/food/snacks/badrecipe, /obj/item/weapon/reagent_containers/food/snacks/clownburger,
+		/obj/item/weapon/reagent_containers/food/snacks/badrecipe, /obj/item/weapon/reagent_containers/food/snacks/burger/clown,
 		/obj/item/weapon/reagent_containers/food/snacks/xenomeat, /obj/item/weapon/reagent_containers/food/snacks/xenomeatbreadslice,
 		/obj/item/weapon/reagent_containers/food/snacks/mysterysoup, /obj/item/weapon/reagent_containers/food/snacks/carpmeat,
-		/obj/item/weapon/reagent_containers/food/snacks/brainburger,/obj/item/weapon/reagent_containers/food/snacks/spesslaw) // that's offensive to the legal system, sir
+		/obj/item/weapon/reagent_containers/food/snacks/burger/brain,/obj/item/weapon/reagent_containers/food/snacks/spesslaw) // that's offensive to the legal system, sir
 
 	// Also fails the sniff test
 	var/global/list/nasty_reagents = list("mutationtoxin","amutationtoxin","toxin","amatoxin","mutagen","plasma","slimejelly",

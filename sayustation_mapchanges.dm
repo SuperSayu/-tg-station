@@ -6,14 +6,12 @@
 	* add Mail machines and mail venders
 	* add Programmable Machines and programmable machine circuit boards (optional)
 	* add Random Drinks cabinet to bar in place of booze cabinet
-	* more maint closets around R&D
-
-	* redo Misc Research
 
 	* Public garden near arrivals
 	* memorial promenade - lights, air alarm for escape hall
 	* solars area near engineering
-	* Centcom Puppies Room - or maybe a holodeck room instead
+	* Centcom Puppies Room
+	* Entertainment camera for holodeck and theater
 
 	* Maint room - Meeting hall
 	* Maint room - Oh god honk
@@ -27,6 +25,7 @@
 		* Chemistry & Virology
 		* Public venders in bar, outside garden, outside hydroponics
 		* Prop storage in theater backroom
+		* Wardrobe vender
 		* Materials storage in asteroid, cargo, EVA, and auxilliary tools storage
 
 	* Holodeck (A) extras:
@@ -43,8 +42,6 @@
 	* Wizard Sanctuary
 		* Enchanting stuff
 		* In Hyperspace
-		* Wizard ship Oshit
-
-	? hyronalin dispenser to genetics
+		* Wizard ship Oshi't
 
 */

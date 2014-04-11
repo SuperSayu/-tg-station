@@ -13,7 +13,6 @@
 	var/list/software = list()
 	var/userDNA		// The DNA string of our assigned user
 	var/obj/item/device/paicard/card	// The card we inhabit
-	var/obj/item/device/radio/radio		// Our primary radio
 
 	var/speakStatement = "states"
 	var/speakExclamation = "declares"
@@ -52,16 +51,15 @@
 
 	var/obj/item/radio/integrated/signal/sradio // AI's signaller
 
+	var/obj/item/device/camera_bug/ai/bug
+
 
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
 	canmove = 0
 	src.loc = get_turf(paicard)
 	card = paicard
+	bug = new(src)
 	sradio = new(src)
-	if(card)
-		if(!card.radio)
-			card.radio = new /obj/item/device/radio(src.card)
-		radio = card.radio
 
 	//PDA
 	pda = new(src)
@@ -187,6 +185,9 @@
 	src.reset_view(null)
 	src.unset_machine()
 	src:cameraFollow = null
+
+/mob/living/silicon/pai/UnarmedAttack(var/atom/A)//Stops runtimes due to attack_animal being the default
+	return
 
 //Addition by Mord_Sith to define AI's network change ability
 /*

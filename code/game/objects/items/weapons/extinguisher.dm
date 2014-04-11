@@ -9,7 +9,7 @@
 	throwforce = 10
 	w_class = 3.0
 	throw_speed = 2
-	throw_range = 10
+	throw_range = 7
 	force = 10
 	m_amt = 90
 	attack_verb = list("slammed", "whacked", "bashed", "thunked", "battered", "bludgeoned", "thrashed")
@@ -24,7 +24,7 @@
 	icon_state = "miniFE0"
 	item_state = "miniFE"
 	hitsound = null	//it is much lighter, after all.
-	flags = FPRINT | TABLEPASS
+	flags = FPRINT
 	throwforce = 2
 	w_class = 2.0
 	force = 3.0

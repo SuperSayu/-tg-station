@@ -1570,7 +1570,7 @@ turf/simulated/floor/return_siding_icon_state()
 		if(is_light_floor())
 			var/obj/item/stack/tile/light/T = floor_tile
 			if(T.state)
-				user.u_equip(C)
+				user.unEquip(C)
 				del(C)
 				T.state = C //fixing it by bashing it with a light bulb, fun eh?
 				update_icon()
@@ -1630,9 +1630,9 @@ turf/simulated/floor/return_siding_icon_state()
 				user << "\blue This section is too damaged to support a tile. Use a welder to fix the damage."
 
 
-	if(istype(C, /obj/item/weapon/cable_coil))
+	if(istype(C, /obj/item/stack/cable_coil))
 		if(is_plating())
-			var/obj/item/weapon/cable_coil/coil = C
+			var/obj/item/stack/cable_coil/coil = C
 			coil.turf_place(src, user)
 		else
 			user << "\red You must remove the plating first."

@@ -22,7 +22,7 @@
 
 	if(content_mob != null && already_opened == 0)
 		if(content_mob == /mob/living/simple_animal/chick)
-			var/num = rand(4, 6)
+			var/num = rand(1, 3)
 			for(var/i = 0, i < num, i++)
 				new content_mob(loc)
 				if(prob(50))
@@ -34,6 +34,7 @@
 			if(prob(50))
 				content_mob = /mob/living/simple_animal/cat/Proc
 			new /obj/item/weapon/pet_collar(loc)
+			new content_mob(loc)
 		else
 			new content_mob(loc)
 			new /obj/item/weapon/pet_collar(loc)

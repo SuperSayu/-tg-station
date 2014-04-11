@@ -49,7 +49,12 @@
 		caster.forceMove(target_turf)
 		smoke_cloud(caster)
 		return 1
-
+/obj/effect/knowspell/self/teleport/limited
+	name = "lesser teleport"
+	desc = "Simplifies the teleport spell, but burns up the spell itself in the process."
+	require_clothing = 0
+	rechargable = 0
+	chargemax = 3
 
 /obj/effect/knowspell/self/blink
 	name = "blink"

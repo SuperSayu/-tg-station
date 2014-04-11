@@ -8,8 +8,8 @@
 	spawn_positions = 1
 	supervisors = "the head of personnel"
 	selection_color = "#dddddd"
-	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue)
-	minimal_access = list(access_bar)
+	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue, access_mineral_storeroom)
+	minimal_access = list(access_bar, access_mineral_storeroom)
 
 
 	equip(var/mob/living/carbon/human/H)
@@ -172,6 +172,7 @@
 			H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/engineer(H.back), slot_in_backpack)
 			H.equip_to_slot_or_del(new /obj/item/weapon/crowbar(H), slot_in_backpack)
 			H.equip_to_slot_or_del(new /obj/item/weapon/storage/bag/ore(H), slot_in_backpack)
+			H.equip_to_slot_or_del(new /obj/item/weapon/mining_voucher(H), slot_in_backpack)
 		return 1
 
 
@@ -195,11 +196,11 @@
 		H.fully_replace_character_name(H.real_name, pick(clown_names))
 		H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/clown(H), slot_back)
 		H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival(H.back), slot_in_backpack)
-		H.equip_to_slot_or_del(new /obj/item/clothing/under/rank/clown(H), slot_w_uniform)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/actorsuit/clown(H), slot_w_uniform)
 		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/clown_shoes(H), slot_shoes)
 		H.equip_to_slot_or_del(new /obj/item/device/pda/clown(H), slot_belt)
 		H.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/clown_hat(H), slot_wear_mask)
-		H.equip_to_slot_or_del(new /obj/item/weapon/reagent_containers/food/snacks/grown/banana(H), slot_in_backpack)
+		H.equip_to_slot_or_del(new /obj/item/weapon/reagent_containers/food/snacks/grown/banana(H, 50), slot_in_backpack)
 		H.equip_to_slot_or_del(new /obj/item/weapon/bikehorn(H), slot_in_backpack)
 		H.equip_to_slot_or_del(new /obj/item/weapon/stamp/clown(H), slot_in_backpack)
 		H.equip_to_slot_or_del(new /obj/item/toy/crayon/rainbow(H), slot_in_backpack)
@@ -227,7 +228,7 @@
 		if(!H)	return 0
 		if(H.backbag == 2) H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(H), slot_back)
 		if(H.backbag == 3) H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
-		H.equip_to_slot_or_del(new /obj/item/clothing/under/mime(H), slot_w_uniform)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/actorsuit/mime(H), slot_w_uniform)
 		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(H), slot_shoes)
 		H.equip_to_slot_or_del(new /obj/item/device/pda/mime(H), slot_belt)
 		H.equip_to_slot_or_del(new /obj/item/clothing/gloves/white(H), slot_gloves)
@@ -242,12 +243,13 @@
 			H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival(H.back), slot_in_backpack)
 			H.equip_to_slot_or_del(new /obj/item/toy/crayon/mime(H), slot_in_backpack)
 			H.equip_to_slot_or_del(new /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing(H), slot_in_backpack)
-		//H.spell_list += new /obj/effect/proc_holder/spell/aoe_turf/conjure/mime_wall(H)
-		//H.spell_list += new /obj/effect/proc_holder/spell/targeted/mime/speak(H)
+		//H.mind.spell_list += new /obj/effect/proc_holder/spell/aoe_turf/conjure/mime_wall(H)
+		//H.mind.spell_list += new /obj/effect/proc_holder/spell/targeted/mime/speak(H)
 		new /obj/effect/knowspell/mime/speech(H)
 		new /obj/effect/knowspell/mime/mimewall(H)
 		new /obj/effect/knowspell/mime/beartrap(H)
-		H.miming = 1
+		if(H.mind)
+			H.mind.miming = 1
 		H.rename_self("mime")
 		return 1
 
@@ -295,7 +297,8 @@
 		H.equip_to_slot_or_del(new /obj/item/clothing/under/suit_jacket/red(H), slot_w_uniform)
 		H.equip_to_slot_or_del(new /obj/item/device/pda/librarian(H), slot_belt)
 		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(H), slot_shoes)
-		H.equip_to_slot_or_del(new /obj/item/weapon/barcodescanner(H), slot_l_hand)
+		H.equip_to_slot_or_del(new /obj/item/weapon/storage/bag/books(H), slot_l_hand)
+		H.equip_to_slot_or_del(new /obj/item/weapon/barcodescanner(H), slot_r_store)
 		H.equip_to_slot_or_del(new /obj/item/device/laser_pointer(H), slot_l_store)
 		return 1
 
@@ -326,6 +329,7 @@ var/global/lawyer = 0//Checks for another lawyer
 		else
 			H.equip_to_slot_or_del(new /obj/item/clothing/under/lawyer/purpsuit(H), slot_w_uniform)
 			H.equip_to_slot_or_del(new /obj/item/clothing/suit/lawyer/purpjacket(H), slot_wear_suit)
+		H.equip_to_slot_or_del(new /obj/item/device/radio/headset/headset_sec(H), slot_ears)
 		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/brown(H), slot_shoes)
 		H.equip_to_slot_or_del(new /obj/item/device/pda/lawyer(H), slot_belt)
 		H.equip_to_slot_or_del(new /obj/item/weapon/storage/briefcase(H), slot_l_hand)

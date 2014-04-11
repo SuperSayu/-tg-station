@@ -702,9 +702,9 @@
 			state=2
 			user << "You close the hatch to the power unit"
 		return
-	else if(istype(W, /obj/item/weapon/cable_coil))
+	else if(istype(W, /obj/item/stack/cable_coil))
 		if(state == 3 && hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
-			var/obj/item/weapon/cable_coil/CC = W
+			var/obj/item/stack/cable_coil/CC = W
 			if(CC.amount > 1)
 				CC.use(2)
 				clearInternalDamage(MECHA_INT_SHORT_CIRCUIT)
@@ -755,7 +755,9 @@
 		return
 
 	else if(istype(W, /obj/item/mecha_parts/mecha_tracking))
-		user.drop_from_inventory(W)
+		if(!user.unEquip(W))
+			user << "<span class='notice'>\the [W] is stuck to your hand, you cannot put it in \the [src]</span>"
+			return
 		W.forceMove(src)
 		user.visible_message("[user] attaches [W] to [src].", "You attach [W] to [src]")
 		return
@@ -909,8 +911,8 @@
 	if(usr != occupant)	return
 
 	lights = !lights
-	if(lights)	SetLuminosity(luminosity + lights_power)
-	else		SetLuminosity(luminosity - lights_power)
+	if(lights)	AddLuminosity(lights_power)
+	else		AddLuminosity(-lights_power)
 	src.occupant_message("Toggled lights [lights?"on":"off"].")
 	log_message("Toggled lights [lights?"on":"off"].")
 	return
@@ -1038,7 +1040,9 @@
 		else if(mmi_as_oc.brainmob.stat)
 			user << "Beta-rhythm below acceptable level."
 			return 0
-		user.drop_from_inventory(mmi_as_oc)
+		if(!user.unEquip(mmi_as_oc))
+			user << "<span class='notice'>\the [mmi_as_oc] is stuck to your hand, you cannot put it in \the [src]</span>"
+			return
 		var/mob/brainmob = mmi_as_oc.brainmob
 		brainmob.reset_view(src)
 	/*

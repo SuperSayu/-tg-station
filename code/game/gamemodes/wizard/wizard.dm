@@ -328,8 +328,8 @@
 
 //To batch-remove wizard spells. Linked to mind.dm.
 /mob/proc/spellremove(var/mob/M as mob)
-	for(var/obj/effect/spell_to_remove in src.spell_list)
-		spell_list -= spell_to_remove
+	for(var/obj/effect/spell_to_remove in src.mind.spell_list)
+		mind.spell_list -= spell_to_remove
 		del(spell_to_remove)
 
 

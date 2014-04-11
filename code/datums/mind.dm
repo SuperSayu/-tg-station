@@ -49,9 +49,12 @@ datum/mind
 	var/has_been_rev = 0//Tracks if this mind has been a rev or not
 
 	var/list/cult_words = list()
+	var/list/spell_list = list() // Wizard mode & "Give Spell" badmin button.
 
 	var/datum/faction/faction 			//associated faction
 	var/datum/changeling/changeling		//changeling holder
+
+	var/miming = 0 // Mime's vow of silence
 
 	New(var/key)
 		src.key = key
@@ -73,8 +76,6 @@ datum/mind
 					current << "You forgot \i[KS]."
 				else
 					KS.loc = new_character
-			new_character.spell_list = current.spell_list
-			current.spell_list = list()
 		if(assigned_role == "Mime" && ishuman(new_character))
 			new /obj/effect/knowspell/mime/speech(new_character)
 			new /obj/effect/knowspell/mime/mimewall(new_character)
@@ -108,6 +109,23 @@ datum/mind
 
 		current = new_character								//associate ourself with our new body
 		new_character.mind = src							//and associate our new body with ourself
+		for(var/obj/effect/knowspell/mime/M in current)
+			del M
+		for(var/obj/effect/knowspell/KS in current.contents)
+			var/allowed = 1
+			if(prob(KS.cloning_forget_chance))
+				allowed = 0
+			if(!KS.allow_nonhuman && !ishuman(new_character))
+				allowed = 0
+			if(!KS.allow_cyborg && issilicon(new_character))
+				allowed = 0
+			if(!allowed)
+				current << "You forgot \i[KS]."
+			else
+				KS.loc = new_character
+		spell_list = list()
+		for(var/obj/effect/knowspell/KS in new_character)
+			spell_list |= KS
 
 		if(changeling && istype(new_character, /mob/living/carbon))										//if we are a changeling mind, re-add any powers
 			var/mob/living/carbon/C = new_character
@@ -905,7 +923,7 @@ datum/mind
 			switch(href_list["common"])
 				if("undress")
 					for(var/obj/item/W in current)
-						current.drop_from_inventory(W)
+						current.unEquip(W, 1) //The 1 forces all items to drop, since this is an admin undress.
 				if("takeuplink")
 					take_uplink()
 					memory = null//Remove any memory they may have had.

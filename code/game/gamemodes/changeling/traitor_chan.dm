@@ -33,10 +33,11 @@
 	if(!possible_traitors.len || !possible_changelings.len)
 		return 0
 
-	/*if(config.changeling_scaling_coeff)
+	var/num_changelings
+	if(config.changeling_scaling_coeff)
 		num_changelings = max(1, round((num_players())/(config.changeling_scaling_coeff*2)))
 	else
-		num_changelings = max(1, min(num_players(), changeling_amount))*/
+		num_changelings = max(1, min(num_players() - 2, changeling_amount))
 
 	for(var/datum/mind/player in possible_changelings)
 		for(var/job in restricted_jobs)//Removing robots from the list
@@ -50,7 +51,7 @@
 	// No more than three lings, but allow them to be a
 	// greater portion of the antagonist docket if the
 	// dice land like that.
-	var/num_changelings = min(3,rand(1,traitors_possible-1))
+	//var/num_changelings = min(3,rand(1,traitors_possible-1))
 
 	while(possible_changelings.len && (changelings.len < num_changelings))
 		var/datum/mind/changeling = pick_n_take(possible_changelings)

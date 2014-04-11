@@ -28,7 +28,7 @@
 							new/datum/cargoprofile/pressure(),new/datum/cargoprofile/chemical(),
 							new/datum/cargoprofile/food(),new/datum/cargoprofile/clothing(),new/datum/cargoprofile/trash())
 	var/list/overrides = list(new/datum/cargoprofile/cargo/unload(),new/datum/cargoprofile/in_stacker())
-	var/list/emag_overrides = list(new/datum/cargoprofile/people(),new/datum/cargoprofile/unary/shredder(),new/datum/cargoprofile/unary/trainer())
+	var/list/emag_overrides = list(new/datum/cargoprofile/slow(),new/datum/cargoprofile/people(),new/datum/cargoprofile/unary/shredder(),new/datum/cargoprofile/unary/trainer())
 	var/list/types = list()
 
 	anchored = 1
@@ -575,7 +575,7 @@
 							new/datum/cargoprofile/chemical(),new/datum/cargoprofile/organics(),new/datum/cargoprofile/food(),
 							new/datum/cargoprofile/clothing(),new/datum/cargoprofile/trash())
 		overrides = list(new/datum/cargoprofile/cargo/unload(),new/datum/cargoprofile/in_stacker(),
-							new/datum/cargoprofile/unary/stacker(),new/datum/cargoprofile/unary/trainer())
+							new/datum/cargoprofile/unary/stacker(),new/datum/cargoprofile/unary/trainer(), new/datum/cargoprofile/slow())
 		emag_overrides = list(new/datum/cargoprofile/people(),new/datum/cargoprofile/unary/shredder())
 
 	New()

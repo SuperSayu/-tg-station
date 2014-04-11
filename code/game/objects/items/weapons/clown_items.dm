@@ -6,12 +6,14 @@
  */
 
 /*
- * Banana Peals
+ * Banana Peels
  */
-/obj/item/weapon/bananapeel/Crossed(AM as mob|obj)
+/obj/item/weapon/grown/bananapeel/Crossed(AM as mob|obj)
 	if (istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
-		M.slip(4, 2, src)
+		var/stun = Clamp(potency / 10, 1, 10)
+		var/weaken = Clamp(potency / 20, 0.5, 5)
+		M.slip(stun, weaken, src)
 
 		if(prob(33))
 			step_rand(src)
@@ -61,7 +63,7 @@
 /obj/item/weapon/soap/Crossed(AM as mob|obj) //EXACTLY the same as bananapeel for now, so it makes sense to put it in the same dm -- Urist
 	if (istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
-		M.slip(3, 2, src)
+		M.slip(4, 2, src)
 		if(CLUMSY in M.mutations)
 			uses++ // murphy's law compels you
 		else
@@ -98,6 +100,8 @@
 		return // I'm pretty sure these never get stained so you'd waste good soap on them
 	else
 		user << "<span class='notice'>You clean \the [target.name].</span>"
+		var/obj/effect/decal/cleanable/C = locate() in target
+		del(C)
 		target.clean_blood()
 		uses-=usesize
 		if(uses<=0)

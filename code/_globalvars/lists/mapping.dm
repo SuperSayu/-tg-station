@@ -22,7 +22,7 @@ var/global/list/global_map = null
 	//5 - empty space
 
 var/list/landmarks_list = list()				//list of all landmarks created
-
+var/list/maybe_beacons = list()			// may get teleporter beacons
 var/list/monkeystart = list()
 var/list/wizardstart = list()
 var/list/newplayer_start = list()

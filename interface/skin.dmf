@@ -446,7 +446,7 @@ menu "menu"
 		is-disabled = false
 		saved-params = "is-checked"
 	elem 
-		name = "&Icons"
+		name = "&View"
 		command = ""
 		category = ""
 		is-checked = false
@@ -457,7 +457,7 @@ menu "menu"
 	elem "stretch"
 		name = "&Stretch to fit"
 		command = ".winset \"mapwindow.map.icon-size=0\""
-		category = "&Icons"
+		category = "&View"
 		is-checked = true
 		can-check = true
 		group = "size"
@@ -466,7 +466,7 @@ menu "menu"
 	elem "icon64"
 		name = "&64x64 (2x)"
 		command = ".winset \"mapwindow.map.icon-size=64\""
-		category = "&Icons"
+		category = "&View"
 		is-checked = false
 		can-check = true
 		group = "size"
@@ -475,27 +475,63 @@ menu "menu"
 	elem "icon32"
 		name = "&32x32"
 		command = ".winset \"mapwindow.map.icon-size=32\""
-		category = "&Icons"
+		category = "&View"
 		is-checked = false
 		can-check = true
 		group = "size"
 		is-disabled = false
 		saved-params = "is-checked"
 	elem 
-		name = ""
+		name = "&Game"
 		command = ""
-		category = "&Icons"
+		category = ""
 		is-checked = false
 		can-check = false
 		group = ""
 		is-disabled = false
 		saved-params = "is-checked"
-	elem "textmode"
-		name = "&Text"
-		command = ".winset \"menu.textmode.is-checked=true?mapwindow.map.text-mode=true:mapwindow.map.text-mode=false\""
-		category = "&Icons"
+	elem 
+		name = "Show &Changelog"
+		command = "changelog"
+		category = "&Game"
 		is-checked = false
-		can-check = true
+		can-check = false
+		group = ""
+		is-disabled = false
+		saved-params = "is-checked"
+	elem 
+		name = "Show &MOTD"
+		command = "MOTD"
+		category = "&Game"
+		is-checked = false
+		can-check = false
+		group = ""
+		is-disabled = false
+		saved-params = "is-checked"
+	elem 
+		name = "&Vote"
+		command = "Vote"
+		category = "&Game"
+		is-checked = false
+		can-check = false
+		group = ""
+		is-disabled = false
+		saved-params = "is-checked"
+	elem 
+		name = ""
+		command = ""
+		category = "&Game"
+		is-checked = false
+		can-check = false
+		group = ""
+		is-disabled = false
+		saved-params = "is-checked"
+	elem 
+		name = "&Respawn"
+		command = "Respawn"
+		category = "&Game"
+		is-checked = false
+		can-check = false
 		group = ""
 		is-disabled = false
 		saved-params = "is-checked"
@@ -509,8 +545,35 @@ menu "menu"
 		is-disabled = false
 		saved-params = "is-checked"
 	elem 
-		name = "&Admin help\tF1"
+		name = "Get &Admin help\tF1"
 		command = "adminhelp"
+		category = "&Help"
+		is-checked = false
+		can-check = false
+		group = ""
+		is-disabled = false
+		saved-params = "is-checked"
+	elem 
+		name = "&Show Server Revision"
+		command = "Show-Server-Revision"
+		category = "&Help"
+		is-checked = false
+		can-check = false
+		group = ""
+		is-disabled = false
+		saved-params = "is-checked"
+	elem 
+		name = "&Report a Bug"
+		command = "https://github.com/SuperSayu/-tg-station/issues/new"
+		category = "&Help"
+		is-checked = false
+		can-check = false
+		group = ""
+		is-disabled = false
+		saved-params = "is-checked"
+	elem 
+		name = ""
+		command = ""
 		category = "&Help"
 		is-checked = false
 		can-check = false
@@ -1322,6 +1385,8 @@ window "mapwindow"
 		on-size = ""
 		icon-size = 0
 		text-mode = false
+		letterbox = true
+		zoom = 0
 		on-show = ".winset\"mainwindow.mainvsplit.left=mapwindow\""
 		on-hide = ".winset\"mainwindow.mainvsplit.left=\""
 		style = ""
@@ -1794,4 +1859,6 @@ window "infowindow"
 		on-show = ".winset\"rpane.infob.is-visible=true;rpane.browseb.is-visible=true?rpane.infob.pos=130,0:rpane.infob.pos=65,0 rpane.textb.is-visible=true rpane.infob.is-checked=true rpane.rpanewindow.pos=0,30 rpane.rpanewindow.size=0x0 rpane.rpanewindow.left=infowindow\""
 		on-hide = ".winset\"rpane.infob.is-visible=false;rpane.browseb.is-visible=true?rpane.browseb.is-checked=true rpane.rpanewindow.left=browserwindow:rpane.textb.is-visible=true rpane.rpanewindow.pos=0,30 rpane.rpanewindow.size=0x0 rpane.rpanewindow.left=\""
 		on-tab = ""
+		prefix-color = none
+		suffix-color = none
 

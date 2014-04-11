@@ -48,6 +48,8 @@
 	var/global/icon/pack_in = new('icons/WIP_Sayu.dmi',"mailpackage")
 	var/global/icon/mail_in = new('icons/WIP_Sayu.dmi',"mailstored")
 	var/global/listchanged = 0
+	var/list/spawn_supplies = list(/obj/item/weapon/packageWrap = 2, /obj/item/stack/sheet/cardboard = 10, /obj/item/weapon/pen = 3, /obj/item/weapon/hand_labeler = 1)
+	var/list/supplies = list()
 
 	New()
 		..()
@@ -56,6 +58,18 @@
 			name = "[A.name] [name]"
 		mailsystem += src
 		listchanged = 1
+		for(var/entry in spawn_supplies)
+			var/count = spawn_supplies[entry]
+			while(count-- > 0)
+				supplies += new entry(src)
+		for(var/entry in spawn_supplies)
+			var/obj/item/I = locate(entry) in supplies
+			if(I)
+				spawn_supplies[entry] = I.name
+			else
+				I = new entry(null)
+				spawn_supplies[entry] = I.name
+				del(I)
 
 	Del()
 		mailsystem -= src
@@ -195,7 +209,15 @@
 				dat += "<A href='?src=\ref[src];operation=sendmenu'>Send Mail</A><br>"
 				dat += "<A href='?src=\ref[src];operation=getmenu'>Check Mail</A><br>"
 				if(packages.len)
-					dat += "There are unsent packages in this machine."
+					dat += "There are unsent packages in this machine.<br>"
+				if(supplies.len)
+					dat += "<br>Mailing supplies:<br>"
+					for(var/typekey in spawn_supplies)
+						var/n = spawn_supplies[typekey] // name of supplies, from New()
+						if(locate(typekey) in supplies)
+							dat += "<a href='?src=\ref[src];operation=supply&type=[typekey]'>[n]</a><br>"
+						else
+							dat += "[n] - SOLD OUT<br>"
 				return dat
 			if(10)	// Send mail
 				if(istype(src,/obj/machinery/mail/hub) && (emagged || (access_qm in id.access)))
@@ -329,6 +351,13 @@
 		if(emagged || (auth && (access_qm in id.access))) auth = 2
 
 		switch(href_list["operation"])
+			if("supply")
+				var/typekey = text2path(href_list["type"])
+				if(!ispath(typekey)) return
+				var/obj/item/I = locate(typekey) in supplies
+				if(I)
+					I.loc = loc
+					supplies -= I
 			if("mainmenu")
 				screen = 0
 			if("sendmenu")
@@ -466,10 +495,15 @@
 
 	attackby(obj/item/P as obj, mob/user as mob)
 		if(istype(P,/obj/item/smallDelivery))
-			usr.drop_item()
+			user.drop_item()
 			P.loc = src
 			packages+= P
 			update_icon()
+		else if(P.type in spawn_supplies)
+			user.drop_item()
+			P.loc = src
+			supplies += P
+			user << "\blue You put [P] into [src]'s supplies drawer."
 		else
 			user << "\blue The [src] refuses the unwrapped [P.name]."
 

@@ -54,19 +54,14 @@
 	if(HULK in mutations)	return
 	..()
 
-/mob/living/carbon/human/update_canmove()
-	var/old_lying = lying
-	. = ..()
-	if(lying && !old_lying) // fell down
-		if(head)
-			var/obj/item/clothing/head/H = head
-			if(!istype(H) || prob(H.loose))
-				drop_from_inventory(H)
-				if(prob(12))
-					step_rand(H)
-				if(stat == CONSCIOUS)
-					src << "\blue [H] falls off!"
-
+mob/living/carbon/human/proc/hat_fall_prob()
+	var/multiplier = 1
+	var/obj/item/clothing/head/H = head
+	var/loose = 100
+	if(istype(H)) loose = H.loose
+	if(stat || (status_flags & FAKEDEATH))
+		multiplier = 2
+	return loose * multiplier
 
 ////////////////////////////////////////////
 

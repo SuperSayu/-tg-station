@@ -11,7 +11,7 @@
 															"digital messenger" = 5,
 															"medical records" = 15,
 															"security records" = 15,
-															//"camera jack" = 10,
+															"camera jack" = 60,
 															"door jack" = 30,
 															"atmosphere sensor" = 5,
 															//"heartbeat sensor" = 10,
@@ -63,9 +63,14 @@
 			if("doorjack")
 				left_part = src.softwareDoor()
 			if("camerajack")
-				left_part = src.softwareCamera()
+				//left_part = src.softwareCamera()
+				if(bug)
+					left_part = bug.menu(bug.get_cameras())
+				else
+					left_part = "Camera bug detached."
 			if("signaller")
 				left_part = src.softwareSignal()
+
 
 	//usr << browse_rsc('windowbak.png')		// This has been moved to the mob's Login() proc
 
@@ -132,6 +137,8 @@
 					if(src.ram >= cost)
 						src.ram -= cost
 						src.software.Add(target)
+						if(target == "camera jack")
+							bug.verbs += /obj/item/device/camera_bug/pai/proc/show_interface
 					else
 						src.temp = "Insufficient RAM available."
 				else
@@ -267,7 +274,6 @@
 	dat += "<A href='byond://?src=\ref[src];software=refresh'>Refresh</A><br>"
 	// Built-in
 	dat += "<A href='byond://?src=\ref[src];software=directives'>Directives</A><br>"
-	dat += "<A href='byond://?src=\ref[src];software=radio;sub=0'>Radio Configuration</A><br>"
 	dat += "<A href='byond://?src=\ref[src];software=image'>Screen Display</A><br>"
 	//dat += "Text Messaging <br>"
 	dat += "<br>"

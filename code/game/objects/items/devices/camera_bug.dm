@@ -5,6 +5,17 @@
 #define ADVANCED_BUG	4
 #define AI_BUG			5
 #define ADMIN_BUG		6
+/*
+	Bugtypes:
+	Vanilla: Attack cameras to bug them, see only your own bugs
+	Universal: Attack cameras to bug them, see all bugs
+	Network: See all cameras on network
+	Sabotage: Attack cameras to bug them, see only your own bugs, EMP button for bugged cameras
+	Advanced: Attack cameras to bug them, see only your own bugs, monitor bugged cameras
+	AI: See all cameras on network, monitor bugged cameras
+	Admin: See all cameras on network, monitor bugged cameras,
+*/
+
 
 #define BUGMODE_LIST	0
 #define BUGMODE_MONITOR	1
@@ -42,6 +53,8 @@
 	var/last_found = null
 	var/last_seen = null
 
+	var/emagged = 0
+
 /obj/item/device/camera_bug/ai
 	name = "Supplemental Camera Interface"
 	skip_bugcheck = 1
@@ -50,7 +63,14 @@
 		set category="AI Commands"
 		set name="Show Camera Monitor"
 		interact(usr)
-
+/obj/item/device/camera_bug/pai
+	name = "Supplemental Camera Interface"
+	skip_bugcheck = 1
+	bugtype = AI_BUG
+	proc/show_interface()
+		set category="pAI Commands"
+		set name="Show Camera Monitor"
+		interact(usr)
 
 /obj/item/device/camera_bug/New()
 	..()
@@ -204,6 +224,8 @@
 			empty = 0
 
 		for(var/mob/living/M in seen)
+			if(!prob(M.alpha)) continue
+			if(M.digitalcamo) continue
 			if(M.name in names)
 				names[M.name]++
 				dat += "[M.name] ([names[M.name]])"
@@ -329,10 +351,16 @@
 		if(!tracking)
 			src.updateSelfDialog()
 			return
+		if(!prob(tracking.alpha))
+			src.updateSelfDialog()
+			return
 
 		if(tracking.name != tracked_name) // Hiding their identity, tricksy
 			var/mob/M = tracking
 			if(istype(M))
+				if(M.digitalcamo)
+					src.updateSelfDialog()
+					return
 				if(!(tracked_name == "Unknown" && findtext(tracking.name,"Unknown"))) // we saw then disguised before
 					if(!(tracked_name == M.real_name && findtext(tracking.name,M.real_name))) // or they're still ID'd
 						src.updateSelfDialog()//But if it's neither of those cases
@@ -391,21 +419,24 @@
 		/obj/item/weapon/stock_parts/subspace/transmitter = NETWORK_BUG,
 
 		/obj/item/device/detective_scanner = ADVANCED_BUG,
-		/obj/item/device/paicard = AI_BUG,
 		/obj/item/weapon/stock_parts/scanning_module = ADVANCED_BUG
 		)
 
 	for(var/entry in expandables)
 		if(istype(W,entry))
+			if(bugtype > VANILLA_BUG)
+				user << "You cannot modify [src]."
+				return
 			bugtype = expandables[entry]
 			user.drop_item()
 			W.loc = src
 			expansion = W
 			user << "You add [W] to [src]."
 			get_cameras() // the tracking code will want to know the new camera list
-			if(bugtype in list(UNIVERSAL_BUG,NETWORK_BUG,ADMIN_BUG))
+			if(bugtype in list(UNIVERSAL_BUG,NETWORK_BUG,AI_BUG,ADMIN_BUG))
 				skip_bugcheck = 1
 			return
+
 	user << "[W] won't fit in [src]."
 	..()
 

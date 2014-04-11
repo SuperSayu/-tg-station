@@ -103,7 +103,8 @@ var/global/floorIsLava = 0
 				body += "<A href='?_src_=holder;makeai=\ref[M]'>Make AI</A> | "
 				body += "<A href='?_src_=holder;makerobot=\ref[M]'>Make Robot</A> | "
 				body += "<A href='?_src_=holder;makealien=\ref[M]'>Make Alien</A> | "
-				body += "<A href='?_src_=holder;makeslime=\ref[M]'>Make Slime</A> "
+				body += "<A href='?_src_=holder;makeslime=\ref[M]'>Make Slime</A> | "
+				body += "<A href='?_src_=holder;makeblob=\ref[M]'>Make Blob</A> | "
 
 			//Simple Animals
 			if(isanimal(M))
@@ -476,6 +477,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=blackout'>Break all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=whiteout'>Fix all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=floorlava'>The floor is lava! (DANGEROUS: extremely lame)</A><BR>
+			<A href='?src=\ref[src];secretsfun=unlockcentcom'>[unlock_centcom?"Lock":"Unlock"] Centcom shuttle and doors</a><BR>
 			<BR>
 			"}
 
@@ -670,30 +672,6 @@ var/global/floorIsLava = 0
 		log_admin("[key_name(usr)] removed the delay.")
 	feedback_add_details("admin_verb","DELAY") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/datum/admins/proc/adjump()
-	set category = "Server"
-	set desc="Toggle admin jumping"
-	set name="Toggle Jump"
-	config.allow_admin_jump = !(config.allow_admin_jump)
-	message_admins("\blue Toggled admin jumping to [config.allow_admin_jump].")
-	feedback_add_details("admin_verb","TJ") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-/datum/admins/proc/adspawn()
-	set category = "Server"
-	set desc="Toggle admin spawning"
-	set name="Toggle Spawn"
-	config.allow_admin_spawning = !(config.allow_admin_spawning)
-	message_admins("\blue Toggled admin item spawning to [config.allow_admin_spawning].")
-	feedback_add_details("admin_verb","TAS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
-/datum/admins/proc/adrev()
-	set category = "Server"
-	set desc="Toggle admin revives"
-	set name="Toggle Revive"
-	config.allow_admin_rev = !(config.allow_admin_rev)
-	message_admins("\blue Toggled reviving to [config.allow_admin_rev].")
-	feedback_add_details("admin_verb","TAR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
 /datum/admins/proc/immreboot()
 	set category = "Server"
 	set desc="Reboots the server post haste"
@@ -716,12 +694,9 @@ var/global/floorIsLava = 0
 	set category = "Admin"
 	set name = "Unprison"
 	if (M.z == 2)
-		if (config.allow_admin_jump)
-			M.loc = pick(latejoin)
-			message_admins("[key_name_admin(usr)] has unprisoned [key_name_admin(M)]", 1)
-			log_admin("[key_name(usr)] has unprisoned [key_name(M)]")
-		else
-			alert("Admin jumping disabled")
+		M.loc = pick(latejoin)
+		message_admins("[key_name_admin(usr)] has unprisoned [key_name_admin(M)]", 1)
+		log_admin("[key_name(usr)] has unprisoned [key_name(M)]")
 	else
 		alert("[M.name] is not prisoned.")
 	feedback_add_details("admin_verb","UP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!

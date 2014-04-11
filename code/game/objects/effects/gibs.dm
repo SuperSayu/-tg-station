@@ -1,8 +1,8 @@
 /proc/gibs(atom/location, var/list/viruses, var/datum/dna/MobDNA)
 	new /obj/effect/gibspawner/generic(location,viruses,MobDNA)
 
-/proc/hgibs(atom/location, var/list/viruses, var/datum/dna/MobDNA)
-	new /obj/effect/gibspawner/human(location,viruses,MobDNA)
+/proc/hgibs(atom/location, var/list/viruses, var/datum/dna/MobDNA, var/list/organs)
+	new /obj/effect/gibspawner/human(location,viruses,MobDNA, organs)
 
 /proc/xgibs(atom/location, var/list/viruses)
 	new /obj/effect/gibspawner/xeno(location,viruses)
@@ -17,12 +17,12 @@
 	var/list/gibamounts = list()
 	var/list/gibdirections = list() //of lists
 
-	New(location, var/list/viruses, var/datum/dna/MobDNA)
+	New(location, var/list/viruses, var/datum/dna/MobDNA, var/list/eviscera)
 		..()
 
-		Gib(loc,viruses,MobDNA)
+		Gib(loc,viruses,MobDNA,eviscera)
 
-	proc/Gib(atom/location, var/list/viruses = list(), var/datum/dna/MobDNA = null)
+	proc/Gib(atom/location, var/list/viruses = list(), var/datum/dna/MobDNA = null, var/list/eviscera)
 		if(gibtypes.len != gibamounts.len || gibamounts.len != gibdirections.len)
 			world << "\red Gib list length mismatch!"
 			return
@@ -36,10 +36,12 @@
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(2, 1, location)
 			s.start()
-
+		var/obj/gross = null
 		for(var/i = 1, i<= gibtypes.len, i++)
 			if(gibamounts[i])
 				for(var/j = 1, j<= gibamounts[i], j++)
+					if(eviscera && eviscera.len)
+						gross = pick(eviscera)
 					var/gibType = gibtypes[i]
 					gib = new gibType(location)
 					if(istype(location,/mob/living/carbon))
@@ -63,6 +65,7 @@
 					var/list/directions = gibdirections[i]
 					if(istype(loc,/turf))
 						if(directions.len)
-							gib.streak(directions)
+							gib.streak(directions,gross)
+							if(gross) eviscera -= gross
 
 		del(src)

@@ -29,7 +29,7 @@
 	if(O.loc != src)
 		if(ismob(O.loc))
 			var/mob/living/LM = O.loc
-			LM.before_take_item(O)
+			LM.unEquip(O)
 		else if(istype(O.loc,/obj/item/weapon/storage))
 			var/obj/item/weapon/storage/S = O.loc
 			S.remove_from_storage(O,loc)

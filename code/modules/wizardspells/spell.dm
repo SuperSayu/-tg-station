@@ -114,7 +114,7 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 		return "<h4>[name] [castblock]([uses]) [learnblock] [removeblock]</h4>[descblock]"
 
 	Topic(href,list/href_list)
-		if(usr.stat) return
+		if(usr.stat || !usr.mind) return
 		..()
 
 		if("cast" in href_list)
@@ -122,22 +122,21 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 			return 1
 
 		if("learn" in href_list)
-			if(src in usr.spell_list) return
+			if(src in usr.mind.spell_list) return
 
-			usr.spell_list -= null // just in case something was deleted
+			usr.mind.spell_list -= null // just in case something was deleted
 
-			if(usr.spell_list.len >= max_spells)
-				var/choice = input(usr,"You have reached your limit; forget which spell?","Forget spell",null) as null|anything in usr.spell_list
+			if(usr.mind.spell_list.len >= max_spells)
+				var/choice = input(usr,"You have reached your limit; forget which spell?","Forget spell",null) as null|anything in usr.mind.spell_list
 				if(choice)
-					usr.spell_list -= choice
+					usr.mind.spell_list -= choice
 					del choice
-			if(usr.spell_list.len >= max_spells || (src in usr.spell_list))
+			if(usr.mind.spell_list.len >= max_spells || (src in usr.mind.spell_list))
 				return
 			var/obj/item/weapon/magic/oldloc = loc
 			loc = usr
-			usr.spell_list += src
-			if(usr.mind)
-				usr.mind.learned_spells |= type
+			usr.mind.spell_list += src
+			usr.mind.learned_spells |= type
 			//usr.spell_list = sortAtom(usr.spell_list)
 			if(isobj(oldloc))
 				if(istype(oldloc))

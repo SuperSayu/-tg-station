@@ -145,7 +145,7 @@
 		src.sight |= SEE_OBJS
 		src.see_in_dark = 8
 		src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-	else 
+	else
 		src.see_in_dark = 8
 		if (src.sight_mode & BORGMESON && src.sight_mode & BORGTHERM)
 			src.sight |= SEE_TURFS
@@ -275,7 +275,7 @@
 		return
 	if(I.loc != src && ismob(I.loc))
 		var/mob/M = I.loc
-		M.before_take_item(I)
+		M.unEquip(I)
 	else if(istype(I.loc, /obj/item/weapon/storage))
 		var/obj/item/weapon/storage/S = I.loc
 		S.remove_from_storage(loc)

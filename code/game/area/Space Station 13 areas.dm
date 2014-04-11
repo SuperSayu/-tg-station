@@ -122,6 +122,14 @@ proc/process_ghost_teleport_locs()
 	name = "\improper Admin room"
 	icon_state = "start"
 
+/area/space
+	requires_power = 1
+	always_unpowered = 1
+	lighting_use_dynamic = 0
+	power_light = 0
+	power_equip = 0
+	power_environ = 0
+
 
 
 //These are shuttle areas, they must contain two areas in a subgroup if you want to move a shuttle from one
@@ -382,6 +390,7 @@ proc/process_ghost_teleport_locs()
 	name = "\improper Thunderdome"
 	icon_state = "thunder"
 	requires_power = 0
+	shuffled = 1
 
 /area/tdome/tdome1
 	name = "\improper Thunderdome (Team 1)"
@@ -1140,6 +1149,10 @@ proc/process_ghost_teleport_locs()
 /area/toxins/storage
 	name = "\improper Toxins Storage"
 	icon_state = "toxstorage"
+
+/area/toxins/mineral_storeroom
+	name = "\improper Mineral Storeroom"
+	icon_state = "toxmisc"
 
 /area/toxins/test_area
 	name = "\improper Toxins Test Area"

@@ -54,7 +54,7 @@
 		if(!contents.len && charges <= 0)
 			user << browse(null, "window=master_spell")
 			del src
-		var/html = "<i>You know [user.spell_list.len]/[max_spells] spells.</i><hr>"
+		var/html = "<i>You know [user.mind.spell_list.len]/[max_spells] spells.</i><hr>"
 		for(var/obj/effect/knowspell/ks in src)
 			html += ks.describe(allow_cast = 0, remove_from = src)
 

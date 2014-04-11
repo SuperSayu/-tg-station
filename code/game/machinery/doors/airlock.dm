@@ -80,11 +80,6 @@
 	doortype = 7
 	glass = 1
 
-/obj/machinery/door/airlock/centcom
-	icon = 'icons/obj/doors/Doorele.dmi'
-	opacity = 1
-	doortype = 8
-
 /obj/machinery/door/airlock/vault
 	name = "vault door"
 	icon = 'icons/obj/doors/vault.dmi'

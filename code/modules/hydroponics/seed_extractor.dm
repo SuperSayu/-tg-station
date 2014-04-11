@@ -79,4 +79,4 @@ obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob
 	if(seedify(O,-1,1))
 		user << "<span class='notice'>You extract some seeds.</span>"
 	else if(!istype(O,/obj/item/weapon/storage/bag/seeds)) // which silently fails
-		user << "<span class='notice'>You can't extract any seeds from that!</span>"
+		user << "<span class='notice'>You can't extract any seeds from \the [O.name].</span>"

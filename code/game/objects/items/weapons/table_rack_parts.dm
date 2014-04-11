@@ -66,7 +66,7 @@
 		var/obj/item/weapon/table_parts/wood/poker/P = new( get_turf(src.loc) )
 		if(ismob(loc))
 			var/mob/M = loc
-			M.drop_from_inventory(src)
+			M.unEquip(src)
 			M.put_in_hands(P)
 		visible_message("<span class='notice'>[user] adds grass to the wooden table parts</span>")
 		del(src)

@@ -776,8 +776,12 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 /datum/supply_packs/organic/vending
 	name = "Bartending Supply Crate"
 	contains = list(/obj/item/weapon/vending_refill/boozeomat,
+					/obj/item/weapon/vending_refill/boozeomat,
+					/obj/item/weapon/vending_refill/boozeomat,
+					/obj/item/weapon/vending_refill/coffee,
+					/obj/item/weapon/vending_refill/coffee,
 					/obj/item/weapon/vending_refill/coffee)
-	cost = 15
+	cost = 20
 	containername = "bartending supply crate"
 
 /datum/supply_packs/organic/vending/snack
@@ -791,13 +795,16 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 /datum/supply_packs/organic/vending/cola
 	name = "Softdrinks Supply Crate"
 	contains = list(/obj/item/weapon/vending_refill/cola,
+					/obj/item/weapon/vending_refill/cola,
 					/obj/item/weapon/vending_refill/cola)
 	cost = 15
 	containername = "softdrinks supply crate"
 
 /datum/supply_packs/organic/vending/cigarette
 	name = "Cigarette Supply Crate"
-	contains = list(/obj/item/weapon/vending_refill/cigarette)
+	contains = list(/obj/item/weapon/vending_refill/cigarette,
+					/obj/item/weapon/vending_refill/cigarette,
+					/obj/item/weapon/vending_refill/cigarette)
 	cost = 15
 	containername = "cigarette supply crate"
 
@@ -889,6 +896,24 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 /datum/supply_packs/misc/empty_vender // sayustation
 	name = "Do-it-yourself Vending Machine"
 	cost = 100
+/datum/supply_packs/misc/lasertag
+	name = "LaserTag Crate"
+	contains =	list(/obj/item/weapon/gun/energy/laser/redtag,
+					/obj/item/weapon/gun/energy/laser/redtag,
+					/obj/item/weapon/gun/energy/laser/redtag,
+					/obj/item/weapon/gun/energy/laser/bluetag,
+					/obj/item/weapon/gun/energy/laser/bluetag,
+					/obj/item/weapon/gun/energy/laser/bluetag,
+					/obj/item/clothing/suit/redtag,
+					/obj/item/clothing/suit/redtag,
+					/obj/item/clothing/suit/redtag,
+					/obj/item/clothing/suit/bluetag,
+					/obj/item/clothing/suit/bluetag,
+					/obj/item/clothing/suit/bluetag,
+					/obj/item/clothing/head/helmet/redtaghelm,
+					/obj/item/clothing/head/helmet/bluetaghelm)
+	cost = 15
+	containername = "LaserTag Crate"
 
 	contains = list(/obj/machinery/vending/refillable/generic)
 	containertype = /obj/structure/largecrate

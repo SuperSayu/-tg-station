@@ -293,8 +293,7 @@
 	if(istype(obj))
 		var/mob/M = obj.loc
 		if(ismob(M))
-			M.u_equip(obj)
-			M.update_icons()	//so their overlays update
+			M.unEquip(obj, 1) //Holoweapons should always drop.
 
 	for(var/mob/M in obj.contents)
 		M.loc = obj.loc
@@ -533,7 +532,7 @@
 	desc = "May the force be with you. Sorta"
 	icon_state = "sword0"
 	force = 3.0
-	throw_speed = 1
+	throw_speed = 2
 	throw_range = 5
 	throwforce = 0
 	w_class = 2.0
@@ -565,13 +564,13 @@
 		force = 30
 		icon_state = "sword[item_color]"
 		w_class = 4
-		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
+		playsound(user, 'sound/weapons/saberon.ogg', 20, 1)
 		user << "\blue [src] is now active."
 	else
 		force = 3
 		icon_state = "sword0"
 		w_class = 2
-		playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
+		playsound(user, 'sound/weapons/saberoff.ogg', 20, 1)
 		user << "\blue [src] can now be concealed."
 	add_fingerprint(user)
 	return

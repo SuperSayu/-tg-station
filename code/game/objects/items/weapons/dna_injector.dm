@@ -3,7 +3,7 @@
 	desc = "This injects the person with DNA."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "dnainjector"
-	throw_speed = 1
+	throw_speed = 3
 	throw_range = 5
 	w_class = 1.0
 
@@ -189,7 +189,7 @@
 	desc = "Gives you fire."
 	New()
 		..()
-		fields = list("SE"=setblock(NULLED_SE, FIREBLOCK, repeat_string(DNA_BLOCK_SIZE,"0")))
+		fields = list("SE"=setblock(NULLED_SE, FIREBLOCK, repeat_string(DNA_BLOCK_SIZE,"f")))
 
 /obj/item/weapon/dnainjector/blindmut
 	name = "\improper DNA injector (Blind)"

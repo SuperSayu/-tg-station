@@ -140,7 +140,7 @@
 			var/mob/living/carbon/human/H = M
 			if(isobj(H.shoes))
 				var/thingy = H.shoes
-				H.drop_from_inventory(H.shoes)
+				H.unEquip(H.shoes)
 				walk_away(thingy,chassis,15,2)
 				spawn(20)
 					if(thingy)
@@ -355,7 +355,8 @@
 		message_admins("[key_name(chassis.occupant, chassis.occupant.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[chassis.occupant]'>?</A>) fired a [src] in ([T.x],[T.y],[T.z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>JMP</a>)",0,1)
 		log_game("[chassis.occupant.ckey]([chassis.occupant]) fired a [src] ([T.x],[T.y],[T.z])")
 		spawn(det_time)
-			F.prime()
+			if(F)
+				F.prime()
 		do_after_cooldown()
 		return
 
@@ -370,7 +371,7 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar
 	name = "banana mortar"
 	icon_state = "mecha_bananamrtr"
-	projectile = /obj/item/weapon/bananapeel
+	projectile = /obj/item/weapon/grown/bananapeel
 	fire_sound = 'sound/items/bikehorn.ogg'
 	projectiles = 15
 	missile_speed = 1.5
@@ -388,7 +389,7 @@
 	action(target)
 		if(!action_checks(target)) return
 		set_ready_state(0)
-		var/obj/item/weapon/bananapeel/B = new projectile(chassis.loc)
+		var/obj/item/weapon/grown/bananapeel/B = new projectile(chassis.loc,60)
 		playsound(chassis, fire_sound, 60, 1)
 		B.throw_at(target, missile_range, missile_speed)
 		projectiles--

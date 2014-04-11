@@ -1,3 +1,5 @@
+/var/unlock_centcom = 0
+
 /datum/game_mode/sandbox
 	name = "sandbox"
 	config_tag = "sandbox"
@@ -19,3 +21,4 @@
 	..()
 	if(emergency_shuttle)
 		emergency_shuttle.always_fake_recall = 1
+	unlock_centcom = 1

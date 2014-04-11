@@ -8,15 +8,21 @@
 	attackby(var/obj/item/W as obj, var/mob/user as mob)
 		if(istype(W,/obj/item/weapon/grab) || istype(W,/obj/item/tk_grab) || istype(W,/obj/item/weapon/crowbar))
 			return ..(W,user)
-		if(istype(W,/obj/item/weapon/hand_labeler))
-			var/obj/item/weapon/hand_labeler/HL = W
-			if(HL.mode)
-				if(HL.labels_left)
-					name = HL.label
-					user << "You label [src]."
-					return 1
-				return 0 // no labels message
+		if(panel_open)
+			if(istype(W,refill_canister))
+				return ..(W,user)
+			if(istype(W,/obj/item/weapon/hand_labeler) && renamable)
+				var/obj/item/weapon/hand_labeler/HL = W
+				if(HL.mode)
+					if(HL.labels_left)
+						name = HL.label
+						user << "You label [src]."
+						return 1
+					return 0 // no labels message
 
+			else if(istype(W, /obj/item/device/multitool)||istype(W, /obj/item/weapon/wirecutters))
+				attack_hand(user)
+				return 0
 		if(istype(W, /obj/item/weapon/card/emag) && !emagged)
 			emagged = 1
 			extended_inventory = !extended_inventory
@@ -32,6 +38,7 @@
 				coin = null
 			updateUsrDialog()
 			return 0
+
 		else if(istype(W, /obj/item/weapon/screwdriver))
 			panel_open = !panel_open
 			user << "You [panel_open ? "open" : "close"] the maintenance panel."
@@ -40,10 +47,6 @@
 				overlays += image(icon, "[initial(icon_state)]-panel")
 			updateUsrDialog()
 			return 0
-		else if(istype(W, /obj/item/device/multitool)||istype(W, /obj/item/weapon/wirecutters))
-			if(panel_open)
-				attack_hand(user)
-				return 0
 		else if(istype(W, /obj/item/weapon/coin) && premium.len > 0)
 			user.drop_item()
 			W.loc = src

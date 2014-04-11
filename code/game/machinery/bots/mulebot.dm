@@ -136,6 +136,9 @@ var/global/mulebot_count = 0
 			)
 		else
 			user << "\blue [src] does not need a repair!"
+	else if(istype(I, /obj/item/device/multitool) || istype(I, /obj/item/weapon/wirecutters))
+		if(open)
+			attack_hand(usr)
 	else if(load && ismob(load))  // chance to knock off rider
 		if(prob(1+I.force * 2))
 			unload(0)
@@ -894,7 +897,7 @@ var/global/mulebot_count = 0
 	new /obj/item/device/assembly/prox_sensor(Tsec)
 	new /obj/item/stack/rods(Tsec)
 	new /obj/item/stack/rods(Tsec)
-	new /obj/item/weapon/cable_coil/cut(Tsec)
+	new /obj/item/stack/cable_coil/cut(Tsec)
 	if (cell)
 		cell.loc = Tsec
 		cell.update_icon()

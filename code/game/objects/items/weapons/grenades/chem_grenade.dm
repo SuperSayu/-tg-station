@@ -89,6 +89,8 @@
 	if(stage == READY &&  !active)
 		var/turf/bombturf = get_turf(src)
 		var/area/A = get_area(bombturf)
+		message_admins("[key_name(usr)]<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A> has primed a [name] for detonation at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>.")
+		log_game("[key_name(usr)] has primed a [name] for detonation at [A.name] ([bombturf.x],[bombturf.y],[bombturf.z]).")
 		if(nadeassembly)
 			nadeassembly.attack_self(user)
 			update_icon()
@@ -181,8 +183,8 @@
 		user << "<span class='notice'>You add [A] to [src]!</span>"
 		update_icon()
 
-	else if(stage == EMPTY && istype(I, /obj/item/weapon/cable_coil))
-		var/obj/item/weapon/cable_coil/C = I
+	else if(stage == EMPTY && istype(I, /obj/item/stack/cable_coil))
+		var/obj/item/stack/cable_coil/C = I
 		C.use(1)
 
 		stage = WIRED

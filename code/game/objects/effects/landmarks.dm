@@ -46,7 +46,10 @@
 		if("blobstart")
 			blobstart += loc
 			del(src)
-
+		if("beacon_maybe")
+			if(prob(33))
+				maybe_beacons += loc
+			del(src)
 		if("xeno_spawn")
 			xeno_spawn += loc
 			del(src)

@@ -182,7 +182,6 @@
 	desc = "Fuzzy."
 	icon_state = "bearpelt"
 	item_state = "bearpelt"
-	flags = BLOCKHAIR
 	loose = 1 // fiercely stays attached
 
 /obj/item/clothing/head/xenos
@@ -193,3 +192,8 @@
 	flags = BLOCKHAIR
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
 	loose = 35
+/obj/item/clothing/head/fedora
+	name = "fedora"
+	icon_state = "fedora"
+	item_state = "fedora"
+	desc = "A really cool hat if you're a mobster. A really lame hat if you're not."

@@ -32,6 +32,14 @@
 	if(prob(2))
 		del src
 
+/obj/item/weapon/circuitboard/turbine_computer
+	name = "circuit board (Turbine Computer)"
+	build_path = /obj/machinery/computer/turbine_computer
+	origin_tech = "programming=4;engineering=4;power=4"
+/obj/item/weapon/circuitboard/telesci_console
+	name = "circuit board (Telescience Console)"
+	build_path = /obj/machinery/computer/telescience
+	origin_tech = "programming=3;bluespace=2"
 
 /obj/item/weapon/circuitboard/message_monitor
 	name = "circuit board (Message Monitor)"
@@ -116,7 +124,6 @@
 /obj/item/weapon/circuitboard/arcade/orion_trail
 	name = "circuit board (Orion_Trail)"
 	build_path = /obj/machinery/computer/arcade/orion_trail
-	origin_tech = "programming=2"
 /obj/item/weapon/circuitboard/turbine_control
 	name = "circuit board (Turbine control)"
 	build_path = /obj/machinery/computer/turbine_computer
@@ -159,7 +166,6 @@
 /obj/item/weapon/circuitboard/ordercomp
 	name = "circuit board (Supply Ordering Console)"
 	build_path = /obj/machinery/computer/ordercomp
-	origin_tech = "programming=2"
 /obj/item/weapon/circuitboard/supplycomp
 	name = "circuit board (Supply shuttle console)"
 	build_path = /obj/machinery/computer/supplycomp
@@ -172,7 +178,6 @@
 /obj/item/weapon/circuitboard/mining
 	name = "circuit board (Outpost Status Display)"
 	build_path = /obj/machinery/computer/security/mining
-	origin_tech = "programming=2"
 /obj/item/weapon/circuitboard/comm_monitor
 	name = "circuit board (Telecommunications Monitor)"
 	build_path = /obj/machinery/computer/telecomms/monitor
@@ -194,20 +199,16 @@
 /obj/item/weapon/circuitboard/shuttle
 	name = "circuit board (Shuttle)"
 	build_path = /obj/machinery/computer/shuttle
-	origin_tech = "programming=2"
 	id = "1"
 /obj/item/weapon/circuitboard/labor_shuttle
 	name = "circuit Board (Labor Shuttle)"
 	build_path = /obj/machinery/computer/shuttle/labor
-	origin_tech = "programming 2"
 /obj/item/weapon/circuitboard/labor_shuttle/one_way
 	name = "circuit Board (Prisoner Shuttle Console)"
 	build_path = /obj/machinery/computer/shuttle/labor/one_way
-	origin_tech = "programming 2"
 /obj/item/weapon/circuitboard/mining_shuttle
 	name = "circuit Board (Mining Shuttle)"
 	build_path = /obj/machinery/computer/shuttle/mining
-	origin_tech = "programming 2"
 /obj/item/weapon/circuitboard/HolodeckControl // Not going to let people get this, but it's just here for future
 	name = "circuit board (Holodeck Control)"
 	build_path = /obj/machinery/computer/HolodeckControl
@@ -219,11 +220,9 @@
 /obj/item/weapon/circuitboard/area_atmos
 	name = "circuit board (Area Air Control)"
 	build_path = /obj/machinery/computer/area_atmos
-	origin_tech = "programming=2"
 /*/obj/item/weapon/circuitboard/prison_shuttle
 	name = "circuit board (Prison Shuttle)"
-	build_path = /obj/machinery/computer/prison_shuttle
-	origin_tech = "programming=2"*/
+	build_path = /obj/machinery/computer/prison_shuttle*/
 
 
 /obj/item/weapon/circuitboard/supplycomp/attackby(obj/item/I as obj, mob/user as mob)
@@ -262,8 +261,8 @@
 
 /obj/item/weapon/circuitboard/shuttle/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/device/multitool))
-		var/chosen_id = round(input(usr, "Choose an ID number:", "Input an Integer", null) as num|null)
-		if(chosen_id >= 0)
+		var/chosen_id = round(input(usr, "Choose a shuttle id:", "Input an ID", null) as null|anything in list("mining","laborcamp"))
+		if(chosen_id)
 			id = chosen_id
 	return
 
@@ -327,8 +326,8 @@
 				user << "<span class='notice'>You unfasten the circuit board.</span>"
 				src.state = 1
 				src.icon_state = "1"
-			if(istype(P, /obj/item/weapon/cable_coil))
-				var/obj/item/weapon/cable_coil/C = P
+			if(istype(P, /obj/item/stack/cable_coil))
+				var/obj/item/stack/cable_coil/C = P
 				if(C.amount >= 5)
 					playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 					if(do_after(user, 20))
@@ -344,7 +343,7 @@
 				user << "<span class='notice'>You remove the cables.</span>"
 				src.state = 2
 				src.icon_state = "2"
-				var/obj/item/weapon/cable_coil/A = new (loc)
+				var/obj/item/stack/cable_coil/A = new (loc)
 				A.amount = 5
 				A.add_fingerprint(user)
 

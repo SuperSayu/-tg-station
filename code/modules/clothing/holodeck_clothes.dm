@@ -76,7 +76,7 @@
 		if(!C) return
 		var/mob/M = C.loc
 		if(istype(M))
-			M.u_equip(C)
+			M.unEquip(C)
 			M.update_icons()	//so their overlays update
 		del C
 
@@ -183,7 +183,7 @@
 
 				if(istype(result,/obj))
 					suit = new result.type
-					H.drop_from_inventory(H.wear_suit)
+					H.unEquip(H.wear_suit)
 					H.equip_to_slot_if_possible(suit,slot_wear_suit)
 
 			if("glove")
@@ -193,7 +193,7 @@
 
 				if(istype(result,/obj))
 					glove = new result.type
-					H.drop_from_inventory(H.gloves)
+					H.unEquip(H.gloves)
 					H.equip_to_slot_if_possible(glove,slot_gloves)
 			if("shoe")
 				var/obj/item/clothing/result = input(usr,"Select a shoe style:","Select shoes", "None") as null|anything in shoe_choices
@@ -202,7 +202,7 @@
 
 				if(istype(result,/obj))
 					shoe = new result.type
-					H.drop_from_inventory(H.shoes)
+					H.unEquip(H.shoes)
 					H.equip_to_slot_if_possible(shoe,slot_shoes)
 			if("hat")
 				var/obj/item/clothing/result = input(usr,"Select a hat style:","Select a hat", "None") as null|anything in hat_choices
@@ -211,7 +211,7 @@
 
 				if(istype(result,/obj))
 					hat = new result.type
-					H.drop_from_inventory(H.head)
+					H.unEquip(H.head)
 					H.equip_to_slot_if_possible(hat,slot_head)
 			if("mask")
 				if(istype(H.wear_mask, /obj/item/clothing/mask/horsehead))
@@ -224,7 +224,7 @@
 
 				if(istype(result,/obj))
 					mask = new result.type
-					H.drop_from_inventory(H.wear_mask)
+					H.unEquip(H.wear_mask)
 					H.equip_to_slot_if_possible(mask,slot_wear_mask)
 			if("eye")
 				var/obj/item/clothing/result = input(usr,"Select an eyewear style:","Select eyewear", "None") as null|anything in eye_choices
@@ -233,7 +233,7 @@
 
 				if(istype(result,/obj))
 					eye = new result.type
-					H.drop_from_inventory(H.glasses)
+					H.unEquip(H.glasses)
 					H.equip_to_slot_if_possible(eye,slot_glasses)
 		interact()
 

@@ -129,7 +129,7 @@
 	desc = "Brings objects to life."
 
 	wand_state = "polywand"
-	staff_state = "animate"
+	staff_state = "animation"
 
 	projectile_count = 1
 	projectile_spread = 0
