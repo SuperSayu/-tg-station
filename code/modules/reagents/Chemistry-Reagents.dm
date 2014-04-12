@@ -1304,7 +1304,7 @@ datum
 
 			on_mob_life(var/mob/living/M as mob)
 				if(!M) M = holder.my_atom
-				M.adjustHalLoss(-1*REM)
+				M.adjustStaminaLoss(-1*REM)
 				..()
 				return
 

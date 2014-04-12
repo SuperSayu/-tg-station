@@ -299,6 +299,6 @@
 	req_access_txt = "0"
 
 	allow_insert(var/obj/item/W, var/mob/user)
-		if(!istype(W,/obj/item/weapon/grown) && !istype(W,/obj/item/weapon/reagent_containers/food/snacks/grown) && !istype(W,/obj/item/stack/sheet/wood))
+		if(!istype(W,/obj/item/weapon/grown) && !istype(W,/obj/item/weapon/reagent_containers/food/snacks/grown) && !istype(W,/obj/item/stack/sheet/mineral/wood))
 			return 0
 		return emagged || !scan_id_insert || allowed(user)

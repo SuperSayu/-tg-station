@@ -200,7 +200,7 @@
 	name = "Hyronalin Dispenser"
 	desc = "Dispenses anti-rad medication."
 	icon = 'icons/obj/objects.dmi'
-	icon_state = "hyronalintank"
+	icon_state = "virusfoodtank"
 	amount_per_transfer_from_this = 10
 	anchored = 1
 	density = 0

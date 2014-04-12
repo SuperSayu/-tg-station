@@ -865,7 +865,7 @@
 			//Blood loss
 			//var/tot_damage = maxHealth-health
 			if(getBruteLoss() >= 50 && prob(15) && !paralysis)
-				adjustHalLoss(rand(0,1))
+				adjustStaminaLoss(rand(0,1))
 				var/turf/pos = get_turf(src)
 				pos.add_blood_floor(src)
 				playsound(pos, 'sound/effects/splat.ogg', 10, 1)
@@ -1137,28 +1137,20 @@
 				switch(hal_screwyhud)
 					if(1)	healths.icon_state = "health0"
 					if(2)	healths.icon_state = "dead"
-					else if(!reagents.has_reagent("morphine"))
-						switch(health - halloss)
-							if(100 to INFINITY)		healths.icon_state = "health10"
-							if(90 to 100)			healths.icon_state = "health9"
-							if(80 to 90)			healths.icon_state = "health8"
-							if(70 to 80)			healths.icon_state = "health7"
-							if(60 to 70)			healths.icon_state = "health6"
-							if(50 to 60)			healths.icon_state = "health5"
-							if(40 to 50)			healths.icon_state = "health4"
-							if(30 to 40)			healths.icon_state = "health3"
-							if(15 to 30)			healths.icon_state = "health2"
-							if(0 to 15)				healths.icon_state = "health1"
-							else					healths.icon_state = "health0"
 					else
-						switch(health - staminaloss)
-							if(100 to INFINITY)		healths.icon_state = "health0"
-							if(80 to 100)			healths.icon_state = "health1"
-							if(60 to 80)			healths.icon_state = "health2"
-							if(40 to 60)			healths.icon_state = "health3"
-							if(20 to 40)			healths.icon_state = "health4"
-							if(0 to 20)				healths.icon_state = "health5"
-							else					healths.icon_state = "health6"
+						if(!reagents.has_reagent("morphine"))
+							switch(health - staminaloss)
+								if(100 to INFINITY)		healths.icon_state = "health10"
+								if(90 to 100)			healths.icon_state = "health9"
+								if(80 to 90)			healths.icon_state = "health8"
+								if(70 to 80)			healths.icon_state = "health7"
+								if(60 to 70)			healths.icon_state = "health6"
+								if(50 to 60)			healths.icon_state = "health5"
+								if(40 to 50)			healths.icon_state = "health4"
+								if(30 to 40)			healths.icon_state = "health3"
+								if(15 to 30)			healths.icon_state = "health2"
+								if(0 to 15)				healths.icon_state = "health1"
+								else					healths.icon_state = "health0"
 
 			if(nutrition_icon)
 				switch(nutrition)
@@ -1276,13 +1268,13 @@
 			// internal bleeding(?)
 			var/obj/item/organ/limb/affecting = get_organ("chest")
 			if(prob(65))
-				apply_damage(1, HALLOSS, affecting)
+				apply_damage(1, STAMINA, affecting)
 		if("head" in broken)
 			//if(prob(5) && stat == CONSCIOUS)
 				//sleeping = 2
 				//adjustBruteLoss(2)
 			if(prob(25))
-				adjustHalLoss(2)
+				adjustStaminaLoss(2)
 		//if(dna && (dna.mutantrace == "slime" || dna.mutantrace == "plant"))
 			// ugly hack to stop slimepeople and plantpeople from breaking their nonexistant bones
 			//broken = list()

@@ -181,7 +181,7 @@
 	if(..())
 		return
 	usr.set_machine(src)
-	
+
 	if("bagvend" in href_list) // bag seeds and dispense
 		var/N = href_list["bagvend"]
 		var/amount = text2num(href_list["amount"])
@@ -324,6 +324,7 @@ obj/machinery/smartfridge/drying_rack/load() //For updating the filled overlay
 /obj/machinery/smartfridge/drinks
 	name = "drink showcase"
 	desc = "A refrigerated storage unit for tasty tasty alcohol."
+	use_power = 0 // so you can get drinks out of it when closed
 /obj/machinery/smartfridge/drinks/accept_check(var/obj/item/O as obj)
 	if(!istype(O,/obj/item/weapon/reagent_containers) || !O.reagents || !O.reagents.reagent_list.len)
 		return 0

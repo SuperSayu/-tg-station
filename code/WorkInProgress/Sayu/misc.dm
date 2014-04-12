@@ -18,8 +18,6 @@
 // -------------------------------------
 //			False walls hide doors
 // -------------------------------------
-/obj/structure/falserwall
-	layer = 3.2
 /obj/structure/falsewall
 	layer = 3.2
 

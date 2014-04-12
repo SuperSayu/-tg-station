@@ -104,5 +104,5 @@
 	new /obj/item/clothing/under/lawyer/blacksuit(src)
 	new /obj/item/clothing/suit/lawyer/blackjacket(src)
 	new /obj/item/clothing/shoes/laceup(src)
-	new /obj/item/clothing/shoes/laceup(src)	if(prob(25))
+	if(prob(25))
 		new /obj/item/clothing/gloves/ring/gold(src)

@@ -41,6 +41,10 @@
 
 
 /obj/machinery/programmable/New()
+	if(!anchored)
+		on = 0
+		unwrenched = 1
+		stat = MAINT
 	..()
 	if(default)
 		default.master = src
@@ -100,9 +104,9 @@
 			for(var/datum/cargoprofile/p in emag_overrides + overrides + profiles)
 				p.master = src
 
-			del C
+			qdel(C)
 		else
-			del O
+			qdel(O)
 
 /obj/machinery/programmable/attack_hand(mob/user as mob)
 	if(stat) // moved, or something else
@@ -155,24 +159,16 @@
 			updateUsrDialog()
 			return
 		if("inlet")
-			indir *= 2 // N S E W
-			if(indir > 8)
-				indir = 1 // W N
-			if(indir == src.outdir)
-				indir *= 2
-				if(indir > 8)
-					indir = 1
+			indir = turn(indir, 90)
+			if(indir == outdir)
+				indir = turn(indir, 90)
 			input = get_step(src,indir) // todo: check for glasswalls / no path to target?
 			updateUsrDialog()
 			return
 		if("outlet")
-			outdir *= 2
-			if(outdir > 8)
-				outdir = 1
+			outdir = turn(outdir, 90)
 			if(outdir == indir)
-				outdir *= 2
-				if(outdir > 8)
-					outdir = 1
+				outdir = turn(outdir, 90)
 			output = get_step(src,outdir) // todo: check for walls / glasswalls / invalid output locations
 			updateUsrDialog()
 			return

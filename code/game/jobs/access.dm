@@ -118,6 +118,7 @@
 	if(!istype(I))
 		return check_access_list(null)
 	return check_access_list(I.GetAccess())
+/obj/proc/check_access_list(var/list/L)
 	//These generations have been moved out of /obj/New() because they were slowing down the creation of objects that never even used the access system.
 	if(!src.req_access)
 		src.req_access = list()

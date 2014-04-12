@@ -147,7 +147,7 @@
 	id = "exotics"
 	blacklist = null
 	whitelist = list(/obj/item/weapon/coin, /obj/item/weapon/spacecash, /obj/item/seeds,
-					/obj/item/stack/sheet/mineral,/obj/item/stack/sheet/wood,/obj/item/stack/sheet/leather)
+					/obj/item/stack/sheet/mineral,/obj/item/stack/sheet/mineral/wood,/obj/item/stack/sheet/leather)
 
 /datum/cargoprofile/organics
 	name = "Organics, chemicals, and Paraphernalia"
@@ -263,7 +263,7 @@
 	name = "Devices & Tools"
 	id = "tools"
 	blacklist = null
-	whitelist = list(/obj/item/device,/obj/item/weapon/card,/obj/item/weapon/cartridge,/obj/item/weapon/cautery,/obj/item/weapon/cell,/obj/item/weapon/circuitboard,
+	whitelist = list(/obj/item/device,/obj/item/weapon/card,/obj/item/weapon/cartridge,/obj/item/weapon/cautery,/obj/item/weapon/stock_parts/cell,/obj/item/weapon/circuitboard,
 					/obj/item/weapon/aiModule,/obj/item/weapon/airalarm_electronics,/obj/item/weapon/airlock_electronics,/obj/item/weapon/circular_saw,
 					/obj/item/weapon/cloaking_device,/obj/item/weapon/crowbar,/obj/item/weapon/disk,/obj/item/weapon/firealarm_electronics,/obj/item/weapon/hand_tele,
 					/obj/item/weapon/hand_labeler,/obj/item/weapon/hemostat,/obj/item/weapon/mop,/obj/item/weapon/locator,/obj/item/weapon/minihoe,
@@ -719,7 +719,7 @@
 		playsound(master.loc, "punch", 25, 1, -1)
 		master.visible_message("\red <B>\The [src] has punched [M]!</B>")
 		if(!master.emagged)
-			M.apply_damage(damage, HALLOSS, affecting, armor_block) // Clean fight
+			M.apply_damage(damage, STAMINA, affecting, armor_block) // Clean fight
 		else
 			M.apply_damage(damage, BRUTE,   affecting, armor_block) // Foul!  Foooul!
 
@@ -737,7 +737,7 @@
 	inlet_reaction(var/atom/W,var/turf/S,var/remaining)
 		//stolen from boxing gloves code
 		var/mob/living/carbon/human/M = W
-		if((M.lying || (M.health - M.halloss < 25))&& !master.emagged)
+		if((M.lying || (M.health - M.staminaloss < 25))&& !master.emagged)
 			M << "\The [src] gives you a break."
 			master.sleep+=5
 			return 0 // Be polite

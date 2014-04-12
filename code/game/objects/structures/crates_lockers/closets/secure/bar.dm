@@ -47,6 +47,7 @@
 		new /obj/item/clothing/under/actorsuit/mime( src )
 		new /obj/item/clothing/mask/gas/mime( src )
 		new /obj/item/clothing/shoes/mime( src )
+		new /obj/item/weapon/bedsheet/mime( src )
 /obj/structure/closet/secure_closet/clown
 	name = "Clown's Closet"
 	req_access = list(access_theatre)
@@ -58,3 +59,4 @@
 		new /obj/item/clothing/under/actorsuit/clown( src )
 		new /obj/item/clothing/mask/gas/clown_hat( src )
 		new /obj/item/clothing/shoes/clown_shoes( src )
+		new /obj/item/weapon/bedsheet/clown( src )

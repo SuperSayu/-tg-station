@@ -39,7 +39,7 @@
 		if("left leg" in broken)
 			src << "\red Pain shoots up your left leg!"
 			var/obj/item/organ/limb/affecting = get_organ("l_leg")
-			apply_damage(rand(0,2), HALLOSS, affecting)
+			apply_damage(rand(0,2), STAMINA, affecting)
 		//	Stun(2)
 			playsound(src, 'sound/weapons/pierce.ogg', 25)
 			last_break = 1
@@ -49,7 +49,7 @@
 		if("right leg" in broken)
 			src << "\red Pain shoots up your right leg!"
 			var/obj/item/organ/limb/affecting = get_organ("r_leg")
-			apply_damage(rand(0,2), HALLOSS, affecting)
+			apply_damage(rand(0,2), STAMINA, affecting)
 		//	Stun(2)
 			playsound(src, 'sound/weapons/pierce.ogg', 25)
 			last_break = 1

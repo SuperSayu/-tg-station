@@ -135,6 +135,8 @@
 
 	cast(mob/caster, list/target)
 		for(var/obj/machinery/door/D in target)
+			if(!unlock_centcom && !(caster.client && caster.client.holder) && istype(D,/obj/machinery/door/airlock/centcom))
+				continue
 			if(istype(D,/obj/machinery/door/airlock))
 				D:locked = 0
 
@@ -171,6 +173,8 @@
 
 	cast(mob/caster, list/target)
 		for(var/obj/machinery/door/D in target)
+			if(!unlock_centcom && !(caster.client && caster.client.holder) && istype(D,/obj/machinery/door/airlock/centcom))
+				continue
 			spawn
 				D.close()
 				if(istype(D,/obj/machinery/door/airlock))

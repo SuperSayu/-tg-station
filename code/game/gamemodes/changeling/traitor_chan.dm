@@ -33,11 +33,11 @@
 	if(!possible_traitors.len || !possible_changelings.len)
 		return 0
 
-	var/num_changelings
+	var/num_changelings = 1
 	if(config.changeling_scaling_coeff)
 		num_changelings = max(1, round((num_players())/(config.changeling_scaling_coeff*2)))
 	else
-		num_changelings = max(1, min(num_players() - 2, changeling_amount))
+		num_changelings = max(1, min(num_players(), changeling_amount))
 
 	for(var/datum/mind/player in possible_changelings)
 		for(var/job in restricted_jobs)//Removing robots from the list

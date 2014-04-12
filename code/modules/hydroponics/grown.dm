@@ -45,8 +45,6 @@
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/New(newloc,potency = 50)
-	if (!isnull(newpotency))
-		potency = newpotency
 	..()
 	src.potency = potency
 	pixel_x = rand(-5, 5)

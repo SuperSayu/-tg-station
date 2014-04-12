@@ -94,7 +94,6 @@
 	name = "spell thrower"
 	icon = 'icons/obj/magic.dmi'
 	icon_state = "3"
-	flags = USEDELAY
 	w_class = 10.0
 	layer = 20
 	castingmode = CAST_RANGED

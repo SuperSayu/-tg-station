@@ -94,7 +94,7 @@
 	origin_tech = "magnets=3;syndicate=4"
 	var/active_power_use = 15
 	var/mob/living/cloaked_user = null
-	var/obj/item/weapon/cell/battery
+	var/obj/item/weapon/stock_parts/cell/battery
 
 	action_button_name = "Activate Cloak"
 

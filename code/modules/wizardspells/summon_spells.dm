@@ -129,10 +129,10 @@
 
 /obj/effect/knowspell/summon/here/portal/cast(var/mob/caster)
 	var/turf/source_turf = get_turf(caster)
-	new /obj/effect/portal{failchance = 0}(source_turf,target_turf, src)
+	new /obj/effect/portal(source_turf,target_turf, src)
 	scatter_sparks(source_turf,6)
 	if(source_turf.z != 2)
-		new /obj/effect/portal{failchance = 0}(target_turf,source_turf,src)
+		new /obj/effect/portal(target_turf,source_turf,src)
 		scatter_sparks(target_turf,12) // that is intentionally a lot
 
 

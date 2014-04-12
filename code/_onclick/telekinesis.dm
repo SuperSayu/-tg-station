@@ -183,3 +183,14 @@ var/const/tk_maxrange = 15
 				var/Z = source:z
 
 */
+/obj/item/clothing/gloves/white/tkglove
+	name = "astral gloves"
+	desc = "As distant as the stars, even when they cover your hands.  Gives a peculiar sensation."
+	item_color = "astral"
+	siemens_coefficient = 0
+	permeability_coefficient = 0.05
+	var/magic_name = null
+	Touch(atom/A, proximity)
+		if(!proximity)
+			A.attack_tk(loc)
+		return 0
