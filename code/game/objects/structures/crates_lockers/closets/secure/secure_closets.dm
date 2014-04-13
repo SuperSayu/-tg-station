@@ -1,6 +1,6 @@
 /obj/structure/closet/secure_closet
 	name = "secure locker"
-	desc = "It's an immobile card-locked storage unit."
+	desc = "It's a card-locked storage unit."
 	icon = 'icons/obj/closet.dmi'
 	icon_state = "secure1"
 	density = 1
@@ -11,6 +11,7 @@
 	icon_opened = "secureopen"
 	var/icon_broken = "securebroken"
 	var/icon_off = "secureoff"
+	var/panel = 0
 	wall_mounted = 0 //never solid (You can always pass over it)
 	health = 200
 
@@ -59,9 +60,64 @@
 		return 1
 	return 0
 
-/obj/structure/closet/secure_closet/attackby(obj/item/weapon/W as obj, mob/user as mob)
-
-	if(!src.opened && src.broken)
+/obj/structure/closet/secure_closet/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/weapon/screwdriver))
+		if(welded = 1)
+			user "<span class='warning'>It's welded shut!</span>"
+			return
+		else
+			src.add_fingerprint(user)
+			panel = !panel
+			// this part is super sloppy but idk
+			if(!panel) // if the panel is now closed
+				if(!broken)
+					overlays -= "hacking"
+				else
+					overlays -= "hackingsparks"
+				user << "<span class='notice'>You close the locking mechanism's panel on the locker.</span>"
+			else
+				if(!broken)
+					overlays += "hacking"
+				else
+					overlays += "hackingsparks"
+				user << "<span class='notice'>You open the locking mechanism's panel on the locker.</span>"
+			return
+	else if(src.panel && istype(W, /obj/item/device/multitool))
+		src.add_fingerprint(user)
+		playsound(src.loc, 'sound/machines/twobeep.ogg', 150, 1)
+		if(!broken)
+			user << "<span class='danger'>You begin hacking the locker open. (This action will take 20 seconds to complete.)</span>"
+			if(do_after(user,200) && panel) // makes sure that the user stays in place and does not close the panel
+				overlays -= "hacking"
+				overlays += "hackingsparks"
+				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+				s.set_up(5, 1, src)
+				s.start()
+				broken = 1
+				locked = 0
+				desc = "It appears to be broken."
+				for(var/mob/O in viewers(user, 3))
+					O.show_message("<span class='warning'>The locker has been broken by [user] with a multitool!</span>", 1, "You hear a faint electrical spark.", 2)
+				icon_state = icon_off
+		else
+			user << "<span class='danger'>You begin repairing the broken locker. (This action will take 30 seconds to complete.)</span>"
+			if(do_after(user,300) && panel) // longer than hacking it open for reasons
+				overlays -= "hackingsparks"
+				overlays += "hacking"
+				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+				s.set_up(5, 1, src)
+				s.start()
+				broken = 0
+				locked = 0	// the locker stays unlocked after it's been fixed, which should be noticable to anyone who's paying attention (read: nobody at all)
+				desc = "It's a card-locked storage unit."
+				for(var/mob/O in viewers(user, 3))
+					O.show_message("<span class='warning'>The locker has been repaired by [user] with a multitool!</span>", 1, "You hear a faint electrical spark.", 2)
+				icon_state = icon_closed
+		return
+	else if(src.panel)
+		user << "<span class='notice'>You cannot do that while the locker's panel is open!</span>"
+		return
+	else if(!src.opened && src.broken)
 		user << "<span class='notice'>The locker appears to be broken.</span>"
 		return
 	else if((istype(W, /obj/item/weapon/card/emag)||istype(W, /obj/item/weapon/melee/energy/blade)) && !src.broken)
@@ -101,6 +157,9 @@
 /obj/structure/closet/secure_closet/attack_hand(mob/user as mob)
 	src.add_fingerprint(user)
 
+	if(panel)
+		user << "<span class='notice'>You cannot do that while the locker's panel is open!</span>"
+		return
 	if(!src.toggle())
 		return src.attackby(null, user)
 
@@ -136,5 +195,10 @@
 			icon_state = icon_closed
 		if(welded)
 			overlays += "welded"
+		if(panel)
+			if(broken)
+				overlays += "hackingsparks"
+			else
+				overlays += "hacking"
 	else
 		icon_state = icon_opened
