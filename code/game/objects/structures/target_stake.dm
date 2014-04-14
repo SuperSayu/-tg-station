@@ -59,3 +59,6 @@
 	buckle_mob(M, user)
 	buckled_mob.dir = 2
 	return
+
+/obj/structure/stool/bed/chair/target_stake/rotate()
+	return
