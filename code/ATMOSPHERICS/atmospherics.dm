@@ -17,7 +17,7 @@ obj/machinery/atmospherics
 	power_channel = ENVIRON
 	var/nodealert = 0
 	var/can_unwrench = 0
-
+	var/clong = 0
 
 
 obj/machinery/atmospherics/var/initialize_directions = 0

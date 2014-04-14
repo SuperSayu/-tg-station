@@ -12,9 +12,13 @@
 	if(user.stat || !isturf(src.loc))
 		return
 	if(!(mdir&initialize_directions))
-		visible_message(pick("clang","CLANG","Clang","clong","CLONG","Clong","tink","tak","tok","DOK","DAK"))
-		user << "donk" // find the user and put a donk on it
-		user.Stun(1)
+		if(user.stat)
+			return
+		if(!clong)
+			playsound(src.loc, 'sound/effects/clang.ogg', 50, 0, 0)
+			clong = 1
+			sleep(30)
+			clong = 0
 		return
 	var/turf/T = get_step(loc,mdir)
 	var/fromdir = turn(mdir,180)
