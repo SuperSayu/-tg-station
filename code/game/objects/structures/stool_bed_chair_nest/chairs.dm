@@ -55,6 +55,9 @@
 	set category = "Object"
 	set src in oview(1)
 
+	if(istype(src, /obj/structure/stool/bed/chair/target_stake))
+		return
+
 	if(config.ghost_interaction)
 		src.dir = turn(src.dir, 90)
 		handle_rotation()
