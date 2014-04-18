@@ -117,9 +117,33 @@
 
 		send_byjax(caster,"[name].browser","targets",targets_window())
 
+
+	proc/describe_range()
+		var/list/categories = list("living","dead","ghostly","braindead", "observing")
+		var/list/cat_select = list(pick_living,pick_dead,pick_ghost,pick_clientless, pick_eye_holders)
+		var/list/target_types = list("disembodied brains","AI","cyborgs","personal AI", "animals", "monkeys", "humans", "aliens", "slimes")
+		var/list/selected = list(pick_brain,pick_ai,pick_robot,pick_pai, pick_animal,pick_monkey,pick_human,pick_xeno,pick_slime)
+		var/i = 1
+		while(i<=cat_select.len)
+			if(!cat_select[i])
+				cat_select.Cut(i,i+1)
+				categories.Cut(i,i+1)
+				continue
+			i++
+		i=1
+		while(i<=selected.len)
+			if(!selected[i])
+				selected.Cut(i,i+1)
+				target_types.Cut(i,i+1)
+				continue
+			i++
+
+		// living, dead, or braindead animals, monkeys, and humans
+		return "Targets [english_list(categories, final_comma_text = ",", and_text = " or ")] [english_list(target_types)] within [range] squares."
+
 	prepare(mob/caster as mob)
 		processing_objects |= src
-		caster << browse("<script language='javascript' type='text/javascript'>[js_byjax]</script><center>[src]<br>[desc]</center><hr><div id='targets'></div>","window=[name]")
+		caster << browse("<script language='javascript' type='text/javascript'>[js_byjax]</script><center>[src]<br>[desc]<br>[describe_range()]</center><hr><div id='targets'></div>","window=[name]")
 		process()
 
 	Topic(href,list/href_list)
@@ -196,27 +220,26 @@
 	pick_monkey = 1
 	pick_human = 1
 	pick_slime = 1
-	pick_brain = 1
 
 	castingmode = CAST_SPELL|CAST_MELEE //  too powerful for ranged casting
 
 	cast(mob/caster, mob/living/target) // todo flashy flash flash
 		check_dna_integrity(target)
-		if(!istype(target,/mob/living/carbon/brain)) // not brain, becomes a spooky scary skeleton
-
+		if(target.stat == 2)
 			if(istype(target,/mob/living/carbon/human))
 				var/mob/living/carbon/human/H = target
-
-				if(H.stat == 2 && H.dna && H.dna.mutantrace != "skeleton")
-					target.revive()
+				if(H.dna && H.dna.mutantrace != "skeleton")
 					H.dna.mutantrace = "skeleton"
 					updateappearance(H)
-					inspire_loyalty(caster, H)
+			inspire_loyalty(caster, target)
+
+		target.revive()
+
 
 //No rewards for EI NATing people! And WizardBorg should be a spell of its own*/
 
 	proc/inspire_loyalty(mob/caster, mob/living/target)
-		if(!target.mind)
+		if(!target.mind || !caster.mind)
 			return
 
 		for(var/obj/item/weapon/implant/loyalty/LI in target.contents)
@@ -231,8 +254,8 @@
 				return
 
 		var/datum/objective/protect/P = new
-		P.target = caster
-		P.owner = target
+		P.target = caster.mind
+		P.owner = target.mind
 		P.explanation_text = "[caster] spared your life; make sure they survive."
 		target.mind.objectives += P
 
@@ -444,7 +467,7 @@
 /obj/effect/knowspell/target/mutate
 	pick_human = 1
 	pick_living = 1
-	pick_dead = 1
+	pick_clientless = 1
 
 	wand_state = "polywand"
 	staff_state = "animation"
