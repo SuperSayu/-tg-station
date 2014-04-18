@@ -77,7 +77,7 @@
 	corgi
 		Ian/renamable = 0
 		Lisa/renamable = 0
-		puppy/sgt_pepper/renamable = 0
+		puppy/smart/sgt_pepper/renamable = 0
 	crab/Coffee/renamable = 0
 	lizard/professor/renamable = 0
 	mouse/Tom/renamable = 0

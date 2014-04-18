@@ -101,10 +101,10 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 					w = "wands "
 				if(castingmode&CAST_RANGED)
 					g = "gloves "
-					b = "blades "
 					w = "wands "
 					s = "staves "
 				if(castingmode&CAST_SELF)
+					s = "staves "
 					o = "orbs "
 				descblock += "<br><b>Enchantable:</b> [g][b][w][s][o]"
 			descblock += "<br><i>[desc]</i><br>"

@@ -157,7 +157,7 @@
 			if(reagents.has_reagent("lexorin")) return
 
 		if(!loc) return //probably ought to make a proper fix for this, but :effort: --NeoFite
-
+		if(istype(loc, /obj/machinery/atmospherics)) return
 		var/datum/gas_mixture/environment = loc.return_air()
 		var/datum/gas_mixture/breath
 		if(health <= config.health_threshold_crit)
@@ -325,6 +325,8 @@
 	proc/handle_environment(datum/gas_mixture/environment)
 		if(!environment)
 			return
+		if(istype(loc, /obj/machinery/atmospherics/pipe)) return
+
 		var/environment_heat_capacity = environment.heat_capacity()
 		if(istype(get_turf(src), /turf/space))
 			var/turf/heat_turf = get_turf(src)

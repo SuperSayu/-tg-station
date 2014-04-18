@@ -8,7 +8,7 @@
 	name = "Seed bag"
 	desc = "A biodegradable seed bag.  Fairly flimsy, but all natural?"
 	var/obj/item/seeds/seedtype = null
-	can_hold = list("/obj/item/seeds") //When the bag has a kind of seed, this gets narrowed down to only that.
+	can_hold = list(/obj/item/seeds) //When the bag has a kind of seed, this gets narrowed down to only that.
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "evidence"
 
@@ -26,7 +26,7 @@
 			icon_state = "evidenceobj"
 			overlays += image('icons/obj/seeds.dmi', icon_state=S.icon_state)
 			seedtype = S.type
-			can_hold = list("[S.type]")
+			can_hold = list(S.type)
 			name = "Seed Bag ([S.plantname])"
 			allow_quick_gather = 1
 
@@ -35,7 +35,7 @@
 			icon_state = "evidence"
 			name = "Seed Bag"
 			seedtype = null
-			can_hold = list("/obj/item/seeds")
+			can_hold = list(/obj/item/seeds)
 			allow_quick_gather = 0
 
 	attack_self(mob/user as mob)

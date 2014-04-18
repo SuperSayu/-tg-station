@@ -145,26 +145,26 @@ var/global/list/autolathe_recipes_hidden = list( \
 			attack_hand(user)
 			return 1
 
-		if(istype(O,/obj/item/weapon/storage/bag) || istype(O,/obj/item/weapon/storage/box))
-			var/obj/item/weapon/storage/S = O
-			var/accepted = 0
-			var/list/reinsert = list()
-			for(var/obj/item/I in S)
-				S.remove_from_storage(I,loc)
-				accepted += recycle(I,1)
-				if(I) // not accepted)
-					reinsert += I
-			for(var/obj/item/I in reinsert)
-				S.handle_item_insertion(I)
-			if(accepted)
-				user << "You insert [accepted] sheet\s into [src]."
-			else
-				usr << "There is nothing in [S] to put in [src]!"
-			return
+	if(istype(O,/obj/item/weapon/storage/bag) || istype(O,/obj/item/weapon/storage/box))
+		var/obj/item/weapon/storage/S = O
+		var/accepted = 0
+		var/list/reinsert = list()
+		for(var/obj/item/I in S)
+			S.remove_from_storage(I,loc)
+			accepted += recycle(I,1)
+			if(I) // not accepted)
+				reinsert += I
+		for(var/obj/item/I in reinsert)
+			S.handle_item_insertion(I)
+		if(accepted)
+			user << "You insert [accepted] sheet\s into [src]."
+		else
+			usr << "There is nothing in [S] to put in [src]!"
+		return
 
-		if(recycle(O,0)) // It's magic, y'knooooow
-			src.updateUsrDialog()
-		return 1
+	if(recycle(O,0)) // It's magic, y'knooooow
+		src.updateUsrDialog()
+	return 1
 
 /obj/machinery/autolathe/proc/recycle(var/obj/item/O, var/silent = 0)
 	if (src.m_amount + O.m_amt > max_m_amount)

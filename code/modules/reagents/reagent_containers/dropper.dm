@@ -12,7 +12,7 @@
 		if(!proximity) return
 		if(!target.reagents) return
 
-		if(istype(target,/mob/living/simple_animal/corgi/puppy/sgt_pepper) && user.a_intent == "help")
+		if(istype(target,/mob/living/simple_animal/corgi/puppy/smart) && user.a_intent == "help")
 			return //sgt. pepper can do a sniff test on reagent containers
 
 		if(filled)

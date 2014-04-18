@@ -13,6 +13,7 @@
 	var/brute_dam_coeff = 1.0
 	var/open = 0//Maint panel
 	var/locked = 1
+	flags = CONDUCT
 	//var/emagged = 0 //Urist: Moving that var to the general /bot tree as it's used by most bots
 
 

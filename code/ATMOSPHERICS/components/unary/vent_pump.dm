@@ -321,8 +321,9 @@
 	..()
 
 /*
-	Alt-click to ventcrawl
-*/
+	Alt-click to ventcrawl - oldstyle
+	see mob living ventcrawl file
+
 /obj/machinery/atmospherics/unary/vent_pump/AltClick(var/mob/living/L)
 	if(!L.ventcrawler || !isliving(L) || !Adjacent(L))
 		return
@@ -389,3 +390,4 @@
 	var/area/new_area = get_area(L.loc)
 	if(new_area)
 		new_area.Entered(L)
+*/

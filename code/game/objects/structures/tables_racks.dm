@@ -777,6 +777,7 @@ Destroy type values:
 	if(isrobot(user))
 		return
 	user.drop_item(src)
+	W.loc = loc
 	return 1
 
 /obj/structure/rack/meteorhit(obj/O as obj)

@@ -228,13 +228,13 @@
 
 /obj/item/weapon/magic/staff
 	name = "magic staff"
-	desc = "For casting spells at a distant target."
+	desc = "For casting spells, especially at a distant target."
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "staff"
 	noun = "staff"
 	force = 3
 	w_class = 4
-	castingmode = CAST_RANGED
+	castingmode = CAST_RANGED | CAST_SELF
 	slot_flags = SLOT_BACK
 
 	update_icon()
@@ -344,9 +344,11 @@
 			del M
 	describe()
 		if(!contents.len)
-			return null
+			return null // do not report unused magic items, this falls into that category
 		if(magic_name)
-			. = "\icon[src] [magic_name] (spellbook):<br>"
+			. = "\icon[src] [magic_name] (spellbook, [contents.len] scrolls)):<br>"
+		else
+			. = "\icon[src] [name] ([contents.len] scrolls):<br>"
 		for(var/obj/effect/knowspell/KS in src)
 			. += "\t * [KS]<br>"
 		return

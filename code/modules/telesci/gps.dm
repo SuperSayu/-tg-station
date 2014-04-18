@@ -10,6 +10,7 @@ var/list/GPS_list = list()
 	var/gpstag = "COM0"
 	var/emped = 0
 	var/turf/locked_location
+	flags = CONDUCT
 
 /obj/item/device/gps/New()
 	..()

@@ -129,10 +129,10 @@
 
 /obj/effect/knowspell/summon/here/portal/cast(var/mob/caster)
 	var/turf/source_turf = get_turf(caster)
-	new /obj/effect/portal(source_turf,target_turf, src)
+	new /obj/effect/portal{auto_tele=0}(source_turf,target_turf, src)
 	scatter_sparks(source_turf,6)
 	if(source_turf.z != 2)
-		new /obj/effect/portal(target_turf,source_turf,src)
+		new /obj/effect/portal{auto_tele=0}(target_turf,source_turf,src)
 		scatter_sparks(target_turf,12) // that is intentionally a lot
 
 
@@ -225,7 +225,7 @@
 /obj/effect/knowspell/summon/target/banana/cast(var/mob/caster, var/atom/target)
 	var/turf/T = get_turf(target)
 	if(T)
-		new /obj/item/weapon/bananapeel/wizard(T)
+		new /obj/item/weapon/grown/bananapeel/wizard(T)
 		scatter_sparks(T)
 		return 1
 	return 0
@@ -447,19 +447,10 @@
 	spawns_possible = list(
 		/mob/living/simple_animal/corgi, /mob/living/simple_animal/corgi/puppy, /mob/living/simple_animal/cat, /mob/living/simple_animal/chicken,
 		/obj/item/weapon/ore = list("name" = "pet rock"),
-		/mob/living/simple_animal/corgi/puppy/sgt_pepper = list(
-			"renamable" = 1, "name" = "corgi puppy", "real_name" = "corgi", "icon_state" = "puppy", "icon_living" = "puppy", "icon_dead" = "puppy_dead")
+		/mob/living/simple_animal/corgi/puppy/smart
 		)
 
 /obj/effect/knowspell/summon/world/puppies/summon_effect(var/atom/movable/AM)
-	if(istype(AM,/mob/living/simple_animal/corgi/puppy/sgt_pepper))
-		var/mob/living/simple_animal/SA = AM // SAAM, GOOOOD TO SEEEEE YOOOOU
-		SA.renamable = 1
-		SA.name = "corgi puppy"
-		SA.real_name="corgi"
-		SA.icon_state = "puppy"
-		SA.icon_living = "puppy"
-		SA.icon_dead = "puppy_dead"
 	step_rand(AM)
 	return 1
 
@@ -481,7 +472,7 @@
 	incantation = "EI HONK"
 	incant_volume = 2
 
-	spawns_possible = list(/obj/item/weapon/bananapeel/wizard, /obj/item/weapon/bananapeel/wizard, /obj/item/weapon/bananapeel/wizard, /obj/item/weapon/bananapeel, /obj/item/weapon/soap)
+	spawns_possible = list(/obj/item/weapon/grown/bananapeel/wizard, /obj/item/weapon/grown/bananapeel/wizard, /obj/item/weapon/grown/bananapeel/wizard, /obj/item/weapon/grown/bananapeel, /obj/item/weapon/soap)
 
 /obj/effect/knowspell/summon/world/bananas/summon_effect(var/obj/item/I)
 	for(var/mob/living/M in I.loc)

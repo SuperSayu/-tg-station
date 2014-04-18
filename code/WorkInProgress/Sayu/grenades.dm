@@ -342,7 +342,10 @@
 	payload = /obj/item/weapon/reagent_containers/food/drinks/bottle/random_drink
 /obj/item/weapon/grenade/clusterbuster/honk
 	name = "Mega Honk Grenade"
-	payload = /obj/item/weapon/bananapeel
+	payload = /obj/item/weapon/grown/bananapeel
+/obj/item/weapon/grenade/clusterbuster/magichonk
+	name = "Magi-Honk Grenade"
+	payload = /obj/item/weapon/grown/bananapeel/wizard
 /obj/item/weapon/grenade/clusterbuster/xmas
 	name = "Christmas Miracle"
 	payload = /obj/item/weapon/a_gift

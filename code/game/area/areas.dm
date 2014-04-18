@@ -275,7 +275,7 @@
 			sound = pick('sound/ambience/ambicha1.ogg','sound/ambience/ambicha2.ogg','sound/ambience/ambicha3.ogg','sound/ambience/ambicha4.ogg')
 		else if(istype(src, /area/medical/morgue))
 			sound = pick('sound/ambience/ambimo1.ogg','sound/ambience/ambimo2.ogg','sound/ambience/title2.ogg')
-		else if(type == /area)
+		else if(type == /area/space)
 			sound = pick('sound/ambience/ambispace.ogg','sound/ambience/title2.ogg',)
 		else if(istype(src, /area/engine))
 			sound = pick('sound/ambience/ambisin1.ogg','sound/ambience/ambisin2.ogg','sound/ambience/ambisin3.ogg','sound/ambience/ambisin4.ogg')

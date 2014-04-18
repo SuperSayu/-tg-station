@@ -18,20 +18,20 @@
 		if(prob(33))
 			step_rand(src)
 
-/obj/item/weapon/bananapeel/wizard
+/obj/item/weapon/grown/bananapeel/wizard
 	name = "magical banana peel"
 	desc = "Far superior to the genetically enhanced version"
 	var/walk_delay = 2
 
-/obj/item/weapon/bananapeel/wizard/New()
+/obj/item/weapon/grown/bananapeel/wizard/New()
 	..()
 	walk_delay = rand(0,5)
 	walk_rand(src,walk_delay)
 	spawn(rand(3,6)*100)
 		if(src)
-			del src
+			qdel(src)
 
-/obj/item/weapon/bananapeel/wizard/Crossed(AM as mob|obj)
+/obj/item/weapon/grown/bananapeel/wizard/Crossed(AM as mob|obj)
 	if (istype(AM, /mob/living/carbon))
 		var/mob/M =	AM
 
@@ -83,14 +83,15 @@
 			if(uses <= 0 || cleaned > 3) break
 			cleaned++
 			uses-=usesize
-			del C
+			qdel(C)
 		if(cleaned > 0)
 			usr << "<span class='notice'>You clean \the [target.name].</span>"
 		if(uses <= 0)
 			user << "<span class='notice'>That's the last of this bar of soap.</span>"
-			del(src)
+			qdel(src)
 	else if(istype(target,/obj/effect/decal/cleanable))
 		user << "<span class='notice'>You scrub \the [target.name] out.</span>"
+		qdel(target)
 		uses-=usesize
 		if(src.uses<=0)
 			user << "<span class='notice'>That's the last of this bar of soap.</span>"
@@ -114,7 +115,7 @@
 		uses-=usesize
 		if(uses<=0)
 			user << "<span class='notice'>That's the last of this bar of soap.</span>"
-			del(src)
+			qdel(src)
 		return
 	//..()
 	return
@@ -130,7 +131,7 @@
 		//Split the soap in two.  Other bladed implements could do this, but it would be pretty awkward.  That's my excuse...
 		if(uses <= 5)
 			user << "You try to split the soap in twain, but end up destroying it."
-			del src
+			qdel(src)
 		else
 			user << "You split the bar of soap down the middle."
 			var/newuses = round(uses/2) - 1

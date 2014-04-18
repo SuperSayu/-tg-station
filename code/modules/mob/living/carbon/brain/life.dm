@@ -21,8 +21,7 @@
 	blinded = null
 
 	//Handle temperature/pressure differences between body and environment
-	if(environment)	// More error checking
-		handle_environment(environment)
+	handle_environment(environment)
 
 	//Status updates, death etc.
 	handle_regular_status_updates()
@@ -71,6 +70,7 @@
 		if(!environment)
 			return
 		var/environment_heat_capacity = environment.heat_capacity()
+		if(istype(loc, /obj/machinery/atmospherics/pipe)) return
 		if(istype(get_turf(src), /turf/space))
 			var/turf/heat_turf = get_turf(src)
 			environment_heat_capacity = heat_turf.heat_capacity

@@ -111,6 +111,7 @@
 	origin_tech = "bluespace=1;syndicate=7"
 	w_class = 2
 	var/droptype = /obj/machinery/singularity_beacon/syndicate
+	flags = CONDUCT
 
 
 /obj/item/device/sbeacondrop/attack_self(mob/user as mob)

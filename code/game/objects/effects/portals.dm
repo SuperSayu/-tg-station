@@ -8,6 +8,7 @@
 	var/obj/item/target = null
 	var/creator = null
 	anchored = 1.0
+	var/auto_tele = 1
 
 /obj/effect/portal/Bumped(mob/M as mob|obj)
 	src.teleport(M)
@@ -20,8 +21,9 @@
 	src.loc = loc
 	src.target = target
 	src.creator = creator
-	for(var/mob/M in src.loc)
-		src.teleport(M)
+	if(auto_tele)
+		for(var/mob/M in src.loc)
+			src.teleport(M)
 	if(lifespan > 0)
 		spawn(lifespan)
 			qdel(src)

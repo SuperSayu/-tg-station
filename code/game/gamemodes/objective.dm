@@ -255,10 +255,6 @@ datum/objective/nuclear
 
 
 var/global/list/possible_items = list()
-var/global/list/traitor_steals = list()
-var/global/list/changeling_steals = list()
-var/global/list/wizard_steals = list()
-var/global/list/ninja_steals = list()
 datum/objective/steal
 	var/datum/objective_item/targetinfo = null //Save the chosen item datum so we can access it later.
 	var/obj/item/steal_target = null //Needed for custom objectives (they're just items, not datums).
@@ -268,40 +264,27 @@ datum/objective/steal/New()
 	..()
 	if(!possible_items.len)//Only need to fill the list when it's needed.
 		init_subtypes(/datum/objective_item,possible_items)
-		for(var/datum/objective_item/entry in possible_items)
-			if(entry.antag_types.len == 4)
-				traitor_steals += entry
-				changeling_steals += entry
-				wizard_steals += entry
-				ninja_steals += entry
-				continue
-			// else
-			for(var/A in entry.antag_types)
-				switch(A)
-					if("Traitor")
-						traitor_steals += entry
-					if("Changeling")
-						changeling_steals += entry
-					if("Wizard")
-						wizard_steals += entry
-					if("Ninja")
-						ninja_steals += entry
 
-
+// this is remarkably inefficient but it should get everything
 datum/objective/steal/find_target()
 	if(!owner)
 		return set_target(pick(possible_items))
-	switch(owner.special_role)
-		if("traitor")
-			return set_target(pick(traitor_steals))
-		if("Changeling")
-			return set_target(pick(changeling_steals))
-		if("Wizard")
-			return set_target(pick(wizard_steals))
-		if("Ninja")
-			return set_target(pick(ninja_steals))
-		else
-			return set_target(pick(possible_items))
+	var/list/loot = possible_items.Copy()
+	for(var/i=1; i<loot.len; i++)
+		var/datum/objective_item/item = loot[i]
+		if(!(owner.special_role in item.antag_types))
+			loot.Cut(i,i+1)
+			continue
+		if(owner.assigned_role in item.excludefromjob)
+			loot.Cut(i,i+1)
+			continue
+		i++
+	var/datum/objective_item/item = pick(loot)
+	var/trial_limit = 5
+	while(--trial_limit && item.find_duplicate(owner) && loot.len)
+		item = pick(loot)
+	return set_target(item)
+
 
 datum/objective/steal/proc/set_target(var/datum/objective_item/item)
 	targetinfo = item.add_objective() // A few steal item datums need copies instead of working on the global copy

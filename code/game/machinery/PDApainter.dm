@@ -63,7 +63,7 @@
 	if(storedpda)
 		var/obj/item/device/pda/P
 		P = input(user, "Select your color!", "PDA Painting") as null|anything in colorlist
-		if(!P)
+		if(!P || !storedpda)
 			return
 		if(!in_range(src, user))
 			return

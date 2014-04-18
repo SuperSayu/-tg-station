@@ -16,6 +16,7 @@
 	desc = "Does card things."
 	icon = 'icons/obj/card.dmi'
 	w_class = 1.0
+	flags = CONDUCT
 
 	var/list/files = list(  )
 

@@ -75,7 +75,7 @@
 	return 0
 
 /obj/machinery/atmospherics/unary/cryo_cell/relaymove(var/mob/user)
-	..()
+//	..()
 	open_machine()
 
 /obj/machinery/atmospherics/unary/cryo_cell/container_resist()

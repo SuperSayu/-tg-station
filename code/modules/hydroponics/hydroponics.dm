@@ -816,7 +816,7 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
 /obj/item/seeds/proc/getYield()
 	var/obj/machinery/hydroponics/parent = loc
-	if (parent.yieldmod == 0)
+	if (!istype(parent) || parent.yieldmod == 0)
 		return min(yield, 1)//1 if above zero, 0 otherwise
 	return (yield * parent.yieldmod)
 

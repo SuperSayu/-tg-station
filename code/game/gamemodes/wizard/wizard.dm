@@ -308,6 +308,7 @@
 			var/obj/item/weapon/magic/M = artifacts_used[entry]
 			if(!M)
 				text += " (destroyed)"
+				continue
 			else if(istype(M) && !M.spell)
 				text += " (dispelled)"
 			else

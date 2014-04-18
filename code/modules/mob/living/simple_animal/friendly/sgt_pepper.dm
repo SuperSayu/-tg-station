@@ -1,23 +1,24 @@
-/mob/living/simple_animal/corgi/puppy/sgt_pepper
+/mob/living/simple_animal/corgi/puppy/smart/sgt_pepper
 	name = "Sgt. Pepper"
 	real_name = "Sgt. Pepper"
-	gender = "female"
 	desc = "The ruffest, tuffest, most vigilant puppy on the station."
 	icon_state = "sgt_pepper"
 	icon_living = "sgt_pepper"
 	icon_dead = "sgt_pepper_dead"
+/mob/living/simple_animal/corgi/puppy/smart
+	gender = "female" // the smarter of the two genders
 	response_help  = "pets"
 	response_disarm = "bops"
 	response_harm   = "kicks"
 
 	// If you give her an item to sniff, she will respond with one of these
-	var/global/list/smell_approved_emotes = list("She seems okay with it.", "She looks hungry.", "She seems to like it.", "She's interested!")
-	var/global/list/smell_neutral_emotes = list("She seems bemused.","She seems okay with it.", "She doesn't seem to care.")
-	var/global/list/smell_offensive_emotes = list("She seems bemused.","She seems agitated!", "She doesn't seem to like it.", "She looks bothered!")
+	var/list/smell_approved_emotes = list("She seems okay with it.", "She looks hungry.", "She seems to like it.", "She's interested!")
+	var/list/smell_neutral_emotes = list("She seems bemused.","She seems okay with it.", "She doesn't seem to care.")
+	var/list/smell_offensive_emotes = list("She seems bemused.","She seems agitated!", "She doesn't seem to like it.", "She looks bothered!")
 
 	// You have caught her attention
-	var/global/list/friendly_emotes = list("follows _T and wags her tail hopefully.","looks at _T with bright eyes.","arfs pleasantly at _T!")
-	var/global/list/aggressor_emotes = list("barks madly at _T!","glares stoicly at _T!","chases _T, yapping incessantly!")
+	var/list/friendly_emotes = list("follows _T and wags her tail hopefully.","looks at _T with bright eyes.","arfs pleasantly at _T!")
+	var/list/aggressor_emotes = list("barks madly at _T!","glares stoicly at _T!","chases _T, yapping incessantly!")
 
 	// Stores known mobs
 	var/list/dislike = list()
@@ -28,7 +29,7 @@
 	var/turns_since_scan = 0
 
 	// Passes the sniff test
-	var/global/list/smell_approved = list(
+	var/list/smell_approved = list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat, /obj/item/weapon/reagent_containers/food/snacks/meat/monkey,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh, /obj/item/weapon/reagent_containers/food/snacks/donut,
 		/obj/item/weapon/reagent_containers/food/snacks/donut/normal, /obj/item/weapon/reagent_containers/food/snacks/donut/jelly,
@@ -37,7 +38,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/sosjerky)
 
 	// Fails the sniff test
-	var/global/list/smell_offensive = list(
+	var/list/smell_offensive = list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat/human, /obj/item/weapon/reagent_containers/food/snacks/meat/corgi,
 		/obj/item/weapon/reagent_containers/food/snacks/badrecipe, /obj/item/weapon/reagent_containers/food/snacks/burger/clown,
 		/obj/item/weapon/reagent_containers/food/snacks/xenomeat, /obj/item/weapon/reagent_containers/food/snacks/xenomeatbreadslice,
@@ -45,7 +46,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/burger/brain,/obj/item/weapon/reagent_containers/food/snacks/spesslaw) // that's offensive to the legal system, sir
 
 	// Also fails the sniff test
-	var/global/list/nasty_reagents = list("mutationtoxin","amutationtoxin","toxin","amatoxin","mutagen","plasma","slimejelly",
+	var/list/nasty_reagents = list("mutationtoxin","amutationtoxin","toxin","amatoxin","mutagen","plasma","slimejelly",
 		"carpotoxin","mindbreaker","chloralhydrate","sacid","pacid")
 
 

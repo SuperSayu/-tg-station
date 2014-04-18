@@ -227,7 +227,7 @@
 
 		if(reagents.has_reagent("lexorin")) return
 		if("chest" in broken && prob(50)) return
-		if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell)) return
+		if(istype(loc, /obj/machinery/atmospherics)) return
 
 		var/datum/gas_mixture/environment = loc.return_air()
 		var/datum/gas_mixture/breath
@@ -445,7 +445,7 @@
 	proc/handle_environment(datum/gas_mixture/environment)
 		if(!environment)
 			return
-
+		if(istype(loc, /obj/machinery/atmospherics/pipe)) return
 		var/loc_temp = get_temperature(environment)
 		//world << "Loc temp: [loc_temp] - Body temp: [bodytemperature] - Fireloss: [getFireLoss()] - Thermal protection: [get_thermal_protection()] - Fire protection: [thermal_protection + add_fire_protection(loc_temp)] - Heat capacity: [environment_heat_capacity] - Location: [loc] - src: [src]"
 

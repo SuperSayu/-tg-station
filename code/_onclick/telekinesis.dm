@@ -85,8 +85,10 @@ var/const/tk_maxrange = 15
 			qdel(src)
 			return
 		if(!(TK in host.mutations))
-			qdel(src)
-			return
+			var/mob/living/carbon/human/H = user
+			if(!istype(H) || !H.gloves || !istype(H.gloves, /obj/item/clothing/gloves/white/tkglove))
+				del(src)
+				return
 		if(isobj(target) && !isturf(target.loc))
 			return
 
