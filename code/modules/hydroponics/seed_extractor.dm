@@ -16,7 +16,7 @@
 			if(!bag)
 				bag = new/obj/item/weapon/storage/bag/seeds(O.loc)
 		while(t_amount < t_max)
-			var/obj/item/seeds/t_prod = new F.seed(O.loc)
+			var/obj/item/seeds/t_prod = new F.seed(O.loc, O)
 			t_prod.lifespan = F.lifespan
 			t_prod.endurance = F.endurance
 			t_prod.maturation = F.maturation
@@ -43,7 +43,7 @@
 			if(!bag)
 				bag = new/obj/item/weapon/storage/bag/seeds(O.loc)
 		while(t_amount < t_max)
-			var/obj/item/seeds/t_prod = new F.seed(O.loc)
+			var/obj/item/seeds/t_prod = new F.seed(F.loc,F)
 			t_prod.lifespan = F.lifespan
 			t_prod.endurance = F.endurance
 			t_prod.maturation = F.maturation
@@ -74,7 +74,7 @@
 obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(isrobot(user))
 		return
-	
+
 	if (istype(O,/obj/item/weapon/storage/bag/plants))
 		var/obj/item/weapon/storage/P = O
 		var/loaded = 0
@@ -124,9 +124,9 @@ datum/seed_pile/New(var/name, var/life, var/endur, var/matur, var/prod, var/yie,
 obj/machinery/seed_extractor/interact(mob/user as mob)
 	if (stat)
 		return 0
-	
+
 	var/dat = "<b>Stored seeds:</b><br>"
-	
+
 	if (contents.len == 0)
 		dat += "<font color='red'>No seeds</font>"
 	else

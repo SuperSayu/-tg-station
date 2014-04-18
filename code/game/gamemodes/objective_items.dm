@@ -57,8 +57,8 @@ datum/objective_item/steal/jetpack
 	antag_types = list("traitor","Changeling","Wizard")
 
 datum/objective_item/steal/magboots
-	name = "a pair of magboots"
-	targetitem =  /obj/item/clothing/shoes/magboots
+	name = "the chief engineer's advanced magnetic boots"
+	targetitem =  /obj/item/clothing/shoes/magboots/advance
 	difficulty = 5
 	excludefromjob = list("Chief Engineer")
 	antag_types = list("traitor","Space Ninja")
@@ -424,4 +424,3 @@ datum/objective_item/stack/uranium
 	name = "25 refined uranium bars"
 	targetitem = /obj/item/stack/sheet/mineral/uranium
 	difficulty = 10
-

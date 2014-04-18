@@ -824,12 +824,14 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	var/obj/machinery/hydroponics/parent = loc //for ease of access
 	if(!istype(parent)) parent = null
 	var/t_amount = 0
+	var/list/result = list()
 	var/dest
 	if(user) dest = user.loc
 	else dest = loc
 
 	while(t_amount < getYield())
-		var/obj/item/weapon/reagent_containers/food/snacks/grown/t_prod = new product(dest, potency) // User gets a consumable
+		var/obj/item/weapon/reagent_containers/food/snacks/grown/t_prod = new product(dest, potency)
+		result.Add(t_prod) // User gets a consumable
 		if(!t_prod)	return
 		t_prod.seed = type
 		t_prod.lifespan = lifespan
@@ -842,6 +844,8 @@ obj/machinery/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 		t_amount++
 
 	if(parent) parent.update_tray()
+
+	return result
 /*
 /obj/item/seeds/grassseed/harvest(mob/user = usr)
 	var/obj/machinery/hydroponics/parent = loc //for ease of access

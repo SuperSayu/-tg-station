@@ -230,7 +230,7 @@
 
 /obj/structure/closet/secure_closet/injection
 	name = "lethal injections"
-	req_access = list(access_captain)
+	req_access = list(access_hos)
 
 	New()
 		..()
