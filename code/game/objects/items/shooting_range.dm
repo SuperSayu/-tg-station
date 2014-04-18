@@ -11,17 +11,16 @@
 
 	Destroy()
 		// if a target is deleted and associated with a stake, force stake to forget
-		for(var/obj/structure/target_stake/T in view(3,src))
+		for(var/obj/structure/stool/bed/chair/target_stake/T in view(3,src))
 			if(T.pinned_target == src)
 				T.pinned_target = null
-				T.density = 1
 				break
 		..() // delete target
 
 	Move()
 		..()
 		// After target moves, check for nearby stakes. If associated, move to target
-		for(var/obj/structure/target_stake/M in view(3,src))
+		for(var/obj/structure/stool/bed/chair/target_stake/M in view(3,src))
 			if(M.density == 0 && M.pinned_target == src)
 				M.loc = loc
 
@@ -43,15 +42,14 @@
 
 	attack_hand(mob/user as mob)
 		// taking pinned targets off!
-		var/obj/structure/target_stake/stake
-		for(var/obj/structure/target_stake/T in view(3,src))
+		var/obj/structure/stool/bed/chair/target_stake/stake
+		for(var/obj/structure/stool/bed/chair/target_stake/T in view(3,src))
 			if(T.pinned_target == src)
 				stake = T
 				break
 
 		if(stake)
 			if(stake.pinned_target)
-				stake.density = 1
 				density = 0
 				layer = OBJ_LAYER
 

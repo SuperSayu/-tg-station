@@ -1,11 +1,11 @@
 // Basically they are for the firing range
-/obj/structure/target_stake
+/obj/structure/stool/bed/chair/target_stake // it's a bed now shut up
 	name = "target stake"
 	desc = "A thin platform with negatively-magnetized wheels."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "target_stake"
-	density = 1
 	flags = CONDUCT
+	anchored = 0
 	var/obj/item/target/pinned_target // the current pinned target
 
 	Move()
@@ -16,7 +16,9 @@
 
 		else // Sanity check: if the pinned target can't be found in immediate view
 			pinned_target = null
-			density = 1
+
+		if(buckled_mob) // moves the unlucky person around. wheeeeeee!
+			buckled_mob.loc = loc
 
 	attackby(obj/item/W as obj, mob/user as mob)
 		// Putting objects on the stake. Most importantly, targets
@@ -50,3 +52,13 @@
 				user << "You take the target out of the stake."
 
 			pinned_target = null
+		..()
+
+/obj/structure/stool/bed/chair/target_stake/MouseDrop_T(mob/M as mob, mob/user as mob)
+	if(!istype(M)) return
+	buckle_mob(M, user)
+	buckled_mob.dir = 2
+	return
+
+/obj/structure/stool/bed/chair/target_stake/rotate()
+	return
