@@ -20,65 +20,7 @@
 		new /obj/structure/constructshell(T)
 		return 1
 	return 0
-/*
-/obj/effect/knowspell/summon/here/staff_change
-	name = "conjure staff of change"
-	desc = "One time use.  Calls forth a Staff of Change for altering your enemies."
-	rechargable = 0
-	chargemax = 1
 
-	incantation = ""
-	incant_volume = 0
-	require_clothing = 0
-
-/obj/effect/knowspell/summon/here/staff_change/cast(var/mob/caster)
-	var/turf/T = get_turf(caster)
-	if(T)
-		new /obj/item/weapon/gun/energy/staff(T)
-		return 1
-	return 0
-
-/obj/effect/knowspell/summon/here/staff_animation
-	name = "conjure staff of animation"
-	desc = "One time use.  Calls forth a Staff of Animation to turn mundane items and structures into monsters."
-	rechargable = 0
-	chargemax = 1
-
-	incantation = ""
-	incant_volume = 0
-	require_clothing = 0
-
-/obj/effect/knowspell/summon/here/staff_animation/cast(var/mob/caster)
-	var/turf/T = get_turf(caster)
-	if(T)
-		new /obj/item/weapon/gun/energy/staff/animate(T)
-		return 1
-	return 0
-
-
-/obj/effect/knowspell/summon/here/orb_scrying
-	name = "conjure orb of scrying"
-	desc = "One time use.  Calls forth an Orb of Scrying."
-	rechargable = 0
-	chargemax = 1
-
-	incantation = ""
-	incant_volume = 0
-	require_clothing = 0
-
-/obj/effect/knowspell/summon/here/orb_scrying/cast(var/mob/caster)
-	var/turf/T = get_turf(caster)
-	if(T)
-		new /obj/item/weapon/scrying(T)
-		if (!(XRAY in caster.mutations))
-			caster.mutations.Add(XRAY)
-			caster.sight |= (SEE_MOBS|SEE_OBJS|SEE_TURFS)
-			caster.see_in_dark = 8
-			caster.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-			caster << "\blue The walls suddenly disappear."
-		return 1
-	return 0
-*/
 /obj/effect/knowspell/summon/here/wizard_armor
 	name = "conjure wizard armor"
 	desc = "One time use.  Calls forth a full set of space-worthy wizard armor."

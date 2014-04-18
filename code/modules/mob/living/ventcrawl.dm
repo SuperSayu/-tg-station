@@ -69,8 +69,7 @@
 /obj/machinery/atmospherics/var/image/visage = null
 /obj/machinery/atmospherics/Entered(mob/M)
 	if(istype(M) && M.client)
-		M.client.perspective = EYE_PERSPECTIVE
-		M.client.eye = loc
+		M.reset_view(src)
 		if(!visage)
 			visage = image(icon,src,icon_state,LIGHTING_LAYER+1,dir)
 		else
@@ -81,8 +80,7 @@
 	if(istype(M) && M.client)
 		M.client.images -= visage
 	if(isturf(M.loc))
-		M.client.perspective = MOB_PERSPECTIVE
-		M.client.eye = M
+		M.reset_view() // gets called every few ticks anyway, but reset that mob eye for us
 
 /obj/machinery/atmospherics/unary/vent_pump/AltClick(mob/living/ML)
 	if(ML.Adjacent(src) && !ML.stat && ML.ventcrawler && !welded)
@@ -96,16 +94,15 @@
 		user.Move(loc)
 		if(user.loc == loc)
 			user.visible_message("\blue [user] scrambles out of [src].")
-			if(user.client)
-				user.client.perspective = MOB_PERSPECTIVE
-				user.client.eye = user
+			user.reset_view()
 			return
 		else
 			user << "You can't get out here"
 	else
+		visible_message("[user] scrambles into [src]")
 		relaymove(user,dir)
 		if(istype(user.loc, /obj/machinery/atmospherics))
-			user << "You are in a maze of twisty passages, all alike.  It is pitch black here."
+			user << "You are in a maze of twisty little passages, all alike."
 
 /obj/machinery/atmospherics/binary/pump/Enter(mob/M,atom/oldloc)
 	if(stat || !on) return 1

@@ -62,8 +62,8 @@
 
 /obj/structure/closet/secure_closet/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/screwdriver))
-		if(welded = 1)
-			user "<span class='warning'>It's welded shut!</span>"
+		if(welded == 1)
+			user << "<span class='warning'>It's welded shut!</span>"
 			return
 		else
 			src.add_fingerprint(user)

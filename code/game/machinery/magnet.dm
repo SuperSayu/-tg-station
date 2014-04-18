@@ -269,6 +269,7 @@
 		dat += "<br>Speed: <a href='?src=\ref[src];operation=minusspeed'>-</a> [speed] <a href='?src=\ref[src];operation=plusspeed'>+</a><br>"
 		dat += "Path: {<a href='?src=\ref[src];operation=setpath'>[path]</a>}<br>"
 		dat += "Moving: <a href='?src=\ref[src];operation=togglemoving'>[moving ? "Enabled":"Disabled"]</a>"
+		dat += "<br><br>Pathing instructions:<br>C will reset target to the center.  R will set it randomly.  N,E,S, and W will move the center.  ' ' will pause.  You may use , or ; to visually separate sections; it will be ignored.  All metal objects in range of the center will be moved to that point."
 
 
 		user << browse(dat, "window=magnet;size=400x500")
@@ -325,7 +326,7 @@
 					var/newpath = copytext(sanitize(input(usr, "Please define a new path!",,path) as text|null),1,MAX_MESSAGE_LEN)
 					if(newpath && newpath != "")
 						moving = 0 // stop moving
-						path = newpath
+						path = uppertext(newpath)
 						pathpos = 1 // reset position
 						filter_path() // renders rpath
 
@@ -357,9 +358,9 @@
 			if(pathpos > rpath.len) // if the position is greater than the length, we just loop through the list!
 				pathpos = 1
 
-			var/nextmove = uppertext(rpath[pathpos]) // makes it un-case-sensitive
+			var/nextmove = rpath[pathpos]
 
-			if(!(nextmove in list("N","S","E","W","C","R")))
+			if(!(nextmove in list("N","S","E","W","C","R"," ")))
 				// N, S, E, W are directional
 				// C is center
 				// R is random (in magnetic field's bounds)
@@ -387,13 +388,14 @@
 		// Generates the rpath variable using the path string, think of this as "string2list"
 		// Doesn't use params2list() because of the akward way it stacks entities
 		rpath = list() //  clear rpath
+
 		var/maximum_character = min( 50, length(path) ) // chooses the maximum length of the iterator. 50 max length
 
 		for(var/i=1, i<=maximum_character, i++) // iterates through all characters in path
 
 			var/nextchar = copytext(path, i, i+1) // find next character
 
-			if(!(nextchar in list(";", "&", "*", " "))) // if char is a separator, ignore
+			if(!(nextchar in list(";", "&", "*",","))) // if char is a separator, ignore
 				rpath += copytext(path, i, i+1) // else, add to list
 
 			// there doesn't HAVE to be separators but it makes paths syntatically visible
