@@ -45,13 +45,11 @@
 				possible_changelings -= player
 				possible_traitors -= player
 
-	//if(config.traitor_scaling)
-	//traitors_possible = scale_antags()
+	if(config.traitor_scaling_coeff)
+		traitors_possible = max(1, round((num_players())/(config.traitor_scaling_coeff)))
+	else
+		traitors_possible = max(1, min(num_players(), traitors_possible))
 
-	// No more than three lings, but allow them to be a
-	// greater portion of the antagonist docket if the
-	// dice land like that.
-	//var/num_changelings = min(3,rand(1,traitors_possible-1))
 
 	while(possible_changelings.len && (changelings.len < num_changelings))
 		var/datum/mind/changeling = pick_n_take(possible_changelings)
@@ -59,7 +57,7 @@
 		modePlayer += changeling
 		possible_traitors -= changeling
 
-	while(possible_traitors.len && (modePlayer.len < traitors_possible))
+	while(possible_traitors.len && (traitors.len < traitors_possible))
 		var/datum/mind/traitor = pick_n_take(possible_traitors)
 		traitors += traitor
 		modePlayer += traitor
