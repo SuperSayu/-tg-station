@@ -646,6 +646,7 @@ obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 					D = new type(0, null)
 			if(!D)
 				return
+			replicator_cooldown(50)
 			var/list/data = list("viruses"=list(D))
 			var/name = sanitize(input(usr,"Name:","Name the culture",D.name))
 			if(!name || name == " ") name = D.name
@@ -653,7 +654,6 @@ obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 			B.desc = "A small bottle. Contains [D.agent] culture in synthblood medium."
 			B.reagents.add_reagent("blood",20,data)
 			src.updateUsrDialog()
-			replicator_cooldown(50)
 		else
 			src.temp_html = "The replicator is not ready yet."
 		src.updateUsrDialog()
