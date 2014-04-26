@@ -206,7 +206,7 @@
 
 	var/list/bones = list("chest", "head", "left arm", "right arm", "left leg", "right leg")
 	for(var/bone in bones)
-		if(!bone in broken && prob(break_chance))
+		if(!(bone in broken) && prob(break_chance))
 			broken += bone
 			playsound(src, 'sound/weapons/pierce.ogg', 50)
 			if(bone == "chest")
