@@ -620,6 +620,7 @@ proc/process_ghost_teleport_locs()
 	name = "Electrical Maintenance"
 	icon_state = "yellow"
 
+
 //Hallway
 
 /area/hallway/primary/fore
@@ -1428,6 +1429,9 @@ proc/process_ghost_teleport_locs()
 	icon_state = "storage"
 
 
+/area/ai_monitored/storage/testing
+	name = "Bomb Range Maintenance"
+	icon_state = "yellow"
 
 //Misc
 

@@ -22,23 +22,25 @@
 				var/obj/slice = new slice_path (src.loc)
 				if(prob(25)) step_rand(slice)
 				reagents.trans_to(slice,reagents_per_slice)
-			del src
+			qdel(src)
+			return
 		if(prob(33) || reagents.total_volume <= bitesize)
 			if(trash)
 				var/obj/O = new trash(loc)
 				do
 					step_rand(O)
 				while(prob(34))
-			del src
+			qdel(src)
+			return
 		if(prob(34))
 			if(dried_type)
 				new dried_type(loc)
-				del src
+				qdel(src)
+				return
 		if(prob(66))
 			bitecount++
 			reagents.remove_any(bitesize)
 	..()
-
 
 
 	//Placeholder for effect that trigger on eating that aren't tied to reagents.

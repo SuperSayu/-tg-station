@@ -303,6 +303,15 @@
 		var/obj/item/trash/can/crushed_can = new /obj/item/trash/can(user.loc)
 		crushed_can.icon_state = icon_state
 		qdel(src)
+		return
+	..()
+
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/initialize()
+	if(prob(15) && isturf(loc))
+		var/obj/item/trash/can/crushed_can = new /obj/item/trash/can(loc)
+		crushed_can.icon_state = icon_state
+		qdel(src)
+		return
 	..()
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola

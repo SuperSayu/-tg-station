@@ -62,6 +62,9 @@
 		examine()
 	return
 
+/turf/attack_ghost() // YES I KNOW IT IS A FLOOR THANKS, THAAANKS
+	return
+
 // ---------------------------------------
 // And here are some good things for free:
 // Now you can click through portals, wormholes, gateways, and teleporters while observing. -Sayu
