@@ -207,9 +207,11 @@
 		if(resting)
 			dizziness = max(0, dizziness - 5)
 			jitteriness = max(0, jitteriness - 5)
+			numbness = max(0, numbness - 5)
 		else
 			dizziness = max(0, dizziness - 1)
 			jitteriness = max(0, jitteriness - 1)
+			numbness = max(0, numbness -5)
 
 		updatehealth()
 

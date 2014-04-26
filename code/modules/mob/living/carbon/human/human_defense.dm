@@ -127,14 +127,13 @@ emp_act
 
 	// Broken arms are no good for combat!
 	var/arm = user.get_active_hand()
-	if(!user.reagents.has_reagent("morphine") && prob(35))
+	if(!user.numbness && prob(35))
 		if(arm == l_hand && "left arm" in user.broken)
 			user << "\red You painfully dislodge your broken left arm!"
 			user.emote("scream")
 		//	user.Stun(2)
 		//	user.Weaken(2)
-			var/obj/item/organ/limb/larm = get_organ("l_arm")
-			user.apply_damage(rand(1,2), STAMINA, larm)
+			user.adjustStaminaLoss(5)
 			playsound(user.loc, 'sound/weapons/pierce.ogg', 25)
 		//	visible_message("<span class='warning'>[user] has attempted to attack [src] with [I]!</span>")
 		//	user.drop_item()
@@ -144,8 +143,7 @@ emp_act
 			user.emote("scream")
 		//	user.Stun(2)
 	//		user.Weaken(2)
-			var/obj/item/organ/limb/rarm = get_organ("r_arm")
-			user.apply_damage(rand(1,2), STAMINA, rarm)
+			user.adjustStaminaLoss(5)
 			playsound(user.loc, 'sound/weapons/pierce.ogg', 25)
 	//		visible_message("<span class='warning'>[user] has attempted to attack [src] with [I]!</span>")
 	//		user.drop_item()

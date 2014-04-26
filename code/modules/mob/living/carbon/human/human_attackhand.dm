@@ -85,12 +85,13 @@
 				visible_message("<span class='warning'>[M] has attempted to [attack_verb] [src]!</span>")
 				return 0
 
-			if(!M.reagents.has_reagent("morphine") && prob(65))
+			if(!M.numbness && prob(65))
 				if(!lying)
 					if("left arm" in M.broken || "right arm" in M.broken)
 						M << "\red You painfully dislodge your broken arm!"
 						M.emote("scream")
 					//	M.Stun(2)
+						M.adjustStaminaLoss(5)
 						playsound(M.loc, 'sound/weapons/pierce.ogg', 25)
 					//	visible_message("<span class='warning'>[M] has attempted to [attack_verb] [src]!</span>")
 					//	return 0
