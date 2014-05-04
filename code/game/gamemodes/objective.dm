@@ -263,7 +263,7 @@ datum/objective/steal
 datum/objective/steal/New()
 	..()
 	if(!possible_items.len)//Only need to fill the list when it's needed.
-		init_subtypes(/datum/objective_item,possible_items)
+		init_subtypes(/datum/objective_item/steal,possible_items)
 
 // this is remarkably inefficient but it should get everything
 datum/objective/steal/find_target()
