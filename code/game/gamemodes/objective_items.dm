@@ -109,42 +109,23 @@ datum/objective_item/steal/reactive
 datum/objective_item/steal/dermal
 	name = "the head of security's dermal armor patch"
 	targetitem = /obj/item/clothing/head/helmet/HoS/dermal
-	difficulty = 12
+	difficulty = 5
 	excludefromjob = list("Head of Security")
 	antag_types = list("traitor","Changeling","Wizard")
 
 datum/objective_item/steal/facehugger
 	name = "an alien facehugger (dead or alive)"
 	targetitem = /obj/item/clothing/mask/facehugger
-	difficulty = 9
+	difficulty = 5
 	excludefromjob = list("Research Director")
 	antag_types = list("Changeling","Wizard")
 
 datum/objective_item/steal/ai_construct
 	name = "an AI core construction circuit board"
 	targetitem = /obj/item/weapon/circuitboard/aicore
-	difficulty = 10
-	excludefromjob = list("Research Director")
+	difficulty = 3
+	excludefromjob = list("Research Director","Scientist","Roboticist")
 	antag_types = list("traitor","Changeling","Wizard")
-
-datum/objective_item/steal/ai_upload
-	name = "an AI upload circuit board"
-	targetitem = /obj/item/weapon/circuitboard/aiupload
-	difficulty = 8
-	antag_types = list("traitor","Changeling","Wizard")
-
-datum/objective_item/steal/borg_upload
-	name = "a cyborg upload circuit board"
-	targetitem = /obj/item/weapon/circuitboard/borgupload
-	difficulty = 8
-	antag_types = list("traitor","Changeling","Wizard")
-
-datum/objective_item/steal/balloon
-	name = "a syndicate balloon"
-	targetitem = /obj/item/toy/syndicateballoon
-	difficulty = 18
-	antag_types = list("traitor")
-
 
 //Items with special checks!
 datum/objective_item/steal/plasma
@@ -204,7 +185,7 @@ datum/objective_item/steal/slime/check_special_completion(var/obj/item/slime_ext
 datum/objective_item/steal/id_cards
 	name = "four unique identification cards"
 	targetitem = /obj/item/weapon/card/id
-	difficulty = 8
+	difficulty = 3
 	excludefromjob = list("Head of Personnel")
 	antag_types = list("Changeling","Wizard","Space Ninja")
 	var/list/found = list()
@@ -220,7 +201,8 @@ datum/objective_item/steal/id_cards/check_special_completion(var/obj/item/weapon
 datum/objective_item/steal/reagent
 	name = "50 units of unstable mutagen"
 	targetitem = /obj/item/weapon/reagent_containers
-	difficulty = 8
+	difficulty = 3
+	antag_types = list("Wizard")
 	var/target_reagent = /datum/reagent/toxin/mutagen
 	var/target_amount = 50
 	var/found = 0
@@ -239,26 +221,10 @@ datum/objective_item/steal/reagent/proc/check_reagent(var/datum/reagent/R)
 datum/objective_item/steal/reagent/compare_to(var/datum/objective_item/i)
 	return i.type == type
 
-datum/objective_item/steal/reagent/polyacid
-	name = "50 units of polytrinic acid"
-	target_reagent = /datum/reagent/toxin/acid/polyacid
-
-/*
-	These were taken out because too many reagent steal types -> too many reagent steal missions
-
-datum/objective_item/steal/reagent/chloral
-	name = "50 units of chloral hydrate"
-	target_reagent = /datum/reagent/toxin/chloralhydrate
-datum/objective_item/steal/reagent/thermite
-	name = "50 units of thermite"
-	target_reagent = /datum/reagent/thermite
-*/
-
 datum/objective_item/steal/reagent/unique
 	name = "four unique blood samples"
 	target_amount = 4
 	target_reagent = /datum/reagent/blood
-	antag_types = list("Changeling","Wizard")
 	var/list/samples = list()
 
 datum/objective_item/steal/reagent/unique/check_special_completion()
@@ -275,7 +241,6 @@ datum/objective_item/steal/reagent/unique/booze // Beer run!
 	target_amount = 7
 	target_reagent = /datum/reagent // not all types of booze are under ethanol for some reason...
 	excludefromjob = list("Bartender", "Chef","Botanist")
-	antag_types = list("traitor","Changeling","Wizard","Space Ninja") // all factions respect the booze run
 
 datum/objective_item/steal/reagent/unique/booze/check_reagent(var/datum/reagent/R)
 	var/static/list/other_alcohols = list(/datum/reagent/atomicbomb,/datum/reagent/gargle_blaster,/datum/reagent/neurotoxin,/datum/reagent/hippies_delight)
