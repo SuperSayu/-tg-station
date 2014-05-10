@@ -270,7 +270,8 @@ datum/objective/steal/find_target()
 	if(!owner)
 		return set_target(pick(possible_items))
 	var/list/loot = possible_items.Copy()
-	for(var/i=1; i<loot.len; i++)
+	var/i=1
+	while(i<loot.len)
 		var/datum/objective_item/item = loot[i]
 		if(!(owner.special_role in item.antag_types))
 			loot.Cut(i,i+1)
