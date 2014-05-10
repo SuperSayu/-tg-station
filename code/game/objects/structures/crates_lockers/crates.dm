@@ -6,6 +6,7 @@
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "crate"
 	density = 1
+	throwpass = 1
 	icon_opened = "crateopen"
 	icon_closed = "crate"
 	req_access = null
