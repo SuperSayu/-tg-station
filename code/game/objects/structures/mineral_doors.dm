@@ -190,22 +190,27 @@
 
 /obj/structure/mineral_door/iron
 	mineralType = "metal"
+	icon_state = "metal"
 	hardness = 3
 
 /obj/structure/mineral_door/silver
 	mineralType = "silver"
+	icon_state = "silver"
 	hardness = 3
 
 /obj/structure/mineral_door/gold
 	mineralType = "gold"
+	icon_state = "gold"
 
 /obj/structure/mineral_door/uranium
 	mineralType = "uranium"
+	icon_state = "uranium"
 	hardness = 3
 	luminosity = 2
 
 /obj/structure/mineral_door/sandstone
 	mineralType = "sandstone"
+	icon_state = "sandstone"
 	hardness = 0.5
 
 /obj/structure/mineral_door/transparent
@@ -217,6 +222,7 @@
 
 /obj/structure/mineral_door/transparent/plasma
 	mineralType = "plasma"
+	icon_state = "plasma"
 
 /obj/structure/mineral_door/transparent/plasma/attackby(obj/item/weapon/W, mob/user)
 	if(is_hot(W))
@@ -235,10 +241,12 @@
 	CheckHardness()
 
 /obj/structure/mineral_door/transparent/diamond
+	icon_state = "diamond"
 	mineralType = "diamond"
 	hardness = 10
 
 /obj/structure/mineral_door/wood
+	icon_state = "wood"
 	mineralType = "wood"
 	hardness = 1
 	openSound = 'sound/effects/doorcreaky.ogg'
@@ -252,6 +260,7 @@
 
 /obj/structure/mineral_door/resin
 	mineralType = "resin"
+	icon_state = "resin"
 	hardness = 1
 	close_delay = 100
 	openSound = 'sound/effects/attackblob.ogg'

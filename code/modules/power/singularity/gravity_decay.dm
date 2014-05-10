@@ -65,7 +65,7 @@
 		dismantle_wall(0,0)
 	return
 
-/turf/simulated/wall/reinforced/disintegrate()
+/turf/simulated/wall/r_wall/disintegrate()
 	if(prob(75))
 		return
 	if(prob(30))
@@ -85,7 +85,7 @@
 		if(!istype(newloc,/turf/simulated))
 			del src
 			return
-		if(istype(newloc,/turf/simulated/wall/reinforced) || istype(newloc,/turf/simulated/floor/engine))
+		if(istype(newloc,/turf/simulated/wall/r_wall) || istype(newloc,/turf/simulated/floor/engine))
 			if(prob(counter*20)) // reinforced - harder to destroy
 				del src
 				return

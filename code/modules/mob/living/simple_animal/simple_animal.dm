@@ -206,7 +206,7 @@
 	if(!atmos_suitable)
 		adjustBruteLoss(unsuitable_atoms_damage)
 	return 1
-
+/*
 /mob/living/simple_animal/Bumped(AM as mob|obj)
 	if(!AM) return
 
@@ -219,7 +219,7 @@
 			src.loc = AM:loc
 			AM:loc = newamloc
 		else
-			..()
+			..()*/
 
 /mob/living/simple_animal/gib(var/animation = 0)
 	if(icon_gib)

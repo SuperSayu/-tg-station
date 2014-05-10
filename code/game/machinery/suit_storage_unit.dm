@@ -35,6 +35,29 @@
 	HELMET_TYPE = /obj/item/clothing/head/helmet/space
 	MASK_TYPE = /obj/item/clothing/mask/breath
 
+/obj/machinery/suit_storage_unit/captain
+	name = "captain's space suit storage unit"
+	SUIT_TYPE = /obj/item/clothing/suit/space/captain
+	HELMET_TYPE = /obj/item/clothing/head/helmet/space/capspace
+	MASK_TYPE = /obj/item/clothing/mask/gas
+
+/obj/machinery/suit_storage_unit/medical
+	name = "medical hardsuit storage unit"
+	SUIT_TYPE = /obj/item/clothing/suit/space/rig/medical
+	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/medical
+	MASK_TYPE = /obj/item/clothing/mask/breath/medical
+
+/obj/machinery/suit_storage_unit/security
+	name = "security hardsuit storage unit"
+	SUIT_TYPE = /obj/item/clothing/suit/space/rig/security
+	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/security
+	MASK_TYPE = /obj/item/clothing/mask/gas/sechailer/hos
+
+/obj/machinery/suit_storage_unit/atmos
+	name = "atmospheric hardsuit storage unit"
+	SUIT_TYPE = /obj/item/clothing/suit/space/rig/atmos
+	HELMET_TYPE = /obj/item/clothing/head/helmet/space/rig/atmos
+	MASK_TYPE = /obj/item/clothing/mask/gas
 
 /obj/machinery/suit_storage_unit/New()
 	src.update_icon()
@@ -164,7 +187,11 @@
 /obj/machinery/suit_storage_unit/Topic(href, href_list) //I fucking HATE this proc
 	if(..())
 		return
-	if ((usr.contents.Find(src) || ((get_dist(src, usr) <= 1) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon/ai)))
+	if (usr.TurfAdjacent(loc))
+		src.add_fingerprint(usr)
+		if(!allowed(usr))
+			usr << "\red Access denied."
+			return
 		usr.set_machine(src)
 		if (href_list["toggleUV"])
 			src.toggleUV(usr)
@@ -202,9 +229,7 @@
 			src.eject_occupant(usr)
 			src.updateUsrDialog()
 			src.update_icon()
-	/*if (href_list["refresh"])
-		src.updateUsrDialog()*/
-	src.add_fingerprint(usr)
+
 	return
 
 

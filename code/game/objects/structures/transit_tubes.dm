@@ -12,6 +12,7 @@
 	var/list/tube_dirs = null
 	var/exit_delay = 2
 	var/enter_delay = 1
+	throwpass = 1
 
 	// alldirs in global.dm is the same list of directions, but since
 	//  the specific order matters to get a usable icon_state, it is

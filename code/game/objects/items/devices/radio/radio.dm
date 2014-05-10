@@ -9,6 +9,7 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	suffix = "\[3\]"
 	icon_state = "walkietalkie"
 	item_state = "walkietalkie"
+	action_button_name = "Access radio controls"
 	var/on = 1 // 0 for off
 	var/last_transmission
 	var/frequency = 1459 //common chat
