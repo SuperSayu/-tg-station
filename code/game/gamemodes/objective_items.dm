@@ -139,13 +139,6 @@ datum/objective_item/steal/borg_upload
 	difficulty = 8
 	antag_types = list("traitor","Changeling","Wizard")
 
-datum/objective_item/steal/balloon
-	name = "a syndicate balloon"
-	targetitem = /obj/item/toy/syndicateballoon
-	difficulty = 18
-	antag_types = list("traitor")
-
-
 //Items with special checks!
 datum/objective_item/steal/plasma
 	name = "28 moles of plasma (full tank)"
