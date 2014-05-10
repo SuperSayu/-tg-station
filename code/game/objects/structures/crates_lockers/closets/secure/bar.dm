@@ -54,7 +54,7 @@
 	New()
 		..()
 		sleep(2)
-		new /obj/item/weapon/bananapeel( src )
+		new /obj/item/weapon/grown/bananapeel/research( src )
 		new /obj/item/weapon/storage/backpack/clown(src)
 		new /obj/item/clothing/under/actorsuit/clown( src )
 		new /obj/item/clothing/mask/gas/clown_hat( src )

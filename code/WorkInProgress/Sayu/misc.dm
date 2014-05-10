@@ -1,7 +1,9 @@
 // ---------------------------
-//  This is a one-line wonder
+//  This is a two-line wonder
 // ---------------------------
-/obj/item/weapon/bananapeel/research/name = "Genetically modified banana peel"
+/obj/item/weapon/grown/bananapeel/research
+	name = "Genetically modified banana peel"
+	potency = 100
 
 // -------------------------------------
 //			Lizard pet

@@ -244,7 +244,7 @@
 	id = "trash"
 	//Note that this filters out blueprints because they are a paper item.  Do NOT throw out the station blueprints unless you be trollin'.
 	blacklist = null
-	whitelist = list(/obj/item/trash,/obj/item/toy,/obj/item/weapon/ectoplasm,/obj/item/weapon/bananapeel,/obj/item/weapon/broken_bottle,/obj/item/weapon/bikehorn,
+	whitelist = list(/obj/item/trash,/obj/item/toy,/obj/item/weapon/ectoplasm,/obj/item/weapon/grown/bananapeel,/obj/item/weapon/broken_bottle,/obj/item/weapon/bikehorn,
 					/obj/item/weapon/cigbutt,/obj/item/weapon/contraband,/obj/item/weapon/grown/corncob,/obj/item/weapon/paper,/obj/item/weapon/shard,
 					/obj/item/weapon/sord,/obj/item/weapon/photo,/obj/item/weapon/folder,
 					/obj/item/blueprints,/obj/item/weapon/contraband,/obj/item/weapon/kitchen,/obj/item/weapon/book,/obj/item/clothing/mask/facehugger)

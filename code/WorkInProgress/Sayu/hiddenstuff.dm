@@ -21,7 +21,7 @@
 						/obj/item/weapon/grenade/clusterbuster/booze,/obj/item/weapon/grenade/clusterbuster/honk,/obj/item/weapon/reagent_containers/glass/bottle/random_reagent,
 						/obj/item/device/transfer_valve,/obj/item/device/assembly/mousetrap/armed,/obj/item/weapon/soap,/obj/item/weapon/grenade/chem_grenade/lube,
 						/obj/item/weapon/grenade/clusterbuster/monkey,/obj/item/weapon/grenade/clusterbuster/aviary, /obj/item/weapon/grenade/chem_grenade/holywater) + private_stache
-	var/list/trash = typesof(/obj/item/trash) - /obj/item/trash + list(/obj/item/weapon/bananapeel,/obj/item/weapon/grown/corncob,/obj/item/weapon/ectoplasm)
+	var/list/trash = typesof(/obj/item/trash) - /obj/item/trash + list(/obj/item/weapon/grown/bananapeel,/obj/item/weapon/grown/corncob,/obj/item/weapon/ectoplasm)
 
 
 	if(istype(A,/area/maintenance))
