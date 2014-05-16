@@ -314,18 +314,19 @@ var/global/datum/controller/supply_shuttle/supply_shuttle
 
 						if(T.stored  && T.stored.id && T.stored.level > 1 ) //you only get money for high level and nonempty disks
 							if(knownTech[T.stored.id])
-								T.stored = 0
-								if(T.stored.level > knownTech[T.stored.id] ) //)
-									var/techDiff = T.stored.level - knownTech[T.stored.id]
+								if(T.stored.level > knownTech[T.stored.id] + 1 ) //)
+									var/techDiff = T.stored.level - (knownTech[T.stored.id]+1)
 									var/pointGain = techDiff*points_per_tech
-									centcom_message += "<font color=green>+[pointGain]</font>: New levels of \"[capitalize(T.stored.id)]\" processed.<BR>"
+									centcom_message += "<font color=green>+[pointGain]</font>: New levels of \"[capitalize(T.stored.name)]\" processed.<BR>"
+									knownTech[T.stored.id] = T.stored.level
 									points += pointGain
 								else
-									centcom_message += "<font color=red>+0</font>: Disk technology did not exceed the previous levels of \"[capitalize(T.stored.id)]\".<BR>"
+									centcom_message += "<font color=red>+0</font>: Disk technology did not exceed the previous levels of \"[capitalize(T.stored.name)]\".<BR>"
 
 							else
-								var/pointGain = T.stored.level*points_per_tech
-								centcom_message += "<font color=green>+[pointGain]</font>: New technology processed: \"[capitalize(T.stored.id)]\".<BR>"
+								var/pointGain = (T.stored.level-1)*points_per_tech
+								centcom_message += "<font color=green>+[pointGain]</font>: New technology processed: \"[capitalize(T.stored.name)]\".<BR>"
+								knownTech[T.stored.id] = T.stored.level
 								points += pointGain
 						else
 							centcom_message += "<font color=red>+0</font>: Disk contained no new technologies.<BR>"
