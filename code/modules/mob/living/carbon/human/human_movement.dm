@@ -55,7 +55,6 @@
 			last_break = 1
 			spawn(50)
 				last_break = 0
-			return
 
 	..()
 
