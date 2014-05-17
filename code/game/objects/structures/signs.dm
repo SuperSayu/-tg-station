@@ -5,6 +5,55 @@
 	density = 0
 	layer = 3.5
 
+/obj/structure/sign/attackby(obj/item/I, var/mob/M)
+	if(istype(I,/obj/item/weapon/screwdriver) && !M.stat)
+		if(do_after(M,10))
+			anchored = !anchored
+			M << "You [anchored?"secure":"loosen"] \the [src] sign."
+
+
+/obj/structure/sign/MouseDrop(var/atom/over)
+	if(!anchored)
+		step_to(src, over)
+
+/obj/structure/sign/Move()
+	if(!anchored)
+		pixel_x = 0
+		pixel_y = 0
+	. = ..()
+
+/obj/structure/sign/Bump(atom/A)
+	if(istype(A,/turf/simulated/wall))
+		switch(get_dir(src,A))
+			if(NORTH)
+				if(pixel_y != 32)
+					pixel_y = 32
+				else
+					loc = A
+					visible_message("\The [src] sign is now prominently affixed to [A].")
+					pixel_y = 0
+			if(SOUTH)
+				if(pixel_y != -32)
+					pixel_y = -32
+				else
+					loc = A
+					visible_message("\The [src] sign is now prominently affixed to [A].")
+					pixel_y = 0
+			if(EAST)
+				if(pixel_x != 32)
+					pixel_x = 32
+				else
+					loc = A
+					visible_message("\The [src] sign is now prominently affixed to [A].")
+					pixel_x = 0
+			if(WEST)
+				if(pixel_x != -32)
+					pixel_x = -32
+				else
+					loc = A
+					visible_message("\The [src] sign is now prominently affixed to [A].")
+					pixel_x = 0
+
 /obj/structure/sign/ex_act(severity)
 	switch(severity)
 		if(1.0)

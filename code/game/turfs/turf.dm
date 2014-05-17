@@ -43,6 +43,7 @@
 	..()
 
 /turf/attack_hand(mob/user as mob)
+	user.changeNext_move(5)
 	user.Move_Pulled(src)
 
 /turf/ex_act(severity)
