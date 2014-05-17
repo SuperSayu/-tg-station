@@ -7,4 +7,4 @@
 	..()
 
 /obj/effect/decal/cleanable/ex_act()
-	del src
+	qdel(src)

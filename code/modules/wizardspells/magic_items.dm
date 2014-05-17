@@ -26,21 +26,26 @@
 	attack_self(user)
 		if(spell && (castingmode & CAST_SELF))
 			spell.prepare(user)
-	afterattack(target,mob/user, proximity)
-		if(!spell) return
+
+	preattack(atom/target, mob/user, proximity)
+		if(!spell || !spell.cast_check(user)) return
+		if(!isturf(target) && !isturf(target.loc))
+			return
+
 		if(proximity)
-			if(target in user.contents)
-				return // should prevent you from casting on your backpack if the item cannot fit, among other undesirable effects
 			if(castingmode & spell.castingmode & CAST_MELEE)
 				spell.attack(target,user)
+				return 1
 		else
 			if(castingmode & spell.castingmode & CAST_RANGED)
 				spell.afterattack(target,user)
+				return 1
 
 	attackby(obj/item/W as obj, mob/user as mob)
 		if(istype(W,/obj/item/weapon/nullrod))
 			if(spell)
 				user << "You banish the foul magics from [src]!"
+				spell.scatter_lightning(get_turf(src),10)
 				dispell(1)
 				return
 		..(W,user)
