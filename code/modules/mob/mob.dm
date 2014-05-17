@@ -720,6 +720,9 @@ var/list/slot_equipment_priority = list( \
 /mob/proc/Dizzy(amount)
 	dizziness = max(dizziness,amount,0)
 
+/mob/proc/Numb(amount)
+	numbness = max(numbness,amount,0)
+
 /mob/proc/Stun(amount)
 	if(status_flags & CANSTUN)
 		stunned = max(stunned,amount,0) //can't go below 0, getting a low amount of stun doesn't lower your current stun

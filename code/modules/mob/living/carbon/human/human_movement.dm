@@ -6,7 +6,7 @@
 
 	. = 0
 	var/health_deficiency = (100 - health + staminaloss)
-	if(health_deficiency >= 40 && !reagents.has_reagent("morphine"))
+	if(health_deficiency >= 40 && !numbness)
 		. += (health_deficiency / 25)
 
 	var/hungry = (500 - nutrition) / 5	//So overeat would be 100 and default level would be 80
@@ -27,7 +27,7 @@
 	if(bodytemperature < 283.222)
 		. += (283.222 - bodytemperature) / 10 * 1.75
 
-	if(("left leg" in broken) && ("right leg" in broken) && !reagents.has_reagent("morphine"))
+	if(("left leg" in broken) && ("right leg" in broken) && !numbness)
 		. += 1
 
 	return (. +config.human_delay)
@@ -35,11 +35,10 @@
 /mob/living/carbon/human/Move()
 	// ugh this looks so ugly
 	var/last_break = 0
-	if(prob(2) && !reagents.has_reagent("morphine") && !last_break)
+	if(prob(2) && !numbness && !last_break)
 		if("left leg" in broken)
 			src << "\red Pain shoots up your left leg!"
-			var/obj/item/organ/limb/affecting = get_organ("l_leg")
-			apply_damage(rand(0,2), STAMINA, affecting)
+			adjustStaminaLoss(10)
 		//	Stun(2)
 			playsound(src, 'sound/weapons/pierce.ogg', 25)
 			last_break = 1
@@ -48,8 +47,7 @@
 			return
 		if("right leg" in broken)
 			src << "\red Pain shoots up your right leg!"
-			var/obj/item/organ/limb/affecting = get_organ("r_leg")
-			apply_damage(rand(0,2), STAMINA, affecting)
+			adjustStaminaLoss(10)
 		//	Stun(2)
 			playsound(src, 'sound/weapons/pierce.ogg', 25)
 			last_break = 1

@@ -814,9 +814,11 @@
 		if(resting)
 			dizziness = max(0, dizziness - 15)
 			jitteriness = max(0, jitteriness - 15)
+			numbness = max(0, numbness - 15)
 		else
 			dizziness = max(0, dizziness - 3)
 			jitteriness = max(0, jitteriness - 3)
+			numbness = max(0, numbness -3)
 
 		updatehealth()
 
@@ -865,7 +867,7 @@
 			//Blood loss
 			//var/tot_damage = maxHealth-health
 			if(getBruteLoss() >= 50 && prob(15) && !paralysis)
-				adjustStaminaLoss(rand(0,1))
+				adjustStaminaLoss(5)
 				var/turf/pos = get_turf(src)
 				pos.add_blood_floor(src)
 				playsound(pos, 'sound/effects/splat.ogg', 10, 1)
@@ -1036,7 +1038,7 @@
 						I.icon_state = "oxydamageoverlay6"
 					if(45 to INFINITY)
 						I.icon_state = "oxydamageoverlay7"
-				if(!reagents.has_reagent("morphine"))
+				if(!numbness)
 					damageoverlay.overlays += I
 
 			//Fire and Brute damage overlay (BSSR)
@@ -1058,7 +1060,7 @@
 						I.icon_state = "brutedamageoverlay5"
 					if(85 to INFINITY)
 						I.icon_state = "brutedamageoverlay6"
-				if(!reagents.has_reagent("morphine"))
+				if(!numbness)
 					var/image/black = image(I.icon, I.icon_state) //BLEND_ADD doesn't let us darken, so this is just to blacken the edge of the screen
 					black.color = "#170000"
 					damageoverlay.overlays += I
@@ -1138,7 +1140,7 @@
 					if(1)	healths.icon_state = "health0"
 					if(2)	healths.icon_state = "dead"
 					else
-						if(!reagents.has_reagent("morphine"))
+						if(!numbness)
 							switch(health - staminaloss)
 								if(100 to INFINITY)		healths.icon_state = "health10"
 								if(90 to 100)			healths.icon_state = "health9"
@@ -1160,7 +1162,7 @@
 					if(150 to 250)					nutrition_icon.icon_state = "nutrition3"
 					else							nutrition_icon.icon_state = "nutrition4"
 
-			if(pressure && !reagents.has_reagent("morphine"))
+			if(pressure && !numbness)
 				pressure.icon_state = "pressure[pressure_alert]"
 
 			if(pullin)
@@ -1169,17 +1171,17 @@
 //			if(rest)	//Not used with new UI
 //				if(resting || lying || sleeping)		rest.icon_state = "rest1"
 //				else									rest.icon_state = "rest0"
-			if(toxin && !reagents.has_reagent("morphine"))
+			if(toxin && !numbness)
 				if(hal_screwyhud == 4 || toxins_alert)	toxin.icon_state = "tox1"
 				else									toxin.icon_state = "tox0"
-			if(oxygen && !reagents.has_reagent("morphine"))
+			if(oxygen && !numbness)
 				if(hal_screwyhud == 3 || oxygen_alert)	oxygen.icon_state = "oxy1"
 				else									oxygen.icon_state = "oxy0"
-			if(fire && !reagents.has_reagent("morphine"))
+			if(fire && !numbness)
 				if(fire_alert)							fire.icon_state = "fire[fire_alert]" //fire_alert is either 0 if no alert, 1 for cold and 2 for heat.
 				else									fire.icon_state = "fire0"
 
-			if(bodytemp && !reagents.has_reagent("morphine"))
+			if(bodytemp && !numbness)
 				switch(bodytemperature) //310.055 optimal body temp
 					if(370 to INFINITY)		bodytemp.icon_state = "temp4"
 					if(350 to 370)			bodytemp.icon_state = "temp3"
@@ -1265,10 +1267,8 @@
 
 	proc/handle_bones()
 		if("chest" in broken)
-			// internal bleeding(?)
-			var/obj/item/organ/limb/affecting = get_organ("chest")
 			if(prob(65))
-				apply_damage(1, STAMINA, affecting)
+				adjustStaminaLoss(2)
 		if("head" in broken)
 			//if(prob(5) && stat == CONSCIOUS)
 				//sleeping = 2
