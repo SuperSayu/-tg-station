@@ -56,8 +56,8 @@
 			spawn(50)
 				last_break = 0
 			return
-	else
-		..()
+
+	..()
 
 /mob/living/carbon/human/Process_Spacemove(var/check_drift = 0)
 	//Can we act
