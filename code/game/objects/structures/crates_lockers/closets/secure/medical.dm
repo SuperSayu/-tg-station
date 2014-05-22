@@ -187,3 +187,10 @@
 				icon_state = icon_closed
 		else
 			icon_state = icon_opened
+/obj/structure/closet/secure_closet/medical_wall/hop
+	New()
+		..()
+		new /obj/item/stack/medical/bruise_pack(src)
+		new /obj/item/weapon/reagent_containers/syringe/inaprovaline(src)
+		new /obj/item/weapon/reagent_containers/pill/ethylredox(src)
+		new /obj/item/weapon/reagent_containers/pill/ethylredox(src)

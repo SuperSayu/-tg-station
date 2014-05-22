@@ -139,6 +139,7 @@ datum/shuttle_manager/proc/move_shuttle(var/override_delay)
 	attack_hand(mob/user)
 		if(!unlock_centcom && !(ismob(user) && user.client && user.client.holder))
 			usr << "[src] is disabled."
+			return
 		..()
 	attackby(var/obj/I, var/mob/user)
 		if(istype(I,/obj/item/weapon/card/emag))

@@ -60,14 +60,14 @@
 				state = 0
 
 		if(2)
-			if(istype(I, /obj/item/weapon/book) || istype(I, /obj/item/weapon/spellbook))
+			if(istype(I, /obj/item/weapon/book) || istype(I, /obj/item/weapon/spellbook) || istype(I,/obj/item/weapon/magic/spellbook))
 				user.drop_item()
 				I.loc = src
 				update_icon()
 			else if(istype(I, /obj/item/weapon/storage/bag/books))
 				var/obj/item/weapon/storage/bag/books/B = I
 				for(var/obj/item/T in B.contents)
-					if(istype(T, /obj/item/weapon/book) || istype(T, /obj/item/weapon/spellbook))
+					if(istype(T, /obj/item/weapon/book) || istype(T, /obj/item/weapon/spellbook) || istype(I,/obj/item/weapon/magic/spellbook))
 						B.remove_from_storage(T, src)
 				user << "<span class='notice'>You empty \the [I] into \the [src].</span>"
 				update_icon()
@@ -136,6 +136,7 @@
 		icon_state = "book-[contents.len]"
 	else
 		icon_state = "book-5"
+
 
 
 /obj/structure/bookcase/manuals/medical

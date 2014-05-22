@@ -235,7 +235,10 @@
 			var/atom/movable/AM = new flowertype(src)
 			AM.pixel_x = rand(-10,10)
 			AM.pixel_y = rand(-5,5)
-
+/obj/structure/closet/crate/bin/flowers/open
+	initialize()
+		..()
+		open()
 
 /obj/structure/closet/crate/bin/plants
 	name = "plant barrel"

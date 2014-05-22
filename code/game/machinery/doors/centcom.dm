@@ -5,8 +5,7 @@
 	req_access = list(access_cent_general)
 
 	attackby(w,user) // no hacking centcom doors
-		attack_hand(user)
-		return 1 // no afterattack
+		return ..(user,user) // door attack_hand defaults to this
 
 	allowed(mob/user)
 		if(unlock_centcom || (ismob(user) && user.client && user.client.holder)) return 1
