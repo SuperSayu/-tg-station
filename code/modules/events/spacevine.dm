@@ -70,6 +70,7 @@
 
 /datum/spacevine_mutation/toxity/on_eat(obj/effect/spacevine/holder, mob/living/eater)
 	eater.adjustToxLoss(5)
+	return prob(50)
 
 /datum/spacevine_mutation/expsolive  //OH SHIT IT CAN CHAINREACT RUN!!!
 	name = "explosive"
@@ -187,6 +188,19 @@
 			holder.Destroy()
 	return 1
 
+/datum/spacevine_mutation/bloodfeeding
+	name = "blood feeding"
+	hue = "AA0000"
+/datum/spacevine_mutation/bloodfeeding/process_mutation(var/obj/effect/spacevine/holder)
+	if(holder.energy >= 2) return
+
+	for(var/obj/effect/decal/cleanable/blood/B in holder.loc)
+		qdel(B)
+		holder.grow()
+		if(holder.energy >= 2) return
+
+// todo snag unprotected flesh with on cross
+
 
 // SPACE VINES (Note that this code is very similar to Biomass code)
 /obj/effect/spacevine
@@ -232,6 +246,7 @@
 	if(!override)
 		if(prob(10))
 			eater.say("Nom")
+		qdel(src)
 
 /obj/effect/spacevine/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (!W || !user || !W.type) return
@@ -372,9 +387,9 @@
 		if(!growth_queue)
 			qdel(src) //Sanity check
 			return
-		if(vines.len >= 250 && !reached_collapse_size)
+		if(vines.len >= 175)
 			reached_collapse_size = 1
-		if(vines.len >= 30 && !reached_slowdown_size )
+		if(vines.len >= 25)
 			reached_slowdown_size = 1
 
 		var/length = 0
@@ -398,7 +413,7 @@
 			for(var/datum/spacevine_mutation/SM in SV.mutations)
 				SM.process_mutation(SV)
 			if(SV.energy < 2) //If tile isn't fully grown
-				if(prob(20))
+				if(prob(12.5))
 					SV.grow()
 			else //If tile is fully grown
 				SV.buckle_mob()
