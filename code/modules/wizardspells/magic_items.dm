@@ -27,14 +27,6 @@
 		if(spell && (castingmode & CAST_SELF))
 			spell.prepare(user)
 
-	preattack(atom/target,mob/user, proximity)
-		if(!spell || !spell.cast_check(user)) return
-		if(proximity && (castingmode & spell.castingmode & CAST_MELEE))
-			if(ismob(target))
-				spell.attack(target,user)
-				return 1
-		return ..(target,user,proximity)
-
 	afterattack(atom/target, mob/user, proximity)
 		if(!spell || !spell.cast_check(user)) return
 		if(!isturf(target) && !isturf(target.loc))

@@ -100,7 +100,7 @@
 /obj/item/device/camera
 	name = "camera"
 	icon = 'icons/obj/items.dmi'
-	desc = "A polaroid camera. 10 photos left."
+	desc = "A polaroid camera."
 	icon_state = "camera"
 	item_state = "electropack"
 	w_class = 2.0
@@ -148,6 +148,11 @@
 		pictures_left = pictures_max
 		return
 	..()
+
+
+/obj/item/device/camera/examine()
+	..()
+	usr << "It has [pictures_left] photos left."
 
 
 /obj/item/device/camera/proc/camera_get_icon(list/turfs, turf/center)
@@ -337,7 +342,6 @@
 	playsound(loc, pick('sound/items/polaroid1.ogg', 'sound/items/polaroid2.ogg'), 75, 1, -3)
 
 	pictures_left--
-	desc = "A polaroid camera. It has [pictures_left] photos left."
 	user << "<span class='notice'>[pictures_left] photos left.</span>"
 	icon_state = "camera_off"
 	on = 0

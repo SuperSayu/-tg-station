@@ -1,5 +1,5 @@
 /obj/structure/closet/secure_closet/bar
-	name = "Booze"
+	name = "booze storage"
 	req_access = list(access_bar)
 	icon_state = "cabinetdetective_locked"
 	icon_closed = "cabinetdetective"
@@ -46,7 +46,7 @@
 			new /obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing( src )
 		new /obj/item/clothing/under/actorsuit/mime( src )
 		new /obj/item/clothing/mask/gas/mime( src )
-		new /obj/item/clothing/shoes/mime( src )
+		new /obj/item/clothing/shoes/sneakers/mime( src )
 		new /obj/item/weapon/bedsheet/mime( src )
 /obj/structure/closet/secure_closet/clown
 	name = "Clown's Closet"

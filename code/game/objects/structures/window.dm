@@ -12,6 +12,7 @@
 	var/state = 0
 	var/reinf = 0
 	var/holo = 0
+	var/disassembled = 0
 //	var/silicate = 0 // number of units of silicate
 //	var/icon/silicateIcon = null // the silicated icon
 
@@ -54,12 +55,6 @@
 		if(reinf) new /obj/item/stack/rods(loc)
 	qdel(src)
 
-
-/obj/structure/window/meteorhit()
-	if(!holo)
-		new /obj/item/weapon/shard( loc )
-		if(reinf) new /obj/item/stack/rods( loc)
-	qdel(src)
 
 /obj/structure/window/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
@@ -197,6 +192,7 @@
 				G = new (user.loc)
 				G.add_fingerprint(user)
 		playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
+		disassembled = 1
 		qdel(src)
 	else
 		if(I.damtype == BRUTE || I.damtype == BURN)
@@ -315,7 +311,7 @@
 /obj/structure/window/Destroy()
 	density = 0
 	air_update_turf(1)
-	if(!holo)
+	if(!holo && !disassembled)
 		playsound(src, "shatter", 70, 1)
 	update_nearby_icons()
 	..()

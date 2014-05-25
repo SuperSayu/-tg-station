@@ -7,9 +7,9 @@
 
 /datum/round_event/dust/meaty/announce()
 	if(prob(16))
-		command_alert("Unknown biological entities have been detected near [station_name()], please stand-by.", "Lifesign Alert")
+		priority_announce("Unknown biological entities have been detected near [station_name()], please stand-by.", "Lifesign Alert")
 	else
-		command_alert("Meaty ores have been detected on collision course with the station.", "Meaty Ore Alert")
+		priorty_announce("Meaty ores have been detected on collision course with the station.", "Meaty Ore Alert")
 		world << sound('sound/AI/meteors.ogg')
 
 /datum/round_event/dust/meaty/setup()

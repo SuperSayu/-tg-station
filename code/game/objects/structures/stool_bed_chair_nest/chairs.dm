@@ -104,25 +104,40 @@
 /obj/structure/stool/bed/chair/comfy
 	name = "comfy chair"
 	desc = "It looks comfy."
+	icon_state = "comfychair"
+	color = rgb(255,255,255)
+	var/image/armrest = null
 
 /obj/structure/stool/bed/chair/comfy/fire_act() // comfy chairs are full of highly flammable fibers usually
 	if(prob(40))
 		del src
 
+/obj/structure/stool/bed/chair/comfy/New()
+	armrest = image("icons/obj/objects.dmi", "comfychair_armrest")
+	armrest.layer = MOB_LAYER + 0.1
+
+	return ..()
+
+/obj/structure/stool/bed/chair/comfy/afterbuckle()
+	if(buckled_mob)
+		overlays += armrest
+	else
+		overlays -= armrest
+
 /obj/structure/stool/bed/chair/comfy/brown
-	icon_state = "comfychair_brown"
+	color = rgb(255,113,0)
 
 /obj/structure/stool/bed/chair/comfy/beige
-	icon_state = "comfychair_beige"
+	color = rgb(255,253,195)
 
 /obj/structure/stool/bed/chair/comfy/teal
-	icon_state = "comfychair_teal"
+	color = rgb(0,255,255)
 
 /obj/structure/stool/bed/chair/comfy/black
-	icon_state = "comfychair_black"
+	color = rgb(167,164,153)
 
 /obj/structure/stool/bed/chair/comfy/lime
-	icon_state = "comfychair_lime"
+	color = rgb(255,251,0)
 
 /obj/structure/stool/bed/chair/holo/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/weapon/wrench))

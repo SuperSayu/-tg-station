@@ -18,7 +18,7 @@
 
 /obj/structure/closet/crate/internals
 	desc = "A internals crate."
-	name = "Internals crate"
+	name = "internals crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "o2crate"
 	density = 1
@@ -27,7 +27,7 @@
 
 /obj/structure/closet/crate/trashcart
 	desc = "A heavy, metal trashcart with wheels."
-	name = "Trash Cart"
+	name = "trash cart"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "trashcart"
 	density = 1
@@ -56,7 +56,7 @@
 
 /obj/structure/closet/crate/medical
 	desc = "A medical crate."
-	name = "Medical crate"
+	name = "medical crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "medicalcrate"
 	density = 1
@@ -65,7 +65,7 @@
 
 /obj/structure/closet/crate/rcd
 	desc = "A crate for the storage of the RCD."
-	name = "RCD crate"
+	name = "\improper RCD crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "crate"
 	density = 1
@@ -74,7 +74,7 @@
 
 /obj/structure/closet/crate/freezer
 	desc = "A freezer."
-	name = "Freezer"
+	name = "freezer"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "freezer"
 	density = 1
@@ -104,7 +104,7 @@
 
 /obj/structure/closet/crate/radiation
 	desc = "A crate with a radiation sign on it."
-	name = "Radioactive gear crate"
+	name = "radioactive gear crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "radiation"
 	density = 1
@@ -113,7 +113,7 @@
 
 /obj/structure/closet/crate/secure/weapon
 	desc = "A secure weapons crate."
-	name = "Weapons crate"
+	name = "weapons crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "weaponcrate"
 	density = 1
@@ -122,7 +122,7 @@
 
 /obj/structure/closet/crate/secure/plasma
 	desc = "A secure plasma crate."
-	name = "Plasma crate"
+	name = "plasma crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "plasmacrate"
 	density = 1
@@ -131,7 +131,7 @@
 
 /obj/structure/closet/crate/secure/gear
 	desc = "A secure gear crate."
-	name = "Gear crate"
+	name = "gear crate"
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "secgearcrate"
 	density = 1
@@ -149,7 +149,7 @@
 
 /obj/structure/closet/crate/secure/bin
 	desc = "A secure bin."
-	name = "Secure bin"
+	name = "secure bin"
 	icon_state = "largebins"
 	icon_opened = "largebinsopen"
 	icon_closed = "largebins"
@@ -160,7 +160,7 @@
 
 /obj/structure/closet/crate/secure
 	desc = "A secure crate."
-	name = "Secure crate"
+	name = "secure crate"
 	icon_state = "securecrate"
 	icon_opened = "securecrateopen"
 	icon_closed = "securecrate"
@@ -178,7 +178,7 @@
 	return 1
 
 /obj/structure/closet/crate/hydroponics
-	name = "Hydroponics crate"
+	name = "hydroponics crate"
 	desc = "All you need to destroy those pesky weeds and pests."
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "hydrocrate"
@@ -258,7 +258,6 @@
 
 	if(contents.len >= storage_capacity)
 		return -1
-
 	if(include_mobs && isliving(AM))
 		var/mob/living/L = AM
 		if(L.buckled)
@@ -336,7 +335,9 @@
 	if(opened)
 		if(isrobot(user))
 			return
-		user.drop_item()
+		if(!user.drop_item()) //couldn't drop the item
+			user << "<span class='notice'>\The [W] is stuck to your hand, you cannot put it in \the [src]!</span>"
+			return
 		if(W)
 			W.loc = src.loc
 	else if(istype(W, /obj/item/weapon/packageWrap))

@@ -609,7 +609,9 @@
 		..()
 		new/obj/effect/decal/cleanable/tomato_smudge(src.loc)
 		src.visible_message("<span class='notice'>The [src.name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
-		qdel(src)
+		for(var/atom/A in get_turf(hit_atom))
+			src.reagents.reaction(A)
+		del(src) // Not qdel, because it'll hit other mobs then the floor for runtimes.
 		return
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/killertomato
@@ -651,7 +653,7 @@
 	src.reagents.reaction(get_turf(hit_atom))
 	for(var/atom/A in get_turf(hit_atom))
 		src.reagents.reaction(A)
-	qdel(src)
+	del(src) // Not qdel, because it'll hit other mobs then the floor for runtimes.
 	return
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato
@@ -674,7 +676,7 @@
 	src.reagents.reaction(get_turf(hit_atom))
 	for(var/atom/A in get_turf(hit_atom))
 		src.reagents.reaction(A)
-	qdel(src)
+	del(src) // Not qdel, because it'll hit other mobs then the floor for runtimes.
 	return
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato/Crossed(AM as mob|obj)

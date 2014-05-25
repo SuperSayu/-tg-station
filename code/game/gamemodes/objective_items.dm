@@ -106,6 +106,10 @@ datum/objective_item/steal/reactive
 	excludefromjob = list("Research Director")
 	antag_types = list("traitor","Changeling","Space Ninja")
 
+datum/objective_item/steal/documents
+	name = "a set of secret documents"
+	targetitem = /obj/item/documents //Any set of secret documents. Doesn't have to be NT's
+	difficulty = 5
 datum/objective_item/steal/dermal
 	name = "the head of security's dermal armor patch"
 	targetitem = /obj/item/clothing/head/helmet/HoS/dermal
@@ -194,6 +198,11 @@ datum/objective_item/steal/slime/check_special_completion(var/obj/item/slime_ext
 		return 1
 	return 0
 
+//Unique Objectives
+datum/objective_item/unique/docs_red
+	name = "the \"Red\" secret documents"
+	targetitem = /obj/item/documents/syndicate/red
+	difficulty = 10
 datum/objective_item/steal/id_cards
 	name = "four unique identification cards"
 	targetitem = /obj/item/weapon/card/id
@@ -209,6 +218,11 @@ datum/objective_item/steal/id_cards/check_special_completion(var/obj/item/weapon
 			return 0
 	found += id
 	return (found.len >= 4)
+
+datum/objective_item/unique/docs_blue
+	name = "the \"Blue\" secret documents"
+	targetitem = /obj/item/documents/syndicate/blue
+	difficulty = 10
 
 datum/objective_item/steal/reagent
 	name = "50 units of unstable mutagen"

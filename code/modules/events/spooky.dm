@@ -13,7 +13,7 @@
 	announceWhen = rand(30, 90)
 
 /datum/round_event/ghosts/announce()
-	command_alert("Unknown quasi-aetheric entities have been detected near [station_name()], please stand-by.", "Lifesign Alert?")
+	priority_announce("Unknown quasi-aetheric entities have been detected near [station_name()], please stand-by.", "Lifesign Alert?")
 
 
 /datum/round_event/ghosts/start()

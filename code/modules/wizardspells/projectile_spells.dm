@@ -106,6 +106,7 @@
 		while(sidestep)
 			end = get_step(end,sidestep_dir)
 			sidestep--
+			target = end
 		P.yo = end.y - start.y
 		P.xo = end.x - start.x
 		P.current = target
@@ -197,8 +198,9 @@
 	desc = "Throws a wall of metal towards the target."
 	require_clothing = 0
 
-
+	homing = 1
 	target_lying = 1
+	target_animals = 1
 	projectile_count = 7
 	directcast_projectile_count = 3
 	projectile_spread = 2
@@ -216,7 +218,6 @@
 
 	wand_state = "polywand"
 
-	homing = 1
 	target_animals = 1
 	target_dead = 1
 	target_lying = 1

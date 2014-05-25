@@ -7,6 +7,7 @@
 	name = "Spell"
 	desc = "A wizard spell"
 	panel = "Spells"
+	anchored = 1 // Crap like fireball projectiles are proc_holders, this is needed so fireballs don't get blown back into your face via atmos etc.
 	density = 0
 	opacity = 0
 

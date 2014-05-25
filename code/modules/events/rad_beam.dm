@@ -33,7 +33,7 @@
 	startWhen = rand(14,35)
 
 /datum/round_event/radiation_flux/announce()
-	command_alert("Warning! Abnormal radiation detected on long range scanners.  Likely affected area: [impact_area.name]. Vacate [impact_area.name].", "Anomaly Alert")
+	priority_announce("Warning! Abnormal radiation detected on long range scanners.  Likely affected area: [impact_area.name]. Vacate [impact_area.name].", "Anomaly Alert")
 
 
 /datum/round_event/radiation_flux/start()

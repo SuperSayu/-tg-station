@@ -191,16 +191,16 @@
 					/obj/item/clothing/under/color/green = 3,/obj/item/clothing/under/color/blue = 3, /obj/item/clothing/under/color/purple = 3,
 					/obj/item/clothing/under/color/pink = 3,
 
-					/obj/item/clothing/shoes/black = 5, /obj/item/clothing/shoes/brown = 5, /obj/item/clothing/shoes/white = 5,
-					/obj/item/clothing/shoes/red = 2, /obj/item/clothing/shoes/yellow = 2,
-					/obj/item/clothing/shoes/green = 2,/obj/item/clothing/shoes/blue = 2,/obj/item/clothing/shoes/purple=2,
+					/obj/item/clothing/shoes/sneakers/black = 5, /obj/item/clothing/shoes/sneakers/brown = 5, /obj/item/clothing/shoes/sneakers/white = 5,
+					/obj/item/clothing/shoes/sneakers/red = 2, /obj/item/clothing/shoes/sneakers/yellow = 2,
+					/obj/item/clothing/shoes/sneakers/green = 2,/obj/item/clothing/shoes/sneakers/blue = 2,/obj/item/clothing/shoes/sneakers/purple=2,
 
 					/obj/item/clothing/glasses/regular = 5, /obj/item/clothing/glasses/eyepatch = 2,
 					/obj/item/clothing/tie/blue = 10, /obj/item/clothing/tie/red = 10)
 	premium = list(/obj/item/clothing/head/beret = 2, /obj/item/clothing/head/cakehat = 0, /obj/item/clothing/head/flatcap = 2, /obj/item/clothing/head/that = 2,
 					/obj/item/clothing/under/suit_jacket = 1,/obj/item/clothing/under/suit_jacket/female = 1,/obj/item/clothing/under/suit_jacket/really_black = 1, /obj/item/clothing/under/sundress = 1, /obj/item/clothing/shoes/sandal = 1,
 					/obj/item/clothing/glasses/monocle = 1)
-	contraband = list(/obj/item/clothing/under/color/rainbow = 1, /obj/item/clothing/head/soft/rainbow = 1, /obj/item/clothing/gloves/rainbow = 1, /obj/item/clothing/shoes/rainbow = 1, /obj/item/clothing/under/blackskirt = 2, /obj/item/clothing/shoes/clown_shoes = 1, /obj/item/clothing/shoes/laceup = 3)
+	contraband = list(/obj/item/clothing/under/color/rainbow = 1, /obj/item/clothing/head/soft/rainbow = 1, /obj/item/clothing/gloves/rainbow = 1, /obj/item/clothing/shoes/sneakers/rainbow = 1, /obj/item/clothing/under/blackskirt = 2, /obj/item/clothing/shoes/clown_shoes = 1, /obj/item/clothing/shoes/laceup = 3)
 
 
 /obj/machinery/vending/refillable/food
@@ -225,22 +225,7 @@
 		return emagged || !scan_id_insert || allowed(user)
 
 	attackby(var/obj/item/W as obj, var/mob/user as mob)
-		if(istype(W,/obj/item/weapon/tray))
-			var/obj/item/weapon/tray/T = W
-			var/loaded = 0
-			for(var/obj/item/snack in T)
-				if(allow_insert(snack,user))
-					T.carrying -= snack
-					snack.loc = loc
-					insert(snack,null) // prevent messages
-					loaded = 1
-			if(loaded)
-				T.update_icon()
-				user << "You load [src] from [W]."
-			else
-				user << "There's nothing on [W] to put in [src]!"
-			return
-		else if(istype(W,/obj/item/weapon/storage/bag/plants))
+		if(istype(W,/obj/item/weapon/storage/bag))
 			var/obj/item/weapon/storage/SB = W
 			var/loaded = 0
 			for(var/obj/item/snack in SB)

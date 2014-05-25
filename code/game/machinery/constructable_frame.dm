@@ -282,7 +282,7 @@ to destroy them and players will be able to make replacements.
 							"/obj/item/weapon/stock_parts/console_screen" = 4)
 
 /obj/item/weapon/circuitboard/thermomachine
-	name = "circuit board (Cooler)"
+	name = "circuit board (Freezer)"
 	desc = "Use screwdriver to switch between heating and cooling modes."
 	build_path = /obj/machinery/atmospherics/unary/cold_sink/freezer
 	board_type = "machine"
@@ -301,7 +301,7 @@ to destroy them and players will be able to make replacements.
 			user << "<span class='notice'>You set the board to heating.</span>"
 		else
 			build_path = /obj/machinery/atmospherics/unary/cold_sink/freezer
-			name = "circuit board (Cooler)"
+			name = "circuit board (Freezer)"
 			user << "<span class='notice'>You set the board to cooling.</span>"
 
 /obj/item/weapon/circuitboard/biogenerator

@@ -20,7 +20,9 @@
 		if(F.on)
 			F.on = 0
 			F.update_brightness(src)
-
+	else if(istype(O, /obj/item/weapon/storage/bag/tray/))
+		var/obj/item/weapon/storage/bag/tray/T = O
+		T.do_quick_empty()
 	if(client)
 		client.screen -= O
 	if(module)
@@ -33,9 +35,6 @@
 		else if(istype(O.loc,/obj/item/weapon/storage))
 			var/obj/item/weapon/storage/S = O.loc
 			S.remove_from_storage(O,loc)
-
-	if(istype(O,/obj/item/weapon/tray))
-		O:un_carry(0) // drop contents of tray so they do not become irretrievable
 
 	O.loc = module
 
