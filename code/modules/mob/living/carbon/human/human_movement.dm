@@ -27,29 +27,25 @@
 	if(bodytemperature < 283.222)
 		. += (283.222 - bodytemperature) / 10 * 1.75
 
-	if(("left leg" in broken) && ("right leg" in broken) && !numbness)
-		. += 1
+	if(!numbness)
+		. += broken.len
 
-	return (. +config.human_delay)
+	return (. + config.human_delay)
 
+/mob/living/carbon/human/var/last_break = 0
 /mob/living/carbon/human/Move()
 	// ugh this looks so ugly
-	var/last_break = 0
-	if(prob(2) && !numbness && !last_break)
-		if("left leg" in broken)
-			src << "\red Pain shoots up your left leg!"
-			adjustStaminaLoss(10)
-			playsound(src, 'sound/weapons/pierce.ogg', 25)
-			last_break = 1
-			spawn(50)
-				last_break = 0
-		if("right leg" in broken)
-			src << "\red Pain shoots up your right leg!"
-			adjustStaminaLoss(10)
-			playsound(src, 'sound/weapons/pierce.ogg', 25)
-			last_break = 1
-			spawn(50)
-				last_break = 0
+	if(prob(2) && !numbness && broken.len && !last_break && has_gravity(src))
+		spawn()
+			var/list/affected = broken&list("left leg","right leg","chest")
+			if(affected.len)
+				var/which = pick(affected)
+				src << "\red Pain shoots up your [which]!"
+				adjustStaminaLoss(10)
+				playsound(src, 'sound/weapons/pierce.ogg', 25)
+				last_break = 1
+				spawn(50)
+					last_break = 0
 	..()
 
 /mob/living/carbon/human/Process_Spacemove(var/check_drift = 0)
