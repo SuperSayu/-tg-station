@@ -39,23 +39,18 @@
 		if("left leg" in broken)
 			src << "\red Pain shoots up your left leg!"
 			adjustStaminaLoss(10)
-		//	Stun(2)
 			playsound(src, 'sound/weapons/pierce.ogg', 25)
 			last_break = 1
 			spawn(50)
 				last_break = 0
-			return
 		if("right leg" in broken)
 			src << "\red Pain shoots up your right leg!"
 			adjustStaminaLoss(10)
-		//	Stun(2)
 			playsound(src, 'sound/weapons/pierce.ogg', 25)
 			last_break = 1
 			spawn(50)
 				last_break = 0
-			return
-	else
-		..()
+	..()
 
 /mob/living/carbon/human/Process_Spacemove(var/check_drift = 0)
 	//Can we act
