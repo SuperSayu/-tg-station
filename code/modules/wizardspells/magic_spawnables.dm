@@ -23,7 +23,7 @@
 	spawn_spelltype = /obj/effect/knowspell/target/prank
 
 /obj/item/weapon/magic/wand/frost
-	spawn_spelltype = /obj/effect/knowspell/projectile/throw/frost
+	spawn_spelltype = /obj/effect/knowspell/projectile/frost
 
 /obj/item/weapon/magic/wand/light
 	spawn_spelltype = /obj/effect/knowspell/summon/target/light
@@ -35,7 +35,7 @@
 	spawn_spelltype = /obj/effect/knowspell/summon/target/forcewall
 
 /obj/item/weapon/magic/staff/broom/sweep
-	spawn_spelltype = /obj/effect/knowspell/projectile/throw/sweep
+	spawn_spelltype = /obj/effect/knowspell/projectile/sweep
 
 
 /obj/item/weapon/magic/spellbook/mime

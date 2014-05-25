@@ -8,6 +8,7 @@
 	var/visible_range = 0
 	var/range = 6
 	var/directcast_charge = 0 // charge lost when casting on something
+	var/directcast_range = 0
 	castingmode = CAST_SPELL|CAST_SELF|CAST_MELEE
 
 	attack(atom/target, mob/caster)
@@ -15,46 +16,21 @@
 	afterattack(atom/target, mob/caster)
 		activate(caster, target)
 
-	cast_check(caster,lesser)
-		return charge_check(caster,lesser) && stat_check(caster) && centcom_check(caster) && clothing_check(caster)
-
-	charge_check(caster,lesser)
-		if(rechargable)
-			if(lesser && directcast_charge)
-				return charge >= directcast_charge
+	filter_target(var/mob/caster, var/atom/target)
+		if(target)
+			if(visible_range)
+				return view(get_turf(target),directcast_range) // do not want to get mob view() code
 			else
-				return charge >= chargemax
-		else
-			return charge > 0
+				return range(target,directcast_range)
+		if(visible_range)
+			return view(get_turf(target),range)
+		return range(target,range)
 
+	charge_required(var/mob/caster, var/atom/target)
+		if(target)
+			return chargemax
+		return directcast_charge
 
-	activate(mob/caster, list/target = null)
-		var/lesser = 0
-		if(isloc(target))
-			var/atom/A = get_turf(target)
-			target = A.contents + A
-			lesser = 1 // targetting only one square
-		if(cast_check(caster,lesser))
-			if(!target)
-				if(visible_range)
-					target = view(caster,range)
-				else
-					target = range(caster,range)
-			else if(isloc(target))
-				var/atom/A = get_turf(target)
-				target = A.contents
-				lesser = 1 // targetting only one square
-
-			if(before_cast(caster,target))
-				cast(caster,target)
-				after_cast(caster,target,lesser)
-				return 1
-	after_cast(caster,target,lesser)
-		if(rechargable && lesser)
-			charge -= directcast_charge
-			start_recharge()
-			return
-		..()
 
 /obj/effect/knowspell/area/emp
 	name = "disable technology"
@@ -70,7 +46,7 @@
 	incantation = "NEC CANTIO"
 	incant_volume = 2
 
-	cast(mob/caster, list/target)
+	cast(mob/caster, atom/source, var/list/target)
 		for(var/atom/movable/AM in target)
 			if(AM == caster && prob(66)) continue
 			if(prob(50))
@@ -92,7 +68,7 @@
 	incantation = "FLASH A-AAAA"
 	incant_volume = 2
 
-	before_cast(mob/caster, list/target)
+	before_cast(mob/caster, atom/source, list/target)
 		for(var/mob/living/ML in target)
 			if(ML.stat) continue
 			if(ML == caster) continue
@@ -100,7 +76,7 @@
 			return 1
 		return 0
 
-	cast(mob/caster, list/target)
+	cast(mob/caster, atom/source, list/target)
 		for(var/mob/living/LM in target)
 			if(LM.stat) continue
 			if(LM == caster) continue
@@ -127,13 +103,13 @@
 	incant_volume = 1
 	castingmode = CAST_SPELL|CAST_SELF|CAST_MELEE
 
-	before_cast(mob/caster, list/target)
+	before_cast(mob/caster, atom/source, list/target)
 		for(var/obj/machinery/door/D in target)
 			..()
 			return 1
 		return 0
 
-	cast(mob/caster, list/target)
+	cast(mob/caster, atom/source, list/target)
 		for(var/obj/machinery/door/D in target)
 			if(!unlock_centcom && !(caster.client && caster.client.holder) && istype(D,/obj/machinery/door/airlock/centcom))
 				continue
@@ -164,14 +140,13 @@
 	attack(atom/target, mob/caster)
 		return activate(caster, target) // return yes if cast
 
-
-	before_cast(mob/caster, list/target)
+	before_cast(mob/caster, atom/source, list/target)
 		for(var/obj/machinery/door/D in target)
 			..()
 			return 1
 		return 0
 
-	cast(mob/caster, list/target)
+	cast(mob/caster, atom/source, list/target)
 		for(var/obj/machinery/door/D in target)
 			if(!unlock_centcom && !(caster.client && caster.client.holder) && istype(D,/obj/machinery/door/airlock/centcom))
 				continue
@@ -193,10 +168,11 @@
 	allow_stuncast = 1
 	incantation = "WOT SEA FLOOR"
 	castingmode = CAST_SPELL | CAST_SELF | CAST_RANGED
+
 	afterattack(atom/A, mob/caster)
 		var/turf/T = get_turf(A)
 		activate(caster,view(T,range))
 
-	cast(mob/caster, list/target)
+	cast(mob/caster, atom/source, list/target)
 		for(var/turf/simulated/T in target)
 			T.MakeSlippery(pick(1,2,2,2))

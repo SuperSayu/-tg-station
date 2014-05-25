@@ -102,9 +102,9 @@
 		if("armor" in href_list)
 			KS = new /obj/effect/knowspell/summon/here/wizard_armor(src)
 		if("change" in href_list)
-			KS = new /obj/effect/knowspell/projectile/throw/change(src)
+			KS = new /obj/effect/knowspell/projectile/change(src)
 		if("animate" in href_list)
-			KS = new /obj/effect/knowspell/projectile/throw/animate(src)
+			KS = new /obj/effect/knowspell/projectile/animate(src)
 		if("disintegrate" in href_list)
 			KS = new /obj/effect/knowspell/target/disintegrate(src)
 		if("stone" in href_list)
@@ -164,10 +164,9 @@
 	name = "book of War"
 	desc = "Crush your enemies, see them driven before you, and hear the lamentations of their women."
 	spawn_spells = list(
-		/obj/effect/knowspell/projectile/throw/fireball,
-		/obj/effect/knowspell/projectile/throw/knives,
-		/obj/effect/knowspell/projectile/throw/frost,
-		/obj/effect/knowspell/projectile/scatter/knives,
+		/obj/effect/knowspell/projectile/fireball,
+		/obj/effect/knowspell/projectile/knives,
+		/obj/effect/knowspell/projectile/frost,
 		/obj/effect/knowspell/target/mutate/good
 	)
 /obj/structure/wizard/spellbook/subterfuge
@@ -177,8 +176,8 @@
 		/obj/effect/knowspell/target/resurrect,
 		/obj/effect/knowspell/area/emp,
 		/obj/effect/knowspell/self/ghostize,
-		/obj/effect/knowspell/projectile/scatter/magicmissile,
-		/obj/effect/knowspell/projectile/scatter/forcearrow,
+		/obj/effect/knowspell/projectile/magicmissile,
+		/obj/effect/knowspell/projectile/forcearrow,
 		/obj/effect/knowspell/summon/world/puppies,
 		/obj/effect/knowspell/target/mindswap
 	)
@@ -188,10 +187,10 @@
 	spawn_spells = list(
 		/obj/effect/knowspell/summon/target/banana,
 		/obj/effect/knowspell/target/mutate/bad,
+		/obj/effect/knowspell/projectile/grease,
 		/obj/effect/knowspell/area/blind,
 		/obj/effect/knowspell/area/knock,
 		/obj/effect/knowspell/area/grease,
-		/obj/effect/knowspell/projectile/throw/sweep,
+		/obj/effect/knowspell/projectile/sweep,
 		/obj/effect/knowspell/target/prank
-//		/obj/effect/knowspell/target/gender_swap // reserved
 	)

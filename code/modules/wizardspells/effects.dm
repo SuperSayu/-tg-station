@@ -157,6 +157,8 @@
 	var/duration = 150
 	var/sidestep = 0 // if >0, step that many tiles to the side
 	var/sidestep_dir = 0
+	var/trail_effect = null
+	var/bullet_speed = 3 // magic ain't bullets exactly
 
 	CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
 		if(air_group || (height==0)) return 1
@@ -170,8 +172,6 @@
 			return 1
 	New()
 		..()
-		if(usr)
-			caster = usr
 		spawn(duration)
 			del src // why are these not dying
 	process()
@@ -185,11 +185,29 @@
 			if((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
 				delete()
 				return
+			if(ispath(trail_effect)) new trail_effect(loc)
 			step_towards(src, current)
 			if(sidestep>0)
 				sidestep--
 				step(src,sidestep_dir)
-			sleep(1)
+			sleep(bullet_speed)
+			if(!bumped && !isturf(original))
+				if(loc == get_turf(original))
+					if(!(original in permutated))
+						Bump(original)
+						sleep(1)
+		return
+	proc/process_homing()
+		if(kill_count < 1)
+			delete()
+			return
+		kill_count--
+		spawn while(src && src.loc && current)
+			if((!( current ) || loc == current))
+				current = locate(min(max(x + xo, 1), world.maxx), min(max(y + yo, 1), world.maxy), z)
+			if(ispath(trail_effect)) new trail_effect(loc)
+			step_towards(src, current)
+			sleep(bullet_speed)
 			if(!bumped && !isturf(original))
 				if(loc == get_turf(original))
 					if(!(original in permutated))
@@ -211,6 +229,7 @@
 	name = "magic blade"
 	icon_state = "render"
 	damage_type = BRUTE
+	nodamage = 0
 	damage = 12
 	weaken = 1
 
@@ -220,14 +239,15 @@
 	icon_state = "ice_2"
 	damage_type = BURN
 	damage = 5
+	nodamage = 0
 
 	on_hit(var/atom/target, var/blocked = 0)
 		for(var/mob/M in range(1,target))
-			M.bodytemperature = max(0,M.bodytemperature - 20)
+			M.bodytemperature = max(10,M.bodytemperature - 20)
 		if(air_master)
 			for(var/turf/simulated/floor/TSF in range(1,target))
 				if(TSF.air)
-					TSF.air.temperature = max(0,TSF.air.temperature - 10)
+					TSF.air.temperature = max(10,TSF.air.temperature - 10)
 					air_master.add_to_active(TSF,0)
 		..()
 /obj/item/projectile/magic/sweep
@@ -240,15 +260,16 @@
 	Move()
 		..()
 		for(var/obj/effect/decal/cleanable/DC in loc)
-			del DC
+			qdel(DC)
 		for(var/atom/movable/I in loc)
 			if(I==src || I.anchored || prob(50)) continue
 			step(I,dir)
-			if(ismob(I) && prob(50))
+			if(ismob(I) && prob(40))
 				I:Weaken(1)
+
 	on_hit(var/atom/movable/target)
 		for(var/obj/effect/decal/cleanable/DC in get_turf(target))
-			del DC
+			qdel(DC)
 		if(!istype(target) || target.anchored) return
 		if(target == caster) return
 		var/turf/throw_target = get_turf(target)
@@ -262,41 +283,19 @@
 			ML.Weaken(1)
 		target.throw_at(throw_target,rand(throwforce,throwforce*2),1)
 
-/obj/item/projectile/magic/homing
-	var/homing_speed = 3
-	duration = 50
-
-	process()
-		if(kill_count < 1)
-			delete()
-			return
-		kill_count--
-		spawn while(src && src.loc && current)
-			if((!( current ) || loc == current))
-				current = locate(min(max(x + xo, 1), world.maxx), min(max(y + yo, 1), world.maxy), z)
-			step_towards(src, current)
-			sleep(homing_speed)
-			if(!bumped && !isturf(original))
-				if(loc == get_turf(original))
-					if(!(original in permutated))
-						Bump(original)
-						sleep(1)
-		return
-
-/obj/item/projectile/magic/homing/magicmissile
+/obj/item/projectile/magic/magicmissile
 	name = "magic missile"
 	desc = "BZZZZAP"
 	icon_state = "magicm"
+	nodamage = 1
 	damage_type = BURN
 	damage = 10
-	weaken = 5
-	process()
-		..()
-		src && new /obj/effect/spelleffect/bullettrail/magicmissile(loc)
+	weaken = 4
+	trail_effect = /obj/effect/spelleffect/bullettrail/magicmissile
 
 	on_hit(var/atom/movable/target, var/blocked = 0)
 		if(target != caster)
-			..(target,blocked)
+			return ..(target,blocked)
 
 /obj/effect/spelleffect/bullettrail/magicmissile
 	name = "magic missile"
@@ -305,26 +304,17 @@
 	New()
 		..()
 		spawn(25)
-			del src
+			qdel(src)
 
-/obj/item/projectile/magic/homing/knives
-	name = "magic blade"
-
-	icon_state = "render"
-	damage_type = BRUTE
-	damage = 15
-	weaken = 1
-	on_hit(var/atom/movable/target, var/blocked = 0)
-		if(target != caster)
-			..(target,blocked)
-
-/obj/item/projectile/magic/homing/forcearrow
+/obj/item/projectile/magic/forcearrow
 	name = "force arrow"
 	desc = "Not the other arrow."
 	icon_state = "arrow"
+	nodamage = 0
 	damage_type = BRUTE
 	damage = 5
 	throwforce = 3 // by coincidence this is the same name as the variable used for how heavily you throw things
+	trail_effect = /obj/effect/spelleffect/bullettrail/magicmissile
 	// but in this case I mean how heavily do you throw the target
 
 	on_hit(var/atom/movable/target, var/blocked = 0)
@@ -340,3 +330,15 @@
 		if(istype(ML))
 			ML.Weaken(1)
 		target.throw_at(throw_target,rand(throwforce,throwforce*2),1)
+
+/obj/item/projectile/magic/grease
+	name = "grease bolt"
+	desc = "Your eyes refuse to focus on it as it goes by.  Probably for the best."
+	icon = 'icons/obj/projectiles.dmi'
+	icon_state = "neurotoxin"
+	duration = 20
+
+	Move()
+		..()
+		if(isturf(loc) && prob(90))
+			loc:MakeSlippery(pick(1,2,2))

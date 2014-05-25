@@ -133,8 +133,8 @@
 	desc = "Jumps from one shadow to another."
 
 	chargemax = 50
-	incant_volume = 0
-	incantation = "NINJA"
+	incant_volume = 0 // not actually spoken
+	incantation = "NINJA" // but you can say it in your mind if you'd like
 	allow_stuncast = 1 // although you can't actually do this with a targetted spell
 	allow_nonhuman = 1
 	require_clothing = 0

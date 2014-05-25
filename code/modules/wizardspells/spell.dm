@@ -53,6 +53,8 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 	var/wand_state = null	// icon state when placed in a wand
 	var/staff_state = null	// icon state when placed in a staff (not broom)
 
+	var/tmp/charging = 0
+
 	New(var/atom/NL, var/override_robeless = 0)
 		..()
 		charge = chargemax
@@ -146,8 +148,8 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 					oldloc.interact()
 			return 1
 
-	proc/cast_check(var/mob/caster)
-		return charge_check(caster) && stat_check(caster) && centcom_check(caster) && clothing_check(caster)
+	proc/cast_check(var/mob/caster, var/atom/target)
+		return charge_check(caster,target) && stat_check(caster) && centcom_check(caster) && clothing_check(caster)
 
 	proc/clothing_check(var/mob/living/carbon/human/H)
 		if(istype(loc,/obj))
@@ -177,9 +179,12 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 
 		return 1
 
-	proc/charge_check(var/mob/caster)
+	proc/charge_required(var/mob/caster, var/target)
+		return chargemax
+
+	proc/charge_check(var/mob/caster, var/atom/target)
 		if(rechargable)
-			return charge >= chargemax
+			return charge >= charge_required(caster,target)
 		else
 			return charge > 0
 
@@ -225,23 +230,29 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 	proc/prepare(mob/user = usr)// distinct from casting, used when clicked on
 		activate(user,null)
 
+	// If you need to change the targets before casting, use this
+	proc/filter_target(var/mob/user, var/atom/target)
+		return target
+
 	proc/activate(mob/user,atom/target = null)
-		if(cast_check(user) && before_cast(user,target))
-			cast(user,target)
-			after_cast(user,target)
-			return 1
+		if(cast_check(user,target))
+			var/filtered = filter_target(user,target)
+			if(before_cast(user,target,filtered))
+				cast(user,target,filtered)
+				after_cast(user,target,filtered)
+				return 1
 		return 0
 
-	proc/before_cast(var/mob/caster, target = null)
+	proc/before_cast(var/mob/caster, target = null, filtered_target = null)
 		incant(caster, target)
 		return 1
 
-	proc/cast(var/mob/caster, target = null)
+	proc/cast(var/mob/caster, target = null, filtered_target = null)
 		return 1
 
-	proc/after_cast(var/mob/caster, target = null)
+	proc/after_cast(var/mob/caster, target = null, filtered_target = null)
 		if(rechargable)
-			charge = 0
+			charge -= charge_required(caster,target)
 			start_recharge()
 		else
 			charge = max(charge-1, 0)
@@ -258,10 +269,14 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 		return 1
 
 	proc/start_recharge()
+		if(charging) return
+		charging = 1
 		spawn()
 			while(charge < chargemax)
 				sleep(1)
 				charge++
+			charge = chargemax // just in case something funny happens
+			charging = 0
 
 /*
 	Special effects, helpers, & fluff
@@ -413,7 +428,4 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 			statpanel(KS.panel,"[KS.charge] left",KS)
 	if(l_hand) l_hand.Stat("Left hand")
 	if(r_hand) r_hand.Stat("Right hand")
-
-/mob/living/carbon/human/list_wizspells()
-	..()
-	if(gloves) gloves.Stat()
+	// suit and gloves stat in human/Stat() already

@@ -76,16 +76,21 @@
 					return
 				new /obj/item/weapon/magic/scroll(loc,PM.spell)
 				PM.dispell(0)
-				return
-			blank = PM
+				return 1
+			glove = PM
 			user.drop_item()
 			PM.loc = src
+			return 1
 
 	attack_hand(mob/user)
 		if(blank)
 			user << "You remove [blank] from [src]."
 			blank.loc = loc
 			blank = null
+		if(glove)
+			user << "You remove [glove] from [src]."
+			glove.loc = loc
+			glove = null
 
 /obj/structure/wizard/namingpylon
 	name = "renaming pylon"
@@ -120,3 +125,4 @@
 		else
 			I.name = newname
 		user << "You give [I] a new name."
+		return 1
