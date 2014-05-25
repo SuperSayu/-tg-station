@@ -1,14 +1,14 @@
 /datum/round_event_control/radiation_storm/gswap
 	name 			= "Gender-swapping Radiation"
 	typepath		= /datum/round_event/radiation_storm/gswap
-	weight			= 6
-	max_occurrences = 4
+	weight			= 0
+	max_occurrences = 0
 /datum/round_event_control/radiation_storm/pota
 	name 			= "Planet of the Apes Radiation"
 	typepath 		= /datum/round_event/radiation_storm/pota
 	weight 			= 1
-	max_occurrences = 2
-	minimumCrew		= 12
+	max_occurrences = 0
+	minimumCrew		= 0
 /datum/round_event_control/radiation_storm/ffour
 	name 			= "Fantastic Four Radiation"
 	typepath 		= /datum/round_event/radiation_storm/ffour
