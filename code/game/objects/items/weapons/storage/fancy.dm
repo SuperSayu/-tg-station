@@ -180,12 +180,9 @@
 
 /obj/item/weapon/storage/fancy/cigarettes/init_scatter()
 	var/list/l = list()
-	while(contents.len && prob(45))
+	while(contents.len && prob(46))
 		var/obj/O = pick(contents)
 		remove_from_storage(O,loc)
-		if(prob(45))
-			del(O)
-			O = new /obj/item/weapon/cigbutt(loc)
 		l += O
 	return l
 

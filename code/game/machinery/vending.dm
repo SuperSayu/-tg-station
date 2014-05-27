@@ -80,11 +80,22 @@
 	..()
 
 /obj/machinery/vending/initialize()
+	..()
 	build_inventory(products)
 	build_inventory(contraband, 1)
 	build_inventory(premium, 0, 1)
-// this vends a bunch of items at roundstart which the table shuffle
-// code will put randomly around the room.
+
+	var/area/A = get_area(src)
+	if(!A || !A.parsed) return
+	A = A.master
+	if(A.tables.len)
+		for(var/obj/item/I in init_vend())
+			I.loc = pick(A.tables)
+			// I am tempted to initialize them, but
+			// testing suggests that the (for AM in world) will catch
+			// items created in this interval
+
+// see areas/table_shuffle.dm for other initailize stuff and related area code
 /obj/machinery/vending/proc/init_vend()
 	if(!products.len) return list()
 	var/amount = rand(initvend_minimum,initvend_maximum)

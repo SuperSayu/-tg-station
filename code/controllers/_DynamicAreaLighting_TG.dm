@@ -234,6 +234,7 @@ turf/proc/build_lighting_area(var/tag, var/level)
 	A.lighting_subarea = 1
 	A.lighting_space = 0 // in case it was copied from a space subarea
 	A.SetLightLevel(level)
+	A.parsed = A.master.parsed
 
 	Area.related += A
 	return A

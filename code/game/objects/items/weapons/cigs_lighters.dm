@@ -81,14 +81,16 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	create_reagents(chem_volume) // making the cigarrete a chemical holder with a maximum volume of 15
 
 /obj/item/clothing/mask/cigarette/initialize()
+	..()
 	if(isturf(loc) && prob(67) && type_butt)
-		var/obj/O = new type_butt(loc)
-		var/p = 34
-		do
-			step_rand(O)
-			p--
-		while(prob(p))
-		del(src)
+		var/area/A = get_area(loc)
+		if(!A || !A.parsed) return
+		A = A.master
+		if(prob(80) && A.empty_floors.len)
+			new type_butt(pick(A.empty_floors))
+		else
+			new type_butt(loc)
+		qdel(src)
 
 /obj/item/clothing/mask/cigarette/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -553,21 +555,25 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	icon = 'icons/obj/cigarettes.dmi'
 	icon_state = "cig_paper_pack"
 	w_class = 1
-	var/papers = 25
+	var/papers = 10
 
 /obj/item/weapon/rollingpaperpack/initialize()
 	if(isturf(loc))
-		while(prob(45) && papers)
+		var/area/A = get_area(loc)
+		if(!A || !A.parsed) return
+		A = A.master
+		var/list/candidates = A.empty_floors + loc
+		while(prob(25) && papers)
 			papers--
-			var/t = pick(/obj/item/weapon/rollingpaper,/obj/item/weapon/cigbutt/roach)
-			var/obj/O = new t(loc)
-			var/p = 45
-			do
-				step_rand(O)
-				step_away(O,src)
-			while(prob(p--))
+			if(prob(80))
+				new /obj/item/weapon/cigbutt/roach(pick(candidates))
+			else
+				if(A.tables.len)
+					new /obj/item/weapon/rollingpaper(pick(A.tables))
+				else
+					step_rand(new /obj/item/weapon/rollingpaper(loc))
 		if(!papers)
-			del(src)
+			qdel(src)
 
 /obj/item/weapon/rollingpaperpack/attack_self(mob/user)
 	if(papers > 1)

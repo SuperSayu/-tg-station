@@ -24,6 +24,13 @@
 				reagents.trans_to(slice,reagents_per_slice)
 			qdel(src)
 			return
+
+		if(prob(34))
+			if(dried_type)
+				new dried_type(loc)
+				qdel(src)
+				return
+
 		if(prob(33) || reagents.total_volume <= bitesize)
 			if(trash)
 				var/obj/O = new trash(loc)
@@ -32,12 +39,8 @@
 				while(prob(34))
 			qdel(src)
 			return
-		if(prob(34))
-			if(dried_type)
-				new dried_type(loc)
-				qdel(src)
-				return
-		if(prob(66))
+
+		if(prob(46))
 			bitecount++
 			reagents.remove_any(bitesize)
 	..()

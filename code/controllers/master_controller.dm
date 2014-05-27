@@ -82,12 +82,12 @@ datum/controller/game_controller/proc/setup()
 
 datum/controller/game_controller/proc/setup_objects()
 
-	world << "\red \b Shuffling initial loadout..."
+	world << "\red \b Parsing area layout..."
 	sleep(-1)
 	for(var/typekey in the_station_areas + /area/wizard_station)
 		if(ispath(typekey,/area/hallway/primary)) continue
 		for(var/subtype in typesof(typekey))
-			shuffle_area(locate(subtype))
+			parse_area(locate(subtype))
 	distribute_secrets()
 
 	world << "\red \b Initializing objects..."

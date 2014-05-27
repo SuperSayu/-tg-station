@@ -384,7 +384,6 @@ proc/process_ghost_teleport_locs()
 	icon_state = "thunder"
 	requires_power = 0
 	has_gravity = 1
-	shuffled = 1
 
 /area/tdome/tdome1
 	name = "\improper Thunderdome (Team 1)"
