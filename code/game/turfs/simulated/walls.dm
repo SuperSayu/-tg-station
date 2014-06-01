@@ -314,8 +314,6 @@
 		F.add_hiddenprint(user)
 		spawn(max(100,300-thermite))
 			if(O)	qdel(O)
-	else if(prob(80))
-		ReplaceWithLattice()
 	else
 		thermite = 0
 		spawn(50)
