@@ -1510,7 +1510,7 @@
 "aDb" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/mechanical{pixel_x = -2; pixel_y = -1},/turf/simulated/floor,/area/storage/primary)
 "aDc" = (/turf/simulated/floor,/area/storage/primary)
 "aDd" = (/obj/machinery/vending/tool,/turf/simulated/floor,/area/storage/primary)
-"aDe" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/simulated/floor{icon_state = "vault"; dir = 1},/area/security/nuke_storage)
+"aDe" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/obj/structure/filingcabinet/filingcabinet,/obj/item/weapon/folder/documents,/turf/simulated/floor{icon_state = "vault"; dir = 1},/area/security/nuke_storage)
 "aDf" = (/turf/simulated/floor{icon_state = "vault"; dir = 6},/area/security/nuke_storage)
 "aDg" = (/obj/machinery/nuclearbomb{r_code = "LOLNO"},/turf/simulated/floor{icon_state = "vault"; dir = 8},/area/security/nuke_storage)
 "aDh" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor{icon_state = "vault"; dir = 10},/area/security/nuke_storage)
