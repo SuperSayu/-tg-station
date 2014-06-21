@@ -247,8 +247,7 @@
 		return
 	if(act)
 		if(act == "scream")	act = "makes a loud and pained whimper" //ugly hack to stop animals screaming when crushed :P
-		for (var/mob/O in viewers(src, null))
-			O.show_message("<B>[src]</B> [act].")
+		visible_message("<B>[src]</B> [act].")
 
 
 /mob/living/simple_animal/attack_animal(mob/living/simple_animal/M as mob)
@@ -257,8 +256,8 @@
 	else
 		if(M.attack_sound)
 			playsound(loc, M.attack_sound, 50, 1, 1)
-		for(var/mob/O in viewers(src, null))
-			O.show_message("\red <B>\The [M]</B> [M.attacktext] [src]!", 1)
+		visible_message("<span class='danger'>\The [M] [M.attacktext] [src]!</span>", \
+				"<span class='userdanger'>\The [M] [M.attacktext] [src]!</span>")
 		add_logs(M, src, "attacked", admin=0)
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		adjustBruteLoss(damage)
@@ -285,9 +284,7 @@
 
 		if("help")
 			if (health > 0)
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message("\blue [M] [response_help] [src].")
+				visible_message("<span class='notice'> [M] [response_help] [src].</span>")
 
 		if("grab")
 			if (M == src || anchored)
@@ -303,16 +300,13 @@
 
 			LAssailant = M
 
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message("\red [M] has grabbed [src] passively!", 1)
+			visible_message("<span class='warning'>[M] has grabbed [src] passively!</span>")
+
 		if("disarm")
-			M.visible_message("\red [M] [response_disarm] [src]")
+			visible_message("\red [M] [response_disarm] [src]")
 		if("harm")
 			adjustBruteLoss(harm_intent_damage)
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message("\red [M] [response_harm] [src]!")
+			visible_message("<span class='danger'>[M] [response_harm] [src]!</span>")
 
 	return
 
@@ -322,9 +316,7 @@
 
 		if ("help")
 
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("\blue [M] caresses [src] with its scythe like arm."), 1)
+			visible_message("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>")
 		if ("grab")
 			if(M == src || anchored)
 				return
@@ -342,13 +334,12 @@
 			LAssailant = M
 
 			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message("\red [M] has grabbed [src] passively!", 1)
+			visible_message("<span class='warning'>[M] has grabbed [src] passively!</span>")
 
 		if("harm", "disarm")
 			var/damage = rand(15, 30)
-			visible_message("\red <B>[M] has slashed at [src]!</B>")
+			visible_message("<span class='danger'>[M] has slashed at [src]!</span>", \
+					"<span class='userdanger'>[M] has slashed at [src]!</span>")
 			adjustBruteLoss(damage)
 
 	return
@@ -357,13 +348,14 @@
 
 	switch(L.a_intent)
 		if("help")
-			visible_message("\blue [L] rubs \his head against [src]")
+			visible_message("<span class='notice'>[L] rubs its head against [src].</span>")
 
 
 		else
 
 			var/damage = rand(5, 10)
-			visible_message("\red <B>[L] bites [src]!</B>")
+			visible_message("<span class='danger'>[L] bites [src]!</span>", \
+					"<span class='userdanger'>[L] bites [src]!</span>")
 
 			if(stat != DEAD)
 				L.amount_grown = min(L.amount_grown + damage, L.max_grown)
@@ -377,7 +369,8 @@
 
 	if(M.Victim) return // can't attack while eating!
 
-	visible_message("\red <B>[M.name] glomps [src]!</B>")
+	visible_message("<span class='danger'>[M.name] glomps [src]!</span>", \
+			"<span class='userdanger'>[M.name] glomps [src]!</span>")
 
 	var/damage = rand(1, 3)
 
@@ -404,18 +397,16 @@
 						MED.amount -= 1
 						if(MED.amount <= 0)
 							qdel(MED)
-						for(var/mob/M in viewers(src, null))
-							if ((M.client && !( M.blinded )))
-								M.show_message("\blue [user] applies [MED] on [src]")
+						visible_message("<span class='notice'> [user] applies [MED] on [src].</span>")
 						return
 					else
-						user << "\blue [MED] won't help at all."
+						user << "<span class='notice'> [MED] won't help at all.</span>"
 						return
 			else
-				user << "\blue [src] is at full health."
+				user << "<span class='notice'> [src] is at full health.</span>"
 				return
 		else
-			user << "\blue This [src] is dead, medical items won't bring it back to life."
+			user << "<span class='notice'> [src] is dead, medical items won't bring it back to life.</span>"
 	if(istype(O,/obj/item/weapon/pet_collar))
 		if(!renamable)
 			if(istype(src,/mob/living/simple_animal/hostile) && src.type != /mob/living/simple_animal/hostile/retaliate/goat)

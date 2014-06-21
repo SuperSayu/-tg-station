@@ -1011,6 +1011,8 @@ About the new airlock wires panel:
 			playsound(src.loc, 'sound/machines/airlock.ogg', 30, 1)
 		if(src.closeOther != null && istype(src.closeOther, /obj/machinery/door/airlock/) && !src.closeOther.density)
 			src.closeOther.close()
+	else
+		playsound(src.loc, 'sound/machines/airlockforced.ogg', 30, 1)
 
 	if(autoclose  && normalspeed)
 		spawn(150)
@@ -1051,6 +1053,9 @@ About the new airlock wires panel:
 			playsound(src.loc, 'sound/items/bikehorn.ogg', 30, 1)
 		else
 			playsound(src.loc, 'sound/machines/airlock.ogg', 30, 1)
+	else
+		playsound(src.loc, 'sound/machines/airlockforced.ogg', 30, 1)
+
 	for(var/obj/structure/window/killthis in get_turf(src))
 		killthis.ex_act(2)//Smashin windows
 

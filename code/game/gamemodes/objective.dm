@@ -13,10 +13,19 @@ datum/objective/New(var/text)
 datum/objective/proc/check_completion()
 	return completed
 
+datum/objective/proc/is_unique_objective(possible_target)
+	for(var/datum/objective/assassinate/O in owner.objectives)
+		if(O.get_target() == possible_target)
+			return 0
+	return 1
+
+datum/objective/proc/get_target()
+	return target
+
 datum/objective/proc/find_target()
 	var/list/possible_targets = list()
 	for(var/datum/mind/possible_target in ticker.minds)
-		if(possible_target != owner && ishuman(possible_target.current) && (possible_target.current.stat != 2))
+		if(possible_target != owner && ishuman(possible_target.current) && (possible_target.current.stat != 2) && is_unique_objective(possible_target))
 			possible_targets += possible_target
 
 	if(owner) // avoid duplicates where possible
@@ -260,6 +269,9 @@ datum/objective/steal
 	var/obj/item/steal_target = null //Needed for custom objectives (they're just items, not datums).
 	dangerrating = 5 //Overridden by the individual item's difficulty, but defaults to 5 for custom objectives.
 
+datum/objective/steal/get_target()
+	return steal_target
+
 datum/objective/steal/New()
 	..()
 	if(!possible_items.len)//Only need to fill the list when it's needed.
@@ -283,17 +295,20 @@ datum/objective/steal/find_target()
 	var/datum/objective_item/item = pick(loot)
 	var/trial_limit = 5
 	while(--trial_limit && item.find_duplicate(owner) && loot.len)
-		item = pick(loot)
+		item = pick_n_take(loot)
 	return set_target(item)
 
 
 datum/objective/steal/proc/set_target(var/datum/objective_item/item)
 	targetinfo = item.add_objective() // A few steal item datums need copies instead of working on the global copy
 
-	steal_target = targetinfo.targetitem
-	explanation_text = "Steal [targetinfo.name]."
-	dangerrating = targetinfo.difficulty
-	return steal_target
+		steal_target = targetinfo.targetitem
+		explanation_text = "Steal [targetinfo.name]."
+		dangerrating = targetinfo.difficulty
+		return steal_target
+	else
+		explanation_text = "Free objective"
+		return
 
 datum/objective/steal/proc/select_target() //For admins setting objectives manually.
 	var/list/possible_items_all = possible_items+"custom"
@@ -316,7 +331,7 @@ datum/objective/steal/proc/select_target() //For admins setting objectives manua
 	return steal_target
 
 datum/objective/steal/check_completion()
-	if(!steal_target || !owner.current)	return 0
+	if(!steal_target)	return 1
 	if(!isliving(owner.current))	return 0
 	var/list/all_items = owner.current.GetAllContents()	//this should get things in cheesewheels, books, etc.
 

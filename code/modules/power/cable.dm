@@ -148,6 +148,9 @@ By design, d1 is the smallest direction and d2 is the highest
 
 	else if(istype(W, /obj/item/stack/cable_coil))
 		var/obj/item/stack/cable_coil/coil = W
+		if (coil.get_amount() < 1)
+			user << "Not enough cable"
+			return
 		coil.cable_join(src, user)
 
 	else if(istype(W, /obj/item/device/multitool))
@@ -236,7 +239,7 @@ obj/structure/cable/proc/add_avail(var/amount)
 
 obj/structure/cable/proc/add_load(var/amount)
 	if(powernet)
-		powernet.newload += amount
+		powernet.load += amount
 
 obj/structure/cable/proc/surplus()
 	if(powernet)
@@ -475,6 +478,12 @@ obj/structure/cable/proc/avail()
 	item_state = "coil_red"
 	attack_verb = list("whipped", "lashed", "disciplined", "flogged")
 
+/obj/item/stack/cable_coil/cyborg
+	is_cyborg = 1
+	m_amt = 0
+	g_amt = 0
+	cost = 1
+
 /obj/item/stack/cable_coil/suicide_act(mob/user)
 	if(locate(/obj/structure/stool) in user.loc)
 		user.visible_message("<span class='suicide'>[user] is making a noose with the [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -502,7 +511,7 @@ obj/structure/cable/proc/avail()
 
 	var/obj/item/organ/limb/affecting = H.get_organ(check_zone(user.zone_sel.selecting))
 	if(affecting.status == ORGAN_ROBOTIC)
-		src.item_heal_robotic(H, user, 0, 30)
+		item_heal_robotic(H, user, 0, 30)
 		src.use(1)
 		return
 	else
@@ -526,12 +535,15 @@ obj/structure/cable/proc/avail()
 /obj/item/stack/cable_coil/examine()
 	set src in view(1)
 
-	if(amount == 1)
-		usr << "A short piece of power cable."
-	else if(amount == 2)
-		usr << "A piece of power cable."
+	if (is_cyborg)
+		usr << "A cable synthesizer. Currently has energy for [get_amount()] lengths of cable."
 	else
-		usr << "A coil of power cable. There are [amount] lengths of cable in the coil."
+		if(get_amount() == 1)
+			usr << "A short piece of power cable."
+		else if(get_amount() == 2)
+			usr << "A piece of power cable."
+		else
+			usr << "A coil of power cable. There are [get_amount()] lengths of cable in the coil."
 
 
 /obj/item/stack/cable_coil/verb/make_restraint()
@@ -564,7 +576,12 @@ obj/structure/cable/proc/avail()
 		src.update_icon()
 		return
 
-	else if( istype(W, /obj/item/stack/cable_coil) )
+	else if(istype(W, /obj/item/stack/cable_coil/cyborg))
+		var/obj/item/stack/cable_coil/cyborg/C = W
+		var/to_transfer = min(src.amount, round((C.source.max_energy - C.source.energy) / C.cost))
+		C.add(to_transfer)
+		src.use(to_transfer)
+	else if(istype(W, /obj/item/stack/cable_coil))
 		var/obj/item/stack/cable_coil/C = W
 		if(C.amount >= MAXCOIL)
 			user << "The coil is too long, you cannot add any more cable to it."
@@ -584,6 +601,7 @@ obj/structure/cable/proc/avail()
 			return
 
 //remove cables from the stack
+/* This is probably reduntant
 /obj/item/stack/cable_coil/use(var/used)
 	if(src.amount < used)
 		return 0
@@ -597,6 +615,11 @@ obj/structure/cable/proc/avail()
 		amount -= used
 		update_icon()
 		return 1
+*/
+/obj/item/stack/cable_coil/use(var/used)
+	. = ..()
+	update_icon()
+	return
 
 //add cables to the stack
 /obj/item/stack/cable_coil/proc/give(var/extra)
@@ -615,11 +638,15 @@ obj/structure/cable/proc/avail()
 	if(!isturf(user.loc))
 		return
 
-	if(get_dist(F,user) > 1) //too far
+	if(get_amount() < 1) // Out of cable
+		user << "There is no cable left."
+		return
+
+	if(get_dist(F,user) > 1) // Too far
 		user << "You can't lay cable at a place that far away."
 		return
 
-	if(F.intact)		// if floor is intact, complain
+	if(F.intact)		// Ff floor is intact, complain
 		user << "You can't lay cable there unless the floor tiles are removed."
 		return
 

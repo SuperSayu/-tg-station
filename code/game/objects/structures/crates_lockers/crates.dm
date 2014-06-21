@@ -298,6 +298,7 @@
 			src.locked = 0
 			overlays.Cut()
 			overlays += greenlight
+			add_fingerprint(user)
 			return
 		else
 			user << "<span class='notice'>[src] is locked.</span>"
@@ -311,6 +312,7 @@
 		src.locked = 1
 		overlays.Cut()
 		overlays += redlight
+		add_fingerprint(user)
 		return
 	else if ( (istype(W, /obj/item/weapon/card/emag)||istype(W, /obj/item/weapon/melee/energy/blade)) && locked &&!broken)
 		overlays.Cut()
@@ -321,6 +323,7 @@
 		src.locked = 0
 		src.broken = 1
 		user << "<span class='notice'>You unlock \the [src].</span>"
+		add_fingerprint(user)
 		return
 
 	return ..()
@@ -346,10 +349,12 @@
 		if(rigged)
 			user << "<span class='notice'>[src] is already rigged!</span>"
 			return
-		user  << "<span class='notice'>You rig [src].</span>"
-		user.drop_item()
-		qdel(W)
-		rigged = 1
+		var/obj/item/stack/cable_coil/C = W
+		if (C.use(5))
+			user << "<span class='notice'>You rig [src].</span>"
+			rigged = 1
+		else
+			user << "<span class='warning'>You need 5 lengths of cable to rig [src].</span>"
 		return
 	else if(istype(W, /obj/item/device/radio/electropack))
 		if(rigged)

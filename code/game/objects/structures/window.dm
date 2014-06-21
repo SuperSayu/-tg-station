@@ -22,9 +22,7 @@
 		health -= Proj.damage
 	..()
 	if(health <= 0)
-		if(!holo)
-			new /obj/item/weapon/shard(loc)
-			if(reinf) new /obj/item/stack/rods(loc)
+		spawnfragments()
 		qdel(src)
 	return
 
@@ -35,24 +33,18 @@
 			qdel(src)
 			return
 		if(2.0)
-			if(!holo)
-				new /obj/item/weapon/shard(loc)
-				if(reinf) new /obj/item/stack/rods(loc)
+			spawnfragments()
 			qdel(src)
 			return
 		if(3.0)
 			if(prob(50))
-				if(!holo)
-					new /obj/item/weapon/shard(loc)
-					if(reinf) new /obj/item/stack/rods(loc)
+				spawnfragments()
 				qdel(src)
 				return
 
 
 /obj/structure/window/blob_act()
-	if(!holo)
-		new /obj/item/weapon/shard(loc)
-		if(reinf) new /obj/item/stack/rods(loc)
+	spawnfragments()
 	qdel(src)
 
 
@@ -92,9 +84,7 @@
 		update_nearby_icons()
 		step(src, get_dir(AM, src))
 	if(health <= 0)
-		if(!holo)
-			new /obj/item/weapon/shard(loc)
-			if(reinf) new /obj/item/stack/rods(loc)
+		spawnfragments()
 		qdel(src)
 
 /obj/structure/window/attack_tk(mob/user as mob)
@@ -108,9 +98,8 @@
 	if(HULK in user.mutations)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!"))
 		user.visible_message("<span class='danger'>[user] smashes through [src]!</span>")
-		if(!holo)
-			new /obj/item/weapon/shard(loc)
-			if(reinf) new /obj/item/stack/rods(loc)
+		add_fingerprint(user) // gets transferred in spawnfrags
+		spawnfragments()
 		qdel(src)
 	else
 		user.changeNext_move(8)
@@ -130,9 +119,7 @@
 	health -= damage
 	if(health <= 0)
 		user.visible_message("<span class='danger'>[user] smashes through [src]!</span>")
-		if(!holo)
-			new /obj/item/weapon/shard(loc)
-			if(reinf) new /obj/item/stack/rods(loc)
+		spawnfragments()
 		qdel(src)
 	else	//for nicer text~
 		user.visible_message("<span class='danger'>[user] smashes into [src]!</span>")
@@ -225,16 +212,20 @@
 			var/index = null
 			index = 0
 			while(index < 2)
-				new /obj/item/weapon/shard(loc)
-				if(reinf) new /obj/item/stack/rods(loc)
+				spawnfragments()
 				index++
 		else
-			if(!holo)
-				new /obj/item/weapon/shard(loc)
-				if(reinf) new /obj/item/stack/rods(loc)
+			spawnfragments()
 		qdel(src)
 		return
 
+/obj/structure/window/proc/spawnfragments()
+	if(holo) return
+	var/newshard = new /obj/item/weapon/shard(loc)
+	transfer_fingerprints_to(newshard)
+	if(reinf)
+		var/newrods = new /obj/item/stack/rods(loc)
+		transfer_fingerprints_to(newrods)
 
 /obj/structure/window/verb/rotate()
 	set name = "Rotate Window Counter-Clockwise"
@@ -307,6 +298,7 @@
 	update_nearby_icons()
 
 	return
+
 
 /obj/structure/window/Destroy()
 	density = 0
