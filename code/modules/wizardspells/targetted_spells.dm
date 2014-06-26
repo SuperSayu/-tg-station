@@ -228,8 +228,8 @@
 		if(target.stat == 2)
 			if(istype(target,/mob/living/carbon/human))
 				var/mob/living/carbon/human/H = target
-				if(H.dna && H.dna.mutantrace != "skeleton")
-					H.dna.mutantrace = "skeleton"
+				if(H.dna && !istype(H.dna.species,/datum/species/skeleton))
+					H.dna.species = new /datum/species/skeleton()
 					updateappearance(H)
 			inspire_loyalty(caster, target)
 

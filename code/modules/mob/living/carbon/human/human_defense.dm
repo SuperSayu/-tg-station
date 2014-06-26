@@ -211,39 +211,6 @@ emp_act
 			if(Iforce > 10 || Iforce >= 5 && prob(33))
 				forcesay(hit_appends)	//forcesay checks stat already
 
-	var/breakchance = (I.force / 4) * I.w_class
-	//src << "\red [breakchance]% chance of breaking."
-	if(I.damtype == BRUTE && I.w_class > 1)
-		// sticks and stones will break your bones
-		if(hit_area in broken)
-			return
-		var/hit_name
-		switch(hit_area)
-			if("head")
-				hit_name = "skull"
-				breakchance /= 4
-			if("chest")
-				hit_name = "ribs"
-				breakchance /= 2
-		if(!hit_name)
-			hit_name = hit_area
-			breakchance *= 1.5
-		if(HULK in user.mutations)
-			// HULK SMASH
-			breakchance *= 2
-		if(armor >= 2)
-			return
-		else if(prob(breakchance))
-			broken += hit_area
-			playsound(src, 'sound/weapons/pierce.ogg', 50)
-			var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
-			if(hit_area != "chest")
-				visible_message("<span class='danger'>[src]'s [hit_name] breaks with a [breaknoise]!</span>", \
-								"<span class='userdanger'>Your [hit_name] breaks with a [breaknoise]!</span>")
-			else
-				visible_message("<span class='danger'>[src]'s [hit_name] break with a [breaknoise]!</span>", \
-								"<span class='userdanger'>Your [hit_name] break with a [breaknoise]!</span>")
-
 
 /mob/living/carbon/human/emp_act(severity)
 	var/informed = 0

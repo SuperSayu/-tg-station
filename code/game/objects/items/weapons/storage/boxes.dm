@@ -496,16 +496,16 @@
 	if(istype(W, /obj/item/weapon/match))
 		W.matchignite()
 	return
-	initialize()
-		if(isturf(loc))
-			while(prob(45) && contents.len)
-				var/obj/item/weapon/match/C = pick(contents)
-				remove_from_storage(C,loc)
-				step_rand(C)
-				while(prob(33)) step_rand(C)
-				if(prob(35))
-					C.icon_state = "match_burnt"
-					C.lit = -1
+/obj/item/weapon/storage/box/matches/initialize()
+	if(isturf(loc))
+		while(prob(45) && contents.len)
+			var/obj/item/weapon/match/C = pick(contents)
+			remove_from_storage(C,loc)
+			step_rand(C)
+			while(prob(33)) step_rand(C)
+			if(prob(35))
+				C.icon_state = "match_burnt"
+				C.lit = -1
 
 
 /obj/item/weapon/storage/box/lights

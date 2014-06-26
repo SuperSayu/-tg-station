@@ -513,6 +513,7 @@
 					if(1)	H.healths.icon_state = "health6"
 					if(2)	H.healths.icon_state = "health7"
 					else
+						/*
 						switch(H.health - H.staminaloss)
 							if(100 to INFINITY)		H.healths.icon_state = "health0"
 							if(80 to 100)			H.healths.icon_state = "health1"
@@ -521,6 +522,19 @@
 							if(20 to 40)			H.healths.icon_state = "health4"
 							if(0 to 20)				H.healths.icon_state = "health5"
 							else					H.healths.icon_state = "health6"
+						*/
+						switch(H.health - H.staminaloss)
+							if(100 to INFINITY)		H.healths.icon_state = "health10"
+							if(90 to 100)			H.healths.icon_state = "health9"
+							if(80 to 90)			H.healths.icon_state = "health8"
+							if(70 to 80)			H.healths.icon_state = "health7"
+							if(60 to 70)			H.healths.icon_state = "health6"
+							if(50 to 60)			H.healths.icon_state = "health5"
+							if(40 to 50)			H.healths.icon_state = "health4"
+							if(30 to 40)			H.healths.icon_state = "health3"
+							if(15 to 30)			H.healths.icon_state = "health2"
+							if(0 to 15)				H.healths.icon_state = "health1"
+							else					H.healths.icon_state = "health0"
 
 		if(H.nutrition_icon)
 			switch(H.nutrition)
@@ -657,6 +671,8 @@
 		if(H.bodytemperature < 283.222)
 			mspeed += (283.222 - H.bodytemperature) / 10 * 1.75
 
+		mspeed += H.broken.len
+
 		mspeed += speedmod
 
 		return mspeed
@@ -664,6 +680,35 @@
 	//////////////////
 	// ATTACK PROCS //
 	//////////////////
+
+	proc/spec_bone_use_check(var/mob/living/carbon/human/M, var/limbs, var/agony_prob)
+		if(M.numbness || !M.broken.len || !prob(agony_prob)) return 0
+		var/list/affected = M.broken & limbs // works if limbs is a list or string
+		if(!affected.len) return 0
+		var/l = pick(affected)
+		M << "\red You painfully dislodge your broken [l]!"
+		M.emote("scream")
+		M.adjustStaminaLoss(2)
+		playsound(M.loc, 'sound/weapons/pierce.ogg', 25)
+		return 1
+
+	proc/spec_break_bone(var/mob/living/carbon/human/target, var/obj/item/organ/limb/affecting, var/break_prob)
+		if(affecting.status != ORGAN_ORGANIC || !prob(break_prob)) return 0
+		var/hit_area = parse_zone(affecting.name)
+		if(target.broken.len && (hit_area in target.broken)) return 0
+		target.broken += hit_area
+		var/hit_desc
+		if(hit_area == "head")
+			hit_desc = "skull breaks"
+		else if(hit_area == "chest")
+			hit_desc = "ribs break"
+		else
+			hit_desc = "[hit_area] breaks"
+
+		playsound(target, 'sound/weapons/pierce.ogg', 50)
+		var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
+		target.visible_message("<span class='danger'>[target]'s [hit_desc] with a [breaknoise]!</span>", "<span class='userdanger'>Your [hit_desc] with a [breaknoise]!</span>")
+		return 1
 
 	proc/spec_attack_hand(var/mob/living/carbon/human/M, var/mob/living/carbon/human/H)
 		if((M != H) && H.check_shields(0, M.name))
@@ -706,6 +751,9 @@
 
 				add_logs(M, H, "grabbed", addition="passively")
 
+				if(spec_bone_use_check(M, M.hand?"left hand":"right hand", 55))
+					return // cannot grab with a broken arm
+
 				if(H.w_uniform)
 					H.w_uniform.add_fingerprint(M)
 
@@ -724,6 +772,11 @@
 
 			if("harm")
 				add_logs(M, H, "punched")
+
+				spec_bone_use_check(M,M.hand?"left hand":"right hand", 65)
+				// can still punch with a broken arm (but ow)
+
+				var/can_break = 0
 
 				var/atk_verb = "punch"
 				if(H.lying)
@@ -749,6 +802,7 @@
 
 				if(HULK in M.mutations)
 					damage += 5
+					can_break = 1
 
 				if(M.dna)
 					playsound(H.loc, M.dna.species.attack_sound, 25, 1, -1)
@@ -767,6 +821,11 @@
 					H.forcesay(hit_appends)
 				else if(H.lying)
 					H.forcesay(hit_appends)
+
+				if(can_break)
+					// HULK SMASH
+					spec_break_bone(H, affecting, 10)
+
 
 			if("disarm")
 				add_logs(M, H, "disarmed")
@@ -836,6 +895,9 @@
 		else
 			return 0
 
+		// You can still swing even heavy objects, but ouch
+		spec_bone_use_check(user, user.hand?"left hand":"right hand", I.w_class * 20)
+
 		var/armor = H.run_armor_check(affecting, "melee", "<span class='warning'>Your armour has protected your [hit_area].</span>", "<span class='warning'>Your armour has softened a hit to your [hit_area].</span>")
 		if(armor >= 100)	return 0
 		var/Iforce = I.force //to avoid runtimes on the forcesay checks at the bottom. Some items might delete themselves if you drop them. (stunning yourself, ninja swords)
@@ -843,6 +905,25 @@
 		apply_damage(I.force, I.damtype, affecting, armor, H)
 
 		var/bloody = 0
+
+		// breaking bones
+		if(I.force > 1 && I.damtype == BRUTE && (!H.broken.len || !(hit_area in H.broken)))
+			var/breakchance = I.force / 4 * I.w_class
+			switch(hit_area)
+				if("head")
+					breakchance /= 4
+				if("chest")
+					breakchance /= 2
+				else
+					breakchance *= 1.5
+			if(HULK in user.mutations)
+				breakchance *= 2
+			breakchance *= (100 / armor)
+
+			if(spec_break_bone(H, affecting, breakchance))
+				bloody = 1 // yeah that sheds blood
+
+
 		if(((I.damtype == BRUTE) && prob(25 + (I.force * 2))))
 			if(affecting.status == ORGAN_ORGANIC)
 				I.add_blood(H)	//Make the weapon bloody, not the person.

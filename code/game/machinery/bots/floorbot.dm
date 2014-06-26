@@ -113,7 +113,7 @@
 		src.amount += loaded
 		if (loaded > 0)
 			user << "<span class='notice'>You load [loaded] tiles into the floorbot. He now contains [src.amount] tiles.</span>"
-			src.updateicon()
+			src.update_icon()
 		else
 			user << "<span class='warning'>You need at least one floor tile to put into the floorbot.</span>"
 	else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))

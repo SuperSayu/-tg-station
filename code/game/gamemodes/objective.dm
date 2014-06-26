@@ -301,14 +301,10 @@ datum/objective/steal/find_target()
 
 datum/objective/steal/proc/set_target(var/datum/objective_item/item)
 	targetinfo = item.add_objective() // A few steal item datums need copies instead of working on the global copy
-
-		steal_target = targetinfo.targetitem
-		explanation_text = "Steal [targetinfo.name]."
-		dangerrating = targetinfo.difficulty
-		return steal_target
-	else
-		explanation_text = "Free objective"
-		return
+	steal_target = targetinfo.targetitem
+	explanation_text = "Steal [targetinfo.name]."
+	dangerrating = targetinfo.difficulty
+	return steal_target
 
 datum/objective/steal/proc/select_target() //For admins setting objectives manually.
 	var/list/possible_items_all = possible_items+"custom"
