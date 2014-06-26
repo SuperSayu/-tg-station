@@ -29,6 +29,16 @@
 /obj/item/weapon/storage/proc/init_scatter()
 	return list()
 
+/obj/item/weapon/storage/examine()
+	. = ..()
+	if(usr && !issilicon(usr) && adjacent(usr))
+		if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
+			return
+		orient2hud(usr)					// dunno why it wasn't before
+		if(usr.s_active)
+			usr.s_active.close(usr)
+		show_to(usr)
+
 /obj/item/weapon/storage/MouseDrop(obj/over_object)
 	if(iscarbon(usr)) //all the check for item manipulation are in other places, you can safely open any storages as anything and its not buggy, i checked
 		var/mob/M = usr
@@ -79,6 +89,7 @@
 				return
 	if(user.s_active)
 		user.s_active.hide_from(user)
+
 	user.client.screen -= boxes
 	user.client.screen -= closer
 	user.client.screen -= contents

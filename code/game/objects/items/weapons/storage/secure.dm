@@ -32,6 +32,13 @@
 		..()
 		usr << text("The service panel is [src.open ? "open" : "closed"].")
 
+	show_to(mob/user as mob)
+		if(locked && !istype(user,/mob/dead))
+			user << "\red It's locked!"
+		else
+			..()
+		return
+
 	attackby(obj/item/weapon/W as obj, mob/user as mob)
 		if(locked)
 			if ( (istype(W, /obj/item/weapon/card/emag)||istype(W, /obj/item/weapon/melee/energy/blade)) && (!src.emagged))
@@ -78,13 +85,6 @@
 			return
 
 		// -> storage/attackby() what with handle insertion, etc
-		..()
-
-
-	MouseDrop(over_object, src_location, over_location)
-		if (locked)
-			src.add_fingerprint(usr)
-			return
 		..()
 
 

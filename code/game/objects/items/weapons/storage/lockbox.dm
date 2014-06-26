@@ -60,7 +60,7 @@
 	return
 
 /obj/item/weapon/storage/lockbox/show_to(mob/user as mob)
-	if(locked)
+	if(locked && !istype(user,/mob/dead))
 		user << "\red It's locked!"
 	else
 		..()
