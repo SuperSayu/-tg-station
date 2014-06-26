@@ -247,7 +247,7 @@
 		if(air_master)
 			for(var/turf/simulated/floor/TSF in range(1,target))
 				if(TSF.air)
-					TSF.air.temperature = max(10,TSF.air.temperature - 10)
+					TSF.air.temperature = max(20,TSF.air.temperature - 20)
 					air_master.add_to_active(TSF,0)
 		..()
 /obj/item/projectile/magic/sweep

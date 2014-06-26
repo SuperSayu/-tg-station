@@ -140,7 +140,7 @@
 		s["enter"] = enter_allowed
 		s["vote"] = config.allow_vote_mode
 		s["ai"] = config.allow_ai
-		s["host"] = host ? host : null
+		s["host"] = host ? host : "not set"
 
 		var/admins = 0
 		for(var/client/C in clients)

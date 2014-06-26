@@ -7,6 +7,10 @@
 	item_state = "lb_suit"
 	item_color = "overalls"
 
+	action_button_name = "Activate suit interface"
+	ui_action_click()
+		clothing_interface()
+
 	var/global/list/jumpsuit_choices = list("None")
 	var/obj/item/clothing/under/jumpsuit = null
 	var/global/list/suit_choices = list("None")
@@ -27,7 +31,7 @@
 
 	var/global/list/forbidden = list(/obj/item/clothing/under/actorsuit, /obj/item/clothing/under/chameleon,/obj/item/clothing/under/chameleon/all,
 		/obj/item/clothing/mask/facehugger, /obj/item/clothing/mask/horsehead, /obj/item/clothing/suit/space/space_ninja, /obj/item/clothing/gloves/space_ninja,
-		/obj/item/clothing/head/helmet/space/space_ninja,/obj/item/clothing/mask/gas/voice/space_ninja)
+		/obj/item/clothing/head/helmet/space/space_ninja,/obj/item/clothing/mask/gas/voice/space_ninja, /obj/item/clothing/gloves/magic/shadow)
 
 	New()
 		..()
@@ -86,6 +90,7 @@
 		set src in usr
 		if(!istype(get_area(loc),/area/holodeck))
 			usr << "\red The advanced functions of this jumpsuit only work on the holodeck!"
+			usr << browse(null,"window=clothing_actor")
 			return
 		interact()
 

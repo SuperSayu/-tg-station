@@ -263,7 +263,7 @@
 	projectile_type = /obj/item/projectile/magic/cold
 
 	chargemax = 150
-	directcast_charge = 230
+	directcast_charge = 50
 	incantation = "FROS TIS"
 	incant_volume = 1
 
