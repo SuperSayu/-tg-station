@@ -31,10 +31,10 @@
 
 /obj/item/weapon/storage/examine()
 	. = ..()
-	if(usr && !issilicon(usr) && adjacent(usr))
+	if(usr && !issilicon(usr) && Adjacent(usr))
 		if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
 			return
-		orient2hud(usr)					// dunno why it wasn't before
+		orient2hud(usr)
 		if(usr.s_active)
 			usr.s_active.close(usr)
 		show_to(usr)

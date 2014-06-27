@@ -74,7 +74,15 @@
 
 /datum/game_mode/traitor/post_setup()
 	for(var/datum/mind/traitor in traitors)
-		forge_traitor_objectives(traitor)
+		if(!exchange_blue && traitors.len >= 5) //Set up an exchange if there are enough traitors
+			if(!exchange_red)
+				exchange_red = traitor
+			else
+				exchange_blue = traitor
+				assign_exchange_role(exchange_red)
+				assign_exchange_role(exchange_blue)
+		else
+			forge_traitor_objectives(traitor)
 		spawn(rand(10,100))
 			finalize_traitor(traitor)
 			greet_traitor(traitor)
@@ -114,7 +122,6 @@
 			traitor.objectives += block_objective
 
 	else
-		//Assign two traitors for exchange objective
 		if((traitors.len > 5) && !exchange_blue)
 			if(!exchange_red)
 				exchange_red = traitor
@@ -122,83 +129,35 @@
 				exchange_blue = traitor
 				assign_exchange_role(exchange_red,"red")
 				assign_exchange_role(exchange_blue,"blue")
-/*
-// Unfortunately this tg version, while it is scalable with the config script,
-// ignores our needs as lowpop in that we cannot have too many kill objetives
-		else
-			for(var/i = 0, i < config.traitor_objectives_amount, i++)
-				if(prob(50))
-					var/datum/objective/assassinate/kill_objective = new
-					kill_objective.owner = traitor
-					kill_objective.find_target()
-					traitor.objectives += kill_objective
-				else
-					var/datum/objective/steal/steal_objective = new
-					steal_objective.owner = traitor
-					steal_objective.find_target()
-					traitor.objectives += steal_objective
-*/
-			if(prob(90))
-				if(!(locate(/datum/objective/escape) in traitor.objectives))
-					var/datum/objective/escape/escape_objective = new
-					escape_objective.owner = traitor
-					traitor.objectives += escape_objective
-			else if(!(locate(/datum/objective/hijack) in traitor.objectives))
-				var/datum/objective/hijack/hijack_objective = new
-				hijack_objective.owner = traitor
-				traitor.objectives += hijack_objective
-			return
-		switch(rand(1,100))
-			if(1 to 45)
-				var/datum/objective/assassinate/kill_objective = new
-				kill_objective.owner = traitor
-				kill_objective.find_target()
-				traitor.objectives += kill_objective
-			if(46 to 75)
-				var/datum/objective/steal/steal_objective = new
-				steal_objective.owner = traitor
-				steal_objective.find_target()
-				traitor.objectives += steal_objective
-			else
-				var/datum/objective/steal/steal_objective = new
-				steal_objective.owner = traitor
-				steal_objective.find_target()
-				traitor.objectives += steal_objective
 
-		switch(rand(1,100))
-			if(1 to 25)
-				var/datum/objective/assassinate/kill_objective = new
-				kill_objective.owner = traitor
-				kill_objective.find_target()
-				traitor.objectives += kill_objective
-			//if(26 to 60)
-			else
-				var/datum/objective/steal/steal_objective = new
-				steal_objective.owner = traitor
-				steal_objective.find_target()
-				traitor.objectives += steal_objective
-			/*else
-				var/datum/objective/steal/steal_objective = new
-				steal_objective.owner = traitor
-				steal_objective.find_target()
-				traitor.objectives += steal_objective
-
-				steal_objective = new
-				steal_objective.owner = traitor
-				steal_objective.find_target()
-				traitor.objectives += steal_objective*/
-		switch(rand(1,100))
-			if(1 to 90)
-				if (!(locate(/datum/objective/escape) in traitor.objectives))
-					var/datum/objective/escape/escape_objective = new
-					escape_objective.owner = traitor
-					traitor.objectives += escape_objective
-			else
-				if (!(locate(/datum/objective/hijack) in traitor.objectives))
-					var/datum/objective/hijack/hijack_objective = new
-					hijack_objective.owner = traitor
-					traitor.objectives += hijack_objective
+		for(var/i = 0, i < config.traitor_objectives_amount, i++)
+			random_traitor_objective(traitor)
+		forge_escape_objective(traitor)
 	return
+
+/datum/game_mode/proc/random_traitor_objective(var/datum/mind/traitor)
+	if(prob(35))
+		var/datum/objective/assassinate/kill = new
+		kill.owner = traitor
+		kill.find_target()
+		traitor.objectives += kill
+	else
+		var/datum/objective/steal/steal = new
+		steal.owner = traitor
+		steal.find_target()
+		traitor.objectives += steal
+
+/datum/game_mode/proc/forge_escape_objective(var/datum/mind/traitor)
+	if(prob(90))
+		if (!(locate(/datum/objective/escape) in traitor.objectives))
+			var/datum/objective/escape/escape_objective = new
+			escape_objective.owner = traitor
+			traitor.objectives += escape_objective
+	else
+		if (!(locate(/datum/objective/hijack) in traitor.objectives))
+			var/datum/objective/hijack/hijack_objective = new
+			hijack_objective.owner = traitor
+			traitor.objectives += hijack_objective
 
 
 /datum/game_mode/proc/greet_traitor(var/datum/mind/traitor)
@@ -226,10 +185,10 @@
 	traitor_mob << "<U><B>The Syndicate provided you with the following information on how to identify their agents:</B></U>"
 	traitor_mob << "<B>Code Phrase</B>: <span class='danger'>[syndicate_code_phrase]</span>"
 	traitor_mob << "<B>Code Response</B>: <span class='danger'>[syndicate_code_response]</span>"
-	
+
 	traitor_mob.mind.store_memory("<b>Code Phrase</b>: [syndicate_code_phrase]")
 	traitor_mob.mind.store_memory("<b>Code Response</b>: [syndicate_code_response]")
-	
+
 	traitor_mob << "Use the code words in the order provided, during regular conversation, to identify other agents. Proceed with caution, however, as everyone is a potential foe."
 
 
@@ -241,7 +200,7 @@
 	killer << "New law: 0. [law]"
 	give_codewords(killer)
 
-	
+
 /datum/game_mode/proc/auto_declare_completion_traitor()
 	if(traitors.len)
 		var/text = "<br><font size=3><b>The [traitor_name]s were:</b></font>"
@@ -362,38 +321,35 @@
 			traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [pda_pass] ([R.name] [loc]).")
 	if(!safety)//If they are not a rev. Can be added on to.
 		give_codewords(traitor_mob)
-	if(traitor_mob.mind == exchange_red || traitor_mob.mind == exchange_blue)
-		equip_exchange(traitor_mob)
 
-/datum/game_mode/proc/assign_exchange_role(var/datum/mind/owner, var/faction)
+/datum/game_mode/proc/assign_exchange_role(var/datum/mind/owner)
+	//set faction
+	var/faction = "red"
+	if(owner == exchange_blue)
+		faction = "blue"
+
+	//Assign objectives
 	var/datum/objective/steal/exchange/exchange_objective = new
+	exchange_objective.set_faction(faction,((faction == "red") ? exchange_blue : exchange_red))
 	exchange_objective.owner = owner
-	exchange_objective.set_faction(faction,(faction == "red" ? exchange_blue : exchange_red))
 	owner.objectives += exchange_objective
 
 	if(prob(20))
 		var/datum/objective/steal/exchange/backstab/backstab_objective = new
-		backstab_objective.owner = owner
 		backstab_objective.set_faction(faction)
+		backstab_objective.owner = owner
 		owner.objectives += backstab_objective
 
-	var/datum/objective/escape_objective
-	if(90)
-		escape_objective = new/datum/objective/escape
-	else
-		escape_objective = new/datum/objective/hijack
-	escape_objective.owner = owner
-	owner.objectives += escape_objective
+	forge_escape_objective(owner)
 
-/datum/game_mode/proc/equip_exchange(mob/living/carbon/human/mob)
-	if(!istype(mob))
-		return
+	//Spawn and equip documents
+	var/mob/living/carbon/human/mob = owner.current
 
 	var/obj/item/weapon/folder/syndicate/folder
-	if(mob.mind == exchange_red)
-		folder = new/obj/item/weapon/folder/syndicate/red(mob)
+	if(owner == exchange_red)
+		folder = new/obj/item/weapon/folder/syndicate/red(mob.locs)
 	else
-		folder = new/obj/item/weapon/folder/syndicate/blue(mob)
+		folder = new/obj/item/weapon/folder/syndicate/blue(mob.locs)
 
 	var/list/slots = list (
 		"backpack" = slot_in_backpack,
@@ -402,9 +358,10 @@
 		"left hand" = slot_l_hand,
 		"right hand" = slot_r_hand,
 	)
-	var/where = mob.equip_in_one_of_slots(folder, slots)
-	if (!where)
-		mob << "<span class='warning'>Your Syndicate employer was unable to send you their secret documents.</span>"
-	else
-		mob << "<span class='info'>In your [where] is a folder containing <b>secret documents</b> that another Syndicate group wants. We have set up a meeting with one of their agents on station to make an exchange. Exercise extreme caution as they cannot be trusted and may be hostile.</span>"
-		mob.update_icons()
+
+	var/where = "At your feet"
+	var/equipped_slot = mob.equip_in_one_of_slots(folder, slots)
+	if (equipped_slot)
+		where = "In your [equipped_slot]"
+	mob << "<BR><BR><span class='info'>[where] is a folder containing <b>secret documents</b> that another Syndicate group wants. We have set up a meeting with one of their agents on station to make an exchange. Exercise extreme caution as they cannot be trusted and may be hostile.</span><BR>"
+	mob.update_icons()
