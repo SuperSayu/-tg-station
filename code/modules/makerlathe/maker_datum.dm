@@ -6,8 +6,11 @@
 
 	// cost - indexed by resource prototype, eg,
 	// cost["cardboard"] = 1000 - that is not 1000 sheets, but 1000 of the resource
-	var/time_cost = 10 // cost increases as resource use increases
 	var/list/cost // cost reduced by maker parts after recalculation
+	var/time_cost = 10 // cost increases as resource use increases
+	var/list/reagent_fill = null // reagents that have to be added to the cost, but may or may not be present for recycling...
+	var/build_fill = null
+
 	var/list/original_cost = list("iron" = 1000)
 
 	// Item produced
@@ -20,12 +23,23 @@
 		name = template.name
 		result_typepath = template.type
 		original_cost = template.maker_cost
+		for(var/entry in original_cost)
+			if(!original_cost[entry]) // zero here indicates it is a reagent filling
+				if(!reagent_fill) reagent_fill = list()
+				var/datum/reagent/R = template.reagents.has_reagent(entry)
+				if(R)
+					reagent_fill[entry] = R.volume
 		qdel(template)
 	else if(istype(template))
 		name = template.name
 		result_typepath = template.type
 		original_cost = template.maker_cost.Copy()
-		// we didn't make it, don't destroy it
+		for(var/entry in original_cost)
+			if(!original_cost[entry]) // zero here indicates it is a reagent filling
+				if(!reagent_fill) reagent_fill = list()
+				var/datum/reagent/R = template.reagents.has_reagent(entry)
+				if(R)
+					reagent_fill[entry] = R.volume
 	else
 		del(src)
 	if(modified_cost)
@@ -48,7 +62,8 @@
 /datum/data/maker_product/proc/check_cost(var/obj/machinery/maker/M)
 	if(!M.reagents) return 0
 	for(var/entry in cost)
-		if(!M.reagents.has_reagent(entry,cost[entry]))
+		if(!cost[entry]) continue // these are optional, if present they are added to the
+		if(!M.reagents.has_reagent(entry,cost[entry])) // reagents of the built object
 			return 0
 	return 1
 
@@ -56,6 +71,15 @@
 	if(!M.reagents) return 0
 	for(var/entry in cost)
 		M.reagents.remove_reagent(entry,cost[entry],1)
+	if(reagent_fill && length(reagent_fill))
+		build_fill = list()
+		for(var/entry in reagent_fill)		// build_fill will indicate how much of the optional reagents
+			var/datum/reagent/R = M.reagents.has_reagent(entry) // will get put into the final object
+			if(R)							// In many cases this will mean removing reagents from the template.
+				build_fill[entry] = min(reagent_fill[entry], R.volume)
+			else
+				build_fill[entry] = 0
+
 	return 1
 
 /datum/data/maker_product/proc/build(var/obj/machinery/maker/M)
@@ -65,4 +89,17 @@
 		return 0
 	deduct_cost(M)
 	sleep(time_cost)
-	return new result_typepath(M.loc)
+	var/obj/item/result = new result_typepath(M.loc)
+	if(build_fill && result.reagents)	// build_fill indicates fill reagents (fire extinguisher water, etc) that we took from the lathe
+		for(var/entry in build_fill)	// this allows fire extinguishers built without water to have none, same for welding tools, etc
+			var/datum/reagent/R = result.reagents.has_reagent(entry)
+			if(R)
+				R.volume = build_fill[entry]
+			else if(build_fill[entry] > 0)
+				result.reagents.add_reagent(entry,build_fill[entry])
+				R = result.reagents.has_reagent(entry)
+			if(R)
+				M.reagents.remove_reagent(entry,R.volume)
+		result.reagents.update_total()
+	build_fill = null
+	return result

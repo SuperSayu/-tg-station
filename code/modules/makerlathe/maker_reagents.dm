@@ -6,9 +6,10 @@
 */
 // note SOLID is only defined in reagents.dm but whatever
 
-/datum/reagent
-	var/resource_item = null // if this is a typepath, makers can eject this as a solid item
+/datum/reagent/var/resource_item = null // if this is a typepath, makers can eject this as a solid item
+/datum/reagent/var/resource_amt  = MINERAL_MATERIAL_AMOUNT // 2000 by default
 
+/datum/reagent
 	iron/resource_item = /obj/item/stack/sheet/metal
 	gold/resource_item = /obj/item/stack/sheet/mineral/gold
 	silver/resource_item = /obj/item/stack/sheet/mineral/silver
@@ -34,7 +35,7 @@
 	nutriment/cardboard
 		name = "Cardboard"
 		id = "cardboard"
-		nutriment_factor = 0.25 * REAGENTS_METABOLISM
+		nutriment_factor = 0.25 * REAGENTS_METABOLISM // yuck
 		resource_item = /obj/item/stack/sheet/cardboard
 
 	banana/bananium

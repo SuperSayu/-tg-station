@@ -31,7 +31,7 @@
 		if(!(pth in researchable))
 			user << "It looks like the blueprint is not compatable with this machine."
 			return
-		var/res = researchable[pth] // if null or text, not yet implemented on this machine
+		var/res = researchable[pth] // if null or text, no designs yet exist
 		if(!res || istext(res))
 			var/datum/data/maker_product/P = new(src, pth, res)
 			std_products += P
@@ -54,6 +54,8 @@
 
 		else if(istype(I, /obj/item/weapon/crowbar))
 			drop_resource(null) // dump all stocks
+			if(beaker) beaker.loc = loc
+			if(jammed) jammed.loc = loc
 			default_deconstruction_crowbar(I)
 			return 1
 
@@ -85,6 +87,8 @@
 			attack_hand(user)
 			return 1
 
+	else if(busy)
+		user << "[src] is busy."
 	else if(istype(I,/obj/item/weapon/storage) && I.contents.len)
 		var/obj/item/weapon/storage/S = I
 		if((istype(S,/obj/item/weapon/storage/secure) || istype(S,/obj/item/weapon/storage/lockbox)) && S:locked)
@@ -96,6 +100,8 @@
 			var/rejects = 0
 			var/accepts = 0
 			for(var/obj/item/stuff in S)
+				if(!user.Adjacent(src))
+					break
 				if(!filter_recycling(stuff))
 					rejects++
 					continue
@@ -110,13 +116,17 @@
 					user << "<span class='notice'>You recycle some of the contents of [S].</span>"
 				else
 					user << "<span class='notice'>You empty [S] into [src].</span>"
+				. = 1
 			else
 				user << "<span class='notice'>[src] rejects all of the items in [S].</span>"
+	else if(issilicon(user))
+		user << "<span class='warning'>[src] refuses to recycle your components.</span>"
 	else if(filter_recycling(I))
 		user.drop_item()
 		I.loc = loc
 		user.visible_message("<span class='notice'>[user] puts [I] into [src].</span>")
 		decompose(I)
+		. = 1 // prevent afterattack
 	else
 		user << "<span class='warning'>[src] refuses to recycle [I].</span>"
 	src.updateUsrDialog()
@@ -131,6 +141,8 @@
 			jammed = null
 		else
 			visible_message("<span class='warning'>[user] hits [src]!</span>")
+	if(..())
+		return
 	interact(user)
 
 /obj/machinery/maker/interact(var/mob/user)
@@ -159,7 +171,18 @@
 	var/global/list/text_cache = list()
 	. = ""
 	for(var/datum/reagent/R in reagents.reagent_list)
-		. += "[R.name] - [R.volume]"
+		if(R.resource_item && R.volume >= MINERAL_MATERIAL_AMOUNT)
+			var/ratio = round(R.volume / MINERAL_MATERIAL_AMOUNT)
+			. += "[R.name] - [R.volume] <a href='?\ref[src];reagent=[R.id];amt=[MINERAL_MATERIAL_AMOUNT]'>Eject</a>"
+			for(var/qty in list(5,10,25,50))
+				if(qty > ratio) break
+				. += " <a href='?\ref[src];reagent=[R.id];amt=[MINERAL_MATERIAL_AMOUNT * qty]'>([qty])</a>"
+		else
+			if(beaker)
+				. += "[R.name] - [R.volume] <a href='?\ref[src];reagent=[R.id];amt=[R.volume]'>Drain</a>"
+			else
+				. += "[R.name] - [R.volume]"
+		. += "<br>"
 	if(!length(.))
 		. = "No resources loaded."
 
@@ -167,7 +190,10 @@
 	var/list/L = all_menus[current_menu]
 	. = ""
 	for(var/datum/data/maker_product/P in L)
-		. += "<a href='?\ref[src];build=\ref[P]'>[P.name]</a> [P.time_cost/10]s [list2params(P.cost)] <br>"
+		. += "<a href='?\ref[src];build=\ref[P]'>[P.name]</a> [P.time_cost/10]s<br> <i>"
+		for(var/entry in P.cost)
+			. += " &nbsp; [P.cost[entry]] [entry]"
+		. += "</i><br>"
 
 /obj/machinery/maker/proc/list_menus()
 	. = "<a href='?\ref[src];menu'>Main Menu</a> <br>"
@@ -191,25 +217,30 @@
 			dat = {"
 			<style>td { border:1px solid #000; }</style>
 			<table style='width:100%;'>
-				<tr><td style='width:250px;'>[resource_summary()]</td><td style='width:100%;' rowspan='2'>[list_products()]</td></tr>
+				<tr><td width='240'>[resource_summary()]</td><td rowspan='2'>[list_products()]</td></tr>
 				<tr><td>[list_menus()]</td></tr>
 			</table> "}
-	var/datum/browser/popup = new(user, "maker", name)
+	var/datum/browser/popup = new(user, "maker", name, nwidth=640)
 	popup.set_content(dat)
 	popup.set_title_image(user.browse_rsc_icon(icon, icon_state))
 	popup.open()
 
 /obj/machinery/maker/Topic(href, list/href_list)
-	if(!usr.Adjacent(src) || stat)
+	if(!usr.TurfAdjacent(src))
 		return
+	usr.set_machine(src)
 	if("menu" in href_list)
+		if(stat) return
 		if(panel_open)
 			usr << "Close the panel first."
 			updateUsrDialog()
 			return
 		current_menu = href_list["menu"]
 		if(current_menu == "") current_menu = null // I don't know why it is doing this
+	if("reagent" in href_list)
+		drop_resource(href_list["reagent"], text2num(href_list["amt"]))
 	if("build" in href_list)
+		if(stat) return
 		if(panel_open)
 			usr << "Close the panel first."
 			updateUsrDialog()

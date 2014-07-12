@@ -42,6 +42,7 @@
 
 	var/obj/item/weapon/circuitboard/maker/board
 	var/board_type = /obj/item/weapon/circuitboard/maker // subtypes of the machine have subtypes of boards
+	var/beaker_type = /obj/item/weapon/reagent_containers/glass/bucket // if set, the beaker will be autocreated
 	var/datum/wires/maker/wires
 	var/wire_type = /datum/wires/maker
 	var/build_anim = "autolathe_n"
@@ -65,6 +66,7 @@
 
 /obj/machinery/maker/initialize()
 	..()
+	if(ispath(beaker_type,/obj/item/weapon/reagent_containers/glass)) beaker = new beaker_type(src)
 	default_reagents()
 
 /obj/machinery/maker/proc/initialize_products(var/list/menu, var/allow_menus = 1)
@@ -151,15 +153,24 @@
 /obj/machinery/maker/proc/filter_recycling(var/obj/item/I)
 	if(!reagents || reagents.total_volume >= reagents.maximum_volume)
 		return 0
-	if(!istype(I) || !I.maker_cost) return
-	if(!recycleable) // null -> anything
-		return 1
-	var/list/results = I.maker_cost - recycleable - "time"
-	if(istype(results))
-		for(var/entry in results) // recycleable list is acceptable reagents, if it's not recycleable, don't accept it
-			usr << "[src] cannot recycle [entry]"
-			return 0
-	return 1
+	if(!istype(I) || !I.maker_cost) return 0
+
+	if(recycleable) // null -> no filter on acceptable reagents
+		var/list/results = I.maker_cost - recycleable
+		if(istype(results))
+			for(var/entry in results) // recycleable list is acceptable reagents, if it's not recycleable, don't accept it
+				usr << "[src] cannot recycle [entry]"
+				return 0
+
+	var/max_insertable = 1
+	if(istype(I,/obj/item/stack))
+		var/space = reagents.maximum_volume - reagents.total_volume
+		var/per_unit = 0
+		for(var/entry in I.maker_cost)
+			per_unit += I.maker_cost[entry]
+		var/obj/item/stack/S = I
+		max_insertable = min(S.amount, round(space / per_unit))
+	return max_insertable
 
 // if you want different insert anims for different objects, override this
 /obj/machinery/maker/proc/insert_anim(var/obj/item/I)
@@ -167,15 +178,18 @@
 	sleep(10)
 
 /obj/machinery/maker/proc/decompose(var/obj/item/I)
-	if(!filter_recycling(I))
+	var/amt = filter_recycling(I)
+	if(!amt) // not recycleable - if amt > 1, it is a stack
 		return 0
 	I.loc = src
 	insert_anim(I)
 
-	for(var/entry in I.maker_cost - "time")
+	for(var/entry in I.maker_cost)
 		if(reagents.total_volume >= reagents.maximum_volume)
 			return 0
-		reagents.add_reagent(entry,I.maker_cost[entry])
+		if(I.maker_cost[entry] == 0)// this indicates it will be taken from the reagents list
+			continue 				// the process of building it will be more complicated, though...
+		reagents.add_reagent(entry,I.maker_cost[entry] * amt) // amt is used when the incoming is a stack
 
 	// reagents get recycled, stored, or dumped
 	if(I.reagents && I.reagents.total_volume)
@@ -189,20 +203,42 @@
 				I.reagents.trans_to(beaker, I.reagents.total_volume)
 			else
 				reliability-- // no overflow cup means stuff is sloshing around in there
-	qdel(I)
+	if(istype(I,/obj/item/stack))
+		var/obj/item/stack/S = I
+		S.use(amt)
+	else
+		qdel(I)
 	return 1
 
 
 
-/obj/machinery/maker/proc/drop_resource(var/type, var/obj/container, var/amount = 0)
+/obj/machinery/maker/proc/drop_resource(var/type, var/amount = 0)
 	if(type == null)
 		for(var/datum/reagent/entry in reagents.reagent_list)
-			drop_resource(entry.id, container, amount)
+			drop_resource(entry.id, amount)
 	var/datum/reagent/R = reagents.has_reagent(type)
 	if(!R) return
-	if(!R.resource_item && !container)
-		reagents.remove_reagent(type)
+
+	if(!amount) amount = R.volume
+	amount = min(amount, R.volume)
+
+	if(!R.resource_item)
+		if(!beaker)
+			reagents.remove_reagent(type)
+		else
+			reagents.trans_id_to(type, beaker, amount)
 		return
+
+	var/amt_per_sheet = R.resource_amt
+
+	while(amount >= amt_per_sheet)
+		var/obj/item/stack/S = new R.resource_item(loc)
+		S.amount = min(S.max_amount, round(amount / amt_per_sheet,1))
+		var/amt_taken = S.amount * amt_per_sheet
+		amount -= amt_taken
+		R.volume -= amt_taken
+
+	reagents.update_total()
 
 /obj/machinery/maker/proc/make(var/datum/data/maker_product/P)
 	if(!istype(P) || !(P in all_menus[current_menu]))
