@@ -69,3 +69,13 @@
 	wood
 		maker_cost = list("wood" = 250)			// maker reagent
 
+/obj/item/weapon/tank
+	oxygen
+		maker_cost = list("iron" = 1500, "oxygen" = 0)
+	emergency_oxygen
+		maker_cost = list("iron" = 500, "oxygen" = 0)
+	plasma
+		maker_cost = list("iron" = 1500, "plasma" = 0)
+
+/obj/item/clothing/under/maker_cost = list("cloth" = 500)
+/obj/item/clothing/suit/hazardvest/maker_cost = list("cloth" = 850)

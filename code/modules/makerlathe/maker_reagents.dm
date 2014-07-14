@@ -20,7 +20,7 @@
 	dermaline/resource_item = /obj/item/stack/medical/ointment
 
 	plasma/solid
-		name = "Solid Plasma"
+		name = "Solid plasma"
 		id = "splasma"
 		//reagent_state = SOLID
 		resource_item = /obj/item/stack/sheet/mineral/plasma
@@ -48,7 +48,7 @@
 		id = "glass"
 		resource_item = /obj/item/stack/sheet/glass
 	silicon/glass/rglass
-		name = "Reinforced Glass"
+		name = "Reinforced glass"
 		id = "rglass"
 		resource_item = /obj/item/stack/sheet/rglass
 	silicon/sandstone
@@ -61,7 +61,7 @@
 		//reagent_state = SOLID
 		resource_item = /obj/item/stack/sheet/leather
 	leather/xeno
-		name = "Xeno Chitin"
+		name = "Xeno chitin"
 		id = "xenol"
 		resource_item = /obj/item/stack/sheet/xenochitin
 	cloth
@@ -77,3 +77,11 @@
 		name = "Grass"
 		id = "grass"
 		resource_item = /obj/item/stack/tile/grass
+
+	// todo: turf reaction to create gas
+	carbon_dioxide
+		name = "Carbon dioxide"
+		id = "co2"
+	nitrous_oxide
+		name = "Nitrous Oxide"
+		id = "n2o"

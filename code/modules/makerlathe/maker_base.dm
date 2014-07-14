@@ -1,3 +1,6 @@
+// This ratio defines the reagent quantity per mole of gas taken from tanks
+// I am not sure what the number should be honestly.
+#define GAS_REAGENT_RATIO 100
 
 /obj/machinery/maker
 	name = "autolathe"
@@ -13,6 +16,7 @@
 	var/current_menu = null
 
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
+	var/beaker_type = /obj/item/weapon/reagent_containers/glass/bucket // if set, the beaker will be autocreated for map objects
 
 	// Contain a cached list by menu name, taking into account hacked/emagged:
 	// all_menus[null] = list(main menu)
@@ -34,7 +38,7 @@
 
 	var/list/recycleable		= list() // types of acceptable reagents to recieve from recycled objects, eg, just iron and glass
 	var/list/starting_reagents	= list() // map objects at initialize time may get some starting resources
-	component_parts				= list() //
+	component_parts				= list() // generic machine var
 
 
 	var/component_cost_multiplier = 1
@@ -42,10 +46,12 @@
 
 	var/obj/item/weapon/circuitboard/maker/board
 	var/board_type = /obj/item/weapon/circuitboard/maker // subtypes of the machine have subtypes of boards
-	var/beaker_type = /obj/item/weapon/reagent_containers/glass/bucket // if set, the beaker will be autocreated
+
 	var/datum/wires/maker/wires
 	var/wire_type = /datum/wires/maker
+
 	var/build_anim = "autolathe_n"
+	// there is also an insert_anim() proc so you can filter by object type if you wanna
 
 	// wire status
 	var/id_scrambled = 0// no id required, random failures with junktech
@@ -62,6 +68,7 @@
 	hack_products = initialize_products(hack_products)
 	junk_recipes  = initialize_products(junk_recipes, 0)
 
+	power_change()
 	..()
 
 /obj/machinery/maker/initialize()
@@ -81,6 +88,10 @@
 			else if(ispath(entry))
 				if(istype(menu[entry],/list))
 					result += new/datum/data/maker_product(src, entry, c_menu, menu[entry])
+				else if(istext(menu[entry]))
+					var/datum/data/maker_product/P = new(src, entry, c_menu)
+					P.name += "([menu[entry]])" // eg /obj/item/stack/cable_coil = "red", /obj/itme/stack/cable_coil/pink = "pink"
+					result += P
 				else
 					result += new/datum/data/maker_product(src, entry, c_menu)
 	return result
@@ -92,10 +103,12 @@
 	all_menus[current_menu] = list()
 	for(var/datum/data/maker_product/M in std_products)
 		if(M.menu_name == current_menu)
+			M.recalculate(src)
 			all_menus[current_menu] += M
 	if(board.hacked)
 		for(var/datum/data/maker_product/M in hack_products)
 			if(M.menu_name == current_menu)
+				M.recalculate(src)
 				all_menus[current_menu] += M
 
 
@@ -120,7 +133,7 @@
 	var/rating = 0
 	for(var/obj/item/weapon/stock_parts/matter_bin/MB in component_parts)
 		rating += MB.rating
-	var/resource_max = rating * 25000
+	var/resource_max = rating * 2000 * 50 * 1.5
 	if(reagents)
 		reagents.maximum_volume = resource_max
 		if(reagents.total_volume > reagents.maximum_volume)
@@ -133,8 +146,8 @@
 		rating *= (1.05 - 0.05 * M.rating) // rating 1 -> 100%, 2->95, etc
 		reliability = 100 + 5*M.rating
 
-	component_cost_multiplier = rating			// .95, .90, .85
-	component_time_multiplier = rating * rating // .90, .81, .72
+	component_cost_multiplier = rating
+	component_time_multiplier = rating // time also goes down as component cost goes down
 
 	if(overdrive)
 		component_time_multiplier *= 0.75
@@ -157,11 +170,11 @@
 
 	if(recycleable) // null -> no filter on acceptable reagents
 		var/list/results = I.maker_cost - recycleable
-		if(istype(results))
+		if(istype(results) && results.len)
 			for(var/entry in results) // recycleable list is acceptable reagents, if it's not recycleable, don't accept it
-				usr << "[src] cannot recycle [entry]"
-				return 0
-
+				if(results[entry] > 0) // do not count fill reagents
+					usr << "[src] cannot recycle [entry]"
+					return 0
 	var/max_insertable = 1
 	if(istype(I,/obj/item/stack))
 		var/space = reagents.maximum_volume - reagents.total_volume
@@ -203,6 +216,28 @@
 				I.reagents.trans_to(beaker, I.reagents.total_volume)
 			else
 				reliability-- // no overflow cup means stuff is sloshing around in there
+	else if(istype(I,/obj/item/weapon/tank))
+		var/obj/item/weapon/tank/T = I
+		var/datum/gas_mixture/air = T.air_contents
+		if("oxygen" in recycleable)
+			reagents.add_reagent("oxygen", air.oxygen * GAS_REAGENT_RATIO)
+			air.oxygen = 0
+		if("nitrogen" in recycleable)
+			reagents.add_reagent("nitrogen", air.nitrogen * GAS_REAGENT_RATIO)
+			air.nitrogen = 0
+		if("plasma" in recycleable)
+			reagents.add_reagent("plasma", air.toxins * GAS_REAGENT_RATIO)
+			air.toxins = 0
+		if("co2" in recycleable)
+			reagents.add_reagent("co2", air.carbon_dioxide * GAS_REAGENT_RATIO)
+			air.carbon_dioxide = 0
+		var/datum/gas/sleeping_agent/gas = locate() in air.trace_gases
+		if(gas && ("n2o" in recycleable))
+			reagents.add_reagent("n2o", gas.moles * GAS_REAGENT_RATIO)
+			gas.moles = 0
+		loc.assume_air(air) // whatever is left
+		air_update_turf()
+
 	if(istype(I,/obj/item/stack))
 		var/obj/item/stack/S = I
 		S.use(amt)
@@ -226,7 +261,7 @@
 		if(!beaker)
 			reagents.remove_reagent(type)
 		else
-			reagents.trans_id_to(type, beaker, amount)
+			reagents.trans_id_to(beaker,type, amount)
 		return
 
 	var/amt_per_sheet = R.resource_amt
@@ -239,6 +274,11 @@
 		R.volume -= amt_taken
 
 	reagents.update_total()
+	if(amount > 0)
+		if(!beaker)
+			reagents.remove_reagent(type)
+		else
+			reagents.trans_id_to(beaker,type, amount)
 
 /obj/machinery/maker/proc/make(var/datum/data/maker_product/P)
 	if(!istype(P) || !(P in all_menus[current_menu]))
@@ -258,9 +298,6 @@
 			air_update_turf()
 	use_power = 2
 	busy = 1
-	if(build_anim)
-		flick(build_anim,src)
-	use_power(P.time_cost)
 	var/obj/item/result = P.build(src)
 	busy = 0
 	use_power = 1 + overdrive

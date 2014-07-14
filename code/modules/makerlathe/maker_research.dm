@@ -19,6 +19,8 @@
 			if(test.result_typepath == P)
 				P = test
 				break
+		if(!istype(P))
+			return 0
 
 	if(researchable[P.result_typepath] == P)
 		researchable[P.result_typepath] = P.menu_name
