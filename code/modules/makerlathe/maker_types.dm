@@ -15,7 +15,7 @@
 				)
 	hack_products = list( /obj/item/toy/spinningtoy,
 					"Safety", /obj/item/clothing/glasses/welding, /obj/item/bodybag,
-					"Tanks", /obj/item/weapon/tank/emergency_oxygen/engi,
+					"Tanks", /obj/item/weapon/tank/emergency_oxygen/engi, /obj/item/weapon/tank/jetpack/carbondioxide,
 					"Tools", /obj/item/weapon/rcd,
 					"Uniforms", /obj/item/clothing/under/sundress, /obj/item/clothing/under/shorts/black
 				)
@@ -25,14 +25,46 @@
 					/obj/item/weapon/stock_parts/cell/high = null, /obj/item/weapon/stock_parts/cell/super = null, /obj/item/weapon/stock_parts/cell/hyper = null)
 
 	junk_recipes = list(/obj/item/weapon/ore = list("iron" = 200), /obj/item/weapon/shard = list("glass" = 200), /obj/item/weapon/wirerod = list("iron" = 350), /obj/item/weapon/kitchen/utensil/fork = list("iron" = 600))
-	recycleable = list("iron","glass","water","fuel","cloth","oxygen")
+	recycleable = list("iron","glass","water","fuel","cloth","oxygen","n2o","co2")
 
-/obj/machinery/maker/biogen
+/obj/machinery/maker/biogen // this will take more work, I am expecting to give it "transform nutriment into X" buttons
 	name = "biogenerator"
 	desc = "Recycles biological waste."
+	icon = 'icons/obj/biogenerator.dmi'
+	icon_state = "biogen-empty"
+	icon_base = "biogen-empty"
+	icon_open = "biogen-empty"
+	build_anim = null
 
-	std_products = list()
+	std_products = list(
+					/obj/item/weapon/reagent_containers/glass/bottle/nutrient/ez, /obj/item/weapon/reagent_containers/glass/bottle/nutrient/l4z, /obj/item/weapon/reagent_containers/glass/bottle/nutrient/rh,
+					// For reagent conversion, the cost list is mandatory.
+					//If you add a null= or output=, you can set the output quantity, default 50
+					"Convert", /datum/reagent/nutriment/cardboard = list("nutriment" = 50, "output" = 2000), /datum/reagent/milk = list("nutriment" = 100), /datum/reagent/cream = list("milk" = 50, "output" = 25), /datum/reagent/leather = list("nutriment" = 500, "output"=1000), /datum/reagent/cloth = list("nutriment" = 500, "output" = 1000), /datum/reagent/cloth/carpet = list("cloth" = 1000, "output" = 2000),
+					"Leather", /obj/item/weapon/storage/belt/utility, /obj/item/weapon/storage/belt/medical, /obj/item/weapon/storage/belt/janitor, /obj/item/weapon/storage/bag/books, /obj/item/weapon/storage/bag/ore, /obj/item/weapon/storage/bag/plants, /obj/item/weapon/storage/backpack/satchel,
+					"Cloth", /obj/item/weapon/storage/backpack, /obj/item/clothing/under/rank/hydroponics, /obj/item/clothing/under/rank/chef, /obj/item/clothing/under/rank/bartender, /obj/item/clothing/under/rank/librarian, /obj/item/clothing/under/rank/chaplain
+				)
 	hack_products = list()
 	researchable = list()
 	junk_recipes = list()
-	recycleable = list()
+	recycleable = list("glass", "nutriment", "cardboard", "milk", "cream", "leather", "cloth") // I sorta wanma make cheese and meat stacks now, mmm...
+
+/obj/machinery/maker/circuit
+	name = "circuit printer"
+	desc = "Builds complicated electronic circuits."
+	icon = 'icons/obj/machines/research.dmi'
+	icon_state = "circuit_imprinter"
+	icon_base = "circuit_imprinter"
+	icon_open = "circuit_imprinter"
+	build_anim = null
+
+	std_products = list(
+					"Games", /obj/item/weapon/circuitboard/arcade/battle, /obj/item/weapon/circuitboard/arcade/orion_trail,
+					"Domestic", /obj/item/weapon/circuitboard/hydroponics, /obj/item/weapon/circuitboard/microwave
+				)
+
+	hack_products = list()
+	researchable = list()
+
+	junk_recipes = list( /obj/item/weapon/shard = list("glass" = 750, "sacid" = 150))
+	recycleable = list("glass","copper","sacid")

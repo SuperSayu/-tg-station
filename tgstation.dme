@@ -866,6 +866,7 @@
 #include "code\modules\library\lib_machines.dm"
 #include "code\modules\library\lib_readme.dm"
 #include "code\modules\makerlathe\circuitboard.dm"
+#include "code\modules\makerlathe\conversion_datum.dm"
 #include "code\modules\makerlathe\item_changes.dm"
 #include "code\modules\makerlathe\maker_base.dm"
 #include "code\modules\makerlathe\maker_datum.dm"

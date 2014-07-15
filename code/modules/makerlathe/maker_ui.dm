@@ -9,7 +9,7 @@
 	if(shorted && shock(user))
 		return
 
-	if(default_deconstruction_screwdriver(user, "autolathe_t", "autolathe", I))
+	if(default_deconstruction_screwdriver(user, icon_open, icon_base, I))
 		updateUsrDialog()
 		return
 
@@ -75,7 +75,12 @@
 			default_deconstruction_crowbar(I)
 			return 1
 
-		else if (stat || busy)
+		else if (stat)
+			user << "[src] is offline."
+			user << browse(null, "window=maker")
+			return 1
+		else if(busy)
+			user << "[src] is busy."
 			return 1
 
 		else if(istype(I, /obj/item/weapon/card/emag))
@@ -104,6 +109,7 @@
 			return 1
 	else if(I.reagents && I.reagents.total_volume && I.flags&OPENCONTAINER)
 		user << "You pour [I] into [src]."
+
 		for(var/datum/reagent/R in I.reagents.reagent_list)
 			if((R.id in recycleable) && reagents.total_volume < reagents.maximum_volume)
 				I.reagents.trans_id_to(src,R.id,R.volume)
@@ -123,6 +129,8 @@
 			user << "[S] is locked, and you can't recycle it without emptying it out."
 			return
 		busy = 1
+		busy_message = "Dismantling, please wait..."
+		updateUsrDialog()
 		user.visible_message("<span class='notice'>[user] starts emptying [S] into [src]...</span>")
 		if(do_after(user,15))
 
@@ -151,15 +159,20 @@
 		user << "<span class='warning'>[src] refuses to recycle your components.</span>"
 	else if(filter_recycling(I))
 		busy = 1
+		busy_message = "Dismantling, please wait..."
+		updateUsrDialog()
 		user.drop_item()
 		I.loc = loc
 		user.visible_message("<span class='notice'>[user] puts [I] into [src].</span>")
 		decompose(I)
 		busy = 0
 		. = 1 // prevent afterattack
-	else
-		user << "<span class='warning'>[src] refuses to recycle [I].</span>"
-	src.updateUsrDialog()
+
+// this message now handled better in filter_recycling
+//	else
+//		user << "<span class='warning'>[src] refuses to recycle [I].</span>"
+
+	updateUsrDialog()
 
 
 /obj/machinery/maker/attack_hand(var/mob/user)
@@ -208,12 +221,12 @@
 			var/v = R.volume
 			if(v >= 10000)
 				v = "[round(R.volume / 1000, 0.1)]k"
-			if(R.resource_item && R.volume >= MINERAL_MATERIAL_AMOUNT)
-				var/ratio = round(R.volume / MINERAL_MATERIAL_AMOUNT)
-				. += "<tr><td>[R.name]</td><td class='r'>[v]</td><td><a href='?\ref[src];reagent=[R.id];amt=[MINERAL_MATERIAL_AMOUNT]' title='Extrude a sheet of this material'>1</a>"
+			if(R.resource_item && R.volume >= R.resource_amt)
+				var/ratio = round(R.volume / R.resource_amt)
+				. += "<tr><td>[R.name]</td><td class='r'>[v]</td><td><a href='?\ref[src];reagent=[R.id];amt=[R.resource_amt]' title='Extrude a sheet of this material'>1</a>"
 				for(var/qty in list(5,10,25,50))
 					if(qty > ratio) break
-					. += " <a href='?\ref[src];reagent=[R.id];amt=[MINERAL_MATERIAL_AMOUNT * qty]' title='Extrude [qty] sheets of this material'>[qty]</a>"
+					. += " <a href='?\ref[src];reagent=[R.id];amt=[R.resource_amt * qty]' title='Extrude [qty] sheets of this material'>[qty]</a>"
 				. += "</td></tr>"
 			else
 				if(beaker)
@@ -223,19 +236,30 @@
 		. += "</table>"
 	. += "</small>"
 
+/obj/machinery/maker/proc/describe_product(var/datum/data/maker_product/P)
+	if(P.description)
+		return P.description
+	. = "<a href='?\ref[src];build=\ref[P]'>[P.name]</a> [P.time_cost/10]s<br> <i><small>"
+	for(var/entry in P.cost)
+		var/amt = P.cost[entry]
+		var/u = ""
+		if(!amt)
+			amt = "Fill with"
+		else if(amt < 0)
+			amt = -amt
+			u = " (used)"// 10 Sulfuric acid (used)
+		var/datum/reagent/R = chemical_reagents_list[entry]
+		if(!R) continue
+		. += " &nbsp; [amt] [R.name][u]" // 1000 Glass
+	. += "</small></i>"
+	P.description = .
+	// return .
+
 /obj/machinery/maker/proc/list_products()
 	var/list/L = all_menus[current_menu]
 	. = ""
 	for(var/datum/data/maker_product/P in L)
-		. += "<a href='?\ref[src];build=\ref[P]'>[P.name]</a> [P.time_cost/10]s<br> <i><small>"
-		for(var/entry in P.cost)
-			var/amt = P.cost[entry]
-			if(!amt)
-				amt = "Fill with"
-			var/datum/reagent/R = chemical_reagents_list[entry]
-			if(!R) continue
-			. += " &nbsp; [amt] [R.name]"
-		. += "</small></i><br>"
+		. += "[describe_product(P)]<br>"
 
 /obj/machinery/maker/proc/list_menus()
 	if(!current_menu)
@@ -250,24 +274,38 @@
 		else
 			. += "<span class='linkOff' title='This is the current menu.'>[entry]</span><br>"
 
+/obj/machinery/maker/proc/research_buttons()
+	if(!length(researchable)) return
+	if(server)
+		return "<a href='?\ref[src];sync'>Synchronise Database with [server]</a>"
+	else
+		return "<a href='?\ref[src];server'>Connect to Research Server</a>"
+
 /obj/machinery/maker/proc/menu(var/mob/user)
 	if(!allowed(user))
 		user << browse(null,"window=maker")
 		return
-	build_menu_cache()
 	var/dat
-	if(panel_open)
-		dat = wires.GetInteractWindow()
+	if(busy)
+		dat = "<br><center><h3>[busy_message]</h3></center>"
+	else if(jammed)
+		dat = "<br><center><h3>Jam detected, please dislodge to continue</h3></center>"
 	else
-		if(stat&(BROKEN|NOPOWER))
-			usr << "[src] is offline."
-			return
+		build_menu_cache()
+		if(panel_open)
+			dat = wires.GetInteractWindow()
 		else
-			dat = {"
-			<style>td { border:1px solid #000; vertical-align:top;} td.r { text-align:right; }</style>
-			<table style='width:100%;'>
-				<tr><td style='text-align:center;' width='175'>[list_menus()]</td><td>[list_products()]</td><td width='300'>[resource_summary()]</td></tr>
-			</table> "}
+			if(stat&(BROKEN|NOPOWER))
+				user << "[src] is offline."
+				user << browse(null, "window=maker")
+				return
+			else
+				dat = {"
+				<style>td { border:1px solid #000; vertical-align:top;} td.r { text-align:right; }</style>
+				<table style='width:100%;'>
+					<tr><td colspan='3'>[research_buttons()]</td></tr>
+					<tr><td style='text-align:center;' width='175'>[list_menus()]</td><td>[list_products()]</td><td width='300'>[resource_summary()]</td></tr>
+				</table> "}
 	var/datum/browser/popup = new(user, "maker", name, 800, 400)
 	popup.set_content(dat)
 	popup.set_title_image(user.browse_rsc_icon(icon, icon_state))
@@ -289,6 +327,7 @@
 	if("reagent" in href_list)
 		if(busy) return
 		busy = 1
+		busy_message = "Dumping..."
 		drop_resource(href_list["reagent"], text2num(href_list["amt"]))
 		busy = 0
 	if("build" in href_list)
@@ -300,10 +339,7 @@
 		if(jammed)
 			usr << "<span class='warning'>[jammed] is stuck in [src]!  You will have to get it out before you can build anything.</span>"
 		else
-			var/datum/data/maker_product/P = locate(href_list["build"])
-			if(!P || !(P in all_menus[current_menu]))
-				return
-			make(P)
+			make( locate(href_list["build"]), usr )
 	if("beaker" in href_list)
 		if(panel_open && beaker)
 			beaker.loc = loc
@@ -315,4 +351,18 @@
 			usr.put_in_hands(jammed)
 			visible_message("[usr] successfully removes [jammed] from [src]!")
 			jammed = null
+	if("server" in href_list)
+		if(stat) usr << "[src] is offline."
+		else if(busy) usr << "[src] is busy."
+
+		else server_connect()
+
+	if("sync" in href_list)
+		if(stat) usr << "[src] is offline."
+		else if(busy) usr << "[src] is busy."
+
+		else research_sync()
+
+	if("open_panel" in href_list)
+		default_deconstruction_screwdriver()
 	updateUsrDialog()

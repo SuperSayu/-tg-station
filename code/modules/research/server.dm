@@ -294,7 +294,7 @@
 			dat += "<HR><A href='?src=\ref[src];main=1'>Main Menu</A>"
 
 		if(2) //Data Management menu
-			dat += "[temp_server.name] Data ManagementP<BR><BR>"
+			dat += "[temp_server.name] Data Management<BR><BR>"
 			dat += "Known Technologies<BR>"
 			for(var/datum/tech/T in temp_server.files.known_tech)
 				dat += "* [T.name] "
