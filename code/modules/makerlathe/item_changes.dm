@@ -1,3 +1,4 @@
+#define BOTTLE_GLASS_COST 200
 /obj/item
 	var/list/maker_cost = list("iron" = 1000)
 
@@ -82,7 +83,7 @@
 
 /obj/item/weapon/circuitboard/maker_cost = list("glass" = 1000, "copper" = 5, "sacid" = -20) // negative value means build cost but not recycleable
 
-/obj/item/weapon/reagent_containers/food/snacks/maker_cost = list("nutriment" = 50)
+/obj/item/weapon/reagent_containers/food/snacks/maker_cost = list("nutriment" = -50)
 /obj/item/weapon/storage
 	belt/maker_cost = list("leather" = 500)
 	bag/maker_cost = list("leather" = 500)
@@ -91,10 +92,6 @@
 	briefcase/maker_cost = list("leather" = 1000)
 	wallet/maker_cost = list("leather" = 250)
 
-/obj/item/weapon/reagent_containers/glass/bottle/nutrient
-	ez/maker_cost = list("glass" = 100, "nutriment" = -50)
-	l4z/maker_cost = list("glass" = 100, "nutriment" = -40, "cardboard" = -500, "milk" = -10) // yeah idk, note milk is currently 1:2 nutriment, cream is 1:4 nutriment
-	rh/maker_cost = list("glass" = 100, "nutriment" = -30, "cream" = -20) // whatever, temporary values
-
+/obj/item/weapon/reagent_containers/glass/bottle/maker_cost = list("glass" = BOTTLE_GLASS_COST)
 /obj/item/weapon/storage/box/maker_cost = list("cardboard" = 250)
 /obj/item/weapon/storage/fancy/maker_cost = list("cardboard" = 500)

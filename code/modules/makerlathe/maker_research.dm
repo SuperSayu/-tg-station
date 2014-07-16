@@ -28,6 +28,8 @@
 		var/entry = researchable[D.build_path]
 		if(!entry || istext(entry)) // new tech - must create product.  The text placeholder is the menu it will be under
 			var/datum/data/maker_product/P = new(src, D.build_path, entry)
+			if(!P)
+				return 0
 			std_products += P
 			researchable[D.build_path] = P
 		return 1
@@ -35,18 +37,13 @@
 
 /obj/machinery/maker/proc/remove_design(var/datum/data/maker_product/P)
 	if(ispath(P,/obj/item))
-		for(var/datum/data/maker_product/test in std_products)
-			if(test.result_typepath == P)
-				P = test
-				break
+		P = researchable[P]
 		if(!istype(P))
 			return 0
 
 	if(researchable[P.result_typepath] == P)
 		researchable[P.result_typepath] = P.menu_name
 		std_products -= P
-		if(istype(all_menus[P.menu_name],/list))
-			all_menus[P.menu_name] -= P
 		qdel(P)
 		return 1
 	return 0
@@ -57,7 +54,6 @@
 	busy_message = "Synchronizing files with server..."
 	updateUsrDialog()
 	var/list/research_files = server.files.known_designs
-	sleep(10 * researchable.len)
 	server.produce_heat(100)
 
 	var/list/unsynched = researchable.Copy() // keeps track of research that might have disappeared
@@ -65,9 +61,15 @@
 		if(add_design(D))
 			unsynched -= D.build_path // research has not disappeared
 
+	sleep(-1)
+
 	// If the research is not in the list of files, remove it from our memory
+	// Note that this currently doesn't work, but only because the server does not
+	// actually seem to delete any files for some reason.
 	for(var/entry in unsynched)
-		var/datum/data/maker_product/P = unsynched[entry]
-		if(istype(P)) // only if the design has been lost
-			remove_design(P)
+		remove_design(entry)
+	for(var/entry in all_menus)
+		all_menus[entry] = null
+
+	sleep(5 * researchable.len)
 	busy = 0

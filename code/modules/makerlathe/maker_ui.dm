@@ -5,6 +5,13 @@
 		return 1
 	return ..()
 
+// By all means add to this list
+// it is currently only used when the maker is emagged
+/obj/machinery/maker/proc/technobabble()
+	return text("[] detected, []...",
+			pick("Spline","Power coupling polarity inversion", "Graviton flux", "Anomaly","Data breach", "Data anomaly" ,"Keyboard not", "Power loss"),
+			pick("reticulating","refresh forced","recovering","recalibrating", "initalizing fallback systems", "reversing power coupling polarity","searching for host", "press any key to continue"))
+
 /obj/machinery/maker/attackby(var/obj/item/I, var/mob/user)
 	if(shorted && shock(user))
 		return
@@ -67,8 +74,10 @@
 			updateUsrDialog()
 			return 1
 
-		else if(istype(I, /obj/item/weapon/crowbar))
-			drop_resource(null) // dump all stocks
+		else if(istype(I, /obj/item/weapon/crowbar) && !busy)
+			busy = 1
+			busy_message = "Dumping stock and shutting down..."
+			drop_resource(null,delay=0) // dump all stocks
 			if(beaker) beaker.loc = loc
 			if(jammed) jammed.loc = loc
 			user << browse(null,"window=maker")
@@ -92,16 +101,22 @@
 					junktech = 1
 					user << "<span class='warning'>[user] disables the ID checker for [src].</span>"
 					busy = 1
-					spawn(50)
-						busy = 0
+					busy_message = technobabble()
+					updateUsrDialog()
+					sleep(50)
+					busy = 0
 				else if(!board.hacked)
 					board.hacked = 1
 					overdrive = 1
 					use_power = 2
 					user << "<span class='notice'>[user] forcibly enables the extended stock chip on [src]'s motherboard.</span>"
 					busy = 1
-					spawn(50)
-						busy = 0
+					busy_message = technobabble()
+					updateUsrDialog()
+					sleep(50)
+					for(var/entry in all_menus)
+						all_menus[entry] = null // reset cache
+					busy = 0
 				else
 					user << "Swiping [I] on the dataport seems to do nothing."
 		else
@@ -128,15 +143,15 @@
 		if((istype(S,/obj/item/weapon/storage/secure) || istype(S,/obj/item/weapon/storage/lockbox)) && S:locked)
 			user << "[S] is locked, and you can't recycle it without emptying it out."
 			return
-		busy = 1
-		busy_message = "Dismantling, please wait..."
-		updateUsrDialog()
-		user.visible_message("<span class='notice'>[user] starts emptying [S] into [src]...</span>")
-		if(do_after(user,15))
 
+		user.visible_message("<span class='notice'>[user] starts emptying [S] into [src]...</span>")
+		if(do_after(user,15) && !busy)
+			busy = 1
+			busy_message = "Dismantling, please wait..."
+			updateUsrDialog()
 			var/accepts = 0
 			for(var/obj/item/stuff in S)
-				if(!user.Adjacent(src))
+				if(!user.Adjacent(src) || stat)
 					break
 				if(!filter_recycling(stuff))
 					continue
@@ -217,6 +232,10 @@
 		. += " &nbsp; <i>None.</i>"
 	else
 		. += "<table style='width:100%'><tr><th>Resource</th><th>Quantity</th><th>Removal Options</th></tr>"
+		var/bottle = 0
+		var/datum/reagent/G = reagents.has_reagent("glass",BOTTLE_GLASS_COST)
+		if(G)
+			bottle = round(G.volume / BOTTLE_GLASS_COST) // maximum number of bottles of this reagent to bottle
 		for(var/datum/reagent/R in reagents.reagent_list)
 			var/v = R.volume
 			if(v >= 10000)
@@ -229,17 +248,28 @@
 					. += " <a href='?\ref[src];reagent=[R.id];amt=[R.resource_amt * qty]' title='Extrude [qty] sheets of this material'>[qty]</a>"
 				. += "</td></tr>"
 			else
+				. += "<tr><td>[R.name]</td><td class='r'>[v]</td><td>"
+				if(!R.resource_item)
+					if(bottle)
+						var/max_qty = min(bottle, round(R.volume / 30) + 1)
+						. += "<a href='?\ref[src];bottle=[R.id];amt=1' title='Fill a glass bottle with this reagent'>1</a> "
+						for(var/qty in list(3,5,10))
+							if(qty > max_qty) break
+							. += "<a href='?\ref[src];bottle=[R.id];amt=[qty]' title='Fill [qty] glass bottles with this reagent'>[qty]</a> "
+					else if("glass" in recycleable)
+						. += "<span class='linkOff' title='Glass is required to bottle loose reagents'>Bottle</span> "
 				if(beaker)
-					. += "<tr><td>[R.name]</td><td class='r'>[v]</td><td><a href='?\ref[src];reagent=[R.id];amt=[R.volume]' title='Transfer to [beaker]'>Drain</a></td></tr>"
+					. += "<a href='?\ref[src];reagent=[R.id];amt=[R.volume]' title='Transfer to [beaker]'>Drain</a> "
 				else
-					. += "<tr><td>[R.name]</td><td class='r'>[v]</td><td><a href='?\ref[src];reagent=[R.id];amt=[R.volume]' title='Discard excess material'>Dump</a></td></tr>"
+					. += "<span class='linkOff' title='Open the panel and insert a container to drain reagents'>Drain</span> "
+					. += " <a href='?\ref[src];reagent=[R.id];amt=[R.volume]' title='Discard excess material'>Dump</a></td></tr>"
 		. += "</table>"
 	. += "</small>"
 
 /obj/machinery/maker/proc/describe_product(var/datum/data/maker_product/P)
 	if(P.description)
 		return P.description
-	. = "<a href='?\ref[src];build=\ref[P]'>[P.name]</a> [P.time_cost/10]s<br> <i><small>"
+	. = "<a href='?\ref[src];build=\ref[P]' style='white-space:nowrap;'>[P.name]</a> <i><small>[P.time_cost/10]s <br>"
 	for(var/entry in P.cost)
 		var/amt = P.cost[entry]
 		var/u = ""
@@ -250,7 +280,7 @@
 			u = " (used)"// 10 Sulfuric acid (used)
 		var/datum/reagent/R = chemical_reagents_list[entry]
 		if(!R) continue
-		. += " &nbsp; [amt] [R.name][u]" // 1000 Glass
+		. += "<span style='white-space:nowrap;'>&nbsp;[amt] [R.name][u]</span>" // 1000 Glass
 	. += "</small></i>"
 	P.description = .
 	// return .
@@ -262,11 +292,13 @@
 		. += "[describe_product(P)]<br>"
 
 /obj/machinery/maker/proc/list_menus()
-	if(!current_menu)
-		. = "<span class='linkOff' title='The default menu is currently selected.'>Select a Submenu</span>"
-	else
-		. = "<a href='?\ref[src];menu'>Main Menu</a>"
-	. += "<hr>"
+	if(main_menu_name)
+		if(!current_menu)
+			. = "<span class='linkOff' title='The default menu is currently selected.'>[main_menu_name]</span>"
+		else
+			. = "<a href='?\ref[src];menu'>[main_menu_name]</a>"
+		. += "<hr>"
+
 	for(var/entry in all_menus)
 		if(!entry) continue
 		if(current_menu != entry)
@@ -304,9 +336,9 @@
 				<style>td { border:1px solid #000; vertical-align:top;} td.r { text-align:right; }</style>
 				<table style='width:100%;'>
 					<tr><td colspan='3'>[research_buttons()]</td></tr>
-					<tr><td style='text-align:center;' width='175'>[list_menus()]</td><td>[list_products()]</td><td width='300'>[resource_summary()]</td></tr>
+					<tr><td style='text-align:center;' width='175'>[list_menus()]</td><td>[list_products()]</td><td width='375'>[resource_summary()]</td></tr>
 				</table> "}
-	var/datum/browser/popup = new(user, "maker", name, 800, 400)
+	var/datum/browser/popup = new(user, "maker", name, 875, 400)
 	popup.set_content(dat)
 	popup.set_title_image(user.browse_rsc_icon(icon, icon_state))
 	popup.open()
@@ -329,6 +361,11 @@
 		busy = 1
 		busy_message = "Dumping..."
 		drop_resource(href_list["reagent"], text2num(href_list["amt"]))
+		busy = 0
+	if("bottle" in href_list)
+		busy = 1
+		busy_message = "Bottling reagent, please wait..."
+		bottle_resource(href_list["bottle"], text2num(href_list["amt"]))
 		busy = 0
 	if("build" in href_list)
 		if(stat || busy) return
@@ -363,6 +400,4 @@
 
 		else research_sync()
 
-	if("open_panel" in href_list)
-		default_deconstruction_screwdriver()
 	updateUsrDialog()

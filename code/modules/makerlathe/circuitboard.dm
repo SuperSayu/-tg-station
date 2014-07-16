@@ -22,3 +22,11 @@
 /obj/item/weapon/circuitboard/maker/engine
 	name = "circuit board (engilathe)"
 	build_path = /obj/machinery/maker/engine
+
+/obj/item/weapon/circuitboard/maker/biogen
+	name = "circuit board (biolathe)"
+	build_path = /obj/machinery/maker/biogen
+
+/obj/item/weapon/circuitboard/maker/circuit
+	name = "circuit board (circuit printer)"
+	build_path = /obj/machinery/maker/circuit

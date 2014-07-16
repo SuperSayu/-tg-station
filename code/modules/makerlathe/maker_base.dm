@@ -20,6 +20,7 @@
 	var/obj/item/jammed = null
 	reliability = 100
 	var/current_menu = null
+	var/main_menu_name = "Main Menu"
 
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 	var/beaker_type = /obj/item/weapon/reagent_containers/glass/bucket // if set, the beaker will be autocreated for map objects
@@ -71,6 +72,8 @@
 	std_products  = initialize_products(std_products)
 	hack_products = initialize_products(hack_products)
 	junk_recipes  = initialize_products(junk_recipes, 0)
+	if(!main_menu_name && !current_menu)
+		current_menu = all_menus[1]
 
 	power_change()
 	..()
@@ -207,9 +210,11 @@
 	for(var/entry in I.maker_cost)
 		if(reagents.total_volume >= reagents.maximum_volume)
 			return 0
-		if(I.maker_cost[entry] <= 0) // negative values are used up in the build process, not recovered
-			continue 			 	 // zero value is used in the build process to indicate fill reagents
-		reagents.add_reagent(entry,I.maker_cost[entry] * amt) // amt is used when the incoming is a stack
+
+		var/value = I.maker_cost[entry]
+		if(value <= 0 || isnull(value))	// negative values are used up in the build process, not recovered; null value is required by the build process but not consumed
+			continue					// zero value is used to indicate fill reagents.
+		reagents.add_reagent(entry,value * amt) // amt is used when the incoming is a stack
 
 	// reagents get recycled, stored, or dumped
 	if(I.reagents && I.reagents.total_volume)
@@ -223,6 +228,7 @@
 				I.reagents.trans_to(beaker, I.reagents.total_volume)
 			else
 				reliability-- // no overflow cup means stuff is sloshing around in there
+
 	else if(istype(I,/obj/item/weapon/tank))
 		var/obj/item/weapon/tank/T = I
 		var/datum/gas_mixture/air = T.air_contents
@@ -252,7 +258,7 @@
 		qdel(I)
 	return 1
 
-/obj/machinery/maker/proc/drop_resource(var/type, var/amount = 0)
+/obj/machinery/maker/proc/drop_resource(var/type, var/amount = 0, var/delay = 1)
 	if(type == null)
 		for(var/datum/reagent/entry in reagents.reagent_list)
 			drop_resource(entry.id, amount)
@@ -270,7 +276,8 @@
 		while(amount >= amt_per_sheet)
 			var/obj/item/stack/S = new R.resource_item(src)
 			S.amount = min(S.max_amount, round(amount / amt_per_sheet))
-			sleep(S.amount)
+			if(delay)
+				sleep(S.amount)
 			var/amt_taken = S.amount * amt_per_sheet
 			amount -= amt_taken
 			R.volume -= amt_taken
@@ -288,6 +295,31 @@
 			reagents.remove_reagent(type,amount)
 		else
 			reagents.trans_id_to(beaker,type, amount)
+
+/obj/machinery/maker/proc/bottle_resource(var/type, var/amount = 0)
+	var/datum/reagent/G = reagents.has_reagent("glass",BOTTLE_GLASS_COST)
+	if(!G)
+		usr << "<span class='warning'>[src] does not have enough glass to bottle anything.</span>"
+		return
+	var/datum/reagent/R = reagents.has_reagent(type)
+	if(!R) return // when the dialog updates that will be clear enough
+	updateUsrDialog() // show the busy message
+	amount = min(round(G.volume / BOTTLE_GLASS_COST), round(R.volume / 30), amount)
+	while(amount-- > 0)
+		sleep(15)
+		G.volume -= BOTTLE_GLASS_COST
+		var/amt = min(30, R.volume)
+		R.volume -= amt
+		var/obj/item/weapon/reagent_containers/glass/bottle/B = new(src)
+		B.reagents.add_reagent(type, amt)
+		B.name = "Bottle ([R.name] [amt]u)"
+		if(!prob(reliability))
+			jammed = B
+			visible_message("<span class='warning'>[B] gets jammed in [src]!</span>")
+			break
+		B.loc = loc
+	reagents.update_total()
+
 
 /obj/machinery/maker/proc/make(var/datum/data/maker_product/P, var/mob/user)
 	if(!istype(P) || !(P in all_menus[current_menu]))
@@ -308,6 +340,7 @@
 	use_power = 2
 	busy = 1
 	busy_message = "Synthesizing, please wait..."
+	updateUsrDialog()
 	var/obj/item/result = P.build(src,user)
 	busy = 0
 	use_power = 1 + overdrive

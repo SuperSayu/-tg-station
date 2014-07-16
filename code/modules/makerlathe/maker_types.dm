@@ -4,6 +4,7 @@
 	desc = "Produces tools for engineering staff."
 	board_type = /obj/item/weapon/circuitboard/maker/engine
 
+	main_menu_name = "Utility"
 	std_products = list( /obj/item/device/flashlight, /obj/item/weapon/light/bulb, /obj/item/weapon/light/tube, /obj/item/weapon/table_parts, /obj/item/weapon/rack_parts, /obj/item/weapon/stock_parts/cell, /obj/item/weapon/rcd_ammo,
 					"Cables", /obj/item/stack/cable_coil = "Red", /obj/item/stack/cable_coil/blue = "Blue", /obj/item/stack/cable_coil/cyan = "Cyan", /obj/item/stack/cable_coil/green = "Green", /obj/item/stack/cable_coil/orange = "Orange", /obj/item/stack/cable_coil/pink = "Pink", /obj/item/stack/cable_coil/white = "White", /obj/item/stack/cable_coil/yellow = "Yellow",
 					"Electronics", /obj/item/weapon/airlock_electronics, /obj/item/weapon/airalarm_electronics, /obj/item/weapon/firealarm_electronics, /obj/item/weapon/module/power_control,
@@ -27,7 +28,7 @@
 	junk_recipes = list(/obj/item/weapon/ore = list("iron" = 200), /obj/item/weapon/shard = list("glass" = 200), /obj/item/weapon/wirerod = list("iron" = 350), /obj/item/weapon/kitchen/utensil/fork = list("iron" = 600))
 	recycleable = list("iron","glass","water","fuel","cloth","oxygen","n2o","co2")
 
-/obj/machinery/maker/biogen // this will take more work, I am expecting to give it "transform nutriment into X" buttons
+/obj/machinery/maker/biogen
 	name = "biogenerator"
 	desc = "Recycles biological waste."
 	icon = 'icons/obj/biogenerator.dmi'
@@ -35,19 +36,27 @@
 	icon_base = "biogen-empty"
 	icon_open = "biogen-empty"
 	build_anim = null
+	board_type = /obj/item/weapon/circuitboard/maker/biogen
 
-	std_products = list(
-					/obj/item/weapon/reagent_containers/glass/bottle/nutrient/ez, /obj/item/weapon/reagent_containers/glass/bottle/nutrient/l4z, /obj/item/weapon/reagent_containers/glass/bottle/nutrient/rh,
-					// For reagent conversion, the cost list is mandatory.
-					//If you add a null= or output=, you can set the output quantity, default 50
-					"Convert", /datum/reagent/nutriment/cardboard = list("nutriment" = 50, "output" = 2000), /datum/reagent/milk = list("nutriment" = 100), /datum/reagent/cream = list("milk" = 50, "output" = 25), /datum/reagent/leather = list("nutriment" = 500, "output"=1000), /datum/reagent/cloth = list("nutriment" = 500, "output" = 1000), /datum/reagent/cloth/carpet = list("cloth" = 1000, "output" = 2000),
-					"Leather", /obj/item/weapon/storage/belt/utility, /obj/item/weapon/storage/belt/medical, /obj/item/weapon/storage/belt/janitor, /obj/item/weapon/storage/bag/books, /obj/item/weapon/storage/bag/ore, /obj/item/weapon/storage/bag/plants, /obj/item/weapon/storage/backpack/satchel,
-					"Cloth", /obj/item/weapon/storage/backpack, /obj/item/clothing/under/rank/hydroponics, /obj/item/clothing/under/rank/chef, /obj/item/clothing/under/rank/bartender, /obj/item/clothing/under/rank/librarian, /obj/item/clothing/under/rank/chaplain
+	main_menu_name = "Convert"
+
+	// For reagent conversion, the cost list is mandatory.
+	//If you add a null= or output=, you can set the output quantity, default 50
+	std_products = list( /datum/reagent/plantnutriment/eznutriment = list("nutriment" = 50, "output" = 60), /datum/reagent/plantnutriment/left4zednutriment = list("nutriment" = 40, "milk" = 10, "output" = 60), /datum/reagent/plantnutriment/robustharvestnutriment = list("nutriment" = 30, "cream" = 20, "output" = 60),
+					"Tools", /obj/item/weapon/minihoe, /obj/item/weapon/hatchet, /obj/item/weapon/shovel,
+					"Cardboard", /datum/reagent/nutriment/cardboard = list("nutriment" = 50, "output" = 2000), /obj/item/weapon/storage/box, /obj/item/weapon/storage/fancy/rollingpapers, /obj/item/weapon/paper, /obj/item/weapon/folder, /obj/item/weapon/packageWrap, /obj/item/weapon/storage/photo_album,
+					"Food", /datum/reagent/milk = list("nutriment" = 100), /datum/reagent/cream = list("milk" = 50, "output" = 25), /obj/item/weapon/reagent_containers/food/snacks/meat,
+					"Leather", /datum/reagent/leather = list("nutriment" = 500, "output"=1000), /obj/item/clothing/gloves/botanic_leather, /obj/item/weapon/storage/belt/utility, /obj/item/weapon/storage/belt/medical, /obj/item/weapon/storage/belt/janitor, /obj/item/weapon/storage/bag/books, /obj/item/weapon/storage/bag/ore, /obj/item/weapon/storage/bag/plants, /obj/item/weapon/storage/backpack/satchel, /obj/item/weapon/storage/wallet,
+					"Cloth", /datum/reagent/cloth = list("nutriment" = 500, "output" = 1000), /datum/reagent/cloth/carpet = list("cloth" = 1000, "output" = 2000), /obj/item/weapon/storage/backpack, /obj/item/clothing/under/rank/hydroponics, /obj/item/clothing/under/rank/chef, /obj/item/clothing/under/rank/bartender, /obj/item/clothing/under/rank/librarian, /obj/item/clothing/under/rank/chaplain
 				)
-	hack_products = list()
-	researchable = list()
-	junk_recipes = list()
-	recycleable = list("glass", "nutriment", "cardboard", "milk", "cream", "leather", "cloth") // I sorta wanma make cheese and meat stacks now, mmm...
+	hack_products = list(
+					/datum/reagent/toxin/mutagen = list("nutriment" = 90, "radium" = 10, "output" = 10),
+					"Tools", /obj/item/weapon/scythe, /obj/item/weapon/stock_parts/cell/potato, /obj/item/weapon/soap,
+					"Leather", /obj/item/clothing/glasses/eyepatch
+				)
+	researchable = list(/obj/item/weapon/gun/energy/floragun = null, /obj/item/device/lightreplacer = "Tools")
+	junk_recipes = list(/obj/item/weapon/reagent_containers/food/snacks/badrecipe, /obj/item/weapon/reagent_containers/food/snacks/candy_corn)
+	recycleable = list("iron", "glass", "radium", "nutriment", "cardboard", "milk", "cream", "leather", "cloth", "eznutriment", "left4zednutriment", "robustharvestnutriment")
 
 /obj/machinery/maker/circuit
 	name = "circuit printer"
@@ -57,7 +66,9 @@
 	icon_base = "circuit_imprinter"
 	icon_open = "circuit_imprinter"
 	build_anim = null
+	board_type = /obj/item/weapon/circuitboard/maker/circuit
 
+	main_menu_name = null
 	std_products = list(
 					"Games", /obj/item/weapon/circuitboard/arcade/battle, /obj/item/weapon/circuitboard/arcade/orion_trail,
 					"Domestic", /obj/item/weapon/circuitboard/hydroponics, /obj/item/weapon/circuitboard/microwave
