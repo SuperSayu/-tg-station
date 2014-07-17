@@ -874,6 +874,7 @@
 #include "code\modules\makerlathe\maker_research.dm"
 #include "code\modules\makerlathe\maker_types.dm"
 #include "code\modules\makerlathe\maker_ui.dm"
+#include "code\modules\makerlathe\readme.dm"
 #include "code\modules\mining\equipment_locker.dm"
 #include "code\modules\mining\machine_input_output_plates.dm"
 #include "code\modules\mining\machine_processing.dm"

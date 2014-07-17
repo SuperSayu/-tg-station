@@ -227,8 +227,8 @@
 
 /obj/machinery/maker/proc/resource_summary()
 	var/global/list/text_cache = list()
-	. = "<small>Loaded Resources<hr>"
-	if(!reagents.total_volume)
+	. = "<small>"
+	if(!reagents.total_volume && !length(stock_parts))
 		. += " &nbsp; <i>None.</i>"
 	else
 		. += "<table style='width:100%'><tr><th>Resource</th><th>Quantity</th><th>Removal Options</th></tr>"
@@ -263,6 +263,16 @@
 				else
 					. += "<span class='linkOff' title='Open the panel and insert a container to drain reagents'>Drain</span> "
 					. += " <a href='?\ref[src];reagent=[R.id];amt=[R.volume]' title='Discard excess material'>Dump</a></td></tr>"
+
+		var/list/stock = list()
+		for(var/obj/item/weapon/stock_parts/S in stock_parts)
+			stock[S.type]++
+		for(var/entry in stock)
+			. += "<tr><td>[stock_names[entry]]</td><td class='r'>[stock[entry]]</td><td><a href='?\ref[src];reagent=[entry];amt=1' title='Eject one of this type of component'>Eject</a> "
+			for(var/qty in list(3,5,10))
+				if(qty > stock[entry]) break
+				. += "<a href='?\ref[src];reagent=[entry];amt=[qty]' title='Eject [qty] of this type of component'>[qty]</a> "
+			// todo recycle component button only if you can handle the resources present - too complicated of a check to do every time I think
 		. += "</table>"
 	. += "</small>"
 
@@ -272,15 +282,46 @@
 	. = "<a href='?\ref[src];build=\ref[P]' style='white-space:nowrap;'>[P.name]</a> <i><small>[P.time_cost/10]s <br>"
 	for(var/entry in P.cost)
 		var/amt = P.cost[entry]
-		var/u = ""
-		if(!amt)
-			amt = "Fill with"
-		else if(amt < 0)
-			amt = -amt
-			u = " (used)"// 10 Sulfuric acid (used)
+
+		// stock parts
+		if(ispath(entry, /obj/item/weapon/stock_parts))
+			var/n = stock_names[entry]
+			if(!(entry in stock_names))
+				var/obj/O = new entry(null)
+				stock_names[entry] = O.name
+				n = O.name
+				qdel(O)
+			var/u
+			switch(amt)
+				if(-1000 to -1)
+					u = "[-amt] [n]s (<u title='Component will not be recovered when item is recycled'>Used</u>)"
+				if(0)
+					u = "[n] (<u title='Component required for construction but not destroyed'>Catalyst</u>)"
+				if(1)
+					u = "[amt] [n]"
+				if(2 to 1000)
+					u = "[amt] [n]s"
+				else
+					u = "<u title='Code glitch, report this'>???</u> [n]s"
+
+			. += "<span style='white-space:nowrap;'>&nbsp;[u]</span>"
+			continue
+
+		// otherwise, reagent
+		var/u
 		var/datum/reagent/R = chemical_reagents_list[entry]
 		if(!R) continue
-		. += "<span style='white-space:nowrap;'>&nbsp;[amt] [R.name][u]</span>" // 1000 Glass
+		if(isnull(amt))
+			u = "<u title='Optional: items built without fillers will be empty.'>Fill with [R.name]</u>"
+		else if(amt == 0)
+			u = "[R.name] (<u title='Required ingredient, not consumed'>Catalyst</u>)"
+		else if(amt < 0)
+			u = "[-amt] [R.name] (<u title='Ingredient will not be recovered when item is recycled'>Used</u>)"
+		else
+			u = "[amt] [R.name]"
+		// null (fill reagents) not applicable here
+
+		. += "<span style='white-space:nowrap;'>&nbsp;[u]</span>"
 	. += "</small></i>"
 	P.description = .
 	// return .
@@ -306,12 +347,22 @@
 		else
 			. += "<span class='linkOff' title='This is the current menu.'>[entry]</span><br>"
 
-/obj/machinery/maker/proc/research_buttons()
-	if(!length(researchable)) return
-	if(server)
-		return "<a href='?\ref[src];sync'>Synchronise Database with [server]</a>"
-	else
-		return "<a href='?\ref[src];server'>Connect to Research Server</a>"
+/obj/machinery/maker/proc/extra_buttons()
+	if(!length(researchable) && !stock_parts)
+		return null // no relevant buttons
+	var/rnd_button = "&nbsp;"
+	var/stock_button = "&nbsp;"
+	if(length(researchable))
+		if(server)
+			rnd_button = "<a href='?\ref[src];sync'>Synchronise Database with [server]</a>"
+		else
+			rnd_button = "<a href='?\ref[src];server'>Connect to Research Server</a>"
+	if(stock_parts)
+		if(recycle_stock_parts)
+			stock_button = "<a href='?\ref[src];stock'>Recycling stock parts</a>"
+		else
+			stock_button = "<a href='?\ref[src];stock'>Storing stock parts</a>"
+	return "<tr><td colspan='2'>[rnd_button]</td><td>[stock_button]</td></tr>"
 
 /obj/machinery/maker/proc/menu(var/mob/user)
 	if(!allowed(user))
@@ -333,10 +384,11 @@
 				return
 			else
 				dat = {"
-				<style>td { border:1px solid #000; vertical-align:top;} td.r { text-align:right; }</style>
+				<style>td { border:1px solid #000; vertical-align:top;} td.r { text-align:right; } th.main { border:1px solid #000; }</style>
 				<table style='width:100%;'>
-					<tr><td colspan='3'>[research_buttons()]</td></tr>
-					<tr><td style='text-align:center;' width='175'>[list_menus()]</td><td>[list_products()]</td><td width='375'>[resource_summary()]</td></tr>
+					[extra_buttons()]
+					<tr><td style='text-align:center;' width='175' rowspan='2'>[list_menus()]</td><th class='main'>Recipes</th><th class='main'>Loaded Resources</th></tr>
+					<tr><td>[list_products()]&nbsp;</td><td width='375'>[resource_summary()]</td></tr>
 				</table> "}
 	var/datum/browser/popup = new(user, "maker", name, 875, 400)
 	popup.set_content(dat)
@@ -360,7 +412,10 @@
 		if(busy) return
 		busy = 1
 		busy_message = "Dumping..."
-		drop_resource(href_list["reagent"], text2num(href_list["amt"]))
+		var/r = href_list["reagent"]
+		var/p = text2path(r) // we may be dealing with stock parts here
+		if(p) r = p
+		drop_resource(r, text2num(href_list["amt"]))
 		busy = 0
 	if("bottle" in href_list)
 		busy = 1
@@ -399,5 +454,6 @@
 		else if(busy) usr << "[src] is busy."
 
 		else research_sync()
-
+	if("stock" in href_list)
+		recycle_stock_parts = !recycle_stock_parts
 	updateUsrDialog()

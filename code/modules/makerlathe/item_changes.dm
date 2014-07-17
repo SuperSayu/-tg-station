@@ -3,8 +3,8 @@
 	var/list/maker_cost = list("iron" = 1000)
 
 /obj/item/weapon/disk/nuclear/maker_cost = null
-/obj/item/weapon/extinguisher/maker_cost = list("iron" = 1500, "water" = 0) // 0 indicates it is a fill reagent
-/obj/item/weapon/weldingtool/maker_cost = list("iron" = 500, "fuel" = 0)
+/obj/item/weapon/extinguisher/maker_cost = list("iron" = 1500, "water" = null) // null indicates it is a fill reagent
+/obj/item/weapon/weldingtool/maker_cost = list("iron" = 500, /obj/item/weapon/stock_parts/manipulator = 1, "fuel" = null)
 
 /obj/item/stack
 	maker_cost = null
@@ -72,11 +72,11 @@
 
 /obj/item/weapon/tank
 	oxygen
-		maker_cost = list("iron" = 1500, "oxygen" = 0)
+		maker_cost = list("iron" = 1500, "oxygen" = null)
 	emergency_oxygen
-		maker_cost = list("iron" = 500, "oxygen" = 0)
+		maker_cost = list("iron" = 500, "oxygen" = null)
 	plasma
-		maker_cost = list("iron" = 1500, "plasma" = 0)
+		maker_cost = list("iron" = 1500, "plasma" = null)
 
 /obj/item/clothing/under/maker_cost = list("cloth" = 500)
 /obj/item/clothing/suit/hazardvest/maker_cost = list("cloth" = 850)

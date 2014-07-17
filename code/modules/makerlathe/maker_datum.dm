@@ -79,7 +79,12 @@
 				power_cost = max(0,power_cost)
 				cost -= "power" // don't want it to show up
 			else
-				if(cost[entry] > 0) // required reagent
+				if(ispath(entry,/obj/item/weapon/stock_parts))
+					if(!source.stock_parts && cost[entry] >= 0) // null stock parts list indicates it cannot accept parts
+						del(src)
+						return
+					continue // but otherwise it's okay
+				if(cost[entry] >= 0) // required reagent
 					if(!(entry in source.recycleable)) // cannot be built on this machine]
 						del(src)
 						return
@@ -97,14 +102,45 @@
 		if(user)
 			user << "<span class='warning'>[M] appears to have some sort of internal fault.</span>"
 		return 0
+	var/list/stock = list()
+	for(var/obj/O in stock_parts)
+		stock[O.type]++
 	for(var/entry in cost)
+
+		// In the case of stock parts (batteries, capacitors, etc)
+		// note =0 still requires one, it just isn't used up
+
+		// todo: there is a fault here that I am too tired to fix
+		// where you could count the same component twice
+		// if for example you need both a quality manip and a lesser manip,
+		// but only have the quality one
+		if(ispath(entry, /obj/item/weapon/stock_parts))
+			var/amt = abs(cost[entry])
+			var/have = 0
+			for(var/t in stock)
+				if(ispath(t, entry)) // accept subtypes
+					have += stock[t]
+			if(amt > have) // not enough
+				if(user) // skip this code if nobody is listening, I do not have a way to cache names for this right now
+					if(!(entry in M.stock_names))
+						var/obj/S = new entry(null)
+						M.stock_names[S.type] = S.name
+						qdel(S)
+					var/part = M.stock_names[entry]
+					user << "<span class='warning'>You need [amt] more [part]\s to create \a [name].</span>"
+				return 0
+			continue
+
+		// The rest are reagents, by reagent id
+
 		// Some are optional, if present they are added to the
-		if(!cost[entry]) continue // reagents of the built object
+		if(isnull(cost[entry])) continue // reagents of the built object
+
 		if(!M.reagents.has_reagent(entry,abs(cost[entry] * M.component_cost_multiplier)))
 			if(user)
 				var/datum/reagent/R = chemical_reagents_list[entry]
 				if(R)
-					user << "<span class='warning'>[M] does not have enough [R.name] to create [name].</span>"
+					user << "<span class='warning'>[M] does not have enough [R.name] to create \a [name].</span>"
 				else
 					user << "<span class='warning'>[M] does not have enough ...[entry]? That's odd.</span>" // graceful-exception-handling station 2014
 			return 0
@@ -115,10 +151,24 @@
 	Return a list of optional reagents that were used in construction,
 	as they will be used to add reagents to the result.
 */
-/datum/data/maker_product/proc/deduct_cost(var/datum/reagents/source, var/cost_multiplier = 1)
+/datum/data/maker_product/proc/deduct_cost(var/obj/machinery/maker/M, var/cost_multiplier = 1)
+	var/datum/reagents/source = M.reagents
 	if(!source) return null
 	for(var/entry in cost)
-		source.remove_reagent(entry,abs(cost[entry] * cost_multiplier),1)
+		if(ispath(entry, /obj/item/weapon/stock_parts))
+			var/amt = abs(cost[entry])
+			while(amt > 0)
+				// todo:
+				// locate() uses an implicit istype() instead of type==, which means that depending on how the stock parts list
+				// is organized, you may end up using more expensive components before less expensive ones.
+				// for now, you will just have to organize your maker_cost list with expensive components first.
+				var/obj/item/weapon/stock_parts/S = locate(entry) in M.stock_parts
+				if(S)
+					amt--
+					M.stock_parts -= S
+					qdel(S) // todo add these to the build_fill return list instead, have the target item handle them
+		else
+			source.remove_reagent(entry,abs(cost[entry] * cost_multiplier),1)
 
 
 	if(reagent_fill && length(reagent_fill))
@@ -131,7 +181,7 @@
 				R.volume -= amt
 			else
 				build_fill[entry] = 0
-
+		source.update_total()
 		return build_fill
 
 	return null
@@ -149,7 +199,7 @@
 	// is how we calculate the appropriate reagent level.  deduct_cost() will track
 	// these so-called fill reagents and let us know what level they should be at.
 	// Note that the optional reagents *have already been deducted* with the rest.
-	var/list/build_fill = deduct_cost(M.reagents, M.component_cost_multiplier)
+	var/list/build_fill = deduct_cost(M, M.component_cost_multiplier)
 
 
 	sleep(time_cost)
@@ -172,7 +222,7 @@
 /datum/data/maker_product/proc/calculate_reagent_fill(var/datum/reagents/source)
 	if(!source) return
 	for(var/entry in cost)
-		if(!cost[entry]) // zero here indicates it is a reagent filling
+		if(isnull(cost[entry])) // null here indicates it is a reagent filling
 			if(!reagent_fill) reagent_fill = list()
 			var/datum/reagent/R = source.has_reagent(entry)
 			if(R)
@@ -206,6 +256,7 @@
 	var/datum/gas/sleeping_agent/gas = locate() in source.trace_gases
 	if(gas && gas.moles)
 		reagent_fill["n2o"] = round(gas.moles * GAS_REAGENT_RATIO) + 1
+	reagent_fill &= cost // only reagents in the cost can be fill reagents - not that this will likely affect much?
 
 /datum/data/maker_product/proc/tank_fill(var/datum/gas_mixture/target, var/list/fill)
 	target.carbon_dioxide = 0

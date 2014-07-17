@@ -54,6 +54,13 @@
 				production_amount = cost[entry]
 				cost -= entry
 			else
+				if(ispath(entry,/obj/item/weapon/stock_parts))
+					if(!source.stock_parts) // null stock parts list indicates it cannot accept parts
+						del(src)
+						return
+					cost[entry] = 0 // reagent conversion only uses stock parts as catalysts
+					continue
+
 				if(cost[entry] > 0) // required reagent
 					if(!(entry in source.recycleable)) // cannot be built on this machine]
 						del(src)
@@ -64,9 +71,11 @@
 	time_cost = max( 15, build_total + time_mod )
 	name = "[production_amount] [name]"
 
-/datum/data/maker_product/reagent_converter/deduct_cost(var/datum/reagents/source, var/cost_multiplier = 1)
+/datum/data/maker_product/reagent_converter/deduct_cost(var/obj/machinery/maker/M, var/cost_multiplier = 1)
+	var/datum/reagents/source = M.reagents
 	if(!source) return null
 	for(var/entry in cost)
+		if(ispath(entry)) continue // we do not deduct
 		source.remove_reagent(entry,abs(cost[entry] * cost_multiplier),1)
 	return null
 
@@ -78,7 +87,7 @@
 		flick(M.build_anim,M)
 
 	M.use_power(time_cost * M.component_time_multiplier + power_cost)
-	deduct_cost(M.reagents, M.component_cost_multiplier)
+	deduct_cost(M, M.component_cost_multiplier)
 
 	sleep(time_cost)
 	M.reagents.add_reagent(reagent_id, production_amount)

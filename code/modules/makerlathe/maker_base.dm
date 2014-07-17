@@ -46,6 +46,10 @@
 	var/list/recycleable		= list() // acceptable reagents to recieve from recycled objects, eg, just iron and glass
 	var/list/starting_reagents	= list() // map objects at initialize time may get some starting resources
 	component_parts				= list() // generic machine var
+	var/list/stock_parts		= list() // allows you to require stock parts - todo, maximum number of stored stock parts
+	var/global/list/stock_names	= list() // name cache by part type - sort of awkward but acceptable
+
+	var/recycle_stock_parts		= 0 	 // ui toggle for storing or recycling stock parts - you do not need to change this
 
 	var/component_cost_multiplier = 1
 	var/component_time_multiplier = 1
@@ -121,6 +125,14 @@
 /obj/machinery/maker/proc/default_reagents()
 	for(var/entry in starting_reagents)
 		var/amt = starting_reagents[entry]
+		if(ispath(entry,/obj/item/weapon/stock_parts) && amt > 0 && !isnull(stock_parts))
+			while(amt--)
+				var/obj/O = new entry(src)
+				stock_parts += O
+				if(!(O.type in stock_names))
+					stock_names[O.type] = O.name
+			continue
+
 		if(amt == 0) amt = -100
 		if(amt < 0) amt = round(rand(0, -amt),10)
 		reagents.add_reagent(entry,amt)
@@ -176,12 +188,21 @@
 			usr << "<span class='notice'>There is no way to recycle [I].</span>"
 		return 0
 
+	if(istype(I,/obj/item/weapon/stock_parts) && stock_parts && !recycle_stock_parts)
+		return 1 // indicates we will store this part instead of recycling it
+
 	var/static/list/cost_modifiers = list("output","power","time")
 
 	if(recycleable) // null -> no filter on acceptable reagents
 		var/list/results = I.maker_cost - recycleable - cost_modifiers
 		if(istype(results) && results.len)
 			for(var/entry in results) // recycleable list is acceptable reagents, if it's not recycleable, don't accept it
+				// stock parts are the exception here, if you accept any parts, accept them all--determine this by whether the stock parts list exists or not
+				if(ispath(entry, /obj/item/weapon/stock_parts))
+					if(isnull(stock_parts) && results[entry] > 0)
+						usr << "<span class='warning'>[src] cannot recycle components, and so refuses [I].</span>"
+						return 0
+					continue
 				if(results[entry] > 0) // do not count fill reagents
 					usr << "<span class='warning'>[src] cannot recycle [entry], and so refuses [I].</span>"
 					return 0
@@ -207,9 +228,25 @@
 	I.loc = src
 	insert_anim(I)
 
+	if(istype(I,/obj/item/weapon/stock_parts) && stock_parts && !recycle_stock_parts)
+		stock_parts += I
+		if(!(I.type in stock_names))
+			stock_names[I.type] = I.name
+		return 1
+
 	for(var/entry in I.maker_cost)
+		if(ispath(entry, /obj/item/weapon/stock_parts))
+			var/amount = I.maker_cost[entry]
+			while(amount > 0)
+				var/obj/O = new entry(src)
+				stock_parts += O
+				if(!(O.type in stock_names))
+					stock_names[O.type] = O.name
+				amount--
+			continue
+
 		if(reagents.total_volume >= reagents.maximum_volume)
-			return 0
+			continue
 
 		var/value = I.maker_cost[entry]
 		if(value <= 0 || isnull(value))	// negative values are used up in the build process, not recovered; null value is required by the build process but not consumed
@@ -262,7 +299,21 @@
 	if(type == null)
 		for(var/datum/reagent/entry in reagents.reagent_list)
 			drop_resource(entry.id, amount)
+		for(var/obj/item/weapon/stock_parts/P in stock_parts)
+			P.loc = loc
+		stock_parts = list()
 		return
+
+	if(ispath(type, /obj/item/weapon/stock_parts))
+		for(var/obj/O in stock_parts)
+			if(O.type == type)
+				O.loc = loc
+				stock_parts -= O
+				amount--
+				if(amount <= 0)
+					break
+		return
+
 	var/datum/reagent/R = reagents.has_reagent(type)
 	if(!R) return
 
@@ -304,7 +355,7 @@
 	var/datum/reagent/R = reagents.has_reagent(type)
 	if(!R) return // when the dialog updates that will be clear enough
 	updateUsrDialog() // show the busy message
-	amount = min(round(G.volume / BOTTLE_GLASS_COST), round(R.volume / 30), amount)
+	amount = min(round(G.volume / BOTTLE_GLASS_COST), round(R.volume / 30)+(R.volume % 30?1:0), amount)
 	while(amount-- > 0)
 		sleep(15)
 		G.volume -= BOTTLE_GLASS_COST
