@@ -32,6 +32,16 @@
 
 	if(istype(modified_cost))
 		cost = modified_cost
+	else if(istext(modified_cost))
+		cost = text2list(modified_cost)
+		for(var/entry in cost)
+			if(text2ascii(entry) == 47) // "/" : indicates the following is a path string
+				var/path = text2path(entry)
+				if(ispath(path, /obj/item/weapon/stock_parts))
+					cost[path] = cost[entry]
+					cost.Remove(entry)
+					continue
+			cost[entry] = text2num(cost[entry])
 	else
 		cost = null
 
@@ -41,6 +51,7 @@
 		del(src)
 
 	var/build_total = 0
+	var/time_mod = 0
 	for(var/entry in cost)
 		switch(entry)
 			if("time")
@@ -62,13 +73,16 @@
 					continue
 
 				if(cost[entry] > 0) // required reagent
-					if(!(entry in source.recycleable)) // cannot be built on this machine]
+					if(source.recycleable && !(entry in source.recycleable)) // cannot be built on this machine]
 						del(src)
 						return
 				build_total += abs(cost[entry])
 
-	build_total = round( build_total / 100 )
-	time_cost = max( 15, build_total + time_mod )
+	if(time_mod)
+		time_cost = time_mod
+	else
+		build_total = round( build_total / 100 )
+		time_cost = max( 15, build_total + time_mod )
 	name = "[production_amount] [name]"
 
 /datum/data/maker_product/reagent_converter/deduct_cost(var/obj/machinery/maker/M, var/cost_multiplier = 1)

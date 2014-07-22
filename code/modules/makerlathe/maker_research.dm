@@ -19,7 +19,7 @@
 	busy = 1
 	busy_message = "Searching for servers..."
 	updateUsrDialog()
-	sleep(100)
+	sleep(55)
 	server = locate(/obj/machinery/r_n_d/server/robotics) in world
 	busy = 0
 

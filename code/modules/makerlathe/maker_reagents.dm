@@ -32,6 +32,7 @@
 		name = "Diamond"
 		id = "diamond"
 		resource_item = /obj/item/stack/sheet/mineral/diamond
+
 	nutriment/cardboard
 		name = "Cardboard"
 		id = "cardboard"
@@ -62,7 +63,7 @@
 		resource_item = /obj/item/stack/sheet/leather
 	leather/xeno
 		name = "Xeno chitin"
-		id = "xenol"
+		id = "xenoleather"
 		resource_item = /obj/item/stack/sheet/xenochitin
 	cloth
 		name = "Cloth"
@@ -85,3 +86,17 @@
 	nitrous_oxide
 		name = "Nitrous Oxide"
 		id = "n2o"
+
+// Added because why did they not exist
+	carbon/plastic
+		name = "Plastic"
+		id = "plastic"
+	silicon/rubber
+		name = "Silicone rubber"
+		id = "rubber"
+	titanium
+		name = "Titanium"
+		id = "titanium"
+	lead
+		name = "Lead"
+		id = "lead"

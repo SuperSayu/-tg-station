@@ -35,7 +35,7 @@
 	icon_state = "biogen-empty"
 	icon_base = "biogen-empty"
 	icon_open = "biogen-empty"
-	build_anim = null
+	build_anim = "biogen-work"
 	board_type = /obj/item/weapon/circuitboard/maker/biogen
 
 	main_menu_name = "Convert"

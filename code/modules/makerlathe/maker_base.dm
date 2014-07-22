@@ -1,6 +1,4 @@
-// This ratio defines the reagent quantity per mole of gas taken from tanks
-// I am not sure what the number should be honestly.
-#define GAS_REAGENT_RATIO 100
+
 
 /obj/machinery/maker
 	name = "autolathe"
@@ -13,7 +11,10 @@
 	var/icon_base = "autolathe"
 	var/icon_open = "autolathe_t"
 	var/build_anim = "autolathe_n"
+	var/default_insert_anim = "autolathe_o"
 	// there is also an insert_anim(item) proc
+	// if you have different animations for inserting different
+	// stacks or items, you can override it.
 
 	var/busy = 0
 	var/busy_message = "" // Takes over the screen with a message while busy
@@ -23,7 +24,12 @@
 	var/main_menu_name = "Main Menu"
 
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
-	var/beaker_type = /obj/item/weapon/reagent_containers/glass/bucket // if set, the beaker will be autocreated for map objects
+	var/obj/item/weapon/circuitboard/maker/board = null
+
+	var/board_type = null // /obj/item/weapon/circuitboard/maker		// board type - must be set to allow disassembly!
+	var/beaker_type = /obj/item/weapon/reagent_containers/glass/bucket	// if set, the beaker will be autocreated for map objects
+	var/list/starting_reagents	= list()								// map objects at initialize time may get some starting resources
+
 
 	// Contain a cached list by menu name, taking into account hacked/emagged:
 	// the main menu is null
@@ -43,19 +49,24 @@
 	var/list/junk_recipes		= list() // trash generated when malfunctioning - no menus here
 	var/list/researchable		= list() // available once researched - go into std products list
 
-	var/list/recycleable		= list() // acceptable reagents to recieve from recycled objects, eg, just iron and glass
-	var/list/starting_reagents	= list() // map objects at initialize time may get some starting resources
+	var/list/recycleable		= list() // acceptable reagents to recieve from recycled objects, eg, just iron and glass.  Does not handle stock parts.
 	component_parts				= list() // generic machine var
-	var/list/stock_parts		= list() // allows you to require stock parts - todo, maximum number of stored stock parts
+
+	// For queue and stock parts lists, if the value is null,
+	// that functionality is disabled (queues or handling stock parts in item recipes)
+
+	var/list/queue				= list()
+	var/list/stock_parts		= list()
 	var/global/list/stock_names	= list() // name cache by part type - sort of awkward but acceptable
 
 	var/recycle_stock_parts		= 0 	 // ui toggle for storing or recycling stock parts - you do not need to change this
+	var/show_queue				= 0		 // ui toggle for showing queue instead of menus
+	var/autostart_queue			= 1		 // toggle for auto-building items vs queueing them
+	var/building				= 0		 // queue is running
+	var/allstop					= 0
 
 	var/component_cost_multiplier = 1
 	var/component_time_multiplier = 1
-
-	var/obj/item/weapon/circuitboard/maker/board
-	var/board_type = /obj/item/weapon/circuitboard/maker // subtypes of the machine have subtypes of boards
 
 	var/obj/machinery/r_n_d/server/server // for downloading plans
 
@@ -67,6 +78,7 @@
 	var/shorted = 0		// shocky
 	var/overdrive = 0	// high speed, high power use, heat generation
 	var/junktech = 0	// reliability plummets, machine may jam, wastes materials
+	var/last_multiplier_change = 0 // set this to the current time when something affecting costs changes, it will recalculate entries
 
 
 /obj/machinery/maker/New()
@@ -81,10 +93,12 @@
 
 	power_change()
 	..()
+	update_icon()
 
 /obj/machinery/maker/initialize()
 	..()
-	if(ispath(beaker_type,/obj/item/weapon/reagent_containers/glass)) beaker = new beaker_type(src)
+	if(ispath(beaker_type, /obj/item))
+		beaker = new beaker_type(src)
 	default_reagents()
 
 /obj/machinery/maker/proc/initialize_products(var/list/menu, var/allow_menus = 1)
@@ -101,7 +115,7 @@
 					result += new/datum/data/maker_product(src, entry, c_menu, menu[entry])
 				else if(istext(menu[entry]))
 					var/datum/data/maker_product/P = new(src, entry, c_menu)
-					P.name += "([menu[entry]])" // eg /obj/item/stack/cable_coil = "red", /obj/itme/stack/cable_coil/pink = "pink"
+					P.name += " ([menu[entry]])" // eg /obj/item/stack/cable_coil = "red" -> Cable Coil (red)
 					result += P
 				else
 					result += new/datum/data/maker_product(src, entry, c_menu)
@@ -139,7 +153,10 @@
 
 /obj/machinery/maker/proc/default_parts()
 	if(component_parts.len) return
-	board = new board_type(null)
+	if(board_type)
+		board = new board_type(null)
+	else // if null, cannot be disassembled
+		board = new /obj/item/weapon/circuitboard/maker() // needed
 	component_parts += board
 	component_parts += new /obj/item/weapon/stock_parts/matter_bin(null)
 	component_parts += new /obj/item/weapon/stock_parts/matter_bin(null)
@@ -162,11 +179,11 @@
 
 	rating = 1
 	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
-		rating *= (1.05 - 0.05 * M.rating) // rating 1 -> 100%, 2->95, etc
+		rating *= (1.1 - 0.1 * M.rating) // rating 1 -> 100%, 2->95, etc
 		reliability = 100 + 5*M.rating
 
 	component_cost_multiplier = rating
-	component_time_multiplier = rating * 3 // time also goes down as component cost goes down
+	component_time_multiplier = rating * 2 // time also goes down as component cost goes down
 
 	if(overdrive)
 		component_time_multiplier *= 0.75
@@ -180,119 +197,59 @@
 	for(var/entry in all_menus)
 		all_menus[entry] = null
 
-/obj/machinery/maker/proc/filter_recycling(var/obj/item/I)
+/obj/machinery/maker/proc/filter_recycling(var/obj/item/I, var/quiet = 0)
 	if(!reagents || reagents.total_volume >= reagents.maximum_volume)
 		return 0
-	if(!istype(I) || !I.maker_cost)
-		if(I)
-			usr << "<span class='notice'>There is no way to recycle [I].</span>"
+	if(!istype(I))
+		if(I && !quiet)
+			user_announce("<span class='notice'>There is no way to recycle [I].</span>")
+		return 0
+
+	var/list/cost = I.determine_cost() // will eventually just be I.maker_cost but we need this for now
+	if(!cost)
+		if(!quiet)
+			user_announce("<span class='notice'>There is no way to recycle [I].</span>")
 		return 0
 
 	if(istype(I,/obj/item/weapon/stock_parts) && stock_parts && !recycle_stock_parts)
 		return 1 // indicates we will store this part instead of recycling it
 
-	var/static/list/cost_modifiers = list("output","power","time")
-
 	if(recycleable) // null -> no filter on acceptable reagents
-		var/list/results = I.maker_cost - recycleable - cost_modifiers
-		if(istype(results) && results.len)
-			for(var/entry in results) // recycleable list is acceptable reagents, if it's not recycleable, don't accept it
-				// stock parts are the exception here, if you accept any parts, accept them all--determine this by whether the stock parts list exists or not
-				if(ispath(entry, /obj/item/weapon/stock_parts))
-					if(isnull(stock_parts) && results[entry] > 0)
-						usr << "<span class='warning'>[src] cannot recycle components, and so refuses [I].</span>"
-						return 0
-					continue
-				if(results[entry] > 0) // do not count fill reagents
-					usr << "<span class='warning'>[src] cannot recycle [entry], and so refuses [I].</span>"
+		var/static/list/cost_modifiers = list("output","power","time")
+		cost -= recycleable
+		cost -= cost_modifiers
+		for(var/entry in cost)
+			// recycleable list is acceptable reagents, if it's not recycleable, don't accept it
+			// stock parts are the exception here, if you accept any parts, accept them all
+			// This is determined by whether the stock parts list exists or not
+			if(ispath(entry, /obj/item/weapon/stock_parts))
+				if(isnull(stock_parts) && cost[entry] > 0)
+					if(!quiet)
+						user_announce("<span class='warning'>[src] cannot recycle components, and so refuses [I].</span>")
 					return 0
-	var/max_insertable = 1
-	if(istype(I,/obj/item/stack))
-		var/space = reagents.maximum_volume - reagents.total_volume
-		var/per_unit = 0
-		for(var/entry in I.maker_cost)
-			per_unit += I.maker_cost[entry]
-		var/obj/item/stack/S = I
-		max_insertable = min(S.amount, round(space / per_unit))
-	return max_insertable
+				continue
+			if(cost[entry] > 0) // do not count fill reagents and build-only costs
+				if(!quiet)
+					user_announce("<span class='warning'>[src] cannot recycle [entry], and so refuses [I].</span>")
+				return 0
+
+	return 1
 
 // if you want different insert anims for different objects, override this
 /obj/machinery/maker/proc/insert_anim(var/obj/item/I)
-	flick("autolathe_o",src)
+	if(default_insert_anim)
+		flick(default_insert_anim,src)
 	sleep(10)
 
 /obj/machinery/maker/proc/decompose(var/obj/item/I)
-	var/amt = filter_recycling(I)
-	if(!amt) // not recycleable - if amt > 1, it is a stack
+	if(!filter_recycling(I))
 		return 0
+
 	I.loc = src
-	insert_anim(I)
-
-	if(istype(I,/obj/item/weapon/stock_parts) && stock_parts && !recycle_stock_parts)
-		stock_parts += I
-		if(!(I.type in stock_names))
-			stock_names[I.type] = I.name
-		return 1
-
-	for(var/entry in I.maker_cost)
-		if(ispath(entry, /obj/item/weapon/stock_parts))
-			var/amount = I.maker_cost[entry]
-			while(amount > 0)
-				var/obj/O = new entry(src)
-				stock_parts += O
-				if(!(O.type in stock_names))
-					stock_names[O.type] = O.name
-				amount--
-			continue
-
-		if(reagents.total_volume >= reagents.maximum_volume)
-			continue
-
-		var/value = I.maker_cost[entry]
-		if(value <= 0 || isnull(value))	// negative values are used up in the build process, not recovered; null value is required by the build process but not consumed
-			continue					// zero value is used to indicate fill reagents.
-		reagents.add_reagent(entry,value * amt) // amt is used when the incoming is a stack
-
-	// reagents get recycled, stored, or dumped
-	if(I.reagents && I.reagents.total_volume)
-		for(var/datum/reagent/R in I.reagents.reagent_list)
-			if(reagents.total_volume < reagents.maximum_volume)
-				if(R.id in recycleable)
-					I.reagents.trans_id_to(src,R.id,R.volume)
-		//Overflow cup
-		if(I.reagents.total_volume)
-			if(beaker)
-				I.reagents.trans_to(beaker, I.reagents.total_volume)
-			else
-				reliability-- // no overflow cup means stuff is sloshing around in there
-
-	else if(istype(I,/obj/item/weapon/tank))
-		var/obj/item/weapon/tank/T = I
-		var/datum/gas_mixture/air = T.air_contents
-		if("oxygen" in recycleable)
-			reagents.add_reagent("oxygen", round(air.oxygen * GAS_REAGENT_RATIO))
-			air.oxygen = 0
-		if("nitrogen" in recycleable)
-			reagents.add_reagent("nitrogen", round(air.nitrogen * GAS_REAGENT_RATIO))
-			air.nitrogen = 0
-		if("plasma" in recycleable)
-			reagents.add_reagent("plasma", round(air.toxins * GAS_REAGENT_RATIO))
-			air.toxins = 0
-		if("co2" in recycleable)
-			reagents.add_reagent("co2", round(air.carbon_dioxide * GAS_REAGENT_RATIO))
-			air.carbon_dioxide = 0
-		var/datum/gas/sleeping_agent/gas = locate() in air.trace_gases
-		if(gas && ("n2o" in recycleable))
-			reagents.add_reagent("n2o", round(gas.moles * GAS_REAGENT_RATIO))
-			gas.moles = 0
-		loc.assume_air(air) // whatever is left
-		air_update_turf()
-
-	if(istype(I,/obj/item/stack))
-		var/obj/item/stack/S = I
-		S.use(amt)
-	else
-		qdel(I)
+	insert_anim(I) // you can make different insert animations if you want
+	var/keep = I.maker_disassemble(src) // return 1 if the piece is kept inside, eg, stock parts
+	if(!keep && I && I.loc == src) // otherwise if it still exists, eg, stacks
+		I.loc = loc				// leave it out for the user
 	return 1
 
 /obj/machinery/maker/proc/drop_resource(var/type, var/amount = 0, var/delay = 1)
@@ -328,6 +285,8 @@
 			var/obj/item/stack/S = new R.resource_item(src)
 			S.amount = min(S.max_amount, round(amount / amt_per_sheet))
 			if(delay)
+				if(build_anim)
+					flick(build_anim,src)
 				sleep(S.amount)
 			var/amt_taken = S.amount * amt_per_sheet
 			amount -= amt_taken
@@ -350,13 +309,23 @@
 /obj/machinery/maker/proc/bottle_resource(var/type, var/amount = 0)
 	var/datum/reagent/G = reagents.has_reagent("glass",BOTTLE_GLASS_COST)
 	if(!G)
-		usr << "<span class='warning'>[src] does not have enough glass to bottle anything.</span>"
+		user_announce("<span class='warning'>[src] does not have enough glass to bottle anything.</span>")
 		return
 	var/datum/reagent/R = reagents.has_reagent(type)
-	if(!R) return // when the dialog updates that will be clear enough
-	updateUsrDialog() // show the busy message
+	if(!R)
+		R = chemical_reagents_list[type]
+		user_announce("<span class='warning'>[src] does not have any [R.name] to bottle.</span>")
+		return // when the dialog updates that will be clear enough
 	amount = min(round(G.volume / BOTTLE_GLASS_COST), round(R.volume / 30)+(R.volume % 30?1:0), amount)
+	if(!amount)
+		return
+
+	building = 1
+	updateUsrDialog() // show the busy message
+
 	while(amount-- > 0)
+		if(build_anim)
+			flick(build_anim,src)
 		sleep(15)
 		G.volume -= BOTTLE_GLASS_COST
 		var/amt = min(30, R.volume)
@@ -369,15 +338,68 @@
 			visible_message("<span class='warning'>[B] gets jammed in [src]!</span>")
 			break
 		B.loc = loc
+	building = 0
 	reagents.update_total()
 
 
-/obj/machinery/maker/proc/make(var/datum/data/maker_product/P, var/mob/user)
-	if(!istype(P) || !(P in all_menus[current_menu]))
+/obj/machinery/maker/proc/enqueue(var/datum/data/maker_product/P)
+	if(istype(P))
+		if(!(P in all_menus[current_menu]))
+			return
+		if(!P.check_cost(src) && !length(queue)) return
+		if(!queue)
+			busy = 1
+			busy_message = "Synthesizing, please wait..."
+			updateUsrDialog()
+			make(P)
+			busy = 0
+			return
+		queue.Add(P)
+	else if(istext(P) && reagents.has_reagent(P))
+		if(!queue)
+			busy = 1
+			busy_message = "Bottling reagent, please wait..."
+			updateUsrDialog()
+			bottle_resource(P,1)
+			busy = 0
+			return
+		queue.Add(P)
+
+	if(!building && autostart_queue)
+		building = 1
+		spawn process_queue()
+
+/obj/machinery/maker/proc/process_queue()
+	while(queue.len && !allstop && !jammed && !stat)
+		var/datum/data/maker_product/P = queue[1]
+		if(istype(P))
+			if(!P.check_cost(src))
+				break
+			building = 1
+			queue.Cut(1,2)
+			if(show_queue)
+				updateUsrDialog()
+			make(P)
+		else if(istext(P))
+			var/datum/reagent/R = reagents.has_reagent(P)
+			if(!R) break
+			building = 1
+			queue.Cut(1,2)
+			if(show_queue)
+				updateUsrDialog()
+			bottle_resource(P,1)
+
+	busy = 0
+	allstop = 0
+	building = 0
+	updateUsrDialog()
+
+/obj/machinery/maker/proc/make(var/datum/data/maker_product/P)
+	if(!istype(P))
 		return
 	var/junk = 0
 	if(!prob(reliability))
-		P.deduct_cost(reagents, (100 - reliability) / 100) // waste resources
+		P.deduct_cost(src, (100 - reliability) / 200) // waste resources
 		if(!prob(reliability) && length(junk_recipes))
 			P = pick(junk_recipes) // junk product
 			junk = 1
@@ -389,17 +411,19 @@
 			T.assume_air(local)
 			air_update_turf()
 	use_power = 2
-	busy = 1
-	busy_message = "Synthesizing, please wait..."
+	building = 1
 	updateUsrDialog()
-	var/obj/item/result = P.build(src,user)
-	busy = 0
+	var/obj/item/result = P.build(src)
+	building = 0
+
 	use_power = 1 + overdrive
 	if(!result)
 		return
 	else if(junk || !prob(reliability))
 		jammed = result
 		jammed.loc = src
-		visible_message("\A [jammed] gets stuck in [src]!")
+		user_announce("\A [jammed] gets stuck in [src]!")
+	else if(istype(result,/list))
+		user_announce("[src] produces several items at once.")
 	else
-		visible_message("[src] produces \a [result].")
+		user_announce("[src] produces \a [result].")

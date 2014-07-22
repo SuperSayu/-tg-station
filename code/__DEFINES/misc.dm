@@ -30,3 +30,11 @@
 
 #define MINERAL_MATERIAL_AMOUNT 2000
 //The amount of materials you get from a sheet of mineral like iron/diamond/glass etc
+
+// This ratio defines the reagent quantity per mole of gas taken from tanks
+// I am not sure what the number should be honestly.
+#define GAS_REAGENT_RATIO 100
+
+// Constant amount of glass for creating a small bottle, since it will be reffered to in a number of places
+#define BOTTLE_GLASS_COST 200
+#define BOX_CARDBOARD_COST 200

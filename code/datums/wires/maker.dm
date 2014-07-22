@@ -54,6 +54,7 @@ var/const/
 			M.shock(usr,100)
 		if(MAKER_WIRE_JUNKER)
 			M.junktech = !M.junktech
+			M.last_multiplier_change = world.time
 		if(MAKER_WIRE_HACKABLE)
 			M.board.hackable = !M.board.hackable
 
@@ -66,8 +67,10 @@ var/const/
 			M.shorted = !mended
 		if(MAKER_WIRE_OVERDRIVE)
 			M.overdrive = !mended
+			M.last_multiplier_change = world.time
 		if(MAKER_WIRE_JUNKER)
 			M.junktech = !mended
+			M.last_multiplier_change = world.time
 			if(!mended) M.shock(usr)
 		//if(MAKER_WIRE_HACKABLE)
 			// nothing - pulse only
