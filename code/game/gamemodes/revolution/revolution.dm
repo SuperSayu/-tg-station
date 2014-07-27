@@ -44,6 +44,8 @@
 
 	if(config.protect_roles_from_antagonist)
 		restricted_jobs += protected_jobs
+	else if(config.protect_captain_from_antagonist)
+		restricted_jobs += "Captain"
 
 	var/head_check = 0
 	for(var/mob/new_player/player in player_list)

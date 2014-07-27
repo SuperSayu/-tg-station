@@ -54,6 +54,7 @@ client/verb/showrevinfo()
 	var/output = revdata.showinfo
 	output += "<b>Current Infomational Settings:</b><br>"
 	output += "Protect Authority Roles From Traitor: [config.protect_roles_from_antagonist]<br>"
+	output += "Protect Captain From Traitor: [config.protect_captain_from_antagonist]<br>"
 	output += "Allow Latejoin Antagonists: [config.allow_latejoin_antagonists]<br>"
 	if(config.show_game_type_odds)
 		output += "<br><b>Game Type Odds:</b><br>"
