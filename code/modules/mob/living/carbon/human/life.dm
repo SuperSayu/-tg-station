@@ -499,7 +499,7 @@
 				var/turf/pos = get_turf(src)
 				pos.add_blood_floor(src)
 				playsound(pos, 'sound/effects/splat.ogg', 10, 1)
-				src << "<span class='warning'>Your feel woozy...</span>"
+				src << pick("<span class='warning'>You feel woozy...</span>","<span class='warning'>You feel drained...</span>","<span class='warning'>Your wounds open...</span>","<span class='warning'>Your blood flows...</span>")
 
 			if(paralysis)
 				AdjustParalysis(-1)
