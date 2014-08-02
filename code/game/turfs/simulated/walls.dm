@@ -70,18 +70,13 @@
 	switch(severity)
 		if(1.0)
 			//SN src = null
-			if(prob(90))
-				src.ChangeTurf(/turf/space)
-			else
-				new /obj/structure/faketurf(src)
+			src.ChangeTurf(/turf/space)
 			return
 		if(2.0)
 			if (prob(45))
 				dismantle_wall(0,1)
-			else if(prob(76))
-				dismantle_wall(1,1)
 			else
-				new /obj/structure/faketurf(src)
+				dismantle_wall(1,1)
 		if(3.0)
 			var/proba
 			if (istype(src, /turf/simulated/wall/r_wall))
