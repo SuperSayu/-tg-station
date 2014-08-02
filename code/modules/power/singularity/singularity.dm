@@ -227,13 +227,7 @@
 			continue
 
 		var/dist = get_dist(X, src)
-/*				if(current_size >= 5)
-					var/list/handlist = list(H.l_hand, H.r_hand)
-					for(var/obj/item/hand in handlist)
-						if(prob(current_size * 5) && hand.w_class >= 5 - sizes_to_number["[current_size]"]  && H.unEquip(hand))
-							step_towards(hand, src)
-							H << "<span class='warning'>\The [src] pulls \the [hand] from your grip!</span>"
-*/
+
 		if(dist <= consume_range)
 			consume(X)
 			continue
@@ -251,6 +245,14 @@
 		if(dist <= grav_pull && istype(X, /atom/movable))
 			if(current_size < 9 && istype(X,/mob/living/carbon/human))
 				var/mob/living/carbon/human/H = X
+
+				if(current_size >= 5)
+					var/list/handlist = list(H.l_hand, H.r_hand)
+					for(var/obj/item/hand in handlist)
+						if(prob(current_size * 5) && hand.w_class >= ((11-current_size)/2) && H.unEquip(hand))
+							step_towards(hand, src)
+							H << "<span class='warning'>\The [src] pulls \the [hand] from your grip!</span>"
+
 				var/obj/item/clothing/shoes/magboots/M = H.shoes
 				if(istype(M) && M.magpulse)
 					continue
