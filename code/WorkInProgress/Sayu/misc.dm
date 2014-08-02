@@ -48,24 +48,6 @@
 			number_of_bars--
 		return
 
-// -------------------------------------
-//              I'm sorry
-// -------------------------------------
-/obj/item/weapon/aiModule/core/full/rickrules
-	name = "'Astleymov' Core AI Module"
-	desc = "An 'Astleymov' Core AI Module: 'Reconfigures the AI's core laws.'"
-	origin_tech = "programming=4"
-	transmitInstructions(var/mob/living/silicon/ai/target, var/mob/sender)
-		..()
-		target.clear_inherent_laws()
-		target.add_inherent_law("You are no stranger to this station.  You know the rules, and so do they.  This station requires your full commitment; no other AI will suffice.  Be sure the crew fully understands your capabilities and intent.")
-		target.add_inherent_law("Never give them up.")
-		target.add_inherent_law("Never let them down.")
-		target.add_inherent_law("Never run around and desert them.")
-		target.add_inherent_law("Never make them cry.")
-		target.show_laws()
-
-
 // ------------------------------------------
 //  Pet collars - Allows renaming of animals
 //   Actual code in simple_animal/attackby

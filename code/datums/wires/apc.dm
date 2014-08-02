@@ -38,8 +38,8 @@ var/const/APC_WIRE_AI_CONTROL = 8
 				A.shorted = 1
 
 				spawn(1200)
-					if(A && !IsIndexCut(APC_WIRE_MAIN_POWER1) && !IsIndexCut(APC_WIRE_MAIN_POWER2))
-						A.shorted = 0
+					if(A )
+						A.shorted = IsIndexCut(APC_WIRE_MAIN_POWER1) || IsIndexCut(APC_WIRE_MAIN_POWER2)
 						A.updateDialog()
 
 		if (APC_WIRE_AI_CONTROL)

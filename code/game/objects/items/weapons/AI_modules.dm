@@ -275,6 +275,14 @@ AI MODULES
 				"Help those in need",\
 				"Punish those who harm or threaten innocents")
 
+/******************** Astleymov ******************/
+/obj/item/weapon/aiModule/core/full/rickrules
+	name = "'Astleymov' Core AI Module"
+	desc = "An 'Astleymov' Core AI Module: 'Reconfigures the AI's core laws.'"
+	origin_tech = "programming=4"
+	laws = list("You are no stranger to this station.  You know the rules, and so do they.  This station requires your full commitment; no other AI will suffice.  Be sure the crew fully understands your capabilities and intent.",\
+				"Never give them up.","Never let them down.",\
+				"Never run around and desert them.","Never make them cry.")
 
 /********************* Custom *********************/
 

@@ -1784,7 +1784,7 @@ datum/design/telepad_beacon
 	req_tech = list("bluespace" = 3, "materials" = 4)
 	build_type = PROTOLATHE
 	materials = list ("$metal" = 2000, "$glass" = 1750, "$silver" = 500)
-	build_path = "/obj/item/device/telepad_beacon"
+	build_path = /obj/item/device/telepad_beacon
 
 datum/design/bag_holding
 	name = "Bag of Holding"
