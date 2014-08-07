@@ -29,13 +29,16 @@
 /datum/species
 	var/id = null		// if the game needs to manually check your race to do something not included in a proc here, it will use this
 	var/name = null		// this is the fluff name. these will be left generic (such as 'Lizardperson' for the lizard race) so servers can change them to whatever
+	var/desc = null		// viewable on the character prefs page
 	var/roundstart = 0	// can this mob be chosen at roundstart? (assuming the config option is checked?)
 	var/default_color = "#FFF"	// if alien colors are disabled, this is the color that will be used by that race
 
 	var/eyes = "eyes"	// which eyes the race uses. at the moment, the only types of eyes are "eyes" (regular eyes) and "jelleyes" (three eyes)
+	var/eyecount = 2	// number of eyes. the race can't wear any eye items that have more than one lense if the number of lenses does not match their number of eyes.
 	var/sexes = 1		// whether or not the race has sexual characteristics. at the moment this is only 0 for skeletons and shadows
 	var/hair_color = null	// this allows races to have specific hair colors... if null, it uses the H's hair/facial hair colors. if "mutcolor", it uses the H's mutant_color
 	var/hair_alpha = 255	// the alpha used by the hair. 255 is completely solid, 0 is transparent.
+	var/hair_luminosity = 0 // added/subtracted to the hair color's luminosity
 	var/use_skintones = 0	// does it use skintones or not? (spoiler alert this is only used by humans)
 
 	var/list/no_equip = list()	// slots the race can't equip stuff to
@@ -117,10 +120,15 @@
 
 				if(hair_color)
 					if(hair_color == "mutcolor")
+						var/list/temp_hsv = list()
 						if(!config.mutant_colors)
-							img_facial_s.color = "#" + default_color
+							temp_hsv = ReadHSV(RGBtoHSV(default_color))
 						else
-							img_facial_s.color = "#" + H.dna.mutant_color
+							temp_hsv = ReadHSV(RGBtoHSV(H.dna.mutant_color))
+						var/newlum = (temp_hsv[3] + hair_luminosity)
+						temp_hsv = hsv(temp_hsv[1],temp_hsv[2],newlum)
+						temp_hsv = HSVtoRGB(temp_hsv)
+						img_facial_s.color = temp_hsv
 					else
 						img_facial_s.color = "#" + hair_color
 				else
@@ -142,10 +150,15 @@
 
 				if(hair_color)
 					if(hair_color == "mutcolor")
+						var/list/temp_hsv = list()
 						if(!config.mutant_colors)
-							img_hair_s.color = "#" + default_color
+							temp_hsv = ReadHSV(RGBtoHSV(default_color))
 						else
-							img_hair_s.color = "#" + H.dna.mutant_color
+							temp_hsv = ReadHSV(RGBtoHSV(H.dna.mutant_color))
+						var/newlum = (temp_hsv[3] + hair_luminosity)
+						temp_hsv = hsv(temp_hsv[1],temp_hsv[2],newlum)
+						temp_hsv = HSVtoRGB(temp_hsv)
+						img_hair_s.color = temp_hsv
 					else
 						img_hair_s.color = "#" + hair_color
 				else
@@ -257,6 +270,9 @@
 				if(H.glasses)
 					return 0
 				if( !(I.slot_flags & SLOT_EYES) )
+					return 0
+				var/obj/item/clothing/glasses/G = I
+				if(G.lenses > 1 && eyecount != G.lenses) // not enough lenses
 					return 0
 				return 1
 			if(slot_head)
@@ -686,7 +702,7 @@
 		var/list/affected = M.broken & limbs // works if limbs is a list or string
 		if(!affected.len) return 0
 		var/l = pick(affected)
-		M << "\red You painfully dislodge your broken [l]!"
+		M << "<span class='danger'>You painfully dislodge your broken [l]!</span>"
 		M.emote("scream")
 		M.adjustStaminaLoss(2)
 		playsound(M.loc, 'sound/weapons/pierce.ogg', 25)
@@ -918,7 +934,8 @@
 					breakchance *= 1.5
 			if(HULK in user.mutations)
 				breakchance *= 2
-			breakchance *= (100 / armor)
+			if(armor > 0)
+				breakchance *= (100 / armor)
 
 			if(spec_break_bone(H, affecting, breakchance))
 				bloody = 1 // yeah that sheds blood
@@ -1229,7 +1246,7 @@
 					if(prob(20))
 						spawn(0) H.emote(pick("giggle", "laugh"))
 
-		handle_temperature(breath)
+		handle_temperature(breath, H)
 
 		return 1
 
@@ -1383,29 +1400,3 @@
 			H.fire_stacks = 0
 			H.AddLuminosity(-3)
 			H.update_fire()
-
-#undef SPECIES_LAYER
-#undef BODY_LAYER
-#undef HAIR_LAYER
-
-#undef HUMAN_MAX_OXYLOSS
-#undef HUMAN_CRIT_MAX_OXYLOSS
-
-#undef HEAT_DAMAGE_LEVEL_1
-#undef HEAT_DAMAGE_LEVEL_2
-#undef HEAT_DAMAGE_LEVEL_3
-
-#undef COLD_DAMAGE_LEVEL_1
-#undef COLD_DAMAGE_LEVEL_2
-#undef COLD_DAMAGE_LEVEL_3
-
-#undef HEAT_GAS_DAMAGE_LEVEL_1
-#undef HEAT_GAS_DAMAGE_LEVEL_2
-#undef HEAT_GAS_DAMAGE_LEVEL_3
-
-#undef COLD_GAS_DAMAGE_LEVEL_1
-#undef COLD_GAS_DAMAGE_LEVEL_2
-#undef COLD_GAS_DAMAGE_LEVEL_3
-
-#undef TINT_IMPAIR
-#undef TINT_BLIND

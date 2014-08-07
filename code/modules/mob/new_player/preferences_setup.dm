@@ -44,13 +44,41 @@ datum/preferences
 		S = hair_styles_list[hair_style]
 		if(S && (HAIR in pref_species.specflags))
 			var/icon/hair_s = new/icon("icon" = S.icon, "icon_state" = "[S.icon_state]_s")
-			hair_s.Blend("#[hair_color]", ICON_MULTIPLY)
+			if(pref_species.hair_color != null)
+				var/list/temp_hsv = list()
+				if(pref_species.hair_color == "mutcolor")
+					if(!config.mutant_colors)
+						temp_hsv = ReadHSV(RGBtoHSV(pref_species.default_color))
+					else
+						temp_hsv = ReadHSV(RGBtoHSV(mutant_color))
+				else
+					temp_hsv = ReadHSV(RGBtoHSV(pref_species.hair_color))
+				var/newlum = (temp_hsv[3] + pref_species.hair_luminosity)
+				var/newhsv = hsv(temp_hsv[1],temp_hsv[2],newlum)
+				var/newcolor = HSVtoRGB(newhsv)
+				hair_s.Blend("[newcolor]", ICON_MULTIPLY)
+			else
+				hair_s.Blend("#[hair_color]", ICON_MULTIPLY)
 			eyes_s.Blend(hair_s, ICON_OVERLAY)
 
 		S = facial_hair_styles_list[facial_hair_style]
 		if(S && (FACEHAIR in pref_species.specflags))
 			var/icon/facial_s = new/icon("icon" = S.icon, "icon_state" = "[S.icon_state]_s")
-			facial_s.Blend("#[facial_hair_color]", ICON_MULTIPLY)
+			if(pref_species.hair_color != null)
+				var/list/temp_hsv = list()
+				if(pref_species.hair_color == "mutcolor")
+					if(!config.mutant_colors)
+						temp_hsv = ReadHSV(RGBtoHSV(pref_species.default_color))
+					else
+						temp_hsv = ReadHSV(RGBtoHSV(mutant_color))
+				else
+					temp_hsv = ReadHSV(RGBtoHSV(pref_species.hair_color))
+				var/newlum = (temp_hsv[3] + pref_species.hair_luminosity)
+				var/newhsv = hsv(temp_hsv[1],temp_hsv[2],newlum)
+				var/newcolor = HSVtoRGB(newhsv)
+				facial_s.Blend("[newcolor]", ICON_MULTIPLY)
+			else
+				facial_s.Blend("#[facial_hair_color]", ICON_MULTIPLY)
 			eyes_s.Blend(facial_s, ICON_OVERLAY)
 
 		var/icon/clothes_s = null

@@ -4,6 +4,7 @@
 	flags = null //doesn't protect eyes because it's a monocle, duh
 	origin_tech = "magnets=3;biotech=2"
 	hud = 1
+	lenses = 1
 
 /* /obj/item/clothing/glasses/hud/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
@@ -102,6 +103,11 @@
 	darkness_view = 1
 	flash_protect = 1
 	tint = 1
+	lenses = 2
+
+/obj/item/clothing/glasses/hud/security/sunglasses/sunglasses3
+	lenses = 3
+
 /obj/item/clothing/glasses/hud/security/night
 	name = "Night Vision Security HUD"
 	desc = "An advanced heads-up display which provides id data and vision in complete darkness."
@@ -121,6 +127,7 @@
 	item_state = "jensenshades"
 	vision_flags = SEE_MOBS
 	invis_view = 2
+	lenses = 2
 
 /obj/item/clothing/glasses/hud/security/process_hud(var/mob/M)
 	if(!M)	return

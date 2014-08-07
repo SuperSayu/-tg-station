@@ -289,7 +289,7 @@ Please contact me on #coderbus IRC. ~Carnie x
 
 		overlays_standing[UNIFORM_LAYER]	= standing
 
-		if(dna && dna.species.sexes)
+		if(dna && dna.species.sexes && !(NOPIXREMOVE in dna.species.specflags))
 			var/G = (gender == FEMALE) ? "f" : "m"
 			if(G == "f" && U.fitted == 1)
 				var/index = "[t_color]_s"
