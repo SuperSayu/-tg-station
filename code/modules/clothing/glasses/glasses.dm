@@ -61,7 +61,7 @@
 	vision_flags = SEE_OBJS
 	invis_view = SEE_INVISIBLE_MINIMUM
 
-/obj/item/clothing/glasses/material/material
+/obj/item/clothing/glasses/material/material3
 	lenses = 3
 
 /obj/item/clothing/glasses/regular

@@ -25,9 +25,9 @@
 
 /datum/species/lizard
 	// Reptilian humanoids with scaled skin and tails.
-	name = "Kokíyg" // WIP name
+	name = "Kokiyg" // WIP name
 	id = "lizard"
-	desc = "The Kokíyg are reptilian creatures known for their dexterity and perseverance. Because they are coldblooded, \
+	desc = "The Kokiyg are reptilian creatures known for their dexterity and perseverance. Because they are coldblooded, \
 	their bodies adjust to external temperatures faster. They are not the type of being you would want to cross."
 	say_mod = "hisses"
 	default_color = "00FF00"
