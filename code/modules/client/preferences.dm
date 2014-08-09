@@ -151,11 +151,17 @@ datum/preferences
 				dat += "<a href='?_src_=prefs;preference=name;task=input'>[real_name]</a><BR>"
 
 				dat += "<b>Gender:</b> <a href='?_src_=prefs;preference=gender'>[gender == MALE ? "Male" : "Female"]</a><BR>"
-				dat += "<b>Age:</b> <a href='?_src_=prefs;preference=age;task=input'>[age]</a>"
+				dat += "<b>Age:</b> <a href='?_src_=prefs;preference=age;task=input'>[age]</a><BR>"
 
+				if(config.mutant_races)
+					dat += "<b>Species:</b><BR><a href='?_src_=prefs;preference=species;task=input'>[pref_species.name]</a><BR>"
+				else
+					dat += "<b>Species:</b> Human<BR>"
+				dat += "[pref_species.desc]"
 
 				dat += "</td><td valign='center'>"
 
+				dat += "<div class='statusDisplay'><center><img src=previewicon.png height=32 width=32><img src=previewicon2.png height=32 width=32></center></div>"
 				dat += "<div class='statusDisplay'><center><img src=previewicon.png height=64 width=64><img src=previewicon2.png height=64 width=64></center></div>"
 
 				dat += "</td></tr></table>"
@@ -164,11 +170,6 @@ datum/preferences
 				dat += "<a href='?_src_=prefs;preference=all;task=random'>Random Body</A><br>"
 
 				dat += "<table width='100%'><tr><td width='24%' valign='top'>"
-
-				if(config.mutant_races)
-					dat += "<b>Species:</b><BR><a href='?_src_=prefs;preference=species;task=input'>[pref_species.name]</a><BR>"
-				else
-					dat += "<b>Species:</b> Human<BR>"
 
 				dat += "<b>Blood Type:</b> [blood_type]<BR>"
 				dat += "<b>Skin Tone:</b><BR><a href='?_src_=prefs;preference=s_tone;task=input'>[skin_tone]</a><BR>"
@@ -205,7 +206,6 @@ datum/preferences
 				dat += "<span style='border: 1px solid #161616; background-color: #[mutant_color];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=mutant_color;task=input'>Change</a><BR>"
 
 				dat += "</td></tr></table>"
-
 
 			if (1) // Game Preferences
 				dat += "<table><tr><td width='340px' height='300px' valign='top'>"
@@ -264,7 +264,7 @@ datum/preferences
 		dat += "</center>"
 
 		//user << browse(dat, "window=preferences;size=560x560")
-		var/datum/browser/popup = new(user, "preferences", "<div align='center'>Character Setup</div>", 580, 600)
+		var/datum/browser/popup = new(user, "preferences", "<div align='center'>Character Setup</div>", 560, 640)
 		popup.set_content(dat)
 		popup.open(0)
 

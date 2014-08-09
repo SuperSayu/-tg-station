@@ -284,8 +284,8 @@
 		new /obj/item/clothing/glasses/regular(src)
 		new /obj/item/clothing/glasses/regular(src)
 		new /obj/item/clothing/glasses/regular(src)
-		new /obj/item/clothing/glasses/regular(src)
-		new /obj/item/clothing/glasses/regular(src)
+		new /obj/item/clothing/glasses/regular/regular3(src)
+		new /obj/item/clothing/glasses/regular/regular3(src)
 
 /obj/item/weapon/storage/box/drinkingglasses
 	name = "box of drinking glasses"

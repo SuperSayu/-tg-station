@@ -6,16 +6,25 @@
 	origin_tech = "magnets=2;engineering=2"
 	vision_flags = SEE_TURFS
 
+/obj/item/clothing/glasses/meson/meson3
+	lenses = 3
+
 /obj/item/clothing/glasses/meson/advanced
 	name = "Advanced Optical Meson Scanner"
 	desc = "More powerful than your standard mesons, these ones make everything appear to be lit extremely brightly."
 	invis_view = SEE_INVISIBLE_MINIMUM
+
+/obj/item/clothing/glasses/meson/advanced/advanced3
+	lenses = 3
 
 /obj/item/clothing/glasses/science
 	name = "Science Goggles"
 	desc = "nothing"
 	icon_state = "purple"
 	item_state = "glasses"
+
+/obj/item/clothing/glasses/science/science3
+	lenses = 3
 
 /obj/item/clothing/glasses/night
 	name = "Night Vision Goggles"
@@ -26,17 +35,22 @@
 	darkness_view = 8
 	invis_view = SEE_INVISIBLE_MINIMUM
 
+/obj/item/clothing/glasses/night/night3
+	lenses = 3
+
 /obj/item/clothing/glasses/eyepatch
 	name = "eyepatch"
 	desc = "Yarr."
 	icon_state = "eyepatch"
 	item_state = "eyepatch"
+	lenses = 0
 
 /obj/item/clothing/glasses/monocle
 	name = "monocle"
 	desc = "Such a dapper eyepiece!"
 	icon_state = "monocle"
 	item_state = "headset" // lol
+	lenses = 1
 
 /obj/item/clothing/glasses/material
 	name = "Optical Material Scanner"
@@ -47,11 +61,17 @@
 	vision_flags = SEE_OBJS
 	invis_view = SEE_INVISIBLE_MINIMUM
 
+/obj/item/clothing/glasses/material/material3
+	lenses = 3
+
 /obj/item/clothing/glasses/regular
 	name = "Prescription Glasses"
 	desc = "Made by Nerd. Co."
 	icon_state = "glasses"
 	item_state = "glasses"
+
+/obj/item/clothing/glasses/regular/regular3
+	lenses = 3
 
 /obj/item/clothing/glasses/regular/hipster
 	name = "Prescription Glasses"
@@ -73,6 +93,9 @@
 	darkness_view = 1
 	flash_protect = 1
 	tint = 1
+
+/obj/item/clothing/glasses/sunglasses/sunglasses3
+	lenses = 3
 
 /obj/item/clothing/glasses/welding
 	name = "welding goggles"
@@ -106,6 +129,7 @@
 //	vision_flags = BLIND	//handled in life.dm/handle_regular_hud_updates()
 	flash_protect = 2
 	tint = 3			// to make them blind
+	lenses = 0
 
 /obj/item/clothing/glasses/sunglasses/big
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Larger than average enhanced shielding blocks many flashes."
@@ -134,23 +158,31 @@
 					M.disabilities &= ~NEARSIGHTED
 		..()
 
+/obj/item/clothing/glasses/thermal/thermal3
+	lenses = 3
+
 /obj/item/clothing/glasses/thermal/syndi	//These are now a traitor item, concealed as mesons.	-Pete
 	name = "Optical Meson Scanner"
 	desc = "Used for seeing walls, floors, and stuff through anything."
 	icon_state = "meson"
 	origin_tech = "magnets=3;syndicate=4"
 
+/obj/item/clothing/glasses/thermal/syndi/syndi3
+	lenses = 3
+
 /obj/item/clothing/glasses/thermal/monocle
 	name = "Thermoncle"
 	desc = "A monocle thermal."
 	icon_state = "thermoncle"
 	flags = null //doesn't protect eyes because it's a monocle, duh
+	lenses = 1
 
 /obj/item/clothing/glasses/thermal/eyepatch
 	name = "Optical Thermal Eyepatch"
 	desc = "An eyepatch with built-in thermal optics"
 	icon_state = "eyepatch"
 	item_state = "eyepatch"
+	lenses = 0
 
 /obj/item/clothing/glasses/thermal/jensen
 	name = "Optical Thermal Implants"

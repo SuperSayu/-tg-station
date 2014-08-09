@@ -5,6 +5,8 @@
 /datum/species/human
 	name = "Human"
 	id = "human"
+	desc = "Beings of flesh and bone who have colonized the majority of Nanotrasen-owned space. \
+	Surprisingly versatile."
 	roundstart = 1
 	specflags = list(EYECOLOR,HAIR,FACEHAIR,LIPS)
 	use_skintones = 1
@@ -23,8 +25,10 @@
 
 /datum/species/lizard
 	// Reptilian humanoids with scaled skin and tails.
-	name = "Lizardperson"
+	name = "Kokiyg" // WIP name
 	id = "lizard"
+	desc = "The Kokiyg are reptilian creatures known for their dexterity and perseverance. Because they are coldblooded, \
+	their bodies adjust to external temperatures faster. They are not the type of being you would want to cross."
 	say_mod = "hisses"
 	default_color = "00FF00"
 	roundstart = 1
@@ -33,12 +37,89 @@
 	attack_sound = 'sound/weapons/slash.ogg'
 	miss_sound = 'sound/weapons/slashmiss.ogg'
 
+/datum/species/lizard/handle_environment(datum/gas_mixture/environment, mob/living/carbon/human/H)
+	// Lizardpeople heat up and cool down faster than humans.
+	// Depending on the environment, this can be either a good thing or a bad thing.
+	if(!environment)
+		return
+
+	var/loc_temp = H.get_temperature(environment)
+
+	if(H.stat != 2)
+		H.stabilize_temperature_from_calories()
+
+	if(!H.on_fire)
+		// Body temperature changes faster!
+		if(loc_temp < H.bodytemperature)
+			var/thermal_protection = H.get_cold_protection(loc_temp)
+			if(thermal_protection < 1)
+				H.bodytemperature += min((1-thermal_protection) * ((loc_temp - H.bodytemperature) / (BODYTEMP_COLD_DIVISOR*0.5)), BODYTEMP_COOLING_MAX)
+		else
+			var/thermal_protection = H.get_heat_protection(loc_temp)
+			if(thermal_protection < 1)
+				H.bodytemperature += min((1-thermal_protection) * ((loc_temp - H.bodytemperature) / (BODYTEMP_HEAT_DIVISOR*0.5)), BODYTEMP_HEATING_MAX)
+
+	if(H.bodytemperature > BODYTEMP_HEAT_DAMAGE_LIMIT && !(HEATRES in specflags))
+		H.fire_alert = max(H.fire_alert, 1)
+		switch(H.bodytemperature) // They start burning at a slightly lower temperature...
+			if(340 to 380)
+				H.apply_damage(HEAT_DAMAGE_LEVEL_1*heatmod, BURN)
+				H.fire_alert = max(H.fire_alert, 2)
+			if(380 to 420)
+				H.apply_damage(HEAT_DAMAGE_LEVEL_2*heatmod, BURN)
+				H.fire_alert = max(H.fire_alert, 2)
+			if(460 to INFINITY)
+				if(H.on_fire)
+					H.apply_damage(HEAT_DAMAGE_LEVEL_3*heatmod, BURN)
+					H.fire_alert = max(H.fire_alert, 2)
+				else
+					H.apply_damage(HEAT_DAMAGE_LEVEL_2*heatmod, BURN)
+					H.fire_alert = max(H.fire_alert, 2)
+
+	else if(H.bodytemperature < BODYTEMP_COLD_DAMAGE_LIMIT && !(COLDRES in specflags))
+		H.fire_alert = max(H.fire_alert, 1)
+		if(!istype(H.loc, /obj/machinery/atmospherics/unary/cryo_cell))
+			switch(H.bodytemperature) // ...and start freezing at a slightly higher temperature.
+				if(180 to 240)
+					H.apply_damage(COLD_DAMAGE_LEVEL_1*coldmod, BURN)
+					H.fire_alert = max(H.fire_alert, 1)
+				if(100 to 180)
+					H.apply_damage(COLD_DAMAGE_LEVEL_2*coldmod, BURN)
+					H.fire_alert = max(H.fire_alert, 1)
+				if(-INFINITY to 100)
+					H.apply_damage(COLD_DAMAGE_LEVEL_3*coldmod, BURN)
+					H.fire_alert = max(H.fire_alert, 1)
+
+	var/pressure = environment.return_pressure()
+	var/adjusted_pressure = H.calculate_affecting_pressure(pressure)
+	switch(adjusted_pressure)
+		if(HAZARD_HIGH_PRESSURE to INFINITY)
+			if(!(HEATRES in specflags))
+				H.adjustBruteLoss( min( ( (adjusted_pressure / HAZARD_HIGH_PRESSURE) -1 )*PRESSURE_DAMAGE_COEFFICIENT , MAX_HIGH_PRESSURE_DAMAGE) )
+				H.pressure_alert = 2
+			else
+				H.pressure_alert = 1
+		if(WARNING_HIGH_PRESSURE to HAZARD_HIGH_PRESSURE)
+			H.pressure_alert = 1
+		if(WARNING_LOW_PRESSURE to WARNING_HIGH_PRESSURE)
+			H.pressure_alert = 0
+		if(HAZARD_LOW_PRESSURE to WARNING_LOW_PRESSURE)
+			H.pressure_alert = -1
+		else
+			if((COLD_RESISTANCE in H.mutations) || (COLDRES in specflags))
+				H.pressure_alert = -1
+			else
+				H.adjustBruteLoss( LOW_PRESSURE_DAMAGE )
+				H.pressure_alert = -2
+
+	return
+
 /datum/species/lizard/handle_speech(message)
-	// jesus christ why
-	if(copytext(message, 1, 2) != "*")
+//NOPE
+	/* if(copytext(message, 1, 2) != "*")
 		message = replacetext(message, "s", stutter("ss"))
 
-	return message
+	return message */
 
 /*
  PLANTPEOPLE
@@ -46,15 +127,64 @@
 
 /datum/species/plant
 	// Creatures made of leaves and plant matter.
-	name = "Plant"
+	name = "Chlorophyte" // WIP name
 	id = "plant"
+	desc = "Made entirely of plant matter, the Chlorophytes can store vast quantities of nutrients within their bodies. \
+	They are naturally free spirits, and do not care much for conformity."
 	default_color = "59CE00"
-	specflags = list(MUTCOLORS,EYECOLOR)
+	roundstart = 1
+	specflags = list(MUTCOLORS,HAIR,FACEHAIR,EYECOLOR,NOPIXREMOVE)
+	hair_color = "mutcolor"
+	hair_luminosity = -115
 	attack_verb = "slice"
 	attack_sound = 'sound/weapons/slice.ogg'
 	miss_sound = 'sound/weapons/slashmiss.ogg'
-	burnmod = 1.25
-	heatmod = 1.5
+	burnmod = 1.5
+
+/datum/species/plant/handle_chemicals_in_body(var/mob/living/carbon/human/H)
+	if(H.reagents) H.reagents.metabolize(H)
+
+	if(FAT in H.mutations)
+		if(H.overeatduration < 200)	// Plantpeople become fit sooner...
+			H << "<span class='notice'>You feel your vines loosen, and once again nutrients begin to flow within you.</span>"
+			H.mutations -= FAT
+			H.update_inv_w_uniform(0)
+			H.update_inv_wear_suit()
+	else
+		if(H.overeatduration > 650)	// ...and become fat later
+			H << "<span class='danger'>You feel your vines constrict tightly.</span>"
+			H.mutations |= FAT
+			H.update_inv_w_uniform(0)
+			H.update_inv_wear_suit()
+
+	if (H.nutrition > 0 && H.stat != 2)	// Plantpeople lose nutrition slower.
+		H.nutrition = max (0, H.nutrition - (HUNGER_FACTOR*0.75))
+
+	if (H.nutrition > 450)
+		if(H.overeatduration < 600)
+			H.overeatduration++
+	else
+		if(H.overeatduration > 1)
+			H.overeatduration -= 2
+
+	if(H.drowsyness)
+		H.drowsyness--
+		H.eye_blurry = max(2, H.eye_blurry)
+		if (prob(5))
+			H.sleeping += 1
+			H.Paralyse(5)
+
+	H.confused = max(0, H.confused - 1)
+	if(H.resting)
+		H.dizziness = max(0, H.dizziness - 15)
+		H.jitteriness = max(0, H.jitteriness - 15)
+	else
+		H.dizziness = max(0, H.dizziness - 3)
+		H.jitteriness = max(0, H.jitteriness - 3)
+
+	H.updatehealth()
+
+	return
 
 /datum/species/plant/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
 	if(chem.id == "plantbgone")
@@ -88,9 +218,11 @@
 */
 
 /datum/species/plant/pod
-	// A mutation caused by a human being ressurected in a revival pod. These regain health in light, and begin to wither in darkness.
+	// A mutation caused by a human being ressurected in a revival pod.
+	// These regain health in light, and begin to wither in darkness.
 	name = "Podperson"
-	id = "pod"
+	roundstart = 0
+	//id = "pod" -- These use the same sprites now
 
 /datum/species/plant/pod/spec_life(mob/living/carbon/human/H)
 	var/light_amount = 0 //how much light there is in the place, affects receiving nutrition and healing
@@ -149,8 +281,13 @@
 	invis_sight = SEE_INVISIBLE_LEVEL_ONE
 	specflags = list(MUTCOLORS,EYECOLOR,HAIR,FACEHAIR)
 	hair_color = "mutcolor"
-	hair_alpha = 150
+	hair_alpha = 165
+	hair_luminosity = -75
 	ignored_by = list(/mob/living/carbon/slime)
+
+/datum/species/slime/spec_life(mob/living/carbon/human/H)
+	if ((HULK in H.mutations))
+		H.mutations.Remove(HULK)
 
 /*
  JELLYPEOPLE
@@ -158,12 +295,86 @@
 
 /datum/species/jelly
 	// Entirely alien beings that seem to be made entirely out of gel. They have three eyes and a skeleton visible within them.
-	name = "Xenobiological Jelly Entity"
+	name = "Xenoid" // WIP name
 	id = "jelly"
+	desc = "The three-eyed Xenoids hail from the outer reaches of the galaxy. They are perceptive beings not known \
+	for being unnecessarily violent. Because their bodies are made of gel-like goo, they naturally heal from \
+	genetic damage. However, they are also fragile, and take more damage from freezing."
 	default_color = "00FF90"
-	say_mod = "chirps"
+	roundstart = 1
 	eyes = "jelleyes"
-	specflags = list(MUTCOLORS,EYECOLOR)
+	eyecount = 3
+	specflags = list(MUTCOLORS,EYECOLOR,HAIR,FACEHAIR)
+	hair_color = "mutcolor"
+	hair_alpha = 195
+	hair_luminosity = -75
+
+	// COLD DAMAGE LEVEL ONE: 0.9 (+0.4)
+	// COLD DAMAGE LEVEL TWO: 2.7 (+1.2)
+	// COLD DAMAGE LEVEL THREE: 5.4 (+2.4)
+	coldmod = 1.8
+
+/datum/species/jelly/before_equip_job(var/datum/job/J, var/mob/living/carbon/human/H)
+	if(H.job == "Quartermaster" || H.job == "Captain" || H.job == "Head of Personnel")
+		H.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses/sunglasses3(H), slot_glasses)
+	if(H.job == "Head of Security" || H.job == "Warden")
+		H.equip_to_slot_or_del(new /obj/item/clothing/glasses/hud/security/sunglasses/sunglasses3(H), slot_glasses)
+
+/datum/species/jelly/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
+	if(chem.id == "water")	// DANGER
+		if(H.reagents.has_reagent("water", 10))
+			H.adjustToxLoss(1)
+		H.reagents.remove_reagent(chem.id, 0.8)
+		return 1
+
+/datum/species/jelly/spec_life(mob/living/carbon/human/H)
+	if ((HULK in H.mutations))
+		H.mutations.Remove(HULK)
+	if(H.getCloneLoss()) // clone loss is slowly regenerated
+		H.adjustCloneLoss(-0.2)
+
+/datum/species/jelly/spec_break_bone(var/mob/living/carbon/human/target, var/obj/item/organ/limb/affecting, var/break_prob)
+	// bones break easier, slightly
+	break_prob *= 1.4
+	if(affecting.status != ORGAN_ORGANIC || !prob(break_prob)) return 0
+	var/hit_area = parse_zone(affecting.name)
+	if(target.broken.len && (hit_area in target.broken)) return 0
+	target.broken += hit_area
+	var/hit_desc
+	if(hit_area == "head")
+		hit_desc = "skull breaks"
+	else if(hit_area == "chest")
+		hit_desc = "ribs break"
+	else
+		hit_desc = "[hit_area] breaks"
+
+	playsound(target, 'sound/weapons/pierce.ogg', 50)
+	var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
+	target.visible_message("<span class='danger'>[target]'s [hit_desc] with a [breaknoise]!</span>", "<span class='userdanger'>Your [hit_desc] with a [breaknoise]!</span>")
+	return 1
+
+/*
+ AXOLOTL PEOPLE -- WIP IN PROGRESS
+*/
+
+/*/datum/species/axolotl
+	// The Lotyn are a race of axolotl-like aliens who are known for being religious, although a handful of them have rejected
+	// their customs.
+
+	name = "Lotyn"
+	id = "axolotl"
+	roundstart = 1
+	specflags = list(MUTCOLORS,EYECOLOR,LIPS,NOPIXREMOVE)
+	default_color = "#EC88FF"
+
+/datum/species/axolotl/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
+	if(chem.id == "holywater")	// holy water acts as ryetalyn
+		H.mutations = list()
+		H.disabilities = 0
+		H.sdisabilities = 0
+		H.update_mutations()
+		H.reagents.remove_reagent(chem.id, 2) // metabolizes faster
+		return 1*/
 
 /*
  GOLEMS
@@ -174,6 +385,7 @@
 	name = "Golem"
 	id = "golem"
 	specflags = list(NOBREATH,HEATRES,COLDRES,NOGUNS,NOBLOOD,RADIMMUNE)
+	sexes = 0
 	speedmod = 3
 	armor = 55
 	punchmod = 5
@@ -219,3 +431,29 @@
 	name = "Spooky Scary Skeleton"
 	id = "skeleton"
 	sexes = 0
+
+#undef SPECIES_LAYER
+#undef BODY_LAYER
+#undef HAIR_LAYER
+
+#undef HUMAN_MAX_OXYLOSS
+#undef HUMAN_CRIT_MAX_OXYLOSS
+
+#undef HEAT_DAMAGE_LEVEL_1
+#undef HEAT_DAMAGE_LEVEL_2
+#undef HEAT_DAMAGE_LEVEL_3
+
+#undef COLD_DAMAGE_LEVEL_1
+#undef COLD_DAMAGE_LEVEL_2
+#undef COLD_DAMAGE_LEVEL_3
+
+#undef HEAT_GAS_DAMAGE_LEVEL_1
+#undef HEAT_GAS_DAMAGE_LEVEL_2
+#undef HEAT_GAS_DAMAGE_LEVEL_3
+
+#undef COLD_GAS_DAMAGE_LEVEL_1
+#undef COLD_GAS_DAMAGE_LEVEL_2
+#undef COLD_GAS_DAMAGE_LEVEL_3
+
+#undef TINT_IMPAIR
+#undef TINT_BLIND

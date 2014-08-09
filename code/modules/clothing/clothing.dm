@@ -33,9 +33,25 @@
 	var/emagged = 0
 	var/hud = null
 	var/list/icon/current = list() //the current hud icons
+	var/lenses = 2
 
 /obj/item/clothing/glasses/proc/process_hud(var/mob/M)
 	return
+
+/obj/item/clothing/glasses/New()
+	set_lenses(lenses)
+	..()
+
+/obj/item/clothing/glasses/proc/set_lenses(var/lense_number)
+	lenses = lense_number
+	if(lense_number == 1)
+		desc += " These glasses have 1 lense."
+	else
+		desc += " These glasses have [lense_number] lenses."
+	if(lense_number > 2)
+		icon_state += "[lense_number]"
+		item_state += "[lense_number]"
+		name = "[lense_number]-lensed [initial(name)]"
 
 /*
 SEE_SELF  // can see self, no matter what

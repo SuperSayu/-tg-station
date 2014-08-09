@@ -62,3 +62,4 @@
 #define NOGUNS		512
 #define NOBLOOD		1024
 #define NOFIRE		2048
+#define NOPIXREMOVE	4096
