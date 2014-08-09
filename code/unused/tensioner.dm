@@ -368,6 +368,8 @@ var/global/datum/tension/tension_master
 		var/datum/game_mode/changeling/temp = new
 		if(config.protect_roles_from_antagonist)
 			temp.restricted_jobs += temp.protected_jobs
+		else if(config.protect_captain_from_antagonist)
+			temp.restricted_jobs += "Captain"
 
 		var/list/mob/living/carbon/human/candidates = list()
 		var/mob/living/carbon/human/H = null
@@ -404,6 +406,8 @@ var/global/datum/tension/tension_master
 		var/datum/game_mode/revolution/temp = new
 		if(config.protect_roles_from_antagonist)
 			temp.restricted_jobs += temp.protected_jobs
+		else if(config.protect_captain_from_antagonist)
+			temp.restricted_jobs += "Captain"
 
 		var/list/mob/living/carbon/human/candidates = list()
 		var/mob/living/carbon/human/H = null
@@ -474,6 +478,8 @@ var/global/datum/tension/tension_master
 		var/datum/game_mode/cult/temp = new
 		if(config.protect_roles_from_antagonist)
 			temp.restricted_jobs += temp.protected_jobs
+		else if(config.protect_captain_from_antagonist)
+			temp.restricted_jobs += "Captain"
 
 		var/list/mob/living/carbon/human/candidates = list()
 		var/mob/living/carbon/human/H = null
@@ -786,7 +792,7 @@ var/global/datum/tension/tension_master
 		else
 			A.real_name = "[syndicate_commando_rank] [syndicate_commano_name]"
 		A.copy_to(new_syndicate_commando)
-		
+
 		ready_dna(new_syndicate_commando)
 
 		//Creates mind stuff.

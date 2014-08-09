@@ -65,6 +65,8 @@
 
 	if(config.protect_roles_from_antagonist)
 		restricted_jobs += protected_jobs
+	else if(config.protect_captain_from_antagonist)
+		restricted_jobs += "Captain"
 
 	for(var/datum/mind/player in antag_candidates)
 		for(var/job in restricted_jobs)//Removing heads and such from the list
