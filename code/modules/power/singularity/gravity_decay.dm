@@ -113,11 +113,13 @@
 			loc:ChangeTurf(/turf/space)
 		else
 			spawn(1)
-				loc:ChangeTurf(/turf/space)
+				if(loc)
+					loc:ChangeTurf(/turf/space)
 		processing_objects.Add(src)
 
 		spawn(rand(2,8))
-			step_rand(src)
+			if(loc)
+				step_rand(src)
 
 	process()
 		if(!loc)
@@ -156,5 +158,8 @@
 		if(istype(mover,/obj/structure/faketurf))
 			return 0
 		return ..(mover,target,height,air_group)
+
+	ex_act()
+		return
 	// There is also an exception in turf/simulated/Enter() to prevent this from entering one of those tiles, ever.
 
