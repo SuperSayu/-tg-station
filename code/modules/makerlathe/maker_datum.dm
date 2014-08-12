@@ -4,7 +4,7 @@
 	as well as determining if it can be built in the first place, and actually
 	creating the item on behalf of the maker machine.
 */
-// This is basically a wrapper for text2list that ensures that all numbers are numbers and all paths are paths
+// This is basically a wrapper for params2list that ensures that all numbers are numbers and all paths are paths
 /proc/makertext2list(var/text)
 	var/list/cost = params2list(text)
 	for(var/entry in cost)
@@ -41,17 +41,25 @@
 	else if(istype(template))
 		generate(source, template, modified_cost, destroy = 0)
 	else
-		del src
+		if(isnull(template)) // these can pop up in the list, don't worry about it
+			del(src)
+			return
+		// but if that's not the case then what are we dealing with?
+		var/t
+		if(istype(template,/datum))
+			t = "[template] ([template.type])"
+		else
+			t = "[template]"
+		return fail_creation(source, "bad template: [t]")
 	menu_name = menu
 
-/*
-	Mostly exists to handle legacy item costs
-	This only exists because I am running out of time to complete this
-	Assuming everything is completed there is no reason to keep the legacy
-	construction equipment or the vars for them
-*/
+/datum/data/maker_product/proc/fail_creation(var/obj/machinery/maker/source, var/reason)
+	warning("[source] ([source.type]) could not create [result_typepath]: [reason]")
+	del(src)
 
-
+// one-line wonder: prevent warnings when uploading files
+/datum/data/maker_product/uploaded/fail_creation()
+	del(src)
 
 /*
 	Determines the cost structure for this product from a template item.
@@ -82,7 +90,7 @@
 
 	if(!cost) // not valid makerthing
 		if(destroy) qdel(template)
-		del(src)
+		return fail_creation(source, "null cost list")
 
 	filler = template.get_maker_fill(src)
 
@@ -102,13 +110,11 @@
 			else
 				if(ispath(entry,/obj/item/weapon/stock_parts))
 					if(!source.stock_parts && cost[entry] >= 0) // null stock parts list indicates it cannot accept parts
-						del(src)
-						return
+						return fail_creation(source, "[source] cannot handle required stock parts")
 					continue // but otherwise it's okay
 				if(cost[entry] >= 0) // required reagent
 					if(source.recycleable && !(entry in source.recycleable)) // cannot be built on this machine
-						del(src)
-						return
+						return fail_creation(source, "[source] lacks access to reagent [entry]")
 
 				build_total += abs(cost[entry])
 	if(time_mod)
@@ -175,7 +181,7 @@
 */
 /datum/data/maker_product/proc/check_cost(var/obj/machinery/maker/M)
 	if(!M.reagents)
-		M.user_announce("<span class='warning'>[M] appears to have some sort of internal fault.</span>")
+		M.user_announce("<span class='warning'>[M] appears to have some sort of internal fault.</span>", "You hear a haunting buzz.")
 		return 0
 	var/list/stock = list()
 	var/reliability_mod = 1 // in actuality, reliability / 100, but this is an estimate...
@@ -206,7 +212,7 @@
 				var/part = M.stock_names[entry]
 				var/s = ""
 				if(amt > 1) s = "s"
-				M.user_announce("<span class='warning'>You need [amt] more [part][s] to create \a [name].</span>")
+				M.user_announce("<span class='warning'>You need [amt] more [part][s] to create \a [name].</span>", "You hear a buzz.")
 				return 0
 			continue
 
@@ -218,9 +224,9 @@
 		if(!M.reagents.has_reagent(entry,abs(cost[entry] * cost_multiplier)))
 			var/datum/reagent/R = chemical_reagents_list[entry]
 			if(R)
-				M.user_announce("<span class='warning'>[M] does not have enough [R.name] to create \a [name].</span>")
+				M.user_announce("<span class='warning'>[M] does not have enough [R.name] to create \a [name].</span>", "You hear a buzz.")
 			else
-				M.user_announce("<span class='warning'>[M] does not have enough ...[entry]? That's odd.</span>")
+				M.user_announce("<span class='warning'>[M] does not have enough ...[entry]? That's odd.</span>", "You hear a haunting buzz.")
 			return 0
 	return 1
 
@@ -300,11 +306,12 @@
 
 	if(build_fill)
 		var/new_result = result.maker_build(build_fill) // usually we will not change the item, but it allows it to happen
-		if(istype(new_result,/list) && !(result in new_result))
-			qdel(result)
-		else if(new_result != result && isobj(new_result)) // item was replaced
-			qdel(result)
-
-		result = new_result
+		if(new_result != result)
+			if(istype(new_result,/list) && !(result in new_result))
+				qdel(result)
+				result = new_result
+			else if(isobj(new_result) || result.loc == null) // item was replaced or is being destroyed(?)
+				qdel(result)
+				result = new_result
 
 	return result

@@ -1,29 +1,11 @@
 /*
-	After some thoughts on the subject I decided that I should use reagents
-	to unify the "amount of materials" nonsense.  Doing this requires adding
-	reagents for special materials (plasteel, diamond, bananium) and making
-	a way to get solid sheets back in some cases
+	I am sorry to do this to you, but these reagents are added by the
+	maker commit and are not finished.  When they are finished,
+	move them back to the main reagents file.  When this file is empty,
+	remove it.
 */
-// note SOLID is only defined in reagents.dm but whatever
-
-/datum/reagent/var/resource_item = null // if this is a typepath, makers can eject this as a solid item
-/datum/reagent/var/resource_amt  = MINERAL_MATERIAL_AMOUNT // 2000 by default
 
 /datum/reagent
-	iron/resource_item = /obj/item/stack/sheet/metal
-	gold/resource_item = /obj/item/stack/sheet/mineral/gold
-	silver/resource_item = /obj/item/stack/sheet/mineral/silver
-	uranium/resource_item = /obj/item/stack/sheet/mineral/uranium
-
-	// and meds too I guess idk
-	bicaridine/resource_item = /obj/item/stack/medical/bruise_pack
-	dermaline/resource_item = /obj/item/stack/medical/ointment
-
-	plasma/solid
-		name = "Solid plasma"
-		id = "splasma"
-		//reagent_state = SOLID
-		resource_item = /obj/item/stack/sheet/mineral/plasma
 	iron/plasteel
 		name = "Plasteel"
 		id = "plasteel"
@@ -39,10 +21,15 @@
 		nutriment_factor = 0.25 * REAGENTS_METABOLISM // yuck
 		resource_item = /obj/item/stack/sheet/cardboard
 
+	uranium/enriched
+		name = "Enriched Uranium"
+		id = "enruranium"
+		resource_item = /obj/item/stack/sheet/mineral/enruranium
+
 	banana/bananium
 		name = "Bananium"
 		id = "bananium"
-		//reagent_state = SOLID
+		reagent_state = SOLID
 		resource_item = /obj/item/stack/sheet/mineral/clown
 	silicon/glass
 		name = "Glass"
@@ -59,7 +46,7 @@
 	leather
 		name = "Leather"
 		id = "leather"
-		//reagent_state = SOLID
+		reagent_state = SOLID
 		resource_item = /obj/item/stack/sheet/leather
 	leather/xeno
 		name = "Xeno chitin"
@@ -68,7 +55,7 @@
 	cloth
 		name = "Cloth"
 		id = "cloth"
-		//reagent_state = SOLID
+		reagent_state = SOLID
 		resource_item = /obj/item/stack/sheet/cloth
 	cloth/carpet
 		name = "Carpet"
@@ -88,15 +75,37 @@
 		id = "n2o"
 
 // Added because why did they not exist
+/*
 	carbon/plastic
 		name = "Plastic"
 		id = "plastic"
+		resource_item = /obj/item/stack/sheet/mineral/plastic
+
 	silicon/rubber
 		name = "Silicone rubber"
 		id = "rubber"
+		resource_item = /obj/item/stack/sheet/mineral/rubber
+
 	titanium
 		name = "Titanium"
 		id = "titanium"
+		resource_item = /obj/item/stack/sheet/mineral/titanium
+
+	titanium/adamantine
+		name = "Adamantine"
+		id = "adamantine"
+		resource_item = /obj/item/stack/sheet/mineral/adamantine
+
+	aluminum
+		resource_item = /obj/item/stack/sheet/mineral/aluminum
+
+	aluminum/mythril
+		name = "Mythril"
+		id = "mythril"
+		resource_item = /obj/item/stack/sheet/mineral/mythril
+
 	lead
 		name = "Lead"
 		id = "lead"
+		resource_item = /obj/item/stack/sheet/mineral/lead
+*/

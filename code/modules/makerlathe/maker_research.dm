@@ -16,12 +16,8 @@
 	As always it pays to have a backup.
 */
 /obj/machinery/maker/proc/server_connect()
-	busy = 1
-	busy_message = "Searching for servers..."
-	updateUsrDialog()
-	sleep(55)
 	server = locate(/obj/machinery/r_n_d/server/robotics) in world
-	busy = 0
+	make_busy("Searching for servers...",55)
 
 /obj/machinery/maker/proc/add_design(var/datum/design/D)
 	if(D.build_path in researchable)
@@ -32,6 +28,7 @@
 				return 0
 			std_products += P
 			researchable[D.build_path] = P
+			all_menus[P.menu_name] = null
 		return 1
 	return 0
 
@@ -44,15 +41,21 @@
 	if(researchable[P.result_typepath] == P)
 		researchable[P.result_typepath] = P.menu_name
 		std_products -= P
+		all_menus[P.menu_name] = null
 		qdel(P)
 		return 1
 	return 0
 
 /obj/machinery/maker/proc/research_sync()
-	if(!server || server.disabled) return
-	busy = 1
-	busy_message = "Synchronizing files with server..."
-	updateUsrDialog()
+
+	make_busy("Synchronizing files with server...")
+	if(!server || server.disabled)
+		server = null
+		sleep(50)
+		busy = 0
+		make_busy(technobabble(),30)
+		return
+
 	var/list/research_files = server.files.known_designs
 	server.produce_heat(100)
 
@@ -71,5 +74,5 @@
 	for(var/entry in all_menus)
 		all_menus[entry] = null
 
-	sleep(5 * researchable.len)
-	busy = 0
+	sleep(3 * researchable.len)
+	busy_done()

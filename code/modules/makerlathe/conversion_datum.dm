@@ -11,18 +11,29 @@
 	For reagent conversion recipes, the modified cost list is mandatory.
 	Adding "output"= to the list will change the amount produced.
 */
+
+
 /datum/data/maker_product/reagent_converter
 	result_typepath = /datum/reagent/water
 	var/reagent_id
 	var/production_amount = 50
 
-/datum/data/maker_product/reagent_converter/New(var/obj/machinery/maker/source, var/datum/reagent/template, var/menu, var/list/modified_cost = null)
+/datum/data/maker_product/reagent_converter/New(var/obj/machinery/maker/source, var/datum/reagent/template, var/menu, var/list/modified_cost = null, var/disk = 0)
 	if(ispath(template,/datum/reagent)) // typepath
 		generate(source, new template(), modified_cost, destroy = 1)
 	else if(istype(template))
 		generate(source, template, modified_cost, destroy = 0)
 	else
-		del src
+		if(isnull(template)) // these can pop up in the list, don't worry about it
+			del(src)
+			return
+		// but if that's not the case then what are we dealing with?
+		var/t
+		if(istype(template,/datum))
+			t = "[template] ([template.type])"
+		else
+			t = "[template]"
+		return fail_creation(source, "bad template: [t]")
 	menu_name = menu
 
 /datum/data/maker_product/reagent_converter/generate(var/obj/machinery/maker/source, var/datum/reagent/template, var/list/modified_cost, var/destroy = 0)
@@ -33,22 +44,19 @@
 	if(istype(modified_cost))
 		cost = modified_cost
 	else if(istext(modified_cost))
-		cost = text2list(modified_cost)
-		for(var/entry in cost)
-			if(text2ascii(entry) == 47) // "/" : indicates the following is a path string
-				var/path = text2path(entry)
-				if(ispath(path, /obj/item/weapon/stock_parts))
-					cost[path] = cost[entry]
-					cost.Remove(entry)
-					continue
-			cost[entry] = text2num(cost[entry])
+		cost = makertext2list(modified_cost)
+
+	else if(istype(template.maker_cost))
+		cost = template.maker_cost
+	else if(istext(template.maker_cost))
+		cost = makertext2list(template.maker_cost)
 	else
 		cost = null
 
 	if(destroy) qdel(template) // got everything we need thanks
 
 	if(!cost) // not valid recipe
-		del(src)
+		return fail_creation(source, "null cost list")
 
 	var/build_total = 0
 	var/time_mod = 0
@@ -67,15 +75,13 @@
 			else
 				if(ispath(entry,/obj/item/weapon/stock_parts))
 					if(!source.stock_parts) // null stock parts list indicates it cannot accept parts
-						del(src)
-						return
+						return fail_creation(source, "[source]  cannot handle required stock parts")
 					cost[entry] = 0 // reagent conversion only uses stock parts as catalysts
 					continue
 
 				if(cost[entry] > 0) // required reagent
 					if(source.recycleable && !(entry in source.recycleable)) // cannot be built on this machine]
-						del(src)
-						return
+						return fail_creation(source, "[source] lacks access to reagent [entry]")
 				build_total += abs(cost[entry])
 
 	if(time_mod)

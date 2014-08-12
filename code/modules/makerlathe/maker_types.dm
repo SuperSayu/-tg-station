@@ -28,7 +28,7 @@
 	junk_recipes = list(/obj/item/weapon/ore = list("iron" = 200), /obj/item/weapon/shard = list("glass" = 200), /obj/item/weapon/wirerod = list("iron" = 350), /obj/item/weapon/kitchen/utensil/fork = list("iron" = 600))
 	recycleable = list("iron","glass","water","fuel","cloth","oxygen","n2o","co2")
 
-/obj/machinery/maker/biogen
+/obj/machinery/maker/biolathe
 	name = "biogenerator"
 	desc = "Recycles biological waste."
 	icon = 'icons/obj/biogenerator.dmi'
@@ -36,7 +36,7 @@
 	icon_base = "biogen-empty"
 	icon_open = "biogen-empty"
 	build_anim = "biogen-work"
-	board_type = /obj/item/weapon/circuitboard/maker/biogen
+	board_type = null
 
 	main_menu_name = "Convert"
 
@@ -58,24 +58,28 @@
 	junk_recipes = list(/obj/item/weapon/reagent_containers/food/snacks/badrecipe, /obj/item/weapon/reagent_containers/food/snacks/candy_corn)
 	recycleable = list("iron", "glass", "radium", "nutriment", "cardboard", "milk", "cream", "leather", "cloth", "eznutriment", "left4zednutriment", "robustharvestnutriment")
 
-/obj/machinery/maker/circuit
-	name = "circuit printer"
-	desc = "Builds complicated electronic circuits."
-	icon = 'icons/obj/machines/research.dmi'
-	icon_state = "circuit_imprinter"
-	icon_base = "circuit_imprinter"
-	icon_open = "circuit_imprinter"
-	build_anim = null
-	board_type = /obj/item/weapon/circuitboard/maker/circuit
 
-	main_menu_name = null
+/obj/machinery/maker/medilathe
+	name = "medilathe" // I am sorry
+	desc = "Creates and recycles various medical tools and supplies."
+	icon = 'icons/obj/biogenerator.dmi'
+	icon_state = "biogen-empty"
+	icon_base = "biogen-empty"
+	icon_open = "biogen-empty"
+	build_anim = "biogen-work"
+	board_type = null
+
 	std_products = list(
-					"Games", /obj/item/weapon/circuitboard/arcade/battle, /obj/item/weapon/circuitboard/arcade/orion_trail,
-					"Domestic", /obj/item/weapon/circuitboard/hydroponics, /obj/item/weapon/circuitboard/microwave
-				)
-
+					"chemistry", /obj/item/weapon/reagent_containers/glass/beaker, /obj/item/weapon/reagent_containers/glass/beaker/large,/obj/item/weapon/reagent_containers/syringe,
+								/obj/item/weapon/reagent_containers/syringe, /obj/item/weapon/reagent_containers/dropper, /obj/item/weapon/reagent_containers/spray,
+					"surgery", /obj/item/weapon/scalpel, /obj/item/weapon/circular_saw, /obj/item/weapon/surgicaldrill, /obj/item/weapon/retractor, /obj/item/weapon/cautery, /obj/item/weapon/hemostat,
+					"clothing", /obj/item/clothing/under/rank/medical, /obj/item/clothing/under/rank/nursesuit,
+								/obj/item/clothing/under/rank/medical/blue = "Blue", /obj/item/clothing/under/rank/medical/green = "Green",/obj/item/clothing/under/rank/medical/purple = "Purple",
+								/obj/item/clothing/under/rank/chemist,/obj/item/clothing/under/rank/geneticist,/obj/item/clothing/under/rank/virologist,
+								/obj/item/clothing/head/bio_hood/general,/obj/item/clothing/suit/bio_suit/general,
+					"convert", /datum/reagent/sterilizine = list("cleaner" = 50, "output" = 25)
+					)
 	hack_products = list()
 	researchable = list()
-
-	junk_recipes = list( /obj/item/weapon/shard = list("glass" = 750, "sacid" = 150))
-	recycleable = list("glass","copper","sacid")
+	junk_recipes = list()
+	recycleable = list("iron","glass","cloth","plastic","cleaner","sterilizine")

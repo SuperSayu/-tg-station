@@ -2,44 +2,67 @@
 	Note from the coder
 
 	Makerlathe code is more or less complete, but I am running out of time because I am going to be moving and
-	starting a job right soon
+	starting a job right soon.  Something like this has been a long time in coming, and I am sorry that I have
+	to rush through finishing it.
 */
+
 /*
-	Makerlathes and item cost
-	-------------------------
+	obj/item/maker_cost
+		1) "iron=1;glass=1" - see makertext2list()
+		2) list("iron"=1,"glass"=1)
+		3) list(iron=1,glass=1) - special byond list() syntax
 
-	Every item has a list called maker_cost.  To simplify matters, this may also be a params string (url encoding):
-	maker_cost = list("iron" = 1,"glass" = 1) or
-	maker_cost = "iron=1;glass=1"
+	in general, A=B where
+		A:
+			/obj/item/weapon/stock_part/[subtype] (typepath, not string)
+			"reagent_id"
+			"power"
+			"time"
+			"output" - for reagent conversions only
+		B:
+			null: fill reagent
+			0: required but not used
+			>0: Required in construction, regained when recycled
+			<0: Required in construction, not recycled
 
-	If that list is anything but null, it may be recycled or built by makerlathes.
-	Entries in this list may be one of two types:
-		/obj/item/weapon/stock_part/[subtype] = [amount required], or
-		"reagent_id" = [amount_required], or in some cases,
-		"special_string" = [amount] (usually "power" or "time")
+	Note that at compile time you cannot use form 1 with defines or constants, e.g.
+	/obj/item/maker_cost="iron=[NORMAL_IRON_AMT]" // compile error
 
-	When this item is recycled, all positive amounts in the list will be added to the lathe.
-	Negative, zero, or null amounts will be ignored.
-	Additionally, any reagents will be sucked out.  Reagents that the maker cannot use are discarded or passed to the overflow bucket.
+	Fill reagents usually go into the reagent list.  Anything listed as a fill reagent
+	will be removed from the item if present unless the maker has enough reagents to add it.
+*/
 
-	When the item is constructed, all positive or negative amounts will be taken from the lathe.
-	That is to say, if you specify a negative amount, it will be used in construction but not returned by being recycled.
-	Zero amounts are required but not deducted from the maker's stocks.
+/*
+	Maker item procs
+	----------------
 
-	The special "reagents" that can be added (power and time) alter the construction of the item.
-	Time cost is normally calculated based on the sum total of the resources used; more resources equals more time.
-	Power cost adds extra drain to the APC network when it is constructed; this normally equals the time cost.
-	Power cost is not checked beforehand, so you can create an item with enormous power drain that empties the APC battery.
+	obj/item/determine_cost()
+		This exists mostly to convert legacy item costs (m_amt, g_amt, or mech fab lists) to maker lists.
 
-	Null amounts are special, and indicate that the item has optional reagents (fire extinguisher water, etc).
-	If the object is constructed and the optional reagents are missing, they will be missing from the completed item.
-	Currently, stock parts cannot have null amounts, for the reason below.
+	obj/item/get_maker_fill(product_datum)
+		For objects such as fire extinguishers, welding tools, and air tanks.
+		These, when spawned, have "contents"--water, welding fuel, or various atmos gasses.
+		The maker lathe defaults to spitting these out without any fill to them, but if the
+		maker can handle that reagent, you can spit the item out filled.
+		Even if it can't, it adds a "Fill with [name]" to the construction list, which may
+		be helpful to players.
 
-	Currently, there are no item procs for handling stock parts or altering the item depending on reagents.
-	The cost list is simply used to create or recycle items without any particular logic code behind it.
-	It would be nice to add, for example, conversion code that makes items better when better stock parts are used,
-	but I do not currently wish to spend even more time on yet another system.
+	obj/item/maker_disassemble(maker_machine)
+		Handles the actual recycling of the good.
+		This is important for a few items that should be handled oddly, such as air tanks and stacks.
 
+	obj/item/maker_build(fill_list)
+		Handles upgrading or filling the item based on what is actually used to construct it.
+		If fill reagents are specified (Fill fire extinguisher with water), you may be passed a
+		list to this function ("water" = 50), which you should use to alter the reagent level
+		or other parameters of the object.
+
+		Additionally, makerlathes can handle stock parts; if a stock part is used in the creation of
+		this item, you may want to check its quality and upgrade the item appropriately.
+
+		If you return a different item or list of items from this function, the maker will
+		assume that this item / these items are the proper build result.  In general, you should
+		return src from this function.
 */
 
 /*
@@ -69,30 +92,40 @@
 /*
 	Makerlathe Template Menus
 	-------------------------
-	The two product lists allow you to specify submenus.  There is also a default menu, which can be renamed.
 
-	Any text item in the product lists will be treated as the start of a new menu:
-		list(main_item_1, main_item_2,
-			"menu 1", menu1_item_1, menu1_item_2,
-			"menu 2", menu2_item_1, menu2_item_2)
-	where each item is a typepath.
-	Items preceeding the first text string go into the default menu.  The name of this menu is determined by the main_menu_name var.
-	If the main_menu_name var is null, the main menu will be hidden, making these items inaccessible.
-	In the preceeding example, main_item_1 and main_item_2 go into the main menu, etc.
+	/obj/machinery/maker/std_products, /obj/machinery/maker/hack_products
+		list( item | menu, item | menu, ... )
+	where
+		item:
+			/obj/item/[subtype]
+			/obj/item/[subtype] = "appended text" (eg, "Red" -> Cable Coils (Red))
+			/obj/item/[subtype] = modified_cost_list
+			/datum/reagent/[subtype] = cost_list
+		menu:
+			"menu_name"
 
-	You can modify these entries in two ways:
-		list(item_with_name_addendum = " text to add to the name",
-			item_with_modified_cost = list(reagent=value, ...)
-		)
-	In the first example, the given string is added to the display name in the recipes list.
-	In the second example, the maker_cost list is *replaced entirely* by the given list.
+	Items that occur before the first menu are put in the default menu.
 
-	The researchable list has a different syntax:
-		list(path_to_item = "menu1", path_to_item2 = "menu2")
-	...where every item path has an associated menu entry.  Unlike the product lists, this is not parsed when the maker is created,
-	but is instead checked when research is synched.
+	---
 
-	When a researchable item is unlocked, it will be put into the specified menu.  If no menu is specified, the main menu is used.
+	/obj/machinery/maker/researchable
+		list( item | menu, ...)
+	where
+		item:
+			/obj/item/[subtype]
+		menu:
+			"menu_name"
+
+	The item subtype must be researchable through some means (a design datum must be created for it).  If no menu is specified, the default menu is used.
+
+	---
+
+	/obj/machinery/maker/junk_recipes
+		list( item, ...)
+	where
+		item:
+			/obj/item/[subtype]
+			/obj/item/[subtype] = modified_cost_list
 
 	Junk items cannot be intentionally built and have no associated menu entry.
 */

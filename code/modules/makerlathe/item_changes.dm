@@ -1,9 +1,8 @@
 /*
 	Much of this code is to handle legacy item cost variables
-	The only reason why this occurs is because I am running
-	out of time before I have to move and there are an egregious
-	number of judgement calls involved in changing the build cost
-	of every single item in the game.
+	There are an egregious number of judgement calls involved
+	in changing the build cost of every single item in the game,
+	and this slows down the change by acting as an intermediate step.
 
 	In the future please slowly (or quickly!) replace all of the
 	build costs with a standardized system
@@ -52,6 +51,14 @@
 	return cost
 
 /obj/item/mecha_parts/determine_cost()
+	if(!construction_cost) return null
+	var/list/cost = construction_cost.Copy()
+	if("metal" in cost)
+		cost["iron"] = cost["metal"]
+		cost -= "metal"
+	cost["time"] = construction_time
+	return cost
+/obj/item/borg/upgrade/determine_cost()
 	if(!construction_cost) return null
 	var/list/cost = construction_cost.Copy()
 	if("metal" in cost)
@@ -181,6 +188,8 @@
 			var/datum/reagent/R = reagents.has_reagent(entry)
 			if(R)
 				fill[entry] = R.volume
+			else
+				fill[entry] = 0
 	if(fill.len)
 		return fill
 	return null
@@ -255,7 +264,7 @@
 
 /obj/item/weapon/disk/nuclear/maker_cost = null
 /obj/item/weapon/extinguisher/maker_cost = list("iron" = 1500, "water" = null) // null indicates it is a fill reagent
-/obj/item/weapon/weldingtool/maker_cost = list("iron" = 500, /obj/item/weapon/stock_parts/manipulator = 1, "fuel" = null)
+/obj/item/weapon/weldingtool/maker_cost = list("iron" = 500, "fuel" = null)
 
 /obj/item/stack
 	maker_cost = null
@@ -265,49 +274,6 @@
 		maker_cost = list("iron" = 300)
 	cable_coil
 		maker_cost = list("iron" = 250)
-
-/obj/item/stack/medical
-	bruise_pack
-		maker_cost = list("bicaridine" = 50)
-	ointment
-		maker_cost = list("dermaline" = 50)
-
-// these amounts should equal the reagent's resource_amt var
-/obj/item/stack/sheet
-	metal
-		maker_cost = list("iron" = MINERAL_MATERIAL_AMOUNT)
-	plasteel
-		maker_cost = list("plasteel" = MINERAL_MATERIAL_AMOUNT)	// maker reagent
-	glass
-		maker_cost = list("glass" = MINERAL_MATERIAL_AMOUNT)		// maker reagent
-	rglass
-		maker_cost = list("rglass" = MINERAL_MATERIAL_AMOUNT)		// maker reagent
-	cardboard
-		maker_cost = list("cardboard" = MINERAL_MATERIAL_AMOUNT)	// maker reagent
-	cloth
-		maker_cost = list("cloth" = MINERAL_MATERIAL_AMOUNT)		// maker reagent
-	leather
-		maker_cost = list("leather" = MINERAL_MATERIAL_AMOUNT)		// maker reagent
-	xenochitin
-		maker_cost = list("xenol" = MINERAL_MATERIAL_AMOUNT)		// maker reagent
-
-/obj/item/stack/sheet/mineral
-	clown
-		maker_cost = list("bananium" = MINERAL_MATERIAL_AMOUNT)	// maker reagent
-	diamond
-		maker_cost = list("diamond" = MINERAL_MATERIAL_AMOUNT)		// maker reagent
-	gold
-		maker_cost = list("gold" = MINERAL_MATERIAL_AMOUNT)
-	plasma
-		maker_cost = list("splasma" = MINERAL_MATERIAL_AMOUNT)		// maker reagent
-	sandstone
-		maker_cost = list("sandstone" = MINERAL_MATERIAL_AMOUNT)	// maker reagent
-	silver
-		maker_cost = list("silver" = MINERAL_MATERIAL_AMOUNT)
-	uranium
-		maker_cost = list("uranium" = MINERAL_MATERIAL_AMOUNT)
-	wood
-		maker_cost = list("wood" = MINERAL_MATERIAL_AMOUNT)		// maker reagent
 
 /obj/item/stack/tile
 	carpet
@@ -332,7 +298,7 @@
 /obj/item/clothing/under/maker_cost = list("cloth" = 500)
 /obj/item/clothing/suit/hazardvest/maker_cost = list("cloth" = 850)
 
-/obj/item/weapon/circuitboard/maker_cost = list("glass" = 1000, "copper" = 5, "sacid" = -20) // negative value means build cost but not recycleable
+/obj/item/weapon/circuitboard/maker_cost = list("glass" = 1000, "sacid" = -20) // negative value means build cost but not recycleable
 
 /obj/item/weapon/reagent_containers/food/snacks/maker_cost = list("nutriment" = -50)
 /obj/item/weapon/storage

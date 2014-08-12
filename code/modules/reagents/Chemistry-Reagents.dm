@@ -20,6 +20,9 @@ datum
 		var/nutriment_factor = 0
 		//var/list/viruses = list()
 		var/color = "#000000" // rgb: 0, 0, 0 (does not support alpha channels - yet!)
+		var/resource_item = null // if this is a typepath, makers can eject this as a solid item
+		var/resource_amt  = MINERAL_MATERIAL_AMOUNT // 2000 by default
+		var/list/maker_cost = null // for reagents made in a maker instead of with normal chemistry
 
 		proc
 			reaction_mob(var/mob/M, var/method=TOUCH, var/volume) //By default we have a chance to transfer some
@@ -695,6 +698,7 @@ datum
 			description = "Pure iron is a metal."
 			reagent_state = SOLID
 			color = "#C8A5DC" // rgb: 200, 165, 220
+			resource_item = /obj/item/stack/sheet/metal
 
 		gold
 			name = "Gold"
@@ -702,6 +706,7 @@ datum
 			description = "Gold is a dense, soft, shiny metal and the most malleable and ductile metal known."
 			reagent_state = SOLID
 			color = "#F7C430" // rgb: 247, 196, 48
+			resource_item = /obj/item/stack/sheet/mineral/gold
 
 		silver
 			name = "Silver"
@@ -709,6 +714,7 @@ datum
 			description = "A soft, white, lustrous transition metal, it has the highest electrical conductivity of any element and the highest thermal conductivity of any metal."
 			reagent_state = SOLID
 			color = "#D0D0D0" // rgb: 208, 208, 208
+			resource_item = /obj/item/stack/sheet/mineral/silver
 
 		uranium
 			name ="Uranium"
@@ -716,6 +722,7 @@ datum
 			description = "A silvery-white metallic chemical element in the actinide series, weakly radioactive."
 			reagent_state = SOLID
 			color = "#B8B8C0" // rgb: 184, 184, 192
+			resource_item = /obj/item/stack/sheet/mineral/uranium
 
 			on_mob_life(var/mob/living/M as mob)
 				if(!M) M = holder.my_atom

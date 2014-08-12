@@ -36,14 +36,14 @@
 	var/list/all_menus			= list() // list cache
 
 	// At compile time, these product lists contain typepaths and strings:
-	// items in main menu
-	// menu1 name, menu1 items
-	// menu2 name, menu2 items
+	// items in main menu,
+	// menu1 name, menu1 items,
+	// menu2 name, menu2 items,
 	// etc
+	// When the machine is constructed these are used to build maker_product objects.
 	// These are consulted when building the all_menus list.
 
 	var/list/std_products		= list() // always available
-	var/list/server_products	= list() // synched from database
 	var/list/hack_products		= list() // available when board hacked
 
 	var/list/junk_recipes		= list() // trash generated when malfunctioning - no menus here
@@ -54,7 +54,6 @@
 
 	// For queue and stock parts lists, if the value is null,
 	// that functionality is disabled (queues or handling stock parts in item recipes)
-
 	var/list/queue				= list()
 	var/list/stock_parts		= list()
 	var/global/list/stock_names	= list() // name cache by part type - sort of awkward but acceptable
@@ -80,6 +79,11 @@
 	var/junktech = 0	// reliability plummets, machine may jam, wastes materials
 	var/last_multiplier_change = 0 // set this to the current time when something affecting costs changes, it will recalculate entries
 
+	// Pointless message customization options
+	var/sheet_out_msg = "Extruding material, please wait..."
+	var/bottle_out_msg = "Bottling reagent, please wait..."
+	var/item_build_msg = "Synthesizing, please wait..."
+	var/item_recycle_msg = "Dismantling, please wait..."
 
 /obj/machinery/maker/New()
 	wires = new wire_type(src)
@@ -88,6 +92,9 @@
 	std_products  = initialize_products(std_products)
 	hack_products = initialize_products(hack_products)
 	junk_recipes  = initialize_products(junk_recipes, 0)
+
+	prep_research_list()
+
 	if(!main_menu_name && !current_menu)
 		current_menu = all_menus[1]
 
@@ -101,6 +108,10 @@
 		beaker = new beaker_type(src)
 	default_reagents()
 
+/*
+	These two procs convert human-readable stock lists
+	into more machine-friendly runtime lists.
+*/
 /obj/machinery/maker/proc/initialize_products(var/list/menu, var/allow_menus = 1)
 	if(!menu) return null
 	var/c_menu = null
@@ -123,6 +134,17 @@
 				// Note that a modified cost list is required here
 				result += new/datum/data/maker_product/reagent_converter(src, entry, c_menu, menu[entry])
 	return result
+
+/obj/machinery/maker/proc/prep_research_list()
+	if(!length(researchable)) return // also if null
+	var/c_menu = null
+	var/list/new_list = list()
+	for(var/entry in researchable)
+		if(istext(entry))
+			c_menu = entry
+		else
+			new_list[entry] = c_menu
+	researchable = new_list
 
 /obj/machinery/maker/proc/build_menu_cache()
 	if(all_menus[current_menu] != null)
@@ -202,13 +224,13 @@
 		return 0
 	if(!istype(I))
 		if(I && !quiet)
-			user_announce("<span class='notice'>There is no way to recycle [I].</span>")
+			user_announce("<span class='notice'>There is no way to recycle [I].</span>", "You hear some thumps and a beep.")
 		return 0
 
 	var/list/cost = I.determine_cost() // will eventually just be I.maker_cost but we need this for now
 	if(!cost)
 		if(!quiet)
-			user_announce("<span class='notice'>There is no way to recycle [I].</span>")
+			user_announce("<span class='notice'>There is no way to recycle [I].</span>", "You hear some thumps and a beep.")
 		return 0
 
 	if(istype(I,/obj/item/weapon/stock_parts) && stock_parts && !recycle_stock_parts)
@@ -225,12 +247,12 @@
 			if(ispath(entry, /obj/item/weapon/stock_parts))
 				if(isnull(stock_parts) && cost[entry] > 0)
 					if(!quiet)
-						user_announce("<span class='warning'>[src] cannot recycle components, and so refuses [I].</span>")
+						user_announce("<span class='warning'>[src] cannot recycle components, and so refuses [I].</span>", "You hear some thumps and a beep.")
 					return 0
 				continue
 			if(cost[entry] > 0) // do not count fill reagents and build-only costs
 				if(!quiet)
-					user_announce("<span class='warning'>[src] cannot recycle [entry], and so refuses [I].</span>")
+					user_announce("<span class='warning'>[src] cannot recycle [entry], and so refuses [I].</span>", "You hear some thumps and a beep.")
 				return 0
 
 	return 1
@@ -280,7 +302,8 @@
 	var/junk = 0
 	if(R.resource_item)
 		var/amt_per_sheet = R.resource_amt
-
+		building = 1
+		update_icon()
 		while(amount >= amt_per_sheet)
 			var/obj/item/stack/S = new R.resource_item(src)
 			S.amount = min(S.max_amount, round(amount / amt_per_sheet))
@@ -298,6 +321,8 @@
 				junk = 1
 				break
 			S.loc = loc
+		building = 0
+		update_icon()
 
 	reagents.update_total()
 	if(amount > 0 && !junk)
@@ -309,18 +334,19 @@
 /obj/machinery/maker/proc/bottle_resource(var/type, var/amount = 0)
 	var/datum/reagent/G = reagents.has_reagent("glass",BOTTLE_GLASS_COST)
 	if(!G)
-		user_announce("<span class='warning'>[src] does not have enough glass to bottle anything.</span>")
+		user_announce("<span class='warning'>[src] does not have enough glass to bottle anything.</span>", "You hear a beep.")
 		return
 	var/datum/reagent/R = reagents.has_reagent(type)
 	if(!R)
 		R = chemical_reagents_list[type]
-		user_announce("<span class='warning'>[src] does not have any [R.name] to bottle.</span>")
+		user_announce("<span class='warning'>[src] does not have any [R.name] to bottle.</span>", "You hear a beep.")
 		return // when the dialog updates that will be clear enough
 	amount = min(round(G.volume / BOTTLE_GLASS_COST), round(R.volume / 30)+(R.volume % 30?1:0), amount)
 	if(!amount)
 		return
 
 	building = 1
+	update_icon()
 	updateUsrDialog() // show the busy message
 
 	while(amount-- > 0)
@@ -339,6 +365,7 @@
 			break
 		B.loc = loc
 	building = 0
+	update_icon()
 	reagents.update_total()
 
 
@@ -348,20 +375,16 @@
 			return
 		if(!P.check_cost(src) && !length(queue)) return
 		if(!queue)
-			busy = 1
-			busy_message = "Synthesizing, please wait..."
-			updateUsrDialog()
+			make_busy(item_build_msg)
 			make(P)
-			busy = 0
+			busy_done()
 			return
 		queue.Add(P)
 	else if(istext(P) && reagents.has_reagent(P))
 		if(!queue)
-			busy = 1
-			busy_message = "Bottling reagent, please wait..."
-			updateUsrDialog()
+			make_busy(bottle_out_msg)
 			bottle_resource(P,1)
-			busy = 0
+			busy_done()
 			return
 		queue.Add(P)
 
@@ -380,6 +403,7 @@
 			if(show_queue)
 				updateUsrDialog()
 			make(P)
+
 		else if(istext(P))
 			var/datum/reagent/R = reagents.has_reagent(P)
 			if(!R) break
@@ -389,6 +413,7 @@
 				updateUsrDialog()
 			bottle_resource(P,1)
 
+	// We might have been asked to stop by the user, reset anyway
 	busy = 0
 	allstop = 0
 	building = 0
@@ -397,6 +422,7 @@
 /obj/machinery/maker/proc/make(var/datum/data/maker_product/P)
 	if(!istype(P))
 		return
+
 	var/junk = 0
 	if(!prob(reliability))
 		P.deduct_cost(src, (100 - reliability) / 200) // waste resources
@@ -412,9 +438,11 @@
 			air_update_turf()
 	use_power = 2
 	building = 1
+	update_icon()
 	updateUsrDialog()
 	var/obj/item/result = P.build(src)
 	building = 0
+	update_icon()
 
 	use_power = 1 + overdrive
 	if(!result)
@@ -422,8 +450,8 @@
 	else if(junk || !prob(reliability))
 		jammed = result
 		jammed.loc = src
-		user_announce("\A [jammed] gets stuck in [src]!")
+		user_announce("\A [jammed] gets stuck in [src]!", "You hear a motor whining uselessly.")
 	else if(istype(result,/list))
-		user_announce("[src] produces several items at once.")
+		user_announce("[src] produces several items at once.", "You hear a hum and several dings.")
 	else
-		user_announce("[src] produces \a [result].")
+		user_announce("[src] produces \a [result].", "You hear a hum and a ding.")
