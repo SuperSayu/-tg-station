@@ -114,12 +114,15 @@
 
 	return
 
-/datum/species/lizard/handle_speech(message)
 //NOPE
-	/* if(copytext(message, 1, 2) != "*")
-		message = replacetext(message, "s", stutter("ss"))
+/*
+	/datum/species/lizard/handle_speech(message)
 
-	return message */
+		if(copytext(message, 1, 2) != "*")
+			message = replacetext(message, "s", stutter("ss"))
+
+		return message
+*/
 
 /*
  PLANTPEOPLE

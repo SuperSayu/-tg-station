@@ -21,7 +21,7 @@
 		wavesecret = 0
 
 
-/proc/spawn_meteors(var/number = 10, var/list/meteortypes)
+/proc/spawn_meteors(var/number = 10, var/list/meteortypes = meteorsA)
 	for(var/i = 0; i < number; i++)
 		spawn(0)
 			spawn_meteor(meteortypes)
