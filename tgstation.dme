@@ -12,7 +12,6 @@
 // END_PREFERENCES
 
 // BEGIN_INCLUDE
-#include "sayustation_mapchanges.dm"
 #include "_maps\sayustation.dm"
 #include "code\_compile_options.dm"
 #include "code\hub.dm"
@@ -888,6 +887,7 @@
 #include "code\modules\mining\mine_turfs.dm"
 #include "code\modules\mining\mint.dm"
 #include "code\modules\mining\money_bag.dm"
+#include "code\modules\mining\monolith.dm"
 #include "code\modules\mining\ores_coins.dm"
 #include "code\modules\mining\satchel_ore_boxdm.dm"
 #include "code\modules\mining\laborcamp\laborminerals.dm"

@@ -237,7 +237,7 @@
 		var/wet = reagents.has_reagent("hot_ramen")?2:0
 		var/spicy = reagents.has_reagent("hell_ramen")?4:0
 		var/msg
-		switch(dry + wet + spicy + watery)
+		switch(dry + wet + spicy)
 			if(1)
 				msg = "The ramen is uncooked."
 			if(2)
