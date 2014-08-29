@@ -523,11 +523,11 @@
 	proc/handle_hud_icons(var/mob/living/carbon/human/H)
 		if(H.healths)
 			if(H.stat == DEAD)
-				H.healths.icon_state = "health7"
+				H.healths.icon_state = "dead"
 			else
 				switch(H.hal_screwyhud)
-					if(1)	H.healths.icon_state = "health6"
-					if(2)	H.healths.icon_state = "health7"
+					if(1)	H.healths.icon_state = "health1"
+					if(2)	H.healths.icon_state = "health0"
 					else
 						/*
 						switch(H.health - H.staminaloss)
