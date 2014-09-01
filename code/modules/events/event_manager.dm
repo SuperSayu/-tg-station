@@ -7,6 +7,7 @@ var/datum/controller/event/events
 	var/scheduled = 0			//The next world.time that a naturally occuring random event can be selected.
 	var/frequency_lower = 4500	//7.5 minutes lower bound.
 	var/frequency_upper = 12000	//20 minutes upper bound.
+	var/midgame = 0
 
 	var/holiday					//This will be a string of the name of any realworld holiday which occurs today (GMT time)
 
@@ -46,6 +47,11 @@ var/datum/controller/event/events
 
 //decides which world.time we should select another random event at.
 /datum/controller/event/proc/reschedule()
+	if(midgame == 0 && world.time > 36000)
+		midgame = 1
+		frequency_lower = round(frequency_lower/2,1)
+		frequency_upper = round(frequency_upper/2,1)
+
 	scheduled = world.time + rand(frequency_lower, max(frequency_lower,frequency_upper))
 
 //selects a random event based on whether it can occur and it's 'weight'(probability)
