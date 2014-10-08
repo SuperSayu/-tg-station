@@ -148,18 +148,12 @@ MASS SPECTROMETER
 		if(!D.hidden[SCANNER])
 			user.show_message("<span class='warning'><b>Warning: [D.form] Detected</b>\nName: [D.name].\nType: [D.spread].\nStage: [D.stage]/[D.max_stages].\nPossible Cure: [D.cure]</span>", 1)
 
-	var/bone_name
-	for(var/bone in M.broken)
-		if(bone == "chest")
-			bone_name = "ribs"
-		else if(bone == "head")
-			bone_name = "skull"
-		else
-			bone_name = bone
-		if(bone_name != "ribs")
-			user.show_message(text("<span class='alert'>Warning: Subject's [bone_name] is broken.</span>"), 1)
-		else
-			user.show_message(text("<span class='alert'>Warning: Subject's [bone_name] are broken.</span>"), 1)
+	if(ishuman(M))
+		var/mob/living/carbon/human/C = M
+		for(var/obj/item/organ/limb/L in C.organs)
+			if(L.bone_status == BONE_BROKEN)
+				user.show_message(text("<span class='alert'>Warning: Subject's [L.bone_name] is broken.</span>"), 1)
+
 	if (M.reagents && M.reagents.get_reagent_amount("inaprovaline"))
 		user.show_message("<span class='notice'>Bloodstream Analysis located [M.reagents:get_reagent_amount("inaprovaline")] units of rejuvenation chemicals.</span>", 1)
 	if (M.getBrainLoss() >= 100 || !M.getorgan(/obj/item/organ/brain))

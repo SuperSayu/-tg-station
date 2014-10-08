@@ -336,25 +336,10 @@
 	if(H.getCloneLoss()) // clone loss is slowly regenerated
 		H.adjustCloneLoss(-0.2)
 
-/datum/species/jelly/spec_break_bone(var/mob/living/carbon/human/target, var/obj/item/organ/limb/affecting, var/break_prob)
-	// bones break easier, slightly
-	break_prob *= 1.4
-	if(affecting.status != ORGAN_ORGANIC || !prob(break_prob)) return 0
-	var/hit_area = parse_zone(affecting.name)
-	if(target.broken.len && (hit_area in target.broken)) return 0
-	target.broken += hit_area
-	var/hit_desc
-	if(hit_area == "head")
-		hit_desc = "skull breaks"
-	else if(hit_area == "chest")
-		hit_desc = "ribs break"
-	else
-		hit_desc = "[hit_area] breaks"
-
-	playsound(target, 'sound/weapons/pierce.ogg', 50)
-	var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
-	target.visible_message("<span class='danger'>[target]'s [hit_desc] with a [breaknoise]!</span>", "<span class='userdanger'>Your [hit_desc] with a [breaknoise]!</span>")
-	return 1
+/datum/species/jelly/spec_break_bone(var/obj/item/organ/limb/affecting, var/break_prob)
+	if(affecting.bone_break(break_prob * 1.4))
+		return 1
+	return 0
 
 /*
  AXOLOTL PEOPLE -- WIP IN PROGRESS
