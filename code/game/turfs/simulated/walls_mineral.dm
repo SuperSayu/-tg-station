@@ -59,6 +59,13 @@
 				L.apply_effect(12,IRRADIATE,0)
 			for(var/turf/simulated/wall/mineral/uranium/T in range(3,src))
 				T.radiate()
+			for(var/obj/item/artifact/A in range(3,src)) // This is terrible
+				if(!A.raddelay)
+					A.raddelay = 1
+					if(!A.checkfail(2))
+						A.activate()
+					spawn(50)
+						A.raddelay = 0
 			last_event = world.time
 			active = null
 			return

@@ -895,6 +895,19 @@
 		else
 			return 0
 
+		if(H.wear_suit && istype(H.wear_suit, /obj/item/))
+			var/obj/item/A = H.wear_suit
+			A.check_retaliate()
+		if(H.l_hand && istype(H.l_hand, /obj/item/))
+			var/obj/item/A = H.l_hand
+			A.check_retaliate()
+		if(H.r_hand && istype(H.r_hand, /obj/item/))
+			var/obj/item/A = H.r_hand
+			A.check_retaliate()
+		if(H.gloves && istype(H.gloves, /obj/item/))
+			var/obj/item/A = H.gloves
+			A.check_retaliate()
+
 		// You can still swing even heavy objects, but ouch
 		spec_bone_use_check(user, user.hand?"left hand":"right hand", I.w_class * 20)
 
@@ -918,7 +931,8 @@
 					breakchance *= 1.5
 			if(HULK in user.mutations)
 				breakchance *= 2
-			breakchance *= (100 / armor)
+			if(armor > 0)
+				breakchance *= (100 / armor)
 
 			if(spec_break_bone(H, affecting, breakchance))
 				bloody = 1 // yeah that sheds blood
@@ -1229,7 +1243,7 @@
 					if(prob(20))
 						spawn(0) H.emote(pick("giggle", "laugh"))
 
-		handle_temperature(breath)
+		handle_temperature(breath,H)
 
 		return 1
 

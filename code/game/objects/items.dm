@@ -298,6 +298,7 @@
 	return 0
 
 /obj/item/proc/IsReflect(var/def_zone) //This proc determines if and at what% an object will reflect energy projectiles if it's in l_hand,r_hand or wear_suit
+	check_retaliate() // also something something something retaliation artifacts
 	if(prob(reflect_chance))
 		return 1
 
