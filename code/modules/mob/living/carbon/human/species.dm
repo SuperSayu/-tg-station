@@ -54,6 +54,8 @@
 	var/heatmod = 1		// multiplier for heat damage
 	var/punchmod = 0	// adds to the punch damage
 
+	var/bone_chance_adjust = 1
+
 	var/invis_sight = SEE_INVISIBLE_LIVING
 	var/darksight = 2
 
@@ -700,9 +702,8 @@
 	// ATTACK PROCS //
 	//////////////////
 
-	//Todo: Complete rewrite needed
 	proc/spec_bone_use_check(var/mob/living/carbon/human/M, var/agony_prob)
-		if(M.numbness || !prob(agony_prob)) return 0
+		if(M.numbness || !bone_chance_adjust || !prob(agony_prob)) return 0 //bone chance ajust does not make agony worse, but can prevent it whole
 		var/obj/item/organ/limb/usedLimb = M.hand ? M.get_organ("l_arm") : M.get_organ("r_arm")
 
 		if(usedLimb.bone_status == BONE_INTACT) return 0
@@ -714,7 +715,7 @@
 		return 1
 
 	proc/spec_break_bone(var/obj/item/organ/limb/affecting, var/break_prob)
-		if(affecting.bone_break(break_prob))
+		if(affecting.bone_break(break_prob*bone_chance_adjust))
 			return 1
 		return 0
 
@@ -922,7 +923,7 @@
 			if(armor > 0)
 				breakchance *= (100 / armor)
 
-			if(spec_break_bone(H, affecting, breakchance))
+			if(spec_break_bone(affecting, breakchance))
 				bloody = 1 // yeah that sheds blood
 
 		if(((I.damtype == BRUTE) && prob(25 + (I.force * 2))))
