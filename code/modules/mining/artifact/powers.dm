@@ -149,7 +149,8 @@
 			max_cooldown = ((extra1+1)*extra2)*100
 		if(A_IRRADIATE)
 			prefix = pick("dissolving","glowing","radioactive","old","oozing")
-			extra1 = rand(35,65)
+			extra1 = rand(45,75)
+			extra2 = rand(2,6)
 			max_cooldown = extra1*10
 		if(A_SURGERY)
 			prefix = pick("sharp","fleshy","pointy","glassy","sliding")
@@ -221,6 +222,8 @@
 		if(A_TRAVEL)
 			prefix = pick("moving","glassy","see-through","reflective","swirling")
 			max_cooldown = rand(1,3)*10 // Don't screw people over too hard
+		if(A_REVIVE)
+			prefix = "protective"
 
 /obj/item/artifact/proc/use_power(var/mob/user, var/mob/target, var/turf/artloc, var/turf/targtile, var/obj/targobj)
 	if(!on || cooldown > 0)
@@ -266,7 +269,7 @@
 		if(A_SLEEP)
 			// EXTRA 1: Effect range
 			// EXTRA 2: Power of the sleep effect
-			for(var/mob/living/carbon/human/H in orange(extra1,artloc))
+			for(var/mob/living/carbon/human/H in orange(extra1,targtile))
 				H << "<span class='danger'>You suddenly feel very sleepy...</span>"
 				spawn(extra2*10)
 					H.Paralyse(extra2)
@@ -274,7 +277,7 @@
 		if(A_HEAL)
 			// EXTRA 1: Amount of healing
 			// EXTRA 2: Damage type that is healed
-			for(var/mob/living/carbon/human/H in orange(3,artloc))
+			for(var/mob/living/carbon/human/H in range(3,targtile))
 				switch(extra2)
 					if(1)
 						H.adjustBruteLoss(-extra1)
@@ -434,7 +437,7 @@
 			if(user)
 				user << "<span class='notice'>Your body becomes see-through.</span>"
 				user.alpha = 155
-				user.pass_flags = PASSGLASS | PASSGRILLE
+				user.pass_flags |= PASSGLASS | PASSGRILLE
 				if(ishuman(user))
 					var/mob/living/carbon/human/H = user
 					if(H.dna && H.dna.species)
@@ -612,7 +615,18 @@
 				artloc.visible_message("<span class='danger'>\The [src] becomes dull, and the light around it fades.</span>")
 		if(A_IRRADIATE)
 			// EXTRA 1: Radiation strength, chance of mutation, chance of good mutation
-			if(target)
+			// EXTRA 2: Range of effect
+			if(!target || target == user)
+				for(var/mob/living/carbon/human/H in orange(extra2,src))
+					H.apply_effect(extra1, IRRADIATE, 0)
+					if(prob(extra1)) // Mutation
+						if(prob(extra1)) // Good mutation
+							randmutg(H)
+							domutcheck(H, null, 1)
+						else // Bad mutation
+							randmutb(H)
+							domutcheck(H, null, 1)
+			else
 				if(istype(target,/mob/living/carbon/human))
 					var/mob/living/carbon/human/H = target
 					H.apply_effect(extra1, IRRADIATE, 0)

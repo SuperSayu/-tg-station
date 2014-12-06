@@ -1,3 +1,5 @@
+var/global/ankh = 0 // only one can spawn
+
 /obj/proc/check_retaliate() // used for retaliation artifacts
 	return 0
 
@@ -41,7 +43,7 @@
 /obj/item/artifact/New()
 	..()
 	processing_objects.Add(src)
-	if(!adminart)
+	if(adminart == 0)
 		set_type()
 		rand_stim()
 		name = "[prefix] [title]"
@@ -49,15 +51,15 @@
 		switch(atype)
 			if(0 to 5)
 				w_class = 1.0
-			if(6 to 11)
+			if(6 to 12)
 				w_class = 3.0
 				force = 5
 				hitsound = 'sound/weapons/smash.ogg'
-			if(12 to 16)
+			if(13 to 17)
 				w_class = 4.0
 				force = 10
 				hitsound = 'sound/weapons/smash.ogg'
-			if(17 to 21)
+			if(18 to 22)
 				w_class = 6.0
 				density = 1
 				pass_flags = 0
@@ -92,7 +94,7 @@
 		check_heat()
 		check_power()
 		integrity = min((integrity+0.5),100)
-		if(usetype == A_CONSTANT && !cooldown && (prob(20) || max_cooldown > 0)) // Doesn't always activate right away, to give a bit of a warning period
+		if(usetype == A_CONSTANT && !cooldown && (prob(20) || max_cooldown > 0 || w_class >= 4.0)) // Doesn't always activate right away, to give a bit of a warning period
 			use_power()
 	else
 		activated = 0
@@ -107,7 +109,7 @@
 		..()
 
 /obj/item/artifact/attack_self(mob/user as mob)
-	if(adminart > 0) // Used for customizing artifacts as an admin.
+	if(adminart == 1) // Used for customizing artifacts as an admin.
 		atype = input("Input artifact type.", name, atype) as num
 		power = input("Input artifact power.", name, power) as num
 		stimulus1 = input("Input artifact stimulus #1.", name, stimulus1) as num
@@ -122,15 +124,15 @@
 		switch(atype)
 			if(0 to 5)
 				w_class = 1.0
-			if(6 to 11)
+			if(6 to 12)
 				w_class = 3.0
 				force = 5
 				hitsound = 'sound/weapons/smash.ogg'
-			if(12 to 16)
+			if(13 to 17)
 				w_class = 4.0
 				force = 10
 				hitsound = 'sound/weapons/smash.ogg'
-			if(17 to 21)
+			if(18 to 22)
 				w_class = 6.0
 				density = 1
 				pass_flags = 0
@@ -216,16 +218,33 @@
 	..()
 
 /obj/item/artifact/proc/set_type()
-	var/size = rand(1,4) // to make the rng less shit
-	switch(size)
-		if(1)
-			atype = rand(0,5)
-		if(2)
-			atype = rand(6,11)
-		if(3)
-			atype = rand(12,16)
-		if(4)
-			atype = rand(17,21)
+	var/size = rand(1,4)
+	if(global.ankh == 0)
+		if((z == 5 && prob(5)) || (z == 1 && prob(2)) || ((z == 3 || z == 4) && prob(3)))
+			atype = A_ANKH
+			world.log << "Ankh generated at [x],[y],[z]"
+			global.ankh = 1
+		else
+			switch(size)
+				if(1)
+					atype = rand(0,5)
+				if(2)
+					atype = rand(6,11)
+				if(3)
+					atype = rand(13,17)
+				if(4)
+					atype = rand(18,22)
+	else
+		 // to make the rng less shit
+		switch(size)
+			if(1)
+				atype = rand(0,5)
+			if(2)
+				atype = rand(6,11)
+			if(3)
+				atype = rand(13,17)
+			if(4)
+				atype = rand(18,22)
 	//atype = rand(FIRST,LAST)
 	switch(atype)
 		// TINY
@@ -264,10 +283,12 @@
 			title = "box"
 			power = pick(A_REPAIR,A_RECHARGE,A_EMPS,A_BLOB,A_IRRADIATE)
 			usetype = pick(A_CLICK,A_CONSTANT)
+			item_state = "box"
 		if(A_TOME)
 			title = "tome"
 			power = pick(A_SLEEP,A_NIGHTMARE,A_FORCEWALL,A_TRAVEL,A_WORMHOLE)
 			usetype = A_CLICK
+			item_state = "bible"
 		if(A_TOTEM)
 			title = "totem"
 			power = pick(A_HEAL,A_SAPLIFE,A_TELEPORT,A_FORCEPORT,A_SHOCKER)
@@ -276,33 +297,44 @@
 			title = "gun"
 			power = pick(A_SHOCKER,A_TELEPORT,A_FORCEPORT,A_EMPS,A_LUBE)
 			usetype = A_TILE
+			item_state = "disabler"
 		if(A_INJECTOR)
 			title = "injector"
 			power = pick(A_INJECT,A_SURGERY,A_SMOKE,A_VIRUS,A_CLONEMKY)
 			usetype = A_ATTACK
+			item_state = "hypo"
+		if(A_ANKH)
+			title = "ankh"
+			power = A_REVIVE
+			slot_flags = SLOT_BACK
 		// HUGE
 		if(A_STAFF)
 			title = "staff"
 			power = pick(A_MAGIC,A_DECLONE,A_HEAL,A_HONK,A_PINKSLIME,A_SHIELD)
 			usetype = A_TILE
+			item_state = "staffofchaos"
 		if(A_CUTTER)
 			title = "cutter"
 			power = pick(A_MINING,A_DEMOLISH,A_SURGERY,A_SEAL)
 			usetype = A_TILE_A
+			item_state = "gun"
 		if(A_RENDER)
 			title = "sickle"
 			power = pick(A_PUSH,A_PULL,A_MELEE,A_WORMHOLE,A_SAPLIFE,A_TRAVEL)
 			usetype = pick(A_CLICK,A_TILE)
+			item_state = "render"
 		if(A_ARMOR)
 			title = "armor"
-			power = pick(A_REFLECT,A_EMPS,A_ELECTRIC,A_IRRADIATE,A_SHIELD)
+			power = pick(A_REFLECT,A_EMPS,A_ELECTRICS,A_IRRADIATE,A_SHIELD)
 			usetype = A_RETALIATE
+			item_state = "armor_reflec"
 			body_parts_covered = CHEST
 			slot_flags = SLOT_OCLOTHING
 		if(A_HAMMER)
 			title = "hammer"
-			power = pick(A_MELEE,A_DEMOLISH,A_REPAIR,A_SMOKE,A_ELECTRICS)
+			power = pick(A_MELEE,A_DEMOLISH,A_REPAIR,A_SMOKE,A_ELECTRIC)
 			usetype = A_ATTACK
+			item_state = "mjollnir"
 		// STATIONARY
 		if(A_PROBE)
 			title = "probe"
@@ -343,6 +375,35 @@
 			title = "ring"
 			body_parts_covered = HANDS
 			slot_flags = SLOT_GLOVES
+		// MEDIUM
+		if(A_ROD)
+			title = "rod"
+		if(A_BOX)
+			title = "box"
+		if(A_TOME)
+			title = "tome"
+		if(A_TOTEM)
+			title = "totem"
+		if(A_GUN)
+			title = "gun"
+		if(A_INJECTOR)
+			title = "injector"
+		if(A_ANKH)
+			title = "ankh"
+			slot_flags = SLOT_BACK
+		// HUGE
+		if(A_STAFF)
+			title = "staff"
+		if(A_CUTTER)
+			title = "cutter"
+		if(A_RENDER)
+			title = "sickle"
+		if(A_ARMOR)
+			title = "armor"
+			body_parts_covered = CHEST
+			slot_flags = SLOT_OCLOTHING
+		if(A_HAMMER)
+			title = "hammer"
 		// STATIONARY
 		if(A_PROBE)
 			title = "probe"
@@ -352,6 +413,8 @@
 			title = "machine"
 		if(A_CRYSTAL)
 			title = "crystal"
+		if(A_CELL)
+			title = "cell"
 
 /obj/item/artifact/proc/update_icons()
 	if(!reverse)
@@ -384,3 +447,20 @@
 
 /obj/item/artifact/admin
 	adminart = 1
+
+/obj/item/artifact/ankh
+	name = "protective ankh"
+	desc = "A gift from the gods."
+	adminart = 2 // doesn't randomize, but can't be modified either
+	atype = A_ANKH
+	power = A_REVIVE
+	title = "ankh"
+	prefix = "protective"
+	activated = 1
+	on = 1
+
+/obj/item/artifact/ankh/New()
+	..()
+	item_state = "ankh1"
+	slot_flags = SLOT_BACK
+	update_icons()

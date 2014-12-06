@@ -33,6 +33,11 @@
 		if(((!check_drift) || (check_drift && J.stabilization_on)) && (!lying) && (J.allow_thrust(0.01, src)))
 			inertia_dir = 0
 			return 1
+
+	if(istype(back, /obj/item/wings))
+		inertia_dir = 0
+		return 1
+
 	//If no working jetpack or magboots then use the other checks
 	if(..())	return 1
 	return 0

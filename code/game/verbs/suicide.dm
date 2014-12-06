@@ -22,6 +22,11 @@
 			src << "You can't commit suicide whilst restrained! ((You can type Ghost instead however.))"
 			return
 		suiciding = 1
+		if(back)
+			if(istype(back,/obj/item/artifact))
+				var/obj/item/artifact/A = back
+				if(A.power == 56 && A.activated && A.on)
+					suiciding = 0 // Not suicide anymore, you'll revive
 		var/obj/item/held_item = get_active_hand()
 		if(held_item)
 			var/damagetype = held_item.suicide_act(src)

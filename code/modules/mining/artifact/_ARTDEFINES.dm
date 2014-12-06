@@ -1,6 +1,6 @@
 // If you modify the number of artifacts, make sure to change these!!!
 #define FIRST		0
-#define LAST		21
+#define LAST		22
 
 // BEGIN DEFINING TYPES
 	// TINY
@@ -17,18 +17,19 @@
 #define A_TOTEM		9
 #define A_GUN		10
 #define A_INJECTOR	11
+#define A_ANKH		12
 	// HUGE
-#define A_STAFF		12
-#define A_CUTTER	13
-#define A_RENDER	14
-#define A_ARMOR		15
-#define A_HAMMER	16
+#define A_STAFF		13
+#define A_CUTTER	14
+#define A_RENDER	15
+#define A_ARMOR		16
+#define A_HAMMER	17
 	// STATIONARY
-#define A_PROBE		17
-#define A_PYRAMID	18
-#define A_MACHINE	19
-#define A_CRYSTAL	20
-#define A_CELL		21
+#define A_PROBE		18
+#define A_PYRAMID	19
+#define A_MACHINE	20
+#define A_CRYSTAL	21
+#define A_CELL		22
 
 // BEGIN DEFINING POWERS
 // Generally try to keep the powers restricted by size, although some can go either way - for instance, large artifacts could use
@@ -91,6 +92,7 @@
 #define A_PROJ		53 // Fires a randomly-determined projejctile. Requires no ammo, but has a cooldown. Potentially quite deadly.
 #define A_MAGICPROJ	54 // Fires a random magic projectile. Zany!
 #define A_TRAVEL	55 // Allows you to phase into another Z-level.
+#define A_REVIVE	56 // One-use revive back from death. You must die while wearing the artifact.
 
 // BEGIN DEFINING STIMULI
 #define A_FORCE		0 // Hit the artifact with an object with a force from 10-24.

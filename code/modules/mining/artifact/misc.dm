@@ -180,6 +180,135 @@
 /obj/machinery/rad_machine/proc/update_icons()
 	icon_state = "pod_[active]"
 
+///////////
+// WINGS //
+///////////
+
+// Granted by resurrecting with the ankh
+
+/obj/item/wings
+	name = "Deo's Wings"
+	desc = "An angelic pair of wings that appeared after resurrecting. They grant extra speed and the ability to fly."
+	icon = 'icons/obj/artifact.dmi'
+	icon_state = "wings"
+	slot_flags = SLOT_BACK
+	action_button_name = "Toggle Wings"
+	var/state = 1 // 0 = retracted, 1 = extended
+	var/datum/effect/effect/system/wing_trail_follow/wing_trail
+	var/mob/living/carbon/human/wearer = null
+
+/obj/item/wings/New()
+	..()
+	wing_trail = new /datum/effect/effect/system/wing_trail_follow()
+	wing_trail.set_up(src)
+	wing_trail.start()
+
+/obj/item/wings/ui_action_click()
+	if(src in usr)
+		toggle()
+
+/obj/item/wings/proc/toggle()
+	if(wearer)
+		playsound(get_turf(wearer), 'sound/weapons/thudswoosh.ogg', 150, 1)
+		if(state == 0)
+			wearer << "<span class='notice'>You unfold your wings, granting the power of flight.</span>"
+			wing_trail.on = 1
+			wing_trail.processing = 1
+			wing_trail.start()
+			extend()
+		else
+			wearer << "<span class='notice'>You fold your wings, landing softly on the ground.</span>"
+			wing_trail.on = 0
+			wing_trail.processing = 0
+			retract()
+
+/obj/item/wings/proc/extend()
+	if(wearer)
+		wearer.unEquip(wearer.back)
+		if(wearer.dna)
+			wearer.dna.species.speedmod -= 2
+		wearer.pass_flags |= PASSTABLE
+		wearer.equip_to_slot_if_possible(src, slot_back, 1, 1, 1)
+		flags |= NODROP
+		state = 1
+
+/obj/item/wings/proc/retract()
+	if(wearer)
+		flags -= NODROP
+		if(wearer.dna)
+			wearer.dna.species.speedmod += 2
+		wearer.pass_flags -= PASSTABLE
+		wearer.unEquip(wearer.back)
+		wearer.contents += src
+		state = 0
+
+/////////////////
+// WING TRAILS //
+////////////////
+
+/obj/effect/effect/wing_trails
+	name = "wing trails"
+	icon_state = "wingtrails"
+	anchored = 1.0
+
+/datum/effect/effect/system/wing_trail_follow
+	var/turf/oldposition
+	var/processing = 1
+	var/on = 1
+
+/datum/effect/effect/system/wing_trail_follow/set_up(atom/atom)
+	attach(atom)
+	oldposition = get_turf(atom)
+
+/datum/effect/effect/system/wing_trail_follow/start()
+	if(!src.on)
+		src.on = 1
+		src.processing = 1
+	if(src.processing)
+		src.processing = 0
+		var/turf/T = get_turf(src.holder)
+		if(T != src.oldposition)
+			if(!has_gravity(T))
+				var/obj/effect/effect/wing_trails/W = new /obj/effect/effect/wing_trails(src.oldposition)
+				src.oldposition = T
+				W.dir = src.holder.dir
+				spawn( 4 )
+					if(W)
+						W && W.delete()
+			spawn(2)
+				if(src.on)
+					src.processing = 1
+					src.start()
+		else
+			spawn(2)
+				if(src.on)
+					src.processing = 1
+					src.start()
+
+//////////////////
+// ADMIN REROLL //
+//////////////////
+
+/client/proc/cmd_admin_artreroll()
+	set category = "Fun"
+	set name = "Reroll Artifacts"
+
+	if (!holder)
+		src << "Only administrators may use this command."
+		return
+
+	global.ankh = 0
+	for(var/obj/item/artifact/A in world)
+		if(A.z <= 6)
+			var/obj/item/artifact/AN = new /obj/item/artifact(get_turf(A))
+			AN.activated = A.activated
+			AN.on = A.on
+			AN.update_icons()
+			qdel(A)
+
+	log_admin("[key_name(usr)] rerolled all artifacts.")
+	message_admins("[key_name_admin(usr)] rerolled all artifacts.)", 1)
+
 ///////////////
 // GUN STUFF //
 ///////////////
