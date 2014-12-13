@@ -24,18 +24,22 @@ datum/objective_item/proc/find_duplicate(var/datum/mind/M)
 	return null
 
 
+datum/objective_item/steal
+	antag_types = list()
+
 datum/objective_item/steal/redphone
 	name = "a red telephone"
 	targetitem = /obj/item/weapon/phone
-	difficulty = 1
+	difficulty = 3
 	excludefromjob = list("Mime") // hold the phone, what's this about?
-	antag_types = list("Changeling","Wizard","Space Ninja")
+	antag_types = list("traitor", "Changeling","Wizard","Space Ninja")
 
 datum/objective_item/steal/caplaser
 	name = "the captain's antique laser gun"
 	targetitem = /obj/item/weapon/gun/energy/laser/captain
 	difficulty = 5
 	excludefromjob = list("Captain")
+	antag_types = list("traitor","Changeling","Wizard","Space Ninja")
 
 datum/objective_item/steal/handtele
 	name = "a hand teleporter"
@@ -97,7 +101,7 @@ datum/objective_item/steal/ablative
 	targetitem = /obj/item/clothing/suit/armor/laserproof
 	difficulty = 3
 	excludefromjob = list("Head of Security", "Warden")
-	antag_types = list("Changeling","Wizard")
+	antag_types = list("traitor","Changeling","Wizard")
 
 datum/objective_item/steal/reactive
 	name = "the reactive teleport armor"
@@ -110,37 +114,39 @@ datum/objective_item/steal/documents
 	name = "a set of secret documents"
 	targetitem = /obj/item/documents //Any set of secret documents. Doesn't have to be NT's
 	difficulty = 5
+	antag_types = list("traitor","Changeling","Wizard","Space Ninja")
+
 datum/objective_item/steal/dermal
 	name = "the head of security's dermal armor patch"
 	targetitem = /obj/item/clothing/head/helmet/HoS/dermal
-	difficulty = 12
+	difficulty = 5
 	excludefromjob = list("Head of Security")
 	antag_types = list("traitor","Changeling","Wizard")
 
 datum/objective_item/steal/facehugger
 	name = "an alien facehugger (dead or alive)"
 	targetitem = /obj/item/clothing/mask/facehugger
-	difficulty = 9
+	difficulty = 10
 	excludefromjob = list("Research Director")
 	antag_types = list("Changeling","Wizard")
 
 datum/objective_item/steal/ai_construct
 	name = "an AI core construction circuit board"
 	targetitem = /obj/item/weapon/circuitboard/aicore
-	difficulty = 10
+	difficulty = 3
 	excludefromjob = list("Research Director")
 	antag_types = list("traitor","Changeling","Wizard")
 
 datum/objective_item/steal/ai_upload
 	name = "an AI upload circuit board"
 	targetitem = /obj/item/weapon/circuitboard/aiupload
-	difficulty = 8
+	difficulty = 3
 	antag_types = list("traitor","Changeling","Wizard")
 
 datum/objective_item/steal/borg_upload
 	name = "a cyborg upload circuit board"
 	targetitem = /obj/item/weapon/circuitboard/borgupload
-	difficulty = 8
+	difficulty = 3
 	antag_types = list("traitor","Changeling","Wizard")
 
 //Items with special checks!
@@ -162,6 +168,7 @@ datum/objective_item/steal/functionalai
 	name = "a functional AI"
 	targetitem = /obj/item/device/aicard
 	difficulty = 30 //beyond the impossible
+	antag_types = list("traitor","Changeling","Wizard")
 
 datum/objective_item/steal/functionalai/check_special_completion(var/obj/item/device/aicard/C)
 	for(var/mob/living/silicon/ai/A in C)
@@ -191,22 +198,18 @@ datum/objective_item/steal/slime
 	targetitem = /obj/item/slime_extract
 	difficulty = 3
 	excludefromjob = list("Research Director","Scientist")
-	antag_types = list("Changeling","Wizard","Space Ninja")
+	antag_types = list("traitor","Changeling","Wizard","Space Ninja")
 
 datum/objective_item/steal/slime/check_special_completion(var/obj/item/slime_extract/E)
 	if(E.Uses > 0)
 		return 1
 	return 0
 
-//Unique Objectives
-datum/objective_item/unique/docs_red
-	name = "the \"Red\" secret documents"
-	targetitem = /obj/item/documents/syndicate/red
-	difficulty = 10
+//ID theft
 datum/objective_item/steal/id_cards
 	name = "four unique identification cards"
 	targetitem = /obj/item/weapon/card/id
-	difficulty = 8
+	difficulty = 10
 	excludefromjob = list("Head of Personnel")
 	antag_types = list("Changeling","Wizard","Space Ninja")
 	var/list/found = list()
@@ -219,15 +222,26 @@ datum/objective_item/steal/id_cards/check_special_completion(var/obj/item/weapon
 	found += id
 	return (found.len >= 4)
 
+//Unique Objectives
+datum/objective_item/unique
+	antag_types = list()
+
+datum/objective_item/unique/docs_red
+	name = "the \"Red\" secret documents"
+	targetitem = /obj/item/documents/syndicate/red
+	difficulty = 10
+
 datum/objective_item/unique/docs_blue
 	name = "the \"Blue\" secret documents"
 	targetitem = /obj/item/documents/syndicate/blue
 	difficulty = 10
 
+//Reagent Objectives
 datum/objective_item/steal/reagent
 	name = "50 units of unstable mutagen"
 	targetitem = /obj/item/weapon/reagent_containers
-	difficulty = 8
+	difficulty = 3
+	antag_types = list("traitor","Changeling","Wizard","Space Ninja")
 	var/target_reagent = /datum/reagent/toxin/mutagen
 	var/target_amount = 50
 	var/found = 0
@@ -282,7 +296,7 @@ datum/objective_item/steal/reagent/unique/booze // Beer run!
 	target_amount = 7
 	target_reagent = /datum/reagent // not all types of booze are under ethanol for some reason...
 	excludefromjob = list("Bartender", "Chef","Botanist")
-	antag_types = list("traitor","Changeling","Wizard","Space Ninja") // all factions respect the booze run
+	antag_types = list("Wizard","Space Ninja") // all factions respect the booze run
 
 datum/objective_item/steal/reagent/unique/booze/check_reagent(var/datum/reagent/R)
 	var/static/list/other_alcohols = list(/datum/reagent/atomicbomb,/datum/reagent/gargle_blaster,/datum/reagent/neurotoxin,/datum/reagent/hippies_delight)
@@ -298,13 +312,16 @@ datum/objective_item/steal/reagent/unique/booze/check_reagent(var/datum/reagent/
 // to keep the excludefromjob list intact.
 datum/objective_item/cosplay/random
 	name = "Station Head Equipment (Random)"
+	antag_types = list("traitor","Changeling","Wizard","Space Ninja")
+	excludefromjob = list("Captain","Head of Personnel", "Head of Security","Chief Engineer","Research Director","Chief Medical Officer")
+
 datum/objective_item/cosplay/random
 	add_objective()
 		return new /datum/objective_item/cosplay()
 
 datum/objective_item/cosplay // yeah you heard me, you know what they're doing with these things.  Mmm, yeah.  Shake it, Chief.
 	excludefromjob = list("Captain","Head of Personnel", "Head of Security","Chief Engineer","Research Director","Chief Medical Officer")
-	antag_types = list("traitor","Changeling","Wizard") // Space Ninjas practice panty raids so often it's not even worth sending someone
+	antag_types = list()
 	difficulty = 9
 	var/list/jumpsuit_paths = list(/obj/item/clothing/under/rank/captain,/obj/item/clothing/under/rank/head_of_personnel,/obj/item/clothing/under/rank/head_of_security,/obj/item/clothing/under/rank/chief_engineer,/obj/item/clothing/under/rank/research_director,/obj/item/clothing/under/rank/chief_medical_officer)
 	var/list/pda_paths = list(/obj/item/weapon/cartridge/captain,/obj/item/weapon/cartridge/hop,/obj/item/weapon/cartridge/hos,/obj/item/weapon/cartridge/ce,/obj/item/weapon/cartridge/rd,/obj/item/weapon/cartridge/cmo)
@@ -365,7 +382,8 @@ datum/objective_item/cosplay/stamp/rd/force_job = 5
 datum/objective_item/cosplay/stamp/cmo/force_job = 6
 //Old ninja objectives.
 datum/objective_item/special
-	antag_types = list("Space Ninja")
+	antag_types = list()
+
 datum/objective_item/special/pinpointer
 	name = "the captain's pinpointer"
 	targetitem = /obj/item/weapon/pinpointer
@@ -376,38 +394,44 @@ datum/objective_item/special/aegun
 	name = "an advanced energy gun"
 	targetitem = /obj/item/weapon/gun/energy/gun/nuclear
 	difficulty = 10
+	antag_types = list("Space Ninja")
 
 datum/objective_item/special/ddrill
 	name = "a diamond drill"
 	targetitem = /obj/item/weapon/pickaxe/diamonddrill
 	difficulty = 10
+	antag_types = list("Space Ninja")
 
 datum/objective_item/special/boh
 	name = "a bag of holding"
 	targetitem = /obj/item/weapon/storage/backpack/holding
 	difficulty = 10
+	antag_types = list("Space Ninja")
 
 datum/objective_item/special/hypercell
 	name = "a hyper-capacity cell"
 	targetitem = /obj/item/weapon/stock_parts/cell/hyper
 	difficulty = 5
+	antag_types = list("Space Ninja")
 
 datum/objective_item/special/laserpointer
 	name = "a laser pointer"
 	targetitem = /obj/item/device/laser_pointer
 	difficulty = 5
+	antag_types = list("Space Ninja")
 
 datum/objective_item/special/telecomhub
 	name =  "a telecom hub circuit board"
 	targetitem = /obj/item/weapon/circuitboard/telecomms/hub
 	difficulty = 15
+	antag_types = list("Space Ninja")
 
 //Stack objectives get their own subtype
 datum/objective_item/stack
 	name = "5 cardboards"
 	targetitem = /obj/item/stack/sheet/cardboard
 	difficulty = 9001
-	antag_types = list("Space Ninja")
+	antag_types = list()
 
 datum/objective_item/stack/check_special_completion(var/obj/item/stack/S)
 	var/target_amount = text2num(name)
@@ -421,13 +445,16 @@ datum/objective_item/stack/diamond
 	name = "10 diamonds"
 	targetitem = /obj/item/stack/sheet/mineral/diamond
 	difficulty = 10
+	antag_types = list("Space Ninja")
 
 datum/objective_item/stack/gold
 	name = "50 gold bars"
 	targetitem = /obj/item/stack/sheet/mineral/gold
 	difficulty = 15
+	antag_types = list("Space Ninja")
 
 datum/objective_item/stack/uranium
 	name = "25 refined uranium bars"
 	targetitem = /obj/item/stack/sheet/mineral/uranium
 	difficulty = 10
+	antag_types = list("Space Ninja")
