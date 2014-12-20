@@ -283,7 +283,7 @@ datum/objective/steal/find_target()
 		return set_target(pick(possible_items))
 	var/list/loot = possible_items.Copy()
 	var/i=1
-	while(i<loot.len)
+	while(i<=loot.len) //otherwise would skip checking the last item. The list is 1 indexed, not 0 indexed, so this shouldn't cause problems.
 		var/datum/objective_item/item = loot[i]
 		if(!(owner.special_role in item.antag_types))
 			loot.Cut(i,i+1)
@@ -292,6 +292,7 @@ datum/objective/steal/find_target()
 			loot.Cut(i,i+1)
 			continue
 		i++
+
 	var/datum/objective_item/item = pick(loot)
 	var/trial_limit = 5
 	while(--trial_limit && item.find_duplicate(owner) && loot.len)
