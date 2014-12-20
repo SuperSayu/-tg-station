@@ -286,8 +286,18 @@
 		var/mob/last = get_mob_by_ckey(nadeassembly.fingerprintslast)
 		var/turf/T = get_turf(src)
 		var/area/A = get_area(T)
-		message_admins("grenade primed by an assembly, attached by [M.key]/[M]<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>(?)</A> and last touched by [last.key]/[last]<A HREF='?_src_=holder;adminmoreinfo=\ref[last]'>(?)</A> ([nadeassembly.a_left.name] and [nadeassembly.a_right.name]) at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[A.name] (JMP)</a>.")
-		log_game("grenade primed by an assembly, attached by [M.key]/[M] and last touched by [last.key]/[last] ([nadeassembly.a_left.name] and [nadeassembly.a_right.name]) at [A.name] ([T.x], [T.y], [T.z])")
+		var/attacher_spiel = " (spawned)"
+		var/attacher_admin_spiel = ""
+		var/last_spiel = " (none)"
+		var/last_admin_spiel = ""
+		if(M)
+			attacher_spiel = ", attached by [M.key]/[M]"
+			attacher_admin_spiel = "<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>(?)</A>"
+		if(last)
+			last_spiel = "[last.key]/[last]"
+			last_admin_spiel = "<A HREF='?_src_=holder;adminmoreinfo=\ref[last]'>(?)</A>"
+		message_admins("grenade primed by an assembly[attacher_spiel][attacher_admin_spiel] and last touched by [last_spiel][last_admin_spiel] ([nadeassembly.a_left.name] and [nadeassembly.a_right.name]) at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[A.name] (JMP)</a>.")
+		log_game("grenade primed by an assembly[attacher_spiel] and last touched by [last_spiel] ([nadeassembly.a_left.name] and [nadeassembly.a_right.name]) at [A.name] ([T.x], [T.y], [T.z])")
 
 	playsound(loc, 'sound/effects/bamf.ogg', 50, 1)
 
@@ -329,6 +339,8 @@
 		nadeassembly.update_icon()
 		stage = READY
 		update_icon()
+	else
+		CRASH("chem grenade CreateDefaultTrigger(): not an assembly: [typekey]")
 
 //Large chem grenades accept slime cores and use the appropriately.
 /obj/item/weapon/grenade/chem_grenade/large
