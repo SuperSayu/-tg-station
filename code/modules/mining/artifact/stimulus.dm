@@ -25,7 +25,7 @@ obj/item/artifact/proc/set_stim()
 			if(A_RADS)
 				extra3 = rand(1,10)
 			if(A_HEAT)
-				extra3 = rand(PLASMA_MINIMUM_BURN_TEMPERATURE,PLASMA_UPPER_TEMPERATURE)
+				extra3 = 300
 			if(A_EXPLODE)
 				extra3 = rand(1,3)
 
