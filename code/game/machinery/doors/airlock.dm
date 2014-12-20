@@ -204,6 +204,13 @@
 /obj/machinery/door/airlock/uranium/proc/radiate()
 	for(var/mob/living/L in range (3,src))
 		L.apply_effect(15,IRRADIATE,0)
+	for(var/obj/item/artifact/A in range(3,src)) // This is terrible
+		if(!A.raddelay)
+			A.raddelay = 1
+			if(!A.checkfail(2))
+				A.activate()
+			spawn(50)
+				A.raddelay = 0
 	return
 
 /obj/machinery/door/airlock/plasma

@@ -1,3 +1,5 @@
+var/global/list/global_wormholes = list()
+
 /datum/round_event_control/wormholes
 	name 			= "Wormholes"
 	typepath 		= /datum/round_event/wormholes
@@ -48,6 +50,10 @@
 	desc = "It looks highly unstable; It could close at any moment."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "anom"
+
+/obj/effect/portal/wormhole/New()
+	..()
+	global_wormholes += src
 
 /obj/effect/portal/wormhole/attack_hand(mob/user)
 	teleport(user)

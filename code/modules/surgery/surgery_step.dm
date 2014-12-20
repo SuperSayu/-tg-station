@@ -16,7 +16,12 @@
 	if(accept_any_item)
 		if(tool && tool_check(user, tool))
 			success = 1
-	else
+	else if(istype(tool,/obj/item/artifact))
+		var/obj/item/artifact/A = tool
+		if(A.power == A_SURGERY)
+			success = 1
+
+	if(!success)
 		for(var/path in implements)
 			if(istype(tool, path))
 				implement_type = path

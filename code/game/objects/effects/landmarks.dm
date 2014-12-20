@@ -1,3 +1,5 @@
+var/global/xartnum = 0 // Extra artifact number. Used to prevent too many extra artifacts from spawning.
+
 /obj/effect/landmark
 	name = "landmark"
 	icon = 'icons/mob/screen_gen.dmi'
@@ -80,8 +82,15 @@
 	..()
 	tag = "start*[name]"
 	invisibility = 101
-
 	return 1
+
+/obj/effect/landmark/artifact/New()
+	..()
+	if(prob(50)-(xartnum*8))
+		new /obj/item/artifact(loc)
+		xartnum++
+	qdel(src)
+	return
 
 //Costume spawner landmarks
 

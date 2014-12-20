@@ -66,8 +66,8 @@ proc/make_mining_asteroid_secret(var/monolith = 0)
 		floortypes = list(/turf/simulated/floor/engine/cult)
 		treasureitems = list(/obj/structure/monolith=1)
 		fluffitems = list(/obj/effect/decal/remains/xeno=1,/obj/effect/decal/cleanable/xenoblood=3)
-		x_size = rand(5,7)
-		y_size = rand(5,7)
+		x_size = 5
+		y_size = 5
 	else
 		switch(pick(possiblethemes))//what kind of room is this gonna be?
 			if("organharvest")
@@ -229,10 +229,13 @@ proc/make_mining_asteroid_secret(var/monolith = 0)
 		T = pick(emptyturfs)
 		if(T)
 			new /obj/effect/glowshroom/single(T) //Just to make it a little more visible
-			var/surprise = null
+			var/atom/surprise = null
 			surprise = pickweight(treasureitems)
-			new surprise(T)//here's the prize
+			var/atom/created = new surprise(T)//here's the prize
 			emptyturfs -= T
+			if(monolith)
+				var/obj/structure/monolith/M = created
+				M.make_artifact() // Here's your artifact!
 
 			while(areapoints >= 10)//lets throw in the fluff items
 				T = pick(emptyturfs)

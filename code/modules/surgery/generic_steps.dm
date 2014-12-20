@@ -53,6 +53,10 @@
 		var/obj/item/weapon/match/M = tool
 		if(M.lit)	return 1
 
+	else if(istype(tool, /obj/item/artifact))
+		var/obj/item/artifact/A = tool
+		if(A.power == A_SURGERY)	return 1
+
 	return 0
 
 

@@ -28,7 +28,31 @@
 	else
 		user.visible_message("<span class ='notice'>[user] looks for [target]'s [parse_zone(user.zone_sel.selecting)].</span>")
 
+/datum/surgery_step/add_limb/try_op(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
+	// So you can't augment someone with a surgery artifact.
+	var/success = 0
+	if(accept_hand)
+		if(!tool)
+			success = 1
+	if(accept_any_item)
+		if(tool && tool_check(user, tool))
+			success = 1
+	else
+		for(var/path in implements)
+			if(istype(tool, path))
+				implement_type = path
+				if(tool_check(user, tool))
+					success = 1
 
+	if(success)
+		if(target_zone == surgery.location)
+			if(get_location_accessible(target, target_zone))
+				initiate(user, target, target_zone, tool, surgery)
+				return 1
+			else
+				user << "<span class='notice'>You need to expose [target]'s [target_zone] to perform surgery on it!</span>"
+				return 1
+	return 0
 
 //ACTUAL SURGERIES
 
