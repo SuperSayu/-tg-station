@@ -81,9 +81,6 @@
 		//Random events (vomiting etc)
 		handle_random_events()
 
-		// Broken bones
-		handle_bones()
-
 	//Handle temperature/pressure differences between body and environment
 	handle_environment(environment)
 
@@ -747,8 +744,7 @@
 	proc/handle_changeling()
 		if(mind && mind.changeling)
 			mind.changeling.regenerate()
-
-	proc/handle_bones()
+	/*
 		if("chest" in broken)
 			if(prob(65))
 				adjustStaminaLoss(2)
@@ -758,9 +754,7 @@
 				//adjustBruteLoss(2)
 			if(prob(25))
 				adjustStaminaLoss(2)
-		//if(dna && (dna.mutantrace == "slime" || dna.mutantrace == "plant"))
-			// ugly hack to stop slimepeople and plantpeople from breaking their nonexistant bones
-			//broken = list()
+	*/
 
 #undef HUMAN_MAX_OXYLOSS
 #undef HUMAN_CRIT_MAX_OXYLOSS

@@ -279,13 +279,18 @@
 	ExtinguishMob()
 	fire_stacks = 0
 	suiciding = 0
-	broken = list()
 	if(iscarbon(src))
 		var/mob/living/carbon/C = src
 		C.handcuffed = initial(C.handcuffed)
 		if(C.reagents)
 			for(var/datum/reagent/R in C.reagents.reagent_list)
 				C.reagents.clear_reagents()
+
+	if(ishuman(src))
+		var/mob/living/carbon/human/C = src
+		for(var/obj/item/organ/limb/L in C.organs)
+			L.bone_mend()
+
 	for(var/datum/disease/D in viruses)
 		D.cure(0)
 	if(stat == 2)

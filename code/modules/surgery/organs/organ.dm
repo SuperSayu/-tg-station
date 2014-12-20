@@ -45,8 +45,9 @@
 	var/burn_dam = 0
 	var/max_damage = 0
 	var/status = ORGAN_ORGANIC
-
-
+	var/bone_status = BONE_INTACT //needed its own flag variable, otherwise it would have wrought havoc with most checks
+	var/bone_name = "bone"
+	var/break_chance_multiplier = 1.5 //buff the weight class of the attacking item a bit
 
 /obj/item/organ/limb/chest
 	name = "chest"
@@ -54,7 +55,8 @@
 	icon_state = "chest"
 	max_damage = 200
 	body_part = CHEST
-
+	bone_name = "rib"
+	break_chance_multiplier = 0.5
 
 /obj/item/organ/limb/head
 	name = "head"
@@ -62,7 +64,8 @@
 	icon_state = "head"
 	max_damage = 200
 	body_part = HEAD
-
+	bone_name = "skull"
+	break_chance_multiplier = 0.25
 
 /obj/item/organ/limb/l_arm
 	name = "l_arm"
@@ -70,6 +73,7 @@
 	icon_state = "l_arm"
 	max_damage = 75
 	body_part = ARM_LEFT
+	bone_name = "left arm"
 
 
 /obj/item/organ/limb/l_leg
@@ -78,6 +82,7 @@
 	icon_state = "l_leg"
 	max_damage = 75
 	body_part = LEG_LEFT
+	bone_name = "left leg"
 
 
 /obj/item/organ/limb/r_arm
@@ -86,6 +91,7 @@
 	icon_state = "r_arm"
 	max_damage = 75
 	body_part = ARM_RIGHT
+	bone_name = "right arm"
 
 
 /obj/item/organ/limb/r_leg
@@ -94,6 +100,7 @@
 	icon_state = "r_leg"
 	max_damage = 75
 	body_part = LEG_RIGHT
+	bone_name = "right leg"
 
 
 
@@ -179,4 +186,68 @@
 		if("head")		return "head"
 		else			return name
 
+/obj/item/organ/limb/proc/bone_break(var/break_chance = 0)
+	if(!owner || status != ORGAN_ORGANIC || bone_status != BONE_INTACT || !prob(break_chance * break_chance_multiplier))
+		return 0
 
+	playsound(owner.loc, 'sound/weapons/pierce.ogg', 50)
+	var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
+	owner.visible_message("<span class='danger'>[owner]'s [bone_name] breaks with a [breaknoise]!</span>", "<span class='userdanger'>Your [bone_name] breaks with a [breaknoise]!</span>")
+	bone_status = BONE_BROKEN
+	return 1
+
+/obj/item/organ/limb/proc/bone_mend(var/show_message = 0)
+	if(!owner || status != ORGAN_ORGANIC || bone_status != BONE_BROKEN)
+		return 0
+
+	if(show_message) //to avoid spam during very rapid healing
+		var/display = getDisplayName()
+		owner << "<span class='notice'>You feel your broken [display] mend...</span>"
+	bone_status = BONE_INTACT
+	return 1
+
+/obj/item/organ/limb/proc/bone_agony()
+	if(!owner || status != ORGAN_ORGANIC || bone_status != BONE_BROKEN)
+		return 0
+
+	var/display = getDisplayName()
+	owner << "<span class='userdanger'>Pain shoots up your [display]!</span>"
+
+	if(ishuman(owner)) //isType ;-;
+		var/mob/living/carbon/human/M = owner
+		M.adjustStaminaLoss(15)
+
+
+	playsound(owner.loc, 'sound/weapons/pierce.ogg', 25)
+
+	return 1
+
+/obj/item/organ/limb/chest/bone_agony()
+	if(!owner || status != ORGAN_ORGANIC || bone_status != BONE_BROKEN)
+		return 0
+
+	owner << "<span class='userdanger'>Your lungs hurt.</span>"
+
+	if(ishuman(owner)) //isType ;-;
+		var/mob/living/carbon/human/M = owner
+		M.adjustStaminaLoss(15)
+		M.adjustOxyLoss(15)
+
+	playsound(owner.loc, 'sound/weapons/pierce.ogg', 25)
+
+	return 1
+
+/obj/item/organ/limb/head/bone_agony()
+	if(!owner || status != ORGAN_ORGANIC || bone_status != BONE_BROKEN)
+		return 0
+
+	owner << "<span class='userdanger'>Your feel concussed.</span>"
+
+	if(ishuman(owner)) //isType ;-;
+		var/mob/living/carbon/human/M = owner
+		M.adjustStaminaLoss(15)
+		M.adjustBrainLoss(1)
+
+	playsound(owner.loc, 'sound/weapons/pierce.ogg', 25)
+
+	return 1

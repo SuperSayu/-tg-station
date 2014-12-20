@@ -287,6 +287,7 @@
 	hair_alpha = 165
 	hair_luminosity = -75
 	ignored_by = list(/mob/living/carbon/slime)
+	bone_chance_adjust = 0
 
 /datum/species/slime/spec_life(mob/living/carbon/human/H)
 	if ((HULK in H.mutations))
@@ -311,6 +312,7 @@
 	hair_color = "mutcolor"
 	hair_alpha = 195
 	hair_luminosity = -75
+	bone_chance_adjust = 1.2
 
 	// COLD DAMAGE LEVEL ONE: 0.9 (+0.4)
 	// COLD DAMAGE LEVEL TWO: 2.7 (+1.2)
@@ -336,25 +338,10 @@
 	if(H.getCloneLoss()) // clone loss is slowly regenerated
 		H.adjustCloneLoss(-0.2)
 
-/datum/species/jelly/spec_break_bone(var/mob/living/carbon/human/target, var/obj/item/organ/limb/affecting, var/break_prob)
-	// bones break easier, slightly
-	break_prob *= 1.4
-	if(affecting.status != ORGAN_ORGANIC || !prob(break_prob)) return 0
-	var/hit_area = parse_zone(affecting.name)
-	if(target.broken.len && (hit_area in target.broken)) return 0
-	target.broken += hit_area
-	var/hit_desc
-	if(hit_area == "head")
-		hit_desc = "skull breaks"
-	else if(hit_area == "chest")
-		hit_desc = "ribs break"
-	else
-		hit_desc = "[hit_area] breaks"
-
-	playsound(target, 'sound/weapons/pierce.ogg', 50)
-	var/breaknoise = pick("snap","crack","pop","crick","snick","click","crock","clack","crunch","snak")
-	target.visible_message("<span class='danger'>[target]'s [hit_desc] with a [breaknoise]!</span>", "<span class='userdanger'>Your [hit_desc] with a [breaknoise]!</span>")
-	return 1
+/datum/species/jelly/spec_break_bone(var/obj/item/organ/limb/affecting, var/break_prob)
+	if(affecting.bone_break(break_prob * bone_chance_adjust))
+		return 1
+	return 0
 
 /*
  AXOLOTL PEOPLE -- WIP IN PROGRESS
@@ -394,6 +381,7 @@
 	punchmod = 5
 	no_equip = list(slot_wear_mask, slot_wear_suit, slot_gloves, slot_shoes, slot_head, slot_w_uniform)
 	nojumpsuit = 1
+	bone_chance_adjust = 0
 
 /*
  ADAMANTINE GOLEMS

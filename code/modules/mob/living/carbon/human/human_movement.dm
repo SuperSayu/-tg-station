@@ -2,14 +2,28 @@
 	if(dna)
 		. += dna.species.movement_delay(src)
 
-	if(!numbness)
-		. += broken.len
-
 	return (. + config.human_delay)
 
 /mob/living/carbon/human/var/last_break = 0
 /mob/living/carbon/human/Move()
+
+	if(prob(2) && !numbness && !last_break)
+		var/list/broken_limbs = list()
+
+		for(var/obj/item/organ/limb/L in organs)
+			if(L.bone_status == BONE_BROKEN) //BONE_BROKEN is supposed to exclude nonorganic bones but have to be sure
+				broken_limbs += L
+
+		if(broken_limbs && broken_limbs.len > 0)
+			var/obj/item/organ/limb/picked_bone = pick(broken_limbs)
+
+			if(picked_bone.bone_agony())
+				last_break = 1
+				spawn(50)
+					last_break = 0
+
 	// ugh this looks so ugly
+	/*
 	if(prob(2) && !numbness && broken.len && !last_break && has_gravity(src))
 		spawn()
 			var/list/affected = broken&list("left leg","right leg","chest")
@@ -21,6 +35,7 @@
 				last_break = 1
 				spawn(50)
 					last_break = 0
+	*/
 	..()
 
 /mob/living/carbon/human/Process_Spacemove(var/check_drift = 0)

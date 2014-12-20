@@ -1,9 +1,5 @@
 
 /mob/living
-	// broken bones
-	// note: these are only here to avoid rewriting a lot of code
-	// these only do stuff if you are a human
-	var/list/broken = list()
 
 /mob/living/proc/run_armor_check(def_zone = null, attack_flag = "melee", absorb_text = null, soften_text = null)
 	var/armor = getarmor(def_zone, attack_flag)
