@@ -9,7 +9,7 @@
 	desc = "It flickers in and out of reality, warping the mind."
 	icon = 'icons/mob/animal.dmi'
 	icon_state = "forgotten"
-	alpha = 50
+	alpha = 30
 	maxHealth = 20
 	health = 20
 	emote_hear = list("moans","wails","whispers")
@@ -23,17 +23,19 @@
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
 	faction = "cult"
 
-/mob/living/simple_animal/hostile/retaliate/shadow/New()
-	..()
+/mob/living/simple_animal/hostile/retaliate/shadow/proc/creation(var/lifespan = 1500)
 	visible_message("<span class='warning'>A shadow appears.</span>")
-	spawn(1500)
+	spawn(lifespan)
 		visible_message("<span class='warning'>The shadow fades away.</span>")
 		qdel(src)
 
 /mob/living/simple_animal/hostile/retaliate/shadow/Life()
 	..()
-	for(var/mob/living/carbon/human/H in range(3,src))
-		H.adjustBrainLoss(rand(0.5,1))
+	for(var/mob/living/carbon/human/H in range(2,src))
+		if(prob(20))
+			H.hallucination += rand(10,20)
+			if(prob(55))
+				H << "<span class='warning'>You feel a trickle of insanity...</span>"
 
 ///////////
 // LIGHT //
@@ -43,6 +45,8 @@
 	name = "dancing lights"
 	desc = "So bright, so ethereal."
 	density = 0
+	layer = 5 // Over everything
+	alpha = 125 // Semi-transparent
 	icon = 'icons/obj/projectiles.dmi'
 	icon_state ="ice_1"
 	pass_flags = PASSGLASS | PASSGRILLE
@@ -60,9 +64,7 @@
 	if(!target)
 		qdel(src)
 	else
-		x = target.x
-		y = target.y
-		z = target.z
+		walk_towards(src, target, 0)
 
 /obj/effect/artlight/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
 	return 1
@@ -308,6 +310,27 @@
 
 	log_admin("[key_name(usr)] rerolled all artifacts.")
 	message_admins("[key_name_admin(usr)] rerolled all artifacts.)", 1)
+
+///////////////
+// ACTIVATOR //
+///////////////
+
+// For admin purposes
+
+/obj/item/device/activator
+	name = "activator"
+	desc = "It broadcasts a frequency that activates artifacts."
+	icon_state = "atmos"
+	item_state = "analyzer"
+	w_class = 2.0
+	flags = CONDUCT
+	slot_flags = SLOT_BELT
+	throwforce = 0
+	throw_speed = 3
+	throw_range = 7
+	m_amt = 30
+	g_amt = 20
+	origin_tech = "magnets=1;engineering=1"
 
 ///////////////
 // GUN STUFF //

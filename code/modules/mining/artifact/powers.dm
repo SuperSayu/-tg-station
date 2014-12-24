@@ -8,9 +8,13 @@
 		if(A_PUSH)
 			prefix = pick("swirling","humming","vibrating","breathing")
 			extra1 = rand(3,9)
+			if(usetype == A_CLICK)
+				max_cooldown = rand(1,3)*10
 		if(A_PULL)
 			prefix = pick("swirling","humming","vibrating","breathing")
 			extra1 = rand(3,9)
+			if(usetype == A_CLICK)
+				max_cooldown = rand(1,3)*10
 		if(A_SLEEP)
 			prefix = pick("humming","relaxing","waving","rippling","gentle")
 			extra1 = rand(1,4)
@@ -56,7 +60,11 @@
 		if(A_NIGHTMARE)
 			prefix = pick("whispering","dark","shadowy","swirling","humming")
 			extra1 = rand(2,5)
-			max_cooldown = (extra1*100)/2
+			extra2 = rand(10,30)
+			if(usetype == A_CONSTANT)
+				max_cooldown = extra2*10
+			else
+				max_cooldown = extra2*30
 		if(A_MUTATE)
 			prefix = pick("glowing","radioactive","flashing","oozing")
 			extra1 = rand(2,4)
@@ -72,12 +80,14 @@
 			max_cooldown = extra1*10
 		if(A_DETECT)
 			prefix = pick("spinning","humming","moving","sliding","crackling")
+			max_cooldown = rand(1,3)*10
 			sound_override = 1
 		if(A_BLINK)
 			prefix = pick("sparking","flickering","flashing","moving","electric","crackling")
 			extra1 = rand(1,8)
 			extra2 = rand(1,8)
 			max_cooldown = rand(2,5)*10
+			usetype = A_CLICK
 		if(A_PHASE)
 			prefix = pick("flickering","see-through","glassy","reflective","shiny","flashing")
 			extra1 = rand(3,9)*100
@@ -125,11 +135,12 @@
 			reverse = 1 // It will glow when it's reflective!
 		if(A_LOCATE)
 			prefix = pick("spinning","humming","moving","sliding","crackling")
+			max_cooldown = rand(1,3)*10
 			sound_override = 1
 		if(A_FORCEWALL)
 			prefix = pick("glassy","shiny","reflective","hardened")
-			extra1 = rand(5,15)
-			max_cooldown = (extra1*10)*1.5
+			extra1 = rand(5,15)*10
+			max_cooldown = (extra1*10)*0.5
 		if(A_BREATH)
 			prefix = pick("breathing","pulsating","rippling","glowing","old")
 			extra1 = rand(6,18)*100
@@ -178,6 +189,7 @@
 			prefix = pick("vampiric","old","dissolving","whispering","shadowy")
 			extra1 = rand(10,25)
 			max_cooldown = extra1*10
+			usetype = A_ATTACK
 		if(A_BLOB)
 			prefix = pick("oozing","gooey","breathing","pulsating","dissolving")
 			extra1 = rand(12,24)*100
@@ -217,11 +229,13 @@
 			extra1 = rand(4,20) // This is added to the force of the hit, for cooldown reasons
 			extra2 = rand(1,4)
 			max_cooldown = extra1*2
+			usetype = A_ATTACK
 		//if(A_GUN)
 		//if(A_MAGICPROJ)
 		if(A_TRAVEL)
 			prefix = pick("moving","glassy","see-through","reflective","swirling")
 			max_cooldown = rand(1,3)*10 // Don't screw people over too hard
+			usetype = A_CLICK
 		if(A_REVIVE)
 			prefix = "protective"
 
@@ -249,7 +263,7 @@
 		// BULKY POWER
 		if(A_SHIELD)
 			// EXTRA 1: Length of forcewall
-			for(var/turf/T in orange(1,artloc))
+			for(var/turf/T in orange(1,targtile))
 				new /obj/effect/spelleffect/forcewall(T,null,extra1)
 			artloc.visible_message("<span class='notice'>\The [src] generates a forcefield!</span>")
 		if(A_PUSH)
@@ -277,22 +291,47 @@
 		if(A_HEAL)
 			// EXTRA 1: Amount of healing
 			// EXTRA 2: Damage type that is healed
-			for(var/mob/living/carbon/human/H in range(3,targtile))
+			var/msg_chance = 100
+			if(usetype == A_CONSTANT)
+				msg_chance = 10
+			if(usetype != A_ATTACK)
+				for(var/mob/living/carbon/human/H in range(3,targtile))
+					switch(extra2)
+						if(1)
+							H.adjustBruteLoss(-extra1)
+							if(prob(msg_chance))
+								H << "<span class='notice'>You feel soothed and refreshed.</span>"
+						if(2)
+							H.adjustFireLoss(-extra1)
+							if(prob(msg_chance))
+								H << "<span class='notice'>You feel cool to the touch.</span>"
+						if(3)
+							H.adjustToxLoss(-extra1)
+							if(prob(msg_chance))
+								H << "<span class='notice'>You feel your stomach settle.</span>"
+			else
+				var/mob/living/carbon/human/H = target
 				switch(extra2)
 					if(1)
 						H.adjustBruteLoss(-extra1)
+						if(prob(msg_chance))
+							H << "<span class='notice'>You feel soothed and refreshed.</span>"
 					if(2)
 						H.adjustFireLoss(-extra1)
+						if(prob(msg_chance))
+							H << "<span class='notice'>You feel cool to the touch.</span>"
 					if(3)
 						H.adjustToxLoss(-extra1)
+						if(prob(msg_chance))
+							H << "<span class='notice'>You feel your stomach settle.</span>"
 		if(A_SEAL)
 			// EXTRA 1: Effect range
 			var/num = 0
-			for(var/turf/T in range(extra1,artloc))
+			for(var/turf/T in range(extra1,targtile))
 				if(istype(T,/turf/space))
 					new /turf/simulated/floor/plating(T)
 					num++
-			for(var/turf/T in range(extra1*1.5,artloc))
+			for(var/turf/T in range(extra1*1.5,targtile))
 				T.oxygen = 22
 			if(num > 0)
 				visible_message("<span class='notice'>The floor under \the [src] suddenly expands!</span>")
@@ -307,11 +346,11 @@
 					qdel(src)
 		if(A_SLIME)
 			// EXTRA 1: Effect range
-			for(var/mob/living/carbon/human/H in orange(extra1,artloc))
+			for(var/mob/living/carbon/human/H in orange(extra1,targtile))
 				H.contract_disease(new /datum/disease/transformation/slime(0),1)
 		if(A_FIRE)
 			// EXTRA 1: Fire power
-			if(istype(artloc,/turf/simulated))
+			if(istype(targtile,/turf/simulated))
 				var/turf/simulated/S = targtile
 				S.atmos_spawn_air(SPAWN_HEAT | SPAWN_TOXINS, extra1*10)
 		if(A_PARTY) // Doesn't work for some reason?
@@ -341,20 +380,22 @@
 				var/turf/T = get_turf(H)
 				qdel(H)
 				T.temperature = T20C
+			for(var/mob/living/carbon/C in range(extra1,targtile))
+				C.fire_stacks = 0
+				C.ExtinguishMob()
+				C.bodytemperature = T20C
 		if(A_NIGHTMARE)
 			// EXTRA 1: Effect range
 			// EXTRA 2: Effect power
 			for(var/mob/living/carbon/human/H in range(extra1,artloc))
 				if(usetype == A_CONSTANT)
 					H.hallucination += extra2
-					H.adjustBrainLoss(extra2)
-					if(prob(5))
-						H << "<span class='warning'>You feel a trickle of insanity.</span>"
+					if(prob(50))
+						H << "<span class='warning'>You feel a trickle of insanity...</span>"
 				else
-					H.hallucination += extra2*10
-					H.adjustBrainLoss(extra2*50)
-					if(prob(25))
-						H << "<span class='warning'>You feel a trickle of insanity.</span>"
+					H.hallucination += extra2*2
+					if(prob(85))
+						H << "<span class='warning'>You feel a trickle of insanity...</span>"
 			var/snum = 0
 			while(snum != extra1)
 				var/list/postiles = list()
@@ -362,7 +403,8 @@
 					postiles += S
 				if(postiles.len > 0)
 					targtile = pick(postiles)
-				new /mob/living/simple_animal/hostile/retaliate/shadow(targtile)
+				var/mob/living/simple_animal/hostile/retaliate/shadow/S = new /mob/living/simple_animal/hostile/retaliate/shadow(targtile)
+				S.creation(max_cooldown*0.75)
 				snum++
 		if(A_MUTATE)
 			// EXTRA 1: Effect range
@@ -398,28 +440,36 @@
 			// EXTRA 1: Range of potential wormholes
 			// EXTRA 2: Number of wormholes
 			var/list/pick_turfs = list()
-			for(var/turf/simulated/floor/T in range(extra1,artloc))
+			for(var/turf/simulated/floor/T in range(extra1,targtile))
 				pick_turfs += T
 			while(global_wormholes.len < extra2)
-				var/turf/T = pick(pick_turfs)
-				new /obj/effect/portal/wormhole(T, null, null, -1)
+				if(pick_turfs.len > 0)
+					var/turf/T = pick(pick_turfs)
+					new /obj/effect/portal/wormhole(T, null, null, -1)
+				else
+					break
 			spawn(max_cooldown / 1.20)
 				for(var/obj/effect/portal/wormhole/W in global_wormholes)
 					global_wormholes -= W
 					qdel(W)
 		// TINY POWERS
 		if(A_DETECT)
+			var/detected = 0
 			for(var/obj/item/artifact/A in orange(15,artloc))
-				var/x_dif = (A.x - artloc.x)
-				var/y_dif = (A.y - artloc.y)
-				if((x_dif <= 5 && x_dif >= -5) && (y_dif <= 5 && y_dif >= -5))
-					playsound(artloc, 'sound/machines/chime.ogg', 80, 1)
-				else if((x_dif <= 10 && x_dif >= -10) && (y_dif <= 10 && y_dif >= -10))
-					playsound(artloc, 'sound/machines/ping.ogg', 30, 1)
-				else if((x_dif <= 15 && x_dif >= -15) && (y_dif <= 15 && y_dif >= -15))
-					playsound(artloc, 'sound/machines/ping.ogg', 15, 1)
-				else
-					playsound(artloc, 'sound/machines/ping.ogg', 5, 1)
+				if(!detected)
+					detected = 1
+					var/x_dif = (A.x - artloc.x)
+					var/y_dif = (A.y - artloc.y)
+					if((x_dif <= 5 && x_dif >= -5) && (y_dif <= 5 && y_dif >= -5))
+						playsound(artloc, 'sound/machines/chime.ogg', 100, 0)
+					else if((x_dif <= 10 && x_dif >= -10) && (y_dif <= 10 && y_dif >= -10))
+						playsound(artloc, 'sound/machines/ping.ogg', 100, 0)
+					else if((x_dif <= 15 && x_dif >= -15) && (y_dif <= 15 && y_dif >= -15))
+						playsound(artloc, 'sound/machines/ping.ogg', 50, 0)
+					else
+						playsound(artloc, 'sound/machines/ping.ogg', 10, 0)
+			if(!detected)
+				visible_message("<span class='danger'>\The [src] is silent. It doesn't seem to detect anything nearby.</span>")
 		if(A_BLINK)
 			// EXTRA 1: Max X distance
 			// EXTRA 2: Max Y distance
@@ -456,11 +506,12 @@
 			var/snum = 0
 			while(snum != extra1)
 				var/list/postiles = list()
-				for(var/turf/simulated/S in orange(6,targtile))
+				for(var/turf/simulated/S in range(extra1,targtile))
 					postiles += S
 				if(postiles.len > 0)
 					targtile = pick(postiles)
-				new /mob/living/simple_animal/hostile/retaliate/shadow(targtile)
+				var/mob/living/simple_animal/hostile/retaliate/shadow/S = new /mob/living/simple_animal/hostile/retaliate/shadow(targtile)
+				S.creation(max_cooldown*0.5)
 				snum++
 		if(A_CLOAK)
 			// EXTRA 1: Cloak length
@@ -504,7 +555,7 @@
 			// EXTRA 1: Effect range
 			for(var/obj/effect/decal/cleanable/C in range(extra1,targtile))
 				qdel(C)
-			playsound(artloc, 'sound/effects/bamf.ogg', 50, 1)
+			playsound(targtile, 'sound/effects/bamf.ogg', 50, 1)
 			var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
 			steam.set_up(10, 0, targtile)
 			steam.attach(targtile)
@@ -514,21 +565,24 @@
 			for(var/turf/T in range(extra1,targtile))
 				if(!istype(T, /turf/space))
 					if(prob(60))
-						new /obj/effect/decal/cleanable/dirt(T)
-			playsound(artloc, 'sound/effects/bamf.ogg', 50, 1)
+						if(prob(25))
+							new /obj/effect/decal/cleanable/xenoblood(T)
+						else
+							new /obj/effect/decal/cleanable/dirt(T)
+			playsound(targtile, 'sound/effects/bamf.ogg', 50, 1)
 		if(A_LUBE)
 			// EXTRA 1: Effect range
 			for(var/turf/simulated/T in range(extra1,targtile))
 				if(prob(60))
 					T.MakeSlippery(2)
-			playsound(artloc, 'sound/effects/bamf.ogg', 50, 1)
+			playsound(targtile, 'sound/effects/bamf.ogg', 50, 1)
 			var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
 			steam.set_up(10, 0, targtile)
 			steam.attach(targtile)
 			steam.start()
 		if(A_LIGHT)
 			// EXTRA 1: Light duration
-			artloc.visible_message("<span class='notice'>An orb of light appears.</span>")
+			targtile.visible_message("<span class='notice'>An orb of light appears.</span>")
 			var/obj/effect/artlight/A
 			if(usetype != A_CLICK && usetype != A_CONSTANT)
 				A = new /obj/effect/artlight(targtile,extra1)
@@ -537,7 +591,7 @@
 				else
 					A.target = targtile
 			else
-				A = new /obj/effect/artlight(artloc,extra1)
+				A = new /obj/effect/artlight(targtile,extra1)
 				if(user)
 					A.target = user
 		if(A_RECHARGE)
@@ -553,21 +607,26 @@
 				if(R.cell)
 					R.cell.charge += (R.cell.maxcharge/extra2)
 		if(A_LOCATE) // Lol copypasta
+			var/detected = 0
 			for(var/mob/living/carbon/human/H in orange(15,artloc))
-				var/x_dif = (H.x - artloc.x)
-				var/y_dif = (H.y - artloc.y)
-				if((x_dif <= 5 && x_dif >= -5) && (y_dif <= 5 && y_dif >= -5))
-					playsound(artloc, 'sound/machines/chime.ogg', 80, 1)
-				else if((x_dif <= 10 && x_dif >= -10) && (y_dif <= 10 && y_dif >= -10))
-					playsound(artloc, 'sound/machines/ping.ogg', 30, 1)
-				else if((x_dif <= 15 && x_dif >= -15) && (y_dif <= 15 && y_dif >= -15))
-					playsound(artloc, 'sound/machines/ping.ogg', 15, 1)
-				else
-					playsound(artloc, 'sound/machines/ping.ogg', 5, 1)
+				if(!detected)
+					detected = 1
+					var/x_dif = (H.x - artloc.x)
+					var/y_dif = (H.y - artloc.y)
+					if((x_dif <= 5 && x_dif >= -5) && (y_dif <= 5 && y_dif >= -5))
+						playsound(artloc, 'sound/machines/chime.ogg', 100, 0)
+					else if((x_dif <= 10 && x_dif >= -10) && (y_dif <= 10 && y_dif >= -10))
+						playsound(artloc, 'sound/machines/ping.ogg', 100, 0)
+					else if((x_dif <= 15 && x_dif >= -15) && (y_dif <= 15 && y_dif >= -15))
+						playsound(artloc, 'sound/machines/ping.ogg', 50, 0)
+					else
+						playsound(artloc, 'sound/machines/ping.ogg', 10, 0)
+			if(!detected)
+				visible_message("<span class='danger'>\The [src] is silent. It doesn't seem to detect anything nearby.</span>")
 		if(A_FORCEWALL)
 			// EXTRA 1: Length of forcewall
-			new /obj/effect/spelleffect/forcewall(artloc,null,extra1)
-			artloc.visible_message("<span class='notice'>\The [src] generates a forcewall!</span>")
+			new /obj/effect/spelleffect/forcewall(targtile,null,extra1)
+			targtile.visible_message("<span class='notice'>\The [src] generates a forcewall!</span>")
 		if(A_BREATH)
 			// EXTRA 1: Breath length
 			if(user && ishuman(user))
@@ -582,7 +641,7 @@
 		//if(A_PLANT) -- TODO
 		if(A_ELECTRICS)
 			// EXTRA 1: Effect range
-			for(var/mob/living/carbon/human/H in range(extra1,artloc))
+			for(var/mob/living/carbon/human/H in range(extra1,targtile))
 				var/insulated = 0
 				if(H.gloves)
 					var/obj/item/clothing/gloves/G = H.gloves
@@ -603,7 +662,7 @@
 		if(A_EMPS)
 			// EXTRA 1: Heavy range
 			// EXTRA 2: Light range
-			empulse(artloc,extra1,extra2,0)
+			empulse(targtile,extra1,extra2,0)
 		if(A_REFLECT)
 			// EXTRA 1: Reflect chance
 			// EXTRA 2: Reflect duration
@@ -676,7 +735,7 @@
 					M.gets_drilled()
 		if(A_HONK) // Forgive me father for I have sinned
 			// EXTRA 1: No. This one doesn't even get varied stats. like, forreal. NO.
-			playsound(artloc, 'sound/items/AirHorn.ogg', 100, 1)
+			playsound(targtile, 'sound/items/AirHorn.ogg', 100, 1)
 			for(var/mob/living/carbon/M in ohearers(5, artloc))
 				if(istype(M, /mob/living/carbon/human))
 					var/mob/living/carbon/human/H = M
@@ -706,7 +765,10 @@
 					if(C == user)
 						continue
 					postargs += C
-				target = pick(postargs)
+				if(postargs.len > 0)
+					target = pick(postargs)
+				else
+					target = null
 			if(target)
 				if(ishuman(target) && ishuman(user))
 					var/mob/living/carbon/human/H = target
@@ -731,8 +793,6 @@
 						user2.adjustFireLoss(final_health)
 		if(A_BLOB)
 			// EXTRA 1: Time it takes for the blob node to grow
-			if(!targtile)
-				targtile = artloc
 			new /obj/effect/blobgoo(targtile,extra1)
 		if(A_VIRUS)
 			// EXTRA 1: Range of effect
@@ -821,6 +881,7 @@
 						H.throw_at(throwtarg, 5, 2)
 		if(A_DEMOLISH)
 			// EXTRA 1: Destruction range
+
 			for(var/atom/A in range(extra1,targtile))
 				if(!ishuman(A)) // don't explode humans
 					A.ex_act(2)
@@ -828,6 +889,8 @@
 		if(A_MELEE)
 			// EXTRA 1: Damage
 			// EXTRA 2: Type of damage
+			target.visible_message("<span class='danger'>[target] has been attacked with [src] by [user]!</span>", \
+								 "<span class='userdanger'>[target] has been attacked with [src] by [user]!</span>")
 			if(target)
 				if(istype(target,/mob/living/carbon/human))
 					var/mob/living/carbon/human/H = target
