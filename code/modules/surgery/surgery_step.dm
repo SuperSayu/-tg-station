@@ -6,6 +6,7 @@
 	var/time = 10					//how long does the step take?
 	var/new_organ = null 			//Used for multilocation operations
 	var/list/allowed_organs = list()//Allowed organs, see Handle_Multi_Loc below - RR
+	var/allow_surgery_multitool = 1
 
 
 /datum/surgery_step/proc/try_op(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
@@ -16,7 +17,7 @@
 	if(accept_any_item)
 		if(tool && tool_check(user, tool))
 			success = 1
-	else if(istype(tool,/obj/item/artifact))
+	else if(allow_surgery_multitool && istype(tool,/obj/item/artifact))
 		var/obj/item/artifact/A = tool
 		if(A.power == A_SURGERY)
 			success = 1

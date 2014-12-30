@@ -86,7 +86,7 @@ var/global/xartnum = 0 // Extra artifact number. Used to prevent too many extra 
 
 /obj/effect/landmark/artifact/New()
 	..()
-	if(prob(50)-(xartnum*8))
+	if(prob(max(0,50-(xartnum*8))))
 		new /obj/item/artifact(loc)
 		xartnum++
 	qdel(src)
