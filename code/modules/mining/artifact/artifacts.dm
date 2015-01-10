@@ -160,6 +160,10 @@ var/global/ankh = 0 // only one can spawn
 				if(!checkfail(A_HEAT,1))
 					user << "<span class='notice'>\The [src] appears to react to the heat of \the [WT].</span>"
 					playsound(get_turf(src),'sound/items/welder.ogg',70,1)
+	else if(istype(W,/obj/item/device/activator))
+		if(!activated)
+			stimnum = 1
+			activate()
 	else
 		if(!activated)
 			if(W.force)
@@ -417,16 +421,18 @@ var/global/ankh = 0 // only one can spawn
 			title = "cell"
 
 /obj/item/artifact/proc/update_icons()
-	if(!reverse)
-		if(!density && cooldown == 1)
+	if(!reverse && usetype == A_CONSTANT)
+		icon_state = "[title][on]"
+	else if(!reverse)
+		if(cooldown == 1)
 			icon_state = "[title]0"
 		else
 			icon_state = "[title][on]"
 	else
-		if(cooldown == 1)
+		if(cooldown == 1 && on)
 			icon_state = "[title]1"
 		else
-			icon_state = "[title][on]"
+			icon_state = "[title]0"
 
 /obj/item/artifact/examine()
 	set src in usr
