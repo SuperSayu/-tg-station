@@ -40,8 +40,8 @@
 	else
 		agent_number = antag_candidates.len
 
-	agent_number = min(agent_number , 1+round((n_players)/(nukeop_scaling_coeff))) //up to five, or one for every five crewmembers, whichever is smaller
-
+	if(config.nukeop_scaling_coeff)
+		agent_number = min(agent_number , round((n_players)/(nukeop_scaling_coeff) + 2))
 
 	if(agent_number >= n_players)
 		agent_number = n_players/2

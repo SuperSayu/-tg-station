@@ -113,6 +113,7 @@ SHUTTLE_REFUEL_DELAY 12000
 ## Set to 0 to disable scaling and use default numbers instead.
 TRAITOR_SCALING_COEFF 6
 CHANGELING_SCALING_COEFF 7
+NUKEOP_SCALING_COEFF 11
 
 # The number of objectives traitors get.
 # Not including escaping/hijacking.
