@@ -15,7 +15,6 @@
 	uplink_uses = 10
 
 	var/const/agents_possible = 5 //If we ever need more syndicate agents.
-	var/const/nukeop_scaling_coeff = 11 //how much does the amount of players get divided by to determine operatives. Six players means one operative versus five crewmembers
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 
@@ -41,7 +40,7 @@
 		agent_number = antag_candidates.len
 
 	if(config.nukeop_scaling_coeff)
-		agent_number = min(agent_number , round((n_players)/(nukeop_scaling_coeff) + 2))
+		agent_number = min(agent_number , round((n_players)/(config.nukeop_scaling_coeff) + 2))
 
 	if(agent_number >= n_players)
 		agent_number = n_players/2
