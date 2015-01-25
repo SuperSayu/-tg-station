@@ -346,6 +346,13 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/cloaking_device
 	cost = 9
 
+/datum/uplink_item/stealthy_tools/smugglersatchel
+	name = "Smuggler's Satchel"
+	desc = "This satchel is thin enough to be hidden in the gap between plating and tiling, great for stashing your stolen goods. Comes with a crowbar and a floor tile inside."
+	item = /obj/item/weapon/storage/backpack/satchel_flat
+	cost = 2
+	surplus = 30
+
 // DEVICE AND TOOLS
 
 /datum/uplink_item/device_tools
