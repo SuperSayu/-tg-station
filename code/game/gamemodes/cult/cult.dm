@@ -30,9 +30,6 @@
 	required_enemies = 6
 	recommended_enemies = 6
 
-	uplink_welcome = "Nar-Sie Uplink Console:"
-	uplink_uses = 10
-
 	var/finished = 0
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
