@@ -6,7 +6,9 @@
 				new /obj/item/clothing/under/chameleon(src)
 				new /obj/item/clothing/mask/gas/voice(src)
 				new /obj/item/weapon/card/id/syndicate(src)
+				new /obj/item/weapon/card/id/syndicate(src)
 				new /obj/item/clothing/shoes/syndigaloshes(src)
+				new /obj/item/device/camera_bug(src)
 				return
 
 			if("stealth")
@@ -21,6 +23,7 @@
 				new /obj/item/ammo_box/magazine/m10mm(src)
 				new /obj/item/ammo_box/magazine/m10mm(src)
 				new /obj/item/clothing/under/chameleon(src)
+				new /obj/item/weapon/card/id/syndicate(src)
 				return
 
 			if("screwed")
