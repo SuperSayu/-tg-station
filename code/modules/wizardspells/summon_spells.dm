@@ -300,13 +300,17 @@
 	return 1
 
 /obj/effect/knowspell/summon/world/before_cast(var/mob/caster)
-	targets = list()
-	for(var/mob/living/carbon/human/H in living_mob_list)
-		if(H.stat & DEAD)
-			continue
-		targets += H
-	incant(caster)
-	return 1
+	if(!(src in caster.contents))
+		caster << "<span class='danger'>You must learn this spell before casting it!</span>"
+		return 0
+	else
+		targets = list()
+		for(var/mob/living/carbon/human/H in living_mob_list)
+			if(H.stat & DEAD)
+				continue
+			targets += H
+		incant(caster)
+		return 1
 
 /obj/effect/knowspell/summon/world/cast(var/mob/caster)
 	for(var/atom/A in targets)
@@ -380,7 +384,7 @@
 	rechargable = 0
 	chargemax = 1
 
-	prevent_centcom = 0
+	prevent_centcom = 1
 	require_clothing = 0
 
 	incantation = "DORBL PUPIIZ"
