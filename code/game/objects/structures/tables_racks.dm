@@ -713,7 +713,7 @@ Destroy type values:
 	desc = "A version of the four legged table with multiple layers of metal."
 
 obj/structure/table/MouseDrop_T(mob/target, mob/living/carbon/human/user)
-	if(istype(target) && user == target)
+	if(istype(target) && user == target  && istype(user))
 		if(user.canmove)
 			climb_table(user)
 
@@ -723,7 +723,9 @@ obj/structure/table/MouseDrop_T(mob/target, mob/living/carbon/human/user)
 	"<span class='notice'>[user] starts climbing onto [src].</span>")
 
 	if(do_mob(user, user, 20))
-		user.loc = src.loc
+		user.pass_flags += PASSTABLE
+		step(user,get_dir(user,src.loc))
+		user.pass_flags -= PASSTABLE
 		user.visible_message("<span class='warning'>[user] climbs onto [src].</span>", \
 		"<span class='notice'>[user] climbs onto [src].</span>")
 		add_logs(user, src, "climbed onto")

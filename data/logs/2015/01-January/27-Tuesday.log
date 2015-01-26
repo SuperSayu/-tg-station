@@ -1,0 +1,32 @@
+
+
+Starting up. 00:05.50
+---------------------
+Adding game mode blob (blob) to configuration.
+Adding game mode changeling (changeling) to configuration.
+Adding game mode traitor+changeling (traitorchan) to configuration.
+Adding game mode double agents (double_agents) to configuration.
+Adding game mode traitor (traitor) to configuration.
+Adding game mode cult (cult) to configuration.
+Adding game mode extended (extended) to configuration.
+Adding game mode AI malfunction (malfunction) to configuration.
+Adding game mode meteor (meteor) to configuration.
+Adding game mode nuclear emergency (nuclear) to configuration.
+Adding game mode revolution (revolution) to configuration.
+Adding game mode sandbox (sandbox) to configuration.
+Adding game mode wizard (wizard) to configuration.
+Saved mode is 'traitor'
+[00:05:50]ADMIN: Loading Banlistjob
+[00:05:50]ADMIN: Loading jobban_rank
+[00:05:50]ADMIN: jobban_keylist was empty
+[00:05:50]ADMIN: Loading appearance_rank
+[00:05:50]ADMIN: appearance_keylist was empty
+[00:05:50]ADMIN: Updating jobbanfile!
+[00:05:50]ADMIN: Loading Banlist
+[00:05:52]ACCESS: Login: PLizzard/(PLizzard) from localhost-1886905086 || BYOND v501
+[00:06:24]ADMIN: PLizzard has started the game.
+[00:06:25]GAME: PLizzard (ckey) has been selected as a traitor
+[00:06:26]ACCESS: Logout: *no key*/(PLizzard)
+[00:06:26]ACCESS: Login: PLizzard/(Jeannie Beck) from localhost-1886905086 || BYOND v501
+[00:07:16]EMOTE: monkey (764)/ : <B>The monkey (764)</B> jumps!
+[00:07:16]ACCESS: Logout: PLizzard[DC]/(Jeannie Beck)
