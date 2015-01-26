@@ -134,11 +134,18 @@
 	return
 
 /datum/game_mode/proc/random_traitor_objective(var/datum/mind/traitor)
+
 	if(prob(35))
-		var/datum/objective/assassinate/kill = new
-		kill.owner = traitor
-		kill.find_target()
-		traitor.objectives += kill
+		if(prob(70))
+			var/datum/objective/assassinate/kill = new
+			kill.owner = traitor
+			kill.find_target()
+			traitor.objectives += kill
+		else
+			var/datum/objective/maroon/maroon_objective = new
+			maroon_objective.owner = traitor
+			maroon_objective.find_target()
+			traitor.objectives += maroon_objective
 	else
 		var/datum/objective/steal/steal = new
 		steal.owner = traitor

@@ -106,10 +106,16 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 
 	switch(rand(1,100))
 		if(1 to 70)
-			var/datum/objective/assassinate/kill_objective = new
-			kill_objective.owner = changeling
-			kill_objective.find_target()
-			changeling.objectives += kill_objective
+			if(prob(70))
+				var/datum/objective/assassinate/kill_objective = new
+				kill_objective.owner = changeling
+				kill_objective.find_target()
+				changeling.objectives += kill_objective
+			else
+				var/datum/objective/maroon/maroon_objective = new
+				maroon_objective.owner = changeling
+				maroon_objective.find_target()
+				changeling.objectives += maroon_objective
 		if(71 to 85)
 			var/datum/objective/debrain/debrain_objective = new
 			debrain_objective.owner = changeling

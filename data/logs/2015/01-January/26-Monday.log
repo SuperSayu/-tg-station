@@ -1,0 +1,70 @@
+
+
+Starting up. 00:51.04
+---------------------
+Adding game mode blob (blob) to configuration.
+Adding game mode changeling (changeling) to configuration.
+Adding game mode traitor+changeling (traitorchan) to configuration.
+Adding game mode double agents (double_agents) to configuration.
+Adding game mode traitor (traitor) to configuration.
+Adding game mode cult (cult) to configuration.
+Adding game mode extended (extended) to configuration.
+Adding game mode AI malfunction (malfunction) to configuration.
+Adding game mode meteor (meteor) to configuration.
+Adding game mode nuclear emergency (nuclear) to configuration.
+Adding game mode revolution (revolution) to configuration.
+Adding game mode sandbox (sandbox) to configuration.
+Adding game mode wizard (wizard) to configuration.
+Saved mode is 'traitor'
+[00:51:04]ADMIN: Loading Banlistjob
+[00:51:04]ADMIN: Loading jobban_rank
+[00:51:04]ADMIN: jobban_keylist was empty
+[00:51:04]ADMIN: Loading appearance_rank
+[00:51:04]ADMIN: appearance_keylist was empty
+[00:51:04]ADMIN: Updating jobbanfile!
+[00:51:04]ADMIN: Loading Banlist
+[00:51:06]ACCESS: Login: PLizzard/(PLizzard) from localhost-1886905086 || BYOND v501
+[00:51:19]ACCESS: Logout: PLizzard[DC]/(PLizzard)
+
+
+Starting up. 01:00.27
+---------------------
+Adding game mode blob (blob) to configuration.
+Adding game mode changeling (changeling) to configuration.
+Adding game mode traitor+changeling (traitorchan) to configuration.
+Adding game mode double agents (double_agents) to configuration.
+Adding game mode traitor (traitor) to configuration.
+Adding game mode cult (cult) to configuration.
+Adding game mode extended (extended) to configuration.
+Adding game mode AI malfunction (malfunction) to configuration.
+Adding game mode meteor (meteor) to configuration.
+Adding game mode nuclear emergency (nuclear) to configuration.
+Adding game mode revolution (revolution) to configuration.
+Adding game mode sandbox (sandbox) to configuration.
+Adding game mode wizard (wizard) to configuration.
+Saved mode is 'traitor'
+[01:00:27]ADMIN: Loading Banlistjob
+[01:00:27]ADMIN: Loading jobban_rank
+[01:00:27]ADMIN: jobban_keylist was empty
+[01:00:27]ADMIN: Loading appearance_rank
+[01:00:27]ADMIN: appearance_keylist was empty
+[01:00:27]ADMIN: Updating jobbanfile!
+[01:00:27]ADMIN: Loading Banlist
+[01:00:30]ACCESS: Login: PLizzard/(PLizzard) from localhost-1886905086 || BYOND v501
+[01:01:06]ADMIN: PLizzard has started the game.
+[01:01:07]GAME: PLizzard (ckey) has been selected as a traitor
+[01:01:08]ACCESS: Logout: *no key*/(PLizzard)
+[01:01:08]ACCESS: Login: PLizzard/(Jeannie Beck) from localhost-1886905086 || BYOND v501
+[01:01:09]EMOTE: monkey (376)/ : <B>The monkey (376)</B> jumps!
+[01:01:50]SAY: mouse/ : Squeek?
+[01:01:54]SAY: mouse/ : Squeek!
+[01:02:02]ADMIN: PLizzard/(Jeannie Beck) spawned /mob/living/carbon/human at (148,117,1)
+[01:02:31]EMOTE: monkey (854)/ : <B>The monkey (854)</B> jumps!
+[01:02:42]ADMIN: PLizzard/(Jeannie Beck) assumed direct control of Unknown.
+[01:02:42]ACCESS: Logout: *no key*/(Jeannie Beck)
+[01:02:42]ACCESS: Login: plizzard/(Unknown) from localhost-1886905086 || BYOND v501
+[01:03:11]ADMIN: plizzard/(Unknown) added a new objective for Unknown: Prevent Jeannie Beck, the Chief Medical Officer, from escaping alive.
+[01:03:11]EMOTE: monkey (391)/ : <B>The monkey (391)</B> jumps!
+[01:03:15]SAY: corgi puppy/ : Bark!
+[01:03:33]EMOTE: monkey (376)/ : <B>The monkey (376)</B> jumps!
+[01:03:38]ACCESS: Logout: plizzard[DC]/(Unknown)
