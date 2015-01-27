@@ -226,7 +226,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				if(copy || photocopy)
 					dat += "Fax to which department?<BR><BR>"
 					dat += "<table width='100%'>"
-					for(var/dpt in req_console_assistance)
+					for(var/dpt in req_console_information)		//We're piggybacking on this list because implementing a separate list of faxable consoles would require a lot of refactoring
 						if (dpt != department)
 							dat += "<tr>"
 							dat += "<td width='55%'>[dpt]</td>"
@@ -399,21 +399,21 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 
 	if(href_list["remove"])			//{FAX} Yet another chunk copied from photocopier.dm
 		if(copy)
-			if(!istype(usr,/mob/living/silicon/ai)) //surprised this check didn't exist before, putting stuff in AI's hand is bad
+			if(!istype(usr,/mob/living/silicon/ai)) //ai cannot eject
 				copy.loc = usr.loc
 				usr.put_in_hands(copy)
 			else
 				copy.loc = src.loc
-			usr << "<span class='notice'>You take [copy] out of [src].</span>"
+			usr << "<span class='notice'>You eject [copy] from of [src].</span>"
 			copy = null
 			updateUsrDialog()
 		else if(photocopy)
-			if(!istype(usr,/mob/living/silicon/ai)) //same with this one, wtf
+			if(!istype(usr,/mob/living/silicon/ai)) //ai cannot eject
 				photocopy.loc = usr.loc
 				usr.put_in_hands(photocopy)
 			else
 				photocopy.loc = src.loc
-			usr << "<span class='notice'>You take [photocopy] out of [src].</span>"
+			usr << "<span class='notice'>You eject [photocopy] from [src].</span>"
 			photocopy = null
 			updateUsrDialog()
 
@@ -421,72 +421,73 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 	if(href_list["sendFax"])		//{FAX} obviously, handles sending faxes. Based on "write" handler. Includes watered down photocopier copy code.
 		dpt = ckey(href_list["sendFax"]) //sendFax contains the string of the receiving department's name
 
-		//Skip the server for now. Fax is point-to-point
-		/*
-		//Confirm a server can relay the request (borrowed from "department" above
+		//Figure out what to log
+		var/loggable = "Fax transmission"
+		if (copy)
+			loggable = copy.info
+		if (photocopy)
+			loggable = photocopy.desc
+
+		//Confirm a server can relay the request (borrowed from "department" above)
 		var/pass = 0
-			for (var/obj/machinery/message_server/MS in world)
-				if(!MS.active) continue
-				//{FAX} TODO - Add functionality to message_server to log fax transmissions. Below line is from "department", handles strings not paper
-				//MS.send_rc_message(href_list["department"],department,log_msg,msgStamped,msgVerified,priority)
-				pass = 1
-			if(pass)
+		for (var/obj/machinery/message_server/MS in world)
+			if(!MS.active) continue
+			//{FAX} TODO - Add functionality to message_server to log fax transmissions. Below line is from "department", handles strings not paper
+			MS.send_rc_message(href_list["sendFax"],department,loggable,0,0,1)
+			pass = 1
+		if(pass)
 
-			*/
+			//Play the fax sound locally
+			if(!silent)
+				playsound(loc, 'sound/machines/56k.ogg', 50, 0)
 
-		//If a message server is present to transmit the fax, find every receiving requests_console and create a copy on them.
-		for (var/obj/machinery/requests_console/Console in allConsoles)
-			if (ckey(Console.department) == ckey(href_list["sendFax"]))
-				//DEBUG
-				//Console.newmessagepriority = 3
-				if(copy)
-					//{FAX} Only ever make one copy, no delays to worry about
-					var/obj/item/weapon/paper/c = new /obj/item/weapon/paper (Console.loc)
-					//var/obj/item/weapon/paper/c = new /obj/item/weapon/paper (loc)
-					if(length(copy.info) > 0)	//Only print and add content if the copied doc has words on it
-						//{FAX} Removed toner shenanigans
-						var/copied = copy.info
-						copied = replacetext(copied, "<font face=\"[c.deffont]\" color=", "<font face=\"[c.deffont]\" nocolor=")	//state of the art techniques in action
-						copied = replacetext(copied, "<font face=\"[c.crayonfont]\" color=", "<font face=\"[c.crayonfont]\" nocolor=")	//This basically just breaks the existing color tag, which we need to do because the innermost tag takes priority.
-						c.info += copied
-						c.info += "</font>"
-						c.name = copy.name
-						c.fields = copy.fields
-						c.updateinfolinks()
-					updateUsrDialog()
-				else if(photocopy)
-					//{FAX} Again, number of copies to make
-					var/obj/item/weapon/photo/p = new /obj/item/weapon/photo (Console.loc)
-					var/icon/I = icon(photocopy.icon, photocopy.icon_state)
-					var/icon/img = icon(photocopy.img)
-					I.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0)) //I'm not sure how expensive this is, but given the many limitations of photocopying, it shouldn't be an issue.
-					img.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0))
-					p.icon = I
-					p.img = img
-					p.name = photocopy.name
-					p.desc = photocopy.desc
-					p.scribble = photocopy.scribble
-					p.pixel_x = rand(-10, 10)
-					p.pixel_y = rand(-10, 10)
-					p.blueprints = photocopy.blueprints //a copy of a picture is still good enough for the syndicate
-		//TODO: show a success screen or something
+			//Find every receiving requests_console and create a copy on them.
+			for (var/obj/machinery/requests_console/Console in allConsoles)
+				if (ckey(Console.department) == ckey(href_list["sendFax"]))
 
-		/*
-		var/new_message = copytext(reject_bad_text(input(usr, "Write your message:", "Awaiting Input", "")),1,MAX_MESSAGE_LEN)
-		if(new_message)
-			message = new_message
-			screen = 9
-			if (text2num(href_list["priority"]) < 2)
-				priority = -1
-			else
-				priority = text2num(href_list["priority"])
+					//Play the fax sound remotely
+					if(!Console.silent)
+						playsound(Console.loc, 'sound/machines/56k.ogg', 50, 0)
+						for (var/mob/O in hearers(5, Console.loc))
+							O.show_message("\icon[Console] *The Requests Console beeps: 'New Fax in [department]'")
+
+					if(copy)
+						//{FAX} Only ever make one copy, no delays to worry about
+						var/obj/item/weapon/paper/c = new /obj/item/weapon/paper (Console.loc)
+						if(length(copy.info) > 0)	//Only print and add content if the copied doc has words on it
+							//{FAX} Removed toner shenanigans
+							//TODO: Cover letter on faxes?
+							var/copied = copy.info
+							copied = replacetext(copied, "<font face=\"[c.deffont]\" color=", "<font face=\"[c.deffont]\" nocolor=")	//state of the art techniques in action
+							copied = replacetext(copied, "<font face=\"[c.crayonfont]\" color=", "<font face=\"[c.crayonfont]\" nocolor=")	//This basically just breaks the existing color tag, which we need to do because the innermost tag takes priority.
+							c.info += copied
+							c.info += "</font>"
+							c.name = copy.name
+							c.fields = copy.fields
+							c.updateinfolinks()
+						updateUsrDialog()
+					else if(photocopy)
+						//{FAX} Again, number of copies to make
+						var/obj/item/weapon/photo/p = new /obj/item/weapon/photo (Console.loc)
+						var/icon/I = icon(photocopy.icon, photocopy.icon_state)
+						var/icon/img = icon(photocopy.img)
+						I.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0)) //I'm not sure how expensive this is, but given the many limitations of photocopying, it shouldn't be an issue.
+						img.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0))
+						p.icon = I
+						p.img = img
+						p.name = photocopy.name
+						p.desc = photocopy.desc
+						p.scribble = photocopy.scribble
+						p.pixel_x = rand(-10, 10)
+						p.pixel_y = rand(-10, 10)
+						p.blueprints = photocopy.blueprints //a copy of a picture is still good enough for the syndicate
+			//TODO: show a success screen or something
+			screen = 6
 		else
-			dpt = "";
-			msgVerified = ""
-			msgStamped = ""
-			screen = 0
-			priority = -1
-		*/
+			screen = 7
+			for (var/mob/O in hearers(4, src.loc))
+				O.show_message("\icon[src] *The Requests Console beeps: 'NOTICE: No server detected!'")
+
 
 
 	//Handle screen switching
@@ -583,6 +584,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 
 
 //{FAX} Code ported over from photocopier.dm
+//Future todo: move photocopier functionality into a datum that photcopier machines and request consoles both include
 
 /obj/machinery/requests_console/attackby(obj/item/O, mob/user)
 	if(istype(O, /obj/item/weapon/paper))
