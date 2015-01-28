@@ -424,15 +424,16 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 		//Figure out what to log
 		var/loggable = "Fax transmission"
 		if (copy)
-			loggable = copy.info
+			var/stripped = replacetext(strip_tags(replacetext(copy.info, "<br>", "&lt;br&gt;")), "&lt;br&gt;", "<br>") // This should remove the tags entirely with adminscrub or strip_html but neither seem to work.
+			loggable = "Faxed document: [stripped]"
 		if (photocopy)
-			loggable = photocopy.desc
+			loggable = "Faxed photograph: [photocopy.desc]"		//Log server needs modification to properly log images, so log descriptions instead.
 
 		//Confirm a server can relay the request (borrowed from "department" above)
 		var/pass = 0
 		for (var/obj/machinery/message_server/MS in world)
 			if(!MS.active) continue
-			//{FAX} TODO - Add functionality to message_server to log fax transmissions. Below line is from "department", handles strings not paper
+			//{FAX} Message server can only log strings, so log faxes as strings
 			MS.send_rc_message(href_list["sendFax"],department,loggable,0,0,1)
 			pass = 1
 		if(pass)
@@ -481,8 +482,26 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 						p.pixel_x = rand(-10, 10)
 						p.pixel_y = rand(-10, 10)
 						p.blueprints = photocopy.blueprints //a copy of a picture is still good enough for the syndicate
-			//TODO: show a success screen or something
+			//Success, go to sent screen and eject the paperwork
 			screen = 6
+			if(copy)
+				if(!istype(usr,/mob/living/silicon/ai)) //ai cannot eject
+					copy.loc = usr.loc
+					usr.put_in_hands(copy)
+				else
+					copy.loc = src.loc
+				usr << "<span class='notice'>You eject [copy] from of [src].</span>"
+				copy = null
+				updateUsrDialog()
+			else if(photocopy)
+				if(!istype(usr,/mob/living/silicon/ai)) //ai cannot eject
+					photocopy.loc = usr.loc
+					usr.put_in_hands(photocopy)
+				else
+					photocopy.loc = src.loc
+				usr << "<span class='notice'>You eject [photocopy] from [src].</span>"
+				photocopy = null
+				updateUsrDialog()
 		else
 			screen = 7
 			for (var/mob/O in hearers(4, src.loc))
