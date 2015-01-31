@@ -23,6 +23,19 @@
  * Text sanitization
  */
 
+
+//Actually strips tags and not just the <> bits >:I
+//Snippet from http://www.byond.com/forum/?post=168298
+/proc/strip_tags(var/T as text)
+	if(!istext(T)) return 0
+	if(!findtext(T,"<")||!findtext(T,">")) return T
+	while(findtext(T,"<")&&findtext(T,">"))
+		var/pre=copytext(T,1,findtext(T,"<"))
+		var/pos=copytext(T,findtext(T,">")+1)
+		T=pre+pos
+	return T
+
+
 //Simply removes < and > and limits the length of the message
 /proc/strip_html_simple(var/t,var/limit=MAX_MESSAGE_LEN)
 	var/list/strip_chars = list("<",">")
@@ -65,7 +78,7 @@
 	for(var/i=1, i<=length(text), i++)
 		switch(text2ascii(text,i))
 			if(62,60,92,47)	return			//rejects the text if it contains these bad characters: <, >, \ or /
-			if(127 to 255)	return			//rejects weird letters like �
+			if(127 to 255)	return			//rejects weird letters like
 			if(0 to 31)		return			//more weird stuff
 			if(32)			continue		//whitespace
 			else			non_whitespace = 1

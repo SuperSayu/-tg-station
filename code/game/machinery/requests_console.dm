@@ -1,6 +1,8 @@
 /******************** Requests Console ********************/
 /** Originally written by errorage, updated by: Carn, needs more work though. I just added some security fixes */
 
+/** Fax machine functionality */
+
 var/req_console_assistance = list()
 var/req_console_supplies = list()
 var/req_console_information = list()
@@ -40,6 +42,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 		// 8 = view messages
 		// 9 = authentication before sending
 		// 10 = send announcement
+		// 11 = send fax		{FAX}
 	var/silent = 0 // set to 1 for it not to beep all the time
 	var/hackState = 0
 		// 0 = not hacked
@@ -55,6 +58,10 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 	var/dpt = ""; //the department which will be receiving the message
 	var/priority = -1 ; //Priority of the message being sent
 	luminosity = 0
+
+	var/obj/item/weapon/paper/copy = null			// {FAX} Enable it to hold a paper object to be faxed. Code borrowed from photocopier.dm
+	var/obj/item/weapon/photo/photocopy = null		// {FAX} Enable it to hold a photo object to be faxed. Code borrowed from photocopier.dm
+
 
 /obj/machinery/requests_console/power_change()
 	..()
@@ -213,6 +220,26 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 					dat += "<span class='linkOff'>Announce Message</span><BR>"
 				dat += "<BR><A href='?src=\ref[src];setScreen=0'><< Back</A><BR>"
 
+			if(11)	//send Fax {FAX}
+
+				//Check for source document
+				if(copy || photocopy)
+					dat += "Fax to which department?<BR><BR>"
+					dat += "<table width='100%'>"
+					for(var/dpt in req_console_information)		//We're piggybacking on this list because implementing a separate list of faxable consoles would require a lot of refactoring
+						if (dpt != department)
+							dat += "<tr>"
+							dat += "<td width='55%'>[dpt]</td>"
+							dat += "<td width='45%'><A href='?src=\ref[src];sendFax=[ckey(dpt)]'>Send</A>"
+							dat += "</td>"
+							dat += "</tr>"
+					dat += "</table>"
+					dat += "<BR><a href='byond://?src=\ref[src];remove=1'>Remove Document</a><BR>"		//Adapted from photocopier.dm
+				else
+					dat += "You must insert a source document before you can fax it."
+
+				dat += "<BR><A href='?src=\ref[src];setScreen=0'><< Back</A><BR>"
+
 			else	//main menu
 				screen = 0
 				announceAuth = 0
@@ -226,6 +253,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 
 				dat += "<A href='?src=\ref[src];setScreen=1'>Request Assistance</A><BR>"
 				dat += "<A href='?src=\ref[src];setScreen=2'>Request Supplies</A><BR>"
+				dat += "<A href='?src=\ref[src];setScreen=11'>Send Fax Transmission</A><BR><BR>"		//{FAX}
 				dat += "<A href='?src=\ref[src];setScreen=3'>Relay Anonymous Information</A><BR><BR>"
 				if(announcementConsole)
 					dat += "<A href='?src=\ref[src];setScreen=10'>Send Station-wide Announcement</A><BR><BR>"
@@ -369,6 +397,118 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 					O.show_message("\icon[src] *The Requests Console beeps: 'NOTICE: No server detected!'")
 
 
+	if(href_list["remove"])			//{FAX} Yet another chunk copied from photocopier.dm
+		if(copy)
+			if(!istype(usr,/mob/living/silicon/ai)) //ai cannot eject
+				copy.loc = usr.loc
+				usr.put_in_hands(copy)
+			else
+				copy.loc = src.loc
+			usr << "<span class='notice'>You eject [copy] from of [src].</span>"
+			copy = null
+			updateUsrDialog()
+		else if(photocopy)
+			if(!istype(usr,/mob/living/silicon/ai)) //ai cannot eject
+				photocopy.loc = usr.loc
+				usr.put_in_hands(photocopy)
+			else
+				photocopy.loc = src.loc
+			usr << "<span class='notice'>You eject [photocopy] from [src].</span>"
+			photocopy = null
+			updateUsrDialog()
+
+
+	if(href_list["sendFax"])		//{FAX} obviously, handles sending faxes. Based on "write" handler. Includes watered down photocopier copy code.
+		dpt = ckey(href_list["sendFax"]) //sendFax contains the string of the receiving department's name
+
+		//Figure out what to log
+		var/loggable = "Fax transmission"
+		if (copy)
+			var/stripped = replacetext(strip_tags(replacetext(copy.info, "<br>", "&lt;br&gt;")), "&lt;br&gt;", "<br>") // This should remove the tags entirely with adminscrub or strip_html but neither seem to work.
+			loggable = "Faxed document: [stripped]"
+		if (photocopy)
+			loggable = "Faxed photograph: [photocopy.desc]"		//Log server needs modification to properly log images, so log descriptions instead.
+
+		//Confirm a server can relay the request (borrowed from "department" above)
+		var/pass = 0
+		for (var/obj/machinery/message_server/MS in world)
+			if(!MS.active) continue
+			//{FAX} Message server can only log strings, so log faxes as strings
+			MS.send_rc_message(href_list["sendFax"],department,loggable,0,0,1)
+			pass = 1
+		if(pass)
+
+			//Play the fax sound locally
+			if(!silent)
+				playsound(loc, 'sound/machines/56k.ogg', 50, 0)
+
+			//Find every receiving requests_console and create a copy on them.
+			for (var/obj/machinery/requests_console/Console in allConsoles)
+				if (ckey(Console.department) == ckey(href_list["sendFax"]))
+
+					//Play the fax sound remotely
+					if(!Console.silent)
+						playsound(Console.loc, 'sound/machines/56k.ogg', 50, 0)
+						for (var/mob/O in hearers(5, Console.loc))
+							O.show_message("\icon[Console] *The Requests Console beeps: 'New Fax in [department]'")
+
+					if(copy)
+						//{FAX} Only ever make one copy, no delays to worry about
+						var/obj/item/weapon/paper/c = new /obj/item/weapon/paper (Console.loc)
+						if(length(copy.info) > 0)	//Only print and add content if the copied doc has words on it
+							//{FAX} Removed toner shenanigans
+							//TODO: Cover letter on faxes?
+							var/copied = copy.info
+							copied = replacetext(copied, "<font face=\"[c.deffont]\" color=", "<font face=\"[c.deffont]\" nocolor=")	//state of the art techniques in action
+							copied = replacetext(copied, "<font face=\"[c.crayonfont]\" color=", "<font face=\"[c.crayonfont]\" nocolor=")	//This basically just breaks the existing color tag, which we need to do because the innermost tag takes priority.
+							c.info += copied
+							c.info += "</font>"
+							c.name = copy.name
+							c.fields = copy.fields
+							c.updateinfolinks()
+						updateUsrDialog()
+					else if(photocopy)
+						//{FAX} Again, number of copies to make
+						var/obj/item/weapon/photo/p = new /obj/item/weapon/photo (Console.loc)
+						var/icon/I = icon(photocopy.icon, photocopy.icon_state)
+						var/icon/img = icon(photocopy.img)
+						I.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0)) //I'm not sure how expensive this is, but given the many limitations of photocopying, it shouldn't be an issue.
+						img.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0))
+						p.icon = I
+						p.img = img
+						p.name = photocopy.name
+						p.desc = photocopy.desc
+						p.scribble = photocopy.scribble
+						p.pixel_x = rand(-10, 10)
+						p.pixel_y = rand(-10, 10)
+						p.blueprints = photocopy.blueprints //a copy of a picture is still good enough for the syndicate
+			//Success, go to sent screen and eject the paperwork
+			screen = 6
+			if(copy)
+				if(!istype(usr,/mob/living/silicon/ai)) //ai cannot eject
+					copy.loc = usr.loc
+					usr.put_in_hands(copy)
+				else
+					copy.loc = src.loc
+				usr << "<span class='notice'>You eject [copy] from of [src].</span>"
+				copy = null
+				updateUsrDialog()
+			else if(photocopy)
+				if(!istype(usr,/mob/living/silicon/ai)) //ai cannot eject
+					photocopy.loc = usr.loc
+					usr.put_in_hands(photocopy)
+				else
+					photocopy.loc = src.loc
+				usr << "<span class='notice'>You eject [photocopy] from [src].</span>"
+				photocopy = null
+				updateUsrDialog()
+		else
+			screen = 7
+			for (var/mob/O in hearers(4, src.loc))
+				O.show_message("\icon[src] *The Requests Console beeps: 'NOTICE: No server detected!'")
+
+
+
 	//Handle screen switching
 	switch(text2num(href_list["setScreen"]))
 		if(null)	//skip
@@ -393,6 +533,8 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 		if(10)		//send announcement
 			if(!announcementConsole)	return
 			screen = 10
+		if(11)		//{FAX}
+			screen = 11
 		else		//main menu
 			dpt = ""
 			msgVerified = ""
@@ -454,4 +596,37 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			var/obj/item/weapon/stamp/T = O
 			msgStamped = "<font color='blue'><b>Stamped with the [T.name]</b></font>"
 			updateUsrDialog()
+
+
+	//{FAX} Code ported over from photocopier.dm to allow insertion and removal of documents
+	if(istype(O, /obj/item/weapon/paper))
+		if(copier_empty())
+			user.drop_item()
+			copy = O
+			O.loc = src
+			user << "<span class='notice'>You insert [O] into [src].</span>"
+			updateUsrDialog()
+		else
+			user << "<span class='notice'>There is already something in [src].</span>"
+	else if(istype(O, /obj/item/weapon/photo))
+		if(copier_empty())
+			user.drop_item()
+			photocopy = O
+			O.loc = src
+			user << "<span class='notice'>You insert [O] into [src].</span>"
+			updateUsrDialog()
+		else
+			user << "<span class='notice'>There is already something in [src].</span>"
+
+
 	return
+
+
+
+
+
+/obj/machinery/requests_console/proc/copier_empty()
+	if(copy || photocopy)
+		return 0
+	else
+		return 1
