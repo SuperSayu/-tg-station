@@ -903,12 +903,12 @@ obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 
 
 /obj/machinery/reagentgrinder/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	if(default_unfasten_wrench(user, O))
+		return
 	if (istype(O,/obj/item/weapon/reagent_containers/glass) || \
 		istype(O,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass) || \
 		istype(O,/obj/item/weapon/reagent_containers/food/drinks/shaker))
 
-		if(default_unfasten_wrench(user, O))
-			return
 		if (beaker)
 			return 1
 		else
