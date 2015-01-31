@@ -16,10 +16,6 @@
 	required_enemies = 1
 	recommended_enemies = 4
 
-
-	uplink_welcome = "Syndicate Uplink Console:"
-	uplink_uses = 10
-
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 
@@ -138,11 +134,18 @@
 	return
 
 /datum/game_mode/proc/random_traitor_objective(var/datum/mind/traitor)
+
 	if(prob(35))
-		var/datum/objective/assassinate/kill = new
-		kill.owner = traitor
-		kill.find_target()
-		traitor.objectives += kill
+		if(prob(70))
+			var/datum/objective/assassinate/kill = new
+			kill.owner = traitor
+			kill.find_target()
+			traitor.objectives += kill
+		else
+			var/datum/objective/maroon/maroon_objective = new
+			maroon_objective.owner = traitor
+			maroon_objective.find_target()
+			traitor.objectives += maroon_objective
 	else
 		var/datum/objective/steal/steal = new
 		steal.owner = traitor

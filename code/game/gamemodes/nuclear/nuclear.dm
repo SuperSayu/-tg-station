@@ -11,9 +11,6 @@
 	pre_setup_before_jobs = 1
 	antag_flag = BE_OPERATIVE
 
-	uplink_welcome = "Corporate Backed Uplink Console:"
-	uplink_uses = 10
-
 	var/const/agents_possible = 5 //If we ever need more syndicate agents.
 	var/const/nukeop_scaling_coeff = 11 //how much does the amount of players get divided by to determine operatives. Six players means one operative versus five crewmembers
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
@@ -221,7 +218,7 @@
 
 	var/obj/item/device/radio/uplink/U = new /obj/item/device/radio/uplink(synd_mob)
 	U.hidden_uplink.uplink_owner="[synd_mob.key]"
-	U.hidden_uplink.uses = 10
+	U.hidden_uplink.uses = 20
 	synd_mob.equip_to_slot_or_del(U, slot_in_backpack)
 
 	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive(synd_mob)
