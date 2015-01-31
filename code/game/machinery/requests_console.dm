@@ -596,16 +596,9 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			var/obj/item/weapon/stamp/T = O
 			msgStamped = "<font color='blue'><b>Stamped with the [T.name]</b></font>"
 			updateUsrDialog()
-	return
 
 
-
-
-
-//{FAX} Code ported over from photocopier.dm
-//Future todo: centralise photocopier functionality
-
-/obj/machinery/requests_console/attackby(obj/item/O, mob/user)
+	//{FAX} Code ported over from photocopier.dm to allow insertion and removal of documents
 	if(istype(O, /obj/item/weapon/paper))
 		if(copier_empty())
 			user.drop_item()
@@ -624,6 +617,12 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			updateUsrDialog()
 		else
 			user << "<span class='notice'>There is already something in [src].</span>"
+
+
+	return
+
+
+
 
 
 /obj/machinery/requests_console/proc/copier_empty()
