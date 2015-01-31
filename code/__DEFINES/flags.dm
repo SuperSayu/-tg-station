@@ -63,3 +63,4 @@
 #define NOBLOOD		1024
 #define NOFIRE		2048
 #define NOPIXREMOVE	4096
+#define LAYER2		8192

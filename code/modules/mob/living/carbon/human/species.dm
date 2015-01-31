@@ -1,6 +1,7 @@
 // This code handles different species in the game.
 
-#define SPECIES_LAYER			23
+#define SPECIES_LAYER			24
+#define SPECIES_LAYER_2			23
 #define BODY_LAYER				22
 #define HAIR_LAYER				8
 
@@ -40,6 +41,7 @@
 	var/hair_alpha = 255	// the alpha used by the hair. 255 is completely solid, 0 is transparent.
 	var/hair_luminosity = 0 // added/subtracted to the hair color's luminosity
 	var/use_skintones = 0	// does it use skintones or not? (spoiler alert this is only used by humans)
+	var/spec_hair = 0	// uses special species "hair" instead of real hair (ex. horns for lizards)
 
 	var/list/no_equip = list()	// slots the race can't equip stuff to
 	var/nojumpsuit = 0	// this is sorta... weird. it basically lets you equip stuff that usually needs jumpsuits without one, like belts and pockets and ids
@@ -83,6 +85,26 @@
 				return "[id]_[(H.gender == FEMALE) ? "f" : "m"]"
 		else
 			return "[id]"
+
+	proc/update_layer_2(var/mob/living/carbon/human/H)
+		H.remove_overlay(SPECIES_LAYER_2)
+
+		var/image/standing
+
+		var/g = (H.gender == FEMALE) ? "f" : "m"
+
+		if(LAYER2 in specflags)
+			var/image/spec_layer2
+			if(sexes)
+				spec_layer2 = image("icon" = 'icons/mob/human.dmi', "icon_state" = "[id]_[g]_olay", "layer" = -SPECIES_LAYER_2)
+			else
+				spec_layer2 = image("icon" = 'icons/mob/human.dmi', "icon_state" = "[id]_olay", "layer" = -SPECIES_LAYER_2)
+			standing = spec_layer2
+
+		if(standing)
+			H.overlays_standing[SPECIES_LAYER_2]	= standing
+
+		H.apply_overlay(SPECIES_LAYER_2)
 
 	proc/update_color(var/mob/living/carbon/human/H)
 		H.remove_overlay(SPECIES_LAYER)
@@ -144,7 +166,15 @@
 			standing	+= image("icon"='icons/mob/human_face.dmi', "icon_state" = "debrained_s", "layer" = -HAIR_LAYER)
 
 		else if(H.hair_style && HAIR in specflags)
-			S = hair_styles_list[H.hair_style]
+			if(spec_hair == 1)
+				switch(id)
+					if("lizard")
+						S = spec_hair_lizard_list[H.spec_hair]
+					if("bird")
+						S = spec_hair_bird_list[H.spec_hair]
+			else
+				S = hair_styles_list[H.hair_style]
+
 			if(S)
 				var/image/img_hair_s = image("icon" = S.icon, "icon_state" = "[S.icon_state]_s", "layer" = -HAIR_LAYER)
 

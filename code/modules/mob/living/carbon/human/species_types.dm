@@ -25,14 +25,16 @@
 
 /datum/species/lizard
 	// Reptilian humanoids with scaled skin and tails.
-	name = "Kokiyg" // WIP name
+	name = "Kokiyg"
 	id = "lizard"
 	desc = "The Kokiyg are reptilian creatures known for their dexterity and perseverance. Because they are coldblooded, \
 	their bodies adjust to external temperatures faster. They are not the type of being you would want to cross."
 	say_mod = "hisses"
 	default_color = "00FF00"
 	roundstart = 1
-	specflags = list(MUTCOLORS,EYECOLOR,LIPS)
+	specflags = list(HAIR,MUTCOLORS,LAYER2,EYECOLOR,LIPS)
+	spec_hair = 1 // They have crests/horns instead of hair
+	hair_color = "mutcolor"
 	attack_verb = "slash"
 	attack_sound = 'sound/weapons/slash.ogg'
 	miss_sound = 'sound/weapons/slashmiss.ogg'
@@ -365,6 +367,118 @@
 		H.update_mutations()
 		H.reagents.remove_reagent(chem.id, 2) // metabolizes faster
 		return 1*/
+
+/datum/species/bird
+	name = "Aven"
+	id = "bird"
+	desc = "Stuff goes here."
+	specflags = list(HAIR,MUTCOLORS,LAYER2,EYECOLOR)
+	say_mod = "hisses"
+	spec_hair = 1
+	hair_color = "mutcolor"
+	speedmod = -1
+	no_equip = list(slot_wear_mask, slot_shoes)
+	roundstart = 1
+
+/*/datum/species/bird/before_equip_job(var/datum/job/J, var/mob/living/carbon/human/H)
+	H.equip_to_slot(new /obj/item/weapon/tank/co2(H), slot_r_store)
+	H.equip_to_slot(new /obj/item/clothing/mask/breath(H), slot_wear_mask)*/
+
+/datum/species/bird/after_equip_job(var/datum/job/J, var/mob/living/carbon/human/H)
+	if(H.job == "Head of Security" || H.job == "Warden" || H.job == "Security Officer")
+		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/roman(H), slot_shoes)
+	else
+		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(H), slot_shoes)
+
+// Probably not going to use this
+/*/datum/species/bird/handle_breath(datum/gas_mixture/breath, var/mob/living/carbon/human/H)
+	// They breathe Co2 instead of oxygen
+	if((H.status_flags & GODMODE))
+		return
+
+	if(!breath || (breath.total_moles() == 0) || H.suiciding)
+		if(H.reagents.has_reagent("inaprovaline"))
+			return
+		if(H.suiciding)
+			H.adjustOxyLoss(2)//If you are suiciding, you should die a little bit faster
+			H.failed_last_breath = 1
+			H.oxygen_alert = max(H.oxygen_alert, 1)
+			return 0
+		if(H.health >= config.health_threshold_crit)
+			if(NOBREATH in specflags)	return 1
+			H.adjustOxyLoss(HUMAN_MAX_OXYLOSS)
+			H.failed_last_breath = 1
+		else
+			H.adjustOxyLoss(HUMAN_CRIT_MAX_OXYLOSS)
+			H.failed_last_breath = 1
+
+		H.oxygen_alert = max(H.oxygen_alert, 1)
+
+		return 0
+
+	var/safe_co2_min = 16 // Co2 and oxygen are reversed
+	var/safe_oxygen_max = 10
+	var/safe_toxins_max = 0.005
+	var/SA_para_min = 1
+	var/SA_sleep_min = 5
+	var/co2_used = 0
+	var/breath_pressure = (breath.total_moles()*R_IDEAL_GAS_EQUATION*breath.temperature)/BREATH_VOLUME
+
+	var/O2_pp = (breath.oxygen/breath.total_moles())*breath_pressure
+	var/Toxins_pp = (breath.toxins/breath.total_moles())*breath_pressure
+	var/CO2_pp = (breath.carbon_dioxide/breath.total_moles())*breath_pressure
+
+	if(CO2_pp < safe_co2_min) // Too little co2
+		if(!(NOBREATH in specflags) || (H.health <= config.health_threshold_crit))
+			if(prob(20))
+				spawn(0) H.emote("gasp")
+			if(CO2_pp > 0)
+				var/ratio = safe_co2_min/CO2_pp
+				H.adjustOxyLoss(min(5*ratio, HUMAN_MAX_OXYLOSS))
+				H.failed_last_breath = 1
+				co2_used = breath.carbon_dioxide*ratio/6
+			else
+				H.adjustOxyLoss(HUMAN_MAX_OXYLOSS)
+				H.failed_last_breath = 1
+			H.oxygen_alert = max(H.oxygen_alert, 1)
+	else
+		H.failed_last_breath = 0
+		H.adjustOxyLoss(-5)
+		co2_used = breath.carbon_dioxide/6
+		H.oxygen_alert = 0
+
+	breath.carbon_dioxide -= co2_used
+	breath.oxygen += co2_used
+
+	// Oxygen doesn't paralyze you, unlike co2 for humans
+	if(O2_pp > safe_oxygen_max && !(NOBREATH in specflags))
+		H.adjustOxyLoss(1)
+		if(prob(20))
+			spawn(0) H.emote("gasp")
+
+	if(Toxins_pp > safe_toxins_max && !(NOBREATH in specflags)) // Too much toxins
+		var/ratio = (breath.toxins/safe_toxins_max) * 10
+		//adjustToxLoss(Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))	//Limit amount of damage toxin exposure can do per second
+		if(H.reagents)
+			H.reagents.add_reagent("plasma", Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))
+		H.toxins_alert = max(H.toxins_alert, 1)
+	else
+		H.toxins_alert = 0
+
+	if(breath.trace_gases.len && !(NOBREATH in specflags))	// If there's some other shit in the air lets deal with it here.
+		for(var/datum/gas/sleeping_agent/SA in breath.trace_gases)
+			var/SA_pp = (SA.moles/breath.total_moles())*breath_pressure
+			if(SA_pp > SA_para_min) // Enough to make us paralysed for a bit
+				H.Paralyse(3) // 3 gives them one second to wake up and run away a bit!
+				if(SA_pp > SA_sleep_min) // Enough to make us sleep as well
+					H.sleeping = max(H.sleeping+2, 10)
+			else if(SA_pp > 0.01)	// There is sleeping gas in their lungs, but only a little, so give them a bit of a warning
+				if(prob(20))
+					spawn(0) H.emote(pick("giggle", "laugh"))
+
+	handle_temperature(breath, H)
+
+	return 1 */
 
 /*
  GOLEMS
