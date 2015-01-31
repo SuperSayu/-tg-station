@@ -5,7 +5,7 @@
 	name = "wizard"
 	config_tag = "wizard"
 	antag_flag = BE_WIZARD
-	required_players = 5
+	required_players = 10
 	required_enemies = 1
 	recommended_enemies = 1
 	pre_setup_before_jobs = 1
@@ -52,30 +52,38 @@
 
 /datum/game_mode/proc/forge_wizard_objectives(var/datum/mind/wizard)
 
-	switch(rand(1,100))
+	switch(rand(1,100)) // 70% assassinate, 30% assassinate + steal
+		if(1 to 70)
+			var/datum/objective/assassinate/kill_objective = new
+			kill_objective.owner = wizard
+			kill_objective.find_target()
+			wizard.objectives += kill_objective
+
+		if(71 to 100)
+			var/datum/objective/assassinate/kill_objective = new
+			kill_objective.owner = wizard
+			kill_objective.find_target()
+			wizard.objectives += kill_objective
+
+			var/datum/objective/steal/steal_objective = new
+			steal_objective.owner = wizard
+			steal_objective.find_target()
+			wizard.objectives += steal_objective
+
+	switch(rand(1,100)) // 50% one steal, 30% assassinate, 20% two steals
 		if(1 to 30)
 			var/datum/objective/assassinate/kill_objective = new
 			kill_objective.owner = wizard
 			kill_objective.find_target()
 			wizard.objectives += kill_objective
 
-		if(31 to 60)
+		if(31 to 80)
 			var/datum/objective/steal/steal_objective = new
 			steal_objective.owner = wizard
 			steal_objective.find_target()
 			wizard.objectives += steal_objective
 
-		if(61 to 80)
-			var/datum/objective/assassinate/kill_objective = new
-			kill_objective.owner = wizard
-			kill_objective.find_target()
-			wizard.objectives += kill_objective
-
-			var/datum/objective/steal/steal_objective = new
-			steal_objective.owner = wizard
-			steal_objective.find_target()
-			wizard.objectives += steal_objective
-		else
+		if(81 to 100)
 			var/datum/objective/steal/steal_objective = new
 			steal_objective.owner = wizard
 			steal_objective.find_target()
@@ -86,47 +94,8 @@
 			steal_objective.find_target()
 			wizard.objectives += steal_objective
 
-	switch(rand(1,100))
-		if(1 to 30)
-			var/datum/objective/assassinate/kill_objective = new
-			kill_objective.owner = wizard
-			kill_objective.find_target()
-			wizard.objectives += kill_objective
-
-		if(31 to 60)
-			var/datum/objective/steal/steal_objective = new
-			steal_objective.owner = wizard
-			steal_objective.find_target()
-			wizard.objectives += steal_objective
-
-		if(61 to 80)
-			var/datum/objective/protect/guard_objective = new	// wait what
-			guard_objective.owner = wizard						// did you seriously just tell me to do that
-			guard_objective.find_target()						// why would you do such a thing
-			wizard.objectives += guard_objective				// you monster ~Sayu
-
-			var/datum/objective/steal/steal_objective = new
-			steal_objective.owner = wizard
-			steal_objective.find_target()
-			wizard.objectives += steal_objective
-		else
-			var/datum/objective/steal/steal_objective = new
-			steal_objective.owner = wizard
-			steal_objective.find_target()
-			wizard.objectives += steal_objective
-
-			steal_objective = new
-			steal_objective.owner = wizard
-			steal_objective.find_target()
-			wizard.objectives += steal_objective
-
-	switch(rand(1,100))
-		if(1 to 40)
-			if (!(locate(/datum/objective/survive) in wizard.objectives))
-				var/datum/objective/survive/survive_objective = new
-				survive_objective.owner = wizard
-				wizard.objectives += survive_objective
-		if(31 to 87)
+	switch(rand(1,100)) // 70% escape, 30% hijack
+		if(1 to 70)
 			if (!(locate(/datum/objective/escape) in wizard.objectives))
 				var/datum/objective/escape/escape_objective = new
 				escape_objective.owner = wizard
