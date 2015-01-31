@@ -603,7 +603,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 
 
 //{FAX} Code ported over from photocopier.dm
-//Future todo: move photocopier functionality into a datum that photcopier machines and request consoles both include
+//Future todo: centralise photocopier functionality
 
 /obj/machinery/requests_console/attackby(obj/item/O, mob/user)
 	if(istype(O, /obj/item/weapon/paper))
@@ -612,7 +612,6 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			copy = O
 			O.loc = src
 			user << "<span class='notice'>You insert [O] into [src].</span>"
-			flick("bigscanner1", src)
 			updateUsrDialog()
 		else
 			user << "<span class='notice'>There is already something in [src].</span>"
@@ -622,7 +621,6 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			photocopy = O
 			O.loc = src
 			user << "<span class='notice'>You insert [O] into [src].</span>"
-			flick("bigscanner1", src)
 			updateUsrDialog()
 		else
 			user << "<span class='notice'>There is already something in [src].</span>"
