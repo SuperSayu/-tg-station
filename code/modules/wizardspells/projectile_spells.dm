@@ -187,6 +187,7 @@
 	directcast_projectile_count = 1
 	projectile_spread = 0
 	projectile_type = /obj/item/projectile/magic/fireball
+	allow_spreadcast = 0
 
 	chargemax = 60
 	directcast_charge = 60
