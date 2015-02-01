@@ -498,13 +498,6 @@
 
 	..()
 
-
-/mob/living/carbon/say(var/message, var/bubble_type)
-	if(istype(wear_mask, /obj/item/clothing/mask/muzzle))
-		return
-
-	..(message, bubble_type)
-
 /mob/living/carbon/getTrail()
 	if(getBruteLoss() < 300)
 		if(prob(50))
