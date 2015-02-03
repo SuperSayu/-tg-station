@@ -27,7 +27,6 @@
 	var/target = null //its target. moves towards the target if it has one
 	var/last_failed_movement = 0//Will not move in the same dir if it couldnt before, will help with the getting stuck on fields thing
 	var/teleport_del = 0
-	var/sizes_to_number = list("1" = 0, "3" = 1, "5" = 2, "7" = 3, "9" = 4) //so i dont have to mess around with weirdass formulas to get this done.
 	var/last_warning
 	var/list/uneatable = list(/turf/space, /obj/effect/overlay)
 	var/force_contained = 0
