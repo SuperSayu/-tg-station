@@ -84,7 +84,7 @@ datum/objective_item/steal/capmedal
 */
 datum/objective_item/steal/hypo
 	name = "the hypospray"
-	targetitem = /obj/item/weapon/reagent_containers/hypospray
+	targetitem = /obj/item/weapon/reagent_containers/hypospray/CMO
 	difficulty = 5
 	excludefromjob = list("Chief Medical Officer")
 	antag_types = list("traitor","Wizard","Space Ninja")

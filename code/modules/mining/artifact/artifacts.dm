@@ -142,7 +142,7 @@ var/global/ankh = 0 // only one can spawn
 
 /obj/item/artifact/attackby(obj/item/W, mob/user)
 	var/turf/artloc = get_turf(src)
-	if(istype(W,/obj/item/device/mining_scanner) || istype(W,/obj/item/device/analyzer))
+	if(istype(W, /obj/item/device/mining_scanner) ||istype(W,/obj/item/device/t_scanner/adv_mining_scanner) || istype(W,/obj/item/device/analyzer))
 		if(integrity > 0)
 			if(activated)
 				on = !on
