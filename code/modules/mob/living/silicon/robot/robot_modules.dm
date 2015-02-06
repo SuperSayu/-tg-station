@@ -222,7 +222,7 @@
 		else
 			modules += new /obj/item/weapon/pickaxe/borgdrill(src)
 		modules += new /obj/item/weapon/storage/bag/sheetsnatcher/borg(src)
-		modules += new /obj/item/device/mining_scanner(src)
+		modules += new /obj/item/device/t_scanner/adv_mining_scanner(src)
 		modules += new /obj/item/weapon/gun/energy/kinetic_accelerator(src)
 	on_emag()
 		..()

@@ -31,7 +31,7 @@ var/global/max_monoliths = rand(3,5)
 	art.y += pick(-1,1)
 
 /obj/structure/monolith/attackby(obj/item/I, mob/user as mob)
-	if(istype(I,/obj/item/device/mining_scanner) || istype(I,/obj/item/device/analyzer))
+	if(istype(I, /obj/item/device/mining_scanner) ||istype(I,/obj/item/device/t_scanner/adv_mining_scanner) || istype(I,/obj/item/device/analyzer))
 		if(!activated)
 			user << "<span class='notice'><b>With a flash of light, the Monolith springs to life at your touch, humming gently.</b></span>"
 			activated = 1

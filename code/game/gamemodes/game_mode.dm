@@ -75,6 +75,9 @@
 	if(revdata.revision)
 		feedback_set_details("revision","[revdata.revision]")
 	feedback_set_details("server_ip","[world.internet_address]:[world.port]")
+
+	start_state = new /datum/station_state()
+	start_state.count()
 	return 1
 
 ///make_antag_chance()

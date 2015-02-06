@@ -54,11 +54,9 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 /datum/supply_packs/New()
 	manifest += "<ul>"
 	for(var/path in contains)
-		if(!path)	continue
-		var/atom/movable/AM = new path()
-		manifest += "<li>[AM.name]</li>"
-//		del AM	//just to make sure they're deleted, no longer garbage collected, as there are way to many objects in crates that have other references.
-		qdel(AM) // How about we fix the issues rather than bypass them, mmkay?
+		if(!path) continue
+		var/atom/movable/AM = path
+		manifest += "<li>[initial(AM.name)]</li>"
 	manifest += "</ul>"
 
 
@@ -165,6 +163,14 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	hidden = 1
 	New()
 		manifest = "<ul><li>Love, sunshine, and perfect happiness.</li></ul>"
+
+/datum/supply_packs/emergency/syndicate
+	name = "ERROR NULL ENTRY"
+	contains = list(/obj/item/weapon/storage/box/syndicate)
+	cost = 140
+	containertype = /obj/structure/closet/crate
+	containername = "crate"
+	hidden = 1
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////// Security ////////////////////////////////////////
@@ -503,6 +509,15 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	cost = 25
 	containername = "particle accelerator crate"
 
+/datum/supply_packs/engineering/engine/spacesuit
+	name = "Space Suit Crate"
+	contains = list(/obj/item/clothing/suit/space,
+					/obj/item/clothing/head/helmet/space,
+					/obj/item/clothing/mask/breath,)
+	cost = 80
+	containertype = /obj/structure/closet/crate/secure
+	containername = "space suit crate"
+	access = access_eva
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////// Medical /////////////////////////////////////////
@@ -527,7 +542,9 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 					/obj/item/weapon/reagent_containers/glass/beaker/large,
 					/obj/item/weapon/reagent_containers/glass/beaker/large,
 					/obj/item/weapon/storage/box/beakers,
-					/obj/item/weapon/storage/box/syringes)
+					/obj/item/weapon/storage/box/syringes,
+					/obj/item/weapon/storage/box/syringes,
+					/obj/item/weapon/storage/box/bodybags)
 	cost = 20
 	containertype = /obj/structure/closet/crate/medical
 	containername = "medical supplies crate"
@@ -658,6 +675,14 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	containername = "shield generators crate"
 	access = access_teleporter
 
+/datum/supply_packs/science/transfer_valves
+	name = "Tank Transfer Valves"
+	contains = list(/obj/item/device/transfer_valve,
+					/obj/item/device/transfer_valve)
+	cost = 60
+	containertype = /obj/structure/closet/crate/secure
+	containername = "transfer valves crate"
+	access = access_rd
 
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////// Organic /////////////////////////////////////////
@@ -929,6 +954,19 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	containertype = /obj/structure/largecrate/mule
 	containername = "\improper MULEbot Crate"
 
+/datum/supply_packs/misc/conveyor
+	name = "Conveyor Assembly Crate"
+	contains = list(/obj/item/conveyor_construct,
+					/obj/item/conveyor_construct,
+					/obj/item/conveyor_construct,
+					/obj/item/conveyor_construct,
+					/obj/item/conveyor_construct,
+					/obj/item/conveyor_construct,
+					/obj/item/conveyor_switch_construct,
+					/obj/item/weapon/paper/conveyor)
+	cost = 15
+	containername = "conveyor assembly crate"
+
 /datum/supply_packs/misc/watertank
 	name = "Water tank crate"
 	contains = list(/obj/structure/reagent_dispensers/watertank)
@@ -970,6 +1008,16 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 					/obj/item/clothing/head/chaplain_hood)
 	cost = 40	// it costs so much because the Space Church is ran by Space Jews
 	containername = "religious supplies crate"
+
+/datum/supply_packs/misc/posters
+	name = "Corporate Posters Crate"
+	contains = list(/obj/item/weapon/contraband/poster/legit,
+					/obj/item/weapon/contraband/poster/legit,
+					/obj/item/weapon/contraband/poster/legit,
+					/obj/item/weapon/contraband/poster/legit,
+					/obj/item/weapon/contraband/poster/legit)
+	cost = 8
+	containername = "Corporate Posters Crate"
 
 
 ///////////// Paper Work
@@ -1115,8 +1163,7 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 /datum/supply_packs/misc/randomised/contraband
 	num_contained = 5
 	contains = list(/obj/item/weapon/contraband/poster,
-					/obj/item/weapon/storage/fancy/cigarettes/dromedaryco,
-					/obj/item/weapon/lipstick/random)
+					/obj/item/weapon/storage/fancy/cigarettes/dromedaryco)
 	name = "Contraband crate"
 	cost = 30
 	containername = "crate"	//let's keep it subtle, eh?
@@ -1187,6 +1234,7 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 					/obj/item/clothing/under/suit_jacket/navy,
 					/obj/item/clothing/under/suit_jacket/burgundy,
 					/obj/item/clothing/under/suit_jacket/checkered,
-					/obj/item/clothing/under/suit_jacket/tan)
+					/obj/item/clothing/under/suit_jacket/tan,
+					/obj/item/weapon/lipstick/random)
 	cost = 30 //Lots of very expensive items. You gotta pay up to look good!
 	containername = "formal-wear crate"

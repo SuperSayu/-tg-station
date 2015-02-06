@@ -34,7 +34,7 @@
 		icon_state = pick("ointment","firefirstaid")
 
 		new /obj/item/device/healthanalyzer( src )
-		new /obj/item/weapon/reagent_containers/syringe/inaprovaline( src )
+		new /obj/item/weapon/reagent_containers/hypospray/medipen( src )
 		new /obj/item/stack/medical/ointment( src )
 		new /obj/item/stack/medical/ointment( src )
 		new /obj/item/weapon/reagent_containers/pill/kelotane( src )
@@ -55,7 +55,7 @@
 		new /obj/item/stack/medical/ointment(src)
 		new /obj/item/stack/medical/ointment(src)
 		new /obj/item/device/healthanalyzer(src)
-		new /obj/item/weapon/reagent_containers/syringe/inaprovaline( src )
+		new /obj/item/weapon/reagent_containers/hypospray/medipen( src )
 		return
 
 /obj/item/weapon/storage/firstaid/toxin
@@ -92,8 +92,8 @@
 		new /obj/item/weapon/reagent_containers/pill/dexalin( src )
 		new /obj/item/weapon/reagent_containers/pill/dexalin( src )
 		new /obj/item/weapon/reagent_containers/pill/dexalin( src )
-		new /obj/item/weapon/reagent_containers/syringe/inaprovaline( src )
-		new /obj/item/weapon/reagent_containers/syringe/inaprovaline( src )
+		new /obj/item/weapon/reagent_containers/hypospray/medipen( src )
+		new /obj/item/weapon/reagent_containers/hypospray/medipen( src )
 		new /obj/item/device/healthanalyzer( src )
 		return
 
@@ -147,7 +147,7 @@
 
 	if (ishuman(usr) || ismonkey(usr)) //Can monkeys even place items in the pocket slots? Leaving this in just in case~
 		var/mob/M = usr
-		if (!( istype(over_object, /obj/screen) ))
+		if (!istype(over_object, /obj/screen) || !Adjacent(M))
 			return ..()
 		if ((!( M.restrained() ) && !( M.stat ) /*&& M.pocket == src*/))
 			switch(over_object.name)
