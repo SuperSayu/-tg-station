@@ -76,6 +76,7 @@
 
 	var/traitor_scaling_coeff = 6		//how much does the amount of players get divided by to determine traitors
 	var/changeling_scaling_coeff = 7	//how much does the amount of players get divided by to determine changelings
+	var/nukeop_scaling_coeff = 0		//how much does the amount of players get divided by to determine nuclear operative agents. Disabled by default
 
 	var/traitor_objectives_amount = 2
 	var/protect_roles_from_antagonist = 0// If security and such can be traitor/cult/other
@@ -349,6 +350,8 @@
 					config.changeling_scaling_coeff	= text2num(value)
 				if("traitor_objectives_amount")
 					config.traitor_objectives_amount = text2num(value)
+				if("nukeop_scaling_coeff")
+					config.nukeop_scaling_coeff = text2num(value)
 				if("probability")
 					var/prob_pos = findtext(value, " ")
 					var/prob_name = null
