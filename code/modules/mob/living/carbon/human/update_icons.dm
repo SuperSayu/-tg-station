@@ -56,7 +56,8 @@ Please contact me on #coderbus IRC. ~Carnie x
 */
 
 //Human Overlays Indexes/////////
-#define SPECIES_LAYER			23		// mutantrace colors... these are on a seperate layer in order to prvent
+#define SPECIES_LAYER			24		// mutantrace colors... these are on a seperate layer in order to prvent
+#define SPECIES_LAYER_2			23		// an uncolored spcies layer
 #define BODY_LAYER				22		//underwear, eyes, lips(makeup)
 #define MUTATIONS_LAYER			21		//Tk headglows etc.
 #define AUGMENTS_LAYER			20
@@ -79,7 +80,7 @@ Please contact me on #coderbus IRC. ~Carnie x
 #define L_HAND_LAYER			3
 #define R_HAND_LAYER			2		//Having the two hands seperate seems rather silly, merge them together? It'll allow for code to be reused on mobs with arbitarily many hands
 #define FIRE_LAYER				1		//If you're on fire
-#define TOTAL_LAYERS			23		//KEEP THIS UP-TO-DATE OR SHIT WILL BREAK ;_;
+#define TOTAL_LAYERS			24		//KEEP THIS UP-TO-DATE OR SHIT WILL BREAK ;_;
 //////////////////////////////////
 
 /mob/living/carbon/human
@@ -97,6 +98,14 @@ Please contact me on #coderbus IRC. ~Carnie x
 
 	icon_state = "[base_icon_state]_s"
 
+/mob/living/carbon/human/proc/update_layer_2()
+	remove_overlay(SPECIES_LAYER_2)
+
+	if(HUSK in mutations)
+		return
+
+	if(dna)
+		dna.species.update_layer_2(src)
 
 /mob/living/carbon/human/proc/apply_overlay(cache_index)
 	var/image/I = overlays_standing[cache_index]
@@ -267,8 +276,9 @@ Please contact me on #coderbus IRC. ~Carnie x
 	update_transform()
 	//Hud Stuff
 	update_hud()
-	// Mutantrace colors
+	// Species stuff
 	update_mutcolor()
+	update_layer_2()
 
 /* --------------------------------------- */
 //vvvvvv UPDATE_INV PROCS vvvvvv
@@ -597,6 +607,7 @@ Please contact me on #coderbus IRC. ~Carnie x
 
 //Human Overlays Indexes/////////
 #undef SPECIES_LAYER
+#undef SPECIES_LAYER_2
 #undef BODY_LAYER
 #undef MUTATIONS_LAYER
 #undef DAMAGE_LAYER

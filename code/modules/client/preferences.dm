@@ -23,7 +23,7 @@ datum/preferences
 	//doohickeys for savefiles
 	var/path
 	var/default_slot = 1				//Holder so it doesn't default to slot 1, rather the last one used
-	var/max_save_slots = 3
+	var/max_save_slots = 8
 
 	//non-preference stuff
 	var/warns = 0
@@ -55,6 +55,7 @@ datum/preferences
 	var/eye_color = "000"				//Eye color
 	var/datum/species/pref_species = new /datum/species/human()	//Mutant race
 	var/mutant_color = "FFF"			//Mutant race skin color
+	var/spec_hair = "None"				// species-specific "hair" (ex. horns for lizards)
 
 		//Mob preview
 	var/icon/preview_icon_front = null
@@ -90,9 +91,9 @@ datum/preferences
 	if(istype(C))
 		if(!IsGuestKey(C.key))
 			load_path(C.ckey)
-			unlock_content = C.IsByondMember()
-			if(unlock_content)
-				max_save_slots = 8
+			//unlock_content = C.IsByondMember()
+			//if(unlock_content)
+			//	max_save_slots = 8
 	var/loaded_preferences_successfully = load_preferences()
 	if(loaded_preferences_successfully)
 		if(load_character())
@@ -179,11 +180,15 @@ datum/preferences
 
 				dat += "</td><td valign='top' width='21%'>"
 
-				dat += "<h3>Hair Style</h3>"
+				if(pref_species && pref_species.spec_hair == 1)
+					dat += "<h3>Species Accessory</h3>"
 
-				dat += "<a href='?_src_=prefs;preference=hair_style;task=input'>[hair_style]</a><BR>"
-				dat += "<span style='border:1px solid #161616; background-color: #[hair_color];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=hair;task=input'>Change</a><BR>"
+					dat += "<a href='?_src_=prefs;preference=spec_hair;task=input'>[spec_hair]</a><BR>"
+				else
+					dat += "<h3>Hair Style</h3>"
 
+					dat += "<a href='?_src_=prefs;preference=hair_style;task=input'>[hair_style]</a><BR>"
+					dat += "<span style='border:1px solid #161616; background-color: #[hair_color];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=hair;task=input'>Change</a><BR>"
 
 				dat += "</td><td valign='top' width='21%'>"
 
@@ -594,6 +599,16 @@ datum/preferences
 						if(new_hair_style)
 							hair_style = new_hair_style
 
+					if("spec_hair")
+						var/new_spec_hair
+						switch(pref_species.id)
+							if("lizard")
+								new_spec_hair = input(user, "Choose your character's species accessory:", "Character Preference")  as null|anything in spec_hair_lizard_list
+							if("bird")
+								new_spec_hair = input(user, "Choose your character's species accessory:", "Character Preference")  as null|anything in spec_hair_bird_list
+						if(new_spec_hair)
+							spec_hair = new_spec_hair
+
 					if("facial")
 						var/new_facial = input(user, "Choose your character's facial-hair colour:", "Character Preference") as null|color
 						if(new_facial)
@@ -767,6 +782,7 @@ datum/preferences
 
 		character.skin_tone = skin_tone
 		character.hair_style = hair_style
+		character.spec_hair = spec_hair
 		character.facial_hair_style = facial_hair_style
 		character.underwear = underwear
 

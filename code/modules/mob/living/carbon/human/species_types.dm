@@ -25,14 +25,16 @@
 
 /datum/species/lizard
 	// Reptilian humanoids with scaled skin and tails.
-	name = "Kokiyg" // WIP name
+	name = "Kokiyg"
 	id = "lizard"
 	desc = "The Kokiyg are reptilian creatures known for their dexterity and perseverance. Because they are coldblooded, \
 	their bodies adjust to external temperatures faster. They are not the type of being you would want to cross."
 	say_mod = "hisses"
 	default_color = "00FF00"
 	roundstart = 1
-	specflags = list(MUTCOLORS,EYECOLOR,LIPS)
+	specflags = list(HAIR,MUTCOLORS,LAYER2,EYECOLOR,LIPS)
+	spec_hair = 1 // They have crests/horns instead of hair
+	hair_color = "mutcolor"
 	attack_verb = "slash"
 	attack_sound = 'sound/weapons/slash.ogg'
 	miss_sound = 'sound/weapons/slashmiss.ogg'
@@ -365,6 +367,32 @@
 		H.update_mutations()
 		H.reagents.remove_reagent(chem.id, 2) // metabolizes faster
 		return 1*/
+
+/*
+ BIRD PEOPLE -- ALSO A WIP IN PROGRESS
+ */
+
+/*/datum/species/bird
+	name = "Aven"
+	id = "bird"
+	desc = "Stuff goes here."
+	specflags = list(HAIR,MUTCOLORS,LAYER2,EYECOLOR)
+	say_mod = "hisses"
+	spec_hair = 1
+	hair_color = "mutcolor"
+	speedmod = -1
+	no_equip = list(slot_wear_mask, slot_shoes)
+	roundstart = 1
+
+/*/datum/species/bird/before_equip_job(var/datum/job/J, var/mob/living/carbon/human/H)
+	H.equip_to_slot(new /obj/item/weapon/tank/co2(H), slot_r_store)
+	H.equip_to_slot(new /obj/item/clothing/mask/breath(H), slot_wear_mask)*/
+
+/datum/species/bird/after_equip_job(var/datum/job/J, var/mob/living/carbon/human/H)
+	if(H.job == "Head of Security" || H.job == "Warden" || H.job == "Security Officer")
+		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/roman(H), slot_shoes)
+	else
+		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(H), slot_shoes)*/
 
 /*
  GOLEMS

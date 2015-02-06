@@ -27,8 +27,18 @@ datum/preferences
 		if(pref_species.id == "human" || !config.mutant_races)
 			preview_icon = new /icon('icons/mob/human.dmi', "[skin_tone]_[g]_s")
 		else
-			preview_icon = new /icon('icons/mob/human.dmi', "[pref_species.id]_[g]_s")
-			preview_icon.Blend("#[mutant_color]", ICON_MULTIPLY)
+			if(pref_species.sexes)
+				preview_icon = new /icon('icons/mob/human.dmi', "[pref_species.id]_[g]_s")
+			else
+				preview_icon = new /icon('icons/mob/human.dmi', "[pref_species.id]_[g]_s")
+			if(MUTCOLORS in pref_species.specflags)
+				preview_icon.Blend("#[mutant_color]", ICON_MULTIPLY)
+
+		if(LAYER2 in pref_species.specflags)
+			if(pref_species.sexes)
+				preview_icon.Blend(new /icon('icons/mob/human.dmi', "[pref_species.id]_[g]_olay"), ICON_OVERLAY)
+			else
+				preview_icon.Blend(new /icon('icons/mob/human.dmi', "[pref_species.id]_olay"), ICON_OVERLAY)
 
 		var/datum/sprite_accessory/S
 		if(underwear)
@@ -41,8 +51,16 @@ datum/preferences
 			eyes_s = new/icon("icon" = 'icons/mob/human_face.dmi', "icon_state" = "[pref_species.eyes]_s")
 			eyes_s.Blend("#[eye_color]", ICON_MULTIPLY)
 
-		S = hair_styles_list[hair_style]
-		if(S && (HAIR in pref_species.specflags))
+		if(pref_species.spec_hair)
+			switch(pref_species.id)
+				if("lizard")
+					S = spec_hair_lizard_list[spec_hair]
+				if("bird")
+					S = spec_hair_bird_list[spec_hair]
+		else
+			S = hair_styles_list[hair_style]
+
+		if(S && ((HAIR in pref_species.specflags) || pref_species.spec_hair))
 			var/icon/hair_s = new/icon("icon" = S.icon, "icon_state" = "[S.icon_state]_s")
 			if(pref_species.hair_color != null)
 				var/list/temp_hsv = list()

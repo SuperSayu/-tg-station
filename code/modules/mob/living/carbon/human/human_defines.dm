@@ -3,6 +3,9 @@
 	var/hair_color = "000"
 	var/hair_style = "Bald"
 
+	// Species "hair" (ex. lizard horns), uses alien color
+	var/spec_hair = "None"
+
 	//Facial hair colour and style
 	var/facial_hair_color = "000"
 	var/facial_hair_style = "Shaved"

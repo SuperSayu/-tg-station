@@ -153,8 +153,15 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	if(needs_update == -2)		//fatal, can't load any data
 		return 0
 
-	if(!S["species"] || !config.mutant_races)
-		S["species"]		<< new /datum/species/human()
+	// Species
+	var/species_name
+	S["species"]	>> species_name
+	if(config.mutant_races && species_name && (species_name in roundstart_species))
+		var/newtype = roundstart_species[species_name]
+		pref_species = new newtype()
+	else
+		pref_species = new /datum/species/human()
+
 	if(!S["mutant_color"] || S["mutant_color"] == "#000")
 		S["mutant_color"]	<< "#FFF"
 
@@ -174,6 +181,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["backbag"]			>> backbag
 	S["species"]			>> pref_species
 	S["mutant_color"]		>> mutant_color
+	//S["spec_hair"]			>> spec_hair // Spec hair resets when you change characters to prevent graphical glitches
 
 	//Jobs
 	S["userandomjob"]		>> userandomjob
@@ -254,6 +262,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["backbag"]			<< backbag
 	S["species"]			<< pref_species
 	S["mutant_color"]		<< mutant_color
+	//S["spec_hair"]			<< spec_hair // Spec hair resets when you change characters to prevent graphical glitches
 
 	//Jobs
 	S["userandomjob"]		<< userandomjob

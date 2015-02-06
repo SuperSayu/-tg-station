@@ -36,6 +36,19 @@
 				female += D.name
 	return L
 
+/proc/init_species_accessory_subtypes(prototype, list/L)
+	if(!istype(L))
+		L = list()
+
+	for(var/path in typesof(prototype))
+		if(path == prototype)	continue
+		var/datum/sprite_accessory/species/D = new path()
+
+		if(D.icon_state)	L[D.name] = D
+		else				L += D.name
+
+	return L
+
 /datum/sprite_accessory
 	var/icon			//the icon file the accessory is located in
 	var/icon_state		//the icon_state of the accessory
@@ -518,3 +531,80 @@
 	female_tankini
 		name = "Tankini"
 		icon_state = "female_tankini"
+
+/////////////////////////
+// Species accessories //
+/////////////////////////
+
+/datum/sprite_accessory/species
+	icon = 'icons/mob/spec_accessory.dmi'
+	gender = NEUTER
+	var/id = null // species id must match accessory id for it to be usable
+
+/////////////
+// LIZARDS //
+/////////////
+
+/datum/sprite_accessory/species/lizard
+	id = "lizard"
+
+	none
+		name = "None"
+		icon_state = null
+
+	spike_small
+		name = "Small Spikes"
+		icon_state = "liz_spike_small"
+
+	spike_tall
+		name = "Tall Spikes"
+		icon_state = "liz_spike_tall"
+
+	twinspikes
+		name = "Twin Spikes"
+		icon_state = "liz_twinspikes"
+
+	point
+		name = "Point"
+		icon_state = "liz_point"
+
+	tripoint
+		name = "Triple Points"
+		icon_state = "liz_tripoint"
+
+	crown
+		name = "Crown"
+		icon_state = "liz_crown"
+
+	flaps
+		name = "Flaps"
+		icon_state = "liz_flaps"
+
+	flaps_alt
+		name = "Flaps Alt"
+		icon_state = "liz_flaps_alt"
+
+	nubs
+		name = "Nubs"
+		icon_state = "liz_nubs"
+
+	side
+		name = "Side"
+		icon_state = "liz_side"
+
+	butterfly
+		name = "Butterfly"
+		icon_state = "liz_butterfly"
+
+///////////
+// BIRDS //
+///////////
+
+// Todo: add stuff here
+
+/datum/sprite_accessory/species/bird
+	id = "bird"
+
+	none
+		name = "None"
+		icon_state = none
