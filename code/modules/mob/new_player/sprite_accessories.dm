@@ -607,4 +607,4 @@
 
 	none
 		name = "None"
-		icon_state = none
+		icon_state = null
