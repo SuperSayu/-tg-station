@@ -539,7 +539,7 @@
 /datum/sprite_accessory/species
 	icon = 'icons/mob/spec_accessory.dmi'
 	gender = NEUTER
-	var/id = null // species id must match accessory id for it to be usable
+	var/id = null // species id must match accessory id for it to be usable.
 
 /////////////
 // LIZARDS //
