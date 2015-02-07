@@ -802,3 +802,6 @@ var/list/slot_equipment_priority = list( \
 	update_canmove()
 	return
 
+/mob/proc/assess_threat() //For sec bot threat assessment
+	return
+
