@@ -179,9 +179,8 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["facial_style_name"]	>> facial_hair_style
 	S["underwear"]			>> underwear
 	S["backbag"]			>> backbag
-	S["species"]			>> pref_species
 	S["mutant_color"]		>> mutant_color
-	//S["spec_hair"]			>> spec_hair // Spec hair resets when you change characters to prevent graphical glitches
+	S["spec_hair"]			>> spec_hair // I'll need to add more stuff when more species that use hair are added to roundstart. ;-;
 
 	//Jobs
 	S["userandomjob"]		>> userandomjob
@@ -202,8 +201,6 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	//Sanitize
 	metadata		= sanitize_text(metadata, initial(metadata))
 	real_name		= reject_bad_name(real_name)
-	if(!(pref_species in species_list))
-		pref_species = new /datum/species/human()
 	if(!mutant_color || mutant_color == "#000")
 		mutant_color = "#FFF"
 	if(!real_name)	real_name = random_name(gender)
@@ -260,9 +257,9 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["facial_style_name"]	<< facial_hair_style
 	S["underwear"]			<< underwear
 	S["backbag"]			<< backbag
-	S["species"]			<< pref_species
+	S["species"]			<< pref_species.name
 	S["mutant_color"]		<< mutant_color
-	//S["spec_hair"]			<< spec_hair // Spec hair resets when you change characters to prevent graphical glitches
+	S["spec_hair"]			<< spec_hair // I'll need to add more stuff when more species that use hair are added to roundstart. ;-;
 
 	//Jobs
 	S["userandomjob"]		<< userandomjob
