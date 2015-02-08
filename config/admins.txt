@@ -64,3 +64,4 @@ donkieyo = Game Master
 argoneus = Game Master
 
 Plizzard = Game Master
+Becquerel = Game Master
