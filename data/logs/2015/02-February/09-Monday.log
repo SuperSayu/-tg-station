@@ -1,0 +1,77 @@
+
+
+Starting up. 00:03.30
+---------------------
+Adding game mode blob (blob) to configuration.
+Adding game mode changeling (changeling) to configuration.
+Adding game mode traitor+changeling (traitorchan) to configuration.
+Adding game mode double agents (double_agents) to configuration.
+Adding game mode traitor (traitor) to configuration.
+Adding game mode cult (cult) to configuration.
+Adding game mode extended (extended) to configuration.
+Adding game mode AI malfunction (malfunction) to configuration.
+Adding game mode meteor (meteor) to configuration.
+Adding game mode nuclear emergency (nuclear) to configuration.
+Adding game mode revolution (revolution) to configuration.
+Adding game mode sandbox (sandbox) to configuration.
+Adding game mode wizard (wizard) to configuration.
+Saved mode is 'sandbox'
+[00:03:30]ADMIN: Loading Banlistjob
+[00:03:30]ADMIN: Loading jobban_rank
+[00:03:30]ADMIN: jobban_keylist was empty
+[00:03:30]ADMIN: Loading appearance_rank
+[00:03:30]ADMIN: appearance_keylist was empty
+[00:03:30]ADMIN: Updating jobbanfile!
+[00:03:30]ADMIN: Loading Banlist
+[00:03:31]ACCESS: Login: PLizzard/(PLizzard) from localhost-1886905086 || BYOND v506
+[00:04:49]ADMIN: PLizzard has started the game.
+[00:04:53]ACCESS: Logout: *no key*/(PLizzard)
+[00:04:53]ACCESS: Login: PLizzard/(Jeannie Beck) from localhost-1886905086 || BYOND v506
+[00:05:11]ADMIN: PLizzard/(Jeannie Beck) spawned /mob/living/carbon/human at (42,145,1)
+[00:05:17]ADMIN: PLizzard/(Jeannie Beck) spawned /obj/item/weapon/gun/projectile/revolver/doublebarrel at (44,145,1)
+[00:05:20]SAY: corgi puppy/ : AUUUUUU
+[00:05:22]EMOTE: monkey (617)/ : <B>The monkey (617)</B> jumps!
+[00:05:24]SAY: mouse/ : SQUEEK!
+[00:05:31]ADMIN: PLizzard/(Jeannie Beck) spawned /obj/item/weapon/gun/projectile/revolver/doublebarrel at (41,145,1)
+[00:05:36]SAY: Poly/ : AI is rouge!
+[00:05:48]ACCESS: Logout: PLizzard[DC]/(Jeannie Beck)
+
+
+Starting up. 19:17.51
+---------------------
+Adding game mode blob (blob) to configuration.
+Adding game mode changeling (changeling) to configuration.
+Adding game mode traitor+changeling (traitorchan) to configuration.
+Adding game mode double agents (double_agents) to configuration.
+Adding game mode traitor (traitor) to configuration.
+Adding game mode cult (cult) to configuration.
+Adding game mode extended (extended) to configuration.
+Adding game mode AI malfunction (malfunction) to configuration.
+Adding game mode meteor (meteor) to configuration.
+Adding game mode nuclear emergency (nuclear) to configuration.
+Adding game mode revolution (revolution) to configuration.
+Adding game mode sandbox (sandbox) to configuration.
+Adding game mode wizard (wizard) to configuration.
+Saved mode is 'sandbox'
+[19:17:51]ADMIN: Loading Banlistjob
+[19:17:51]ADMIN: Loading jobban_rank
+[19:17:51]ADMIN: jobban_keylist was empty
+[19:17:51]ADMIN: Loading appearance_rank
+[19:17:51]ADMIN: appearance_keylist was empty
+[19:17:51]ADMIN: Updating jobbanfile!
+[19:17:51]ADMIN: Loading Banlist
+[19:17:52]ACCESS: Login: PLizzard/(PLizzard) from localhost-1886905086 || BYOND v506
+[19:18:47]ADMIN: PLizzard has started the game.
+[19:18:49]ACCESS: Logout: *no key*/(PLizzard)
+[19:18:49]ACCESS: Login: PLizzard/(Jeannie Beck) from localhost-1886905086 || BYOND v506
+[19:18:56]EMOTE: monkey (601)/ : <B>The monkey (601)</B> jumps!
+[19:19:01]SAY: mouse/ : Squeek?
+[19:19:06]ADMIN: PLizzard/(Jeannie Beck) spawned /obj/item/weapon/gun/energy/stunrevolver at (122,124,1)
+[19:19:27]SAY: mouse/ : Squeek!
+[19:19:33]EMOTE: monkey (356)/ : <B>The monkey (356)</B> jumps!
+[19:19:42]SAY: corgi puppy/ : YAP
+[19:19:49]ADMIN: PLizzard/(Jeannie Beck) spawned /obj/item/weapon/gun/energy/taser at (124,125,1)
+[19:19:52]SAY: mouse/ : Squeek!
+[19:20:15]ADMIN: PLizzard/(Jeannie Beck) spawned /obj/item/weapon/gun/energy/gun/advtaser at (123,127,1)
+[19:20:17]SAY: mouse/ : Squeek?
+[19:21:43]ACCESS: Logout: PLizzard[DC]/(Jeannie Beck)

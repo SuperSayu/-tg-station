@@ -9,18 +9,23 @@
 /obj/item/projectile/energy/electrode
 	name = "electrode"
 	icon_state = "spark"
+	color = "#FFFF00"
 	nodamage = 1
 	stun = 5
 	weaken = 5
 	stutter = 5
-	hitsound = "sparks"
+	jitter = 20
+	hitsound = "sound/weapons/taserhit.ogg"
+	range = 7
 
-	on_hit(var/atom/target, var/blocked = 0)
+/obj/item/projectile/energy/electrode/on_hit(var/atom/target, var/blocked = 0)
+	if(!proj_hit)
 		if(!ismob(target) || blocked >= 2) //Fully blocked by mob or collided with dense object - burst into sparks!
 			var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread
 			sparks.set_up(1, 1, src)
 			sparks.start()
-		..()
+			proj_hit = 1
+	..()
 
 /obj/item/projectile/energy/declone
 	name = "declown"
@@ -30,7 +35,7 @@
 	irradiate = 40
 
 
-/obj/item/projectile/energy/dart
+/obj/item/projectile/energy/dart //ninja throwing dart
 	name = "dart"
 	icon_state = "toxin"
 	damage = 5
@@ -38,31 +43,19 @@
 	weaken = 5
 
 
-/obj/item/projectile/energy/bolt
+/obj/item/projectile/energy/bolt //ebow bolts
 	name = "bolt"
 	icon_state = "cbbolt"
-	damage = 10
+	damage = 15
 	damage_type = TOX
 	nodamage = 0
 	weaken = 5
 	stutter = 5
-
+	range = 10
 
 /obj/item/projectile/energy/bolt/large
 	name = "largebolt"
 	damage = 20
-
-/obj/item/projectile/energy/disabler
-	name = "disabler beam"
-	icon_state = "omnilaser"
-	damage = 34
-	damage_type = STAMINA
-	var/range = 7
-
-/obj/item/projectile/energy/disabler/Range()
-	range--
-	if(range <= 0)
-		delete()
 
 
 

@@ -150,7 +150,7 @@
 		modules += new /obj/item/borg/sight/hud/sec(src)
 		modules += new /obj/item/weapon/handcuffs/cyborg(src)
 		modules += new /obj/item/weapon/melee/baton/loaded(src)
-		modules += new /obj/item/weapon/gun/energy/taser/cyborg(src)
+		modules += new /obj/item/weapon/gun/energy/disabler/cyborg(src)
 		emag = new /obj/item/weapon/gun/energy/laser/cyborg(src)
 
 
