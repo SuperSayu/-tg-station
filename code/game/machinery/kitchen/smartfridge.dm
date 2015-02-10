@@ -16,11 +16,11 @@
 	var/icon_on = "smartfridge"
 	var/icon_off = "smartfridge-off"
 	var/item_quants = list()
-/*
+
 /obj/machinery/smartfridge/power_change()
 	..()
 	update_icon()
-*/
+
 /obj/machinery/smartfridge/update_icon()
 	if(!stat)
 		icon_state = icon_on
@@ -141,26 +141,27 @@
 		for (var/O in item_quants)
 			if(item_quants[O] > 0)
 				var/N = item_quants[O]
+				var/itemName = sanitize(O)
 				dat += "<FONT color = 'blue'><B>[capitalize(O)]</B>:"
 				dat += " [N] </font>"
-				dat += "<a href='byond://?src=\ref[src];vend=[O];amount=1'>Vend</A> "
+				dat += "<a href='byond://?src=\ref[src];vend=[itemName];amount=1'>Vend</A> "
 				if(N > 5)
-					dat += "(<a href='byond://?src=\ref[src];vend=[O];amount=5'>x5</A>)"
+					dat += "(<a href='byond://?src=\ref[src];vend=[itemName];amount=5'>x5</A>)"
 					if(N > 10)
-						dat += "(<a href='byond://?src=\ref[src];vend=[O];amount=10'>x10</A>)"
+						dat += "(<a href='byond://?src=\ref[src];vend=[itemName];amount=10'>x10</A>)"
 						if(N > 25)
-							dat += "(<a href='byond://?src=\ref[src];vend=[O];amount=25'>x25</A>)"
+							dat += "(<a href='byond://?src=\ref[src];vend=[itemName];amount=25'>x25</A>)"
 				if(N > 1)
-					dat += "(<a href='?src=\ref[src];vend=[O];amount=[N]'>All</A>)"
+					dat += "(<a href='?src=\ref[src];vend=[itemName];amount=[N]'>All</A>)"
 				if((findtext(O,"seeds") || findtext(O,"mycelium")) && N>1)
 					var/max_bags = round((N-1)/7)+1
-					dat += "(<a href='?src=\ref[src];bagvend=[O];amount=1'>1 Bag</A>)"
+					dat += "(<a href='?src=\ref[src];bagvend=[itemName];amount=1'>1 Bag</A>)"
 					if(max_bags > 2) // at least 14
-						dat += "(<a href='?src=\ref[src];bagvend=[O];amount=2'>2 Bags</A>)"
+						dat += "(<a href='?src=\ref[src];bagvend=[itemName];amount=2'>2 Bags</A>)"
 						if(max_bags > 5) // at least 35
-							dat += "(<a href='?src=\ref[src];bagvend=[O];amount=5'>5 Bags</A>)"
+							dat += "(<a href='?src=\ref[src];bagvend=[itemName];amount=5'>5 Bags</A>)"
 					if(max_bags > 1)
-						dat += "(<a href='?src=\ref[src];bagvend=[O];amount=[max_bags]'>Bag All</A>)"
+						dat += "(<a href='?src=\ref[src];bagvend=[itemName];amount=[max_bags]'>Bag All</A>)"
 				dat += "<br>"
 
 		dat += "</TT>"

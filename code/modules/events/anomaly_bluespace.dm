@@ -52,9 +52,7 @@
 				var/x_distance = TO.x - FROM.x
 				for (var/atom/movable/A in range(12, FROM )) // iterate thru list of mobs in the area
 					if(istype(A, /obj/item/device/radio/beacon)) continue // don't teleport beacons because that's just insanely stupid
-					if(A.anchored && istype(A, /obj/machinery)) continue
-					if(istype(A, /obj/structure/disposalpipe )) continue
-					if(istype(A, /obj/structure/cable )) continue
+					if(A.anchored) continue
 
 					var/turf/newloc = locate(A.x + x_distance, A.y + y_distance, TO.z) // calculate the new place
 					if(!newloc) continue
