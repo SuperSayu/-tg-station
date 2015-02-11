@@ -57,6 +57,8 @@
 	var/punchmod = 0	// adds to the punch damage
 
 	var/bone_chance_adjust = 1
+	var/species_temp_coeff = 1
+	var/species_temp_offset = 0
 
 	var/invis_sight = SEE_INVISIBLE_LIVING
 	var/darksight = 2
@@ -1324,24 +1326,28 @@
 		if(H.stat != 2)
 			H.stabilize_temperature_from_calories()
 
+		var/coeff = species_temp_coeff
+		if(!coeff)
+			coeff = 1
+
 		//After then, it reacts to the surrounding atmosphere based on your thermal protection
 		if(!H.on_fire) //If you're on fire, you do not heat up or cool down based on surrounding gases
 			if(loc_temp < H.bodytemperature)
 				//Place is colder than we are
 				var/thermal_protection = H.get_cold_protection(loc_temp) //This returns a 0 - 1 value, which corresponds to the percentage of protection based on what you're wearing and what you're exposed to.
 				if(thermal_protection < 1)
-					H.bodytemperature += min((1-thermal_protection) * ((loc_temp - H.bodytemperature) / BODYTEMP_COLD_DIVISOR), BODYTEMP_COOLING_MAX)
+					H.bodytemperature += min((1-thermal_protection) * ((loc_temp - H.bodytemperature) / (BODYTEMP_COLD_DIVISOR * coeff)), BODYTEMP_COOLING_MAX)
 			else
 				//Place is hotter than we are
 				var/thermal_protection = H.get_heat_protection(loc_temp) //This returns a 0 - 1 value, which corresponds to the percentage of protection based on what you're wearing and what you're exposed to.
 				if(thermal_protection < 1)
-					H.bodytemperature += min((1-thermal_protection) * ((loc_temp - H.bodytemperature) / BODYTEMP_HEAT_DIVISOR), BODYTEMP_HEATING_MAX)
+					H.bodytemperature += min((1-thermal_protection) * ((loc_temp - H.bodytemperature) / (BODYTEMP_HEAT_DIVISOR * coeff)), BODYTEMP_HEATING_MAX)
 
 		// +/- 50 degrees from 310.15K is the 'safe' zone, where no damage is dealt.
 		if(H.bodytemperature > BODYTEMP_HEAT_DAMAGE_LIMIT && !(HEATRES in specflags))
 			//Body temperature is too hot.
 			H.fire_alert = max(H.fire_alert, 1)
-			switch(H.bodytemperature)
+			switch((H.bodytemperature + species_temp_offset))
 				if(360 to 400)
 					H.apply_damage(HEAT_DAMAGE_LEVEL_1*heatmod, BURN)
 					H.fire_alert = max(H.fire_alert, 2)
@@ -1359,7 +1365,7 @@
 		else if(H.bodytemperature < BODYTEMP_COLD_DAMAGE_LIMIT && !(COLDRES in specflags))
 			H.fire_alert = max(H.fire_alert, 1)
 			if(!istype(H.loc, /obj/machinery/atmospherics/unary/cryo_cell))
-				switch(H.bodytemperature)
+				switch((H.bodytemperature + species_temp_offset))
 					if(200 to 260)
 						H.apply_damage(COLD_DAMAGE_LEVEL_1*coldmod, BURN)
 						H.fire_alert = max(H.fire_alert, 1)
