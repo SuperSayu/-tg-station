@@ -8,5 +8,9 @@
 *.lk
 *.int
 /data/mode.txt
-/maps/backup
+/_maps/backup
 
+#Logfiles
+*.log
+/data/investigate/**
+/data/logs/**
