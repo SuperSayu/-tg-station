@@ -55,7 +55,7 @@
 	icon_living = "Basilisk"
 	icon_aggro = "Basilisk_alert"
 	icon_dead = "Basilisk_dead"
-	icon_gib = "syndicate_gib"
+	icon_gib = "syndicate_gib"https://github.com/SuperSayu/-tg-station/pull/137
 	move_to_delay = 20
 	projectiletype = /obj/item/projectile/temp/basilisk
 	projectilesound = 'sound/weapons/pierce.ogg'
@@ -308,7 +308,7 @@
 	harm_intent_damage = 5
 	melee_damage_lower = 2
 	melee_damage_upper = 2
-	attacktext = "slashes"
+	attacktext = "tackles"
 	throw_message = "falls right through the strange body of the"
 	environment_smash = 0
 	pass_flags = PASSTABLE
