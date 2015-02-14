@@ -38,83 +38,8 @@
 	attack_verb = "slash"
 	attack_sound = 'sound/weapons/slash.ogg'
 	miss_sound = 'sound/weapons/slashmiss.ogg'
-
-/datum/species/lizard/handle_environment(datum/gas_mixture/environment, mob/living/carbon/human/H)
-	// Lizardpeople heat up and cool down faster than humans.
-	// Depending on the environment, this can be either a good thing or a bad thing.
-	if(!environment)
-		return
-
-	var/loc_temp = H.get_temperature(environment)
-
-	if(H.stat != 2)
-		H.stabilize_temperature_from_calories()
-
-	if(!H.on_fire)
-		// Body temperature changes faster!
-		if(loc_temp < H.bodytemperature)
-			var/thermal_protection = H.get_cold_protection(loc_temp)
-			if(thermal_protection < 1)
-				H.bodytemperature += min((1-thermal_protection) * ((loc_temp - H.bodytemperature) / (BODYTEMP_COLD_DIVISOR*0.5)), BODYTEMP_COOLING_MAX)
-		else
-			var/thermal_protection = H.get_heat_protection(loc_temp)
-			if(thermal_protection < 1)
-				H.bodytemperature += min((1-thermal_protection) * ((loc_temp - H.bodytemperature) / (BODYTEMP_HEAT_DIVISOR*0.5)), BODYTEMP_HEATING_MAX)
-
-	if(H.bodytemperature > BODYTEMP_HEAT_DAMAGE_LIMIT && !(HEATRES in specflags))
-		H.fire_alert = max(H.fire_alert, 1)
-		switch(H.bodytemperature) // They start burning at a slightly lower temperature...
-			if(340 to 380)
-				H.apply_damage(HEAT_DAMAGE_LEVEL_1*heatmod, BURN)
-				H.fire_alert = max(H.fire_alert, 2)
-			if(380 to 420)
-				H.apply_damage(HEAT_DAMAGE_LEVEL_2*heatmod, BURN)
-				H.fire_alert = max(H.fire_alert, 2)
-			if(460 to INFINITY)
-				if(H.on_fire)
-					H.apply_damage(HEAT_DAMAGE_LEVEL_3*heatmod, BURN)
-					H.fire_alert = max(H.fire_alert, 2)
-				else
-					H.apply_damage(HEAT_DAMAGE_LEVEL_2*heatmod, BURN)
-					H.fire_alert = max(H.fire_alert, 2)
-
-	else if(H.bodytemperature < BODYTEMP_COLD_DAMAGE_LIMIT && !(COLDRES in specflags))
-		H.fire_alert = max(H.fire_alert, 1)
-		if(!istype(H.loc, /obj/machinery/atmospherics/unary/cryo_cell))
-			switch(H.bodytemperature) // ...and start freezing at a slightly higher temperature.
-				if(180 to 240)
-					H.apply_damage(COLD_DAMAGE_LEVEL_1*coldmod, BURN)
-					H.fire_alert = max(H.fire_alert, 1)
-				if(100 to 180)
-					H.apply_damage(COLD_DAMAGE_LEVEL_2*coldmod, BURN)
-					H.fire_alert = max(H.fire_alert, 1)
-				if(-INFINITY to 100)
-					H.apply_damage(COLD_DAMAGE_LEVEL_3*coldmod, BURN)
-					H.fire_alert = max(H.fire_alert, 1)
-
-	var/pressure = environment.return_pressure()
-	var/adjusted_pressure = H.calculate_affecting_pressure(pressure)
-	switch(adjusted_pressure)
-		if(HAZARD_HIGH_PRESSURE to INFINITY)
-			if(!(HEATRES in specflags))
-				H.adjustBruteLoss( min( ( (adjusted_pressure / HAZARD_HIGH_PRESSURE) -1 )*PRESSURE_DAMAGE_COEFFICIENT , MAX_HIGH_PRESSURE_DAMAGE) )
-				H.pressure_alert = 2
-			else
-				H.pressure_alert = 1
-		if(WARNING_HIGH_PRESSURE to HAZARD_HIGH_PRESSURE)
-			H.pressure_alert = 1
-		if(WARNING_LOW_PRESSURE to WARNING_HIGH_PRESSURE)
-			H.pressure_alert = 0
-		if(HAZARD_LOW_PRESSURE to WARNING_LOW_PRESSURE)
-			H.pressure_alert = -1
-		else
-			if((COLD_RESISTANCE in H.mutations) || (COLDRES in specflags))
-				H.pressure_alert = -1
-			else
-				H.adjustBruteLoss( LOW_PRESSURE_DAMAGE )
-				H.pressure_alert = -2
-
-	return
+	species_temp_coeff = 0.5
+	species_temp_offset = -20
 
 //NOPE
 /*
