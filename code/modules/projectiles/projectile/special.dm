@@ -59,20 +59,6 @@
 
 		return ..(A)
 	*/
-	log_hit(var/mob/target)
-		var/R = ""
-		if(contained && contained.reagents)
-			for(var/datum/reagent/A in contained.reagents.reagent_list)
-				R += A.id + ","
-		else
-			R = "no payload"
-		if(istype(firer, /mob))
-			target.attack_log += "\[[time_stamp()]\] <b>[firer]/[firer.ckey]</b> shot <b>[target]/[target.ckey]</b> with a <b>[src]</b> ([R])"
-			firer.attack_log += "\[[time_stamp()]\] <b>[firer]/[firer.ckey]</b> shot <b>[target]/[target.ckey]</b> with a <b>[src]</b> ([R])"
-			log_attack("<font color='red'>[firer] ([firer.ckey]) shot [target] ([target.ckey]) with a [src] ([R])</font>")
-		else
-			target.attack_log += "\[[time_stamp()]\] <b>UNKNOWN SUBJECT (No longer exists)</b> shot <b>[target]/[target.ckey]</b> with a <b>[src]</b> ([R])"
-			log_attack("<font color='red'>UNKNOWN shot [target] ([target.ckey]) with a [src] ([R])</font>")
 
 /obj/item/projectile/reagent/bananacreme
 	name = "banana creme bullet"
@@ -105,7 +91,6 @@
 	icon_state= "bolter"
 	damage = 50
 	flag = "bullet"
-
 
 	on_hit(var/atom/target, var/blocked = 0)
 		explosion(target, -1, 0, 2)
@@ -201,7 +186,7 @@
 	damage = 15
 	damage_type = BRUTE
 	flag = "bomb"
-	var/range = 3
+	range = 3
 
 obj/item/projectile/kinetic/New()
 	var/turf/proj_turf = get_turf(src)

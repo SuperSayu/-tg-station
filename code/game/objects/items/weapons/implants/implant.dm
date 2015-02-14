@@ -5,7 +5,7 @@
 	action_button_is_hands_free = 1
 	var/activated = 1 //1 for implant types that can be activated, 0 for ones that are "always on" like loyalty implants
 	var/implanted = null
-	var/mob/imp_in = null
+	var/mob/living/imp_in = null
 	item_color = "b"
 	var/allow_reagents = 0
 
@@ -201,6 +201,7 @@
 	imp_in.SetParalysis(0)
 	imp_in.lying = 0
 	imp_in.update_canmove()
+	imp_in.adjustStaminaLoss(-75)
 
 	imp_in.reagents.add_reagent("synaptizine", 10)
 	imp_in.reagents.add_reagent("tricordrazine", 10)

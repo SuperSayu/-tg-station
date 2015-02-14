@@ -118,7 +118,7 @@
 			if(/obj/item/weapon/gun/energy/lasercannon)
 				iconholder = 1
 
-			if(/obj/item/weapon/gun/energy/taser)
+			if(/obj/item/weapon/gun/energy/gun/advtaser)
 				eprojectile = /obj/item/projectile/beam
 
 			if(/obj/item/weapon/gun/energy/stunrevolver)

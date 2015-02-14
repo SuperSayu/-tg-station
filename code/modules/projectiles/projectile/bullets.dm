@@ -7,16 +7,15 @@
 	flag = "bullet"
 
 
-/obj/item/projectile/bullet/weakbullet
+/obj/item/projectile/bullet/weakbullet  //beanbag, heavy stamina damage
 	damage = 5
-	stun = 5
-	weaken = 5
+	stamina = 80
 
 
-/obj/item/projectile/bullet/weakbullet2
+/obj/item/projectile/bullet/weakbullet2 //detective revolver instastuns, but multiple shots are better for keeping punks down
 	damage = 15
-	stun = 5
-	weaken = 5
+	weaken = 3
+	stamina = 50
 
 
 /obj/item/projectile/bullet/pellet
@@ -26,8 +25,7 @@
 
 /obj/item/projectile/bullet/midbullet
 	damage = 20
-	stun = 5
-	weaken = 5
+	stamina = 50
 
 
 /obj/item/projectile/bullet/midbullet2
@@ -55,12 +53,17 @@
 	damage = 20
 
 
-/obj/item/projectile/bullet/stunshot
+/obj/item/projectile/bullet/stunshot //taser slugs for shotguns, nothing special
 	name = "stunshot"
 	damage = 5
+	stamina = 50
 	stun = 5
 	weaken = 5
 	stutter = 5
+	jitter = 20
+	range = 7
+	icon_state = "spark"
+	color = "#FFFF00"
 
 
 /obj/item/projectile/bullet/a762
