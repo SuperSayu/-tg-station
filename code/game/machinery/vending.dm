@@ -6,10 +6,9 @@
 	var/display_color = "blue"
 	var/artificial = 0 // If true, only exists because of inserted items
 
-	New(var/atom/source = null,var/new_amount = null)
-		if(!source) return
-		product_name = source.name
-		product_path = source.type
+	New(var/name, var/path,var/new_amount = null)
+		product_name = name
+		product_path = type
 		display_color = pick("red","lightgreen","aqua","maroon","green","teal")
 		if(!isnull(new_amount))
 			amount = new_amount
@@ -148,9 +147,10 @@
 		var/amount = productlist[typepath]
 		if(isnull(amount)) amount = 0
 
-		var/atom/temp = new typepath(null)
-		if(!temp) continue
-		var/datum/data/vending_product/R = new(temp,amount)
+		//var/atom/temp = new typepath(null)
+		//if(!temp) continue
+		if(!ispath(typepath,/obj)) continue
+		var/datum/data/vending_product/R = new(initial(typepath:name),typepath,amount) // this use of initial() hurts my brain
 
 		if(hidden)
 			hidden_records += R

@@ -246,19 +246,23 @@
 	anchored = 0
 	New()
 		while(contents.len < 10)
-			var/ptype = pick(/obj/item/weapon/reagent_containers/food/snacks/grown/apple, /obj/item/weapon/reagent_containers/food/snacks/grown/banana,
-							 /obj/item/weapon/reagent_containers/food/snacks/grown/berries, /obj/item/weapon/reagent_containers/food/snacks/grown/cabbage,
-							 /obj/item/weapon/reagent_containers/food/snacks/grown/carrot, /obj/item/weapon/reagent_containers/food/snacks/grown/cherries,
-							 /obj/item/weapon/reagent_containers/food/snacks/grown/chili, /obj/item/weapon/reagent_containers/food/snacks/grown/cocoapod,
-							 /obj/item/weapon/reagent_containers/food/snacks/grown/corn, /obj/item/weapon/reagent_containers/food/snacks/grown/eggplant,
-							 /obj/item/weapon/reagent_containers/food/snacks/grown/grapes, /obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes,
-							 /obj/item/weapon/reagent_containers/food/snacks/grown/icepepper, /obj/item/weapon/reagent_containers/food/snacks/grown/lemon,
-							 /obj/item/weapon/reagent_containers/food/snacks/grown/lime, /obj/item/weapon/reagent_containers/food/snacks/grown/orange,
-							 /obj/item/weapon/reagent_containers/food/snacks/grown/potato, /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin,
-							 /obj/item/weapon/reagent_containers/food/snacks/grown/soybeans, /obj/item/weapon/reagent_containers/food/snacks/grown/sugarcane,
-							 /obj/item/weapon/reagent_containers/food/snacks/grown/tomato, /obj/item/weapon/reagent_containers/food/snacks/grown/watermelon,
-							 /obj/item/weapon/reagent_containers/food/snacks/grown/wheat, /obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,
-							 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chanterelle, /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet)
+			var/ptype = pick(/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chanterelle, /obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/plumphelmet, /obj/item/weapon/reagent_containers/food/snacks/grown/banana,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/eggplant, /obj/item/weapon/reagent_containers/food/snacks/grown/apple,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/carrot, /obj/item/weapon/reagent_containers/food/snacks/grown/orange,
+
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet, /obj/item/weapon/reagent_containers/food/snacks/grown/lime,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/soybeans, /obj/item/weapon/reagent_containers/food/snacks/grown/lemon,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin, /obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/tomato, /obj/item/weapon/reagent_containers/food/snacks/grown/berries,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/chili, /obj/item/weapon/reagent_containers/food/snacks/grown/cherries,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/corn, /obj/item/weapon/reagent_containers/food/snacks/grown/sugarcane,
+
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/watermelon, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/icepepper, /obj/item/weapon/reagent_containers/food/snacks/grown/potato,
+							 /obj/item/weapon/reagent_containers/food/snacks/grown/cocoapod, /obj/item/weapon/reagent_containers/food/snacks/grown/cabbage)
+							 /* In case it should be unclear I am bored out of my mind*/
+
 			var/obj/O = new ptype(src)
 			O.pixel_x = rand(-10,10)
 			O.pixel_y = rand(-5,5)
