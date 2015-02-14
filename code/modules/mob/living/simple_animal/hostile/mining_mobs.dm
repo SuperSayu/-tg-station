@@ -55,7 +55,7 @@
 	icon_living = "Basilisk"
 	icon_aggro = "Basilisk_alert"
 	icon_dead = "Basilisk_dead"
-	icon_gib = "syndicate_gib"https://github.com/SuperSayu/-tg-station/pull/137
+	icon_gib = "syndicate_gib"
 	move_to_delay = 20
 	projectiletype = /obj/item/projectile/temp/basilisk
 	projectilesound = 'sound/weapons/pierce.ogg'
