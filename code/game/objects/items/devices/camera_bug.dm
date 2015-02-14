@@ -59,9 +59,7 @@
 	name = "Supplemental Camera Interface"
 	skip_bugcheck = 1
 	bugtype = AI_BUG
-	verb/show_interface()
-		set category="AI Commands"
-		set name="Show Camera Monitor"
+	proc/show_interface()
 		interact(usr)
 /obj/item/device/camera_bug/pai
 	name = "Supplemental Camera Interface"

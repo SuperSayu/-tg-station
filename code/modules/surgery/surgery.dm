@@ -16,13 +16,15 @@
 /datum/surgery/proc/next_step(mob/user, mob/living/carbon/target)
 	if(step_in_progress)	return
 
-	var/procedure = steps[status]
-	var/datum/surgery_step/S = new procedure
+	var/datum/surgery_step/S = get_surgery_step()
 	if(S)
 		if(S.try_op(user, target, user.zone_sel.selecting, user.get_active_hand(), src))
 			return 1
 	return 0
 
+/datum/surgery/proc/get_surgery_step()
+	var/step_type = steps[status]
+	return new step_type
 
 /datum/surgery/proc/complete(mob/living/carbon/human/target)
 	target.surgeries -= src
