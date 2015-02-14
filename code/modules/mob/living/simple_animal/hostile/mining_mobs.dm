@@ -215,7 +215,7 @@
 
 /mob/living/simple_animal/hostile/asteroid/hivelord
 	name = "hivelord"
-	desc = "A truly alien creature, it is a mass of unknown organic material, constantly fluctuating. When attacking, pieces of it split off and attack in tandem with the original."
+	desc = "A truly alien creature made of self-replicating neural cells. When it feels threatened, it rapidly divides into an army."
 	icon = 'icons/mob/animal.dmi'
 	icon_state = "Hivelord"
 	icon_living = "Hivelord"
@@ -260,7 +260,7 @@
 
 /obj/item/asteroid/hivelord_core
 	name = "hivelord remains"
-	desc = "All that remains of a hivelord, it seems to be what allows it to break pieces of itself off without being hurt... its healing properties will soon become inert if not used quickly. Try not to think about what you're eating."
+	desc = "Found in the remains of a hivelord, an organ which allows it to divide without being harmed... its healing properties will soon become inert if not used quickly. Try not to think about what you're eating."
 	icon = 'icons/obj/food.dmi'
 	icon_state = "phelmbiscuit"
 	var/inert = 0
@@ -308,7 +308,7 @@
 	harm_intent_damage = 5
 	melee_damage_lower = 2
 	melee_damage_upper = 2
-	attacktext = "slashes"
+	attacktext = "tackles"
 	throw_message = "falls right through the strange body of the"
 	environment_smash = 0
 	pass_flags = PASSTABLE
@@ -412,8 +412,8 @@
 	..()
 
 /obj/item/asteroid/goliath_hide
-	name = "goliath hide plates"
-	desc = "Pieces of a goliath's rocky hide, these might be able to make your suit a bit more durable to attack from the local fauna."
+	name = "goliath shell plating"
+	desc = "Pieces of a goliath's rocky shell, these might be able to make your suit a bit more durable to attack from the local fauna."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "goliath_hide"
 	w_class = 3
