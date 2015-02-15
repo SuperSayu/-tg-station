@@ -673,7 +673,6 @@ var/list/slot_equipment_priority = list( \
 	drop_l_hand()
 	drop_r_hand()
 
-
 /mob/verb/eastface()
 	set hidden = 1
 	if(!canface())	return 0
@@ -720,7 +719,7 @@ var/list/slot_equipment_priority = list( \
 
 /mob/proc/Stun(amount)
 	if(status_flags & CANSTUN)
-		stunned = max(stunned,amount,0) //can't go below 0, getting a low amount of stun doesn't lower your current stun
+		stunned = max(max(stunned,amount),0) //can't go below 0, getting a low amount of stun doesn't lower your current stun
 		update_canmove()
 	return
 
@@ -738,7 +737,7 @@ var/list/slot_equipment_priority = list( \
 
 /mob/proc/Weaken(amount)
 	if(status_flags & CANWEAKEN)
-		weakened = max(weakened,amount,0)
+		weakened = max(max(weakened,amount),0)
 		update_canmove()	//updates lying, canmove and icons
 	return
 
@@ -788,7 +787,7 @@ var/list/slot_equipment_priority = list( \
 	return
 
 /mob/proc/Resting(amount)
-	resting = max(resting,amount,0)
+	resting = max(max(resting,amount),0)
 	update_canmove()
 	return
 
@@ -804,4 +803,5 @@ var/list/slot_equipment_priority = list( \
 
 /mob/proc/assess_threat() //For sec bot threat assessment
 	return
+
 

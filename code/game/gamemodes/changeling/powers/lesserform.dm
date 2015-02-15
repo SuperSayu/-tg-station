@@ -13,7 +13,6 @@
 	user.monkeyize(TR_KEEPITEMS | TR_KEEPIMPLANTS | TR_KEEPDAMAGE | TR_KEEPSE | TR_KEEPSRC)
 
 	// Human-form power now handled in monkeyize()
-
 	feedback_add_details("changeling_powers","LF")
 	.=1
 	qdel(user)
