@@ -6,7 +6,7 @@
 	config_tag = "monkey"
 	antag_flag = BE_MONKEY
 
-	required_players = 1
+	required_players = 30
 	required_enemies = 1
 	recommended_enemies = 1
 
