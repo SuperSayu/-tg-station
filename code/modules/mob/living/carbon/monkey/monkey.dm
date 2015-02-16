@@ -348,6 +348,7 @@
 /mob/living/carbon/monkey/canBeHandcuffed()
 	return 1
 
+
 /mob/living/carbon/monkey/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
 	if(judgebot.emagged == 2)
 		return 10 //Everyone is a criminal!

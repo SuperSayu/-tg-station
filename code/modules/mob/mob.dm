@@ -803,5 +803,3 @@ var/list/slot_equipment_priority = list( \
 
 /mob/proc/assess_threat() //For sec bot threat assessment
 	return
-
-

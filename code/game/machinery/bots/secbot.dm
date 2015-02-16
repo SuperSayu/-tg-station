@@ -210,6 +210,7 @@ Auto Patrol: []"},
 		if(!istype(W, /obj/item/weapon/screwdriver) && !istype(W, /obj/item/weapon/weldingtool) && (W.force) && (!src.target)) // Added check for welding tool to fix #2432. Welding tool behavior is handled in superclass.
 			threatlevel = user.assess_threat(src)
 			threatlevel += 6
+
 			if(threatlevel >= 4)
 				src.target = user
 				src.mode = SECBOT_HUNT
@@ -275,10 +276,12 @@ Auto Patrol: []"},
 						M.Weaken(5)
 						M.stuttering = 5
 						M.Stun(5)
+
 					if(declare_arrests)
 						declare_arrest()
 					target.visible_message("<span class='danger'>[src.target] has been stunned by [src]!</span>",\
 											"<span class='userdanger'>[src.target] has been stunned by [src]!</span>")
+
 					maxstuns--
 					if(maxstuns <= 0)
 						target = null
