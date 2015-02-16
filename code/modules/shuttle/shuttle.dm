@@ -1,12 +1,4 @@
-var/obj/list/shuttles = list(
-	("escape" = new /datum/shuttle_manager(/area/shuttle/escape/centcom, 0)),
-	("pod1" =  new /datum/shuttle_manager(/area/shuttle/escape_pod1/station, 0)),
-	("pod2" = new /datum/shuttle_manager(/area/shuttle/escape_pod2/station, 0)),
-	("pod3" = new /datum/shuttle_manager(/area/shuttle/escape_pod3/station, 0)),
-	("pod4" = new /datum/shuttle_manager(/area/shuttle/escape_pod4/station, 0)),
-	("mining" = new /datum/shuttle_manager(/area/shuttle/mining/station, 10)),
-	("laborcamp" = new /datum/shuttle_manager(/area/shuttle/laborcamp/station, 10)),
-	("ferry" = new /datum/shuttle_manager(/area/shuttle/transport1/centcom, 30)))
+var/obj/list/shuttles = list(("escape" = new /datum/shuttle_manager(/area/shuttle/escape/centcom, 0)), ("pod1" =  new /datum/shuttle_manager(/area/shuttle/escape_pod1/station, 0)), ("pod2" = new /datum/shuttle_manager(/area/shuttle/escape_pod2/station, 0)), ("pod3" = new /datum/shuttle_manager(/area/shuttle/escape_pod3/station, 0)), ("pod4" = new /datum/shuttle_manager(/area/shuttle/escape_pod4/station, 0)), ("mining" = new /datum/shuttle_manager(/area/shuttle/mining/station, 10)), ("laborcamp" = new /datum/shuttle_manager(/area/shuttle/laborcamp/station, 10)), ("ferry" = new /datum/shuttle_manager(/area/shuttle/transport1/centcom, 30)))
 		//Pre-made shuttles should have non-number keys, so that buildable shuttles can use numbered keys without allowing 'I build a shuttle console with the escape number as its ID.'
 datum/shuttle_manager
 	var/tickstomove = 10 //How long does it take to move the shuttle?
@@ -31,7 +23,6 @@ datum/shuttle_manager/proc/move_shuttle(var/override_delay)
 
 		toArea.clear_docking_area()
 
-
 		fromArea.move_contents_to(toArea)
 		location = toArea.type
 
@@ -55,8 +46,6 @@ datum/shuttle_manager/proc/move_shuttle(var/override_delay)
 
 		moving = 0
 	return 1
-
-
 
 
 /obj/machinery/computer/shuttle
@@ -91,11 +80,11 @@ datum/shuttle_manager/proc/move_shuttle(var/override_delay)
 		if(id in shuttles)
 			var/datum/shuttle_manager/s = shuttles[id]
 			if (s.move_shuttle())
-				usr << "<span class='notice'> Shuttle recieved message and will be sent shortly.</span>"
+				usr << "<span class='notice'>Shuttle recieved message and will be sent shortly.</span>"
 			else
-				usr << "<span class='notice'> Shuttle is already moving.</span>"
+				usr << "<span class='notice'>Shuttle is already moving.</span>"
 		else
-			usr << "<span class='warning'> Invalid shuttle requested.</span>"
+			usr << "<span class='warning'>Invalid shuttle requested.</span>"
 
 
 /obj/machinery/computer/shuttle/attackby(I as obj, user as mob)
@@ -107,6 +96,7 @@ datum/shuttle_manager/proc/move_shuttle(var/override_delay)
 	else
 		..()
 	return
+
 
 /obj/machinery/computer/shuttle/centcomm
 	name = "Centcom ferry Console"
