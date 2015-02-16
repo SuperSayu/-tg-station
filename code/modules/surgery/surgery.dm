@@ -11,8 +11,6 @@
 	var/has_multi_loc = 0 										//Multiple locations - RR
 
 
-
-
 /datum/surgery/proc/next_step(mob/user, mob/living/carbon/target)
 	if(step_in_progress)	return
 
@@ -25,6 +23,7 @@
 /datum/surgery/proc/get_surgery_step()
 	var/step_type = steps[status]
 	return new step_type
+
 
 /datum/surgery/proc/complete(mob/living/carbon/human/target)
 	target.surgeries -= src
