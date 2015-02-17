@@ -228,7 +228,7 @@
 	icon_state = "seed-bloodtomato"
 	species = "bloodtomato"
 	plantname = "Blood-Tomato Plants"
-	product = /obj/item/weapon/reagent_containers/food/snacks/grown/bloodtomato
+	product = /obj/item/weapon/reagent_containers/food/snacks/grown/tomato/blood
 	lifespan = 25
 	endurance = 20
 	maturation = 8
@@ -262,7 +262,7 @@
 	icon_state = "seed-killertomato"
 	species = "killertomato"
 	plantname = "Killer-Tomato Plants"
-	product = /obj/item/weapon/reagent_containers/food/snacks/grown/killertomato
+	product = /obj/item/weapon/reagent_containers/food/snacks/grown/tomato/killer
 	lifespan = 25
 	endurance = 15
 	maturation = 8
@@ -280,7 +280,7 @@
 	icon_state = "seed-bluetomato"
 	species = "bluetomato"
 	plantname = "Blue-Tomato Plants"
-	product = /obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato
+	product = /obj/item/weapon/reagent_containers/food/snacks/grown/tomato/blue
 	lifespan = 25
 	endurance = 15
 	maturation = 8
@@ -298,7 +298,7 @@
 	icon_state = "seed-bluespacetomato"
 	species = "bluespacetomato"
 	plantname = "Blue-Space Tomato Plants"
-	product = /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato
+	product = /obj/item/weapon/reagent_containers/food/snacks/grown/tomato/blue/bluespace
 	lifespan = 25
 	endurance = 15
 	maturation = 8

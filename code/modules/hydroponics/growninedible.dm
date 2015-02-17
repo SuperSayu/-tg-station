@@ -183,8 +183,59 @@
 	throwforce = 0
 	throw_speed = 3
 	throw_range = 7
+
 /obj/item/weapon/grown/bananapeel/New(var/loc, var/potency = 10)
 	..()
+
+/obj/item/weapon/grown/bananapeel/Crossed(AM as mob|obj)
+	if (istype(AM, /mob/living/carbon))
+		var/mob/living/carbon/M = AM
+		var/stun = Clamp(potency / 10, 1, 10)
+		var/weaken = Clamp(potency / 20, 0.5, 5)
+		M.slip(stun, weaken, src)
+
+		if(prob(33))
+			step_rand(src)
+
+/obj/item/weapon/grown/bananapeel/wizard
+	name = "magical banana peel"
+	desc = "Far superior to the genetically enhanced version"
+	var/walk_delay = 2
+
+/obj/item/weapon/grown/bananapeel/wizard/New()
+	..()
+	walk_delay = rand(0,5)
+	walk_rand(src,walk_delay)
+	spawn(rand(3,6)*100)
+		if(src)
+			qdel(src)
+
+/obj/item/weapon/grown/bananapeel/wizard/Crossed(AM as mob|obj)
+	if (istype(AM, /mob/living/carbon))
+		var/mob/M =	AM
+
+		if(HULK in M.mutations)
+			M << "You squash [src], and it disintegrates with a \i [magic_soundfx()]."
+			del src
+			return
+
+		if (istype(M, /mob/living/carbon/human))
+			var/mob/living/carbon/human/H = M
+
+			if(H.shoes && H.shoes.flags&NOSLIP)
+				return
+
+		M.stop_pulling()
+		M << "\blue You slipped on the [name]! It disintegrates with a \i [magic_soundfx()]"
+		playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
+		M.Stun(2)
+		M.Weaken(1)
+		walk_rand(new src.type(loc),walk_delay)
+		while(prob(15))
+			walk_rand(new src.type(loc),walk_delay)
+		del src
+		return
+
 
 /obj/item/weapon/grown/corncob
 	name = "corn cob"

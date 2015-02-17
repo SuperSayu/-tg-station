@@ -148,7 +148,7 @@ proc/make_mining_asteroid_secret(var/monolith = 0)
 			if("bluespa")
 				theme = "bluespa"
 				floortypes = list(/turf/simulated/floor,/turf/simulated/floor/wood)
-				treasureitems = list(/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato=1,/obj/item/weapon/soap/deluxe=2)
+				treasureitems = list(/obj/item/weapon/reagent_containers/food/snacks/grown/tomato/blue/bluespace=1,/obj/item/weapon/soap/deluxe=2)
 				fluffitems = list(/obj/machinery/shower=2,/obj/item/weapon/bikehorn/rubberducky=1,/obj/structure/mirror=1)
 
 			if("carpcave")
