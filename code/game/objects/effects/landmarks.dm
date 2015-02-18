@@ -61,6 +61,10 @@ var/global/xartnum = 0 // Extra artifact number. Used to prevent too many extra 
 			if(prob(33))
 				maybe_beacons += loc
 			del(src)
+		if("secequipment")
+			secequipment += loc
+			qdel(src)
+			return
 		if("xeno_spawn")
 			xeno_spawn += loc
 			qdel(src)
