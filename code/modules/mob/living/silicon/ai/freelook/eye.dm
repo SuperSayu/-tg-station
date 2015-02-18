@@ -93,7 +93,6 @@
 
 
 // Return to the Core.
-
 /mob/living/silicon/ai/proc/view_core()
 
 	current = null

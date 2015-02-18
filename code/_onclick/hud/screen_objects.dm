@@ -366,6 +366,7 @@
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
 				AI.aicamera.viewpictures()
+
 		if("Activate Camera Bug")
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr

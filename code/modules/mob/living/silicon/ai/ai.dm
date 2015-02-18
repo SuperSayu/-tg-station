@@ -183,7 +183,6 @@ var/list/ai_list = list()
 			stat(null, text("Systems nonfunctional"))
 
 /mob/living/silicon/ai/proc/ai_alerts()
-
 	var/dat = "<HEAD><TITLE>Current Station Alerts</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n"
 	dat += "<A HREF='?src=\ref[src];mach_close=aialerts'>Close</A><BR><BR>"
 	for (var/cat in alarms)
