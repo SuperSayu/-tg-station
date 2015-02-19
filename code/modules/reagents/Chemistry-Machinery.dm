@@ -832,7 +832,7 @@ obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 				/obj/item/stack/sheet/mineral/silver = list("silver" = 20),
 				/obj/item/stack/sheet/mineral/gold = list("gold" = 20),
 				/obj/item/weapon/grown/nettle = list("sacid" = 0),
-				/obj/item/weapon/grown/deathnettle = list("pacid" = 0),
+				/obj/item/weapon/grown/nettle/death = list("pacid" = 0),
 				/obj/item/weapon/grown/novaflower = list("capsaicin" = 0),
 
 				//Crayons (for overriding colours)
@@ -850,8 +850,8 @@ obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 				/obj/item/weapon/reagent_containers/food/snacks/grown/corn = list("cornoil" = 0),
 				/obj/item/weapon/reagent_containers/food/snacks/grown/wheat = list("flour" = 0),
 				/obj/item/weapon/reagent_containers/food/snacks/grown/cherries = list("cherryjelly" = 0),
-				/obj/item/weapon/grown/nettle = list("sacid" = 0),
-				/obj/item/weapon/grown/deathnettle = list("pacid" = 0),
+				/obj/item/weapon/grown/nettle/basic = list("sacid" = 0),
+				/obj/item/weapon/grown/nettle/death = list("pacid" = 0),
 				/obj/item/weapon/grown/novaflower = list("capsaicin" = 0),
 
 				//Grinder stuff, but only if dry
