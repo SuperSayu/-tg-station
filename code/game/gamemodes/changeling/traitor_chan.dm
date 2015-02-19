@@ -80,7 +80,8 @@
 
 /datum/game_mode/traitor/changeling/make_antag_chance(var/mob/living/carbon/human/character) //Assigns changeling to latejoiners
 	var/changelingcap = round(joined_player_list.len / (config.changeling_scaling_coeff * 2))
-	if(changelings.len >= changelingcap) //Caps number of latejoin antagonists		..()
+	if(changelings.len >= changelingcap) //Caps number of latejoin antagonists
+		..()
 		return
 	if(changelings.len <= (changelingcap - 2) || prob(100 / (config.changeling_scaling_coeff * 2)))
 		if(character.client.prefs.be_special & BE_CHANGELING)
