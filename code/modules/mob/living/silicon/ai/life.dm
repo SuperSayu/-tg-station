@@ -25,8 +25,6 @@
 			death()
 			return
 
-		lightNearbyCamera()
-
 		if (src.machine)
 			if (!( src.machine.check_eye(src) ))
 				src.reset_view(null)
