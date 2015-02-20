@@ -53,7 +53,7 @@
 	add_logs(user, M, "stabbed", object="[name]")
 
 /*
- * Parapens
+ * Sleepypens
  */
 /obj/item/weapon/pen/sleepy
 	origin_tech = "materials=2;syndicate=5"
