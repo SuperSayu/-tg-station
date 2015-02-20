@@ -224,7 +224,7 @@
 	E.imp_in = synd_mob
 	E.implanted = 1
 	E.implanted(synd_mob)
-	synd_mob.faction = "syndicate"
+	synd_mob.faction |= "syndicate"
 	synd_mob.update_icons()
 	return 1
 
