@@ -698,11 +698,15 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	contains = list(/obj/item/weapon/storage/box/spacemeal,/obj/item/weapon/storage/box/spacemeal,/obj/item/weapon/storage/box/spacemeal,/obj/item/weapon/storage/box/spacemeal)
 	cost = 30
 	containername = "fast food delivery"
+
 /datum/supply_packs/organic/pizza
-	name = "Pizza delivery"
-	contains = list(/obj/item/pizzabox/delivery)
-	cost = 40
-	containername = "pizza delivery"
+	name = "Pizza Crate"
+	contains = list(/obj/item/pizzabox/margherita,
+	/obj/item/pizzabox/mushroom,
+	/obj/item/pizzabox/meat,
+	/obj/item/pizzabox/vegetable)
+	cost = 60
+	containername = "Pizza crate"
 
 
 /datum/supply_packs/organic/food
