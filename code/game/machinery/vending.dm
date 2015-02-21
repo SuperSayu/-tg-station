@@ -8,7 +8,7 @@
 
 	New(var/name, var/path,var/new_amount = null)
 		product_name = name
-		product_path = type
+		product_path = path
 		display_color = pick("red","lightgreen","aqua","maroon","green","teal")
 		if(!isnull(new_amount))
 			amount = new_amount
