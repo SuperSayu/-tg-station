@@ -67,21 +67,24 @@
 
 		//BubbleWrap: people in handcuffs are always switched around as if they were on 'help' intent to prevent a person being pulled from being seperated from their puller
 		if((tmob.a_intent == "help" || tmob.restrained()) && (a_intent == "help" || src.restrained()) && tmob.canmove && canmove) // mutual brohugs all around!
-			/*var/turf/oldloc = loc
-			loc = tmob.loc
+			var/turf/oldloc = loc
+			var/turf/other_loc = tmob.loc
 
-			tmob.loc = oldloc*/
-			var/turf/oldloc = tmob.loc
-			density = 0
-			step_towards(tmob,loc)
-			density = 1
-			if(tmob in loc)
-				step_towards(src,oldloc)
-				now_pushing = 0
-				for(var/mob/living/carbon/slime/slime in view(1,tmob))
-					if(slime.Victim == tmob)
-						slime.UpdateFeed()
-				return
+			loc = tmob.loc
+			tmob.loc = oldloc
+			now_pushing = 0
+
+			for(var/mob/living/carbon/slime/slime in view(1,tmob))
+				if(slime.Victim == tmob)
+					slime.UpdateFeed()
+
+			//cross any movable atoms on either turf
+			for(var/atom/movable/M in other_loc)
+				M.Crossed(src)
+			for(var/atom/movable/M in oldloc)
+				M.Crossed(tmob)
+
+			return
 
 		if(tmob.r_hand && istype(tmob.r_hand, /obj/item/weapon/shield/riot))
 			if(prob(99))
