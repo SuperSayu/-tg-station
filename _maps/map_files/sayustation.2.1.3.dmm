@@ -4258,7 +4258,7 @@
 "bDT" = (/obj/structure/filingcabinet/filingcabinet,/turf/simulated/floor{icon_state = "barber"},/area/medical/cmo)
 "bDU" = (/obj/machinery/computer/crew,/obj/machinery/requests_console{announcementConsole = 1; department = "Chief Medical Officer's Desk"; departmentType = 5; name = "Chief Medical Officer RC"; pixel_x = 0; pixel_y = 32},/turf/simulated/floor{icon_state = "barber"},/area/medical/cmo)
 "bDV" = (/obj/machinery/computer/med_data,/obj/machinery/alarm{frequency = 1439; pixel_y = 23},/turf/simulated/floor{icon_state = "barber"},/area/medical/cmo)
-"bDW" = (/obj/machinery/light{dir = 4; icon_state = "tube1"},/obj/machinery/suit_storage_unit/medical,/turf/simulated/floor{icon_state = "barber"},/area/medical/cmo)
+"bDW" = (/obj/machinery/suit_storage_unit/cmo,/turf/simulated/floor{icon_state = "barber"},/area/medical/cmo)
 "bDX" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 6},/turf/simulated/wall,/area/medical/cmo)
 "bDY" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/turf/simulated/floor/plating,/area/maintenance/asmaint)
 "bDZ" = (/obj/structure/disposalpipe/segment,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/atmospherics/pipe/manifold{pipe_color = "red"; dir = 1; icon_state = "manifold-r-f"; level = 1; name = "pipe manifold"},/turf/simulated/floor/plating,/area/maintenance/asmaint)
