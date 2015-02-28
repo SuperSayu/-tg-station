@@ -34,7 +34,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh, /obj/item/weapon/reagent_containers/food/snacks/donut,
 		/obj/item/weapon/reagent_containers/food/snacks/donut/normal, /obj/item/weapon/reagent_containers/food/snacks/donut/jelly,
 		/obj/item/weapon/reagent_containers/food/snacks/donut/cherryjelly, /obj/item/weapon/reagent_containers/food/snacks/meatbreadslice,
-		/obj/item/weapon/reagent_containers/food/snacks/monkeykabob, /obj/item/weapon/reagent_containers/food/snacks/meatpie,
+		/obj/item/weapon/reagent_containers/food/snacks/monkeykebab, /obj/item/weapon/reagent_containers/food/snacks/meatpie,
 		/obj/item/weapon/reagent_containers/food/snacks/sosjerky)
 
 	// Fails the sniff test

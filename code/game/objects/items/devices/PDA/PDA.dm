@@ -1043,9 +1043,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		return
 	if(!isnull(aiPDA))
 		var/HTML = "<html><head><title>AI PDA Message Log</title></head><body>[aiPDA.tnote]</body></html>"
-		user  << browse(HTML, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
+		user << browse(HTML, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
 	else
-		user  << "You do not have a PDA. You should make an issue report about this."
+		user << "You do not have a PDA. You should make an issue report about this."
 
 //Some spare PDAs in a box
 /obj/item/weapon/storage/box/PDAs

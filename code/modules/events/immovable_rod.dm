@@ -87,7 +87,8 @@
 		return
 
 	if(clong && prob(25))
-		src.loc = clong.loc
+		x = clong.x
+		y = clong.y
 
 	if (istype(clong, /turf) || istype(clong, /obj))
 		if(clong.density)

@@ -74,7 +74,7 @@
 	if (M.a_intent == "help")
 		help_shake_act(M)
 	else
-		if ((M.a_intent == "harm" && !is_muzzled()))
+		if (M.a_intent == "harm" && !is_muzzled())
 			if ((prob(75) && health > 0))
 				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 				visible_message("<span class='danger'>[M.name] bites [name]!</span>", \
@@ -83,11 +83,10 @@
 				adjustBruteLoss(damage)
 				health = 100 - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()
 				for(var/datum/disease/D in M.viruses)
-					if(istype(D, /datum/disease/jungle_fever))
-						contract_disease(D,1,0)
+					contract_disease(D,1,0)
 			else
 				visible_message("<span class='danger'>[M.name] has attempted to bite [name]!</span>", \
-						"<span class='userdanger'>[M.name] has attempted to bite [name]!</span>")
+					"<span class='userdanger'>[M.name] has attempted to bite [name]!</span>")
 	return
 
 /mob/living/carbon/monkey/attack_hand(mob/living/carbon/human/M as mob)
@@ -382,3 +381,6 @@
 		threatcount -= 1
 
 	return threatcount
+
+/mob/living/carbon/monkey/SpeciesCanConsume()
+	return 1 // Monkeys can eat, drink, and be forced to do so

@@ -165,6 +165,15 @@ var/list/department_radio_keys = list(
 					Changeling << "<i><font color=#800080><b>[mind.changeling.changelingID]:</b> [message]</font></i>"
 			return
 
+	if (message_mode == "alientalk")
+		if(alien_talk_understand || hivecheck())
+		//message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN)) //seems redundant
+			alien_talk(message)
+		return
+
+	if(is_muzzled()) // Intentionally after changeling hivemind check
+		return
+
 	var/list/obj/item/used_radios = new
 
 	switch (message_mode)

@@ -223,6 +223,7 @@ Auto Patrol: []"},
 			if(hasvar(W,"force") && W.force)//If force is defined and non-zero
 				threatlevel = user.assess_threat(src)
 				threatlevel += 6
+
 				if(threatlevel >= 4)
 					src.target = user
 					if(lasercolor)//To make up for the fact that lasertag bots don't hunt
@@ -686,7 +687,6 @@ Auto Patrol: []"},
 			break
 		else
 			continue
-
 
 /obj/machinery/bot/ed209/proc/check_for_weapons(var/obj/item/slot_item)
 	if(istype(slot_item, /obj/item/weapon/gun) || istype(slot_item, /obj/item/weapon/melee))

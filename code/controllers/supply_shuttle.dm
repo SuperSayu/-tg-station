@@ -589,8 +589,9 @@ var/global/datum/controller/supply_shuttle/supply_shuttle
 		\n<A href='?src=\ref[user];mach_close=computer'>Close</A><BR>
 		<HR>\n<B>Central Command messages</B><BR> [supply_shuttle.centcom_message ? supply_shuttle.centcom_message : "Remember to stamp and send back the supply manifests."]"}
 
-	user << browse(dat, "window=computer;size=700x450")
-	onclose(user, "computer")
+	var/datum/browser/popup = new(user, "computer", "Supply Shuttle Console", 700, 455)
+	popup.set_content(dat)
+	popup.open()
 	return
 
 /obj/machinery/computer/supplycomp/attackby(I as obj, user as mob)

@@ -646,33 +646,32 @@ var/list/slot_equipment_priority = list( \
 //Updates canmove, lying and icons. Could perhaps do with a rename but I can't think of anything to describe it.
 //Robots and brains have their own version so don't worry about them
 /mob/proc/update_canmove()
-        var/ko = weakened || paralysis || stat || (status_flags & FAKEDEATH)
-        var/bed = !(buckled && istype(buckled, /obj/structure/stool/bed/chair))
-        if(ko || resting || stunned)
-                drop_r_hand()
-                drop_l_hand()
-        else
-                lying = 0
-                canmove = 1
-        if(buckled)
-                lying = 90 * bed
-                anchored = buckled
-        else
-                if((ko || resting) && !lying)
-                        fall(ko)
-        canmove = !(ko || resting || stunned || buckled)
-        density = !lying
-        update_transform()
-        lying_prev = lying
-        if(update_icon) //forces a full overlay update
-                update_icon = 0
-                regenerate_icons()
-        return canmove
+	var/ko = weakened || paralysis || stat || (status_flags & FAKEDEATH)
+	var/bed = !(buckled && istype(buckled, /obj/structure/stool/bed/chair))
+	if(ko || resting || stunned)
+		drop_r_hand()
+		drop_l_hand()
+	else
+		lying = 0
+		canmove = 1
+	if(buckled)
+		lying = 90 * bed
+		anchored = buckled
+	else
+		if((ko || resting) && !lying)
+			fall(ko)
+	canmove = !(ko || resting || stunned || buckled)
+	density = !lying
+	update_transform()
+	lying_prev = lying
+	if(update_icon) //forces a full overlay update
+		update_icon = 0
+		regenerate_icons()
+	return canmove
 
 /mob/proc/fall(var/forced)
 	drop_l_hand()
 	drop_r_hand()
-
 
 /mob/verb/eastface()
 	set hidden = 1
@@ -709,6 +708,9 @@ var/list/slot_equipment_priority = list( \
 /mob/proc/IsAdvancedToolUser()//This might need a rename but it should replace the can this mob use things check
 	return 0
 
+/mob/proc/SpeciesCanConsume()
+	return 0
+
 /mob/proc/Jitter(amount)
 	jitteriness = max(jitteriness,amount,0)
 
@@ -720,7 +722,7 @@ var/list/slot_equipment_priority = list( \
 
 /mob/proc/Stun(amount)
 	if(status_flags & CANSTUN)
-		stunned = max(stunned,amount,0) //can't go below 0, getting a low amount of stun doesn't lower your current stun
+		stunned = max(max(stunned,amount),0) //can't go below 0, getting a low amount of stun doesn't lower your current stun
 		update_canmove()
 	return
 
@@ -738,7 +740,7 @@ var/list/slot_equipment_priority = list( \
 
 /mob/proc/Weaken(amount)
 	if(status_flags & CANWEAKEN)
-		weakened = max(weakened,amount,0)
+		weakened = max(max(weakened,amount),0)
 		update_canmove()	//updates lying, canmove and icons
 	return
 
@@ -788,7 +790,7 @@ var/list/slot_equipment_priority = list( \
 	return
 
 /mob/proc/Resting(amount)
-	resting = max(resting,amount,0)
+	resting = max(max(resting,amount),0)
 	update_canmove()
 	return
 
@@ -804,4 +806,3 @@ var/list/slot_equipment_priority = list( \
 
 /mob/proc/assess_threat() //For sec bot threat assessment
 	return
-

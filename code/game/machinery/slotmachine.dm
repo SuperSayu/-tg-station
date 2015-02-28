@@ -251,7 +251,6 @@
 		user << "<span class='notice'>You win three free games!</span>"
 		balance += SPIN_PRICE * 4
 		money = max(money - SPIN_PRICE * 4, money)
-
 	else
 		user << "<span class='warning'>No luck!</span>"
 

@@ -21,7 +21,7 @@
 	origin_tech = null
 
 /obj/item/weapon/gun/energy/crossbow
-	name = "mini energy-crossbow"
+	name = "mini energy crossbow"
 	desc = "A weapon favored by many of the syndicates stealth specialists."
 	icon_state = "crossbow"
 	w_class = 2.0
@@ -67,7 +67,7 @@
 	return
 
 /obj/item/weapon/gun/energy/crossbow/largecrossbow
-	name = "Energy Crossbow"
+	name = "energy crossbow"
 	desc = "A weapon favored by syndicate infiltration teams."
 	w_class = 4.0
 	force = 10

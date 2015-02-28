@@ -7,7 +7,7 @@
 /mob/living/carbon/human/var/last_break = 0
 /mob/living/carbon/human/Move()
 
-	if(prob(2) && !numbness && !last_break)
+	if(prob(2) && !numbness && !last_break && !buckled)
 		var/list/broken_limbs = list()
 
 		for(var/obj/item/organ/limb/L in organs)

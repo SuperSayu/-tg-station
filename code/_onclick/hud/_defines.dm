@@ -120,5 +120,3 @@
 #define ui_ears "WEST+2:10,SOUTH+2:9"
 
 #define ui_head "WEST+1:8,SOUTH+3:11"
-
-

@@ -41,6 +41,7 @@
 			dat += "<B>No patient detected</B>"
 	else
 		dat += "<B>Operating table not found.</B>"
+
 	var/datum/browser/popup = new(user, "op", "Operating Computer", 400, 500)
 	popup.set_content(dat)
 	popup.open()
@@ -56,7 +57,6 @@
 				<div class='line'><div class='statusLabel'>\> Resp. Damage:</div><div class='progressBar'><div style='width: [max(patient.getOxyLoss(), 0)]%;' class='progressFill bad'></div></div><div class='statusValue'>[patient.getOxyLoss()]%</div></div>
 				<div class='line'><div class='statusLabel'>\> Toxin Content:</div><div class='progressBar'><div style='width: [max(patient.getToxLoss(), 0)]%;' class='progressFill bad'></div></div><div class='statusValue'>[patient.getToxLoss()]%</div></div>
 				<div class='line'><div class='statusLabel'>\> Burn Severity:</div><div class='progressBar'><div style='width: [max(patient.getFireLoss(), 0)]%;' class='progressFill bad'></div></div><div class='statusValue'>[patient.getFireLoss()]%</div></div>
-
 				"}
 	if(patient.surgeries.len)
 		dat += "<BR><B>Initiated Procedures</B><div class='statusDisplay'>"

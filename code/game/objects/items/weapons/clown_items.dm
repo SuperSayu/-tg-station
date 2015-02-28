@@ -1,66 +1,47 @@
 /* Clown Items
  * Contains:
- * 		Banana Peels
  *		Soap
  *		Bike Horns
  */
 
 /*
- * Banana Peels
- */
-/obj/item/weapon/grown/bananapeel/Crossed(AM as mob|obj)
-	if (istype(AM, /mob/living/carbon))
-		var/mob/living/carbon/M = AM
-		var/stun = Clamp(potency / 10, 1, 10)
-		var/weaken = Clamp(potency / 20, 0.5, 5)
-		M.slip(stun, weaken, src)
-
-		if(prob(33))
-			step_rand(src)
-
-/obj/item/weapon/grown/bananapeel/wizard
-	name = "magical banana peel"
-	desc = "Far superior to the genetically enhanced version"
-	var/walk_delay = 2
-
-/obj/item/weapon/grown/bananapeel/wizard/New()
-	..()
-	walk_delay = rand(0,5)
-	walk_rand(src,walk_delay)
-	spawn(rand(3,6)*100)
-		if(src)
-			qdel(src)
-
-/obj/item/weapon/grown/bananapeel/wizard/Crossed(AM as mob|obj)
-	if (istype(AM, /mob/living/carbon))
-		var/mob/M =	AM
-
-		if(HULK in M.mutations)
-			M << "You squash [src], and it disintegrates with a \i [magic_soundfx()]."
-			del src
-			return
-
-		if (istype(M, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = M
-
-			if(H.shoes && H.shoes.flags&NOSLIP)
-				return
-
-		M.stop_pulling()
-		M << "\blue You slipped on the [name]! It disintegrates with a \i [magic_soundfx()]"
-		playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
-		M.Stun(2)
-		M.Weaken(1)
-		walk_rand(new src.type(loc),walk_delay)
-		while(prob(15))
-			walk_rand(new src.type(loc),walk_delay)
-		del src
-		return
-
-/*
  * Soap
  */
-/obj/item/weapon/soap/Crossed(AM as mob|obj) //EXACTLY the same as bananapeel for now, so it makes sense to put it in the same dm -- Urist
+
+/obj/item/weapon/soap
+	name = "soap"
+	desc = "A cheap bar of soap. Doesn't smell."
+	gender = PLURAL
+	icon = 'icons/obj/items.dmi'
+	icon_state = "soap"
+	w_class = 1.0
+	throwforce = 0
+	throw_speed = 3
+	throw_range = 7
+	var/uses = 10
+	var/usesize = 1
+
+/obj/item/weapon/soap/nanotrasen
+	desc = "A Nanotrasen brand bar of soap. Smells of plasma."
+	icon_state = "soapnt"
+	uses = 30
+
+/obj/item/weapon/soap/deluxe
+	desc = "A deluxe Waffle Co. brand bar of soap. Smells of condoms."
+	icon_state = "soapdeluxe"
+	uses = 25
+
+/obj/item/weapon/soap/syndie
+	desc = "An untrustworthy bar of soap. Smells of fear."
+	icon_state = "soapsyndie"
+	usesize = 0
+
+/obj/item/weapon/soap/borg
+	desc = "A very durable bar of robo-soap."
+	icon_state = "soapdeluxe"
+	usesize = 0
+
+/obj/item/weapon/soap/Crossed(AM as mob|obj)
 	if (istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
 		M.slip(4, 2, src)
@@ -119,14 +100,13 @@
 		return
 	//..()
 	return
-/obj/item/weapon/soap/attackby(obj/item/I as obj, mob/user as mob)
+/obj/item/weapon/soap/attackby(obj/item/I as obj, mob/user as mob) //todo: implement isSharp for soap splitting
+
 	if(istype(I,/obj/item/weapon/kitchenknife) || istype(I,/obj/item/weapon/kitchen/utensil/knife) || istype(I,/obj/item/weapon/butch))
 
-		//no splitting infinite soap
 		if(usesize == 0)
 			user << "You try to split the soap in twain, but alas, it is too though."
-		return
-
+			return
 
 		//Split the soap in two.  Other bladed implements could do this, but it would be pretty awkward.  That's my excuse...
 		if(uses <= 5)
@@ -146,8 +126,28 @@
 /*
  * Bike Horns
  */
+
+
+/obj/item/weapon/bikehorn
+	name = "bike horn"
+	desc = "A horn off of a bicycle."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "bike_horn"
+	item_state = "bike_horn"
+	throwforce = 0
+	hitsound = null //To prevent tap.ogg playing, as the item lacks of force
+	w_class = 1.0
+	throw_speed = 3
+	throw_range = 7
+	attack_verb = list("HONKED")
+	var/spam_flag = 0
+
+/obj/item/weapon/bikehorn/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+	playsound(loc, 'sound/items/bikehorn.ogg', 50, 1, -1) //plays instead of tap.ogg!
+	return ..()
+
 /obj/item/weapon/bikehorn/attack_self(mob/user as mob)
-	if (spam_flag == 0)
+	if(spam_flag == 0)
 		spam_flag = 1
 		playsound(src.loc, 'sound/items/bikehorn.ogg', 50, 1)
 		src.add_fingerprint(user)

@@ -153,8 +153,8 @@ Security Officer
 	department_head = list("Head of Security")
 	department_flag = ENGSEC
 	faction = "Station"
-	total_positions = 5
-	spawn_positions = 5
+	total_positions = 5 //Handled in /datum/controller/occupations/proc/setup_officer_positions()
+	spawn_positions = 5 //Handled in /datum/controller/occupations/proc/setup_officer_positions()
 	supervisors = "the head of security, and the head of your assigned department (if applicable)"
 	selection_color = "#ffeeee"
 	minimal_player_age = 7
@@ -165,7 +165,8 @@ Security Officer
 	default_backpack = /obj/item/weapon/storage/backpack/security
 	default_satchel = /obj/item/weapon/storage/backpack/satchel_sec
 
-	access = list(access_security, access_sec_doors, access_brig, access_court, access_maint_tunnels, access_morgue)
+
+	access = list(access_security, access_sec_doors, access_brig, access_court, access_maint_tunnels, access_morgue, access_weapons)
 	minimal_access = list(access_security, access_sec_doors, access_brig, access_court, access_weapons) //But see /datum/job/warden/get_access()
 
 /datum/job/officer/equip_items(var/mob/living/carbon/human/H)

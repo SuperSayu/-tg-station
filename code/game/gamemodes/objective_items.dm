@@ -111,7 +111,7 @@ datum/objective_item/steal/reactive
 	antag_types = list("traitor","Changeling","Space Ninja")
 
 datum/objective_item/steal/documents
-	name = "a set of secret documents"
+	name = "any set of secret documents of any organization"
 	targetitem = /obj/item/documents //Any set of secret documents. Doesn't have to be NT's
 	difficulty = 5
 	antag_types = list("traitor","Changeling","Wizard","Space Ninja")
