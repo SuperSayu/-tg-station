@@ -144,7 +144,6 @@
 	return
 
 /datum/game_mode/proc/random_traitor_objective(var/datum/mind/traitor)
-	world << "forging"
 	if(prob(35))
 		if(prob(70))
 			var/datum/objective/assassinate/kill = new
