@@ -36,6 +36,10 @@
 	max_w_class = 5
 	max_combined_w_class = 60 // 21*2, 14*3, ~10*4, ~8*5
 
+/obj/item/weapon/storage/backpack/holding/New()
+	..()
+	return
+
 /obj/item/weapon/storage/backpack/holding/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(crit_fail)
 		user << "\red The Bluespace generator isn't working."
