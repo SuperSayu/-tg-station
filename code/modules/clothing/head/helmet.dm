@@ -89,7 +89,7 @@
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES
 	loose = 0 // full-head objects (almost) never fall off
 obj/item/clothing/head/helmet/redtaghelm
-	name = "Red LaserTag Helmet"
+	name = "red laser tag helmet"
 	desc = "They have chosen their own end."
 	icon_state = "redtaghelm"
 	flags = HEADCOVERSEYES
@@ -99,7 +99,7 @@ obj/item/clothing/head/helmet/redtaghelm
 	flags_inv = HIDEEARS|HIDEEYES
 
 obj/item/clothing/head/helmet/bluetaghelm
-	name = "Blue LaserTag Helmet"
+	name = "blue laser tag helmet"
 	desc = "They'll need more men."
 	icon_state = "bluetaghelm"
 	flags = HEADCOVERSEYES
