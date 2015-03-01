@@ -37,8 +37,8 @@
 	if(T)
 		new /obj/item/clothing/shoes/sandal(T) //In case they've lost them.
 		new /obj/item/clothing/gloves/magic(T)
-		new /obj/item/clothing/suit/space/rig/wizard(T)
-		new /obj/item/clothing/head/helmet/space/rig/wizard(T)
+		new /obj/item/clothing/suit/space/hardsuit/wizard(T)
+		new /obj/item/clothing/head/helmet/space/hardsuit/wizard(T)
 		return 1
 	return 0
 
