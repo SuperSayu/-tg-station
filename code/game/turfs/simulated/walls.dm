@@ -98,7 +98,7 @@
 		dismantle_wall()
 
 /turf/simulated/wall/attack_paw(mob/user as mob)
-	user.changeNext_move(8)
+	user.changeNext_move(CLICK_CD_MELEE)
 	if ((HULK in user.mutations))
 		if (prob(hardness))
 			playsound(src, 'sound/effects/meteorimpact.ogg', 100, 1)
@@ -114,7 +114,7 @@
 	return src.attack_hand(user)
 
 /turf/simulated/wall/attack_animal(var/mob/living/simple_animal/M)
-	M.changeNext_move(8)
+	M.changeNext_move(CLICK_CD_MELEE)
 	if(M.environment_smash >= 2)
 		if(istype(src, /turf/simulated/wall/r_wall))
 			if(M.environment_smash == 3)
@@ -130,7 +130,7 @@
 			return
 
 /turf/simulated/wall/attack_hand(mob/user as mob)
-	user.changeNext_move(8)
+	user.changeNext_move(CLICK_CD_MELEE)
 	if (HULK in user.mutations)
 		if (prob(hardness))
 			playsound(src, 'sound/effects/meteorimpact.ogg', 100, 1)
@@ -150,7 +150,7 @@
 	return
 
 /turf/simulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	user.changeNext_move(8)
+	user.changeNext_move(CLICK_CD_MELEE)
 	if (!(istype(user, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
 		user << "<span class='warning'>You don't have the dexterity to do this!</span>"
 		return

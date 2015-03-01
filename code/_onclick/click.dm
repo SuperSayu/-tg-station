@@ -36,7 +36,7 @@
 /mob/proc/ClickOn( var/atom/A, var/params )
 	if(world.time <= next_click)
 		return
-	next_click = world.time + 3
+	next_click = world.time + 1
 
 	if(client.buildmode)
 		build_click(src, client.buildmode, params, A)
@@ -102,7 +102,7 @@
 				W.afterattack(A,src,1,params) // 1 indicates adjacency
 		else
 			if(ismob(A))
-				changeNext_move(8)
+				changeNext_move(CLICK_CD_MELEE)
 			UnarmedAttack(A)
 		return
 
@@ -119,7 +119,7 @@
 					W.afterattack(A,src,1,params) // 1: clicking something Adjacent
 			else
 				if(ismob(A))
-					changeNext_move(8)
+					changeNext_move(CLICK_CD_MELEE)
 				UnarmedAttack(A, 1)
 			return
 		else // non-adjacent click
@@ -150,7 +150,7 @@
 */
 /mob/proc/UnarmedAttack(var/atom/A, var/proximity_flag)
 	if(ismob(A))
-		changeNext_move(8)
+		changeNext_move(CLICK_CD_MELEE)
 	return
 
 /*
@@ -221,6 +221,7 @@
 
 /*
 	Alt click
+	Unused except for AI
 */
 /mob/proc/AltClickOn(var/atom/A)
 	A.AltClick(src)
@@ -260,7 +261,7 @@
 	return
 
 /mob/living/LaserEyes(atom/A)
-	changeNext_move(4)
+	changeNext_move(CLICK_CD_RANGE)
 	var/turf/T = get_turf(src)
 	var/turf/U = get_turf(A)
 
