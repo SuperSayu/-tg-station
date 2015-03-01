@@ -66,7 +66,6 @@
 	proj_hit = 1
 	qdel(src)
 
-
 /obj/item/projectile/proc/delete()
 	// Garbage collect the projectiles
 	loc = null
@@ -92,6 +91,7 @@
 
 	if(bumped)//Stops multihit projectiles
 		return 1
+
 
 	bumped = 1
 	if(ismob(A))

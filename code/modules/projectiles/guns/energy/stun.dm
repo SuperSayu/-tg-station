@@ -34,27 +34,27 @@
 	var/charge_tick = 0
 
 
-	New()
-		..()
-		processing_objects.Add(src)
+/obj/item/weapon/gun/energy/crossbow/New()
+	..()
+	processing_objects.Add(src)
 
 
-	Destroy()
-		processing_objects.Remove(src)
-		..()
+/obj/item/weapon/gun/energy/crossbow/Destroy()
+	processing_objects.Remove(src)
+	..()
 
 
-	process()
-		charge_tick++
-		if(charge_tick < 4) return 0
-		charge_tick = 0
-		if(!power_supply) return 0
-		power_supply.give(100)
-		return 1
+/obj/item/weapon/gun/energy/crossbow/process()
+	charge_tick++
+	if(charge_tick < 4) return 0
+	charge_tick = 0
+	if(!power_supply) return 0
+	power_supply.give(100)
+	return 1
 
 
-	update_icon()
-		return
+/obj/item/weapon/gun/energy/crossbow/update_icon()
+	return
 
 /obj/item/weapon/gun/energy/crossbow/cyborg/newshot()
 	if(isrobot(src.loc))
