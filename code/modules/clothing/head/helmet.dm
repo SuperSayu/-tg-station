@@ -46,7 +46,7 @@
 
 /obj/item/clothing/head/helmet/swat
 	name = "\improper SWAT helmet"
-	desc = "A robust helmet used by the SWAT branches planetary security forces."
+	desc = "An extremely robust, space-worthy helmet with a nanotrasen logo on the top."
 	icon_state = "swat"
 	item_state = "swat"
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 50, bio = 10, rad = 0)
@@ -55,6 +55,12 @@
 	heat_protection = HEAD
 	max_heat_protection_temperature = SPACE_HELM_MAX_TEMP_PROTECT
 	loose = 8
+
+/obj/item/clothing/head/helmet/swat/syndicate
+	name = "blood-red helmet"
+	desc = "An extremely robust, space-worthy helmet without a visor to allow for goggle usage underneath. Property of Gorlex Marauders."
+	icon_state = "helmetsyndi"
+	item_state = "helmet"
 
 /obj/item/clothing/head/helmet/thunderdome
 	name = "\improper Thunderdome helmet"
