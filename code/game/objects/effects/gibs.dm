@@ -17,55 +17,54 @@
 	var/list/gibamounts = list()
 	var/list/gibdirections = list() //of lists
 
-	New(location, var/list/viruses, var/datum/dna/MobDNA, var/list/eviscera)
-		..()
+/obj/effect/gibspawner/New(location, var/list/viruses, var/datum/dna/MobDNA, var/list/eviscera)
+	..()
 
-		Gib(loc,viruses,MobDNA,eviscera)
+	Gib(loc,viruses,MobDNA,eviscera)
 
-	proc/Gib(atom/location, var/list/viruses = list(), var/datum/dna/MobDNA = null, var/list/eviscera)
-		if(gibtypes.len != gibamounts.len || gibamounts.len != gibdirections.len)
-			world << "\red Gib list length mismatch!"
-			return
+/obj/effect/gibspawner/proc/Gib(atom/location, var/list/viruses = list(), var/datum/dna/MobDNA = null, var/list/eviscera)
+	if(gibtypes.len != gibamounts.len || gibamounts.len != gibdirections.len)
+		world << "\red Gib list length mismatch!"
+		return
 
-		var/obj/effect/decal/cleanable/blood/gibs/gib = null
-		for(var/datum/disease/D in viruses)
-			if(D.spread_type == SPECIAL)
-				del(D)
+	var/obj/effect/decal/cleanable/blood/gibs/gib = null
+	for(var/datum/disease/D in viruses)
+		if(D.spread_type == SPECIAL)
+			del(D)
 
-		if(sparks)
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(2, 1, location)
-			s.start()
-		var/obj/gross = null
-		for(var/i = 1, i<= gibtypes.len, i++)
-			if(gibamounts[i])
-				for(var/j = 1, j<= gibamounts[i], j++)
-					if(eviscera && eviscera.len)
-						gross = pick(eviscera)
-					var/gibType = gibtypes[i]
-					gib = new gibType(location)
-					if(istype(location,/mob/living/carbon))
-						var/mob/living/carbon/digester = location
-						digester.stomach_contents += gib
+	if(sparks)
+		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		s.set_up(2, 1, location)
+		s.start()
 
-					if(viruses.len > 0)
-						for(var/datum/disease/D in viruses)
-							if(prob(virusProb))
-								var/datum/disease/viruus = D.Copy(1)
-								gib.viruses += viruus
-								viruus.holder = gib
+	var/obj/gross = null
+	for(var/i = 1, i<= gibtypes.len, i++)
+		if(gibamounts[i])
+			for(var/j = 1, j<= gibamounts[i], j++)
+				if(eviscera && eviscera.len)
+					gross = pick(eviscera)
+				var/gibType = gibtypes[i]
+				gib = new gibType(location)
+				if(istype(location,/mob/living/carbon))
+					var/mob/living/carbon/digester = location
+					digester.stomach_contents += gib
 
-					gib.blood_DNA = list()
-					if(MobDNA)
-						gib.blood_DNA[MobDNA.unique_enzymes] = MobDNA.blood_type
-					else if(istype(src, /obj/effect/gibspawner/xeno))
-						gib.blood_DNA["UNKNOWN DNA"] = "X*"
-					else if(istype(src, /obj/effect/gibspawner/generic)) // Probably a monkey
-						gib.blood_DNA["Non-human DNA"] = "A+"
-					var/list/directions = gibdirections[i]
-					if(istype(loc,/turf))
-						if(directions.len)
-							gib.streak(directions,gross)
-							if(gross) eviscera -= gross
+				if(viruses.len > 0)
+					for(var/datum/disease/D in viruses)
+						if(prob(virusProb))
+							var/datum/disease/viruus = D.Copy(1)
+							gib.viruses += viruus
+							viruus.holder = gib
 
-		qdel(src)
+				gib.blood_DNA = list()
+				if(MobDNA)
+					gib.blood_DNA[MobDNA.unique_enzymes] = MobDNA.blood_type
+				else if(istype(src, /obj/effect/gibspawner/xeno))
+					gib.blood_DNA["UNKNOWN DNA"] = "X*"
+				else if(istype(src, /obj/effect/gibspawner/generic)) // Probably a monkey
+					gib.blood_DNA["Non-human DNA"] = "A+"
+				var/list/directions = gibdirections[i]
+				if(istype(loc,/turf))
+					if(directions.len)
+						gib.streak(directions,gross)
+						if(gross) eviscera -= gross
