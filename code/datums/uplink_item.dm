@@ -110,7 +110,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/dangerous/pistol
 	name = "Stechkin Pistol"
-	desc = "A small, easily concealable handgun that uses 10mm magazines and is compatible with silencers."
+	desc = "A small, easily concealable handgun that uses 10mm magazines and is compatible with suppressors."
 	item = /obj/item/weapon/gun/projectile/automatic/pistol
 	cost = 9
 
@@ -227,8 +227,8 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/ammo/smg
 	name = "Ammo-12mm"
-	desc = "A 20-round 12mm magazine for use in the C-20r submachine gun."
-	item = /obj/item/ammo_box/magazine/m12mm
+	desc = "A 20-round .45 ACP magazine for use in the C-20r submachine gun."
+	item = /obj/item/ammo_box/magazine/c20m
 	cost = 2
 	gamemodes = list(/datum/game_mode/nuclear)
 
@@ -278,18 +278,12 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/cartridge/syndicate
 	cost = 6
 
-/datum/uplink_item/stealthy_weapons/silencer
-	name = "Stetchkin Silencer"
-	desc = "Fitted for use on the Stetchkin pistol, this silencer will make its shots quieter when equipped onto it."
-	item = /obj/item/weapon/silencer
+/datum/uplink_item/stealthy_weapons/suppressor
+	name = "Stetchkin Suppressor"
+	desc = "Fitted for use on the Stetchkin pistol, this suppressor will make its shots quieter when equipped onto it."
+	item = /obj/item/weapon/suppressor
 	cost = 3
 	surplus = 10
-
-/datum/uplink_item/stealthy_weapons/irradscanner
-	name = "Irradiation Device"
-	desc = "Disguised as a health analyzer, this can seriously irradiate a target, causing genetic abnormalities and sickness."
-	item = /obj/item/device/irradscanner
-	cost = 6
 
 // STEALTHY TOOLS
 
@@ -403,7 +397,7 @@ var/list/uplink_items = list()
 	name = "Syndicate Encryption Key"
 	desc = "A key, that when inserted into a radio headset, allows you to listen to all station department channels as well as talk on an encrypted Syndicate channel."
 	item = /obj/item/device/encryptionkey/syndicate
-	cost = 11
+	cost = 6
 	surplus = 75
 
 /datum/uplink_item/device_tools/ai_detector
@@ -420,7 +414,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/device_tools/plastic_explosives
 	name = "Composition C-4"
-	desc = "C-4 is plastic explosive of the common variety Composition C. You can use it to breach walls, attach it to organisms to destroy them, or connect a signaler to its wiring to make it remotely detonable. \
+	desc = "C-4 is plastic explosive of the common variety Composition C. You can use it to breach walls or connect a signaler to its wiring to make it remotely detonable. \
 	It has a modifiable timer with a minimum setting of 10 seconds."
 	item = /obj/item/weapon/plastique
 	cost = 1
@@ -447,6 +441,13 @@ var/list/uplink_items = list()
 	item = /obj/item/device/sbeacondrop/bomb
 	cost = 11
 	excludefrom = list(/datum/game_mode/traitor/double_agents)
+
+/datum/uplink_item/stealthy_weapons/rad_laser
+	name = "Radioactive Microlaser"
+	desc = "A radioactive microlaser disguised as a standard Nanotrasen health analyzer. When used, it emits a powerful burst of radiation, which, after a short delay, can incapitate all but the most protected of humanoids. \
+ 	It has two settings: intensity, which controls the power of the radiation, and wavelength, which controls how long the radiation delay is."
+	item = /obj/item/device/rad_laser
+	cost = 6
 
 /datum/uplink_item/device_tools/syndicate_detonator
 	name = "Syndicate Detonator"

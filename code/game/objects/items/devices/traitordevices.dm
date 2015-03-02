@@ -69,7 +69,7 @@ effective or pretty fucking useless.
 		Wavelength is also slightly increased by the intensity as well.
 */
 
-/obj/item/device/irradscanner
+/obj/item/device/rad_laser
 	name = "health analyzer"
 	icon_state = "health"
 	item_state = "analyzer"
@@ -86,7 +86,7 @@ effective or pretty fucking useless.
 	var/wavelength = 10 // time it takes for the radiation to kick in, in seconds
 	var/used = 0 // is it cooling down?
 
-/obj/item/device/irradscanner/attack(mob/living/M as mob, mob/living/user as mob)
+/obj/item/device/rad_laser/attack(mob/living/M as mob, mob/living/user as mob)
 	if(!used)
 		..()
 		user.visible_message(text("<span class='notice'>[] has analyzed []'s vitals.</span>", user, M))
@@ -102,16 +102,16 @@ effective or pretty fucking useless.
 	else
 		user << "<span class='danger'>The radioactive microlaser is still recharging.</span>"
 
-/obj/item/device/irradscanner/proc/handle_cooldown(var/cooldown)
+/obj/item/device/rad_laser/proc/handle_cooldown(var/cooldown)
 	spawn(cooldown)
 		used = 0
 		icon_state = "health"
 
-/obj/item/device/irradscanner/attack_self(mob/user as mob)
+/obj/item/device/rad_laser/attack_self(mob/user as mob)
 	..()
 	interact(user)
 
-/obj/item/device/irradscanner/interact(mob/user as mob)
+/obj/item/device/rad_laser/interact(mob/user as mob)
 	user.set_machine(src)
 
 	var/cooldown = round(max(10,((intensity*8)-(wavelength/2))+(intensity*2)))
@@ -125,7 +125,7 @@ effective or pretty fucking useless.
 	popup.set_content(dat)
 	popup.open()
 
-/obj/item/device/irradscanner/Topic(href, href_list)
+/obj/item/device/rad_laser/Topic(href, href_list)
 	if(!usr.canUseTopic(src))
 		return 1
 

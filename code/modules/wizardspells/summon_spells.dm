@@ -357,7 +357,7 @@
 
 /obj/effect/knowspell/summon/world/guns/summon_effect(var/atom/A)
 	if(istype(A,/obj/item/weapon/gun/projectile/automatic/pistol))
-		new /obj/item/weapon/silencer(A.loc)
+		new /obj/item/weapon/suppressor(A.loc)
 	return 1
 
 /obj/effect/knowspell/summon/world/guns/target_effect(var/mob/living/carbon/human/H)
