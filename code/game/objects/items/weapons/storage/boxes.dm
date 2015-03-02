@@ -435,13 +435,16 @@
 	new /obj/item/weapon/card/id/prisoner/seven(src)
 
 /obj/item/weapon/storage/box/seccarts
-	name = "box of spare PDA security cartridges"
-	desc = "A box full of PDA cartridges, used by Security."
+	name = "box of PDA security cartridges"
+	desc = "A box full of PDA cartridges used by Security."
 	icon_state = "pda"
 
 /obj/item/weapon/storage/box/seccarts/New()
 	..()
 	new /obj/item/weapon/cartridge/detective(src)
+	new /obj/item/weapon/cartridge/security(src)
+	new /obj/item/weapon/cartridge/security(src)
+	new /obj/item/weapon/cartridge/security(src)
 	new /obj/item/weapon/cartridge/security(src)
 	new /obj/item/weapon/cartridge/security(src)
 	new /obj/item/weapon/cartridge/security(src)
