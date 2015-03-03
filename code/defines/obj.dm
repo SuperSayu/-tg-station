@@ -4,42 +4,50 @@
 	anchored = 1
 	density = 1
 
-	attackby(obj/item/weapon/W as obj, mob/user as mob)
-		return attack_hand(user)
+/obj/structure/signpost/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	return attack_hand(user)
 
-	attack_hand(mob/user as mob)
-		switch(alert("Travel back to ss13?",,"Yes","No"))
-			if("Yes")
-				if(user.z != src.z)	return
-				user.forceMove(pick(latejoin))
-			if("No")
-				return
+/obj/structure/signpost/attack_hand(mob/user as mob)
+	switch(alert("Travel back to ss13?",,"Yes","No"))
+		if("Yes")
+			if(user.z != src.z)	return
+			user.loc.loc.Exited(user)
+			user.forceMove(pick(latejoin))
+		if("No")
+			return
 
 /obj/structure/signpost/antag
 	name = "Directions to Evil"
-	attack_hand(mob/user as mob)
-		switch(input("Pick destination") as null|anything in list("Wizard","Syndicate","Space Station"))
-			if(null) return
-			if("Space Station")
-				user.forceMove(pick(latejoin))
-				return
-			if("Wizard")
-				if(wizardstart.len)
-					user.forceMove(pick(wizardstart))
-					new /obj/effect/knowspell/self/teleport/limited{chargemax = 1}(user.loc) // spawns a teleport scroll with limited uses
-					return
-			if("Syndicate")
-				// this is complicated by the fact that other sandbox users may have moved the shuttle,
-				// so I cannot use syndicate start locations (off the shuttle).
-				for(var/obj/effect/landmark/L in landmarks_list)
-					if(L.name == "syndicate teleporter")
-						user.forceMove(L.loc)
-						new /obj/item/weapon/card/id/syndicate(user.loc)
-						return
-		var/static/c = pick("yellow","salmon","frost white","forest green","sky blue","rose pink","diamond","translucent mauve", "effervescent brown")
-		visible_message("The [c] 'map error' light on the wooden signpost blinks mysteriously.") // have fun kids
 
-/*
+/obj/structure/signpost/antag/attack_hand(mob/user as mob)
+	switch(input("Pick destination") as null|anything in list("Wizard","Syndicate","Space Station"))
+		if(null) return
+		if("Space Station")
+			if(user.z != src.z)	return
+			user.loc.loc.Exited(user)
+			user.forceMove(pick(latejoin))
+			return
+		if("Wizard")
+			if(wizardstart.len)
+				if(user.z != src.z)	return
+				user.loc.loc.Exited(user)
+				user.forceMove(pick(wizardstart))
+				new /obj/effect/knowspell/self/teleport/limited{chargemax = 1}(user.loc) // spawns a teleport scroll with limited uses
+				return
+		if("Syndicate")
+			// this is complicated by the fact that other sandbox users may have moved the shuttle,
+			// so I cannot use syndicate start locations (off the shuttle).
+			for(var/obj/effect/landmark/L in landmarks_list)
+				if(L.name == "syndicate teleporter")
+					if(user.z != src.z)	return
+					user.loc.loc.Exited(user)
+					user.forceMove(L.loc)
+					new /obj/item/weapon/card/id/syndicate(user.loc)
+					return
+	var/static/c = pick("yellow","salmon","frost white","forest green","sky blue","rose pink","diamond","translucent mauve", "effervescent brown")
+	visible_message("The [c] 'map error' light on the wooden signpost blinks mysteriously.") // have fun kids
+
+
 /obj/effect/mark
 	var/mark = ""
 	icon = 'icons/misc/mark.dmi'
@@ -48,7 +56,7 @@
 	layer = 99
 	mouse_opacity = 0
 	unacidable = 1//Just to be sure.
-*/
+
 /obj/effect/beam
 	name = "beam"
 	unacidable = 1//Just to be sure.
@@ -99,9 +107,10 @@
 	throwforce = 0.0
 	throw_speed = 2
 	throw_range = 7
-	afterattack(atom/target as mob|obj|turf|area, mob/user as mob)
-		user.drop_item()
-		src.throw_at(target, throw_range, throw_speed)
+
+/obj/item/weapon/beach_ball/afterattack(atom/target as mob|obj|turf|area, mob/user as mob)
+	user.drop_item()
+	src.throw_at(target, throw_range, throw_speed)
 
 /obj/effect/spawner
 	name = "object spawner"
