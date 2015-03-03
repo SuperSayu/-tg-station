@@ -9,20 +9,20 @@
 	icon_off = "cabinetdetective_broken"
 
 
-	New()
-		..()
-		sleep(2)
-		new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
-		new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
-		return
+/obj/structure/closet/secure_closet/bar/New()
+	..()
+	sleep(2)
+	new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
+	new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
+	new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
+	new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
+	new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
+	new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
+	new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
+	new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
+	new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
+	new /obj/item/weapon/reagent_containers/food/drinks/beer( src )
+	return
 
 /obj/structure/closet/secure_closet/bar/update_icon()
 	if(broken)
@@ -48,6 +48,7 @@
 		new /obj/item/clothing/mask/gas/mime( src )
 		new /obj/item/clothing/shoes/sneakers/mime( src )
 		new /obj/item/weapon/bedsheet/mime( src )
+
 /obj/structure/closet/secure_closet/clown
 	name = "Clown's Closet"
 	req_access = list(access_theatre)
