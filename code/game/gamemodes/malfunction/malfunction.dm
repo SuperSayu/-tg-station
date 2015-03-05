@@ -10,9 +10,6 @@
 	recommended_enemies = 1
 	pre_setup_before_jobs = 1
 
-	var/const/waittime_l = 600
-	var/const/waittime_h = 1800 // started at 1800
-
 	var/AI_win_timeleft = 1800 //started at 1800, in case I change this for testing round end.
 	var/malf_mode_declared = 0
 	var/station_captured = 0
@@ -87,8 +84,6 @@
 */
 	if(emergency_shuttle)
 		emergency_shuttle.always_fake_recall = 1
-	spawn (rand(waittime_l, waittime_h))
-		send_intercept()
 	..()
 
 
