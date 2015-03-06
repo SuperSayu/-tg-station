@@ -182,12 +182,15 @@ datum/preferences
 
 				if(pref_species && pref_species.spec_hair == 1)
 					dat += "<h3>Species Accessory</h3>"
-
 					dat += "<a href='?_src_=prefs;preference=spec_hair;task=input'>[spec_hair]</a><BR>"
+					dat += "<a href='?_src_=prefs;preference=previous_spec_hair_style;task=input'>&lt;</a> <a href='?_src_=prefs;preference=next_spec_hair_style;task=input'>&gt;</a><BR>"
+
 				else
 					dat += "<h3>Hair Style</h3>"
 
 					dat += "<a href='?_src_=prefs;preference=hair_style;task=input'>[hair_style]</a><BR>"
+					dat += "<a href='?_src_=prefs;preference=previous_hair_style;task=input'>&lt;</a> <a href='?_src_=prefs;preference=next_hair_style;task=input'>&gt;</a><BR>"
+
 					dat += "<span style='border:1px solid #161616; background-color: #[hair_color];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=hair;task=input'>Change</a><BR>"
 
 				dat += "</td><td valign='top' width='21%'>"
@@ -195,6 +198,7 @@ datum/preferences
 				dat += "<h3>Facial Hair Style</h3>"
 
 				dat += "<a href='?_src_=prefs;preference=facial_hair_style;task=input'>[facial_hair_style]</a><BR>"
+				dat += "<a href='?_src_=prefs;preference=previous_facehair_style;task=input'>&lt;</a> <a href='?_src_=prefs;preference=next_facehair_style;task=input'>&gt;</a><BR>"
 				dat += "<span style='border: 1px solid #161616; background-color: #[facial_hair_color];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=facial;task=input'>Change</a><BR>"
 
 
@@ -609,6 +613,39 @@ datum/preferences
 						if(new_spec_hair)
 							spec_hair = new_spec_hair
 
+					if("next_spec_hair_style")
+						var/new_spec_hair
+						switch(pref_species.id)
+							if("lizard")
+								new_spec_hair = next_list_item(spec_hair, spec_hair_lizard_list)
+							if("bird")
+								new_spec_hair = next_list_item(spec_hair, spec_hair_bird_list)
+						if(new_spec_hair)
+							spec_hair = new_spec_hair
+
+					if("previous_spec_hair_style")
+						var/new_spec_hair
+						switch(pref_species.id)
+							if("lizard")
+								new_spec_hair = previous_list_item(hair_style, spec_hair_lizard_list)
+							if("bird")
+								new_spec_hair = previous_list_item(hair_style, spec_hair_bird_list)
+						if(new_spec_hair)
+							spec_hair = new_spec_hair
+
+
+					if("next_hair_style")
+						if (gender == MALE)
+							hair_style = next_list_item(hair_style, hair_styles_male_list)
+						else
+							hair_style = next_list_item(hair_style, hair_styles_female_list)
+
+					if("previous_hair_style")
+						if (gender == MALE)
+							hair_style = previous_list_item(hair_style, hair_styles_male_list)
+						else
+							hair_style = previous_list_item(hair_style, hair_styles_female_list)
+
 					if("facial")
 						var/new_facial = input(user, "Choose your character's facial-hair colour:", "Character Preference") as null|color
 						if(new_facial)
@@ -622,6 +659,18 @@ datum/preferences
 							new_facial_hair_style = input(user, "Choose your character's facial-hair style:", "Character Preference")  as null|anything in facial_hair_styles_female_list
 						if(new_facial_hair_style)
 							facial_hair_style = new_facial_hair_style
+
+					if("next_facehair_style")
+						if (gender == MALE)
+							facial_hair_style = next_list_item(facial_hair_style, facial_hair_styles_male_list)
+						else
+							facial_hair_style = next_list_item(facial_hair_style, facial_hair_styles_female_list)
+
+					if("previous_facehair_style")
+						if (gender == MALE)
+							facial_hair_style = previous_list_item(facial_hair_style, facial_hair_styles_male_list)
+						else
+							facial_hair_style = previous_list_item(facial_hair_style, facial_hair_styles_female_list)
 
 					if("underwear")
 						var/new_underwear
