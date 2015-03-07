@@ -356,7 +356,6 @@
 			num_survivors++
 
 	world << "[TAB]Command's Approval Rating: <B>[100 - round((num_revs/num_survivors)*100, 0.1)]%</B>" // % of loyal crew
-
 	..()
 	return 1
 

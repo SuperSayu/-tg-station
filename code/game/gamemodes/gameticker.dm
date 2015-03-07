@@ -329,7 +329,6 @@ var/round_start_time = 0
 
 
 /datum/controller/gameticker/proc/declare_completion()
-
 	var/station_evacuated
 	if(emergency_shuttle.location > 0)
 		station_evacuated = 1
@@ -337,6 +336,9 @@ var/round_start_time = 0
 	var/num_escapees = 0
 
 	world << "<BR><BR><BR><FONT size=3><B>The round has ended.</B></FONT>"
+
+
+	//Player status report
 	for(var/mob/Player in mob_list)
 		if(Player.mind)
 			if(Player.stat != DEAD && !isbrain(Player))
@@ -368,7 +370,6 @@ var/round_start_time = 0
 	world << "<BR>"
 
 	//Silicon laws report
-
 	for (var/mob/living/silicon/ai/aiPlayer in mob_list)
 		if (aiPlayer.stat != 2 && aiPlayer.mind)
 			world << "<b>[aiPlayer.name] (Played by: [aiPlayer.mind.key])'s laws at the end of the round were:</b>"
