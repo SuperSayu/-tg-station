@@ -133,6 +133,8 @@ datum/objective/maroon/update_explanation_text()
 	else
 		explanation_text = "Free Objective"
 
+
+
 datum/objective/debrain//I want braaaainssss
 	var/target_role_type=0
 	dangerrating = 20
@@ -517,6 +519,7 @@ datum/objective/absorb/check_completion()
 		return 0
 
 
+
 datum/objective/destroy
 	dangerrating = 10
 
@@ -533,7 +536,6 @@ datum/objective/destroy/check_completion()
 			return 1
 		return 0
 	return 1
-
 
 datum/objective/destroy/update_explanation_text()
 	..()
