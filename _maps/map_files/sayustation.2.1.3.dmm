@@ -7709,7 +7709,7 @@
 "cSm" = (/obj/structure/closet/crate/medical,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/syndicate_station/start)
 "cSn" = (/obj/structure/shuttle/engine/heater,/obj/structure/window/reinforced{dir = 1},/turf/simulated/shuttle/plating,/area/syndicate_station/start)
 "cSo" = (/obj/machinery/teleport/station,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/syndicate_station/start)
-"cSp" = (/obj/machinery/teleport/hub,/obj/effect/landmark{name = "syndicate teleporter"},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/syndicate_station/start)
+"cSp" = (/obj/machinery/teleport/hub/syndicate,/obj/effect/landmark{name = "syndicate teleporter"},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/syndicate_station/start)
 "cSq" = (/obj/machinery/door/poddoor{id = "thunderdomegen"; name = "General Supply"},/turf/unsimulated/floor{icon_state = "floor"},/area/tdome)
 "cSr" = (/obj/structure/shuttle/engine/propulsion{icon_state = "propulsion_l"},/turf/space,/area/syndicate_station/start)
 "cSs" = (/obj/structure/shuttle/engine/propulsion,/turf/space,/area/syndicate_station/start)
