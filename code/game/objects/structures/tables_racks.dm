@@ -303,7 +303,7 @@
 	var/dat = "<h3>Construction menu</h3>"
 	dat += "<div class='statusDisplay'>"
 	if(busy)
-		dat += "Construction inprogress...</div>"
+		dat += "Construction in progress...</div>"
 	else
 		for(var/datum/table_recipe/R in table_recipes)
 			if(check_contents(R))
@@ -599,8 +599,14 @@
 		return
 
 	if (istype(I, /obj/item/weapon/wrench))
-		table_destroy(2, user)
-		return
+		if(istype(src, /obj/structure/table/reinforced))
+			var/obj/structure/table/reinforced/RT = src
+			if(RT.status == 1)
+				table_destroy(2, user)
+				return
+		else
+			table_destroy(2, user)
+			return
 
 	if (istype(I, /obj/item/weapon/storage/bag/tray))
 		var/obj/item/weapon/storage/bag/tray/T = I
@@ -653,24 +659,13 @@ Destroy type values:
 		return
 
 	if(destroy_type == 2)
-		if(istype(src, /obj/structure/table/reinforced))
-			var/obj/structure/table/reinforced/RT = src
-			if(RT.status == 1)
-				user << "<span class='notice'>Now disassembling the reinforced table</span>"
-				playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-				if (do_after(user, 50))
-					new parts( src.loc )
-					playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
-					qdel(src)
-				return
-		else
-			user << "<span class='notice'>Now disassembling table</span>"
-			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-			if (do_after(user, 50))
-				new parts( src.loc )
-				playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
-				qdel(src)
-			return
+		user << "<span class='notice'>Now disassembling the [src.name]</span>"
+		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+		if (do_after(user, 50))
+			new parts( src.loc )
+			playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
+			qdel(src)
+		return
 
 
 
@@ -877,4 +872,3 @@ obj/structure/table/MouseDrop_T(mob/target, mob/living/carbon/human/user)
 		qdel(src)
 /obj/structure/rack/attack_tk() // no telehulk sorry
 	return
-
