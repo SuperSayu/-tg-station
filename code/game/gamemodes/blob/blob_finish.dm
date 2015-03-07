@@ -29,7 +29,7 @@
 		world << "<B>The alien organism has been eradicated from the station</B>"
 		log_game("Blob mode completed with a crew victory.")
 
-		world << "\blue Rebooting in 30s"
+		world << "<span class='notice'>Rebooting in 30s</span>"
 	..()
 	return 1
 
