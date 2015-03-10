@@ -85,47 +85,12 @@
 	if(a_right)
 		a_right.on_found(finder)
 
-
-/obj/item/device/assembly_holder/hear_talk(mob/living/M as mob, msg)
-	if(a_left)
-		a_left.hear_talk(M, msg)
-	if(a_right)
-		a_right.hear_talk(M, msg)
-
 /obj/item/device/assembly_holder/Move()
 	..()
 	if(a_left && a_right)
 		a_left.holder_movement()
 		a_right.holder_movement()
 	return
-
-/obj/item/device/assembly_holder/hear_talk(mob/living/M as mob, msg)
-	if(a_left)
-		a_left.hear_talk(M, msg)
-	if(a_right)
-		a_right.hear_talk(M, msg)
-
-/obj/item/device/assembly_holder/proc/process_movement() // infrared beams and prox sensors
-	if(a_left && a_right)
-		a_left.holder_movement()
-		a_right.holder_movement()
-
-/obj/item/device/assembly_holder/Move()
-	..()
-	process_movement()
-	return
-
-/obj/item/device/assembly_holder/pickup()
-	..()
-	process_movement()
-
-/obj/item/device/assembly_holder/Bump()
-	..()
-	process_movement()
-
-/obj/item/device/assembly_holder/throw_impact() // called when a throw stops
-	..()
-	process_movement()
 
 /obj/item/device/assembly_holder/attack_hand()//Perhapse this should be a holder_pickup proc instead, can add if needbe I guess
 	if(a_left && a_right)

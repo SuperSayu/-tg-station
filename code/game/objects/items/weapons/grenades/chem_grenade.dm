@@ -235,39 +235,6 @@
 	if(nadeassembly)
 		nadeassembly.HasProximity(AM)
 
-/obj/item/weapon/grenade/chem_grenade/Move() // prox sensors and infrared care about this
-	..()
-	if(nadeassembly)
-		nadeassembly.process_movement()
-
-/obj/item/weapon/grenade/chem_grenade/pickup()
-	..()
-	if(nadeassembly)
-		nadeassembly.process_movement()
-
-/obj/item/weapon/grenade/chem_grenade/Crossed(atom/movable/AM)
-	if(nadeassembly)
-		nadeassembly.Crossed(AM)
-
-/obj/item/weapon/grenade/chem_grenade/on_found(mob/finder)
-	if(nadeassembly)
-		nadeassembly.on_found(finder)
-
-/obj/item/weapon/grenade/chem_grenade/hear_talk(mob/living/M, msg)
-	if(nadeassembly)
-		nadeassembly.hear_talk(M, msg)
-
-/obj/item/weapon/grenade/chem_grenade/Bump()
-	..()
-	if(nadeassembly)
-		nadeassembly.process_movement()
-
-/obj/item/weapon/grenade/chem_grenade/throw_impact() // called when a throw stops
-	..()
-	if(nadeassembly)
-		nadeassembly.process_movement()
-
-
 /obj/item/weapon/grenade/chem_grenade/prime()
 	if(stage != READY)
 		return

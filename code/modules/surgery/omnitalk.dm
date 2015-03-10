@@ -13,7 +13,7 @@
 
 /datum/surgery_step/implant/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
 	user.visible_message("<span class='notice'>[user] implants [target]!</span>")
-	target.universal_speak = 1
+	target.languages = ALL
 	user.drop_item()
 	tool.loc = target
 	return 1

@@ -5,39 +5,41 @@
 	m_amt = 500
 	g_amt = 50
 	origin_tech = "magnets=1"
+	flags = HEAR
 	var/listening = 0
-	var/recorded = null	//the activation message
-
+	var/recorded	//the activation message
 	bomb_name = "voice-activated bomb"
 
-/obj/item/device/assembly/voice/describe()
-	if(recorded || listening)
-		return "A meter on [src] flickers with every nearby sound."
-	else
-		return "[src] is deactivated."
-
-/obj/item/device/assembly/voice/hear_talk(mob/living/M as mob, msg)
+/obj/item/device/assembly/voice/Hear(message, atom/movable/speaker, message_langs, raw_message, radio_freq)
 	if(listening)
-		recorded = msg
+		recorded = raw_message
 		listening = 0
-		var/turf/T = get_turf(src)	//otherwise it won't work in hand
-		T.visible_message("\icon[src] beeps, \"Activation message is '[recorded]'.\"")
+		say("Activation message is '[recorded]'.")
 	else
-		if(findtext(msg, recorded))
+		if(findtext(raw_message, recorded))
 			pulse(0)
 
 /obj/item/device/assembly/voice/activate()
 	if(secured)
 		if(!holder)
 			listening = !listening
-			var/turf/T = get_turf(src)
-			T.visible_message("\icon[src] beeps, \"[listening ? "Now" : "No longer"] recording input.\"")
+			say("[listening ? "Now" : "No longer"] recording input.")
+
+/obj/machinery/vending/say_quote(text)
+	return "beeps, \"[text]\""
 
 /obj/item/device/assembly/voice/attack_self(mob/user)
 	if(!user)	return 0
 	activate()
 	return 1
 
+
 /obj/item/device/assembly/voice/toggle_secure()
 	. = ..()
 	listening = 0
+
+/obj/item/device/assembly/voice/describe()
+	if(recorded || listening)
+		return "A meter on [src] flickers with every nearby sound."
+	else
+		return "[src] is deactivated."
