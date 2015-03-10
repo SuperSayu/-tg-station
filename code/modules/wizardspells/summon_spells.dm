@@ -37,8 +37,8 @@
 	if(T)
 		new /obj/item/clothing/shoes/sandal(T) //In case they've lost them.
 		new /obj/item/clothing/gloves/magic(T)
-		new /obj/item/clothing/suit/space/rig/wizard(T)
-		new /obj/item/clothing/head/helmet/space/rig/wizard(T)
+		new /obj/item/clothing/suit/space/hardsuit/wizard(T)
+		new /obj/item/clothing/head/helmet/space/hardsuit/wizard(T)
 		return 1
 	return 0
 
@@ -357,7 +357,7 @@
 
 /obj/effect/knowspell/summon/world/guns/summon_effect(var/atom/A)
 	if(istype(A,/obj/item/weapon/gun/projectile/automatic/pistol))
-		new /obj/item/weapon/silencer(A.loc)
+		new /obj/item/weapon/suppressor(A.loc)
 	return 1
 
 /obj/effect/knowspell/summon/world/guns/target_effect(var/mob/living/carbon/human/H)

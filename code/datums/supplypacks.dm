@@ -982,7 +982,7 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	name = "Do-it-yourself Vending Machine"
 	cost = 100
 /datum/supply_packs/misc/lasertag
-	name = "LaserTag Crate"
+	name = "Laser Tag Crate"
 	contains = list(/obj/item/weapon/gun/energy/laser/redtag,
 					/obj/item/weapon/gun/energy/laser/redtag,
 					/obj/item/weapon/gun/energy/laser/redtag,
@@ -998,7 +998,7 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 					/obj/item/clothing/head/helmet/redtaghelm,
 					/obj/item/clothing/head/helmet/bluetaghelm)
 	cost = 15
-	containername = "LaserTag Crate"
+	containername = "laser tag crate"
 
 /datum/supply_packs/misc/religious_supplies
 	name = "Religious Supplies Crate"
@@ -1157,7 +1157,7 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 					/obj/item/clothing/head/collectable/petehat)
 	name = "Collectable hat crate!"
 	cost = 200
-	containername = "Collectable hats crate! Brought to you by Bass.inc!"
+	containername = "collectable hats crate! Brought to you by Bass.inc!"
 
 /datum/supply_packs/misc/randomised/New()
 	manifest += "Contains any [num_contained] of:"

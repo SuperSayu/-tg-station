@@ -58,7 +58,7 @@
 	else
 		t += "Reset is [progress]% done..."
 	if(!powernet)
-		t += "\red No connection"
+		t += "<span class='danger'>No connection.</span>"
 	else
 
 		var/list/L = list()

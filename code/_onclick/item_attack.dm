@@ -11,7 +11,7 @@
 		visible_message("<span class='danger'>[src] has been hit by [user] with [W].</span>")
 
 /mob/living/attackby(obj/item/I, mob/user)
-	user.changeNext_move(8)
+	user.changeNext_move(CLICK_CD_MELEE)
 	I.attack(src, user)
 
 /mob/living/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone)
@@ -51,9 +51,6 @@ obj/item/proc/get_clamped_volume()
 
 	if (!istype(M)) // not sure if this is the right thing...
 		return
-	if(force < 1 && (flags&NOBLUDGEON))
-		return
-
 
 	if (hitsound && force > 0) //If an item's hitsound is defined and the item's force is greater than zero...
 		playsound(loc, hitsound, get_clamped_volume(), 1, -1) //...play the item's hitsound at get_clamped_volume() with varying frequency and -1 extra range.

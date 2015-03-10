@@ -16,9 +16,6 @@
 	required_enemies = 1
 	recommended_enemies = 4
 
-	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
-	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
-
 	var/traitors_possible = 4 //hard limit on traitors if scaling is turned off
 	var/scale_modifier = 1 // Used for gamemodes, that are a child of traitor, that need more than the usual.
 
@@ -80,8 +77,6 @@
 	if(!exchange_blue)
 		exchange_blue = -1 //Block latejoiners from getting exchange objectives
 	modePlayer += traitors
-	spawn (rand(waittime_l, waittime_h))
-		send_intercept()
 	..()
 	return 1
 
@@ -102,19 +97,23 @@
 
 /datum/game_mode/proc/forge_traitor_objectives(var/datum/mind/traitor)
 	if(istype(traitor.current, /mob/living/silicon))
-		var/datum/objective/assassinate/kill_objective = new
-		kill_objective.owner = traitor
-		kill_objective.find_target()
-		traitor.objectives += kill_objective
-
-		var/datum/objective/survive/survive_objective = new
-		survive_objective.owner = traitor
-		traitor.objectives += survive_objective
+		var/objective_count = 0
 
 		if(prob(10))
 			var/datum/objective/block/block_objective = new
 			block_objective.owner = traitor
 			traitor.objectives += block_objective
+			objective_count++
+
+		for(var/i = objective_count, i < config.traitor_objectives_amount, i++)
+			var/datum/objective/assassinate/kill_objective = new
+			kill_objective.owner = traitor
+			kill_objective.find_target()
+			traitor.objectives += kill_objective
+
+		var/datum/objective/survive/survive_objective = new
+		survive_objective.owner = traitor
+		traitor.objectives += survive_objective
 
 	else
 		var/is_hijacker = prob(10)

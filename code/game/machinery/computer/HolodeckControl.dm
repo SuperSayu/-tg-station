@@ -16,192 +16,189 @@
 	attack_ai(var/mob/user as mob)
 		return src.attack_hand(user)
 
-	attack_hand(var/mob/user as mob)
+/obj/machinery/computer/HolodeckControl/attack_hand(var/mob/user as mob)
 
-		if(..())
-			return
-		user.set_machine(src)
-
-		var/dat = "<h3>Current Loaded Programs</h3>"
-		dat += "<A href='?src=\ref[src];turnoff=1'>((Turn Off))</A><BR>"
-		dat += "<A href='?src=\ref[src];lounge=1'>((Classic Lounge))</A><BR>"
-		dat += "<A href='?src=\ref[src];emptycourt=1'>((Empty Court))</A><BR>"
-		dat += "<A href='?src=\ref[src];boxingcourt=1'>((Dodgeball Arena)</font>)</A><BR>"
-		dat += "<A href='?src=\ref[src];basketball=1'>((Basketball Court))</A><BR>"
-		dat += "<A href='?src=\ref[src];thunderdomecourt=1'>((Thunderdome Court))</A><BR>"
-		dat += "<A href='?src=\ref[src];beach=1'>((Beach))</A><BR>"
-		dat += "<A href='?src=\ref[src];party=1'>((Party Room))</A><BR>"
-		dat += "<A href='?src=\ref[src];transit=1'>((Transit system demo))</A><BR>"
-		dat += "<A href='?src=\ref[src];pets=1'>((Pet Room))</A><BR>"
-		dat += " - Pet preference: <a href='?src=\ref[src];pettype=1'>[pettype]</a><br>"
-		if(emagged | issilicon(user))
-			dat += "<A href='?src=\ref[src];medical=1'>((Emergency Medical Center))</A><BR>"
-			dat += "Caution: Holographic medical facilities for emergency use only. <BR>"
-
-
-		dat += "<span class='notice'>Please ensure that only holographic weapons are used in the holodeck if a combat simulation has been loaded.</span><BR>"
-
-		if(emagged)
-			dat += "<A href='?src=\ref[src];securebunker=1'>(<font color=red>Load secure bunker</font>)</A><BR>"
-			dat += "Caution: Ensure that bunker is not used in an unauthorized manner.<BR>"
-
-			dat += "<A href='?src=\ref[src];burntest=1'>(<font color=red>Begin Atmospheric Burn Simulation</font>)</A><BR>"
-			dat += "Ensure the holodeck is empty before testing.<BR>"
-			dat += "<BR>"
-			dat += "<A href='?src=\ref[src];wildlifecarp=1'>(<font color=red>Begin Wildlife Simulation</font>)</A><BR>"
-			dat += "Ensure the holodeck is empty before testing.<BR>"
-			dat += "<BR>"
-			dat += "<BR>"
-			if(issilicon(user))
-				dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=green>Re-Enable Safety Protocols?</font>)</A><BR>"
-			dat += "Safety Protocols are <font class='bad'>DISABLED</font><BR>"
-		else
-			if(issilicon(user))
-				dat += "<BR>"
-				dat += "<BR>"
-				dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=red>Override Safety Protocols?</font>)</A><BR>"
-			dat += "<BR>"
-			dat += "Safety Protocols are <font class='good'>ENABLED</font><BR>"
-
-		//user << browse(dat, "window=computer;size=400x500")
-		//onclose(user, "computer")
-		var/datum/browser/popup = new(user, "computer", name, 400, 500)
-		popup.set_content(dat)
-		popup.set_title_image(user.browse_rsc_icon(src.icon, src.icon_state))
-		popup.open()
+	if(..())
 		return
 
+	user.set_machine(src)
 
-	Topic(href, href_list)
-		if(..())
-			return
-		if(Adjacent(usr) || istype(usr, /mob/living/silicon))
-			usr.set_machine(src)
+	var/dat = "<h3>Current Loaded Programs</h3>"
+	dat += "<A href='?src=\ref[src];turnoff=1'>((Turn Off))</A><BR>"
+	dat += "<A href='?src=\ref[src];lounge=1'>((Classic Lounge))</A><BR>"
+	dat += "<A href='?src=\ref[src];emptycourt=1'>((Empty Court))</A><BR>"
+	dat += "<A href='?src=\ref[src];boxingcourt=1'>((Dodgeball Arena)</font>)</A><BR>"
+	dat += "<A href='?src=\ref[src];basketball=1'>((Basketball Court))</A><BR>"
+	dat += "<A href='?src=\ref[src];thunderdomecourt=1'>((Thunderdome Court))</A><BR>"
+	dat += "<A href='?src=\ref[src];beach=1'>((Beach))</A><BR>"
+	dat += "<A href='?src=\ref[src];party=1'>((Party Room))</A><BR>"
+	dat += "<A href='?src=\ref[src];transit=1'>((Transit system demo))</A><BR>"
+	dat += "<A href='?src=\ref[src];pets=1'>((Pet Room))</A><BR>"
+	dat += " - Pet preference: <a href='?src=\ref[src];pettype=1'>[pettype]</a><br>"
+	if(emagged | issilicon(user))
+		dat += "<A href='?src=\ref[src];medical=1'>((Emergency Medical Center))</A><BR>"
+		dat += "Caution: Holographic medical facilities for emergency use only. <BR>"
 
-			if(href_list["loadarea"])
-				var/typepath = text2path(href_list["loadarea"])
-				if(ispath(typepath,/area))
-					target = locate(typepath)
-					if(target)
-						loadProgram(target)
-					else
-						world.log << "area not ready: [typepath]"
+	dat += "<span class='notice'>Please ensure that only holographic weapons are used in the holodeck if a combat simulation has been loaded.</span><BR>"
+
+	if(emagged)
+		dat += "<A href='?src=\ref[src];securebunker=1'>(<font color=red>Load secure bunker</font>)</A><BR>"
+		dat += "Caution: Ensure that bunker is not used in an unauthorized manner.<BR>"
+
+		dat += "<A href='?src=\ref[src];burntest=1'>(<font color=red>Begin Atmospheric Burn Simulation</font>)</A><BR>"
+		dat += "Ensure the holodeck is empty before testing.<BR>"
+		dat += "<BR>"
+		dat += "<A href='?src=\ref[src];wildlifecarp=1'>(<font color=red>Begin Wildlife Simulation</font>)</A><BR>"
+		dat += "Ensure the holodeck is empty before testing.<BR>"
+		dat += "<BR>"
+		dat += "<BR>"
+		if(issilicon(user))
+			dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=green>Re-Enable Safety Protocols?</font>)</A><BR>"
+		dat += "Safety Protocols are <font class='bad'>DISABLED</font><BR>"
+	else
+		if(issilicon(user))
+			dat += "<BR>"
+			dat += "<BR>"
+			dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=red>Override Safety Protocols?</font>)</A><BR>"
+		dat += "<BR>"
+		dat += "Safety Protocols are <font class='good'>ENABLED</font><BR>"
+
+	var/datum/browser/popup = new(user, "computer", name, 400, 500)
+	popup.set_content(dat)
+	popup.set_title_image(user.browse_rsc_icon(src.icon, src.icon_state))
+	popup.open()
+	return
+
+/obj/machinery/computer/HolodeckControl/Topic(href, href_list)
+	if(..())
+		return
+	if(Adjacent(usr) || istype(usr, /mob/living/silicon))
+		usr.set_machine(src)
+
+		if(href_list["loadarea"])
+			var/typepath = text2path(href_list["loadarea"])
+			if(ispath(typepath,/area))
+				target = locate(typepath)
+				if(target)
+					loadProgram(target)
 				else
-					world.log << "bad area argument: [href_list["loadarea"]]"
+					world.log << "area not ready: [typepath]"
+			else
+				world.log << "bad area argument: [href_list["loadarea"]]"
 
-			else if(href_list["emptycourt"])
-				target = locate(/area/holodeck/source_emptycourt)
-				if(target)
-					loadProgram(target)
-			else if(href_list["lounge"])
-				target = locate(/area/holodeck/source_lounge)
-				if(target)
-					loadProgram(target)
-			else if(href_list["pets"])
-				target = locate(/area/holodeck/source_puppy)
-				if(target)
-					loadProgram(target)
-			else if(href_list["pettype"])
-				var/list/next_pettype = list(
+		else if(href_list["emptycourt"])
+			target = locate(/area/holodeck/source_emptycourt)
+			if(target)
+				loadProgram(target)
+		else if(href_list["lounge"])
+			target = locate(/area/holodeck/source_lounge)
+			if(target)
+				loadProgram(target)
+		else if(href_list["pets"])
+			target = locate(/area/holodeck/source_puppy)
+			if(target)
+				loadProgram(target)
+		else if(href_list["pettype"])
+			var/list/next_pettype = list(
+				"dogs" = "cats",
+				"cats" = "chicks",
+				"chicks" = "dogs")
+			if(emagged)
+				next_pettype = list(
 					"dogs" = "cats",
 					"cats" = "chicks",
-					"chicks" = "dogs")
-				if(emagged)
-					next_pettype = list(
-						"dogs" = "cats",
-						"cats" = "chicks",
-						"chicks" = "goats",
-						"goats" = "ghosts",
-						"ghosts" = "clowns",
-						"clowns" = "dogs")
-				if(pettype in next_pettype)
-					pettype = next_pettype[pettype]
-				else
-					pettype = "dogs"
-				for(var/mob/M in holographic_items)
-					derez(M)
-				for(var/obj/effect/landmark/L in linkedholodeck)
-					if(L.name == "Holopet Spawn")
-						petspawn(L.loc)
-				for(var/mob/M in holographic_items)
-					step_rand(M)
-					step_rand(M)
-				for(var/obj/effect/decal/cleanable/EDC in linkedholodeck)
-					if(EDC in holographic_items) continue
-					del EDC
+					"chicks" = "goats",
+					"goats" = "ghosts",
+					"ghosts" = "clowns",
+					"clowns" = "dogs")
+			if(pettype in next_pettype)
+				pettype = next_pettype[pettype]
+			else
+				pettype = "dogs"
+			for(var/mob/M in holographic_items)
+				derez(M)
+			for(var/obj/effect/landmark/L in linkedholodeck)
+				if(L.name == "Holopet Spawn")
+					petspawn(L.loc)
+			for(var/mob/M in holographic_items)
+				step_rand(M)
+				step_rand(M)
+			for(var/obj/effect/decal/cleanable/EDC in linkedholodeck)
+				if(EDC in holographic_items) continue
+				del EDC
 
-			else if(href_list["boxingcourt"])
-				target = locate(/area/holodeck/source_boxingcourt)
-				if(target)
-					loadProgram(target)
+		else if(href_list["boxingcourt"])
+			target = locate(/area/holodeck/source_boxingcourt)
+			if(target)
+				loadProgram(target)
 
-			else if(href_list["basketball"])
-				target = locate(/area/holodeck/source_basketball)
-				if(target)
-					loadProgram(target)
+		else if(href_list["basketball"])
+			target = locate(/area/holodeck/source_basketball)
+			if(target)
+				loadProgram(target)
 
-			else if(href_list["thunderdomecourt"])
-				target = locate(/area/holodeck/source_thunderdomecourt)
-				if(target)
-					loadProgram(target)
+		else if(href_list["thunderdomecourt"])
+			target = locate(/area/holodeck/source_thunderdomecourt)
+			if(target)
+				loadProgram(target)
 
-			else if(href_list["beach"])
-				target = locate(/area/holodeck/source_beach)
-				if(target)
-					loadProgram(target)
+		else if(href_list["beach"])
+			target = locate(/area/holodeck/source_beach)
+			if(target)
+				loadProgram(target)
 
-			else if(href_list["transit"])
-				target = locate(/area/holodeck/source_transit)
-				if(target)
-					loadProgram(target)
+		else if(href_list["transit"])
+			target = locate(/area/holodeck/source_transit)
+			if(target)
+				loadProgram(target)
 
-			else if(href_list["party"])
-				target = locate(/area/holodeck/source_party)
-				if(target)
-					loadProgram(target)
+		else if(href_list["party"])
+			target = locate(/area/holodeck/source_party)
+			if(target)
+				loadProgram(target)
 
-			else if(href_list["turnoff"])
-				target = locate(offline_area)
-				if(target)
-					loadProgram(target)
+		else if(href_list["turnoff"])
+			target = locate(offline_area)
+			if(target)
+				loadProgram(target)
 
-			else if(href_list["burntest"])
-				if(!emagged)	return
-				target = locate(/area/holodeck/source_burntest)
-				if(target)
-					loadProgram(target)
+		else if(href_list["burntest"])
+			if(!emagged)	return
+			target = locate(/area/holodeck/source_burntest)
+			if(target)
+				loadProgram(target)
 
-			else if(href_list["wildlifecarp"])
-				if(!emagged)	return
-				target = locate(/area/holodeck/source_wildlife)
-				if(target)
-					loadProgram(target)
+		else if(href_list["wildlifecarp"])
+			if(!emagged)	return
+			target = locate(/area/holodeck/source_wildlife)
+			if(target)
+				loadProgram(target)
 
-			else if(href_list["securebunker"])
-				//if(!emagged)	return
-				target = locate(/area/holodeck/source_bunker)
-				if(target)
-					loadProgram(target)
-			else if(href_list["medical"])
-				target = locate(/area/holodeck/source_medical)
-				if(target)
-					loadProgram(target)
-			else if(href_list["AIoverride"])
-				if(!issilicon(usr))	return
-				emagged = !emagged
-				if(emagged)
-					message_admins("[key_name_admin(usr)] overrode the holodeck's safeties")
-					log_game("[key_name(usr)] overrided the holodeck's safeties")
-				else
-					message_admins("[key_name_admin(usr)] restored the holodeck's safeties")
-					log_game("[key_name(usr)] restored the holodeck's safeties")
+		else if(href_list["securebunker"])
+			//if(!emagged)	return
+			target = locate(/area/holodeck/source_bunker)
+			if(target)
+				loadProgram(target)
+		else if(href_list["medical"])
+			target = locate(/area/holodeck/source_medical)
+			if(target)
+				loadProgram(target)
+		else if(href_list["AIoverride"])
+			if(!issilicon(usr))	return
+			emagged = !emagged
+			if(emagged)
+				message_admins("[key_name_admin(usr)] overrode the holodeck's safeties")
+				log_game("[key_name(usr)] overrided the holodeck's safeties")
+			else
+				message_admins("[key_name_admin(usr)] restored the holodeck's safeties")
+				log_game("[key_name(usr)] restored the holodeck's safeties")
 
 
-			src.add_fingerprint(usr)
-		src.updateUsrDialog()
-		return
+		src.add_fingerprint(usr)
+	src.updateUsrDialog()
 
 
+	return
 
 /obj/machinery/computer/HolodeckControl/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
 

@@ -1,10 +1,9 @@
 
 /obj/item/weapon/gun/energy/taser
 	name = "taser gun"
-	desc = "A small, low capacity gun used for non-lethal takedowns."
+	desc = "A low-capacity, energy-based stun gun used by security teams to subdue targets at range."
 	icon_state = "taser"
 	item_state = null	//so the human update icon uses the icon_state instead.
-	ammo_type = list(/obj/item/ammo_casing/energy/electrode)
 
 /obj/item/weapon/gun/energy/stunrevolver
 	name = "stun revolver"
@@ -22,39 +21,39 @@
 
 /obj/item/weapon/gun/energy/crossbow
 	name = "mini energy crossbow"
-	desc = "A weapon favored by many of the syndicates stealth specialists."
+	desc = "A weapon favored by syndicate stealth specialists."
 	icon_state = "crossbow"
-	w_class = 2.0
 	item_state = "crossbow"
+	w_class = 2.0
 	m_amt = 2000
 	origin_tech = "combat=2;magnets=2;syndicate=5"
-	silenced = 1
+	suppressed = 1
 	ammo_type = list(/obj/item/ammo_casing/energy/bolt)
 	cell_type = "/obj/item/weapon/stock_parts/cell/crap"
 	var/charge_tick = 0
 
 
-	New()
-		..()
-		processing_objects.Add(src)
+/obj/item/weapon/gun/energy/crossbow/New()
+	..()
+	processing_objects.Add(src)
 
 
-	Destroy()
-		processing_objects.Remove(src)
-		..()
+/obj/item/weapon/gun/energy/crossbow/Destroy()
+	processing_objects.Remove(src)
+	..()
 
 
-	process()
-		charge_tick++
-		if(charge_tick < 4) return 0
-		charge_tick = 0
-		if(!power_supply) return 0
-		power_supply.give(100)
-		return 1
+/obj/item/weapon/gun/energy/crossbow/process()
+	charge_tick++
+	if(charge_tick < 4) return 0
+	charge_tick = 0
+	if(!power_supply) return 0
+	power_supply.give(100)
+	return 1
 
 
-	update_icon()
-		return
+/obj/item/weapon/gun/energy/crossbow/update_icon()
+	return
 
 /obj/item/weapon/gun/energy/crossbow/cyborg/newshot()
 	if(isrobot(src.loc))
@@ -68,7 +67,8 @@
 
 /obj/item/weapon/gun/energy/crossbow/largecrossbow
 	name = "energy crossbow"
-	desc = "A weapon favored by syndicate infiltration teams."
-	w_class = 4.0
+	desc = "A weapon favored by syndicate carp hunters."
+	icon_state = "crossbowlarge"
+	w_class = 3.0
 	force = 10
 	m_amt = 200000

@@ -40,6 +40,7 @@
 	miss_sound = 'sound/weapons/slashmiss.ogg'
 	species_temp_coeff = 0.5
 	species_temp_offset = -20
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/lizard
 
 //NOPE
 /*
@@ -70,6 +71,7 @@
 	attack_sound = 'sound/weapons/slice.ogg'
 	miss_sound = 'sound/weapons/slashmiss.ogg'
 	burnmod = 1.5
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/plant
 
 /datum/species/plant/handle_chemicals_in_body(var/mob/living/carbon/human/H)
 	if(H.reagents) H.reagents.metabolize(H)
@@ -184,6 +186,7 @@
 	darksight = 8
 	sexes = 0
 	ignored_by = list(/mob/living/simple_animal/hostile/faithless)
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/shadow
 
 /datum/species/shadow/spec_life(mob/living/carbon/human/H)
 	var/light_amount = 0
@@ -215,6 +218,7 @@
 	hair_luminosity = -75
 	ignored_by = list(/mob/living/carbon/slime)
 	bone_chance_adjust = 0
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/slime
 
 /datum/species/slime/spec_life(mob/living/carbon/human/H)
 	if ((HULK in H.mutations))
@@ -240,6 +244,7 @@
 	hair_alpha = 195
 	hair_luminosity = -75
 	bone_chance_adjust = 1.2
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/slime
 
 	// COLD DAMAGE LEVEL ONE: 0.9 (+0.4)
 	// COLD DAMAGE LEVEL TWO: 2.7 (+1.2)
@@ -335,6 +340,7 @@
 	no_equip = list(slot_wear_mask, slot_wear_suit, slot_gloves, slot_shoes, slot_head, slot_w_uniform)
 	nojumpsuit = 1
 	bone_chance_adjust = 0
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/golem
 
 /*
  ADAMANTINE GOLEMS
@@ -343,6 +349,7 @@
 /datum/species/golem/adamantine
 	name = "Adamantine Golem"
 	id = "adamantine"
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/golem/adamantine
 
 /*
  FLIES
@@ -353,6 +360,7 @@
 	name = "Human?"
 	id = "fly"
 	say_mod = "buzzes"
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/fly
 
 /datum/species/fly/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
 	if(chem.id == "pestkiller")
@@ -375,6 +383,7 @@
 	name = "Spooky Scary Skeleton"
 	id = "skeleton"
 	sexes = 0
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/skeleton
 
 #undef SPECIES_LAYER
 #undef BODY_LAYER

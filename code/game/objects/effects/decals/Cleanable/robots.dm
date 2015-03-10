@@ -51,30 +51,31 @@
 	var/viruses = list()
 	random_icon_states = list("floor1", "floor2", "floor3", "floor4", "floor5", "floor6", "floor7")
 
-	Destroy()
-		for(var/datum/disease/D in viruses)
-			D.cure(0)
-		var/turf/simulated/cur_turf = get_turf(src.loc)
-		if(istype(cur_turf, /turf/simulated))
-			cur_turf.oily = 0
-		..()
+/obj/effect/decal/cleanable/oil/Destroy()
+	for(var/datum/disease/D in viruses)
+		D.cure(0)
+	var/turf/simulated/cur_turf = get_turf(src.loc)
+	if(istype(cur_turf, /turf/simulated))
+		cur_turf.oily = 0
+	..()
 
-	New()
-		var/turf/simulated/cur_turf = get_turf(src.loc)
-		if(istype(cur_turf, /turf/simulated))
-			cur_turf.bloody = 0
-			cur_turf.oily = 30
-			cur_turf.xenobloody = 0
-		// lame copypasta time x3 combo
-		if(src.loc && isturf(src.loc))
-			for(var/obj/effect/decal/cleanable/blood/B in src.loc)
-				if(B != src)
-					del(B)
-			for(var/obj/effect/decal/cleanable/xenoblood/B in src.loc)
-				if(B != src)
-					del(B)
-			for(var/obj/effect/decal/cleanable/oil/B in src.loc)
-				if(B != src)
-					del(B)
+/obj/effect/decal/cleanable/oil/New()
+	var/turf/simulated/cur_turf = get_turf(src.loc)
+	if(istype(cur_turf, /turf/simulated))
+		cur_turf.bloody = 0
+		cur_turf.oily = 30
+		cur_turf.xenobloody = 0
+	// lame copypasta time x3 combo
+	if(src.loc && isturf(src.loc))
+		for(var/obj/effect/decal/cleanable/blood/B in src.loc)
+			if(B != src)
+				del(B)
+		for(var/obj/effect/decal/cleanable/xenoblood/B in src.loc)
+			if(B != src)
+				del(B)
+		for(var/obj/effect/decal/cleanable/oil/B in src.loc)
+			if(B != src)
+				del(B)
+
 /obj/effect/decal/cleanable/oil/streak
 	random_icon_states = list("streak1", "streak2", "streak3", "streak4", "streak5")

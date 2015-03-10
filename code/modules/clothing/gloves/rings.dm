@@ -2,7 +2,7 @@
 	name = "iron ring"
 	desc = "A band that goes around your finger.  It's considered gauche to wear more than one."
 	gender = "neuter" // not plural anymore
-	print_clarity = 95
+	transfer_prints = TRUE
 	icon_state = "ironring"
 	item_state = ""
 	var/material = "iron"

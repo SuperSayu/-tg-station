@@ -259,7 +259,7 @@
 		CC.update_icon()
 		overlays = list()
 		string_attached = null
-		user << "\blue You detach the string from the coin."
+		user << "<span class='notice'>You detach the string from the coin.</span>"
 	else if(istype(W,/obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.welding && WT.remove_fuel(0, user))
@@ -273,7 +273,7 @@
 				user << "\blue You make [src] into a ring."
 				new typekey(get_turf(loc))
 				del src
-		..()
+	else ..()
 
 /obj/item/weapon/coin/attack_self(mob/user as mob)
 	if(cooldown < world.time - 15)

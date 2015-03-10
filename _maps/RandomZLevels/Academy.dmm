@@ -34,7 +34,7 @@
 "aH" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; pixel_y = 0; tag = ""},/obj/machinery/light{icon_state = "tube1"; dir = 8},/turf/simulated/floor/carpet,/area/awaymission/academy/headmaster)
 "aI" = (/obj/structure/cult/tome,/obj/item/weapon/staff,/turf/simulated/floor/wood,/area/awaymission/academy/headmaster)
 "aJ" = (/obj/structure/stool/bed/chair/wood/wings{dir = 8},/turf/simulated/floor/wood,/area/awaymission/academy/headmaster)
-"aK" = (/obj/item/clothing/suit/space/rig/wizard,/obj/item/clothing/head/helmet/space/rig/wizard,/obj/structure/table/woodentable,/turf/simulated/floor/wood,/area/awaymission/academy/headmaster)
+"aK" = (/obj/item/clothing/suit/space/hardsuit/wizard,/obj/item/clothing/head/helmet/space/hardsuit/wizard,/obj/structure/table/woodentable,/turf/simulated/floor/wood,/area/awaymission/academy/headmaster)
 "aL" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/briefcase,/turf/simulated/floor/carpet,/area/awaymission/academy/headmaster)
 "aM" = (/obj/structure/table/reinforced,/obj/item/weapon/coin/plasma,/turf/simulated/floor/carpet,/area/awaymission/academy/headmaster)
 "aN" = (/obj/machinery/light/small{dir = 1},/turf/simulated/floor/carpet,/area/awaymission/academy/headmaster)

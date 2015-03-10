@@ -31,9 +31,6 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	var/const/prob_right_objective_l = 25 //lower bound on probability of determining the objective correctly
 	var/const/prob_right_objective_h = 50 //upper bound on probability of determining the objective correctly
 
-	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
-	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
-
 	var/changeling_amount = 3 //hard limit on changelings if scaling is turned off
 
 /datum/game_mode/changeling/announce()
@@ -78,8 +75,6 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 		forge_changeling_objectives(changeling)
 		greet_changeling(changeling)
 
-	spawn (rand(waittime_l, waittime_h))
-		send_intercept()
 	..()
 	return
 
@@ -143,8 +138,8 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 
 /datum/game_mode/proc/greet_changeling(var/datum/mind/changeling, var/you_are=1)
 	if (you_are)
-		changeling.current << "<b>\red You are a changeling! You have absorbed and taken the form of a human.</b>"
-	changeling.current << "<b>\red Use say \":g message\" to communicate with your fellow changelings.</b>"
+		changeling.current << "<span class='userdanger'>You are a changeling! You have absorbed and taken the form of a human.</span>"
+	changeling.current << "<span class='userdanger'>Use say \":g message\" to communicate with your fellow changelings.</span>"
 	changeling.current << "<b>You must complete the following tasks:</b>"
 
 	if (changeling.current.mind)
@@ -210,7 +205,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 						text += "<br><b>Objective #[count]</b>: [objective.explanation_text] <font color='green'><b>Success!</b></font>"
 						feedback_add_details("changeling_objective","[objective.type]|SUCCESS")
 					else
-						text += "<br><b>Objective #[count]</b>: [objective.explanation_text] <font color='red'>Fail.</font>"
+						text += "<br><b>Objective #[count]</b>: [objective.explanation_text] <span class='danger'>Fail.</span>"
 						feedback_add_details("changeling_objective","[objective.type]|FAIL")
 						changelingwin = 0
 					count++
@@ -219,7 +214,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 				text += "<br><font color='green'><b>The changeling was successful!</b></font>"
 				feedback_add_details("changeling_success","SUCCESS")
 			else
-				text += "<br><font color='red'><b>The changeling has failed.</b></font>"
+				text += "<br><span class='userdanger'>The changeling has failed.</span>"
 				feedback_add_details("changeling_success","FAIL")
 			text += "<br>"
 

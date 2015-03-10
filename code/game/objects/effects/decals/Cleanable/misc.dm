@@ -99,16 +99,16 @@
 	random_icon_states = list("vomit_1", "vomit_2", "vomit_3", "vomit_4")
 	var/list/viruses = list()
 
-	New()
-		spawn(12000) // 20 minutes
-			icon_state += "-old"
-			name = "crusty dried vomit"
-			desc = "You try not to look at the chunks, and fail."
+/obj/effect/decal/cleanable/vomit/New()
+	spawn(12000) // 20 minutes
+		icon_state += "-old"
+		name = "crusty dried vomit"
+		desc = "You try not to look at the chunks, and fail."
 
-	Destroy()
-		for(var/datum/disease/D in viruses)
-			D.cure(0)
-		..()
+/obj/effect/decal/cleanable/vomit/Destroy()
+	for(var/datum/disease/D in viruses)
+		D.cure(0)
+	..()
 
 /obj/effect/decal/cleanable/tomato_smudge
 	name = "tomato smudge"

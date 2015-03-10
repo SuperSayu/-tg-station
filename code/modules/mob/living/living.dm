@@ -17,7 +17,7 @@
 		src.adjustOxyLoss(src.health + 200)
 		src.health = 100 - src.getOxyLoss() - src.getToxLoss() - src.getFireLoss() - src.getBruteLoss()
 		if(!whispered)
-			src << "\blue You have given up life and succumbed to death."
+			src << "<span class='notice'>You have given up life and succumbed to death.</span>"
 		death()
 
 /mob/living/proc/InCritical()
@@ -367,7 +367,7 @@
 							var/obj/item/weapon/grab/G = pick(M.grabbed_by)
 							if (istype(G, /obj/item/weapon/grab))
 								for(var/mob/O in viewers(M, null))
-									O.show_message(text("\red [] has been pulled from []'s grip by []", G.affecting, G.assailant, src), 1)
+									O.show_message(text("<span class='danger'>[] has been pulled from []'s grip by []</span>", G.affecting, G.assailant, src), 1)
 								//G = null
 								qdel(G)
 						else
@@ -549,9 +549,11 @@
 		var/mob/living/carbon/CM = L
 		if(CM.on_fire && CM.canmove)
 			CM.fire_stacks -= 5
-			CM.weakened = 5
+			CM.Weaken(3)
+			CM.spin(32,2)
 			CM.visible_message("<span class='danger'>[CM] rolls on the floor, trying to put themselves out!</span>", \
 				"<span class='notice'>You stop, drop, and roll!</span>")
+			sleep(30)
 			if(fire_stacks <= 0)
 				CM.visible_message("<span class='danger'>[CM] has successfully extinguished themselves!</span>", \
 					"<span class='notice'>You extinguish yourself.</span>")
@@ -566,6 +568,23 @@
 				else
 					cuff_resist(CM.legcuffed, CM)
 
+/mob/living/carbon/proc/spin(spintime, speed)
+	spawn()
+		var/D = dir
+		while(spintime >= speed)
+			sleep(speed)
+			switch(D)
+				if(NORTH)
+					D = EAST
+				if(SOUTH)
+					D = WEST
+				if(EAST)
+					D = SOUTH
+				if(WEST)
+					D = NORTH
+			dir = D
+			spintime -= speed
+	return
 
 /mob/living/proc/get_visible_name()
 	return name

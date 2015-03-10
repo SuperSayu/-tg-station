@@ -167,13 +167,13 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 		if(!require_clothing)
 			return 1
 
-		if(!istype(H.wear_suit, /obj/item/clothing/suit/wizrobe) && !istype(H.wear_suit, /obj/item/clothing/suit/space/rig/wizard))
+		if(!istype(H.wear_suit, /obj/item/clothing/suit/wizrobe) && !istype(H.wear_suit, /obj/item/clothing/suit/space/hardsuit/wizard))
 			H << "<span class='notice'>I don't feel strong enough without my robe.</span>"
 			return 0
 		if(!istype(H.shoes, /obj/item/clothing/shoes/sandal))
 			H << "<span class='notice'>I don't feel strong enough without my sandals.</span>"
 			return 0
-		if(!istype(H.head, /obj/item/clothing/head/wizard) && !istype(H.head, /obj/item/clothing/head/helmet/space/rig/wizard))
+		if(!istype(H.head, /obj/item/clothing/head/wizard) && !istype(H.head, /obj/item/clothing/head/helmet/space/hardsuit/wizard))
 			H << "<span class='notice'>I don't feel strong enough without my hat.</span>"
 			return 0
 

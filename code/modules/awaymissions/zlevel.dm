@@ -3,7 +3,7 @@ proc/createRandomZlevel()
 		return
 
 	var/list/potentialRandomZlevels = list()
-	world << "\red \b Searching for away missions..."
+	world << "<span class='userdanger'>Searching for away missions...</span>"
 	var/list/Lines = file2list("_maps/RandomZLevels/fileList.txt")
 	if(!Lines.len)	return
 	for (var/t in Lines)
@@ -33,7 +33,7 @@ proc/createRandomZlevel()
 
 
 	if(potentialRandomZlevels.len)
-		world << "\red \b Loading away mission..."
+		world << "<span class='userdanger'>Loading away mission...</span>"
 
 		var/map = pick(potentialRandomZlevels)
 		var/file = file(map)
@@ -47,9 +47,9 @@ proc/createRandomZlevel()
 			awaydestinations.Add(L)
 
 		makepowernets()
-		world << "\red \b Away mission loaded."
+		world << "<span class='userdanger'>Away mission loaded.</span>"
 
 
 	else
-		world << "\red \b No away missions found."
+		world << "<span class='userdanger'>No away missions found.</span>"
 		return
