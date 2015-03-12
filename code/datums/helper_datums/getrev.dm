@@ -51,15 +51,22 @@ var/global/datum/getrev/revdata = new()
 client/verb/showrevinfo()
 	set category = "OOC"
 	set name = "Show Server Revision"
-	var/output = revdata.showinfo
-	output += "<b>Current Infomational Settings:</b><br>"
-	output += "Protect Authority Roles From Traitor: [config.protect_roles_from_antagonist]<br>"
-	output += "Protect Captain From Traitor: [config.protect_captain_from_antagonist]<br>"
-	output += "Allow Latejoin Antagonists: [config.allow_latejoin_antagonists]<br>"
+	set desc = "Check the current server code revision"
+
+	if(revdata.revision)
+		src << "<b>Server revision compiled on:</b> [revdata.date]"
+		src << "<a href='[file2text("config/git_host.txt")]/commit/[revdata.revision]'>[revdata.revision]</a>"
+	else
+		src << "Revision unknown"
+	src << "<b>Current Infomational Settings:</b>"
+	src << "Protect Authority Roles From Traitor: [config.protect_roles_from_antagonist]"
+	src << "Enforce Human Authority: [config.enforce_human_authority]"
+	src << "Allow Latejoin Antagonists: [config.allow_latejoin_antagonists]"
 	if(config.show_game_type_odds)
+		var/output  = ""
 		output += "<br><b>Game Type Odds:</b><br>"
 		for(var/i=1,i<=config.probabilities.len,i++)
 			var/p = config.probabilities[i]
 			output += "[p] [config.probabilities[p]]<br>"
-	usr << browse(output,"window=revdata");
+		src << output
 	return
