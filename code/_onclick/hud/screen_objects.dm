@@ -397,6 +397,10 @@
 				var/mob/living/silicon/ai/AI = usr
 				AI.aibug.show_interface()
 
+		if("Sensor Augmentation")
+			if(issilicon(usr))
+				var/mob/living/silicon/S = usr
+				S.sensor_mode()
 		else
 			return 0
 	return 1
