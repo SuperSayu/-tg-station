@@ -66,6 +66,7 @@
 
 //---//
 
+/*
 /datum/round_event_control/wizard/shuffleminds //Basically Mass Ranged Mindswap
 	name = "Change Minds!"
 	weight = 1
@@ -94,3 +95,4 @@
 		var/datum/effect/effect/system/harmless_smoke_spread/smoke = new /datum/effect/effect/system/harmless_smoke_spread()
 		smoke.set_up(max(1,1), 0, H.loc)
 		smoke.start()
+*/
