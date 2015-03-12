@@ -278,7 +278,7 @@
 				dat += "<br><br>"
 
 				if(listchanged)
-					mailsystem = sortAtom(mailsystem)
+					mailsystem = sortNames(mailsystem)
 
 				for(var/obj/machinery/mail/hub/station in mailsystem)
 					dat += "<a href='?src=\ref[src];operation=do_setstation&object=\ref[station]'>[station.name]</a><br>"
