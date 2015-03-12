@@ -611,8 +611,7 @@ turf/simulated/floor/proc/update_icon()
 					icon_state = icon_plating
 					burnt = 0
 					broken = 0
-				else
-					user << "<span class='notice'>You need more welding fuel to complete this task.</span>"
+
 	if(istype(C,/obj/item/weapon/storage))
 		var/obj/item/weapon/storage/S = C
 		if(S.collection_mode)
