@@ -1,4 +1,4 @@
-
+//In this file: Summon Magic/Summon Guns/Summon Events
 
 /mob/proc/rightandwrong(var/summon_type) //0 = Summon Guns, 1 = Summon Magic
 	var/list/gunslist 			= list("taser","egun","laser","revolver","detective","smg","nuclear","deagle","gyrojet","pulse","suppressed","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","crossbow","saw")
@@ -130,3 +130,19 @@
 						if("staffchaos")
 							new /obj/item/weapon/gun/magic/staff/chaos(get_turf(H))
 					H << "<span class='notice'>You suddenly feel lucky.</span>"
+
+/mob/proc/summonevents()
+	if(events) 																//if there isn't something is very wrong
+		if(!events.wizardmode)
+			events.toggleWizardmode()
+			events.frequency_lower = 600									//1 minute lower bound
+			events.frequency_upper = 3000									//5 minutes upper bound
+			events.reschedule()
+
+		else 																//Speed it up
+			events.frequency_lower = round(events.frequency_lower * 0.8)	//1 minute | 48 seconds | 34.8 seconds | 30.7 seconds | 24.6 seconds
+			events.frequency_upper = round(events.frequency_upper * 0.6)	//5 minutes | 3 minutes | 1 minute 48 seconds | 1 minute 4.8 seconds | 38.9 seconds
+			if(events.frequency_upper < events.frequency_lower)
+				events.frequency_upper = events.frequency_lower				//this can't happen unless somehow multiple spellbooks are used, but just in case
+
+			events.reschedule()
