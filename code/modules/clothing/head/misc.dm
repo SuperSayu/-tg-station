@@ -67,7 +67,7 @@
 	name = "cueball helmet"
 	desc = "A large, featureless white orb mean to be worn on your head. How do you even see out of this thing?"
 	icon_state = "cueball"
-	flags = HEADCOVERSEYES|HEADCOVERSMOUTH|BLOCKHAIR
+	flags = HEADCOVERSEYES|BLOCKHAIR
 	item_state="cueball"
 	flags_inv = 0
 	loose = 0
@@ -92,7 +92,7 @@
 	desc = "A helmet made out of a box."
 	icon_state = "cardborg_h"
 	item_state = "cardborg_h"
-	flags = HEADCOVERSEYES | HEADCOVERSMOUTH
+	flags = HEADCOVERSEYES
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
 	loose = 1 // full-head objects (almost) never fall off
 
@@ -101,7 +101,7 @@
 	desc = "fight for what's righteous!"
 	icon_state = "justicered"
 	item_state = "justicered"
-	flags = HEADCOVERSEYES|HEADCOVERSMOUTH|BLOCKHAIR
+	flags = HEADCOVERSEYES|BLOCKHAIR
 	loose = 0 // full-head objects (almost) never fall off
 
 /obj/item/clothing/head/justice/blue

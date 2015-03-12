@@ -397,6 +397,11 @@
 				var/mob/living/silicon/ai/AI = usr
 				AI.aibug.show_interface()
 
+		if("nightvision")
+			if(isalien(usr))
+				var/mob/living/carbon/alien/humanoid/A = usr
+				A.nightvisiontoggle()
+
 		if("Sensor Augmentation")
 			if(issilicon(usr))
 				var/mob/living/silicon/S = usr

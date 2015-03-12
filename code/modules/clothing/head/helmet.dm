@@ -90,7 +90,7 @@
 	name = "gladiator helmet"
 	desc = "Ave, Imperator, morituri te salutant."
 	icon_state = "gladiator"
-	flags = HEADCOVERSEYES|HEADCOVERSMOUTH|BLOCKHAIR
+	flags = HEADCOVERSEYES|BLOCKHAIR
 	item_state = "gladiator"
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES
 	loose = 0 // full-head objects (almost) never fall off
