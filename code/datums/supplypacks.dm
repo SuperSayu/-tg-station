@@ -510,7 +510,7 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	containername = "particle accelerator crate"
 
 /datum/supply_packs/engineering/engine/spacesuit
-	name = "Space Suit Crate"
+	name = "Space Suit crate"
 	contains = list(/obj/item/clothing/suit/space,
 					/obj/item/clothing/head/helmet/space,
 					/obj/item/clothing/mask/breath,)
