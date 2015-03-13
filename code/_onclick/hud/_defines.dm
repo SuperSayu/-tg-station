@@ -60,6 +60,10 @@
 #define ui_alien_storage_l "CENTER-2:14,SOUTH:5"//alien
 #define ui_alien_storage_r "CENTER+1:18,SOUTH:5"//alien
 
+#define ui_drone_drop "CENTER+1:18,SOUTH:5"     //maintenance drones
+#define ui_drone_pull "CENTER+2:2,SOUTH:5"      //maintenance drones
+#define ui_drone_storage "CENTER-2:14,SOUTH:5"  //maintenance drones
+
 //Lower right, persistant menu
 #define ui_drop_throw "EAST-1:28,SOUTH+1:7"
 #define ui_pull_resist "EAST-2:26,SOUTH+1:7"
@@ -93,7 +97,6 @@
 #define ui_borg_health "EAST-1:28,CENTER-1:15"		//borgs have the health display where humans have the pressure damage indicator.
 #define ui_alien_health "EAST-1:28,CENTER-1:15"	//aliens have the health display where humans have the pressure damage indicator.
 #define ui_alienplasmadisplay "EAST-1:28,CENTER-2:15"
-
 
 // AI
 

@@ -101,6 +101,8 @@ var/list/freqtoname = list(
 		return "hisses."
 	else if(message_langs & ROBOT)
 		return "beeps rapidly."
+	else if(message_langs & DRONE)
+		return "chitters."
 	else
 		return "makes a strange sound."
 
