@@ -76,7 +76,7 @@
 	var/allow_ai = 0					// allow ai job
 
 	var/traitor_scaling_coeff = 6		//how much does the amount of players get divided by to determine traitors
-	var/changeling_scaling_coeff = 7	//how much does the amount of players get divided by to determine changelings
+	var/changeling_scaling_coeff = 6	//how much does the amount of players get divided by to determine changelings
 	var/nukeop_scaling_coeff = 0		//how much does the amount of players get divided by to determine nuclear operative agents. Disabled by default
 	var/security_scaling_coeff = 8		//how much does the amount of players get divided by to determine open security officer positions
 
