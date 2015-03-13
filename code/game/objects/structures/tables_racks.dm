@@ -270,6 +270,7 @@
 						while(amt > 0)
 							I = locate(B) in loc
 							Deletion.Add(I)
+							I.loc = null //remove it from the table loc so that we don't locate the same item every time (will be relocated inside the crafted item in construct_item())
 							amt--
 						break item_loop
 		else
@@ -294,6 +295,7 @@
 			if(!istype(B, A))
 				Deletion.Remove(B)
 				qdel(B)
+
 	return Deletion
 
 /obj/structure/table/interact(mob/user)
