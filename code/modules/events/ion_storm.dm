@@ -540,7 +540,7 @@ Rise of the bots
 ******/
 
 /datum/round_event_control/ion_storm/bot_storm
-	name = "Ion Storm"
+	name = "Minor Ion Storm"
 	typepath = /datum/round_event/ion_storm/bot_storm
 	max_occurrences = 2
 	weight = 15
