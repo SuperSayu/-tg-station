@@ -66,7 +66,7 @@
 
 //---//
 
-/*
+
 /datum/round_event_control/wizard/shuffleminds //Basically Mass Ranged Mindswap
 	name = "Change Minds!"
 	weight = 1
@@ -81,7 +81,7 @@
 		if(!H.mind || H.mind in ticker.mode.wizards)	continue //the wizard(s) are spared on this one
 		mobs += H
 
-	if(!mobs) return
+	if(!mobs || mobs.len == 1) return
 
 	shuffle(mobs)
 
@@ -95,4 +95,3 @@
 		var/datum/effect/effect/system/harmless_smoke_spread/smoke = new /datum/effect/effect/system/harmless_smoke_spread()
 		smoke.set_up(max(1,1), 0, H.loc)
 		smoke.start()
-*/
