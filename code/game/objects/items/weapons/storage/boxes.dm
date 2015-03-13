@@ -31,6 +31,7 @@
 	..(user)
 
 	if(contents.len)
+		user << "<span class='notice'>You can't fold this box with items still inside.</span>"
 		return
 	if(!ispath(foldable))
 		return
