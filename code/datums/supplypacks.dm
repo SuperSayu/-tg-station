@@ -160,8 +160,9 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	containertype = /obj/structure/largecrate/evil
 	containername = "large crate"
 	hidden = 1
-	New()
-		manifest = "<ul><li>Love, sunshine, and perfect happiness.</li></ul>"
+
+/datum/supply_packs/emergency/evil/New()
+	manifest = "<ul><li>Love, sunshine, and perfect happiness.</li></ul>"
 
 /datum/supply_packs/emergency/syndicate
 	name = "ERROR NULL ENTRY"
