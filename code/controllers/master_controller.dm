@@ -45,15 +45,6 @@ var/global/pipe_processing_killed = 0
 			del(master_controller)
 		master_controller = src
 
-	createRandomZlevel()			//probably shouldn't be here!
-
-	for(var/m=0, m<max_monoliths)
-		if(make_mining_asteroid_secret(1) == 1)
-			m++
-
-	for(var/i=0, i<max_secret_rooms, i++)
-		make_mining_asteroid_secret(0)
-
 	if(!events)
 		new /datum/controller/event()
 
