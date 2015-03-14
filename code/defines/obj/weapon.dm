@@ -171,11 +171,6 @@
 	flags = FPRINT
 	attack_verb = list("warned", "cautioned", "smashed")
 
-/obj/item/weapon/caution/cone
-	desc = "This cone is trying to warn you of something!"
-	name = "warning cone"
-	icon_state = "cone"
-
 /obj/item/weapon/rack_parts
 	name = "rack parts"
 	desc = "Parts of a rack."
