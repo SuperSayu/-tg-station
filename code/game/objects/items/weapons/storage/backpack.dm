@@ -36,10 +36,6 @@
 	max_w_class = 5
 	max_combined_w_class = 60 // 21*2, 14*3, ~10*4, ~8*5
 
-/obj/item/weapon/storage/backpack/holding/New()
-	..()
-	return
-
 /obj/item/weapon/storage/backpack/holding/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(crit_fail)
 		user << "<span class='danger'>The Bluespace generator isn't working.</span>"
@@ -74,9 +70,9 @@
 	icon_state = "giftbag0"
 	item_state = "giftbag"
 	w_class = 4.0
-	storage_slots = 20
+	storage_slots = 20 //Can store a lot.
 	max_w_class = 3
-	max_combined_w_class = 400 // can store a ton of shit!
+	max_combined_w_class = 60
 
 /obj/item/weapon/storage/backpack/cultpack
 	name = "trophy rack"
