@@ -180,6 +180,7 @@
 	final_zone_connections.len = z_level_order.len
 
 	var/list/temp = list()
+
 	for(var/j=1, j<= 24, j++)
 		temp += zone_connections[j]
 		if(temp.len == 4) //Chunks of cardinal directions
