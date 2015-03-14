@@ -175,7 +175,7 @@
 \***************************************/
 /obj/effect/proc_holder/changeling/weapon/shield
 	name = "Organic Shield"
-	desc = "We reform one of our arms into hard shield."
+	desc = "We reform one of our arms into a hard shield."
 	helptext = "Organic tissue cannot resist damage forever, the shield will break after it is hit too much. The more genomes we absorb, the stronger it is. Cannot be used while in lesser form."
 	chemical_cost = 20
 	dna_cost = 1
@@ -288,11 +288,11 @@
 	name = "Chitinous Armor"
 	desc = "We turn our skin into tough chitin to protect us from damage."
 	helptext = "Upkeep of the armor requires a low expenditure of chemicals. The armor is strong against brute force, but does not provide much protection from lasers. Retreating the armor damages our genomes. Cannot be used in lesser form."
-	chemical_cost = 25
-	dna_cost = 1
+	chemical_cost = 20
+	dna_cost = 2
 	genetic_damage = 11
 	req_human = 1
-	max_genetic_damage = 10
+	max_genetic_damage = 20
 
 	suit_type = /obj/item/clothing/suit/armor/changeling
 	helmet_type = /obj/item/clothing/head/helmet/changeling
