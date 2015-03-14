@@ -1,3 +1,7 @@
+#define Z_NORTH 1
+#define Z_EAST 2
+#define Z_SOUTH 3
+#define Z_WEST 4
 
 var/list/cardinal = list( NORTH, SOUTH, EAST, WEST )
 var/list/alldirs = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
@@ -8,7 +12,7 @@ var/list/alldirs = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAS
 //Was list("3" = 30, "4" = 70).
 //Spacing should be a reliable method of getting rid of a body -- Urist.
 //Go away Urist, I'm restoring this to the longer list. ~Errorage
-var/list/accessable_z_levels = list("1" = 5, "3" = 10, "4" = 15, "5" = 10, "6" = 60)
+var/list/accessable_z_levels = list(1,3,4,5,6,7) //Keep this to six maps, repeating z-levels is ok if needed
 
 var/global/list/global_map = null
 	//list/global_map = list(list(1,5),list(4,3))//an array of map Z levels.
@@ -22,7 +26,7 @@ var/global/list/global_map = null
 	//5 - empty space
 
 var/list/landmarks_list = list()				//list of all landmarks created
-var/list/maybe_beacons = list() // may get teleporter beacons
+
 var/list/monkeystart = list()
 var/list/wizardstart = list()
 var/list/newplayer_start = list()
@@ -43,3 +47,5 @@ var/list/global_activeturfs
 
 	//away missions
 var/list/awaydestinations = list()	//a list of landmarks that the warpgate can take you to
+
+var/list/maybe_beacons = list() // may get teleporter beacons
