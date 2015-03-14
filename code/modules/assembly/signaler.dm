@@ -51,7 +51,6 @@
 <TT>
 
 <A href='byond://?src=\ref[src];send=1'>Send Signal</A><BR>
-Reciever is <A href='byond://?src=\ref[src];receive=1'>[receiving?"on":"off"]</A><BR>
 <B>Frequency/Code</B> for signaler:<BR>
 Frequency:
 <A href='byond://?src=\ref[src];freq=-10'>-</A>
