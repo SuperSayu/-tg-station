@@ -722,23 +722,8 @@ Destroy type values:
 			return
 	..()
 
-/obj/structure/table/holotable
-	name = "table"
-	desc = "A square piece of metal standing on four metal legs. It can not move."
-	icon = 'icons/obj/structures.dmi'
-	icon_state = "table"
-
-/obj/structure/table/holotable/wood
-	name = "wooden table"
-	icon_state = "woodtable"
-	desc = "A classic design in a classic material."
-
-/obj/structure/table/holotable/reinforced
-	name = "reinforced table"
-	desc = "A version of the four legged table with multiple layers of metal."
-
-obj/structure/table/MouseDrop_T(mob/target, mob/living/carbon/human/user)
-	if(istype(target) && user == target  && istype(user))
+/obj/structure/table/MouseDrop_T(mob/target, mob/living/carbon/human/user)
+	if(istype(target) && user == target && istype(user))
 		if(user.canmove)
 			climb_table(user)
 
@@ -755,6 +740,21 @@ obj/structure/table/MouseDrop_T(mob/target, mob/living/carbon/human/user)
 		"<span class='notice'>[user] climbs onto [src].</span>")
 		add_logs(user, src, "climbed onto")
 		user.Stun(2)
+
+/obj/structure/table/holotable
+	name = "table"
+	desc = "A square piece of metal standing on four metal legs. It can not move."
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "table"
+
+/obj/structure/table/holotable/wood
+	name = "wooden table"
+	icon_state = "woodtable"
+	desc = "A classic design in a classic material."
+
+/obj/structure/table/holotable/reinforced
+	name = "reinforced table"
+	desc = "A version of the four legged table with multiple layers of metal."
 
 /*
  * Racks
