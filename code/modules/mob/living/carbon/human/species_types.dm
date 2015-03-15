@@ -270,11 +270,6 @@
 	if(H.getCloneLoss()) // clone loss is slowly regenerated
 		H.adjustCloneLoss(-0.2)
 
-/datum/species/jelly/spec_break_bone(var/obj/item/organ/limb/affecting, var/break_prob)
-	if(affecting.bone_break(break_prob * bone_chance_adjust))
-		return 1
-	return 0
-
 /*
  AXOLOTL PEOPLE -- WIP IN PROGRESS
 */
