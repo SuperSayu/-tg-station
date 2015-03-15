@@ -87,21 +87,6 @@
 
 	return
 
-/obj/item/weapon/reagent_containers/food/drinks/examine()
-	set src in view()
-	..()
-	if (!(usr in range(0)) && usr!=src.loc) return
-	if(!reagents || reagents.total_volume==0)
-		usr << "<span class='notice'>\The [src] is empty!</span>"
-	else if (reagents.total_volume<=src.volume/4)
-		usr << "<span class='notice'>\The [src] is almost empty!</span>"
-	else if (reagents.total_volume<=src.volume*0.66)
-		usr << "<span class='notice'>\The [src] is half full!</span>"
-	else if (reagents.total_volume<=src.volume*0.90)
-		usr << "<span class='notice'>\The [src] is almost full!</span>"
-	else
-		usr << "<span class='notice'>\The [src] is full!</span>"
-
 /obj/item/weapon/reagent_containers/food/drinks/initialize()
 	while(reagents.total_volume && prob(45))
 		reagents.remove_any(gulp_size)
@@ -227,7 +212,7 @@
 	src.pixel_x = rand(-10.0, 10)
 	src.pixel_y = rand(-10.0, 10)
 
-/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/examine()
+/obj/item/weapon/reagent_containers/food/drinks/dry_ramen/examine(mob/user)
 	..()
 	var/dry = reagents.has_reagent("dry_ramen")?1:0
 	var/wet = reagents.has_reagent("hot_ramen")?2:0
@@ -244,7 +229,7 @@
 			msg = "The ramen smells spicy."
 		if(6)
 			msg = "The ramen is partly spiced."
-	usr << msg
+	user << msg
 
 /obj/item/weapon/reagent_containers/food/drinks/beer
 	name = "Space Beer"

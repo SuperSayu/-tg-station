@@ -21,15 +21,16 @@
 	var/obj/machinery/mail/dest_station
 	var/sender = null
 	var/last_sender = null
-	examine()
-		..()
-		if(dest)
-			if(sender)
-				usr << "According to the label, [sender] sent it to [dest]."
-			else if (last_sender)
-				usr << "According to the label, [last_sender] sent it to [dest]."
-			else
-				usr << "According to the label, it is intended for [dest]."
+
+/obj/item/smallDelivery/examine(mob/user)
+	..()
+	if(dest)
+		if(sender)
+			usr << "According to the label, [sender] sent it to [dest]."
+		else if (last_sender)
+			usr << "According to the label, [last_sender] sent it to [dest]."
+		else
+			usr << "According to the label, it is intended for [dest]."
 
 /obj/machinery/mail
 	name = "Mail Station"

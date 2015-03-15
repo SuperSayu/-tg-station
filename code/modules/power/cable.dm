@@ -474,6 +474,7 @@ obj/structure/cable/proc/avail()
 
 /obj/item/stack/cable_coil
 	name = "cable coil"
+	gender = NEUTER //That's a cable coil sounds better than that's some cable coils
 	icon = 'icons/obj/power.dmi'
 	icon_state = "coil_red"
 	amount = MAXCOIL
@@ -489,6 +490,7 @@ obj/structure/cable/proc/avail()
 	slot_flags = SLOT_BELT
 	item_state = "coil_red"
 	attack_verb = list("whipped", "lashed", "disciplined", "flogged")
+	singular_name = "cable piece"
 
 /obj/item/stack/cable_coil/cyborg
 	is_cyborg = 1
@@ -542,20 +544,6 @@ obj/structure/cable/proc/avail()
 	else
 		icon_state = "coil_[item_color]"
 		name = "cable coil"
-
-
-/obj/item/stack/cable_coil/examine()
-	set src in view(1)
-
-	if (is_cyborg)
-		usr << "A cable synthesizer. Currently has energy for [get_amount()] lengths of cable."
-	else
-		if(get_amount() == 1)
-			usr << "A short piece of power cable."
-		else if(get_amount() == 2)
-			usr << "A piece of power cable."
-		else
-			usr << "A coil of power cable. There are [get_amount()] lengths of cable in the coil."
 
 
 /obj/item/stack/cable_coil/verb/make_restraint()

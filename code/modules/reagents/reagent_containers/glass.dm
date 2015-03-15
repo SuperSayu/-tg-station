@@ -157,59 +157,58 @@
 				for(var/datum/reagent/R in gasses)
 					estimate += "[round(R.volume)]  units of [R.name], a gas."
 
-/obj/item/weapon/reagent_containers/glass/examine()
-	set src in view()
+/*
+/obj/item/weapon/reagent_containers/glass/examine(mob/user)
 	..()
 	var/list/matterStates = list("a solid", "a liquid", "a gas")
 
 	//Robots: Awesome (also ghosts)
-	if(istype(usr,/mob/living/silicon/robot) || istype(usr,/mob/dead/observer))
-		usr << "\blue It contains:"
+	if(istype(user,/mob/living/silicon/robot) || istype(user,/mob/dead/observer))
+		user << "\blue It contains:"
 		if(reagents && reagents.reagent_list.len)
 			for(var/datum/reagent/R in reagents.reagent_list)
-				usr << "\blue [R.volume] units of [R.name], [matterStates[R.reagent_state]]."
+				user << "\blue [R.volume] units of [R.name], [matterStates[R.reagent_state]]."
 		else
-			usr << "\blue Nothing."
+			user << "\blue Nothing."
 
 	//Humans: Fallible eyes
-	else if(istype(usr,/mob/living/carbon/human) && ((usr in view(1)) || usr==src.loc))
+	else if(istype(user,/mob/living/carbon/human) && ((user in view(1)) || user==src.loc))
 		if(reestimate)
 			buildEstimate()
 
-		var/mob/living/carbon/human/H = usr
+		var/mob/living/carbon/human/H = user
 		var/guessword = pick("estimate","think","believe","guess","guesstimate")
 
 		if(H.confused > 5 || H.hallucination || prob(1)) // why am I doing this
 			var/nonsense = pick("evil", "ponies", "justice", "God", "bananas", "spiders", "owls", "Pun-Pun", "the finest wine imaginable", "love", "a singularity", "farts","time","space","bananium ore")
-			usr << "\blue You [guessword] it contains [rand(-5,reagents.maximum_volume * 2)] units of [nonsense]."
+			user << "\blue You [guessword] it contains [rand(-5,reagents.maximum_volume * 2)] units of [nonsense]."
 			return
 
 		if(identify_probability >= 50 && H.glasses && (istype(H.glasses,/obj/item/clothing/glasses/science) || istype(H.glasses,/obj/item/clothing/glasses/hud/health)))
-			usr << "\blue It contains:"
+			user << "\blue It contains:"
 			if(reagents && reagents.reagent_list.len)
 				for(var/datum/reagent/R in reagents.reagent_list)
-					usr << "\blue [R.volume] units of [R.name], [matterStates[R.reagent_state]]."
+					user << "\blue [R.volume] units of [R.name], [matterStates[R.reagent_state]]."
 			else
-				usr << "\blue Nothing."
+				user << "\blue Nothing."
 		else
-			usr << "\blue You [guessword] it contains:"
+			user << "\blue You [guessword] it contains:"
 			for(var/str in estimate)
-				usr << "\blue [str]"
+				user << "\blue [str]"
 
 	//Other creatures, estimates from far away, etc
 	else
 		if(!reagents || reagents.total_volume==0)
-			usr << "\blue \The [src] is empty!"
+			user << "\blue \The [src] is empty!"
 		else if (reagents.total_volume<=src.volume/4)
-			usr << "\blue \The [src] is almost empty!"
+			user << "\blue \The [src] is almost empty!"
 		else if (reagents.total_volume<=src.volume*0.66)
-			usr << "\blue \The [src] is half full!"
+			user << "\blue \The [src] is half full!"
 		else if (reagents.total_volume<=src.volume*0.90)
-			usr << "\blue \The [src] is almost full!"
+			user << "\blue \The [src] is almost full!"
 		else
-			usr << "\blue \The [src] is full!"
-
-
+			user << "\blue \The [src] is full!"
+*/
 
 /obj/item/weapon/reagent_containers/glass/afterattack(obj/target, mob/user, proximity)
 	if(!proximity) return // not adjacent

@@ -119,17 +119,17 @@
 		else
 			icon_state = "tnt-disarmed"
 
-	examine()
+	examine(mob/user)
 		..()
 		if(lit_time)
 			var/det_time = lit_time + fuselength
 			var/difference = det_time - world.time
-			usr << "\red The fuse is lit!  You have [Time(difference)] to get away!"
+			user << "\red The fuse is lit!  You have [Time(difference)] to get away!"
 		else
 			if(fuselength)
-				usr << "\blue The fuse is [Time(fuselength)] long."
+				user << "\blue The fuse is [Time(fuselength)] long."
 			else
-				usr << "\blue The fuse was removed."
+				user << "\blue The fuse was removed."
 
 	attackby(var/obj/item/W as obj, var/mob/living/user as mob)
 		if(istype(W,/obj/item/weapon/wirecutters))
@@ -294,9 +294,9 @@
 			beenrun = 1
 		user << browse(dat, "window=oshit")
 
-	examine()
+	examine(mob/user)
 		..()
-		usr << "The holy book of oshit is [oshit.len] pages long and contains [total_oshit] entries total."
+		user << "The holy book of oshit is [oshit.len] pages long and contains [total_oshit] entries total."
 /obj/item/weapon/book/debug/mobs
 	name = "Null mob log"
 	populate()
