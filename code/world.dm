@@ -54,8 +54,6 @@
 
 	timezoneOffset = text2num(time2text(0,"hh")) * 36000
 
-	makepowernets()
-
 	sun = new /datum/sun()
 	radio_controller = new /datum/controller/radio()
 	data_core = new /obj/effect/datacore()
@@ -87,6 +85,8 @@
 			m++
 
 	createRandomZlevel()
+
+	makepowernets()
 
 	master_controller = new /datum/controller/game_controller()
 	spawn(-1)
