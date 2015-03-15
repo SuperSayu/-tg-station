@@ -52,6 +52,7 @@ datum/objective_item/steal/rcd
 	name = "a rapid-construction-device"
 	targetitem = /obj/item/weapon/rcd
 	difficulty = 3
+	excludefromjob = list("Quartermaster","Cargo Technician")
 	antag_types = list("traitor","Changeling","Space Ninja")
 
 datum/objective_item/steal/jetpack
@@ -65,14 +66,14 @@ datum/objective_item/steal/magboots
 	targetitem =  /obj/item/clothing/shoes/magboots/advance
 	difficulty = 5
 	excludefromjob = list("Chief Engineer")
-	antag_types = list("traitor","Space Ninja")
+	antag_types = list("traitor","Changeling","Space Ninja")
 
 datum/objective_item/steal/corgimeat
 	name = "a piece of corgi meat"
 	targetitem = /obj/item/weapon/reagent_containers/food/snacks/meat/corgi
 	difficulty = 5
-	excludefromjob = list("Head of Personnel") //>hurting your little buddy ever
-	antag_types = list("traitor","Wizard")
+	excludefromjob = list("Quartermaster","Cargo Technician","Head of Personnel") //>hurting your little buddy ever
+	antag_types = list("traitor","Changeling","Wizard")
 /*
 //	We often don't have enough for captains to be a sure thing
 
@@ -87,20 +88,20 @@ datum/objective_item/steal/hypo
 	targetitem = /obj/item/weapon/reagent_containers/hypospray/CMO
 	difficulty = 5
 	excludefromjob = list("Chief Medical Officer")
-	antag_types = list("traitor","Wizard","Space Ninja")
+	antag_types = list("traitor","Changeling","Wizard","Space Ninja")
 
 datum/objective_item/steal/nukedisc
 	name = "the nuclear authentication disk"
 	targetitem = /obj/item/weapon/disk/nuclear
 	difficulty = 5
 	excludefromjob = list("Captain")
-	antag_types = list("traitor","Wizard","Space Ninja")
+	antag_types = list("traitor","Changeling","Wizard","Space Ninja")
 
 datum/objective_item/steal/ablative
 	name = "an ablative armor vest"
 	targetitem = /obj/item/clothing/suit/armor/laserproof
 	difficulty = 3
-	excludefromjob = list("Head of Security", "Warden")
+	excludefromjob = list("Quartermaster","Cargo Technician","Head of Security", "Warden")
 	antag_types = list("traitor","Changeling","Wizard")
 
 datum/objective_item/steal/reactive
@@ -108,7 +109,7 @@ datum/objective_item/steal/reactive
 	targetitem = /obj/item/clothing/suit/armor/reactive
 	difficulty = 5
 	excludefromjob = list("Research Director")
-	antag_types = list("traitor","Changeling","Space Ninja")
+	antag_types = list("traitor","Changeling","Wizard","Space Ninja")
 
 datum/objective_item/steal/documents
 	name = "any set of secret documents of any organization"
@@ -118,7 +119,7 @@ datum/objective_item/steal/documents
 
 datum/objective_item/steal/dermal
 	name = "the head of security's dermal armor patch"
-	targetitem = /obj/item/clothing/head/helmet/HoS/dermal
+	targetitem = /obj/item/clothing/head/HoS/dermal
 	difficulty = 5
 	excludefromjob = list("Head of Security")
 	antag_types = list("traitor","Changeling","Wizard")
@@ -155,7 +156,7 @@ datum/objective_item/steal/plasma
 	targetitem = /obj/item/weapon/tank
 	difficulty = 3
 	excludefromjob = list("Chief Engineer","Research Director","Station Engineer","Scientist","Atmospheric Technician")
-	antag_types = list("traitor","Space Ninja")
+	antag_types = list("traitor","Changeling","Space Ninja")
 
 datum/objective_item/steal/plasma/check_special_completion(var/obj/item/weapon/tank/T)
 	var/target_amount = text2num(name)
@@ -260,11 +261,11 @@ datum/objective_item/steal/reagent/proc/check_reagent(var/datum/reagent/R)
 datum/objective_item/steal/reagent/compare_to(var/datum/objective_item/i)
 	return i.type == type
 
+/*
 datum/objective_item/steal/reagent/polyacid
 	name = "50 units of polytrinic acid"
 	target_reagent = /datum/reagent/toxin/acid/polyacid
 
-/*
 	These were taken out because too many reagent steal types -> too many reagent steal missions
 
 datum/objective_item/steal/reagent/chloral
@@ -315,9 +316,8 @@ datum/objective_item/cosplay/random
 	antag_types = list("traitor","Changeling","Wizard","Space Ninja")
 	excludefromjob = list("Captain","Head of Personnel", "Head of Security","Chief Engineer","Research Director","Chief Medical Officer")
 
-datum/objective_item/cosplay/random
-	add_objective()
-		return new /datum/objective_item/cosplay()
+datum/objective_item/cosplay/random/add_objective()
+	return new /datum/objective_item/cosplay()
 
 datum/objective_item/cosplay // yeah you heard me, you know what they're doing with these things.  Mmm, yeah.  Shake it, Chief.
 	excludefromjob = list("Captain","Head of Personnel", "Head of Security","Chief Engineer","Research Director","Chief Medical Officer")
@@ -328,33 +328,34 @@ datum/objective_item/cosplay // yeah you heard me, you know what they're doing w
 	var/list/stamp_paths = list(/obj/item/weapon/stamp/captain,/obj/item/weapon/stamp/hop,/obj/item/weapon/stamp/hos,/obj/item/weapon/stamp/ce,/obj/item/weapon/stamp/rd,/obj/item/weapon/stamp/cmo)
 	var/force_type = 0 // 1:jumpsuit; 2:pda; 3:stamp
 	var/force_job = 0
-	New()
-		..()
-		var/index
-		if(force_job)
-			index = force_job
-		else
-			index = rand(1,excludefromjob.len)
+datum/objective_item/cosplay/New()
+	..()
+	var/index
+	if(force_job)
+		index = force_job
+	else
+		index = rand(1,excludefromjob.len)
 
-		var/job = excludefromjob[index]
-		excludefromjob = list(job)
+	var/job = excludefromjob[index]
+	excludefromjob = list(job)
 
-		if(!force_type) force_type = pick(1,2,3)
-		switch(force_type)
-			if(1)
-				targetitem = jumpsuit_paths[index]
-				name = "a [job]'s jumpsuit"
-			if(2)
-				targetitem = pda_paths[index]
-				var/obj/O = new targetitem(null)
-				name = "\a [O] ([job]'s PDA cartridge)"
-			if(3)
-				targetitem = stamp_paths[index]
-				name = "a [job]'s rubber stamp"
+	if(!force_type) force_type = pick(1,2,3)
+	switch(force_type)
+		if(1)
+			targetitem = jumpsuit_paths[index]
+			name = "a [job]'s jumpsuit"
+		if(2)
+			targetitem = pda_paths[index]
+			var/obj/O = new targetitem(null)
+			name = "\a [O] ([job]'s PDA cartridge)"
+		if(3)
+			targetitem = stamp_paths[index]
+			name = "a [job]'s rubber stamp"
 
 datum/objective_item/cosplay/jumpsuit
 	force_type = 1
 	antag_types = list() // forces them to not be picked randomly
+
 datum/objective_item/cosplay/jumpsuit/captain/force_job = 1
 datum/objective_item/cosplay/jumpsuit/hop/force_job = 2
 datum/objective_item/cosplay/jumpsuit/hos/force_job = 3
@@ -365,15 +366,18 @@ datum/objective_item/cosplay/jumpsuit/cmo/force_job = 6
 datum/objective_item/cosplay/pda
 	force_type = 2
 	antag_types = list()
+
 datum/objective_item/cosplay/pda/captain/force_job = 1
 datum/objective_item/cosplay/pda/hop/force_job = 2
 datum/objective_item/cosplay/pda/hos/force_job = 3
 datum/objective_item/cosplay/pda/ce/force_job = 4
 datum/objective_item/cosplay/pda/rd/force_job = 5
 datum/objective_item/cosplay/pda/cmo/force_job = 6
+
 datum/objective_item/cosplay/stamp
 	force_type = 3
 	antag_types = list()
+
 datum/objective_item/cosplay/stamp/captain/force_job = 1
 datum/objective_item/cosplay/stamp/hop/force_job = 2
 datum/objective_item/cosplay/stamp/hos/force_job = 3

@@ -5,7 +5,9 @@
 	icon_state = "centcom"
 	desc = "It's good to be emperor."
 	item_state = "that"
-	loose = 0 // centcom
+	flags_inv = 0
+	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
+	loose = 0
 
 /obj/item/clothing/head/powdered_wig
 	name = "powdered wig"
@@ -192,6 +194,7 @@
 	flags = BLOCKHAIR
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
 	loose = 35
+
 /obj/item/clothing/head/fedora
 	name = "fedora"
 	icon_state = "fedora"
