@@ -1,3 +1,4 @@
+/*
 /obj/machinery/door/airlock/centcom
 	icon = 'icons/obj/doors/Doorele.dmi'
 	opacity = 1
@@ -10,3 +11,4 @@
 	allowed(mob/user)
 		if(unlock_centcom || (ismob(user) && user.client && user.client.holder)) return 1
 		return ..(user)
+*/
