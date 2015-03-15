@@ -1067,6 +1067,10 @@ proc/process_ghost_teleport_locs()
 	name = "\improper Firing Range"
 	icon_state = "firingrange"
 
+/area/security/transfer
+	name = "\improper Transfer Centre"
+	icon_state = "armory"
+
 /*
 	New()
 		..()
@@ -1404,6 +1408,10 @@ proc/process_ghost_teleport_locs()
 	name = "Emergency Storage"
 	icon_state = "storage"
 
+/area/ai_monitored/storage/satellite
+	name = "\improper AI Satellite Maint"
+	icon_state = "storage"
+
 
 /area/turret_protected/
 	ambientsounds = list('sound/ambience/ambimalf.ogg')
@@ -1426,7 +1434,7 @@ proc/process_ghost_teleport_locs()
 
 /area/aisat
 	name = "\improper AI Satellite Exterior"
-	icon_state = "storage"
+	icon_state = "yellow"
 
 /area/turret_protected/aisat_interior
 	name = "\improper AI Satellite Antechamber"
