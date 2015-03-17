@@ -532,7 +532,7 @@
 								message = "THE [ionabstract] IS [ionverb] THE [ionadjectiveshalf][ionobjects]"
 
 	return message
-
+/*
 /****
 
 Rise of the bots
@@ -540,7 +540,7 @@ Rise of the bots
 ******/
 
 /datum/round_event_control/ion_storm/bot_storm
-	name = "Ion Storm"
+	name = "Minor Ion Storm"
 	typepath = /datum/round_event/ion_storm/bot_storm
 	max_occurrences = 2
 	weight = 15
@@ -548,6 +548,10 @@ Rise of the bots
 /datum/round_event/ion_storm/bot_storm
 	aiLawChange = 0
 	botEmagChance = 100
+
+/datum/round_event/ion_storm/bot_storm/New(var/botEmagChance = 100, var/announceEvent = ION_ANNOUNCE, var/ionMessage = null, var/ionAnnounceChance = 33)
+ 	..()
+ */
 
 #undef ION_RANDOM
 #undef ION_ANNOUNCE

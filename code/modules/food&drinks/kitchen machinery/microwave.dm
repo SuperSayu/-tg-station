@@ -1,5 +1,6 @@
 /obj/machinery/microwave
 	name = "microwave"
+	desc = "Keeps hot things hot and cold things hot."
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "mw"
 	layer = 2.9
@@ -183,6 +184,8 @@
 	return 0
 
 /obj/machinery/microwave/attack_hand(mob/user as mob)
+	if(..())
+		return
 	user.set_machine(src)
 	interact(user)
 

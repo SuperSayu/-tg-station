@@ -3,6 +3,7 @@
 // -------------------------
 /obj/machinery/smartfridge
 	name = "smartfridge"
+	desc = "Keeps cold things cold and hot things cold."
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "smartfridge"
 	layer = 2.9
@@ -110,7 +111,7 @@
 		item_quants[n]++
 	else
 		item_quants[n] = 1
-	item_quants = sortAssoc(item_quants)
+	sortList(item_quants)
 
 /obj/machinery/smartfridge/proc/name_filter(var/n)
 	return sanitize_simple(n,list("'"="","+"=" ")) // these do not translate correctly in html links

@@ -281,6 +281,7 @@
 	if(istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0,user))
+			playsound(loc, 'sound/items/Welder.ogg', 40, 1)
 			user << "<span class='notice'>Now welding the vent.</span>"
 			if(do_after(user, 20))
 				if(!src || !WT.isOn()) return
@@ -293,19 +294,14 @@
 					user.visible_message("[user] unwelds the vent.", "You unweld the vent.", "You hear welding.")
 					welded = 0
 					update_icon()
-			else
-				user << "<span class='notice'>The welding tool needs to be on to start this task.</span>"
-		else
-			user << "<span class='notice'>You need more welding fuel to complete this task.</span>"
 			return 1
 	else
 		return ..()
 
-/obj/machinery/atmospherics/unary/vent_pump/examine()
-	set src in oview(1)
+/obj/machinery/atmospherics/unary/vent_pump/examine(mob/user)
 	..()
 	if(welded)
-		usr << "It seems welded shut."
+		user << "It seems welded shut."
 
 /obj/machinery/atmospherics/unary/vent_pump/power_change()
 	if(powered(power_channel))
@@ -362,7 +358,7 @@
 		L << "<span class='warning'> There are no available vents to travel to, they could be welded. </span>"
 		return
 
-	var/obj/selection = input(L,"Select a destination.", "Duct System") as null|anything in sortAssoc(vents)
+	var/obj/selection = input(L,"Select a destination.", "Duct System") as null|anything in sortList(vents)
 	if(!selection)	return
 
 	if(!Adjacent(L))
@@ -377,11 +373,9 @@
 	if(!target_vent)
 		return
 
-	for(var/mob/O in viewers(L, null))
-		O.show_message(text("<B>[L] scrambles into the ventillation ducts!</B>"), 1)
+	L.visible_message("<B>[L] scrambles into the ventillation ducts!</B>")
 
-	for(var/mob/O in hearers(target_vent,null))
-		O.show_message("You hear something squeezing through the ventilation ducts.",2)
+	target_vent.audible_message("<span class='notice'>You hear something squeezing through the ventilation ducts.</span>")
 
 	if(target_vent.welded)		//the vent can be welded while they scrolled through the list.
 		target_vent = src

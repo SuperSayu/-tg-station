@@ -5,7 +5,9 @@
 	icon_state = "centcom"
 	desc = "It's good to be emperor."
 	item_state = "that"
-	loose = 0 // centcom
+	flags_inv = 0
+	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
+	loose = 0
 
 /obj/item/clothing/head/powdered_wig
 	name = "powdered wig"
@@ -67,7 +69,7 @@
 	name = "cueball helmet"
 	desc = "A large, featureless white orb mean to be worn on your head. How do you even see out of this thing?"
 	icon_state = "cueball"
-	flags = HEADCOVERSEYES|HEADCOVERSMOUTH|BLOCKHAIR
+	flags = HEADCOVERSEYES|BLOCKHAIR
 	item_state="cueball"
 	flags_inv = 0
 	loose = 0
@@ -92,7 +94,7 @@
 	desc = "A helmet made out of a box."
 	icon_state = "cardborg_h"
 	item_state = "cardborg_h"
-	flags = HEADCOVERSEYES | HEADCOVERSMOUTH
+	flags = HEADCOVERSEYES
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
 	loose = 1 // full-head objects (almost) never fall off
 
@@ -101,7 +103,7 @@
 	desc = "fight for what's righteous!"
 	icon_state = "justicered"
 	item_state = "justicered"
-	flags = HEADCOVERSEYES|HEADCOVERSMOUTH|BLOCKHAIR
+	flags = HEADCOVERSEYES|BLOCKHAIR
 	loose = 0 // full-head objects (almost) never fall off
 
 /obj/item/clothing/head/justice/blue
@@ -192,6 +194,7 @@
 	flags = BLOCKHAIR
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
 	loose = 35
+
 /obj/item/clothing/head/fedora
 	name = "fedora"
 	icon_state = "fedora"
@@ -216,3 +219,16 @@
 	item_state = "shamebrero"
 	desc = "Once it's on, it never comes off."
 	flags = NODROP
+
+/obj/item/clothing/head/cone
+	desc = "This cone is trying to warn you of something!"
+	name = "warning cone"
+	icon = 'icons/obj/janitor.dmi'
+	icon_state = "cone"
+	item_state = "cone"
+	force = 1.0
+	throwforce = 3.0
+	throw_speed = 2
+	throw_range = 5
+	w_class = 2.0
+	attack_verb = list("warned", "cautioned", "smashed")

@@ -9,7 +9,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 var/list/world_uplinks = list()
 
 /obj/item/device/uplink
-	var/welcome  = "Syndicate Uplink Console:"	// Welcoming menu message
+	var/welcome = "Syndicate Uplink Console:"	// Welcoming menu message
 	var/uses = 20								// Numbers of crystals
 	// List of items not to shove in their hands.
 	var/purchase_log = ""
@@ -22,8 +22,6 @@ var/list/world_uplinks = list()
 /obj/item/device/uplink/New()
 	..()
 	world_uplinks+=src
-	welcome = ticker.mode.uplink_welcome
-	uses = ticker.mode.uplink_uses
 
 /obj/item/device/uplink/Destroy()
 	world_uplinks-=src

@@ -41,7 +41,8 @@
 						D.createmessage("Ore Redemption Machine", "New minerals available!", msg, 1, 0)
 		var/obj/item/stack/sheet/storage = stack_list[processed_sheet]
 		storage.amount += 1 //Stack the sheets
-		O.loc = null //Let the old sheet garbage collect
+		O.loc = null //Let the old sheet...
+		qdel(O) //... garbage collect
 
 /obj/machinery/mineral/ore_redemption/process()
 	if(!panel_open) //If the machine is partially dissassembled, it should not process minerals
@@ -76,9 +77,7 @@
 		return
 	if(panel_open)
 		if(istype(W, /obj/item/weapon/crowbar))
-			for (var/obj/O in src.contents)
-				O.loc = src.loc //Drop item to the floor
-				O.layer = initial(O.layer)
+			empty_content()
 			default_deconstruction_crowbar(W)
 		return 1
 	if(default_deconstruction_screwdriver(user, "ore_redemption-open", "ore_redemption", W))
@@ -197,17 +196,26 @@
 	s.start()
 	if(severity == 1)
 		if(prob(50))
-			for (var/obj/O in src.contents)
-				O.loc = src.loc //Drop item to the floor
-				O.layer = initial(O.layer)
+			empty_content()
 			qdel(src)
 	else if(severity == 2)
 		if(prob(25))
-			for (var/obj/O in src.contents)
-				O.loc = src.loc //Drop item to the floor
-				O.layer = initial(O.layer)
+			empty_content()
 			qdel(src)
 	return
+
+//empty the redemption machine by stacks of at most max_amount (50 at this time) size
+/obj/machinery/mineral/ore_redemption/proc/empty_content()
+	var/obj/item/stack/sheet/s
+
+	for(var/O in stack_list)
+		s = stack_list[O]
+		while(s.amount > s.max_amount)
+			new s.type(loc,s.max_amount)
+			s.use(s.max_amount)
+		s.loc = loc
+		s.layer = initial(s.layer)
+
 
 /**********************Mining Equipment Vendor**************************/
 
@@ -388,9 +396,9 @@
 			user << "<span class='info'>There's no points left on [src].</span>"
 	..()
 
-/obj/item/weapon/card/mining_point_card/examine()
+/obj/item/weapon/card/mining_point_card/examine(mob/user)
 	..()
-	usr << "There's [points] points on the card."
+	user << "There's [points] point\s on the card."
 
 /**********************Jaunter**********************/
 
@@ -529,12 +537,9 @@
 /obj/item/clothing/mask/facehugger/toy
 	desc = "A toy often used to play pranks on other miners by putting it in their beds. It takes a bit to recharge after latching onto something."
 	throwforce = 0
+	real = 0
 	sterile = 1
 	tint = 3 //Makes it feel more authentic when it latches on
-
-/obj/item/clothing/mask/facehugger/toy/examine()//So that giant red text about probisci doesn't show up.
-	if(desc)
-		usr << desc
 
 /obj/item/clothing/mask/facehugger/toy/Die()
 	return
@@ -580,7 +585,7 @@
 	projectilesound = 'sound/weapons/Gunshot4.ogg'
 	wanted_objects = list(/obj/item/weapon/ore/diamond, /obj/item/weapon/ore/gold, /obj/item/weapon/ore/silver,
 						  /obj/item/weapon/ore/plasma,  /obj/item/weapon/ore/uranium,    /obj/item/weapon/ore/iron,
-						  /obj/item/weapon/ore/clown)
+						  /obj/item/weapon/ore/bananium)
 
 /mob/living/simple_animal/hostile/mining_drone/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/weldingtool))
@@ -721,12 +726,12 @@
 	if(!malfunctioning)
 		malfunctioning = 1
 
-/obj/item/weapon/lazarus_injector/examine()
+/obj/item/weapon/lazarus_injector/examine(mob/user)
 	..()
 	if(!loaded)
-		usr << "<span class='info'>[src] is empty.</span>"
+		user << "<span class='info'>[src] is empty.</span>"
 	if(malfunctioning)
-		usr << "<span class='info'>The display on [src] seems to be flickering.</span>"
+		user << "<span class='info'>The display on [src] seems to be flickering.</span>"
 
 /**********************Mining Scanners**********************/
 
@@ -772,7 +777,7 @@
 	for(var/turf/simulated/mineral/M in world)
 		if(M.scan_state)
 			M.icon_state = M.scan_state
-	del(src)
+	qdel(src)
 
 /obj/item/device/t_scanner/adv_mining_scanner
 	desc = "A scanner that automatically checks surrounding rock for useful minerals; it can also be used to stop gibtonite detonations. Requires you to wear mesons to function properly."

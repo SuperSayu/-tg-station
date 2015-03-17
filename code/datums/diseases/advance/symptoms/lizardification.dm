@@ -23,6 +23,7 @@ Bonus
 	stage_speed = -3
 	transmittable = -5
 	level = 5
+	severity = 3
 
 /datum/symptom/lizardification/Activate(var/datum/disease/advance/A)
 	..()
@@ -33,7 +34,7 @@ Bonus
 		if(istype(M,/mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
 
-			if(H.dna && !istype(H.dna.species,/datum/species/lizard))
+			if(H.dna && H.dna.species.id == "human")
 				switch(A.stage)
 					if(1, 2)
 						H << "<span class='notice'>[pick("Your skin itches.", "You feel a tingling underneath your skin.", "You feel goosebumps on your skin.")]</span>"

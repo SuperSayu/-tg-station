@@ -148,11 +148,11 @@
 				V.disease = virus2.getcopy()
 		del src
 
-/obj/item/weapon/virusdish/examine()
+/obj/item/weapon/virusdish/examine(mob/user)
 	..()
 	if(src.info)
-		usr << "It has the following information about its contents"
-		usr << src.info
+		user << "It has the following information about its contents"
+		user << src.info
 
 /obj/machinery/proc/state(var/msg)
 	for(var/mob/O in hearers(src, null))

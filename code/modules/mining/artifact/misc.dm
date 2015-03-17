@@ -236,7 +236,7 @@
 
 /obj/item/wings/proc/retract()
 	if(wearer)
-		flags -= NODROP
+		flags &= ~NODROP
 		if(wearer.dna)
 			wearer.dna.species.speedmod += 2
 		wearer.pass_flags -= PASSTABLE

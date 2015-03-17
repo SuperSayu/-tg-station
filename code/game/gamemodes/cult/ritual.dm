@@ -63,9 +63,9 @@ var/engwords = list("travel", "blood", "join", "hell", "destroy", "technology", 
 	usr.say("O bidai nabora se[pick("'","`")]sma!")
 	sleep(10)
 	usr.say("[input]")
-	for(var/datum/mind/H in ticker.mode.cult)
-		if (H.current)
-			H.current << "<span class='userdanger'>[input]</span>"
+	for(var/mob/M in mob_list)
+		if((M.mind && (M.mind in ticker.mode.cult)) || (M in dead_mob_list))
+			M << "<span class='userdanger'>[input]</span>"
 	return
 	#undef CHECK_STATUS
 
@@ -99,7 +99,7 @@ var/engwords = list("travel", "blood", "join", "hell", "destroy", "technology", 
 
 
 /obj/effect/rune
-	desc = ""
+	desc = "A strange collection of symbols drawn in blood."
 	anchored = 1
 	icon = 'icons/obj/rune.dmi'
 	icon_state = "1"
@@ -146,25 +146,11 @@ var/engwords = list("travel", "blood", "join", "hell", "destroy", "technology", 
 	for(var/mob/living/silicon/ai/AI in player_list)
 		AI.client.images += blood
 
-/obj/effect/rune/examine()
-	set src in view(2)
+/obj/effect/rune/examine(mob/user)
+	..()
+	if(iscultist(user))
+		user << "This spell circle reads: <i>[word1] [word2] [word3]</i>."
 
-	if(!iscultist(usr))
-		usr << "A strange collection of symbols drawn in blood."
-		return
-		/* Explosions... really?
-		if(desc && !usr.stat)
-			usr << "It reads: <i>[desc]</i>."
-			sleep(30)
-			explosion(src.loc, 0, 2, 5, 5)
-			qdel(src)
-		*/
-	if(!desc)
-		usr << "A spell circle drawn in blood. It reads: <i>[word1] [word2] [word3]</i>."
-	else
-		usr << "Explosive Runes inscription in blood. It reads: <i>[desc]</i>."
-
-	return
 
 
 /obj/effect/rune/attackby(I as obj, user as mob)
@@ -187,7 +173,7 @@ var/engwords = list("travel", "blood", "join", "hell", "destroy", "technology", 
 		user << "<span class='notice'>You are unable to speak the words of the rune.</span>"
 		return
 	if(!word1 || !word2 || !word3 || prob(user.getBrainLoss()))
-		return fizzle()
+		return fizzle(user)
 	if(word1 == wordtravel && word2 == wordself)
 		return teleport(src.word3)
 	if(word1 == wordsee && word2 == wordblood && word3 == wordhell)
@@ -241,16 +227,18 @@ var/engwords = list("travel", "blood", "join", "hell", "destroy", "technology", 
 	else
 		user.take_overall_damage(30, 0)
 		user << "<span class='danger'>You feel the life draining from you, as if Lord Nar-Sie is displeased with you.</span>"
-		return fizzle()
+		return fizzle(user)
 
 
-/obj/effect/rune/proc/fizzle()
-	if(istype(src,/obj/effect/rune))
-		usr.say(pick("B'ADMINES SP'WNIN SH'T","IC'IN O'OC","RO'SHA'M I'SA GRI'FF'N ME'AI","TOX'IN'S O'NM FI'RAH","IA BL'AME TOX'IN'S","FIR'A NON'AN RE'SONA","A'OI I'RS ROUA'GE","LE'OAN JU'STA SP'A'C Z'EE SH'EF","IA PT'WOBEA'RD, IA A'DMI'NEH'LP"))
-	else
-		usr.whisper(pick("B'ADMINES SP'WNIN SH'T","IC'IN O'OC","RO'SHA'M I'SA GRI'FF'N ME'AI","TOX'IN'S O'NM FI'RAH","IA BL'AME TOX'IN'S","FIR'A NON'AN RE'SONA","A'OI I'RS ROUA'GE","LE'OAN JU'STA SP'A'C Z'EE SH'EF","IA PT'WOBEA'RD, IA A'DMI'NEH'LP"))
-	for (var/mob/V in viewers(src))
-		V.show_message("<span class='danger'>The markings pulse with a small burst of light, then fall dark.</span>", 3, "<span class='danger'>You hear a faint fizzle.</span>", 2)
+/obj/effect/rune/proc/fizzle(var/mob/living/cultist = null)
+	var/gibberish = pick("B'ADMINES SP'WNIN SH'T","IC'IN O'OC","RO'SHA'M I'SA GRI'FF'N ME'AI","TOX'IN'S O'NM FI'RAH","IA BL'AME TOX'IN'S","FIR'A NON'AN RE'SONA","A'OI I'RS ROUA'GE","LE'OAN JU'STA SP'A'C Z'EE SH'EF","IA PT'WOBEA'RD, IA A'DMI'NEH'LP")
+
+	if(cultist)
+		if(istype(src,/obj/effect/rune))
+			cultist.say(gibberish)
+		else
+			cultist.whisper(gibberish)
+	visible_message("<span class='danger'>The markings pulse with a small burst of light, then fall dark.</span>", 3, "<span class='danger'>You hear a faint fizzle.</span>", 2)
 	return
 
 /obj/effect/rune/proc/check_icon()
@@ -347,6 +335,7 @@ var/engwords = list("travel", "blood", "join", "hell", "destroy", "technology", 
 
 /obj/item/weapon/tome
 	name = "arcane tome"
+	desc = "An old, dusty tome with frayed edges and a sinister looking cover."
 	icon_state ="tome"
 	throw_speed = 2
 	throw_range = 5
@@ -571,7 +560,7 @@ var/engwords = list("travel", "blood", "join", "hell", "destroy", "technology", 
 					usr.whisper("[input]")
 					for(var/datum/mind/H in ticker.mode.cult)
 						if (H.current)
-							H.current << "<span class='danger'>[input]</span>"
+							H.current << "<span class='userdanger'>[input]</span>"
 					return
 				if("Notes")
 					if(usr.get_active_hand() != src)
@@ -694,13 +683,10 @@ var/engwords = list("travel", "blood", "join", "hell", "destroy", "technology", 
 		user << "You copy the translation notes from your tome."
 
 
-/obj/item/weapon/tome/examine()
-	set src in usr
+/obj/item/weapon/tome/examine(mob/user)
 	..()
-	if(!iscultist(usr))
-		usr << "An old, dusty tome with frayed edges and a sinister looking cover."
-	else
-		usr << "The scriptures of Nar-Sie, The One Who Sees, The Geometer of Blood. Contains the details of every ritual his followers could think of. Most of these are useless, though."
+	if(iscultist(user))
+		user << "The scriptures of Nar-Sie, The One Who Sees, The Geometer of Blood. Contains the details of every ritual his followers could think of."
 
 /obj/item/weapon/tome/imbued //admin tome, spawns working runes without waiting
 	w_class = 2.0

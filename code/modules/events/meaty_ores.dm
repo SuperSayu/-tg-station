@@ -1,3 +1,4 @@
+/*
 /datum/round_event_control/dust/meaty
 	name = "Meaty Space Dust"
 	typepath = /datum/round_event/dust/meaty
@@ -59,3 +60,4 @@
 					new /mob/living/simple_animal/cow(loc)
 
 				del(src)
+*/

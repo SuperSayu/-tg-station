@@ -226,7 +226,7 @@ var/global/ankh = 0 // only one can spawn
 	if(global.ankh == 0)
 		if((z == 5 && prob(5)) || (z == 1 && prob(2)) || ((z == 3 || z == 4) && prob(3)))
 			atype = A_ANKH
-			world.log << "Ankh generated at [x],[y],[z]"
+			message_admins("Ankh generated at [x],[y],[z]")
 			global.ankh = 1
 		else
 			switch(size)

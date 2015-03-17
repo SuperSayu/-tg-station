@@ -79,6 +79,7 @@
 
 	//The Syndicate
 /var/const/access_syndicate = 150//General Syndicate Access
+/var/const/access_syndicate_leader = 151//Nuke Op Leader Access
 
 /obj/var/list/req_access = null
 /obj/var/req_access_txt = "0"
@@ -91,24 +92,22 @@
 	if(istype(M, /mob/living/silicon))
 		//AI can do whatever he wants
 		return 1
-	var/list/access = list()
 
 	if(istype(M, /mob/living/carbon/human)) //if they are holding or wearing a card that has access, that works
 		var/mob/living/carbon/human/H = M
-		if(H.wear_id)
-			access += H.wear_id.GetAccess()
-		var/obj/item/I = H.get_active_hand()
-		if(I)
-			access += I.GetAccess()
-
+		if(src.check_access(H.get_active_hand()) || src.check_access(H.wear_id))
+			return 1
 	else if(istype(M, /mob/living/carbon/monkey) || istype(M, /mob/living/carbon/alien/humanoid))
 		var/mob/living/carbon/george = M
 		//they can only hold things :(
-		var/obj/item/I = george.get_active_hand()
-		if(I)
-			access += I.GetAccess()
 
-	return check_access_list(access)
+		if(src.check_access(george.get_active_hand()))
+			return 1
+	else if(isanimal(M))
+		var/mob/living/simple_animal/A = M
+		if(check_access(A.access_card))
+			return 1
+	return 0
 
 /obj/item/proc/GetAccess()
 	return list()
@@ -211,7 +210,7 @@
 	return list(access_cent_general, access_cent_thunder, access_cent_specops, access_cent_medical, access_cent_living, access_cent_storage, access_cent_teleporter, access_cent_captain)
 
 /proc/get_all_syndicate_access()
-	return list(access_syndicate)
+	return list(access_syndicate, access_syndicate)
 
 /proc/get_region_accesses(var/code)
 	switch(code)

@@ -51,7 +51,6 @@
 <TT>
 
 <A href='byond://?src=\ref[src];send=1'>Send Signal</A><BR>
-Reciever is <A href='byond://?src=\ref[src];receive=1'>[receiving?"on":"off"]</A><BR>
 <B>Frequency/Code</B> for signaler:<BR>
 Frequency:
 <A href='byond://?src=\ref[src];freq=-10'>-</A>
@@ -136,8 +135,8 @@ Code:
 	if(signal.encryption != code)	return 0
 	if(!(src.wires & WIRE_RADIO_RECEIVE))	return 0
 	pulse(1)
-	for(var/mob/O in hearers(1, src.loc))
-		O.show_message(text("\icon[] *beep* *beep*", src), 3, "*beep* *beep*", 2)
+	if(src.loc)
+		src.loc.audible_message("\icon[src] *beep* *beep*", null, 1)
 	return
 
 

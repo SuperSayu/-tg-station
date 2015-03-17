@@ -9,6 +9,7 @@ Note: Must be placed within 3 tiles of the R&D Console
 */
 /obj/machinery/r_n_d/destructive_analyzer
 	name = "Destructive Analyzer"
+	desc = "Learn science by destroying things!"
 	icon_state = "d_analyzer"
 	var/obj/item/weapon/loaded_item = null
 	var/decon_mod = 0
@@ -56,18 +57,18 @@ Note: Must be placed within 3 tiles of the R&D Console
 		user << "<span class='warning'>The [src.name] must be linked to an R&D console first!</span>"
 		return
 	if (busy)
-		user << "<span class='warning'> The [src.name] is busy right now.</span>"
+		user << "<span class='warning'>The [src.name] is busy right now.</span>"
 		return
 	if (istype(O, /obj/item) && !loaded_item)
 		if(!O.origin_tech)
-			user << "<span class='warning'> This doesn't seem to have a tech origin!</span>"
+			user << "<span class='warning'>This doesn't seem to have a tech origin!</span>"
 			return
 		var/list/temp_tech = ConvertReqString2List(O.origin_tech)
 		if (temp_tech.len == 0)
-			user << "<span class='warning'> You cannot deconstruct this item!</span>"
+			user << "<span class='warning'>You cannot deconstruct this item!</span>"
 			return
 		if(!user.drop_item())
-			user << "<span class='warning'>\The [O] is stuck to your hand, you cannot put it in the analyzer!</span>"
+			user << "<span class='warning'>\The [O] is stuck to your hand, you cannot put it in the [src.name]!</span>"
 			return
 		busy = 1
 		loaded_item = O
@@ -78,13 +79,3 @@ Note: Must be placed within 3 tiles of the R&D Console
 			icon_state = "d_analyzer_l"
 			busy = 0
 	return
-
-//For testing purposes only.
-/*/obj/item/weapon/deconstruction_test
-	name = "Test Item"
-	desc = "WTF?"
-	icon = 'icons/obj/weapons.dmi'
-	icon_state = "d20"
-	g_amt = 5000
-	m_amt = 5000
-	origin_tech = "materials=5;plasmatech=5;syndicate=5;programming=9"*/

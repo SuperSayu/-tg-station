@@ -54,11 +54,10 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 /datum/supply_packs/New()
 	manifest += "<ul>"
 	for(var/path in contains)
-		if(!path) continue
+		if(!path)	continue
 		var/atom/movable/AM = path
 		manifest += "<li>[initial(AM.name)]</li>"
 	manifest += "</ul>"
-
 
 ////// Use the sections to keep things tidy please /Malkevin
 
@@ -161,8 +160,9 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	containertype = /obj/structure/largecrate/evil
 	containername = "large crate"
 	hidden = 1
-	New()
-		manifest = "<ul><li>Love, sunshine, and perfect happiness.</li></ul>"
+
+/datum/supply_packs/emergency/evil/New()
+	manifest = "<ul><li>Love, sunshine, and perfect happiness.</li></ul>"
 
 /datum/supply_packs/emergency/syndicate
 	name = "ERROR NULL ENTRY"
@@ -510,7 +510,7 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	containername = "particle accelerator crate"
 
 /datum/supply_packs/engineering/engine/spacesuit
-	name = "Space Suit Crate"
+	name = "Space Suit crate"
 	contains = list(/obj/item/clothing/suit/space,
 					/obj/item/clothing/head/helmet/space,
 					/obj/item/clothing/mask/breath,)

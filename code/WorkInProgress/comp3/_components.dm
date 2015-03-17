@@ -140,10 +140,10 @@ Removable hard drive presets
 		readonly = !readonly
 		user << "You flip the write-protect tab to [readonly ? "protected" : "unprotected"]."
 
-	examine()
+	examine(mob/user)
 		set src in oview(5)
 		..()
-		usr << text("The write-protect tab is set to [readonly ? "protected" : "unprotected"].")
+		user << text("The write-protect tab is set to [readonly ? "protected" : "unprotected"].")
 		return
 
 	init()

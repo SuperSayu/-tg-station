@@ -145,7 +145,7 @@ MASS SPECTROMETER
 		user.show_message("<span class='info'>Subject appears to be suffering from fatigue.</span>", 1)
 
 	if (M.getCloneLoss())
-		user.show_message("<span class='warning'>Subject appears to have been imperfectly cloned.</span>", 1)
+		user.show_message("<span class='warning'>Subject appears to have [M.getCloneLoss() > 30 ? "severe" : "minor"] cellular damage.</span>", 1)
 
 	for(var/datum/disease/D in M.viruses)
 		if(!D.hidden[SCANNER])
@@ -278,7 +278,7 @@ MASS SPECTROMETER
 	if (crit_fail)
 		user << "<span class='warning'> This device has critically failed and is no longer functional!</span>"
 		return
-	if (!(istype(user, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
+	if (!user.IsAdvancedToolUser())
 		user << "<span class='warning'> You don't have the dexterity to do this!</span>"
 		return
 	if(reagents.total_volume)

@@ -222,3 +222,8 @@
 		if(slot_num > 3) slot_num = 1 //Wrap around.
 
 	return
+
+
+/mob/living/silicon/robot/swap_hand()
+	cycle_modules()
+	return

@@ -59,7 +59,7 @@
 // Oh by the way this didn't work with old click code which is why clicking shit didn't spam you
 /atom/proc/attack_ghost(mob/dead/observer/user as mob)
 	if(user.client && user.client.inquisitive_ghost)
-		examine()
+		user.examinate(src)
 	return
 
 /turf/attack_ghost() // YES I KNOW IT IS A FLOOR THANKS, THAAANKS

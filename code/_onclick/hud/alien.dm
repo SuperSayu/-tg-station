@@ -32,26 +32,6 @@
 	l_hand_hud_object = inv_box
 	adding += inv_box
 
-//pocket 1
-	inv_box = new /obj/screen/inventory()
-	inv_box.name = "storage1"
-	inv_box.icon = 'icons/mob/screen_alien.dmi'
-	inv_box.icon_state = "pocket"
-	inv_box.screen_loc = ui_alien_storage_l
-	inv_box.slot_id = slot_l_store
-	inv_box.layer = 19
-	adding += inv_box
-
-//pocket 2
-	inv_box = new /obj/screen/inventory()
-	inv_box.name = "storage2"
-	inv_box.icon = 'icons/mob/screen_alien.dmi'
-	inv_box.icon_state = "pocket"
-	inv_box.screen_loc = ui_alien_storage_r
-	inv_box.slot_id = slot_r_store
-	inv_box.layer = 19
-	adding += inv_box
-
 //begin buttons
 
 	using = new /obj/screen/inventory()
@@ -142,6 +122,12 @@
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_alien_health
 
+	nightvisionicon = new /obj/screen()
+	nightvisionicon.icon ='icons/mob/screen_alien.dmi'
+	nightvisionicon.icon_state = "nightvision1"
+	nightvisionicon.name = "nightvision"
+	nightvisionicon.screen_loc = ui_alien_nightvision
+
 	alien_plasma_display = new /obj/screen()
 	alien_plasma_display.icon = 'icons/mob/screen_gen.dmi'
 	alien_plasma_display.icon_state = "power_display2"
@@ -168,6 +154,6 @@
 
 	mymob.client.screen = null
 
-	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.toxin, mymob.fire, mymob.healths, alien_plasma_display, mymob.pullin, mymob.blind, mymob.flash) //, mymob.hands, mymob.rest, mymob.sleep, mymob.mach )
+	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.toxin, mymob.fire, mymob.healths, nightvisionicon, alien_plasma_display, mymob.pullin, mymob.blind, mymob.flash) //, mymob.hands, mymob.rest, mymob.sleep, mymob.mach )
 	mymob.client.screen += adding + other
 

@@ -36,10 +36,7 @@
 			overlays -= wet_overlay
 
 /turf/simulated/Entered(atom/A, atom/OL)
-	if(movement_disabled && usr.ckey != movement_disabled_exception)
-		usr << "<span class='danger'>Movement is admin-disabled.</span>" //This is to identify lag problems
-		return
-
+	..()
 	if (istype(A,/mob/living/carbon))
 		var/mob/living/carbon/M = A
 		if(M.lying)	return
@@ -83,10 +80,8 @@
 				M.trailtype = "oil"
 				oily = max(oily-amount,0)
 
-
-
-	..()
 /turf/simulated/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
 	if(istype(mover,/obj/structure/faketurf))
 		return 0
 	return ..(mover,forget)
+

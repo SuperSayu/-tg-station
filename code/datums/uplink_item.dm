@@ -46,8 +46,8 @@ var/list/uplink_items = list()
 	var/cost = 0
 	var/last = 0 // Appear last
 	var/list/gamemodes = list() // Empty list means it is in all the gamemodes. Otherwise place the gamemode name here.
-	var/list/excludefrom = list()//Empty list does nothing. Place the name of gamemode you don't want this item to be available in here. This is so you dont have to list EVERY mode to exclude something.
-	var/surplus = 100
+	var/list/excludefrom = list() //Empty list does nothing. Place the name of gamemode you don't want this item to be available in here. This is so you dont have to list EVERY mode to exclude something.
+	var/surplus = 100 //Chance of being included in the surplus crate (when pick() selects it)
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U)
 	if(item)
@@ -65,9 +65,6 @@ var/list/uplink_items = list()
 	if (!user || user.stat || user.restrained())
 		return 0
 
-	if (!( istype(user, /mob/living/carbon/human)))
-		return 0
-
 	// If the uplink's holder is in the user's contents
 	if ((U.loc in user.contents || (in_range(U.loc, user) && istype(U.loc.loc, /turf))))
 		user.set_machine(U)
@@ -76,9 +73,10 @@ var/list/uplink_items = list()
 
 		var/obj/I = spawn_item(get_turf(user), U)
 
-		if(istype(I, /obj/item) && ishuman(user))
-			var/mob/living/carbon/human/A = user
-			A.put_in_any_hand_if_possible(I)
+		if(istype(I, /obj/item))
+			if(ishuman(user))
+				var/mob/living/carbon/human/A = user
+				A.put_in_any_hand_if_possible(I)
 
 			if(istype(I,/obj/item/weapon/storage/box/) && I.contents.len>0)
 				for(var/atom/o in I)
@@ -238,12 +236,34 @@ var/list/uplink_items = list()
 	item = /obj/item/ammo_box/magazine/m10mm
 	cost = 1
 
+/datum/uplink_item/ammo/bullstun
+	name = "Ammo-12g Stun Slug"
+	desc = "An additional 8-round stun slug magazine for use in the Bulldog shotgun. Saying that they're non-lethal would be lying."
+	item = /obj/item/ammo_box/magazine/m12g
+	cost = 2
+	gamemodes = list(/datum/game_mode/nuclear)
+
+/datum/uplink_item/ammo/bullbuck
+	name = "Ammo-12g Buckshot"
+	desc = "An alternative 8-round buckshot magazine for use in the Bulldog shotgun. Front towards enemy."
+	item = /obj/item/ammo_box/magazine/m12g/buckshot
+	cost = 2
+	gamemodes = list(/datum/game_mode/nuclear)
+
+/datum/uplink_item/ammo/bulldragon
+	name = "Ammo-12g Dragon's Breath"
+	desc = "An alternative 8-round dragon's breath magazine for use in the Bulldog shotgun. I'm a fire starter, twisted fire starter!"
+	item = /obj/item/ammo_box/magazine/m12g/dragon
+	cost = 3
+	gamemodes = list(/datum/game_mode/nuclear)
+
 /datum/uplink_item/ammo/machinegun
 	name = "Ammo-7.62×51mm"
 	desc = "A 50-round magazine of 7.62×51mm ammunition for use in the L6 SAW machinegun. By the time you need to use this, you'll already be on a pile of corpses."
 	item = /obj/item/ammo_box/magazine/m762
 	cost = 12
 	gamemodes = list(/datum/game_mode/nuclear)
+	surplus = 0
 
 // STEALTHY WEAPONS
 
@@ -257,12 +277,6 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/pen/sleepy
 	cost = 4
 	excludefrom = list(/datum/game_mode/nuclear)
-
-///datum/uplink_item/stealthy_weapons/blowgun
-//	name = "Blowgun"
-//	desc = "Disguised as a cigar, this can hold one syringe and shoot it a short distance."
-//	item = /obj/item/clothing/mask/blowgun
-//	cost = 1
 
 /datum/uplink_item/stealthy_weapons/soap
 	name = "Syndicate Soap"
@@ -335,11 +349,6 @@ var/list/uplink_items = list()
 	cost = 2
 	surplus = 90
 
-/datum/uplink_item/stealthy_tools/cloaking_device
-	name = "Cloaking Device"
-	item = /obj/item/weapon/cloaking_device
-	cost = 9
-
 /datum/uplink_item/stealthy_tools/smugglersatchel
 	name = "Smuggler's Satchel"
 	desc = "This satchel is thin enough to be hidden in the gap between plating and tiling, great for stashing your stolen goods. Comes with a crowbar and a floor tile inside."
@@ -382,7 +391,7 @@ var/list/uplink_items = list()
 	name = "Thermal Imaging Glasses"
 	desc = "These glasses are thermals disguised as engineers' optical meson scanners. \
 	They allow you to see organisms through walls by capturing the upper portion of the infrared light spectrum, emitted as heat and light by objects. \
-	Hotter objects, such as warm bodies, cybernetic organisms and artificial intelligence cores emit more of this light than cooler objects like walls and airlocks."
+	Hotter objects, such as warm bodies, cybernetic organisms and artificial intelligence cores emit more of this light than cooler objects like walls and airlocks." //THEN WHY CANT THEY SEE PLASMA FIRES????
 	item = /obj/item/clothing/glasses/thermal/syndi
 	cost = 6
 
@@ -412,11 +421,19 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/aiModule/syndicate
 	cost = 14
 
-/datum/uplink_item/device_tools/plastic_explosives
+/datum/uplink_item/device_tools/magboots
+	name = "Blood-Red Magboots"
+	desc = "A pair of magnetic boots with a Syndicate paintjob that assist with freer movement in space or on-station during gravitational generator failures. \
+	These reverse-engineered knockoffs of Nanotrasen's 'Advanced Magboots' slow you down in simulated-gravity environments much like the standard issue variety."
+	item = /obj/item/clothing/shoes/magboots/syndie
+	cost = 5
+	gamemodes = list(/datum/game_mode/nuclear)
+
+/datum/uplink_item/device_tools/c4
 	name = "Composition C-4"
 	desc = "C-4 is plastic explosive of the common variety Composition C. You can use it to breach walls or connect a signaler to its wiring to make it remotely detonable. \
 	It has a modifiable timer with a minimum setting of 10 seconds."
-	item = /obj/item/weapon/plastique
+	item = /obj/item/weapon/c4
 	cost = 1
 
 /datum/uplink_item/device_tools/powersink
@@ -442,10 +459,10 @@ var/list/uplink_items = list()
 	cost = 11
 	excludefrom = list(/datum/game_mode/traitor/double_agents)
 
-/datum/uplink_item/stealthy_weapons/rad_laser
+/datum/uplink_item/device_tools/rad_laser
 	name = "Radioactive Microlaser"
 	desc = "A radioactive microlaser disguised as a standard Nanotrasen health analyzer. When used, it emits a powerful burst of radiation, which, after a short delay, can incapitate all but the most protected of humanoids. \
- 	It has two settings: intensity, which controls the power of the radiation, and wavelength, which controls how long the radiation delay is."
+	It has two settings: intensity, which controls the power of the radiation, and wavelength, which controls how long the radiation delay is."
 	item = /obj/item/device/rad_laser
 	cost = 6
 
@@ -463,6 +480,7 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/circuitboard/teleporter
 	cost = 40
 	gamemodes = list(/datum/game_mode/nuclear)
+	surplus = 0
 
 /datum/uplink_item/device_tools/shield
 	name = "Energy Shield"
@@ -472,6 +490,11 @@ var/list/uplink_items = list()
 	gamemodes = list(/datum/game_mode/nuclear)
 	surplus = 20
 
+/datum/uplink_item/stealthy_tools/cloaking_device
+	name = "Cloaking Device"
+	desc = "An experimentar cloaking device, which will makes you almost invisible. Has a rechargable, but low capacity internal battery. More effective in muted grey floors."
+	item = /obj/item/weapon/cloaking_device
+	cost = 9
 
 // IMPLANTS
 
@@ -490,6 +513,7 @@ var/list/uplink_items = list()
 	The ability for an agent to open an uplink after their posessions have been stripped from them makes this implant excellent for escaping confinement."
 	item = /obj/item/weapon/storage/box/syndie_kit/imp_uplink
 	cost = 20
+	surplus = 0
 
 /datum/uplink_item/implants/adrenal
 	name = "Adrenal Implant"
@@ -509,7 +533,6 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 20
 	excludefrom = list(/datum/game_mode/nuclear)
-
 
 /datum/uplink_item/badass/syndiecards
 	name = "Syndicate Playing Cards"
@@ -566,7 +589,6 @@ var/list/uplink_items = list()
 		buyable_items += temp_uplink_list[category]
 	var/list/bought_items = list()
 	U.uses -= cost
-	U.used_TC = 20
 	var/remaining_TC = 50
 
 	var/datum/uplink_item/I
@@ -581,7 +603,6 @@ var/list/uplink_items = list()
 		bought_items += I.item
 		remaining_TC -= I.cost
 
-	U.purchase_log += "<BIG>\icon[C]</BIG>"
 	for(var/item in bought_items)
 		new item(C)
 		U.purchase_log += "<BIG>\icon[item]</BIG>"
