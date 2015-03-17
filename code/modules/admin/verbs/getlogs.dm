@@ -56,13 +56,12 @@
 	src << "Attempting to send file, this may take a fair few minutes if the file is very large."
 	return
 
-
 //This proc allows download of past server logs saved within the data/logs/ folder.
 //It works similarly to show-server-log.
 /client/proc/getserverlog()
-	set name = ".getserverlog"
+	set name = "Get Server Logfiles"
 	set desc = "Fetch logfiles from data/logs"
-	set category = null
+	set category = "Debug"
 
 	var/path = browse_files("data/logs/")
 	if(!path)

@@ -197,6 +197,10 @@
 	var/list/names = list()
 	var/total_oshit = 0
 	var/beenrun = 0
+
+	attack_ghost(user)
+		attack_self(user)
+
 	proc/populate()
 		oshit.Cut()
 		names.Cut()
