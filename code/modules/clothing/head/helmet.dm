@@ -11,6 +11,7 @@
 	heat_protection = HEAD
 	max_heat_protection_temperature = HELMET_MAX_TEMP_PROTECT
 	loose = 0
+	strip_delay = 60
 
 /obj/item/clothing/head/helmet/riot
 	name = "riot helmet"
@@ -20,6 +21,7 @@
 	flags = HEADCOVERSEYES | HEADCOVERSMOUTH
 	armor = list(melee = 82, bullet = 15, laser = 5,energy = 5, bomb = 5, bio = 2, rad = 0)
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
+	strip_delay = 80
 
 /obj/item/clothing/head/helmet/swat
 	name = "\improper SWAT helmet"
@@ -31,7 +33,7 @@
 	min_cold_protection_temperature = SPACE_HELM_MIN_TEMP_PROTECT
 	heat_protection = HEAD
 	max_heat_protection_temperature = SPACE_HELM_MAX_TEMP_PROTECT
-	loose = 8
+	strip_delay = 80
 
 /obj/item/clothing/head/helmet/swat/syndicate
 	name = "blood-red helmet"
@@ -49,6 +51,7 @@
 	min_cold_protection_temperature = SPACE_HELM_MIN_TEMP_PROTECT
 	heat_protection = HEAD
 	max_heat_protection_temperature = SPACE_HELM_MAX_TEMP_PROTECT
+	strip_delay = 80
 
 /obj/item/clothing/head/helmet/roman
 	name = "roman helmet"
@@ -56,6 +59,7 @@
 	armor = list(melee = 25, bullet = 0, laser = 25, energy = 10, bomb = 10, bio = 0, rad = 0)
 	icon_state = "roman"
 	item_state = "roman"
+	strip_delay = 100
 
 /obj/item/clothing/head/helmet/roman/legionaire
 	name = "roman legionaire helmet"

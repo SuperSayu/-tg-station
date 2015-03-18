@@ -6,7 +6,9 @@
 	icon_state = "chef"
 	item_state = "chef"
 	desc = "The commander in chef's head wear."
-	loose = 35
+	loose = 10
+	strip_delay = 10
+	put_on_delay = 10
 
 //Captain
 /obj/item/clothing/head/caphat
@@ -17,6 +19,7 @@
 	flags_inv = 0
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	loose = 0
+	strip_delay = 60
 
 //Captain: This is no longer space-worthy
 /obj/item/clothing/head/caphat/parade
@@ -73,6 +76,7 @@
 	flags = 0
 	flags_inv = HIDEEARS
 	loose = 0
+	strip_delay = 80
 
 /obj/item/clothing/head/HoS/dermal
 	name = "Dermal Armor Patch"
@@ -90,6 +94,7 @@
 	flags = 0
 	flags_inv = HIDEEARS
 	loose = 0
+	strip_delay = 60
 
 /obj/item/clothing/head/beret/sec
 	name = "security beret"
