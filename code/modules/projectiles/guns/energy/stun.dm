@@ -71,4 +71,5 @@
 	icon_state = "crossbowlarge"
 	w_class = 3.0
 	force = 10
-	m_amt = 200000
+	m_amt = 4000
+	suppressed = 0
