@@ -72,7 +72,7 @@
 	return do_after(caster, setup_time)
 
 /obj/effect/knowspell/mime/beartrap/cast(var/mob/caster)
-	new /obj/item/weapon/legcuffs/beartrap/mimetrap(caster.loc,duration)
+	new /obj/item/weapon/restraints/legcuffs/beartrap/mimetrap(caster.loc,duration)
 	caster.visible_message("<B>[caster.real_name]</B> sets something on the ground, looking proud!")
 
 /obj/effect/spelleffect/forcewall/mime
@@ -81,7 +81,7 @@
 	icon = null
 	icon_state = null
 
-/obj/item/weapon/legcuffs/beartrap/mimetrap
+/obj/item/weapon/restraints/legcuffs/beartrap/mimetrap
 	name = "mimetrap"
 	desc = "A beartrap catches bears, this is meant to...?"
 	icon = null

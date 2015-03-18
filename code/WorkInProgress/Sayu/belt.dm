@@ -119,7 +119,7 @@
 		new /obj/item/device/multitool(src)
 		new /obj/item/stack/cable_coil(src)
 
-		new /obj/item/weapon/handcuffs(src)
+		new /obj/item/weapon/restraints/handcuffs(src)
 		new /obj/item/weapon/dnainjector/xraymut(src)
 		new /obj/item/weapon/dnainjector/firemut(src)
 		new /obj/item/weapon/dnainjector/telemut(src)
