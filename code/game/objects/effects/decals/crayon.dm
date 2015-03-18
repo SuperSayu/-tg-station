@@ -6,32 +6,17 @@
 	layer = 2.1
 	anchored = 1
 
-/obj/effect/decal/cleanable/crayon/New(location,main = "#FFFFFF", var/type = "rune")
+/obj/effect/decal/cleanable/crayon/examine()
+	set src in view(2)
+	..()
+	return
+
+/obj/effect/decal/cleanable/crayon/New(location, main = "#FFFFFF", var/type = "rune1", var/e_name = "rune")
 	..()
 	loc = location
 
-	name = type
-	desc = "A [type] drawn in crayon."
+	name = e_name
+	desc = "A [name] drawn in crayon."
 
-	switch(type)
-		if("rune")
-			type = "rune[rand(1,6)]"
-		if("graffiti")
-			type = pick("amyjon","face","matt","revolution","engie","guy","end","dwarf","uboa")
-			icon_state = type
-			color = main
-
-/obj/effect/decal/cleanable/body
-	name = "body marking"
-	desc = "It shows the area where a body was..."
-	icon = 'icons/effects/effects.dmi'
-	icon_state = "body-"
-	layer = 2.1
-	anchored = 1
-
-/obj/effect/decal/cleanable/body/New()
-	..()
-	if(src.loc && isturf(src.loc))
-		for(var/obj/effect/decal/cleanable/body/B in src.loc)
-			if(B != src)
-				del(B)
+	icon_state = type
+	color = main
