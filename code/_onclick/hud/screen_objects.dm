@@ -57,6 +57,9 @@
 	if(usr.stat)
 		return 1
 
+	if(usr.stat)
+		return 1
+
 
 
 	if(!(owner in usr))

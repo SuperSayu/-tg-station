@@ -20,6 +20,7 @@
 /obj/item/weapon/implant/ui_action_click()
 	activate("action_button")
 
+
 //What does the implant do upon injection?
 //return 0 if the implant fails (ex. Revhead and loyalty implant.)
 //return 1 if the implant succeeds (ex. Nonrevhead and loyalty implant.)
