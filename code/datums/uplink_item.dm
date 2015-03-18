@@ -589,6 +589,7 @@ var/list/uplink_items = list()
 		buyable_items += temp_uplink_list[category]
 	var/list/bought_items = list()
 	U.uses -= cost
+	U.used_TC = 20
 	var/remaining_TC = 50
 
 	var/datum/uplink_item/I
