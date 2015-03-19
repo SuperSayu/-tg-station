@@ -143,15 +143,15 @@
 	desc = "A box full of inaprovaline MediPens."
 	icon_state = "syringe"
 
-	New()
-		..()
-		new /obj/item/weapon/reagent_containers/hypospray/medipen( src )
-		new /obj/item/weapon/reagent_containers/hypospray/medipen( src )
-		new /obj/item/weapon/reagent_containers/hypospray/medipen( src )
-		new /obj/item/weapon/reagent_containers/hypospray/medipen( src )
-		new /obj/item/weapon/reagent_containers/hypospray/medipen( src )
-		new /obj/item/weapon/reagent_containers/hypospray/medipen( src )
-		new /obj/item/weapon/reagent_containers/hypospray/medipen( src )
+/obj/item/weapon/storage/box/medipens/New()
+	..()
+	new /obj/item/weapon/reagent_containers/hypospray/medipen( src )
+	new /obj/item/weapon/reagent_containers/hypospray/medipen( src )
+	new /obj/item/weapon/reagent_containers/hypospray/medipen( src )
+	new /obj/item/weapon/reagent_containers/hypospray/medipen( src )
+	new /obj/item/weapon/reagent_containers/hypospray/medipen( src )
+	new /obj/item/weapon/reagent_containers/hypospray/medipen( src )
+	new /obj/item/weapon/reagent_containers/hypospray/medipen( src )
 
 /obj/item/weapon/storage/box/medipens/utility
 	name = "medipens kit"
