@@ -2185,7 +2185,7 @@
 "aQa" = (/turf/simulated/floor{dir = 9; icon_state = "warning"},/area/hallway/secondary/entry)
 "aQb" = (/obj/item/device/radio/intercom{broadcasting = 0; name = "Station Intercom (General)"; pixel_y = 20},/turf/simulated/floor{dir = 1; icon_state = "warning"},/area/hallway/secondary/entry)
 "aQc" = (/turf/simulated/floor{icon_state = "warningcorner"; dir = 4},/area/hallway/secondary/entry)
-"aQd" = (/obj/structure/stool/bed/chair/comfy/beige{dir = 1; icon_state = "comfychair_beige"},/turf/simulated/floor{icon_state = "grimy"},/area/hallway/secondary/entry)
+"aQd" = (/obj/structure/stool/bed/chair/comfy/beige{dir = 1; icon_state = "comfychair"},/turf/simulated/floor{icon_state = "grimy"},/area/hallway/secondary/entry)
 "aQe" = (/obj/machinery/vending/refillable/food/snack,/turf/simulated/floor{icon_state = "dark"},/area/hallway/secondary/entry)
 "aQf" = (/turf/simulated/wall,/area/maintenance/port)
 "aQg" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/simulated/wall,/area/maintenance/port)
