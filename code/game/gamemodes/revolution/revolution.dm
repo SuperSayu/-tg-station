@@ -43,6 +43,9 @@
 	else if(config.protect_captain_from_antagonist)
 		restricted_jobs += "Captain"
 
+	if(config.protect_assistant_from_antagonist)
+		restricted_jobs += "Assistant"
+
 	var/head_check = 0
 	for(var/mob/new_player/player in player_list)
 		if(player.mind.assigned_role in command_positions)

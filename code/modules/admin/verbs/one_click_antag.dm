@@ -64,6 +64,9 @@ client/proc/one_click_antag()
 	else if(config.protect_captain_from_antagonist)
 		temp.restricted_jobs += "Captain"
 
+	if(config.protect_assistant_from_antagonist)
+		temp.restricted_jobs += "Assistant"
+
 	var/list/mob/living/carbon/human/candidates = list()
 	var/mob/living/carbon/human/H = null
 
@@ -98,6 +101,9 @@ client/proc/one_click_antag()
 	else if(config.protect_captain_from_antagonist)
 		temp.restricted_jobs += "Captain"
 
+	if(config.protect_assistant_from_antagonist)
+		temp.restricted_jobs += "Assistant"
+
 	var/list/mob/living/carbon/human/candidates = list()
 	var/mob/living/carbon/human/H = null
 
@@ -129,6 +135,9 @@ client/proc/one_click_antag()
 		temp.restricted_jobs += temp.protected_jobs
 	else if(config.protect_captain_from_antagonist)
 		temp.restricted_jobs += "Captain"
+
+	if(config.protect_assistant_from_antagonist)
+		temp.restricted_jobs += "Assistant"
 
 	var/list/mob/living/carbon/human/candidates = list()
 	var/mob/living/carbon/human/H = null
@@ -196,6 +205,9 @@ client/proc/one_click_antag()
 		temp.restricted_jobs += temp.protected_jobs
 	else if(config.protect_captain_from_antagonist)
 		temp.restricted_jobs += "Captain"
+
+	if(config.protect_assistant_from_antagonist)
+		temp.restricted_jobs += "Assistant"
 
 	var/list/mob/living/carbon/human/candidates = list()
 	var/mob/living/carbon/human/H = null
@@ -398,6 +410,9 @@ client/proc/one_click_antag()
 	var/datum/game_mode/gang/temp = new
 	if(config.protect_roles_from_antagonist)
 		temp.restricted_jobs += temp.protected_jobs
+
+	if(config.protect_assistant_from_antagonist)
+		temp.restricted_jobs += "Assistant"
 
 	var/list/mob/living/carbon/human/candidates = list()
 	var/mob/living/carbon/human/H = null
