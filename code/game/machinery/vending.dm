@@ -927,6 +927,7 @@
 	product_ads = "FJKLFJSD;AJKFLBJAKL;1234 LOONIES LOL!;>MFW;Kill them fuckers!;GET DAT FUKKEN DISK;HONK!;EI NATH;Destroy the station!;Admin conspiracies since forever!;Space-time bending hardware!"
 	products = list(/obj/item/clothing/head/wizard = 1,/obj/item/clothing/suit/wizrobe = 1,
 					/obj/item/clothing/head/wizard/red = 1,/obj/item/clothing/suit/wizrobe/red = 1,
+					/obj/item/clothing/head/wizard/yellow = 1,/obj/item/clothing/suit/wizrobe/yellow = 1,
 					/obj/item/clothing/shoes/sandal = 2,
 					/obj/item/weapon/magic/wand = 3, /obj/item/weapon/magic/blade = 0, /obj/item/weapon/magic/staff = 2, /obj/item/weapon/magic/staff/broom = 1,
 					/obj/item/weapon/magic/orb = 2, /obj/item/weapon/magic/spellbook = 1)
