@@ -1049,7 +1049,7 @@ About the new airlock wires panel:
 		if(affected_mobs.len)
 		//	playsound(src.loc, 'sound/machines/buzz-two.ogg', 50, 0)	//THE BUZZING IT NEVER STOPS	-Pete
 			spawn (60)
-				close()
+				autoclose()
 			return
 
 	crush()
