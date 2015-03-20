@@ -663,6 +663,14 @@
 	name = "Ladies Kinky"
 	icon_state = "female_kinky"
 
+/datum/sprite_accessory/underwear/female_whitealt
+	name = "Ladies White Sport"
+	icon_state = "female_whitealt"
+
+/datum/sprite_accessory/underwear/female_blackalt
+	name = "Ladies Black Sport"
+	icon_state = "female_blackalt"
+
 ////////////////////////////
 // Undershirt Definitions //
 ////////////////////////////

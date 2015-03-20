@@ -1620,7 +1620,7 @@
 "aFh" = (/obj/machinery/camera{c_tag = "Security Checkpoint"; dir = 1},/obj/machinery/alarm{dir = 4; icon_state = "alarm0"; pixel_x = -22},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/obj/machinery/light_switch{pixel_x = 6; pixel_y = -25},/turf/simulated/floor{icon_state = "red"; dir = 10},/area/security/checkpoint2)
 "aFi" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/simulated/floor{icon_state = "red"},/area/security/checkpoint2)
 "aFj" = (/obj/item/weapon/paper_bin{pixel_x = 1; pixel_y = 9},/obj/item/weapon/pen,/obj/structure/table/reinforced,/turf/simulated/floor{icon_state = "red"},/area/security/checkpoint2)
-"aFk" = (/obj/item/weapon/paper,/obj/structure/table/reinforced,/turf/simulated/floor{icon_state = "red"},/area/security/checkpoint2)
+"aFk" = (/obj/item/weapon/paper,/obj/structure/table/reinforced,/obj/machinery/door/window/brigdoor{name = "Arrivals Security Checkpoint"; req_access_txt = "63"},/turf/simulated/floor{icon_state = "red"},/area/security/checkpoint2)
 "aFl" = (/obj/machinery/recharger{pixel_y = 4},/obj/structure/table/reinforced,/turf/simulated/floor{icon_state = "red"},/area/security/checkpoint2)
 "aFm" = (/obj/item/weapon/crowbar,/obj/item/device/flash,/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor{icon_state = "red"; dir = 6},/area/security/checkpoint2)
 "aFn" = (/obj/structure/stool/bed/chair/office/dark{dir = 4},/obj/machinery/newscaster{pixel_x = -30},/turf/simulated/floor/carpet,/area/hallway/secondary/construction{name = "\improper Unfinished Office"})
