@@ -48,7 +48,7 @@
 	qdel(src)
 
 
-/obj/structure/window/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/window/CanPass(atom/movable/mover, turf/target, height=0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
 	if(dir&(dir-1))//more than one bit = diagonal = full window
@@ -198,7 +198,7 @@
 	if(!is_fulltile())
 		if(get_dir(user,src) & dir)
 			for(var/obj/O in loc)
-				if(!O.CanPass(user, user.loc, 1, 0))
+				if(!O.CanPass(user, user.loc, 1))
 					return 0
 	return 1
 
