@@ -127,9 +127,9 @@
 	icon_closed = "orange"
 
 /obj/structure/closet/wardrobe/orange/New()
-	new /obj/item/clothing/under/color/orange(src)
-	new /obj/item/clothing/under/color/orange(src)
-	new /obj/item/clothing/under/color/orange(src)
+	new /obj/item/clothing/under/rank/prisoner(src)
+	new /obj/item/clothing/under/rank/prisoner(src)
+	new /obj/item/clothing/under/rank/prisoner(src)
 	new /obj/item/clothing/shoes/sneakers/orange(src)
 	new /obj/item/clothing/shoes/sneakers/orange(src)
 	new /obj/item/clothing/shoes/sneakers/orange(src)
