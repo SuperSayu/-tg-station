@@ -22,6 +22,8 @@
 	name = "pellet"
 	damage = 15
 
+/obj/item/projectile/bullet/pellet/weak
+	damage = 3
 
 /obj/item/projectile/bullet/midbullet
 	damage = 20

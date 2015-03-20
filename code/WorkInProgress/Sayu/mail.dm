@@ -49,7 +49,7 @@
 	var/global/icon/pack_in = new('icons/WIP_Sayu.dmi',"mailpackage")
 	var/global/icon/mail_in = new('icons/WIP_Sayu.dmi',"mailstored")
 	var/global/listchanged = 0
-	var/list/spawn_supplies = list(/obj/item/weapon/packageWrap = 2, /obj/item/stack/sheet/cardboard = 10, /obj/item/weapon/pen = 3, /obj/item/weapon/hand_labeler = 1)
+	var/list/spawn_supplies = list(/obj/item/stack/packageWrap = 2, /obj/item/stack/sheet/cardboard = 10, /obj/item/weapon/pen = 3, /obj/item/weapon/hand_labeler = 1)
 	var/list/supplies = list()
 
 	New()
@@ -624,7 +624,7 @@ datum/design/mailhub
 	product_ads = "The mail always delivers.;Doing our part when you're apart.;Don't forget to write home occasionally!"
 	density = 0
 	wheeled = 0
-	products = list(/obj/item/weapon/packageWrap = 2, /obj/item/stack/sheet/cardboard = 10, /obj/item/weapon/pen = 3, /obj/item/weapon/hand_labeler = 1)
+	products = list(/obj/item/stack/packageWrap = 2, /obj/item/stack/sheet/cardboard = 10, /obj/item/weapon/pen = 3, /obj/item/weapon/hand_labeler = 1)
 
 	north
 		pixel_y = 27
