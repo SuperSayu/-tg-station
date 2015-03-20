@@ -482,6 +482,7 @@
 	icon_state = "puppy"
 	icon_living = "puppy"
 	icon_dead = "puppy_dead"
+	mob_size = 0
 
 
 //puppies cannot wear anything.

@@ -182,6 +182,7 @@
 	var/amount_grown = 0
 	var/never_grow = 0
 	pass_flags = PASSTABLE | PASSGRILLE
+	mob_size = 0
 
 /mob/living/simple_animal/chick/New()
 	..()
