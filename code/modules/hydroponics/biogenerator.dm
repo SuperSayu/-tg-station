@@ -152,10 +152,14 @@
 			dat += "Botanical gloves: <A href='?src=\ref[src];create=gloves;amount=1'>Make</A> ([250/efficiency])<BR>"
 			dat += "Utility belt: <A href='?src=\ref[src];create=tbelt;amount=1'>Make</A> ([300/efficiency])<BR>"
 			dat += "Leather Satchel: <A href='?src=\ref[src];create=satchel;amount=1'>Make</A> ([400/efficiency])<BR>"
-			dat += "Pet Collar: <a href='?src=\ref[src];create=collar;amount=1'>Make</a> ([100/efficiency])<BR>"
+			dat += "Leather Jacket: <A href='?src=\ref[src];create=jacket;amount=1'>Make</A> ([500/efficiency])<BR>"
+			dat += "</div>"
 			dat += "<h3>Other:</h3>"
+			dat += "<div class='statusDisplay'>"
+			dat += "Pet Collar: <a href='?src=\ref[src];create=collar;amount=1'>Make</a> ([100/efficiency])<BR>"
 			dat += "Carpet Tile: <a href='?src=\ref[src];create=carpet5;amount=1'>Make 5</a> <a href='?src=\ref[src];create=carpet25;amount=1'>x25</a> <a href='?src=\ref[src];create=carpet50;amount=1'>x50</a> ([5/efficiency]/[25/efficiency]/[50/efficiency])<br>"
 			dat += "Deluxe Soap: <a href='?src=\ref[src];create=soap;amount=1'>Make</A> ([200/efficiency])<BR>"
+
 			dat += "</div>"
 		else
 			dat += "<div class='statusDisplay'>No container inside, please insert container.</div>"
@@ -263,6 +267,12 @@
 		if("carpet50")
 			if(check_cost(50/efficiency)) return 0
 			new /obj/item/stack/tile/carpet{amount=50}(src.loc)
+		if("jacket")
+			if (check_cost(500/efficiency)) return 0
+			else new/obj/item/clothing/suit/jacket/leather(src.loc)
+		//if("monkey")
+		//	if (check_cost(500)) return 0
+		//	else new/mob/living/carbon/monkey(src.loc)
 	processing = 0
 	menustat = "complete"
 	update_icon()
