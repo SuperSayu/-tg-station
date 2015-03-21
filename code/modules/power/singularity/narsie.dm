@@ -9,11 +9,9 @@
 	contained = 0 //Are we going to move around?
 	dissipate = 0 //Do we lose energy over time?
 	move_self = 1 //Do we move on our own?
-	grav_pull = 10 //How many tiles out do we pull?
-	grav_pull = 6
-	consume_range = 3 //How many tiles out do we eat
-	uneatable = list(/turf/space, /obj/effect/overlay, /mob/living/simple_animal/construct)
-	decay_range = 9
+	grav_pull = 5 //How many tiles out do we pull?
+	consume_range = 6 //How many tiles out do we eat
+	var/uneatable = list(/turf/space, /obj/effect/overlay, /mob/living/simple_animal/construct)
 
 /obj/machinery/singularity/narsie/large
 	name = "Nar-Sie"
@@ -25,7 +23,6 @@
 	move_self = 1 //Do we move on our own?
 	grav_pull = 12
 	consume_range = 8 //How many tiles out do we eat
-	decay_range = 14
 
 
 /obj/machinery/singularity/narsie/large/New()

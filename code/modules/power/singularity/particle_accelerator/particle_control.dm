@@ -211,8 +211,13 @@
 /obj/machinery/particle_accelerator/control_box/proc/toggle_power()
 	src.active = !src.active
 	investigate_log("turned [active?"<font color='red'>ON</font>":"<font color='green'>OFF</font>"] by [usr ? usr.key : "outside forces"]","singulo")
-	message_admins("PA Control Computer turned [active ?"ON":"OFF"] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
-	log_game("PA Control Computer turned [active ?"ON":"OFF"] by [usr.ckey]([usr]) in ([x],[y],[z])")
+	if(usr)
+		message_admins("PA Control Computer turned [active ?"ON":"OFF"] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
+		log_game("PA Control Computer turned [active ?"ON":"OFF"] by [usr.ckey]([usr]) in ([x],[y],[z])")
+	else
+		message_admins("PA Control Computer turned [active ?"ON":"OFF"] indirectly in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
+		log_game("PA Control Computer turned [active ?"ON":"OFF"] indirectly in ([x],[y],[z])")
+
 	if(src.active)
 		src.use_power = 2
 		for(var/obj/structure/particle_accelerator/part in connected_parts)
