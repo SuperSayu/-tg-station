@@ -58,6 +58,11 @@
 
 		del src
 
+/obj/item/weapon/storage/box/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/stack/packageWrap))
+		return 0
+	..()
+
 
 /obj/item/weapon/storage/box/survival
 
@@ -550,6 +555,7 @@
 	if(istype(W, /obj/item/weapon/match))
 		W.matchignite()
 	return
+
 /obj/item/weapon/storage/box/matches/initialize()
 	if(isturf(loc))
 		while(prob(45) && contents.len)
