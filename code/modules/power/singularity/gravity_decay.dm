@@ -5,6 +5,9 @@
 //
 
 // Called when the singularity attempts to destroy a turf
+
+/*
+
 /turf/proc/gravity_decay()
 	if(prob(65)) return
 	for(var/obj/O in contents)
@@ -75,6 +78,8 @@
 		dismantle_wall(0,0)
 	return
 
+*/
+
 // Created when the singularity pulls a floor or wall out
 /obj/structure/faketurf
 	var/last_movement
@@ -121,45 +126,46 @@
 			if(loc)
 				step_rand(src)
 
-	process()
-		if(!loc)
-			del src
-			return
-		if(world.time >= (last_movement + 35))
-			if(!istype(loc,/turf/space) || !original_type)
-				del src
-				return
-			var/turf/simulated/TS = new original_type(loc)
-			TS.name = name
-			TS.desc = desc
-			TS.dir = dir
-			TS.icon = icon
-			TS.icon_state = icon_state
-			del src
-			return
-	Move()
-		..()
-		for(var/obj/O in anchored_objects)
-			if(!O || !O.anchored)
-				anchored_objects -= O
-				continue
-			if(prob(10))
-				O.anchored = 0
-				anchored_objects -= O
-				step_rand(O)
-				continue
-			if(prob(10))
-				O.ex_act(3)
-				continue
-			O.loc = loc
-		last_movement = world.time
-
-	CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
-		if(istype(mover,/obj/structure/faketurf))
-			return 0
-		return ..(mover,target,height,air_group)
-
-	ex_act()
+/obj/structure/faketurf/process()
+	if(!loc)
+		del src
 		return
-	// There is also an exception in turf/simulated/Enter() to prevent this from entering one of those tiles, ever.
+	if(world.time >= (last_movement + 35))
+		if(!istype(loc,/turf/space) || !original_type)
+			del src
+			return
+		var/turf/simulated/TS = new original_type(loc)
+		TS.name = name
+		TS.desc = desc
+		TS.dir = dir
+		TS.icon = icon
+		TS.icon_state = icon_state
+		del src
+		return
+
+/obj/structure/faketurf/Move()
+	..()
+	for(var/obj/O in anchored_objects)
+		if(!O || !O.anchored)
+			anchored_objects -= O
+			continue
+		if(prob(10))
+			O.anchored = 0
+			anchored_objects -= O
+			step_rand(O)
+			continue
+		if(prob(10))
+			O.ex_act(3)
+			continue
+		O.loc = loc
+	last_movement = world.time
+
+/obj/structure/faketurf/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+	if(istype(mover,/obj/structure/faketurf))
+		return 0
+	return ..(mover,target,height,air_group)
+
+/obj/structure/faketurf/ex_act()
+	return
+// There is also an exception in turf/simulated/Enter() to prevent this from entering one of those tiles, ever.
 
