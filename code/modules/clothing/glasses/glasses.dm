@@ -8,17 +8,11 @@
 	vision_flags = SEE_TURFS
 	invis_view = SEE_INVISIBLE_MINIMUM
 
-/obj/item/clothing/glasses/meson/meson3
-	lenses = 3
-
 /obj/item/clothing/glasses/science
 	name = "Science Goggles"
 	desc = "nothing"
 	icon_state = "purple"
 	item_state = "glasses"
-
-/obj/item/clothing/glasses/science/science3
-	lenses = 3
 
 /obj/item/clothing/glasses/night
 	name = "Night Vision Goggles"
@@ -28,9 +22,6 @@
 	origin_tech = "magnets=4"
 	darkness_view = 8
 	invis_view = SEE_INVISIBLE_MINIMUM
-
-/obj/item/clothing/glasses/night/night3
-	lenses = 3
 
 /obj/item/clothing/glasses/eyepatch
 	name = "eyepatch"
@@ -55,17 +46,11 @@
 	vision_flags = SEE_OBJS
 	invis_view = SEE_INVISIBLE_MINIMUM
 
-/obj/item/clothing/glasses/material/material3
-	lenses = 3
-
 /obj/item/clothing/glasses/regular
 	name = "Prescription Glasses"
 	desc = "Made by Nerd. Co."
 	icon_state = "glasses"
 	item_state = "glasses"
-
-/obj/item/clothing/glasses/regular/regular3
-	lenses = 3
 
 /obj/item/clothing/glasses/regular/hipster
 	name = "Prescription Glasses"
@@ -87,9 +72,6 @@
 	darkness_view = 1
 	flash_protect = 1
 	tint = 1
-
-/obj/item/clothing/glasses/sunglasses/sunglasses3
-	lenses = 3
 
 /obj/item/clothing/glasses/welding
 	name = "welding goggles"
@@ -152,17 +134,12 @@
 					M.disabilities &= ~NEARSIGHTED
 		..()
 
-/obj/item/clothing/glasses/thermal/thermal3
-	lenses = 3
-
 /obj/item/clothing/glasses/thermal/syndi	//These are now a traitor item, concealed as mesons.	-Pete
 	name = "Optical Meson Scanner"
 	desc = "Used by engineering and mining staff to see basic structural and terrain layouts through walls, regardless of lighting condition."
 	icon_state = "meson"
 	origin_tech = "magnets=3;syndicate=4"
 
-/obj/item/clothing/glasses/thermal/syndi/syndi3
-	lenses = 3
 
 /obj/item/clothing/glasses/thermal/monocle
 	name = "Thermoncle"
@@ -174,12 +151,5 @@
 /obj/item/clothing/glasses/thermal/eyepatch
 	name = "Optical Thermal Eyepatch"
 	desc = "An eyepatch with built-in thermal optics"
-	icon_state = "eyepatch"
 	item_state = "eyepatch"
 	lenses = 0
-
-/obj/item/clothing/glasses/thermal/jensen
-	name = "Optical Thermal Implants"
-	desc = "A set of implantable lenses designed to augment your vision"
-	icon_state = "thermalimplants"
-	item_state = "syringe_kit"
