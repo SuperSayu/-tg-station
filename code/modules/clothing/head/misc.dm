@@ -66,15 +66,6 @@
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
 	loose = 1 // full-head objects (almost) never fall off
 
-/obj/item/clothing/head/cueball
-	name = "cueball helmet"
-	desc = "A large, featureless white orb mean to be worn on your head. How do you even see out of this thing?"
-	icon_state = "cueball"
-	flags = HEADCOVERSEYES|BLOCKHAIR
-	item_state="cueball"
-	flags_inv = 0
-	loose = 0
-
 /obj/item/clothing/head/that
 	name = "sturdy top-hat"
 	desc = "It's an amish looking armored top hat."
