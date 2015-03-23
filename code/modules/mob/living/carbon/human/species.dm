@@ -542,13 +542,12 @@
 /datum/species/proc/handle_hud_icons(var/mob/living/carbon/human/H)
 	if(H.healths)
 		if(H.stat == DEAD)
-			H.healths.icon_state = "dead"
+			H.healths.icon_state = "health7"
 		else
 			switch(H.hal_screwyhud)
-				if(1)	H.healths.icon_state = "health1"
-				if(2)	H.healths.icon_state = "health0"
+				if(1)	H.healths.icon_state = "health6"
+				if(2)	H.healths.icon_state = "health7"
 				else
-					/*
 					switch(H.health - H.staminaloss)
 						if(100 to INFINITY)		H.healths.icon_state = "health0"
 						if(80 to 100)			H.healths.icon_state = "health1"
@@ -557,7 +556,8 @@
 						if(20 to 40)			H.healths.icon_state = "health4"
 						if(0 to 20)				H.healths.icon_state = "health5"
 						else					H.healths.icon_state = "health6"
-					*/
+
+					/*
 					switch(H.health - H.staminaloss)
 						if(100 to INFINITY)		H.healths.icon_state = "health10"
 						if(90 to 100)			H.healths.icon_state = "health9"
@@ -570,6 +570,7 @@
 						if(15 to 30)			H.healths.icon_state = "health2"
 						if(0 to 15)				H.healths.icon_state = "health1"
 						else					H.healths.icon_state = "health0"
+					*/
 
 	if(H.nutrition_icon)
 		switch(H.nutrition)
