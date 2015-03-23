@@ -117,13 +117,6 @@ datum/objective_item/steal/documents
 	difficulty = 5
 	antag_types = list("traitor","Changeling","Wizard","Space Ninja")
 
-datum/objective_item/steal/dermal
-	name = "the head of security's dermal armor patch"
-	targetitem = /obj/item/clothing/head/HoS/dermal
-	difficulty = 5
-	excludefromjob = list("Head of Security")
-	antag_types = list("traitor","Changeling","Wizard")
-
 datum/objective_item/steal/facehugger
 	name = "an alien facehugger (dead or alive)"
 	targetitem = /obj/item/clothing/mask/facehugger
