@@ -56,6 +56,7 @@
 	density = 1
 	unacidable = 1
 	var/mob/caster = null
+	var/reliability = 100
 
 	New(l,c,d = 0)
 		..()
