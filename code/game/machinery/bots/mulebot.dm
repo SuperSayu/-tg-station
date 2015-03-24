@@ -79,9 +79,6 @@ var/global/mulebot_count = 0
 			name = "mulebot [suffix]"
 
 
-	verbs -= /atom/movable/verb/pull
-
-
 
 // attack by item
 // emag : lock/unlock,
