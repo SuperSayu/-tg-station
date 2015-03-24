@@ -10,6 +10,7 @@
  * Ocean
  * Iron Sand
  * Snow
+ * High-traction
  */
 
 /turf/simulated/floor/goonplaque
@@ -92,26 +93,12 @@
 /turf/simulated/floor/plating/snow/ex_act(severity)
 	return
 
-/turf/simulated/floor/plating/glass
-	name = "glass plating"
-	icon_state = "glassplating"
-	icon_plating = "glassplating"
-	floor_tile = null
-	intact = 0
-	lighting_lumcount = 2 // transparent floor
+/turf/simulated/floor/noslip
+	name = "high-traction floor"
+	icon_state = "noslip"
+	floor_tile = /obj/item/stack/tile/noslip
+	broken_states = list("noslip-damaged1","noslip-damaged2","noslip-damaged3")
+	burnt_states = list("noslip-scorched1","noslip-scorched2")
 
-/turf/simulated/floor/plating/glass/New()
-	..()
-	underlays += image('icons/turf/space.dmi',icon_state = "[((x + y) ^ ~(x * y) + z) % 25]")
-
-/turf/simulated/floor/plating/airless/glass
-	name = "glass plating"
-	icon_state = "glassplating"
-	icon_plating = "glassplating"
-	floor_tile = null
-	intact = 0
-	lighting_lumcount = 2 // transparent floor
-
-/turf/simulated/floor/plating/airless/glass/New()
-	..()
-	underlays += image('icons/turf/space.dmi',icon_state = "[((x + y) ^ ~(x * y) + z) % 25]")
+/turf/simulated/floor/noslip/MakeSlippery()
+	return
