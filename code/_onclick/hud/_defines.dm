@@ -116,7 +116,7 @@
 #define ui_ai_take_picture "SOUTH:6,WEST+12"
 #define ui_ai_view_images "SOUTH:6,WEST+13"
 #define ui_ai_sensor "SOUTH:6,WEST+14"
-#define ui_ai_camera_bug "SOUTH:6,WEST+15"
+#define ui_ai_camera_bug "SOUTH+1:6,WEST"
 
 //Pop-up inventory
 #define ui_shoes "WEST+1:8,SOUTH:5"
