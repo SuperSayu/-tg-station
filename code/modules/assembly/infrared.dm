@@ -145,6 +145,9 @@
 	set category = "Object"
 	set src in usr
 
+	if(usr.stat || !usr.canmove || usr.restrained())
+		return
+
 	dir = turn(dir, 90)
 	return
 
