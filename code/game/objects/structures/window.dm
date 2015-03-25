@@ -13,6 +13,8 @@
 	var/reinf = 0
 	var/holo = 0
 	var/disassembled = 0
+	var/obj/item/stack/rods/storedrods
+	var/obj/item/weapon/shard/storedshard
 //	var/silicate = 0 // number of units of silicate
 //	var/icon/silicateIcon = null // the silicated icon
 
@@ -23,7 +25,6 @@
 	..()
 	if(health <= 0)
 		spawnfragments()
-		qdel(src)
 	return
 
 
@@ -34,19 +35,19 @@
 			return
 		if(2.0)
 			spawnfragments()
-			qdel(src)
 			return
 		if(3.0)
 			if(prob(50))
 				spawnfragments()
-				qdel(src)
 				return
 
 
 /obj/structure/window/blob_act()
 	spawnfragments()
-	qdel(src)
 
+/obj/structure/window/singularity_pull(S, current_size)
+	if(current_size >= STAGE_FIVE)
+		spawnfragments()
 
 /obj/structure/window/CanPass(atom/movable/mover, turf/target, height=0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
@@ -85,7 +86,6 @@
 		step(src, get_dir(AM, src))
 	if(health <= 0)
 		spawnfragments()
-		qdel(src)
 
 /obj/structure/window/attack_tk(mob/user as mob)
 	user.visible_message("<span class='notice'>Something knocks on [src].</span>")
@@ -98,9 +98,10 @@
 	if(HULK in user.mutations)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!"))
 		user.visible_message("<span class='danger'>[user] smashes through [src]!</span>")
-		add_fingerprint(user) // gets transferred in spawnfrags
+		storedshard.add_fingerprint(user)
+		if(storedrods)
+			storedrods.add_fingerprint(user)
 		spawnfragments()
-		qdel(src)
 	else
 		user.changeNext_move(CLICK_CD_MELEE)
 		user.visible_message("<span class='notice'>[user] knocks on [src].</span>")
@@ -120,7 +121,6 @@
 	if(health <= 0)
 		user.visible_message("<span class='danger'>[user] smashes through [src]!</span>")
 		spawnfragments()
-		qdel(src)
 	else	//for nicer text~
 		user.visible_message("<span class='danger'>[user] smashes into [src]!</span>")
 		playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
@@ -216,16 +216,17 @@
 				index++
 		else
 			spawnfragments()
-		qdel(src)
 		return
 
 /obj/structure/window/proc/spawnfragments()
 	if(holo) return
-	var/newshard = new /obj/item/weapon/shard(loc)
-	transfer_fingerprints_to(newshard)
-	if(reinf)
-		var/newrods = new /obj/item/stack/rods(loc)
-		transfer_fingerprints_to(newrods)
+	var/turf/T = loc
+	storedshard.loc = T
+	transfer_fingerprints_to(storedshard)
+	if(storedrods)
+		storedrods.loc = T
+		transfer_fingerprints_to(storedrods)
+	qdel(src)
 
 /obj/structure/window/verb/rotate()
 	set name = "Rotate Window Counter-Clockwise"
@@ -287,7 +288,7 @@
 	..()
 
 	if(re)	reinf = re
-
+	storedshard = new/obj/item/weapon/shard(src)
 	ini_dir = dir
 	if(reinf)
 		icon_state = "rwindow"
@@ -297,6 +298,7 @@
 		health = 40
 		if(opacity)
 			icon_state = "twindow"
+		storedrods = new/obj/item/stack/rods(src)
 	else
 		icon_state = "window"
 
