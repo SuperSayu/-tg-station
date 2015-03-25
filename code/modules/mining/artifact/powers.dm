@@ -347,7 +347,7 @@
 		if(A_SLIME)
 			// EXTRA 1: Effect range
 			for(var/mob/living/carbon/human/H in orange(extra1,targtile))
-				H.contract_disease(new /datum/disease/transformation/slime(0),1)
+				H.ForceContractDisease(new /datum/disease/transformation/slime(0))
 		if(A_FIRE)
 			// EXTRA 1: Fire power
 			if(istype(targtile,/turf/simulated))
