@@ -26,8 +26,8 @@
 	..()
 	move_update_air(T)
 
-/obj/machinery/shield/CanPass(atom/movable/mover, turf/target, height, air_group)
-	if(!height || air_group) return 0
+/obj/machinery/shield/CanPass(atom/movable/mover, turf/target, height)
+	if(!height) return 0
 	else return ..()
 
 /obj/machinery/shield/CanAtmosPass(var/turf/T)
@@ -46,7 +46,7 @@
 
 
 	if (src.health <= 0)
-		visible_message("<span class='notice'>The [src] dissapates.</span>")
+		visible_message("<span class='notice'>[src] dissipates.</span>")
 		qdel(src)
 		return
 
@@ -58,7 +58,7 @@
 	health -= Proj.damage
 	..()
 	if(health <=0)
-		visible_message("<span class='notice'>The [src] dissapates.</span>")
+		visible_message("<span class='notice'>The [src] dissipates.</span>")
 		qdel(src)
 		return
 	opacity = 1
@@ -107,7 +107,7 @@
 
 	//Handle the destruction of the shield
 	if (src.health <= 0)
-		visible_message("<span class='notice'>The [src] dissapates.</span>")
+		visible_message("<span class='notice'>[src] dissipates.</span>")
 		qdel(src)
 		return
 
@@ -343,7 +343,7 @@
 		if(PN) //runtime errors fixer. They were caused by PN.newload trying to access missing network in case of working on stored power.
 			storedpower += shieldload
 			PN.load += shieldload //uses powernet power.
-//		message_admins("[PN.load]", 1)
+//		message_admins("[PN.load]")
 //		use_power(250) //uses APC power
 
 /obj/machinery/shieldwallgen/attack_hand(mob/user as mob)
@@ -475,8 +475,8 @@
 			user << "<span class='danger'>Access denied.</span>"
 
 	else
-		src.add_fingerprint(user)
-		visible_message("<span class='danger'>The [src.name] has been hit with the [W.name] by [user.name]!</span>")
+		add_fingerprint(user)
+		..()
 
 /obj/machinery/shieldwallgen/proc/cleanup(var/NSEW)
 	var/obj/machinery/shieldwall/F
@@ -594,8 +594,8 @@
 	return
 
 
-/obj/machinery/shieldwall/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
-	if(air_group || (height==0)) return 1
+/obj/machinery/shieldwall/CanPass(atom/movable/mover, turf/target, height=0)
+	if(height==0) return 1
 
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return prob(20)

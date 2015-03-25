@@ -8,6 +8,7 @@
 	flags_inv = 0
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	loose = 0
+	strip_delay = 80
 
 /obj/item/clothing/head/powdered_wig
 	name = "powdered wig"
@@ -48,7 +49,7 @@
 	desc = "It's unspeakably stylish"
 	icon_state = "hasturhood"
 	flags = HEADCOVERSEYES|BLOCKHAIR
-	loose = 1 // full-head objects (almost) never fall off
+	loose = 0 // full-head objects (almost) never fall off
 
 /obj/item/clothing/head/nursehat
 	name = "nurse's hat"
@@ -65,15 +66,6 @@
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
 	loose = 1 // full-head objects (almost) never fall off
 
-/obj/item/clothing/head/cueball
-	name = "cueball helmet"
-	desc = "A large, featureless white orb mean to be worn on your head. How do you even see out of this thing?"
-	icon_state = "cueball"
-	flags = HEADCOVERSEYES|BLOCKHAIR
-	item_state="cueball"
-	flags_inv = 0
-	loose = 0
-
 /obj/item/clothing/head/that
 	name = "sturdy top-hat"
 	desc = "It's an amish looking armored top hat."
@@ -87,7 +79,7 @@
 	icon_state = "greenbandana"
 	item_state = "greenbandana"
 	flags_inv = 0
-	loose = 1
+	loose = 0
 
 /obj/item/clothing/head/cardborg
 	name = "cardborg helmet"
@@ -96,7 +88,7 @@
 	item_state = "cardborg_h"
 	flags = HEADCOVERSEYES
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
-	loose = 1 // full-head objects (almost) never fall off
+	loose = 0 // full-head objects (almost) never fall off
 
 /obj/item/clothing/head/justice
 	name = "justice hat"

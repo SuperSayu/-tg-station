@@ -83,9 +83,11 @@
 	var/traitor_objectives_amount = 2
 	var/protect_roles_from_antagonist = 0// If security and such can be traitor/cult/other
 	var/protect_captain_from_antagonist = 0
+	var/protect_assistant_from_antagonist = 0 //If assistants can be traitor/cult/other
 	var/enforce_human_authority = 0		//If non-human species are barred from joining as a head of staff
 	var/allow_latejoin_antagonists = 0 	// If late-joining players can be traitor/changeling
 	var/continuous_round_rev = 0		// Gamemodes which end instantly will instead keep on going until the round ends by escape shuttle or nuke.
+	var/continuous_round_gang = 0
 	var/continuous_round_wiz = 0
 	var/continuous_round_malf = 0
 	var/shuttle_refuel_delay = 12000
@@ -339,6 +341,8 @@
 					config.gateway_delay			= text2num(value)
 				if("continuous_round_rev")
 					config.continuous_round_rev		= 1
+				if("continuous_round_gang")
+					config.continuous_round_gang	= 1
 				if("continuous_round_wiz")
 					config.continuous_round_wiz		= 1
 				if("continuous_round_malf")
@@ -379,6 +383,9 @@
 
 				if("protect_captain_from_antagonist")
 					config.protect_captain_from_antagonist	= 1
+
+				if("protect_assistant_from_antagonist")
+					config.protect_assistant_from_antagonist	= 1
 
 				if("enforce_human_authority")
 					config.enforce_human_authority	= 1

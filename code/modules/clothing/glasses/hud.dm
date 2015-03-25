@@ -45,6 +45,11 @@
 	desc = "A heads-up display that scans the humans in view and provides accurate data about their ID status and security records."
 	icon_state = "securityhud"
 
+/obj/item/clothing/glasses/hud/security/eyepatch
+	name = "Eyepatch HUD"
+	desc = "A heads-up display that connects directly to the optical nerve of the user, replacing the need for that useless eyeball."
+	icon_state = "hudpatch"
+
 /obj/item/clothing/glasses/hud/security/sunglasses
 	name = "HUDSunglasses"
 	desc = "Sunglasses with a HUD."
@@ -53,9 +58,6 @@
 	flash_protect = 1
 	tint = 1
 	lenses = 2
-
-/obj/item/clothing/glasses/hud/security/sunglasses/sunglasses3
-	lenses = 3
 
 /obj/item/clothing/glasses/hud/security/night
 	name = "Night Vision Security HUD"
@@ -68,15 +70,6 @@
 	if(emagged == 0)
 		emagged = 1
 		desc = desc + " The display flickers slightly."
-
-/obj/item/clothing/glasses/hud/security/jensenshades
-	name = "Augmented shades"
-	desc = "Polarized bioneural eyewear, designed to augment your vision."
-	icon_state = "jensenshades"
-	item_state = "jensenshades"
-	vision_flags = SEE_MOBS
-	invis_view = 2
-	lenses = 2
 
 /obj/item/clothing/glasses/hud/security/process_hud(var/mob/M)
 	process_data_hud(M,DATA_HUD_SECURITY,DATA_HUD_ADVANCED)

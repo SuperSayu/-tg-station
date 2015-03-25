@@ -79,9 +79,8 @@
 					H.updatehealth()
 				else
 					src.take_organ_damage(d)
-				for(var/mob/M in viewers(user, null))
-					if(M.client)
-						M.show_message("<span class='userdanger'>[user] attacks [src]'s stomach wall with the [I.name]!</span>", 2)
+				visible_message("<span class='danger'>[user] attacks [src]'s stomach wall with the [I.name]!</span>", \
+									"<span class='userdanger'>[user] attacks your stomach wall with the [I.name]!</span>")
 				playsound(user.loc, 'sound/effects/attackblob.ogg', 50, 1)
 
 				if(prob(src.getBruteLoss() - 50))
@@ -111,42 +110,6 @@
 		mind.changeling.chosen_sting.try_to_sting(src, A)
 	else
 		..()
-
-/mob/living/carbon/attack_hand(mob/user)
-	if(!iscarbon(user)) return
-
-	for(var/datum/disease/D in viruses)
-		if(D.spread_by_touch())
-			user.contract_disease(D, 0, 1, CONTACT_HANDS)
-
-	for(var/datum/disease/D in user.viruses)
-		if(D.spread_by_touch())
-			contract_disease(D, 0, 1, CONTACT_HANDS)
-
-	if(lying || isslime(src))
-		if(user.a_intent == "help")
-			if(surgeries.len)
-				for(var/datum/surgery/S in surgeries)
-					if(S.next_step(user, src))
-						return 1
-	return 0
-
-
-/mob/living/carbon/attack_paw(mob/M as mob)
-	if(!istype(M, /mob/living/carbon)) return
-
-
-	for(var/datum/disease/D in viruses)
-
-		if(D.spread_by_touch())
-			M.contract_disease(D, 0, 1, CONTACT_HANDS)
-
-	for(var/datum/disease/D in M.viruses)
-
-		if(D.spread_by_touch())
-			contract_disease(D, 0, 1, CONTACT_HANDS)
-
-	return
 
 /mob/living/carbon/electrocute_act(var/shock_damage, var/obj/source, var/siemens_coeff = 1.0)
 	shock_damage *= siemens_coeff
@@ -357,20 +320,7 @@
 		item.layer = initial(item.layer)
 		src.visible_message("<span class='danger'>[src] has thrown [item].</span>")
 
-		if(!src.lastarea)
-			src.lastarea = get_area(src.loc)
-		if(!has_gravity(src))
-			src.inertia_dir = get_dir(target, src)
-			step(src, inertia_dir)
-
-
-/*
-		if(istype(src.loc, /turf/space) || (src.flags & NOGRAV)) //they're in space, move em one space in the opposite direction
-			src.inertia_dir = get_dir(target, src)
-			step(src, inertia_dir)
-*/
-
-
+		newtonian_move(get_dir(target, src))
 
 		item.throw_at(target, item.throw_range, item.throw_speed)
 
@@ -474,7 +424,7 @@
 			if(ITEM && istype(ITEM, /obj/item/weapon/tank) && wear_mask && (wear_mask.flags & MASKINTERNALS))
 				visible_message("<span class='danger'>[usr] tries to [internal ? "close" : "open"] the valve on [src]'s [ITEM].</span>", \
 								"<span class='userdanger'>[usr] tries to [internal ? "close" : "open"] the valve on [src]'s [ITEM].</span>")
-				if(do_mob(usr, src, STRIP_DELAY))
+				if(do_mob(usr, src, POCKET_STRIP_DELAY))
 					if(internal)
 						internal = null
 						if(internals)
@@ -487,16 +437,6 @@
 					visible_message("<span class='danger'>[usr] [internal ? "opens" : "closes"] the valve on [src]'s [ITEM].</span>", \
 									"<span class='userdanger'>[usr] [internal ? "opens" : "closes"] the valve on [src]'s [ITEM].</span>")
 
-
-/mob/living/carbon/attackby(obj/item/I, mob/user)
-	if(lying || isslime(src))
-		if(surgeries.len)
-			if(user.a_intent == "help")
-				for(var/datum/surgery/S in surgeries)
-					if(S.next_step(user, src))
-						return 1
-
-	..()
 
 
 /mob/living/carbon/getTrail()

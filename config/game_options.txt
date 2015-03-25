@@ -104,6 +104,7 @@ PROBABILITY SANDBOX 0
 ## the shuttle is called or the station is nuked.
 ## Malf and Rev will let the shuttle be called when the antags/protags are dead.
 #CONTINUOUS_ROUND_REV
+#CONTINUOUS_ROUND_GANG
 #CONTINUOUS_ROUND_WIZ
 #CONTINUOUS_ROUND_MALF
 
@@ -130,11 +131,14 @@ TRAITOR_OBJECTIVES_AMOUNT 2
 ## implants from being most antagonists.
 #PROTECT_ROLES_FROM_ANTAGONIST
 
-
-
-## Uncomment to prohibit captain from
+# Uncomment to prohibit captain from
 ## being most antagonists.
 #PROTECT_CAPTAIN_FROM_ANTAGONIST
+
+
+
+## Uncomment to prohibit assistants from becoming most antagonists.
+#PROTECT_ASSISTANT_FROM_ANTAGONIST
 
 
 ## If non-human species are barred from joining as a head of staff

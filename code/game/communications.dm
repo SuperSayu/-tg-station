@@ -178,6 +178,9 @@ var/const/RADIO_AIRLOCK = "6"
 var/const/RADIO_SECBOT = "7"
 var/const/RADIO_MULEBOT = "8"
 var/const/RADIO_MAGNETS = "9"
+var/const/RADIO_CLEANBOT = "10"
+var/const/RADIO_FLOORBOT = "11"
+var/const/RADIO_MEDBOT = "12"
 
 var/global/datum/controller/radio/radio_controller
 
@@ -371,4 +374,4 @@ var/list/pointers = list()
 	for(var/d in data)
 		var/val = data[d]
 		if(istext(val))
-			data[d] = strip_html_simple(val)
+			data[d] = strip_html_properly(val)

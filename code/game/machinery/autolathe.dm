@@ -18,6 +18,7 @@ var/global/list/autolathe_recipes = list( \
 		new /obj/item/weapon/airlock_electronics(), \
 		new /obj/item/weapon/airalarm_electronics(), \
 		new /obj/item/weapon/firealarm_electronics(), \
+		new /obj/item/device/pipe_painter(), \
 		new /obj/item/stack/sheet/metal(), \
 		new /obj/item/stack/sheet/glass(), \
 		new /obj/item/stack/sheet/rglass(), \
@@ -56,7 +57,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 		new /obj/item/weapon/rcd(), \
 		new /obj/item/device/electropack(), \
 		new /obj/item/weapon/weldingtool/largetank(), \
-		new /obj/item/weapon/handcuffs(), \
+		new /obj/item/weapon/restraints/handcuffs(), \
 		new /obj/item/ammo_box/a357(), \
 		new /obj/item/ammo_casing/shotgun(), \
 		new /obj/item/ammo_casing/shotgun/buckshot(), \
@@ -269,13 +270,13 @@ var/global/list/autolathe_recipes_hidden = list( \
 					if(istype(template, /obj/item/stack))
 						src.m_amount -= template.m_amt*multiplier
 						src.g_amount -= template.g_amt*multiplier
-						var/obj/new_item = new template.type(T)
+						var/obj/item/new_item = new template.type(T)
 						var/obj/item/stack/S = new_item
 						S.amount = multiplier
 					else
 						src.m_amount -= template.m_amt/coeff
 						src.g_amount -= template.g_amt/coeff
-						var/obj/new_item = new template.type(T)
+						var/obj/item/new_item = new template.type(T)
 						new_item.m_amt /= coeff
 						new_item.g_amt /= coeff
 					if(src.m_amount < 0)
@@ -309,7 +310,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 		objs += src.L
 		if(src.hacked)
 			objs += src.LL
-		for(var/obj/t in objs)
+		for(var/obj/item/t in objs)
 			if(disabled || m_amount<t.m_amt || g_amount<t.g_amt)
 				dat += replacetext("<span class='linkOff'>[t]</span>", "The ", "")
 			else

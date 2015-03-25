@@ -7,6 +7,7 @@
 	item_color = "r"
 	var/uses = 4.0
 
+
 /obj/item/weapon/implant/freedom/activate()
 	if (src.uses < 1)	return 0
 	src.uses--
@@ -35,6 +36,7 @@
 				W.dropped(C_imp_in)
 				if (W)
 					W.layer = initial(W.layer)
+
 
 /obj/item/weapon/implant/freedom/get_data()
 	var/dat = {"

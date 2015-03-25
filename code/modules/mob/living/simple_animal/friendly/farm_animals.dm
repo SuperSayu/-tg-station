@@ -57,7 +57,7 @@
 				var/step = get_step(src, direction)
 				if(step)
 					if(locate(/obj/effect/spacevine) in step)
-						Move(step)
+						Move(step, get_dir(src, step))
 
 /mob/living/simple_animal/hostile/retaliate/goat/Retaliate()
 	..()
@@ -182,6 +182,7 @@
 	var/amount_grown = 0
 	var/never_grow = 0
 	pass_flags = PASSTABLE | PASSGRILLE
+	mob_size = 0
 
 /mob/living/simple_animal/chick/New()
 	..()

@@ -16,7 +16,7 @@
 	throw_range = 7
 	var/empty = 0
 	attackby(obj/item/W as obj, mob/user as mob)
-		if(istype(W,/obj/item/weapon/packageWrap)) // avoid alert
+		if(istype(W,/obj/item/stack/packageWrap)) // avoid alert
 			return
 		..()
 
@@ -111,7 +111,7 @@
 	new /obj/item/weapon/reagent_containers/pill/bicaridine( src )
 	new /obj/item/weapon/reagent_containers/pill/dermaline( src )
 	new /obj/item/weapon/reagent_containers/syringe/lethal/choral( src )
-	new /obj/item/clothing/glasses/hud/health( src )
+	new /obj/item/clothing/glasses/hud/health/night( src )
 	return
 
 

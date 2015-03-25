@@ -328,7 +328,7 @@
 
 // attack with item - insert light (if right type), otherwise try to break the light
 
-/obj/machinery/light/attackby(obj/item/W, mob/user)
+/obj/machinery/light/attackby(obj/item/W, mob/living/user)
 
 	//Light replacer code
 	if(istype(W, /obj/item/device/lightreplacer))
@@ -369,14 +369,12 @@
 
 	else if(status != LIGHT_BROKEN && status != LIGHT_EMPTY)
 
-
+		user.do_attack_animation(src)
 		if(prob(1+W.force * 5))
 
-			user << "You hit the light, and it smashes!"
-			for(var/mob/M in viewers(src))
-				if(M == user)
-					continue
-				M.show_message("[user.name] smashed the light!", 3, "You hear a tinkle of breaking glass", 2)
+			user.visible_message("<span class='danger'>[user.name] smashed the light!</span>", \
+								"<span class='danger'>You hit the light, and it smashes!</span>", \
+								 "You hear a tinkle of breaking glass")
 			if(on && (W.flags & CONDUCT))
 				//if(!user.mutations & COLD_RESISTANCE)
 				if (prob(12))
@@ -384,14 +382,14 @@
 			broken()
 
 		else
-			user << "You hit the light!"
+			user.visible_message("<span class='danger'>[user.name] hits the light.</span>")
 
 	// attempt to stick weapon into light socket
 	else if(status == LIGHT_EMPTY)
 		if(istype(W, /obj/item/weapon/screwdriver)) //If it's a screwdriver open it.
 			playsound(src.loc, 'sound/items/Screwdriver.ogg', 75, 1)
-			user.visible_message("[user.name] opens [src]'s casing.", \
-				"You open [src]'s casing.", "You hear a noise.")
+			user.visible_message("<span class='notice'>[user.name] opens [src]'s casing.</span>", \
+				"<span class='notice'>You open [src]'s casing.</span>", "You hear a noise.")
 			var/obj/machinery/light_construct/newlight = null
 			switch(fitting)
 				if("tube")
@@ -456,8 +454,8 @@
 		user << "\green That object is useless to you."
 		return
 	else if (status == LIGHT_OK||status == LIGHT_BURNED)
-		for(var/mob/M in viewers(src))
-			M.show_message("<span class='danger'>[user.name] smashed the light!</span>", 3, "You hear a tinkle of breaking glass", 2)
+		user.do_attack_animation(src)
+		visible_message("<span class='danger'>[user.name] smashed the light!</span>", "You hear a tinkle of breaking glass")
 		broken()
 	return
 
@@ -467,8 +465,8 @@
 		M << "<span class='danger'>That object is useless to you.</span>"
 		return
 	else if (status == LIGHT_OK||status == LIGHT_BURNED)
-		for(var/mob/O in viewers(src))
-			O.show_message("<span class='danger'>[M.name] smashed the light!</span>", 3, "You hear a tinkle of breaking glass", 2)
+		M.do_attack_animation(src)
+		visible_message("<span class='danger'>[M.name] smashed the light!</span>", "You hear a tinkle of breaking glass")
 		broken()
 	return
 // attack with hand - remove tube/bulb

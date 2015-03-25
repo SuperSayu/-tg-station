@@ -28,6 +28,9 @@
 	set category = "Object"
 	set src in oview(1)
 
+	if(usr.stat || usr.restrained() || !usr.canmove)
+		return
+
 	if( state != 4 )
 		usr << "The washing machine cannot run in this state."
 		return
@@ -131,6 +134,7 @@
 					J.item_color = wash_color
 					J.name = new_jumpsuit_name
 					J.desc = new_desc
+					J.suit_color = wash_color
 			if(new_glove_icon_state && new_glove_item_state && new_glove_name)
 				for(var/obj/item/clothing/gloves/G in contents)
 					//world << "DEBUG: YUP! FOUND IT!"
@@ -145,7 +149,7 @@
 					if (S.chained == 1)
 						S.chained = 0
 						S.slowdown = SHOES_SLOWDOWN
-						new /obj/item/weapon/handcuffs( src )
+						new /obj/item/weapon/restraints/handcuffs( src )
 					S.icon_state = new_shoe_icon_state
 					S.item_color = wash_color
 					S.name = new_shoe_name

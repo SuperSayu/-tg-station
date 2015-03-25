@@ -39,6 +39,9 @@
 	else if(config.protect_captain_from_antagonist)
 		restricted_jobs += "Captain"
 
+	if(config.protect_assistant_from_antagonist)
+		restricted_jobs += "Assistant"
+
 	var/num_traitors = 1
 
 	if(config.traitor_scaling_coeff)

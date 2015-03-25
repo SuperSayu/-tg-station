@@ -488,11 +488,10 @@
 	if (healths)
 		if (stat != 2)
 			switch(health)
-/*
 				if(100 to INFINITY)
-					healths.icon_state = "health10"
+					healths.icon_state = "health0"
 				if(80 to 100)
-					healths.icon_state = "health8"
+					healths.icon_state = "health1"
 				if(60 to 80)
 					healths.icon_state = "health2"
 				if(40 to 60)
@@ -503,7 +502,10 @@
 					healths.icon_state = "health5"
 				else
 					healths.icon_state = "health6"
-*/
+		else
+			healths.icon_state = "health7"
+
+/*
 				if(100 to INFINITY)		healths.icon_state = "health10"
 				if(90 to 100)			healths.icon_state = "health9"
 				if(80 to 90)			healths.icon_state = "health8"
@@ -515,9 +517,10 @@
 				if(15 to 30)			healths.icon_state = "health2"
 				if(0 to 15)				healths.icon_state = "health1"
 				else					healths.icon_state = "health0"
+
 		else
 			healths.icon_state = "dead"
-
+*/
 
 	if(pressure)
 		pressure.icon_state = "pressure[pressure_alert]"

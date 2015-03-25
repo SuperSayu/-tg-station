@@ -14,6 +14,7 @@ var/list/admin_verbs_default = list(
 	/client/proc/investigate_show,		/*various admintools for investigation. Such as a singulo grief-log*/
 	/client/proc/secrets,
 	/client/proc/reload_admins,
+	/client/proc/reestablish_db_connection,/*reattempt a connection to the database*/
 	/client/proc/cmd_admin_pm_context,	/*right-click adminPM interface*/
 	/client/proc/cmd_admin_pm_panel		/*admin-pm list*/
 	)
@@ -56,7 +57,8 @@ var/list/admin_verbs_admin = list(
 	/client/proc/cmd_admin_direct_narrate,	/*send text directly to a player with no padding. Useful for narratives and fluff-text*/
 	/client/proc/cmd_admin_world_narrate,	/*sends text to all players with no padding*/
 	/client/proc/cmd_admin_create_centcom_report,
-	/client/proc/check_words			/*displays cult-words*/
+	/client/proc/check_words,			/*displays cult-words*/
+	/client/proc/reset_all_tcs			/*resets all telecomms scripts*/
 	)
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -185,7 +187,9 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/cmd_debug_del_all,
 	/client/proc/enable_debug_verbs,
 	/proc/possess,
-	/proc/release
+	/proc/release,
+	/client/proc/reload_admins,
+	/client/proc/reset_all_tcs
 	)
 
 /client/proc/add_admin_verbs()
@@ -393,7 +397,7 @@ var/list/admin_verbs_hideable = list(
 				new_key = copytext(new_key, 1, 26)
 			holder.fakekey = new_key
 		log_admin("[key_name(usr)] has turned stealth mode [holder.fakekey ? "ON" : "OFF"]")
-		message_admins("[key_name_admin(usr)] has turned stealth mode [holder.fakekey ? "ON" : "OFF"]", 1)
+		message_admins("[key_name_admin(usr)] has turned stealth mode [holder.fakekey ? "ON" : "OFF"]")
 	feedback_add_details("admin_verb","SM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/drop_bomb()
@@ -432,13 +436,13 @@ var/list/admin_verbs_hideable = list(
 		return
 	feedback_add_details("admin_verb","GS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] gave [key_name(T)] the spell [S].")
-	message_admins("<span class='adminnotice'>[key_name_admin(usr)] gave [key_name(T)] the spell [S].</span>", 1)
+	message_admins("<span class='adminnotice'>[key_name_admin(usr)] gave [key_name(T)] the spell [S].</span>")
 
 	if(T.mind)
 		T.mind.spell_list += new S(T)
 	else
 		T.mob_spell_list += new S(T)
-		message_admins("<span class='danger'>Spells given to mindless mobs will not be transferred in mindswap or cloning!</span>", 1)
+		message_admins("<span class='danger'>Spells given to mindless mobs will not be transferred in mindswap or cloning!</span>")
 
 
 /client/proc/give_disease(mob/T as mob in mob_list)
@@ -450,11 +454,11 @@ var/list/admin_verbs_hideable = list(
 	T.contract_disease(new D, 1)
 	feedback_add_details("admin_verb","GD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] gave [key_name(T)] the disease [D].")
-	message_admins("<span class='adminnotice'>[key_name_admin(usr)] gave [key_name(T)] the disease [D].</span>", 1)
+	message_admins("<span class='adminnotice'>[key_name_admin(usr)] gave [key_name(T)] the disease [D].</span>")
 
 /client/proc/object_say(var/obj/O in world)
 	set category = "Special Verbs"
-	set name = "Object Say"
+	set name = "OSay"
 	set desc = "Makes an object say something."
 	var/message = input(usr, "What do you want the message to be?", "Make Sound") as text | null
 	if(!message)
@@ -464,9 +468,8 @@ var/list/admin_verbs_hideable = list(
 	O.say(message)
 	O.languages = templanguages
 	log_admin("[key_name(usr)] made [O] at [O.x], [O.y], [O.z] say \"[message]\"")
-	message_admins("<span class='adminnotice'>[key_name_admin(usr)] made [O] at [O.x], [O.y], [O.z]. say \"[message]\"</span>", 1)
+	message_admins("<span class='adminnotice'>[key_name_admin(usr)] made [O] at [O.x], [O.y], [O.z]. say \"[message]\"</span>")
 	feedback_add_details("admin_verb","OS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
 /client/proc/togglebuildmodeself()
 	set name = "Toggle Build Mode Self"
 	set category = "Special Verbs"
@@ -486,7 +489,7 @@ var/list/admin_verbs_hideable = list(
 		usr << "<b>Disabled air processing.</b>"
 	feedback_add_details("admin_verb","KA") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] used 'kill air'.")
-	message_admins("<span class='adminnotice'>[key_name_admin(usr)] used 'kill air'.</span>", 1)
+	message_admins("<span class='adminnotice'>[key_name_admin(usr)] used 'kill air'.</span>")
 
 /client/proc/deadmin_self()
 	set name = "De-admin self"
@@ -495,7 +498,7 @@ var/list/admin_verbs_hideable = list(
 	if(holder)
 		if(alert("Confirm self-deadmin for the round? You can't re-admin yourself without someont promoting you.",,"Yes","No") == "Yes")
 			log_admin("[src] deadmined themself.")
-			message_admins("[src] deadmined themself.", 1)
+			message_admins("[src] deadmined themself.")
 			deadmin()
 			src << "<span class='interface'>You are now a normal player.</span>"
 	feedback_add_details("admin_verb","DAS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!

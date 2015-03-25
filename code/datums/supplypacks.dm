@@ -1101,6 +1101,13 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	cost = 10
 	containername = "replacement lights"
 
+/datum/supply_packs/misc/noslipfloor
+	name = "High-traction floor tiles"
+	contains = list(/obj/item/stack/tile/noslip)
+	amount = 20
+	cost = 20
+	containername = "high-traction floor tiles"
+
 
 ///////////// Costumes
 
@@ -1167,7 +1174,8 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 /datum/supply_packs/misc/randomised/contraband
 	num_contained = 5
 	contains = list(/obj/item/weapon/contraband/poster,
-					/obj/item/weapon/storage/fancy/cigarettes/dromedaryco)
+					/obj/item/weapon/storage/fancy/cigarettes/dromedaryco,
+					/obj/item/weapon/storage/fancy/cigarettes/cigpack_shadyjims)
 	name = "Contraband crate"
 	cost = 30
 	containername = "crate"	//let's keep it subtle, eh?

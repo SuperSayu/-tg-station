@@ -237,7 +237,7 @@
 					/obj/item/clothing/mask/facehugger) // NOT CLOTHING AT ALLLLL
 	whitelist = list(/obj/item/clothing,/obj/item/weapon/storage/belt,/obj/item/weapon/storage/backpack,
 					/obj/item/device/radio/headset,/obj/item/device/pda,/obj/item/weapon/card/id,/obj/item/weapon/tank,
-					/obj/item/weapon/handcuffs, /obj/item/weapon/legcuffs)
+					/obj/item/weapon/restraints/handcuffs, /obj/item/weapon/restraints/legcuffs)
 
 /datum/cargoprofile/trash
 	name = "Trash"
@@ -247,7 +247,7 @@
 	whitelist = list(/obj/item/trash,/obj/item/toy,/obj/item/weapon/ectoplasm,/obj/item/weapon/grown/bananapeel,/obj/item/weapon/broken_bottle,/obj/item/weapon/bikehorn,
 					/obj/item/weapon/cigbutt,/obj/item/weapon/contraband,/obj/item/weapon/grown/corncob,/obj/item/weapon/paper,/obj/item/weapon/shard,
 					/obj/item/weapon/sord,/obj/item/weapon/photo,/obj/item/weapon/folder,
-					/obj/item/blueprints,/obj/item/weapon/contraband,/obj/item/weapon/kitchen,/obj/item/weapon/book,/obj/item/clothing/mask/facehugger)
+					/obj/item/areaeditor/blueprints,/obj/item/weapon/contraband,/obj/item/weapon/kitchen,/obj/item/weapon/book,/obj/item/clothing/mask/facehugger)
 
 /datum/cargoprofile/weapons
 	name = "Weapons & Illegals"
@@ -267,7 +267,7 @@
 					/obj/item/weapon/aiModule,/obj/item/weapon/airalarm_electronics,/obj/item/weapon/airlock_electronics,/obj/item/weapon/circular_saw,
 					/obj/item/weapon/cloaking_device,/obj/item/weapon/crowbar,/obj/item/weapon/disk,/obj/item/weapon/firealarm_electronics,/obj/item/weapon/hand_tele,
 					/obj/item/weapon/hand_labeler,/obj/item/weapon/hemostat,/obj/item/weapon/mop,/obj/item/weapon/locator,/obj/item/weapon/minihoe,
-					/obj/item/weapon/packageWrap,/obj/item/weapon/paint,/obj/item/weapon/pen,/obj/item/weapon/pickaxe,/obj/item/weapon/pinpointer,
+					/obj/item/stack/packageWrap,/obj/item/weapon/paint,/obj/item/weapon/pen,/obj/item/weapon/pickaxe,/obj/item/weapon/pinpointer,
 					/obj/item/weapon/rcd,/obj/item/weapon/rcd_ammo,/obj/item/weapon/retractor,/obj/item/weapon/rsf,/obj/item/weapon/rsp,/obj/item/weapon/scalpel,
 					/obj/item/weapon/screwdriver,/obj/item/weapon/shovel,/obj/item/weapon/soap,/obj/item/weapon/stamp,/obj/item/weapon/weldingtool,
 					/obj/item/weapon/wirecutters,/obj/item/weapon/wrench,/obj/item/weapon/extinguisher)

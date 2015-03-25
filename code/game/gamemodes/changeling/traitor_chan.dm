@@ -28,6 +28,9 @@
 	else if(config.protect_captain_from_antagonist)
 		restricted_jobs += "Captain"
 
+	if(config.protect_assistant_from_antagonist)
+		restricted_jobs += "Assistant"
+
 	var/list/datum/mind/possible_changelings = get_players_for_role(BE_CHANGELING)
 	var/list/possible_traitors = get_players_for_role(BE_TRAITOR)
 

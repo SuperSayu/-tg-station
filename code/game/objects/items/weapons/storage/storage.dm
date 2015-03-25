@@ -281,9 +281,9 @@
 				if(M == usr)
 					usr << "<span class='notice'>You put [W] [preposition]to [src].</span>"
 				else if(in_range(M, usr)) //If someone is standing close enough, they can tell what it is...
-					M.show_message("<span class='notice'>[usr] puts [W] [preposition]to [src].</span>")
+					M.show_message("<span class='notice'>[usr] puts [W] [preposition]to [src].</span>", 1)
 				else if(W && W.w_class >= 3.0) //Otherwise they can only see large or normal items from a distance...
-					M.show_message("<span class='notice'>[usr] puts [W] [preposition]to [src].</span>")
+					M.show_message("<span class='notice'>[usr] puts [W] [preposition]to [src].</span>", 1)
 
 		orient2hud(usr)
 		if(usr.s_active)
@@ -377,6 +377,9 @@
 	set name = "Switch Gathering Method"
 	set category = "Object"
 
+	if(usr.stat || !usr.canmove || usr.restrained())
+		return
+
 	collection_mode = (collection_mode+1)%3
 	switch (collection_mode)
 		if(2)
@@ -391,7 +394,7 @@
 	set name = "Empty Contents"
 	set category = "Object"
 
-	if((!ishuman(usr) && (loc != usr)) || usr.stat || usr.restrained())
+	if((!ishuman(usr) && (loc != usr)) || usr.stat || usr.restrained() ||!usr.canmove)
 		return
 
 	do_quick_empty()

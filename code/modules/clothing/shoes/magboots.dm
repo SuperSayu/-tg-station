@@ -6,12 +6,16 @@
 	var/magpulse = 0
 	var/slowdown_active = 2
 	action_button_name = "Toggle Magboots"
+	strip_delay = 70
+	put_on_delay = 70
 
 
 /obj/item/clothing/shoes/magboots/verb/toggle()
 	set name = "Toggle Magboots"
 	set category = "Object"
 	set src in usr
+	if(!can_use(usr))
+		return
 	attack_self(usr)
 
 

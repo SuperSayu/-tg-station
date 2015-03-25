@@ -408,14 +408,14 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 							else
 								new_item.loc = linked_lathe.loc*/
 							for(var/i = 0, i<amount, i++)
-								var/obj/new_item = new P(src)
+								var/obj/item/new_item = new P(src)
 								if( new_item.type == /obj/item/weapon/storage/backpack/holding )
 									new_item.investigate_log("built by [key]","singulo")
 								new_item.reliability = R
 								new_item.m_amt /= coeff
 								new_item.g_amt /= coeff
 								if(linked_lathe.hacked)
-									R = max((reliability / 2), 0)
+									R = max((new_item.reliability/2), 0)
 								if(O)
 									var/obj/item/weapon/storage/lockbox/L = new/obj/item/weapon/storage/lockbox(linked_lathe.loc)
 									new_item.loc = L
@@ -471,7 +471,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					var/R = being_built.reliability
 					spawn(16)
 						if(g2g)
-							var/obj/new_item = new P(src)
+							var/obj/item/new_item = new P(src)
 							new_item.reliability = R
 							new_item.loc = linked_imprinter.loc
 						linked_imprinter.busy = 0

@@ -6,7 +6,9 @@
 	icon_state = "chef"
 	item_state = "chef"
 	desc = "The commander in chef's head wear."
-	loose = 35
+	loose = 10
+	strip_delay = 10
+	put_on_delay = 10
 
 //Captain
 /obj/item/clothing/head/caphat
@@ -17,6 +19,7 @@
 	flags_inv = 0
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	loose = 0
+	strip_delay = 60
 
 //Captain: This is no longer space-worthy
 /obj/item/clothing/head/caphat/parade
@@ -66,30 +69,29 @@
 //Security
 
 /obj/item/clothing/head/HoS
-	name = "head of security hat"
-	desc = "The robust hat of the Head of Security. For showing the officers who's in charge."
+	name = "head of security cap"
+	desc = "The robust standard-issue cap of the Head of Security. For showing the officers who's in charge."
 	icon_state = "hoscap"
 	armor = list(melee = 80, bullet = 60, laser = 50, energy = 10, bomb = 25, bio = 10, rad = 0)
 	flags = 0
 	flags_inv = HIDEEARS
 	loose = 0
+	strip_delay = 80
 
-/obj/item/clothing/head/HoS/dermal
-	name = "Dermal Armor Patch"
-	desc = "An armored implant that automatically integrates just below the scalp for robust protection without sacrificing style."
-	icon_state = "dermal"
-	item_state = "dermal"
-	flags_inv = 0
-	loose = 0
+/obj/item/clothing/head/HoS/drill
+	name = "head of security drill hat"
+	desc = "A robust drill hat for the Head of Security. For keeping the officers in line."
+	icon_state = "hosdrill"
 
 /obj/item/clothing/head/warden
-	name = "warden's hat"
+	name = "warden's police hat"
 	desc = "It's a special armored hat issued to the Warden of a security force. Protects the head from impacts."
 	icon_state = "policehelm"
 	armor = list(melee = 60, bullet = 5, laser = 25, energy = 10, bomb = 25, bio = 0, rad = 0)
 	flags = 0
 	flags_inv = HIDEEARS
 	loose = 0
+	strip_delay = 60
 
 /obj/item/clothing/head/beret/sec
 	name = "security beret"

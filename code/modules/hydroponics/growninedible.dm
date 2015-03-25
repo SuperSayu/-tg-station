@@ -268,10 +268,21 @@
 		if(prob(33))
 			step_rand(src)
 
+		return 1
+
+
+/obj/item/weapon/grown/bananapeel/specialpeel     //used by /obj/item/clothing/shoes/clown_shoes/banana_shoes
+	name = "synthesized banana peel"
+	desc = "A synthetic banana peel."
+
+/obj/item/weapon/grown/bananapeel/specialpeel/Crossed(AM)
+	if(..())	qdel(src)
+
 /obj/item/weapon/grown/bananapeel/wizard
 	name = "magical banana peel"
 	desc = "Far superior to the genetically enhanced version"
 	var/walk_delay = 2
+	potency = 10
 
 /obj/item/weapon/grown/bananapeel/wizard/New()
 	..()
@@ -281,32 +292,11 @@
 		if(src)
 			qdel(src)
 
-/obj/item/weapon/grown/bananapeel/wizard/Crossed(AM as mob|obj)
-	if (istype(AM, /mob/living/carbon))
-		var/mob/M =	AM
-
-		if(HULK in M.mutations)
-			M << "You squash [src], and it disintegrates with a \i [magic_soundfx()]."
-			del src
-			return
-
-		if (istype(M, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = M
-
-			if(H.shoes && H.shoes.flags&NOSLIP)
-				return
-
-		M.stop_pulling()
-		M << "\blue You slipped on the [name]! It disintegrates with a \i [magic_soundfx()]"
-		playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
-		M.Stun(2)
-		M.Weaken(1)
-		walk_rand(new src.type(loc),walk_delay)
-		while(prob(15))
-			walk_rand(new src.type(loc),walk_delay)
-		del src
-		return
-
+/obj/item/weapon/grown/bananapeel/specialpeel/wizard/Crossed(AM)
+	if(..())
+		var/turf/T = get_turf(src.loc)
+		T.visible_message("<span class='notice'>The [name] disintegrates with a \i [magic_soundfx()]</span>")
+		qdel(src)
 
 /obj/item/weapon/grown/corncob
 	name = "corn cob"

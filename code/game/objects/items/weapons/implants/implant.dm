@@ -20,6 +20,7 @@
 /obj/item/weapon/implant/ui_action_click()
 	activate("action_button")
 
+
 //What does the implant do upon injection?
 //return 0 if the implant fails (ex. Revhead and loyalty implant.)
 //return 1 if the implant succeeds (ex. Nonrevhead and loyalty implant.)
@@ -167,11 +168,12 @@
 
 /obj/item/weapon/implant/loyalty/implanted(mob/target)
 	..()
-	if(target.mind in ticker.mode.head_revolutionaries)
+	if((target.mind in ticker.mode.head_revolutionaries) || (target.mind in ticker.mode.A_bosses) || (target.mind in ticker.mode.B_bosses))
 		target.visible_message("<span class='warning'>[target] seems to resist the implant!</span>", "<span class='warning'>You feel the corporate tendrils of Nanotrasen try to invade your mind!</span>")
 		return 0
-	if(target.mind in ticker.mode.revolutionaries)
+	if((target.mind in ticker.mode.revolutionaries) || (target.mind in ticker.mode.A_gangsters) || (target.mind in ticker.mode.B_gangsters))
 		ticker.mode.remove_revolutionary(target.mind)
+		ticker.mode.remove_gangster(target.mind, exclude_bosses=0)
 	target << "<span class='notice'>You feel a surge of loyalty towards Nanotrasen.</span>"
 	return 1
 

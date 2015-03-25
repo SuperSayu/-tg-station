@@ -46,7 +46,7 @@
 /obj/structure/alien/resin/wall
 	name = "resin wall"
 	desc = "Thick resin solidified into a wall."
-	icon_state = "resinwall"	//same as resin, but consistency ho!
+	icon_state = "wall0"	//same as resin, but consistency ho!
 	resintype = "wall"
 
 /obj/structure/alien/resin/wall/New()
@@ -59,7 +59,7 @@
 /obj/structure/alien/resin/membrane
 	name = "resin membrane"
 	desc = "Resin just thin enough to let light pass through."
-	icon_state = "resinmembrane"
+	icon_state = "membrane0"
 	opacity = 0
 	health = 120
 	resintype = "membrane"
@@ -109,8 +109,9 @@
 	healthcheck()
 
 
-/obj/structure/alien/resin/attack_hand(mob/user)
+/obj/structure/alien/resin/attack_hand(mob/living/user)
 	if(HULK in user.mutations)
+		user.do_attack_animation(src)
 		user.visible_message("<span class='danger'>[user] destroys [src]!</span>")
 		health = 0
 		healthcheck()
@@ -120,8 +121,9 @@
 	return attack_hand(user)
 
 
-/obj/structure/alien/resin/attack_alien(mob/user)
+/obj/structure/alien/resin/attack_alien(mob/living/user)
 	user.changeNext_move(CLICK_CD_MELEE)
+	user.do_attack_animation(src)
 	if(islarva(user))
 		return
 	user.visible_message("<span class='danger'>[user] claws at the resin!</span>")
@@ -132,7 +134,7 @@
 	healthcheck()
 
 
-/obj/structure/alien/resin/attackby(obj/item/I, mob/user)
+/obj/structure/alien/resin/attackby(obj/item/I, mob/living/user)
 	user.changeNext_move(CLICK_CD_MELEE)
 	health -= I.force
 	playsound(loc, 'sound/effects/attackblob.ogg', 100, 1)
@@ -140,8 +142,7 @@
 	..()
 
 
-/obj/structure/alien/resin/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
-	if(air_group) return 0
+/obj/structure/alien/resin/CanPass(atom/movable/mover, turf/target, height=0)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return !opacity
 	return !density

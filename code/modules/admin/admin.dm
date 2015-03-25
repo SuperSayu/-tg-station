@@ -150,7 +150,7 @@ var/global/floorIsLava = 0
 	body += "<br>"
 	body += "</body></html>"
 
-	usr << browse(body, "window=adminplayeropts;size=550x515")
+	usr << browse(body, "window=adminplayeropts-\ref[M];size=550x515")
 	feedback_add_details("admin_verb","SPP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 
@@ -252,6 +252,10 @@ var/global/floorIsLava = 0
 							usr << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
 							dat+="<img src='tmp_photo[i].png' width = '180'><BR><BR>"
 						dat+="<FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
+						dat+="[MESSAGE.comments.len] comment[MESSAGE.comments.len > 1 ? "s" : ""]:<br>"
+						for(var/datum/feed_comment/comment in MESSAGE.comments)
+							dat+="[comment.body]<br><font size=1>[comment.author] [comment.time_stamp]</font><br>"
+						dat+="<br>"
 			dat+="<BR><HR><A href='?src=\ref[src];ac_refresh=1'>Refresh</A>"
 			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[1]'>Back</A>"
 		if(10)
@@ -287,6 +291,9 @@ var/global/floorIsLava = 0
 				for(var/datum/feed_message/MESSAGE in src.admincaster_feed_channel.messages)
 					dat+="-[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
 					dat+="<FONT SIZE=2><A href='?src=\ref[src];ac_censor_channel_story_body=\ref[MESSAGE]'>[(MESSAGE.body == "\[REDACTED\]") ? ("Undo story censorship") : ("Censor story")]</A>  -  <A href='?src=\ref[src];ac_censor_channel_story_author=\ref[MESSAGE]'>[(MESSAGE.author == "\[REDACTED\]") ? ("Undo Author Censorship") : ("Censor message Author")]</A></FONT><BR>"
+					dat+="[MESSAGE.comments.len] comment[MESSAGE.comments.len > 1 ? "s" : ""]: <a href='?src=\ref[src];ac_lock_comment=\ref[MESSAGE]'>[MESSAGE.locked ? "Unlock" : "Lock"]</a><br>"
+					for(var/datum/feed_comment/comment in MESSAGE.comments)
+						dat+="[comment.body] <a href='?src=\ref[src];ac_del_comment=\ref[comment];ac_del_comment_msg=\ref[MESSAGE]'>X</a><br><font size=1>[comment.author] [comment.time_stamp]</font><br>"
 			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[10]'>Back</A>"
 		if(13)
 			dat+="<B>[src.admincaster_feed_channel.channel_name]: </B><FONT SIZE=1>\[ created by: <FONT COLOR='maroon'>[src.admincaster_feed_channel.author]</FONT> \]</FONT><BR>"
@@ -300,7 +307,6 @@ var/global/floorIsLava = 0
 				else
 					for(var/datum/feed_message/MESSAGE in src.admincaster_feed_channel.messages)
 						dat+="-[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
-
 			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[11]'>Back</A>"
 		if(14)
 			dat+="<B>Wanted Issue Handler:</B>"
@@ -547,7 +553,7 @@ var/global/floorIsLava = 0
 	set name="Toggle OOC"
 	toggle_ooc()
 	log_admin("[key_name(usr)] toggled OOC.")
-	message_admins("[key_name_admin(usr)] toggled OOC.", 1)
+	message_admins("[key_name_admin(usr)] toggled OOC.")
 	feedback_add_details("admin_verb","TOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /datum/admins/proc/toggleoocdead()
@@ -557,7 +563,7 @@ var/global/floorIsLava = 0
 	dooc_allowed = !( dooc_allowed )
 
 	log_admin("[key_name(usr)] toggled OOC.")
-	message_admins("[key_name_admin(usr)] toggled Dead OOC.", 1)
+	message_admins("[key_name_admin(usr)] toggled Dead OOC.")
 	feedback_add_details("admin_verb","TDOOC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 /*
 /datum/admins/proc/toggletraitorscaling()
@@ -566,7 +572,7 @@ var/global/floorIsLava = 0
 	set name="Toggle Traitor Scaling"
 	traitor_scaling = !traitor_scaling
 	log_admin("[key_name(usr)] toggled Traitor Scaling to [traitor_scaling].")
-	message_admins("[key_name_admin(usr)] toggled Traitor Scaling [traitor_scaling ? "on" : "off"].", 1)
+	message_admins("[key_name_admin(usr)] toggled Traitor Scaling [traitor_scaling ? "on" : "off"].")
 	feedback_add_details("admin_verb","TTS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 */
 /datum/admins/proc/startnow()
@@ -596,7 +602,7 @@ var/global/floorIsLava = 0
 	else
 		world << "<B>New players may now enter the game.</B>"
 	log_admin("[key_name(usr)] toggled new player game entering.")
-	message_admins("<span class='adminnotice'>[key_name_admin(usr)] toggled new player game entering.</span>", 1)
+	message_admins("<span class='adminnotice'>[key_name_admin(usr)] toggled new player game entering.</span>")
 	world.update_status()
 	feedback_add_details("admin_verb","TE") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -622,7 +628,7 @@ var/global/floorIsLava = 0
 		world << "<B>You may now respawn.</B>"
 	else
 		world << "<B>You may no longer respawn :(</B>"
-	message_admins("<span class='adminnotice'>[key_name_admin(usr)] toggled respawn to [abandon_allowed ? "On" : "Off"].</span>", 1)
+	message_admins("<span class='adminnotice'>[key_name_admin(usr)] toggled respawn to [abandon_allowed ? "On" : "Off"].</span>")
 	log_admin("[key_name(usr)] toggled respawn to [abandon_allowed ? "On" : "Off"].")
 	world.update_status()
 	feedback_add_details("admin_verb","TR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -665,7 +671,7 @@ var/global/floorIsLava = 0
 	set name = "Unprison"
 	if (M.z == 2)
 		M.loc = pick(latejoin)
-		message_admins("[key_name_admin(usr)] has unprisoned [key_name_admin(M)]", 1)
+		message_admins("[key_name_admin(usr)] has unprisoned [key_name_admin(M)]")
 		log_admin("[key_name(usr)] has unprisoned [key_name(M)]")
 	else
 		alert("[M.name] is not prisoned.")
@@ -750,7 +756,7 @@ var/global/floorIsLava = 0
 	else
 		world << "<B>The tinted_weldhelh has been disabled!</B>"
 	log_admin("[key_name(usr)] toggled tinted_weldhelh.")
-	message_admins("[key_name_admin(usr)] toggled tinted_weldhelh.", 1)
+	message_admins("[key_name_admin(usr)] toggled tinted_weldhelh.")
 	feedback_add_details("admin_verb","TTWH") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /datum/admins/proc/toggleguests()
@@ -763,7 +769,7 @@ var/global/floorIsLava = 0
 	else
 		world << "<B>Guests may now enter the game.</B>"
 	log_admin("[key_name(usr)] toggled guests game entering [guests_allowed?"":"dis"]allowed.")
-	message_admins("<span class='adminnotice'>[key_name_admin(usr)] toggled guests game entering [guests_allowed?"":"dis"]allowed.</span>", 1)
+	message_admins("<span class='adminnotice'>[key_name_admin(usr)] toggled guests game entering [guests_allowed?"":"dis"]allowed.</span>")
 	feedback_add_details("admin_verb","TGU") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/unjobban_panel()
@@ -795,25 +801,38 @@ var/global/floorIsLava = 0
 	if(!ai_number)
 		usr << "<b>No AIs located</b>" //Just so you know the thing is actually working and not just ignoring you.
 
-/datum/admins/proc/list_free_slots()
+/datum/admins/proc/manage_free_slots()
 	if(!check_rights())
 		return
-	var/dat = "<html><head><title>List Free Slots</title></head><body>"
+	var/dat = "<html><head><title>Manage Free Slots</title></head><body>"
 	var/count = 0
+
+	if(ticker && !ticker.mode)
+		alert(usr, "You cannot manage jobs before the round starts!")
+		return
 
 	if(job_master)
 		for(var/datum/job/job in job_master.occupations)
 			count++
 			var/J_title = html_encode(job.title)
+			var/J_opPos = html_encode(job.total_positions - (job.total_positions - job.current_positions))
 			var/J_totPos = html_encode(job.total_positions)
-			dat += "[J_title]: [J_totPos]<br>"
+			if(job.total_positions <= 0)
+				dat += "[J_title]: [J_opPos]"
+			else
+				dat += "[J_title]: [J_opPos]/[J_totPos]"
+			if(initial(job.total_positions) > 0)
+				dat += "   <A href='?src=\ref[src];addjobslot=[job.title]'>Add</A>  |  "
+				if(job.total_positions > job.current_positions)
+					dat += "<A href='?src=\ref[src];removejobslot=[job.title]'>Remove</A>"
+				else
+					dat += "Remove"
+			dat += "<br>"
 
 	dat += "</body>"
 	var/winheight = 100 + (count * 20)
 	winheight = min(winheight, 690)
 	usr << browse(dat, "window=players;size=316x[winheight]")
-
-
 
 //
 //

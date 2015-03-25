@@ -441,34 +441,34 @@
 
 // Holographic Items!
 
-/turf/simulated/floor/holofloor/
+/turf/simulated/floor/holofloor
 	thermal_conductivity = 0
 
 /turf/simulated/floor/holofloor/grass
 	gender = PLURAL
 	name = "lush grass"
 	icon_state = "grass1"
-	floor_tile = new/obj/item/stack/tile/grass
+	floor_tile = /obj/item/stack/tile/grass
 
-	New()
-		floor_tile.New() //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
-		icon_state = "grass[pick("1","2","3","4")]"
-		..()
-		spawn(4)
+/turf/simulated/floor/holofloor/grass/New()
+	..()
+	icon_state = "grass[pick("1","2","3","4")]"
+	spawn(1)
+		if(src)
 			update_icon()
-			for(var/direction in cardinal)
-				if(istype(get_step(src,direction),/turf/simulated/floor))
-					var/turf/simulated/floor/FF = get_step(src,direction)
-					FF.update_icon() //so siding get updated properly
+			fancy_update(type)
+
+
+
 /turf/simulated/floor/holofloor/asteroid
 	name = "Asteroid"
 	icon_state = "asteroid0"
 	floor_tile = new/obj/item/stack/tile/grass
 
-	New()
-		floor_tile.New() //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
-		icon_state = "asteroid[pick(0,1,2,3,4,5,6,7,8,9,10,11,12)]"
-		..()
+/turf/simulated/floor/holofloor/asteroid/New()
+	floor_tile = null //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
+	icon_state = "asteroid[pick(0,1,2,3,4,5,6,7,8,9,10,11,12)]"
+	..()
 
 /turf/simulated/floor/holofloor/fakespace
 	name = "Space"
@@ -476,10 +476,10 @@
 	icon_state = "0"
 	floor_tile = new/obj/item/stack/tile/grass
 
-	New()
-		floor_tile.New() //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
-		icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
-		..()
+/turf/simulated/floor/holofloor/fakespace/New()
+	floor_tile = null
+	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
+	..()
 
 /turf/simulated/floor/holofloor/hyperspace
 	name = "Hyperspace"
@@ -487,10 +487,10 @@
 	icon_state = "speedspace_eq_1"
 	floor_tile = new/obj/item/stack/tile/grass
 
-	New()
-		floor_tile.New() //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
-		src.icon_state = "speedspace_ew_[(x + 5*y + (y%2+1)*7)%15+1]"
-		..()
+/turf/simulated/floor/holofloor/hyperspace/New()
+	floor_tile = null
+	src.icon_state = "speedspace_ew_[(x + 5*y + (y%2+1)*7)%15+1]"
+	..()
 
 
 /turf/simulated/floor/holofloor/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -625,7 +625,7 @@
 		visible_message("<span class='warning'> [user] dunks [W] into the [src]!</span>", 3)
 		return
 
-/obj/structure/holohoop/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+/obj/structure/holohoop/CanPass(atom/movable/mover, turf/target, height=0)
 	if (istype(mover,/obj/item) && mover.throwing)
 		var/obj/item/I = mover
 		if(istype(I, /obj/item/projectile))
@@ -637,7 +637,7 @@
 			visible_message("<span class='danger'> \the [I] bounces off of \the [src]'s rim!</span>", 3)
 		return 0
 	else
-		return ..(mover, target, height, air_group)
+		return ..(mover, target, height)
 
 
 /obj/machinery/readybutton

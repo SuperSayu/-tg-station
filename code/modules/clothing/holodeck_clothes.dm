@@ -6,10 +6,10 @@
 	icon_state = "overalls"
 	item_state = "lb_suit"
 	item_color = "overalls"
+	can_adjust = 0
+	flags = HEAR
 
 	action_button_name = "Activate suit interface"
-	ui_action_click()
-		clothing_interface()
 
 	var/global/list/jumpsuit_choices = list("None")
 	var/obj/item/clothing/under/jumpsuit = null
@@ -29,14 +29,12 @@
 	var/obj/item/device/radio/off/mic = null
 	var/performing = 0 // when on, the owner's speech is copied into the theater-chat
 
-	var/global/list/forbidden = list(/obj/item/clothing/under/actorsuit, /obj/item/clothing/under/chameleon,/obj/item/clothing/under/chameleon/all,
+	var/global/list/forbidden = list(/obj/item/clothing/under/actorsuit, /obj/item/clothing/under/actorsuit/clown, /obj/item/clothing/under/actorsuit/mime, /obj/item/clothing/under/chameleon,/obj/item/clothing/under/chameleon/all,
 		/obj/item/clothing/mask/facehugger, /obj/item/clothing/mask/horsehead, /obj/item/clothing/suit/space/space_ninja, /obj/item/clothing/gloves/space_ninja,
 		/obj/item/clothing/head/helmet/space/space_ninja,/obj/item/clothing/mask/gas/voice/space_ninja, /obj/item/clothing/gloves/magic/shadow)
 
 /obj/item/clothing/under/actorsuit/New()
 	..()
-
-	flags |= HEAR
 
 	if(jumpsuit_choices.len == 1) // these are global lists, they are at null location for technical reasons
 		for(var/U in typesof(/obj/item/clothing/under) - forbidden)
@@ -60,12 +58,16 @@
 		for(var/U in typesof(/obj/item/clothing/glasses) - forbidden)
 			var/obj/item/clothing/C = new U
 			eye_choices += C
+
 	processing_objects.Add(src)
 
 	mic = new/obj/item/device/radio/off{frequency=1441}(src)
 	mic.icon = icon
 	mic.icon_state = icon_state
+
 	return
+
+
 
 /obj/item/clothing/under/actorsuit/emp_act(severity)
 	for(var/obj/item/clothing/C in list(suit,hat,glove,shoe,mask,eye))

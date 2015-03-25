@@ -14,6 +14,8 @@
 	var/wall_mounted = 0 //never solid (You can always pass over it)
 	var/health = 100
 	var/lastbang
+	var/max_mob_size = 1 //Biggest mob_size accepted by the container
+	var/mob_storage_capacity = 3 // how many human sized mob/living can fit together inside a closet.
 	var/storage_capacity = 30 //This is so that someone can't pack hundreds of items in a locker/crate
 							  //then open it in a populated area to crash clients.
 
@@ -25,8 +27,8 @@
 /obj/structure/closet/alter_health()
 	return get_turf(src)
 
-/obj/structure/closet/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
-	if(air_group || (height==0 || wall_mounted)) return 1
+/obj/structure/closet/CanPass(atom/movable/mover, turf/target, height=0)
+	if(height==0 || wall_mounted) return 1
 	return (!density)
 
 /obj/structure/closet/proc/can_open()
@@ -36,7 +38,7 @@
 
 /obj/structure/closet/proc/can_close()
 	for(var/obj/structure/closet/closet in get_turf(src))
-		if(closet != src)
+		if(closet != src && !closet.wall_mounted)
 			return 0
 	return 1
 
@@ -82,8 +84,14 @@
 
 	if(istype(AM, /mob/living))
 		var/mob/living/L = AM
-		if(L.buckled)
+		if(L.buckled || L.mob_size > max_mob_size) //buckled mobs and mobs too big for the container don't get inside closets.
 			return 0
+		if(L.mob_size > 0)
+			var/mobs_stored = 0
+			for(var/mob/living/M in contents)
+				mobs_stored++
+				if(mobs_stored >= mob_storage_capacity)
+					return 0
 		if(L.client)
 			L.client.perspective = EYE_PERSPECTIVE
 			L.client.eye = src
@@ -151,6 +159,7 @@
 
 /obj/structure/closet/attack_animal(mob/living/simple_animal/user as mob)
 	if(user.environment_smash)
+		user.do_attack_animation(src)
 		visible_message("<span class='danger'>[user] destroys the [src].</span>")
 		for(var/atom/movable/A as mob|obj in src)
 			A.loc = src.loc
@@ -259,7 +268,7 @@
 		if(user.drop_item())
 			W.Move(loc)
 
-	else if(istype(W, /obj/item/weapon/packageWrap))
+	else if(istype(W, /obj/item/stack/packageWrap))
 		return
 	else if(istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
@@ -374,8 +383,8 @@
 		return  //Door's open, not locked or welded, no point in resisting.
 
 	//okay, so the closet is either welded or locked... resist!!!
-	user.changeNext_move(100)
-	user.last_special = world.time + 100
+	user.changeNext_move(CLICK_CD_BREAKOUT)
+	user.last_special = world.time + CLICK_CD_BREAKOUT
 	user << "<span class='notice'>You lean on the back of [src] and start pushing the door open. (this will take about [breakout_time] minutes.)</span>"
 	for(var/mob/O in viewers(src))
 		O << "<span class='warning'>[src] begins to shake violently!</span>"
@@ -391,6 +400,9 @@
 		visible_message("<span class='danger'>[user] successfully broke out of [src]!</span>")
 		user << "<span class='notice'>You successfully break out of [src]!</span>"
 		open()
+	else
+		user << "<span class='warning'>You fail to break out of [src]!</span>"
+
 /obj/structure/closet/fire_act(air,temp,volume)
 	if(prob(1))
 		del src
