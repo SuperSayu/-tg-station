@@ -1044,9 +1044,9 @@
 						src = null
 						M = H.monkeyize()
 						src = M.mind
-						current.ForceContractDisease(new /datum/disease/transformation/jungle_fever)
+						current.contract_disease(new /datum/disease/transformation/jungle_fever,1,0)
 					else if (istype(M))
-						current.ForceContractDisease(new /datum/disease/transformation/jungle_fever)
+						current.contract_disease(new /datum/disease/transformation/jungle_fever,1,0)
 			if("human")
 				if (check_rights(R_ADMIN, 0))
 					var/mob/living/carbon/human/H = current

@@ -63,7 +63,7 @@
 		ape_infectees += carriermind
 
 		var/datum/disease/D = new /datum/disease/transformation/jungle_fever
-		D.visibility_flags = HIDDEN_SCANNER|HIDDEN_PANDEMIC
+		D.hidden = list(1,1)
 		D.holder = carriermind.current
 		D.affected_mob = carriermind.current
 		carriermind.current.viruses += D
@@ -72,7 +72,7 @@
 /datum/game_mode/monkey/proc/check_monkey_victory()
 	var/datum/disease/transformation/jungle_fever/compareDisease = new /datum/disease/transformation/jungle_fever
 	for(var/mob/living/carbon/monkey/M in living_mob_list)
-		if (M.HasDisease(compareDisease))
+		if (M.has_disease(compareDisease))
 			var/area/A = get_area(M)
 			if(is_type_in_list(A, centcom_areas))
 				escaped_monkeys++

@@ -94,14 +94,14 @@ datum/reagent/blood/reaction_mob(var/mob/M, var/method=TOUCH, var/volume)
 	src = null
 	if(self.data && self.data["viruses"])
 		for(var/datum/disease/D in self.data["viruses"])
-
-			if(D.spread_flags & SPECIAL || D.spread_flags & NON_CONTAGIOUS)
-				continue
+			//var/datum/disease/virus = new D.type(0, D, 1)
+			// We don't spread.
+			if(D.spread_type == SPECIAL || D.spread_type == NON_CONTAGIOUS) continue
 
 			if(method == TOUCH)
-				M.ContractDisease(D)
+				M.contract_disease(D)
 			else //injected
-				M.ForceContractDisease(D)
+				M.contract_disease(D, 1, 0)
 
 datum/reagent/blood/on_new(var/list/data)
 	if(istype(data))
@@ -349,7 +349,7 @@ datum/reagent/aslimetoxin
 
 datum/reagent/aslimetoxin/reaction_mob(var/mob/M, var/volume)
 	src = null
-	M.ForceContractDisease(new /datum/disease/transformation/slime(0))
+	M.contract_disease(new /datum/disease/transformation/slime(0),1)
 
 datum/reagent/inaprovaline
 	name = "Inaprovaline"
@@ -998,9 +998,9 @@ datum/reagent/adminordrazine/on_mob_life(var/mob/living/carbon/M as mob)
 	M.sleeping = 0
 	M.jitteriness = 0
 	for(var/datum/disease/D in M.viruses)
-		if(D.severity == NONTHREAT)
+		if(D.severity == D.non_threat)
 			continue
-		D.spread_text = "Remissive"
+		D.spread = "Remissive"
 		D.stage--
 		if(D.stage < 1)
 			D.cure()
@@ -1246,7 +1246,7 @@ datum/reagent/nanites
 datum/reagent/nanites/reaction_mob(var/mob/M, var/method=TOUCH, var/volume)
 	src = null
 	if( (prob(10) && method==TOUCH) || method==INGEST)
-		M.ForceContractDisease(new /datum/disease/transformation/robot(0))
+		M.contract_disease(new /datum/disease/transformation/robot(0),1)
 
 datum/reagent/xenomicrobes
 	name = "Xenomicrobes"
@@ -1258,7 +1258,7 @@ datum/reagent/xenomicrobes
 datum/reagent/xenomicrobes/reaction_mob(var/mob/M, var/method=TOUCH, var/volume)
 	src = null
 	if( (prob(10) && method==TOUCH) || method==INGEST)
-		M.ContractDisease(new /datum/disease/transformation/xeno(0))
+		M.contract_disease(new /datum/disease/transformation/xeno(0),1)
 
 datum/reagent/fluorosurfactant//foam precursor
 	name = "Fluorosurfactant"
