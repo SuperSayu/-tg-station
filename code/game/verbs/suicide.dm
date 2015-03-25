@@ -2,25 +2,12 @@
 
 /mob/living/carbon/human/verb/suicide()
 	set hidden = 1
-
-	if (stat == DEAD)
-		src << "You're already dead!"
+	if(!canSuicide())
 		return
-
-	if (!ticker)
-		src << "You can't commit suicide before the game starts!"
-		return
-
-	if (suiciding)
-		src << "You're already committing suicide! Be patient!"
-		return
-
 	var/confirm = alert("Are you sure you want to commit suicide?", "Confirm Suicide", "Yes", "No")
-
+	if(!canSuicide())
+		return
 	if(confirm == "Yes")
-		if(!canmove || restrained())	//just while I finish up the new 'fun' suiciding verb. This is to prevent metagaming via suicide
-			src << "You can't commit suicide whilst restrained! ((You can type Ghost instead however.))"
-			return
 		suiciding = 1
 		if(back)
 			if(istype(back,/obj/item/artifact))
@@ -79,21 +66,11 @@
 
 /mob/living/carbon/brain/verb/suicide()
 	set hidden = 1
-
-	if (stat == 2)
-		src << "You're already dead!"
+	if(!canSuicide())
 		return
-
-	if (!ticker)
-		src << "You can't commit suicide before the game starts!"
-		return
-
-	if (suiciding)
-		src << "You're already committing suicide! Be patient!"
-		return
-
 	var/confirm = alert("Are you sure you want to commit suicide?", "Confirm Suicide", "Yes", "No")
-
+	if(!canSuicide())
+		return
 	if(confirm == "Yes")
 		suiciding = 1
 		viewers(loc) << "<span class='userdanger'>[src]'s brain is growing dull and lifeless. It looks like it's lost the will to live.</span>"
@@ -103,25 +80,12 @@
 
 /mob/living/carbon/monkey/verb/suicide()
 	set hidden = 1
-
-	if (stat == 2)
-		src << "You're already dead!"
+	if(!canSuicide())
 		return
-
-	if (!ticker)
-		src << "You can't commit suicide before the game starts!"
-		return
-
-	if (suiciding)
-		src << "You're already committing suicide! Be patient!"
-		return
-
 	var/confirm = alert("Are you sure you want to commit suicide?", "Confirm Suicide", "Yes", "No")
-
+	if(!canSuicide())
+		return
 	if(confirm == "Yes")
-		if(!canmove || restrained())
-			src << "You can't commit suicide whilst restrained! ((You can type Ghost instead however.))"
-			return
 		suiciding = 1
 		//instead of killing them instantly, just put them at -175 health and let 'em gasp for a while
 		viewers(src) << "<span class='userdanger'>[src] is attempting to bite \his tongue. It looks like \he's trying to commit suicide.</span>"
@@ -130,17 +94,11 @@
 
 /mob/living/silicon/ai/verb/suicide()
 	set hidden = 1
-
-	if (stat == 2)
-		src << "You're already dead!"
+	if(!canSuicide())
 		return
-
-	if (suiciding)
-		src << "You're already committing suicide! Be patient!"
-		return
-
 	var/confirm = alert("Are you sure you want to commit suicide?", "Confirm Suicide", "Yes", "No")
-
+	if(!canSuicide())
+		return
 	if(confirm == "Yes")
 		suiciding = 1
 		viewers(src) << "<span class='userdanger'>[src] is powering down. It looks like \he's trying to commit suicide.</span>"
@@ -150,17 +108,11 @@
 
 /mob/living/silicon/robot/verb/suicide()
 	set hidden = 1
-
-	if (stat == 2)
-		src << "You're already dead!"
+	if(!canSuicide())
 		return
-
-	if (suiciding)
-		src << "You're already committing suicide! Be patient!"
-		return
-
 	var/confirm = alert("Are you sure you want to commit suicide?", "Confirm Suicide", "Yes", "No")
-
+	if(!canSuicide())
+		return
 	if(confirm == "Yes")
 		suiciding = 1
 		viewers(src) << "<span class='userdanger'>[src] is powering down. It looks like \he's trying to commit suicide.</span>"
@@ -183,17 +135,11 @@
 
 /mob/living/carbon/alien/humanoid/verb/suicide()
 	set hidden = 1
-
-	if (stat == 2)
-		src << "You're already dead!"
+	if(!canSuicide())
 		return
-
-	if (suiciding)
-		src << "You're already committing suicide! Be patient!"
-		return
-
 	var/confirm = alert("Are you sure you want to commit suicide?", "Confirm Suicide", "Yes", "No")
-
+	if(!canSuicide())
+		return
 	if(confirm == "Yes")
 		suiciding = 1
 		viewers(src) << "<span class='userdanger'>[src] is thrashing wildly! It looks like \he's trying to commit suicide.</span>"
@@ -204,16 +150,11 @@
 
 /mob/living/carbon/slime/verb/suicide()
 	set hidden = 1
-	if (stat == 2)
-		src << "You're already dead!"
+	if(!canSuicide())
 		return
-
-	if (suiciding)
-		src << "You're already committing suicide! Be patient!"
-		return
-
 	var/confirm = alert("Are you sure you want to commit suicide?", "Confirm Suicide", "Yes", "No")
-
+	if(!canSuicide())
+		return
 	if(confirm == "Yes")
 		suiciding = 1
 		setOxyLoss(100)
@@ -222,3 +163,20 @@
 		setCloneLoss(100)
 
 		updatehealth()
+
+/mob/living/proc/canSuicide()
+	if(stat == CONSCIOUS)
+		return 1
+	else if(stat == DEAD)
+		src << "You're already dead!"
+	else if(stat == UNCONSCIOUS)
+		src << "You need to be conscious to suicide"
+	return
+
+/mob/living/carbon/canSuicide()
+	if(!..())
+		return
+	if(!canmove || restrained())	//just while I finish up the new 'fun' suiciding verb. This is to prevent metagaming via suicide
+		src << "You can't commit suicide whilst restrained! ((You can type Ghost instead however.))"
+		return
+	return 1
