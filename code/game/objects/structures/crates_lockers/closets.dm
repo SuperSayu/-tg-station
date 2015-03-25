@@ -399,6 +399,9 @@
 		visible_message("<span class='danger'>[user] successfully broke out of [src]!</span>")
 		user << "<span class='notice'>You successfully break out of [src]!</span>"
 		open()
+	else
+		user << "<span class='warning'>You fail to break out of [src]!</span>"
+
 /obj/structure/closet/fire_act(air,temp,volume)
 	if(prob(1))
 		del src
