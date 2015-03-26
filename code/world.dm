@@ -83,8 +83,7 @@
 		make_mining_asteroid_secret()
 
 	for(var/m=0, m<max_monoliths)
-		if(make_mining_asteroid_secret(1) == 1)
-			m++
+		make_mining_asteroid_secret(1)
 
 	createRandomZlevel()
 
