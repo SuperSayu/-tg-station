@@ -79,12 +79,12 @@
 
 	setup_map_transitions()
 
+
 	for(var/i=0, i<max_secret_rooms, i++)
 		make_mining_asteroid_secret()
 
-	for(var/m=0, m<max_monoliths)
-		if(make_mining_asteroid_secret(1) == 1)
-			m++
+	for(var/m=0, m<max_monoliths, m++)
+		make_mining_asteroid_secret(1)
 
 	createRandomZlevel()
 
