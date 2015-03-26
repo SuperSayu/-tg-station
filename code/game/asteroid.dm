@@ -62,12 +62,14 @@ proc/make_mining_asteroid_secret(var/monolith = 0)
 	areapoints = x_size * y_size
 
 	if(monolith)
+		theme = "monolith"
 		walltypes = list(/turf/simulated/wall/cult=3,/turf/simulated/mineral/random/high_chance=1)
 		floortypes = list(/turf/simulated/floor/engine/cult)
 		treasureitems = list(/obj/structure/monolith=1)
 		fluffitems = list(/obj/effect/decal/remains/xeno=1,/obj/effect/decal/cleanable/xenoblood=3)
 		x_size = 5
 		y_size = 5
+		areapoints = 25
 	else
 		switch(pick(possiblethemes))//what kind of room is this gonna be?
 			if("organharvest")
@@ -174,7 +176,8 @@ proc/make_mining_asteroid_secret(var/monolith = 0)
 				treasureitems = list(/obj/item/weapon/spellbook=1,/obj/mecha/combat/marauder=1,/obj/machinery/wish_granter=1)
 				fluffitems = list(/obj/item/weapon/melee/energy/axe)*/
 
-	possiblethemes -= theme //once a theme is selected, it's out of the running!
+	if(!monolith)
+		possiblethemes -= theme //once a theme is selected, it's out of the running!
 	var/floor = pick(floortypes)
 
 	turfs = get_area_turfs(/area/mine/unexplored)
