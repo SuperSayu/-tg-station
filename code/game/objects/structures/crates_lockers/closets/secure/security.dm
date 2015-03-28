@@ -10,7 +10,6 @@
 
 /obj/structure/closet/secure_closet/captains/New()
 	..()
-	sleep(2)
 	if(prob(50))
 		new /obj/item/weapon/storage/backpack/captain(src)
 	else
@@ -39,7 +38,6 @@
 
 /obj/structure/closet/secure_closet/hop/New()
 	..()
-	sleep(2)
 	new /obj/item/clothing/under/rank/head_of_personnel(src)
 	new /obj/item/clothing/head/hopcap(src)
 	new /obj/item/weapon/cartridge/hop(src)
@@ -69,7 +67,6 @@
 
 /obj/structure/closet/secure_closet/hos/New()
 	..()
-	sleep(2)
 	new /obj/item/clothing/suit/armor/vest(src)
 	new /obj/item/clothing/under/hosformalfem(src)
 	new /obj/item/clothing/under/hosformalmale(src)
@@ -105,7 +102,6 @@
 
 /obj/structure/closet/secure_closet/warden/New()
 	..()
-	sleep(2)
 	new /obj/item/clothing/suit/armor/vest(src)
 	new /obj/item/clothing/under/rank/warden(src)
 	new /obj/item/clothing/suit/armor/vest/warden(src)
@@ -138,7 +134,6 @@
 
 /obj/structure/closet/secure_closet/security/New()
 	..()
-	sleep(2)
 	new /obj/item/clothing/suit/armor/vest(src)
 	new /obj/item/clothing/head/helmet(src)
 	new /obj/item/device/radio/headset/headset_sec/alt(src)
@@ -204,7 +199,6 @@
 
 /obj/structure/closet/secure_closet/detective/New()
 	..()
-	sleep(2)
 	new /obj/item/clothing/under/rank/det(src)
 	new /obj/item/clothing/suit/det_suit(src)
 	new /obj/item/clothing/head/det_hat(src)
@@ -242,7 +236,6 @@
 
 /obj/structure/closet/secure_closet/injection/New()
 	..()
-	sleep(2)
 	new /obj/item/weapon/reagent_containers/syringe/lethal/choral(src)
 	new /obj/item/weapon/reagent_containers/syringe/lethal/choral(src)
 	new /obj/item/weapon/reagent_containers/syringe/lethal/choral(src)
@@ -269,7 +262,6 @@
 
 /obj/structure/closet/secure_closet/courtroom/New()
 	..()
-	sleep(2)
 	new /obj/item/clothing/shoes/sneakers/brown(src)
 	new /obj/item/weapon/paper/Court (src)
 	new /obj/item/weapon/paper/Court (src)
