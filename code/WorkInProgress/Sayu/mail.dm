@@ -594,9 +594,9 @@
 	board_type = "machine"
 	origin_tech = "programming=2;bluespace=4"
 	frame_desc = "Requires 1 ansible, 1 amplifier, and 1 transmitter."
-	req_components = list(	"/obj/item/weapon/stock_parts/subspace/ansible" = 1,
-							"/obj/item/weapon/stock_parts/subspace/amplifier" = 1,
-							"/obj/item/weapon/stock_parts/subspace/transmitter" = 1)
+	req_components = list(	/obj/item/weapon/stock_parts/subspace/ansible = 1,
+							/obj/item/weapon/stock_parts/subspace/amplifier = 1,
+							/obj/item/weapon/stock_parts/subspace/transmitter = 1)
 
 datum/design/mail
 	name = "Circuit Design (Mail Station)"
