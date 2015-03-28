@@ -491,10 +491,10 @@
 	materials = list("$metal"=80000 , "$glass"=6000 , "$gold"= 5000)
 	category = "Cyborg Upgrade Modules"
 
-/datum/design/borg_upgrade_tasercooler
+/datum/design/borg_upgrade_disablercooler
 	id = "borg_upgrade_tasercooler"
 	build_type = MECHFAB
-	build_path = /obj/item/borg/upgrade/tasercooler
+	build_path = /obj/item/borg/upgrade/disablercooler
 	materials = list("$metal"=80000 , "$glass"=6000 , "$gold"= 2000, "$diamond" = 500)
 	category = "Cyborg Upgrade Modules"
 
