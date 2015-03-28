@@ -55,6 +55,8 @@
 	consume(user)
 	return 1
 
+/obj/machinery/singularity/Process_Spacemove() //The singularity stops drifting for no man!
+	return 0
 
 /obj/machinery/singularity/blob_act(severity)
 	return
@@ -90,17 +92,15 @@
 
 
 /obj/machinery/singularity/process()
-	if(current_size == 1)
-		decay_range = pick(0,0,0,1)
-	eat()
-	dissipate()
-	check_energy()
-
 	if(current_size >= STAGE_TWO)
 		move()
 		pulse()
 		if(prob(event_chance))//Chance for it to run a special event TODO:Come up with one or two more that fit
 			event()
+	eat()
+	dissipate()
+	check_energy()
+
 	return
 
 
@@ -279,10 +279,10 @@
 			dir2 = 1
 			dir3 = 2
 	var/turf/T2 = T
-	for(var/j = 1 to steps)
+	for(var/j = 1 to steps-1)
 		T2 = get_step(T2,dir2)
 		turfs.Add(T2)
-	for(var/k = 1 to steps)
+	for(var/k = 1 to steps-1)
 		T = get_step(T,dir3)
 		turfs.Add(T)
 	for(var/turf/T3 in turfs)
