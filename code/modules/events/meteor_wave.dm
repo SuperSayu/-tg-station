@@ -9,11 +9,26 @@
 	startWhen		= 6
 	endWhen			= 66
 	announceWhen	= 1
+	var/list/wave_type
+
+/datum/round_event/meteor_wave/New()
+	..()
+	random_wave_type()
+
+/datum/round_event/meteor_wave/proc/random_wave_type()
+	var/picked_wave = pickweight(list("normal" = 75, "threatening" = 20, "catastrophic" = 5))
+	switch(picked_wave)
+		if("normal")
+			wave_type = meteors_normal
+		if("threatening")
+			wave_type = meteors_threatening
+		if("catastrophic")
+			wave_type = meteors_catastrophic
 
 /datum/round_event/meteor_wave/announce()
 	priority_announce("Meteors have been detected on collision course with the station.", "Meteor Alert", 'sound/AI/meteors.ogg')
 
 
 /datum/round_event/meteor_wave/tick()
-	if(IsMultiple(activeFor, 6))
-		spawn_meteors(5, meteorsA) //meteor list types defined in gamemode/meteor/meteors.dm
+	if(IsMultiple(activeFor, 3))
+		spawn_meteors(5, wave_type) //meteor list types defined in gamemode/meteor/meteors.dm
