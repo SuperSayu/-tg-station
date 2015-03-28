@@ -497,17 +497,26 @@
 	return
 	// HOLOFLOOR DOES NOT GIVE A FUCK
 
-/obj/structure/table/holotable/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
-		var/obj/item/weapon/grab/G = W
-		if(G.state < GRAB_AGGRESSIVE)
-			user << "<span class='danger'> You need a better grip to do that!</span>"
-			return
-		G.affecting.loc = src.loc
-		G.affecting.Weaken(5)
-		visible_message("<span class='danger'> [G.assailant] puts [G.affecting] on the table.</span>")
-		qdel(W)
-		return
+/obj/structure/table/holotable
+	name = "table"
+	desc = "A square piece of metal standing on four metal legs. It can not move."
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "table"
+	holo = 1
+
+/obj/structure/table/holotable/wood
+	name = "wooden table"
+	icon_state = "woodtable"
+	desc = "A classic design in a classic material."
+	holo = 1
+
+/obj/structure/table/holotable/reinforced
+	name = "reinforced table"
+	desc = "A version of the four legged table with multiple layers of metal."
+	holo = 1
+
+/obj/structure/table/holotable/attack_hand(mob/user as mob)
+	return
 
 /obj/structure/holowindow
 	name = "reinforced window"
