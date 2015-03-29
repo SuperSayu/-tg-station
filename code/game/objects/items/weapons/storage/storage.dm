@@ -99,6 +99,11 @@
 	user.s_active = src
 
 
+/obj/item/weapon/storage/throw_at(atom/target, range, speed)
+	close_all()
+	return ..()
+
+
 /obj/item/weapon/storage/proc/hide_from(mob/user)
 	if(!user.client)
 		return

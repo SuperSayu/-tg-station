@@ -420,7 +420,6 @@
 		playsound(src.loc, "shatter", 50, 1)
 		new frame(src.loc)
 		new /obj/item/weapon/shard(src.loc)
-		new /obj/item/weapon/shard(src.loc)
 		qdel(src)
 	qdel(I)
 
@@ -437,7 +436,6 @@
 		add_logs(user, src, "climbed onto")
 		playsound(src.loc, "shatter", 50, 1)
 		new frame(src.loc)
-		new /obj/item/weapon/shard(src.loc)
 		new /obj/item/weapon/shard(src.loc)
 		qdel(src)
 		user.Weaken(5)
