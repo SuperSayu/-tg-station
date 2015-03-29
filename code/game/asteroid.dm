@@ -53,7 +53,7 @@ proc/make_mining_asteroid_secret(var/monolith = 0)
 	var/areapoints = 0
 	var/theme = "organharvest"
 	var/list/walltypes = list(/turf/simulated/wall=3, /turf/simulated/mineral/random=1)
-	var/list/floortypes = list(/turf/simulated/floor)
+	var/list/floortypes = list(/turf/simulated/floor/plasteel)
 	var/list/treasureitems = list()//good stuff. only 1 is created per room.
 	var/list/fluffitems = list()//lesser items, to help fill out the room and enhance the theme.
 
@@ -74,7 +74,7 @@ proc/make_mining_asteroid_secret(var/monolith = 0)
 		switch(pick(possiblethemes))//what kind of room is this gonna be?
 			if("organharvest")
 				walltypes = list(/turf/simulated/wall/r_wall=2,/turf/simulated/wall=2,/turf/simulated/mineral/random/high_chance=1)
-				floortypes = list(/turf/simulated/floor,/turf/simulated/floor/engine)
+				floortypes = list(/turf/simulated/floor/plasteel,/turf/simulated/floor/engine)
 				treasureitems = list(/obj/machinery/bot/medbot/mysterious=1, /obj/item/weapon/circular_saw=1, /obj/structure/closet/critter/cat=2)
 				fluffitems = list(/obj/effect/decal/cleanable/blood=5,/obj/item/organ/appendix=2,/obj/structure/closet/crate/freezer=2,
 								  /obj/structure/optable=1,/obj/item/weapon/scalpel=1,/obj/item/weapon/storage/firstaid/regular=3,
@@ -127,7 +127,7 @@ proc/make_mining_asteroid_secret(var/monolith = 0)
 
 			if("speakeasy")
 				theme = "speakeasy"
-				floortypes = list(/turf/simulated/floor,/turf/simulated/floor/wood)
+				floortypes = list(/turf/simulated/floor/plasteel,/turf/simulated/floor/wood)
 				treasureitems = list(/obj/item/weapon/melee/energy/sword/pirate=1,/obj/item/weapon/gun/projectile/revolver/doublebarrel=1,/obj/item/weapon/storage/backpack/satchel_flat=1,
 				/obj/machinery/reagentgrinder=2, /obj/machinery/computer/security/wooden_tv=4, /obj/machinery/vending/coffee=3)
 				fluffitems = list(/obj/structure/table/wood=2,/obj/structure/reagent_dispensers/beerkeg=1,/obj/item/weapon/spacecash/c500=4,
@@ -178,6 +178,7 @@ proc/make_mining_asteroid_secret(var/monolith = 0)
 
 	if(!monolith)
 		possiblethemes -= theme //once a theme is selected, it's out of the running!
+
 
 	var/floor = pick(floortypes)
 

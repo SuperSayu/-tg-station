@@ -278,8 +278,6 @@
 			else
 				path = get_path_to(loc, target, /turf/proc/AdjacentTurfsSpace, /turf/proc/Distance, 0, 30, id=botcard)
 
-			world << "A* path length : [path.len] to [target] at [target.x], [target.y], [target.z]"
-
 			if(!bot_move(target))
 				add_to_ignore(target)
 				oldtarget = target
@@ -380,7 +378,7 @@ view
 		spawn(50)
 			if(mode == BOT_REPAIRING)
 				if(autotile) //Build the floor and include a tile.
-					target_turf.ChangeTurf(/turf/simulated/floor)
+					target_turf.ChangeTurf(/turf/simulated/floor/plasteel)
 				else //Build a hull plating without a floor tile.
 					target_turf.ChangeTurf(/turf/simulated/floor/plating)
 				mode = BOT_IDLE
@@ -396,7 +394,7 @@ view
 			if(mode == BOT_REPAIRING)
 				F.broken = 0
 				F.burnt = 0
-				F.make_floor(/turf/simulated/floor)
+				F.ChangeTurf(/turf/simulated/floor/plasteel)
 				mode = BOT_IDLE
 				amount -= 1
 				updateicon()
