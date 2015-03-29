@@ -7123,7 +7123,7 @@
 "cGY" = (/obj/effect/step_trigger/thrower{affect_ghosts = 1; direction = 2; name = "thrower_throwdownside"; nostop = 1; stopper = 0; tiles = 0},/turf/space/transit/north/shuttlespace_ns14,/area/space)
 "cGZ" = (/obj/structure/showcase{desc = "A strange machine supposedly from another world. The Wizard Federation has been meddling with it for years."; icon = 'icons/obj/computer.dmi'; icon_state = "escapeb"; name = "byond random number generator"},/turf/unsimulated/floor{tag = "icon-damaged3"; icon_state = "damaged3"},/area/space)
 "cHa" = (/obj/item/weapon/shard,/turf/unsimulated/floor{tag = "icon-damaged1"; icon_state = "damaged1"},/area/space)
-"cHb" = (/obj/item/weapon/scythe,/obj/machinery/singularity_beacon/syndicate,/turf/unsimulated/floor{icon_state = "chapel"},/area/space)
+"cHb" = (/obj/item/weapon/scythe,/obj/machinery/power/singularity_beacon,/turf/unsimulated/floor{icon_state = "chapel"},/area/space)
 "cHc" = (/obj/structure/showcase{icon = 'icons/mob/AI.dmi'; icon_state = "ai-static"; name = "Damaged AI Core"},/turf/unsimulated/floor{icon_state = "dark"},/area/space)
 "cHd" = (/obj/effect/landmark{name = "Holopet Spawn"},/turf/simulated/floor/holofloor{tag = "icon-carpet5-1 (EAST)"; icon_state = "carpet5-1"; dir = 4},/area/holodeck/source_puppy)
 "cHe" = (/turf/simulated/floor/holofloor{tag = "icon-carpet13-5 (EAST)"; icon_state = "carpet13-5"; dir = 4},/area/holodeck/source_puppy)
