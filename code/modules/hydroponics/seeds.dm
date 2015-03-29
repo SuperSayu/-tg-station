@@ -41,11 +41,6 @@
 		return
 	..() // Fallthrough to item/attackby() so that bags can pick seeds up
 
-/obj/item/seeds/initialize()
-	if(isturf(loc) && prob(42))
-		harvest(null)
-		del(src)
-
 /obj/item/seeds/chiliseed
 	name = "pack of chili seeds"
 	desc = "These seeds grow into chili plants. HOT! HOT! HOT!"
