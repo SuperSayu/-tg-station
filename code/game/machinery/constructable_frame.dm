@@ -211,10 +211,10 @@ to destroy them and players will be able to make replacements.
 							/obj/item/weapon/vending_refill/boozeomat = 3)
 
 	var/list/names_paths = list(/obj/machinery/vending/refillable/drink/boozeomat = "Booze-O-Mat",
-							/obj/machinery/vending/coffee = "Hot Drinks",
+							/obj/machinery/vending/coffee = "Solar's Best Hot Drinks",
 							/obj/machinery/vending/refillable/food/snack = "Getmore Chocolate Corp",
 							/obj/machinery/vending/refillable/drink/cola = "Robust Softdrinks",
-							/obj/machinery/vending/cigarette = "Cigarette",
+							/obj/machinery/vending/cigarette = "ShadyCigs Deluxe",
 							/obj/machinery/vending/refillable/wardrobe/autodrobe = "AutoDrobe")
 	var/list/filler_paths = list(/obj/machinery/vending/refillable/drink/boozeomat = /obj/item/weapon/vending_refill/boozeomat,
 								/obj/machinery/vending/coffee = /obj/item/weapon/vending_refill/coffee,
@@ -222,6 +222,7 @@ to destroy them and players will be able to make replacements.
 								/obj/machinery/vending/refillable/drink/cola = /obj/item/weapon/vending_refill/cola,
 								/obj/machinery/vending/cigarette = /obj/item/weapon/vending_refill/cigarette,
 								/obj/machinery/vending/refillable/wardrobe/autodrobe = /obj/item/weapon/vending_refill/autodrobe)
+
 /obj/item/weapon/circuitboard/vendor/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/weapon/screwdriver))
 		set_type(pick(names_paths), user)
