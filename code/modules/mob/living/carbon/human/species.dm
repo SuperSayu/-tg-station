@@ -1281,6 +1281,8 @@
 	if(!environment)
 		return
 
+	if(istype(H.loc, /obj/machinery/atmospherics/pipe)) return
+
 	var/loc_temp = H.get_temperature(environment)
 	//world << "Loc temp: [loc_temp] - Body temp: [bodytemperature] - Fireloss: [getFireLoss()] - Thermal protection: [get_thermal_protection()] - Fire protection: [thermal_protection + add_fire_protection(loc_temp)] - Heat capacity: [environment_heat_capacity] - Location: [loc] - src: [src]"
 

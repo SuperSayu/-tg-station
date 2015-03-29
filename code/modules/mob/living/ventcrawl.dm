@@ -130,7 +130,7 @@
 		src.relaymove(M,dir)
 	return ..()
 
-/obj/machinery/atmospherics/valve/Enter(mob/M,atom/oldloc)
+/obj/machinery/atmospherics/binary/valve/Enter(mob/M,atom/oldloc)
 	if(!stat && !open)
 		M << "You can't get past [src]."
 		return 0
