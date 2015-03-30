@@ -243,8 +243,6 @@ var/const/POWER = 8
 			signallers[colour] = S
 			S.loc = holder
 			S.connected = src
-			if(istype(S))
-				S.receiving = 1 // since most players won't know right now that signalers start off.
 			return S
 
 /datum/wires/proc/Detach(var/colour)

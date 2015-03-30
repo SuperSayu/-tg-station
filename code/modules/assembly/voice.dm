@@ -32,16 +32,11 @@
 	return "beeps, \"[text]\""
 
 /obj/item/device/assembly/voice/attack_self(mob/user)
-	if(!user)	return 0
+	if(!user)
+		return 0
 	activate()
 	return 1
 
 /obj/item/device/assembly/voice/toggle_secure()
 	. = ..()
 	listening = 0
-
-/obj/item/device/assembly/voice/describe()
-	if(recorded || listening)
-		return "A meter on [src] flickers with every nearby sound."
-	else
-		return "[src] is deactivated."
