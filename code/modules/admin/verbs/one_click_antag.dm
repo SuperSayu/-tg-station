@@ -310,8 +310,6 @@ client/proc/one_click_antag()
 				new_character.mind.make_Nuke(synd_spawn[spawnpos],nuke_code)
 			spawnpos++
 
-		ticker.mode.update_all_synd_icons()
-
 	return 1
 
 
