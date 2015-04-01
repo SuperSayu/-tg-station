@@ -255,23 +255,16 @@
 			user << "<span class='notice'>[target] is full.</span>"
 			return
 
-		if(istype(target,/obj/item/weapon/reagent_containers/spray/chemsprayer/honkmaster))
-			var/trans = reagents.trans_id_to(target,"water",amount_per_transfer_from_this)
-			if(!trans)
-				user << "<span class='notice'>[target] is too cheaply made to hold anything but water!</span>"
-			else
-				user << "<span class='notice'>You transfer [trans] unit\s of the water to [target].</span>"
-		if(istype(target,/obj/item/weapon/reagent_containers/spray/chemsprayer/cleanblaster))
-			var/trans = reagents.trans_id_to(target,"cleaner",amount_per_transfer_from_this)
-			if(!trans)
-				user << "<span class='notice'>[target] seems to only accept cleaning fluid!</span>"
-			else
-				user << "<span class='notice'>You transfer [trans] unit\s of cleaning fluid to [target].</span>"
-		else if(istype(target,/obj/item/weapon/reagent_containers/spray/chemsprayer/dirtblaster))
-			user << "<span class='notice'>You can't seem to find a way to fill it.</span>"
-		else
-			var/trans = reagents.trans_to(target, amount_per_transfer_from_this)
-			user << "<span class='notice'>You transfer [trans] unit\s of the solution to [target].</span>"
+
+		if(istype(target, /obj/item/weapon/reagent_containers))
+			var/obj/item/weapon/reagent_containers/RC = target
+			for(var/bad_reg in RC.banned_reagents)
+				if(reagents.has_reagent(bad_reg, 1)) //Message is a bit "Game-y" but I can't think up a better one.
+					user << "<span class='warning'>A chemical in [src] is far too dangerous to transfer to [RC]!</span>"
+					return
+
+		var/trans = reagents.trans_to(target, amount_per_transfer_from_this)
+		user << "<span class='notice'>You transfer [trans] unit\s of the solution to [target].</span>"
 
 	//Safety for dumping stuff into a ninja suit. It handles everything through attackby() and this is unnecessary.	//gee thanks noize
 	else if(istype(target, /obj/item/clothing/suit/space/space_ninja))
