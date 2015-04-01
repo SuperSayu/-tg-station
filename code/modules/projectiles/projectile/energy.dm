@@ -56,6 +56,3 @@
 /obj/item/projectile/energy/bolt/large
 	name = "largebolt"
 	damage = 20
-
-
-
