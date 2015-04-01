@@ -95,11 +95,11 @@
 			..()
 
 
-/obj/machinery/camera/ex_act(severity)
+/obj/machinery/camera/ex_act(severity, specialty)
 	if(src.invuln)
 		return
 	else
-		..(severity)
+		..()
 	return
 
 /obj/machinery/camera/blob_act()

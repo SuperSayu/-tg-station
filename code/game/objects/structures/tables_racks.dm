@@ -189,7 +189,7 @@
 		else
 			dir = 2
 
-/obj/structure/table/ex_act(severity)
+/obj/structure/table/ex_act(severity, specialty)
 	switch(severity)
 		if(1.0)
 			qdel(src)
@@ -528,7 +528,7 @@
 		if(prob(80))
 			I.pixel_y += rand(-7.7)
 
-/obj/structure/rack/ex_act(severity)
+/obj/structure/rack/ex_act(severity, specialty)
 	switch(severity)
 		if(1.0)
 			qdel(src)

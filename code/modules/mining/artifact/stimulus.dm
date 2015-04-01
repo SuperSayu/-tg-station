@@ -29,7 +29,7 @@ obj/item/artifact/proc/set_stim()
 			if(A_EXPLODE)
 				extra3 = rand(1,3)
 
-/obj/item/artifact/ex_act(severity)
+/obj/item/artifact/ex_act(severity,specialty)
 	if(!checkfail(A_EXPLODE))
 		if(severity >= extra3)
 			activate()

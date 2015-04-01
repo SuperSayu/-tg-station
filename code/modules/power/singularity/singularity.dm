@@ -61,7 +61,7 @@
 /obj/machinery/singularity/blob_act(severity)
 	return
 
-/obj/machinery/singularity/ex_act(severity)
+/obj/machinery/singularity/ex_act(severity, specialty)
 	switch(severity)
 		if(1.0)
 			if(current_size <= STAGE_TWO)
