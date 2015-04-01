@@ -8,7 +8,6 @@
 	flags = CONDUCT
 	pressure_resistance = 5*ONE_ATMOSPHERE
 	layer = 2.9
-	explosion_resistance = 5
 	var/health = 10
 	var/destroyed = 0
 	var/obj/item/stack/rods/stored
@@ -245,7 +244,7 @@
 		tforce = 5
 	else if(isobj(AM))
 		var/obj/item/I = AM
-		tforce = I.throwforce - 5
+		tforce = max(0, I.throwforce - 5)
 	playsound(loc, 'sound/effects/grillehit.ogg', 80, 1)
 	health = max(0, health - tforce)
 	healthcheck()
