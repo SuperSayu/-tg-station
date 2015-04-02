@@ -1203,7 +1203,7 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 		environ = 3
 	..()
 
-/obj/machinery/power/apc/ex_act(severity, specialty)
+/obj/machinery/power/apc/ex_act(severity, target)
 	..()
 	if(!gc_destroyed)
 		switch(severity)

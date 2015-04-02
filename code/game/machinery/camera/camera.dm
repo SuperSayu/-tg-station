@@ -95,7 +95,7 @@
 			..()
 
 
-/obj/machinery/camera/ex_act(severity, specialty)
+/obj/machinery/camera/ex_act(severity, target)
 	if(src.invuln)
 		return
 	else

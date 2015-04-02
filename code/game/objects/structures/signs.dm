@@ -54,7 +54,7 @@
 					visible_message("\The [src] sign is now prominently affixed to [A].")
 					pixel_x = 0
 
-/obj/structure/sign/ex_act(severity,specialty)
+/obj/structure/sign/ex_act(severity, target)
 	qdel(src)
 
 /obj/structure/sign/blob_act()

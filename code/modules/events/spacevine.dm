@@ -515,7 +515,7 @@
 
 */
 
-/obj/effect/spacevine/ex_act(severity, specialty)
+/obj/effect/spacevine/ex_act(severity, target)
 	switch(severity)
 		if(1.0)
 			Destroy()
