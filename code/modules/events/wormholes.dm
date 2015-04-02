@@ -1,4 +1,3 @@
-var/global/list/global_wormholes = list()
 
 /datum/round_event_control/wormholes
 	name 			= "Wormholes"
@@ -53,7 +52,6 @@ var/global/list/global_wormholes = list()
 
 /obj/effect/portal/wormhole/New()
 	..()
-	global_wormholes += src
 
 /obj/effect/portal/wormhole/attack_hand(mob/user)
 	teleport(user)
