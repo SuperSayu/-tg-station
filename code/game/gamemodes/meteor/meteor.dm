@@ -25,7 +25,7 @@
 	else
 		spawn()
 			dust_swarm("strong")*/
-	spawn() spawn_meteors(6)
+	spawn() spawn_meteors(6, meteors_normal)
 
 
 /datum/game_mode/meteor/declare_completion()

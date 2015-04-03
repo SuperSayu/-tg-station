@@ -70,7 +70,6 @@ By design, d1 is the smallest direction and d2 is the highest
 
 
 	// ensure d1 & d2 reflect the icon_state for entering and exiting cable
-
 	var/dash = findtext(icon_state, "-")
 
 	d1 = text2num( copytext( icon_state, 1, dash ) )
@@ -83,8 +82,9 @@ By design, d1 is the smallest direction and d2 is the highest
 	cable_list += src //add it to the global cable list
 
 	if(d1)
-		stored = new/obj/item/stack/cable_coil(src,2,cable_color)
-	else stored = new/obj/item/stack/cable_coil(src,1,cable_color)
+		stored = new/obj/item/stack/cable_coil(null,2,cable_color)
+	else
+		stored = new/obj/item/stack/cable_coil(null,1,cable_color)
 
 /obj/structure/cable/Destroy()					// called when a cable is deleted
 	if(powernet)
@@ -185,28 +185,23 @@ By design, d1 is the smallest direction and d2 is the highest
 		return 0
 
 //explosion handling
-/obj/structure/cable/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-		if(2.0)
-			if (prob(50))
-				Deconstruct()
-
-		if(3.0)
-			if (prob(25))
-				Deconstruct()
-	return
+/obj/structure/cable/ex_act(severity, target)
+	..()
+	if(!gc_destroyed)
+		switch(severity)
+			if(2)
+				if(prob(50))
+					Deconstruct()
+			if(3)
+				if(prob(25))
+					Deconstruct()
 
 /obj/structure/cable/singularity_pull(S, current_size)
 	if(current_size >= STAGE_FIVE)
 		Deconstruct()
 
-obj/structure/cable/proc/cableColor(var/colorC)
-	var/color_n = "red"
-	if(colorC)
-		color_n = colorC
-	cable_color = color_n
+/obj/structure/cable/proc/cableColor(var/colorC = "red")
+	cable_color = colorC
 	switch(colorC)
 		if("red")
 			icon = 'icons/obj/power_cond/power_cond_red.dmi'
@@ -224,6 +219,11 @@ obj/structure/cable/proc/cableColor(var/colorC)
 			icon = 'icons/obj/power_cond/power_cond_cyan.dmi'
 		if("white")
 			icon = 'icons/obj/power_cond/power_cond_white.dmi'
+
+/obj/structure/cable/proc/update_stored(var/length = 1, var/color = "red")
+	stored.amount = length
+	stored.item_color = color
+	stored.update_icon()
 
 ////////////////////////////////////////////
 // Power related
@@ -502,7 +502,7 @@ obj/structure/cable/proc/avail()
 /obj/item/stack/cable_coil/New(loc, amount = MAXCOIL, var/param_color = null)
 	..()
 	src.amount = amount
-	if (param_color)
+	if(param_color)
 		item_color = param_color
 	pixel_x = rand(-2,2)
 	pixel_y = rand(-2,2)
@@ -539,7 +539,6 @@ obj/structure/cable/proc/avail()
 		icon_state = "coil_[item_color]"
 		name = "cable coil"
 
-
 /obj/item/stack/cable_coil/verb/make_restraint()
 	set name = "Make Cable Restraints"
 	set category = "Object"
@@ -566,7 +565,7 @@ obj/structure/cable/proc/avail()
 	..()
 	if( istype(W, /obj/item/weapon/wirecutters) && src.amount > 1)
 		src.amount--
-		new/obj/item/stack/cable_coil(user.loc, 1,item_color)
+		new /obj/item/stack/cable_coil(user.loc, 1,item_color)
 		user << "You cut a piece off the cable coil."
 		src.update_icon()
 		return
@@ -624,9 +623,15 @@ obj/structure/cable/proc/avail()
 		amount += extra
 	update_icon()
 
+
+
 ///////////////////////////////////////////////
 // Cable laying procedures
 //////////////////////////////////////////////
+
+/obj/item/stack/cable_coil/proc/get_new_cable(var/location)
+	var/path = "/obj/structure/cable" + (item_color == "red" ? "" : "/" + item_color)
+	return new path (location)
 
 // called when cable_coil is clicked on a turf/simulated/floor
 /obj/item/stack/cable_coil/proc/turf_place(turf/simulated/floor/F, mob/user)
@@ -658,9 +663,7 @@ obj/structure/cable/proc/avail()
 				user << "There's already a cable at that position."
 				return
 
-		var/obj/structure/cable/C = new(F)
-
-		C.cableColor(item_color)
+		var/obj/structure/cable/C = get_new_cable (F)
 
 		//set up the new cable
 		C.d1 = 0 //it's a O-X node cable
@@ -724,8 +727,7 @@ obj/structure/cable/proc/avail()
 					user << "There's already a cable at that position."
 					return
 
-			var/obj/structure/cable/NC = new(U)
-			NC.cableColor(item_color)
+			var/obj/structure/cable/NC = get_new_cable (U)
 
 			NC.d1 = 0
 			NC.d2 = fdirn
@@ -774,6 +776,9 @@ obj/structure/cable/proc/avail()
 
 		C.d1 = nd1
 		C.d2 = nd2
+
+		//updates the stored cable coil
+		C.update_stored(2, item_color)
 
 		C.add_fingerprint()
 		C.updateicon()

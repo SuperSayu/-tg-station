@@ -53,10 +53,11 @@
 		else
 			uses--
 		if(uses <= 0)
-			del src
+			qdel(src)
 
 /obj/item/weapon/soap/afterattack(atom/target, mob/user as mob, proximity)
-	if(!proximity) return
+	if(!proximity)
+		return
 	//I couldn't feasibly  fix the overlay bugs caused by cleaning items we are wearing.
 	//So this is a workaround. This also makes more sense from an IC standpoint. ~Carn
 	if(user.client && (target in user.client.screen))
@@ -70,15 +71,17 @@
 			qdel(C)
 		if(cleaned > 0)
 			usr << "<span class='notice'>You clean \the [target.name].</span>"
-		if(uses <= 0)
-			user << "<span class='notice'>That's the last of this bar of soap.</span>"
-			qdel(src)
+			checkUses(user)
 	else if(istype(target,/obj/effect/decal/cleanable))
 		user.visible_message("<span class='warning'>[user] begins to scrub \the [target.name] out with [src].</span>")
 		if(do_after(user, src.cleanspeed))
 			user << "<span class='notice'>You scrub \the [target.name] out.</span>"
+			uses-=usesize
 			qdel(target)
 			checkUses(user)
+	else if(ishuman(target) && user.zone_sel && user.zone_sel.selecting == "mouth")
+		user.visible_message("<span class='warning'>\the [user] washes \the [target]'s mouth out with [src.name]!</span>") //washes mouth out with soap sounds better than 'the soap' here
+		return
 	else
 		user.visible_message("<span class='warning'>[user] begins to clean \the [target.name] with [src].</span>")
 		if(do_after(user, src.cleanspeed))
@@ -88,13 +91,6 @@
 			target.clean_blood()
 			checkUses(user)
 	return
-
-/obj/item/weapon/soap/attack(mob/target as mob, mob/user as mob)
-	if(target && user && ishuman(target) && ishuman(user) && !target.stat && !user.stat && user.zone_sel &&user.zone_sel.selecting == "mouth" )
-		user.visible_message("<span class='danger'>\the [user] washes \the [target]'s mouth out with [src.name]!</span>") //washes mouth out with soap sounds better than 'the soap' here
-		checkUses(user)
-		return
-	..()
 
 /obj/item/weapon/soap/proc/checkUses(mob/user as mob)
 	if(src.uses<=0)

@@ -505,9 +505,6 @@
 				H.sight |= G.vision_flags
 				H.see_in_dark = G.darkness_view
 				H.see_invisible = G.invis_view
-				if(G.hud)
-					G.process_hud(H)
-
 		if(H.druggy)	//Override for druggy
 			H.see_invisible = see_temp
 
@@ -684,12 +681,12 @@
 		mspeed -= 1
 
 	if(!has_gravity(H))
-		mspeed += 2 //Carefully propelling yourself along the walls is actually quite slow
+		mspeed += 1.5 //Carefully propelling yourself along the walls is actually quite slow
 
 		if(istype(H.back, /obj/item/weapon/tank/jetpack))
 			var/obj/item/weapon/tank/jetpack/J = H.back
 			if(J.allow_thrust(0.01, H))
-				mspeed -= 3
+				mspeed -= 2.5
 
 		if(H.l_hand) //Having your hands full makes movement harder when you're weightless. You try climbing around while holding a gun!
 			mspeed += 0.5
@@ -894,11 +891,11 @@
 		return 0
 
 	if(I.attack_verb && I.attack_verb.len)
-		H.visible_message("<span class='danger'>[H] has been [pick(I.attack_verb)] in the [hit_area] with [I] by [user]!</span>", \
-						"<span class='userdanger'>[H] has been [pick(I.attack_verb)] in the [hit_area] with [I] by [user]!</span>")
+		H.visible_message("<span class='danger'>[user] has [pick(I.attack_verb)] [H] in the [hit_area] with [I]!</span>", \
+						"<span class='userdanger'>[user] has [pick(I.attack_verb)] [H] in the [hit_area] with [I]!</span>")
 	else if(I.force)
-		H.visible_message("<span class='danger'>[H] has been attacked in the [hit_area] with [I] by [user]!</span>", \
-						"<span class='userdanger'>[H] has been attacked in the [hit_area] with [I] by [user]!</span>")
+		H.visible_message("<span class='danger'>[user] has attacked [H] in the [hit_area] with [I]!</span>", \
+						"<span class='userdanger'>[user] has attacked [H] in the [hit_area] with [I]!</span>")
 	else
 		return 0
 
@@ -1005,23 +1002,20 @@
 			if(istype(location, /turf/simulated))
 				location.add_blood_floor(H)
 
-	var/showname = "."
-	if(user)
-		showname = " by [user]!"
-		if(user != src)
-			user.do_attack_animation(H)
-	if(!(user in viewers(I, null)))
-		showname = "."
-
+	var/message_verb = ""
 	if(I.attack_verb && I.attack_verb.len)
-		H.visible_message("<span class='danger'>[H] has been [pick(I.attack_verb)] with [I][showname]</span>",
-		"<span class='userdanger'>[H] has been [pick(I.attack_verb)] with [I][showname]</span>")
+		message_verb = "[pick(I.attack_verb)]"
 	else if(I.force)
-		H.visible_message("<span class='danger'>[H] has been attacked with [I][showname]</span>",
-		"<span class='userdanger'>[H] has been attacked with [I][showname]</span>")
-	if(!showname && user)
-		if(user.client)
-			user << "<span class='danger'><B>You attack [H] with [I]. </B></span>"
+		message_verb = "attacked"
+
+	var/attack_message = "[H] has been [message_verb] with [I]."
+	if(user)
+		user.do_attack_animation(src)
+		if(user in viewers(src, null))
+			attack_message = "[user] has [message_verb] [H] with [I]!"
+	if(message_verb)
+		H.visible_message("<span class='danger'>[attack_message]</span>",
+		"<span class='userdanger'>[attack_message]</span>")
 
 	return
 
@@ -1280,6 +1274,8 @@
 /datum/species/proc/handle_environment(datum/gas_mixture/environment, var/mob/living/carbon/human/H)
 	if(!environment)
 		return
+
+	if(istype(H.loc, /obj/machinery/atmospherics/pipe)) return
 
 	var/loc_temp = H.get_temperature(environment)
 	//world << "Loc temp: [loc_temp] - Body temp: [bodytemperature] - Fireloss: [getFireLoss()] - Thermal protection: [get_thermal_protection()] - Fire protection: [thermal_protection + add_fire_protection(loc_temp)] - Heat capacity: [environment_heat_capacity] - Location: [loc] - src: [src]"

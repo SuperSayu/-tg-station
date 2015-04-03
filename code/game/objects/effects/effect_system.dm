@@ -397,8 +397,9 @@ steam.start() -- spawns the effect
 			if (M.coughedtime != 1)
 				M.coughedtime = 1
 				M.emote("cough")
-				spawn ( 20 )
-					M.coughedtime = 0
+				spawn(20)
+					if(M && M.loc)
+						M.coughedtime = 0
 	return
 
 
@@ -421,8 +422,9 @@ steam.start() -- spawns the effect
 			if (M.coughedtime != 1)
 				M.coughedtime = 1
 				M.emote("cough")
-				spawn ( 20 )
-					M.coughedtime = 0
+				spawn(20)
+					if(M && M.loc)
+						M.coughedtime = 0
 	return
 
 /datum/effect/effect/system/bad_smoke_spread
@@ -634,8 +636,9 @@ steam.start() -- spawns the effect
 			if (M.coughedtime != 1)
 				M.coughedtime = 1
 				M.emote("cough")
-				spawn ( 20 )
-					M.coughedtime = 0
+				spawn(20)
+					if(M && M.loc)
+						M.coughedtime = 0
 	return
 
 /obj/effect/effect/sleep_smoke/Crossed(mob/living/carbon/M as mob )
@@ -650,8 +653,9 @@ steam.start() -- spawns the effect
 			if (M.coughedtime != 1)
 				M.coughedtime = 1
 				M.emote("cough")
-				spawn ( 20 )
-					M.coughedtime = 0
+				spawn(20)
+					if(M && M.loc)
+						M.coughedtime = 0
 	return
 
 /datum/effect/effect/system/sleep_smoke_spread
@@ -972,7 +976,7 @@ steam.start() -- spawns the effect
 		icon_state = "ironfoam"
 
 
-/obj/structure/foamedmetal/ex_act(severity)
+/obj/structure/foamedmetal/ex_act(severity, target)
 	qdel(src)
 
 /obj/structure/foamedmetal/blob_act()

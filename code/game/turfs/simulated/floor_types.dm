@@ -204,5 +204,5 @@
 	icon = 'icons/turf/snow.dmi'
 	icon_state = "snow"
 
-/turf/simulated/floor/plating/snow/ex_act(severity)
+/turf/simulated/floor/plating/snow/ex_act(severity, target)
 	return

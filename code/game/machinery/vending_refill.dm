@@ -5,106 +5,106 @@
 	var/renamable = 0	// set true for do-it-yourself venders
 	var/list/inserted = list()
 
-	attackby(var/obj/item/W as obj, var/mob/user as mob)
-		if(istype(W,/obj/item/weapon/grab) || istype(W,/obj/item/tk_grab) || istype(W,/obj/item/weapon/crowbar))
+/obj/machinery/vending/refillable/attackby(var/obj/item/W as obj, var/mob/user as mob)
+	if(istype(W,/obj/item/weapon/grab) || istype(W,/obj/item/tk_grab) || istype(W,/obj/item/weapon/crowbar))
+		return ..(W,user)
+	if(panel_open)
+		if(istype(W,refill_canister))
 			return ..(W,user)
+		if(istype(W,/obj/item/weapon/hand_labeler) && renamable)
+			var/obj/item/weapon/hand_labeler/HL = W
+			if(HL.mode)
+				if(HL.labels_left)
+					name = HL.label
+					user << "You label [src]."
+					return 1
+				return 0 // no labels message
+
+		else if(istype(W, /obj/item/device/multitool)||istype(W, /obj/item/weapon/wirecutters))
+			attack_hand(user)
+			return 0
+	if(istype(W, /obj/item/weapon/card/emag) && !emagged)
+		emagged = 1
+		extended_inventory = !extended_inventory
+		if(coin_records.len)
+			hidden_records += coin_records
+			coin_records.Cut()
+			contraband += premium
+			premium = list(null)
+		user << "You short out the product lock on [src]"
+		if(coin)
+			coin.loc = loc
+			user << "<span class='notice'>[coin] pops out!</span>"
+			coin = null
+		updateUsrDialog()
+		return 0
+
+	else if(istype(W, /obj/item/weapon/screwdriver))
+		panel_open = !panel_open
+		user << "You [panel_open ? "open" : "close"] the maintenance panel."
+		overlays.Cut()
 		if(panel_open)
-			if(istype(W,refill_canister))
-				return ..(W,user)
-			if(istype(W,/obj/item/weapon/hand_labeler) && renamable)
-				var/obj/item/weapon/hand_labeler/HL = W
-				if(HL.mode)
-					if(HL.labels_left)
-						name = HL.label
-						user << "You label [src]."
-						return 1
-					return 0 // no labels message
-
-			else if(istype(W, /obj/item/device/multitool)||istype(W, /obj/item/weapon/wirecutters))
-				attack_hand(user)
-				return 0
-		if(istype(W, /obj/item/weapon/card/emag) && !emagged)
-			emagged = 1
-			extended_inventory = !extended_inventory
-			if(coin_records.len)
-				hidden_records += coin_records
-				coin_records.Cut()
-				contraband += premium
-				premium = list(null)
-			user << "You short out the product lock on [src]"
-			if(coin)
-				coin.loc = loc
-				user << "\blue[coin] pops out!"
-				coin = null
+			overlays += image(icon, "[initial(icon_state)]-panel")
+		updateUsrDialog()
+		return 0
+	else if(istype(W, /obj/item/weapon/coin) && premium.len > 0)
+		user.drop_item()
+		W.loc = src
+		coin = W
+		user << "<span class='notice'>You insert [W] into [src].</span>"
+		return 1
+	else
+		if(allow_insert(W, user))
+			insert(W, user)
 			updateUsrDialog()
-			return 0
-
-		else if(istype(W, /obj/item/weapon/screwdriver))
-			panel_open = !panel_open
-			user << "You [panel_open ? "open" : "close"] the maintenance panel."
-			overlays.Cut()
-			if(panel_open)
-				overlays += image(icon, "[initial(icon_state)]-panel")
-			updateUsrDialog()
-			return 0
-		else if(istype(W, /obj/item/weapon/coin) && premium.len > 0)
-			user.drop_item()
-			W.loc = src
-			coin = W
-			user << "<span class='notice'>You insert [W] into [src].</span>"
 			return 1
 		else
-			if(allow_insert(W, user))
-				insert(W, user)
-				updateUsrDialog()
-				return 1
-			else
-				..()
-				return 0
-
-	proc/allow_insert(var/obj/item/I, var/mob/user)
-		if(!emagged && scan_id_insert && !allowed(user))
+			..()
 			return 0
-		var/searchlist = products
-		if(extended_inventory)
-			searchlist += contraband
-		return (I.type in searchlist)
 
-	proc/insert(var/obj/item/I, var/mob/user)
-		var/datum/data/vending_product/target_vend = null
-		for(var/datum/data/vending_product/VP in product_records + hidden_records)
-			if(VP.product_path == I.type)
-				target_vend = VP
-				break
-		if(!target_vend)
-			target_vend = new(I,0)
-			target_vend.artificial = 1
-			product_records += target_vend
-			products += I.type // for allow_insert checks
+/obj/machinery/vending/refillable/proc/allow_insert(var/obj/item/I, var/mob/user)
+	if(!emagged && scan_id_insert && !allowed(user))
+		return 0
+	var/searchlist = products
+	if(extended_inventory)
+		searchlist += contraband
+	return (I.type in searchlist)
 
-		target_vend.amount++
+/obj/machinery/vending/refillable/proc/insert(var/obj/item/I, var/mob/user)
+	var/datum/data/vending_product/target_vend = null
+	for(var/datum/data/vending_product/VP in product_records + hidden_records)
+		if(VP.product_path == I.type)
+			target_vend = VP
+			break
+	if(!target_vend)
+		target_vend = new(I,0)
+		target_vend.artificial = 1
+		product_records += target_vend
+		products += I.type // for allow_insert checks
 
-		if(user)
-			user.drop_item()
+	target_vend.amount++
 
-			if((target_vend in hidden_records) && !extended_inventory)	// This won't usually come up
-				user << "\blue You insert [I] into [src], but it doesn't show up on the list."
-			else
-				user << "\blue You insert [I] into [src]."
-			I.add_fingerprint(user)
-			add_fingerprint(user)
+	if(user)
+		user.drop_item()
 
-		inserted += I
-		I.loc = src
-
-	vend(var/typepath, var/atom/newloc = loc)
-		var/obj/O = locate(typepath) in inserted
-		if(O)
-			O.loc = newloc
-			inserted -= O
-			return O
+		if((target_vend in hidden_records) && !extended_inventory)	// This won't usually come up
+			user << "<span class='notice'> You insert [I] into [src], but it doesn't show up on the list.</span>"
 		else
-			return new typepath(loc)
+			user << "<span class='notice'> You insert [I] into [src]. </span>"
+		I.add_fingerprint(user)
+		add_fingerprint(user)
+
+	inserted += I
+	I.loc = src
+
+/obj/machinery/vending/refillable/vend(var/typepath, var/atom/newloc = loc)
+	var/obj/O = locate(typepath) in inserted
+	if(O)
+		O.loc = newloc
+		inserted -= O
+		return O
+	else
+		return new typepath(loc)
 
 /obj/machinery/vending/refillable/generic
 	name = "do-it-yourself vend-o-mat"
@@ -113,25 +113,26 @@
 		if(istype(I) && !(I.flags&ABSTRACT))
 			return 1
 		return 0
-	New()
-		..()
-		if(!istype(loc,/turf))
-			anchored = 0
+
+/obj/machinery/vending/refillable/New()
+	..()
+	if(!istype(loc,/turf))
+		anchored = 0
 
 
 /obj/machinery/vending/refillable/drink
 	name = "mixed drink vender"
 	desc = "Full of the bartender's leftovers."
 
-	allow_insert(var/obj/item/weapon/reagent_containers/W as obj, var/mob/user as mob)
-		if(!istype(W,/obj/item/weapon/reagent_containers/food/drinks) || !W.reagents)
-			return 0
-		if(istype(W,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass) && W.reagents.reagent_list.len) // no full glasses
-			return 0
-		if(!W.reagents.reagent_list.len) // no empty bottles
-			return 0
+/obj/machinery/vending/refillable/allow_insert(var/obj/item/weapon/reagent_containers/W as obj, var/mob/user as mob)
+	if(!istype(W,/obj/item/weapon/reagent_containers/food/drinks) || !W.reagents)
+		return 0
+	if(istype(W,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass) && W.reagents.reagent_list.len) // no full glasses
+		return 0
+	if(!W.reagents.reagent_list.len) // no empty bottles
+		return 0
 
-		return (emagged || !scan_id_insert || allowed(user))
+	return (emagged || !scan_id_insert || allowed(user))
 
 /obj/machinery/vending/refillable/theatre
 	name = "prop storage"

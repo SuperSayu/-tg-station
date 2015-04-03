@@ -374,7 +374,7 @@
 
 	..()
 
-/obj/machinery/porta_turret/ex_act(severity)
+/obj/machinery/porta_turret/ex_act(severity, target)
 	if(severity >= 3)	//turret dies if an explosion touches it!
 		qdel(src)
 	else
@@ -614,8 +614,7 @@
 	A.current = T
 	A.yo = U.y - T.y
 	A.xo = U.x - T.x
-	spawn( 1 )
-		A.process()
+	A.fire()
 
 /obj/machinery/porta_turret/proc/setState(var/on, var/emagged)
 	if(controllock)
@@ -1128,12 +1127,18 @@ Status: []<BR>"},
 			usr << "Control panel is locked!"
 			return
 	if (href_list["toggleOn"])
-		src.enabled = !src.enabled
-		src.updateTurrets()
+		toggle_on()
 	else if (href_list["toggleLethal"])
-		src.lethal = !src.lethal
-		src.updateTurrets()
+		toggle_lethal()
 	src.attack_hand(usr)
+
+/obj/machinery/turretid/proc/toggle_lethal()
+	lethal = !lethal
+	updateTurrets()
+
+/obj/machinery/turretid/proc/toggle_on()
+	enabled = !enabled
+	updateTurrets()
 
 /obj/machinery/turretid/proc/updateTurrets()
 	if(control_area)

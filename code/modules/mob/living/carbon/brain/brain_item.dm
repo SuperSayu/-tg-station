@@ -82,6 +82,8 @@
 		else
 			M.key = brainmob.key
 
+		qdel(brainmob)
+
 		M.internal_organs += src
 		loc = null
 

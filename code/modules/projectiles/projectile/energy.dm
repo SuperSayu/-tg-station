@@ -4,6 +4,7 @@
 	damage = 0
 	damage_type = BURN
 	flag = "energy"
+	color = "#FFFF00"
 
 
 /obj/item/projectile/energy/electrode
@@ -56,6 +57,3 @@
 /obj/item/projectile/energy/bolt/large
 	name = "largebolt"
 	damage = 20
-
-
-

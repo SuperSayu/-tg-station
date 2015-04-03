@@ -347,7 +347,7 @@
 		if(A_SLIME)
 			// EXTRA 1: Effect range
 			for(var/mob/living/carbon/human/H in orange(extra1,targtile))
-				H.contract_disease(new /datum/disease/transformation/slime(0),1)
+				H.ContractDisease(new /datum/disease/transformation/slime(0))
 		if(A_FIRE)
 			// EXTRA 1: Fire power
 			if(istype(targtile,/turf/simulated))
@@ -442,15 +442,15 @@
 			var/list/pick_turfs = list()
 			for(var/turf/simulated/floor/T in range(extra1,targtile))
 				pick_turfs += T
-			while(global_wormholes.len < extra2)
+			while(portals.len < extra2)
 				if(pick_turfs.len > 0)
 					var/turf/T = pick(pick_turfs)
 					new /obj/effect/portal/wormhole(T, null, null, -1)
 				else
 					break
 			spawn(max_cooldown / 1.20)
-				for(var/obj/effect/portal/wormhole/W in global_wormholes)
-					global_wormholes -= W
+				for(var/obj/effect/portal/wormhole/W in portals)
+					portals -= W
 					qdel(W)
 		// TINY POWERS
 		if(A_DETECT)

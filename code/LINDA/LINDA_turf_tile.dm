@@ -1,5 +1,4 @@
 
-
 turf
 	var/pressure_difference = 0
 	var/pressure_direction = 0
@@ -153,9 +152,6 @@ turf/simulated/proc/share_temperature_mutual_solid(turf/simulated/sharer, conduc
 
 		if(istype(enemy_tile,/turf/simulated))
 			var/turf/simulated/enemy_simulated = enemy_tile
-			if(!enemy_simulated.air)
-				atmos_adjacent_turfs &= ~direction
-				continue
 
 			if(current_cycle > enemy_simulated.current_cycle)
 				enemy_simulated.archive()
@@ -197,7 +193,7 @@ turf/simulated/proc/share_temperature_mutual_solid(turf/simulated/sharer, conduc
 		/******************* GROUP HANDLING FINISH *********************************************************************/
 
 		else
-			if(!air.check_turf(enemy_tile))
+			if(!air.check_turf(enemy_tile, atmos_adjacent_turfs_amount))
 				var/difference = air.mimic(enemy_tile,,atmos_adjacent_turfs_amount)
 				if(difference)
 					if(difference > 0)
