@@ -194,22 +194,7 @@
 							break
 			default_deconstruction_crowbar(W)
 
-	if(istype(W, /obj/item/weapon/card/emag) && !emagged)
-		emagged = 1
-		extended_inventory = 1
-		hidden_records += coin_records
-		coin_records.Cut()
-		contraband += premium
-		if(premium.len)
-			premium = list(null) // preserve the existence of the coin slot
-		user << "You short out the product lock on [src]"
-		if(coin)
-			coin.loc = loc
-			user << "\blue[coin] pops out!"
-			coin = null
-		updateUsrDialog()
-		return 1
-	else if(istype(W, /obj/item/weapon/screwdriver) && anchored)
+	if(istype(W, /obj/item/weapon/screwdriver) && anchored)
 		panel_open = !panel_open
 		user << "You [panel_open ? "open" : "close"] the maintenance panel."
 		overlays.Cut()
@@ -265,6 +250,10 @@
 	else
 		..()
 
+/obj/machinery/vending/emag_act(user as mob)
+	if(!emagged)
+		emagged  = 1
+		user << "You short out the product lock on [src]."
 
 /obj/machinery/vending/attack_paw(mob/user)
 	return attack_hand(user)

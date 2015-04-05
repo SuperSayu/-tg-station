@@ -191,20 +191,22 @@
 			updateUsrDialog()
 			return
 
-/obj/machinery/programmable/attackby(obj/item/I as obj, mob/user as mob)
-	if(istype(I,/obj/item/weapon/card/emag))
-		if(emagged)
-			return
-		user << "You swipe the unloader with your card.  After a moment's grinding, it beeps in a sinister fashion."
-		playsound(src.loc, 'sound/machines/twobeep.ogg', 50, 0)
-		emagged = 1
-		overrides += emag_overrides
-
-		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-		s.set_up(2, 1, src)
-		s.start()
-
+/obj/machinery/programmable/emag_act(mob/user as mob)
+	if(emagged)
 		return
+	if(user)
+		user << "You swipe the unloader with your card.  After a moment's grinding, it beeps in a sinister fashion."
+	playsound(src.loc, 'sound/machines/twobeep.ogg', 50, 0)
+	emagged = 1
+	overrides += emag_overrides
+
+	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+	s.set_up(2, 1, src)
+	s.start()
+
+	return
+
+/obj/machinery/programmable/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I,/obj/item/weapon/wrench)) // code borrowed from pipe dispenser
 		if (unwrenched==0)
 			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)

@@ -23,21 +23,6 @@
 		else if(istype(W, /obj/item/device/multitool)||istype(W, /obj/item/weapon/wirecutters))
 			attack_hand(user)
 			return 0
-	if(istype(W, /obj/item/weapon/card/emag) && !emagged)
-		emagged = 1
-		extended_inventory = !extended_inventory
-		if(coin_records.len)
-			hidden_records += coin_records
-			coin_records.Cut()
-			contraband += premium
-			premium = list(null)
-		user << "You short out the product lock on [src]"
-		if(coin)
-			coin.loc = loc
-			user << "<span class='notice'>[coin] pops out!</span>"
-			coin = null
-		updateUsrDialog()
-		return 0
 
 	else if(istype(W, /obj/item/weapon/screwdriver))
 		panel_open = !panel_open

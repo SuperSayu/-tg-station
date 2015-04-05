@@ -71,9 +71,6 @@
 	user << "It has [uses] light\s remaining."
 
 /obj/item/device/lightreplacer/attackby(obj/item/W, mob/user)
-	if(istype(W,  /obj/item/weapon/card/emag) && emagged == 0)
-		Emag()
-		return
 
 	if(istype(W, /obj/item/stack/sheet/glass))
 		var/obj/item/stack/sheet/glass/G = W
@@ -100,23 +97,9 @@
 			user << "You need a working light."
 			return
 
-	if(istype(W,/obj/item/weapon/storage/box/lights))
-		var/obj/item/weapon/storage/S = W
-		var/added = 0
-		for(var/obj/item/weapon/light/L in S)
-			if(uses >= max_uses) break
-			if(L.status > 0) continue
-			S.remove_from_storage(L,null)
-			L.loc = null
-			AddUses(1)
-			added++
-		if(added)
-			user << "You add [added] lights to [src]."
-		else if(S.contents.len)
-			user << "All the bulbs in [S] are broken!"
-		else
-			user <<"[S] is empty!"
-		return
+/obj/item/device/lightreplacer/emag_act()
+	if(!emagged)
+		Emag()
 
 /obj/item/device/lightreplacer/attack_self(mob/user)
 	/* // This would probably be a bit OP. If you want it though, uncomment the code.
