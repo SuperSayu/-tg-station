@@ -124,7 +124,7 @@ var/global/xartnum = 0 // Extra artifact number. Used to prevent too many extra 
 /obj/effect/landmark/costume/madscientist/New()
 	new /obj/item/clothing/under/gimmick/rank/captain/suit(src.loc)
 	new /obj/item/clothing/head/flatcap(src.loc)
-	new /obj/item/clothing/suit/labcoat/mad(src.loc)
+	new /obj/item/clothing/suit/toggle/labcoat/mad(src.loc)
 	new /obj/item/clothing/glasses/gglasses(src.loc)
 	qdel(src)
 

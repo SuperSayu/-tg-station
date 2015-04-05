@@ -30,6 +30,7 @@
 	new /obj/item/device/multitool(src)
 	new /obj/item/clothing/gloves/ring(src)
 	new /obj/item/device/flash/handheld(src)
+	new /obj/item/clothing/suit/toggle/wintercoat/engineering(src)
 	return
 
 /obj/structure/closet/secure_closet/engineering_electrical
@@ -108,6 +109,7 @@
 	new /obj/item/clothing/suit/hazardvest(src)
 	new /obj/item/clothing/mask/gas(src)
 	new /obj/item/clothing/glasses/meson(src)
+	new /obj/item/clothing/suit/toggle/wintercoat/engineering(src)
 	return
 
 /obj/structure/closet/secure_closet/atmospherics
@@ -123,7 +125,6 @@
 
 /obj/structure/closet/secure_closet/atmospherics/New()
 	..()
-	sleep(2)
 	new /obj/item/device/radio/headset/headset_eng(src)
 	new /obj/item/weapon/storage/toolbox/mechanical(src)
 	new /obj/item/weapon/storage/backpack/satchel_norm(src)
@@ -131,4 +132,5 @@
 	new /obj/item/weapon/watertank/atmos(src)
 	new /obj/item/clothing/suit/fire/atmos(src)
 	new /obj/item/clothing/head/hardhat/atmos(src)
+	new /obj/item/clothing/suit/toggle/wintercoat/engineering/atmos(src)
 	return
