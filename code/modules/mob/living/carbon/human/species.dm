@@ -559,20 +559,28 @@
 						if(0 to 20)				H.healths.icon_state = "health5"
 						else					H.healths.icon_state = "health6"
 
-					/*
-					switch(H.health - H.staminaloss)
-						if(100 to INFINITY)		H.healths.icon_state = "health10"
-						if(90 to 100)			H.healths.icon_state = "health9"
-						if(80 to 90)			H.healths.icon_state = "health8"
-						if(70 to 80)			H.healths.icon_state = "health7"
-						if(60 to 70)			H.healths.icon_state = "health6"
-						if(50 to 60)			H.healths.icon_state = "health5"
-						if(40 to 50)			H.healths.icon_state = "health4"
-						if(30 to 40)			H.healths.icon_state = "health3"
-						if(15 to 30)			H.healths.icon_state = "health2"
-						if(0 to 15)				H.healths.icon_state = "health1"
-						else					H.healths.icon_state = "health0"
-					*/
+	if(H.healthdoll)
+		H.healthdoll.overlays.Cut()
+		if(H.stat == DEAD)
+			H.healthdoll.icon_state = "healthdoll_DEAD"
+		else
+			H.healthdoll.icon_state = "healthdoll_OVERLAY"
+			for(var/obj/item/organ/limb/L in H.organs)
+				var/damage = L.burn_dam + L.brute_dam
+				var/comparison = (L.max_damage/5)
+				var/icon_num = 0
+				if(damage)
+					icon_num = 1
+				if(damage > (comparison))
+					icon_num = 2
+				if(damage > (comparison*2))
+					icon_num = 3
+				if(damage > (comparison*3))
+					icon_num = 4
+				if(damage > (comparison*4))
+					icon_num = 5
+				if(icon_num)
+					H.healthdoll.overlays += image('icons/mob/screen_gen.dmi',"[L.name][icon_num]")
 
 	if(H.nutrition_icon)
 		switch(H.nutrition)
@@ -691,7 +699,7 @@
 		if(J.allow_thrust(0.01, H))
 			hasjetpack = 1
 	var/grav = has_gravity(H)
-	
+
 	if(!grav && !hasjetpack)
 		mspeed += 1 //Slower space without jetpack
 
