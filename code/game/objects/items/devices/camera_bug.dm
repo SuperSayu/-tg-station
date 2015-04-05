@@ -210,13 +210,12 @@
 /obj/item/device/camera_bug/proc/camera_report()
 	// this should only be called if current exists
 	var/dat = ""
-
 	if(current && current.can_use())
 		dat += "Light is <a href='?\ref[src];light=\ref[current]'>[current.luminosity?"on":"off"]</a><hr>"
 		var/list/seen = current.can_see()
 		var/list/names = list()
 		var/empty = 1
-		for(var/obj/machinery/singularity/S in seen) // god help you if you see more than one
+		for(var/obj/singularity/S in seen) // god help you if you see more than one
 			if(S.name in names)
 				names[S.name]++
 				dat += "[S.name] ([names[S.name]])"

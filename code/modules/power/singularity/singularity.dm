@@ -1,6 +1,6 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:33
 
-/obj/machinery/singularity
+/obj/singularity
 	name = "gravitational singularity"
 	desc = "A gravitational singularity."
 	icon = 'icons/obj/singularity.dmi'
@@ -10,7 +10,6 @@
 	layer = 6
 	luminosity = 6
 	unacidable = 1 //Don't comment this out.
-	use_power = 0
 	var/current_size = 1
 	var/allowed_size = 1
 	var/contained = 1 //Are we going to move around?
@@ -29,20 +28,24 @@
 	var/last_warning
 	var/force_contained = 0
 
-/obj/machinery/singularity/New(loc, var/starting_energy = 50, var/temp = 0)
+/obj/singularity/New(loc, var/starting_energy = 50, var/temp = 0)
 	//CARN: admin-alert for chuckle-fuckery.
 	admin_investigate_setup()
 
 	src.energy = starting_energy
 	..()
+	processing_objects.Add(src)
 	for(var/obj/machinery/power/singularity_beacon/singubeacon in world)
 		if(singubeacon.active)
 			target = singubeacon
 			break
 	return
 
+/obj/singularity/Destroy()
+	processing_objects.Remove(src)
+	..()
 
-/obj/machinery/singularity/Move(atom/newloc, direct)
+/obj/singularity/Move(atom/newloc, direct)
 	if(current_size >= STAGE_FIVE || check_turfs_in(direct))
 		last_failed_movement = 0//Reset this because we moved
 		return ..()
@@ -51,17 +54,17 @@
 		return 0
 
 
-/obj/machinery/singularity/attack_hand(mob/user as mob)
+/obj/singularity/attack_hand(mob/user as mob)
 	consume(user)
 	return 1
 
-/obj/machinery/singularity/Process_Spacemove() //The singularity stops drifting for no man!
+/obj/singularity/Process_Spacemove() //The singularity stops drifting for no man!
 	return 0
 
-/obj/machinery/singularity/blob_act(severity)
+/obj/singularity/blob_act(severity)
 	return
 
-/obj/machinery/singularity/ex_act(severity, target)
+/obj/singularity/ex_act(severity, target)
 	switch(severity)
 		if(1.0)
 			if(current_size <= STAGE_TWO)
@@ -77,21 +80,21 @@
 	return
 
 
-/obj/machinery/singularity/bullet_act(obj/item/projectile/P)
+/obj/singularity/bullet_act(obj/item/projectile/P)
 	return 0 //Will there be an impact? Who knows.  Will we see it? No.
 
 
-/obj/machinery/singularity/Bump(atom/A)
+/obj/singularity/Bump(atom/A)
 	consume(A)
 	return
 
 
-/obj/machinery/singularity/Bumped(atom/A)
+/obj/singularity/Bumped(atom/A)
 	consume(A)
 	return
 
 
-/obj/machinery/singularity/process()
+/obj/singularity/process()
 	if(current_size >= STAGE_TWO)
 		move()
 		pulse()
@@ -104,17 +107,17 @@
 	return
 
 
-/obj/machinery/singularity/attack_ai() //to prevent ais from gibbing themselves when they click on one.
+/obj/singularity/attack_ai() //to prevent ais from gibbing themselves when they click on one.
 	return
 
 
-/obj/machinery/singularity/proc/admin_investigate_setup()
+/obj/singularity/proc/admin_investigate_setup()
 	last_warning = world.time
 	var/count = locate(/obj/machinery/field/containment) in orange(30, src)
 	if(!count)	message_admins("A singulo has been created without containment fields active ([x],[y],[z])",1)
 	investigate_log("was created. [count?"":"<font color='red'>No containment fields were active</font>"]","singulo")
 
-/obj/machinery/singularity/proc/dissipate()
+/obj/singularity/proc/dissipate()
 	if(!dissipate)
 		return
 	if(dissipate_track >= dissipate_delay)
@@ -123,9 +126,7 @@
 	else
 		dissipate_track++
 
-
-
-/obj/machinery/singularity/proc/expand(var/force_size = 0)
+/obj/singularity/proc/expand(var/force_size = 0)
 	var/temp_allowed_size = src.allowed_size
 	if(force_size)
 		temp_allowed_size = force_size
@@ -190,7 +191,8 @@
 	else
 		return 0
 
-/obj/machinery/singularity/proc/check_energy()
+
+/obj/singularity/proc/check_energy()
 	if(energy <= 0)
 		investigate_log("collapsed.","singulo")
 		qdel(src)
@@ -211,11 +213,11 @@
 	return 1
 
 
-/obj/machinery/singularity/proc/eat()
+/obj/singularity/proc/eat()
 	set background = BACKGROUND_ENABLED
 	for(var/atom/X in orange(grav_pull,src))
 		var/dist = get_dist(X, src)
-		var/obj/machinery/singularity/S = src
+		var/obj/singularity/S = src
 		if(dist > consume_range)
 			X.singularity_pull(S, current_size)
 		else if(dist <= consume_range)
@@ -223,13 +225,13 @@
 	return
 
 
-/obj/machinery/singularity/proc/consume(var/atom/A)
+/obj/singularity/proc/consume(var/atom/A)
 	var/gain = A.singularity_act(current_size)
 	src.energy += gain
 	return
 
 
-/obj/machinery/singularity/proc/move(var/force_move = 0)
+/obj/singularity/proc/move(var/force_move = 0)
 	if(!move_self)
 		return 0
 
@@ -244,7 +246,7 @@
 	step(src, movement_dir)
 
 
-/obj/machinery/singularity/proc/check_turfs_in(var/direction = 0, var/step = 0)
+/obj/singularity/proc/check_turfs_in(var/direction = 0, var/step = 0)
 	if(!direction)
 		return 0
 	var/steps = 0
@@ -292,19 +294,23 @@
 			return 0
 	return 1
 
-
-/obj/machinery/singularity/proc/can_move(var/turf/T)
-	for(var/obj/machinery/M in T)
-		switch(M.type)
-			if(/obj/machinery/field/containment,/obj/machinery/shieldwall)
-				return 0
-			if(/obj/machinery/field/generator,/obj/machinery/shieldwallgen)
-				if(M:active)
-					return 0
+/obj/singularity/proc/can_move(var/turf/T)
+	if(!T)
+		return 0
+	if((locate(/obj/machinery/field/containment) in T)||(locate(/obj/machinery/shieldwall) in T))
+		return 0
+	else if(locate(/obj/machinery/field/generator) in T)
+		var/obj/machinery/field/generator/G = locate(/obj/machinery/field/generator) in T
+		if(G && G.active)
+			return 0
+	else if(locate(/obj/machinery/shieldwallgen) in T)
+		var/obj/machinery/shieldwallgen/S = locate(/obj/machinery/shieldwallgen) in T
+		if(S && S.active)
+			return 0
 	return 1
 
 
-/obj/machinery/singularity/proc/event()
+/obj/singularity/proc/event()
 	var/numb = pick(1,2,3,4,5,6)
 	switch(numb)
 		if(1)//EMP
@@ -318,7 +324,7 @@
 	return 1
 
 
-/obj/machinery/singularity/proc/toxmob()
+/obj/singularity/proc/toxmob()
 	var/toxrange = 10
 	var/toxdamage = 4
 	var/radiation = 15
@@ -334,7 +340,7 @@
 	return
 
 
-/obj/machinery/singularity/proc/mezzer()
+/obj/singularity/proc/mezzer()
 	for(var/mob/living/carbon/M in oviewers(8, src))
 		if(istype(M, /mob/living/carbon/brain)) //Ignore brains
 			continue
@@ -353,19 +359,19 @@
 	return
 
 
-/obj/machinery/singularity/proc/emp_area()
+/obj/singularity/proc/emp_area()
 	empulse(src, 8, 10)
 	return
 
 
-/obj/machinery/singularity/proc/pulse()
+/obj/singularity/proc/pulse()
 
 	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
 		if(get_dist(R, src) <= 15) // Better than using orange() every process
 			R.receive_pulse(energy)
 	return
 
-/obj/machinery/singularity/singularity_act()
+/obj/singularity/singularity_act()
 	var/gain = (energy/2)
 	var/dist = max((current_size - 2),1)
 	explosion(src.loc,(dist),(dist*2),(dist*4))
