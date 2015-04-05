@@ -2449,7 +2449,7 @@
 "aVe" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{dir = 4},/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor/plating,/area/maintenance/port)
 "aVf" = (/obj/structure/disposalpipe/segment,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; pixel_y = 0},/obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden{dir = 4; initialize_directions = 11},/turf/simulated/floor/plating,/area/maintenance/port)
 "aVg" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/wall,/area/maintenance/port)
-"aVh" = (/obj/machinery/vending/refillable/wardrobe,/turf/simulated/floor/plasteel,/area/crew_quarters/locker)
+"aVh" = (/obj/machinery/vending/clothing,/turf/simulated/floor/plasteel,/area/crew_quarters/locker)
 "aVi" = (/obj/machinery/camera{c_tag = "Locker Room West"; dir = 1},/turf/simulated/floor/plasteel,/area/crew_quarters/locker)
 "aVj" = (/obj/structure/closet/secure_closet/personal,/obj/machinery/atmospherics/unary/vent_pump{dir = 4; on = 1},/turf/simulated/floor/plasteel,/area/crew_quarters/locker)
 "aVk" = (/obj/machinery/atmospherics/pipe/manifold/supply/hidden{dir = 4; initialize_directions = 11},/turf/simulated/wall,/area/crew_quarters/locker)
