@@ -6,7 +6,6 @@
 	icon_state = "chef"
 	item_state = "chef"
 	desc = "The commander in chef's head wear."
-	loose = 10
 	strip_delay = 10
 	put_on_delay = 10
 
@@ -18,7 +17,6 @@
 	item_state = "that"
 	flags_inv = 0
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
-	loose = 0
 	strip_delay = 60
 
 //Captain: This is no longer space-worthy
@@ -33,14 +31,12 @@
 	icon_state = "hopcap"
 	desc = "The symbol of true bureaucratic micromanagement."
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
-	loose = 0
 
 /obj/item/clothing/head/nun_hood
 	name = "nun hood"
 	desc = "Maximum piety in this star system."
 	icon_state = "nun_hood"
 	flags = HEADCOVERSEYES|BLOCKHAIR
-	loose = 0 // full-head objects (almost) never fall off
 
 /obj/item/clothing/head/det_hat
 	name = "detective's fedora"
@@ -48,14 +44,12 @@
 	icon_state = "detective"
 	allowed = list(/obj/item/weapon/reagent_containers/food/snacks/candy_corn, /obj/item/weapon/pen)
 	armor = list(melee = 50, bullet = 5, laser = 25, energy = 10, bomb = 0, bio = 0, rad = 0)
-	loose = 0
 
 //Mime
 /obj/item/clothing/head/beret
 	name = "beret"
 	desc = "A beret, a mime's favorite headwear."
 	icon_state = "beret"
-	loose = 15
 
 //Security
 
@@ -65,7 +59,6 @@
 	icon_state = "hoscap"
 	armor = list(melee = 80, bullet = 60, laser = 50, energy = 10, bomb = 25, bio = 10, rad = 0)
 	strip_delay = 80
-	loose = 0
 
 /obj/item/clothing/head/HoS/beret
 	name = "head of security beret"
@@ -78,7 +71,6 @@
 	icon_state = "policehelm"
 	armor = list(melee = 60, bullet = 5, laser = 25, energy = 10, bomb = 25, bio = 0, rad = 0)
 	strip_delay = 60
-	loose = 0
 
 /obj/item/clothing/head/beret/sec
 	name = "security beret"
@@ -86,7 +78,6 @@
 	icon_state = "beret_badge"
 	armor = list(melee = 30, bullet = 25, laser = 25, energy = 10, bomb = 0, bio = 0, rad = 0)
 	strip_delay = 60
-	loose = 0
 
 /obj/item/clothing/head/beret/sec/navyhos
 	name = "head of security's beret"
@@ -98,7 +89,6 @@
 	desc = "A special beret with the Warden's insignia emblazoned on it. For wardens with class."
 	icon_state = "wardenberet"
 	armor = list(melee = 60, bullet = 5, laser = 25, energy = 10, bomb = 25, bio = 0, rad = 0)
-	strip_delay = 60
 
 /obj/item/clothing/head/beret/sec/navyofficer
 	desc = "A special beret with the security insignia emblazoned on it. For officers with class."

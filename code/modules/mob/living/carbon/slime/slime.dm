@@ -792,7 +792,6 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	desc = "a golem's head"
 	unacidable = 1
 	flags = ABSTRACT | NODROP
-	loose = 0 // not even
 
 /obj/effect/golemrune
 	anchored = 1

@@ -89,7 +89,6 @@ BLIND     // can't see anything
 	icon = 'icons/obj/clothing/hats.dmi'
 	body_parts_covered = HEAD
 	slot_flags = SLOT_HEAD
-	var/loose = 10 // propensity to fall off, 0..100
 
 //Mask
 /obj/item/clothing/mask
@@ -177,7 +176,6 @@ BLIND     // can't see anything
 	heat_protection = HEAD
 	max_heat_protection_temperature = SPACE_HELM_MAX_TEMP_PROTECT
 	flash_protect = 2
-	loose = 0 // This falling off would be A Bad Thing
 	strip_delay = 50
 	put_on_delay = 50
 

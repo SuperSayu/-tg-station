@@ -10,7 +10,6 @@
 	min_cold_protection_temperature = HELMET_MIN_TEMP_PROTECT
 	heat_protection = HEAD
 	max_heat_protection_temperature = HELMET_MAX_TEMP_PROTECT
-	loose = 0
 	strip_delay = 60
 
 /obj/item/clothing/head/helmet/riot
@@ -102,7 +101,7 @@
 	flags = HEADCOVERSEYES|BLOCKHAIR
 	item_state = "gladiator"
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES
-	loose = 0 // full-head objects (almost) never fall off
+
 obj/item/clothing/head/helmet/redtaghelm
 	name = "red laser tag helmet"
 	desc = "They have chosen their own end."

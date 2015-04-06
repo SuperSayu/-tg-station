@@ -7,7 +7,6 @@
 	item_state = "that"
 	flags_inv = 0
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
-	loose = 0
 	strip_delay = 80
 
 /obj/item/clothing/head/powdered_wig
@@ -15,33 +14,27 @@
 	desc = "A powdered wig."
 	icon_state = "pwig"
 	item_state = "pwig"
-	loose = 90 // fucking whigs
 
 /obj/item/clothing/head/that
 	name = "top-hat"
 	desc = "It's an amish looking hat."
 	icon_state = "tophat"
 	item_state = "that"
-	loose = 70
 
 /obj/item/clothing/head/redcoat
 	name = "redcoat's hat"
 	icon_state = "redcoat"
 	desc = "<i>'I guess it's a redhead.'</i>"
-	loose = 45
-
 /obj/item/clothing/head/mailman
 	name = "mailman's hat"
 	icon_state = "mailman"
 	desc = "<i>'Right-on-time'</i> mail service head wear."
-	loose = 65
 
 /obj/item/clothing/head/plaguedoctorhat
 	name = "plague doctor's hat"
 	desc = "These were once used by plague doctors. They're pretty much useless."
 	icon_state = "plaguedoctor"
 	permeability_coefficient = 0.01
-	loose = 30
 
 
 /obj/item/clothing/head/hasturhood
@@ -49,13 +42,11 @@
 	desc = "It's <i>unspeakably</i> stylish."
 	icon_state = "hasturhood"
 	flags = HEADCOVERSEYES|BLOCKHAIR
-	loose = 0 // full-head objects (almost) never fall off
 
 /obj/item/clothing/head/nursehat
 	name = "nurse's hat"
 	desc = "It allows quick identification of trained medical personnel."
 	icon_state = "nursehat"
-	loose = 80 // this allows awkward come-ons when he/she drops her hat and you get it for him/her
 
 /obj/item/clothing/head/syndicatefake
 	name = "black space-helmet replica"
@@ -64,7 +55,6 @@
 	desc = "A plastic replica of a Syndicate agent's space helmet. You'll look just like a real murderous Syndicate agent in this! This is a toy, it is not made for use in space!"
 	flags = BLOCKHAIR
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
-	loose = 1 // full-head objects (almost) never fall off
 
 /obj/item/clothing/head/that
 	name = "sturdy top-hat"
@@ -79,7 +69,6 @@
 	icon_state = "greenbandana"
 	item_state = "greenbandana"
 	flags_inv = 0
-	loose = 0
 
 /obj/item/clothing/head/cardborg
 	name = "cardborg helmet"
@@ -88,7 +77,6 @@
 	item_state = "cardborg_h"
 	flags = HEADCOVERSEYES
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
-	loose = 0 // full-head objects (almost) never fall off
 
 /obj/item/clothing/head/justice
 	name = "justice hat"
@@ -96,7 +84,6 @@
 	icon_state = "justicered"
 	item_state = "justicered"
 	flags = HEADCOVERSEYES|BLOCKHAIR
-	loose = 0 // full-head objects (almost) never fall off
 
 /obj/item/clothing/head/justice/blue
 	icon_state = "justiceblue"
@@ -118,28 +105,24 @@
 	name = "rabbit ears"
 	desc = "Wearing these makes you looks useless, and only good for your sex appeal."
 	icon_state = "bunny"
-	loose = 2
 
 /obj/item/clothing/head/flatcap
 	name = "flat cap"
 	desc = "A working man's cap."
 	icon_state = "flat_cap"
 	item_state = "detective"
-	loose = 1
 
 /obj/item/clothing/head/pirate
 	name = "pirate hat"
 	desc = "Yarr."
 	icon_state = "pirate"
 	item_state = "pirate"
-	loose = 17
 
 /obj/item/clothing/head/hgpiratecap
 	name = "pirate hat"
 	desc = "Yarr."
 	icon_state = "hgpiratecap"
 	item_state = "hgpiratecap"
-	loose = 34
 
 
 /obj/item/clothing/head/bandana
@@ -147,14 +130,12 @@
 	desc = "Yarr."
 	icon_state = "bandana"
 	item_state = "bandana"
-	loose = 2 // awfully hardboiled
 
 /obj/item/clothing/head/bowler
 	name = "bowler-hat"
 	desc = "Gentleman, elite aboard!"
 	icon_state = "bowler"
 	item_state = "bowler"
-	loose = 33
 
 /obj/item/clothing/head/witchwig
 	name = "witch costume wig"
@@ -176,7 +157,6 @@
 	desc = "Fuzzy."
 	icon_state = "bearpelt"
 	item_state = "bearpelt"
-	loose = 1 // fiercely stays attached
 
 /obj/item/clothing/head/xenos
 	name = "xenos helmet"
@@ -185,7 +165,6 @@
 	desc = "A helmet made out of chitinous alien hide."
 	flags = BLOCKHAIR
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
-	loose = 35
 
 /obj/item/clothing/head/fedora
 	name = "fedora"

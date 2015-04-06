@@ -5,7 +5,6 @@
 	gas_transfer_coefficient = 0.01 // IT'S MAGICAL OKAY JEEZ +1 TO NOT DIE
 	permeability_coefficient = 0.01
 	armor = list(melee = 30, bullet = 20, laser = 20, energy = 20, bomb = 20, bio = 20, rad = 20)
-	loose = 0 // a wizard and his hat are not so easily parted
 	//Not given any special protective value since the magic robes are full-body protection --NEO
 	strip_delay = 50
 	put_on_delay = 50
