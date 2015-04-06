@@ -212,13 +212,13 @@ to destroy them and players will be able to make replacements.
 
 	var/list/names_paths = list(/obj/machinery/vending/refillable/drink/boozeomat = "Booze-O-Mat",
 							/obj/machinery/vending/coffee = "Solar's Best Hot Drinks",
-							/obj/machinery/vending/refillable/food/snack = "Getmore Chocolate Corp",
+							/obj/machinery/vending/snack = "Getmore Chocolate Corp",
 							/obj/machinery/vending/refillable/drink/cola = "Robust Softdrinks",
 							/obj/machinery/vending/cigarette = "ShadyCigs Deluxe",
 							/obj/machinery/vending/refillable/wardrobe/autodrobe = "AutoDrobe")
 	var/list/filler_paths = list(/obj/machinery/vending/refillable/drink/boozeomat = /obj/item/weapon/vending_refill/boozeomat,
 								/obj/machinery/vending/coffee = /obj/item/weapon/vending_refill/coffee,
-								/obj/machinery/vending/refillable/food/snack = /obj/item/weapon/vending_refill/snack,
+								/obj/machinery/vending/snack = /obj/item/weapon/vending_refill/snack,
 								/obj/machinery/vending/refillable/drink/cola = /obj/item/weapon/vending_refill/cola,
 								/obj/machinery/vending/cigarette = /obj/item/weapon/vending_refill/cigarette,
 								/obj/machinery/vending/refillable/wardrobe/autodrobe = /obj/item/weapon/vending_refill/autodrobe)

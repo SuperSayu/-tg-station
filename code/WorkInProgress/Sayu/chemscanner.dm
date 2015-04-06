@@ -65,7 +65,7 @@
 		dat += "<hr>"
 		var/found = 0
 		for(var/datum/reagent/DR in R.reagent_list)
-			if(istype(DR,/datum/reagent/nothing))
+			if(istype(DR,/datum/reagent/consumable/nothing))
 				continue // this will annoy mime chemists
 			else
 				dat += "<b>[DR.name]</b> [round(DR.volume,0.1)]mg <br>"
