@@ -99,9 +99,11 @@
 	if(new_character.mind)								//disassociate any mind currently in our new body's mind variable
 		new_character.mind.current = null
 
-	transfer_antag_huds(new_character)					//inherit the antag HUDs from this mind (TODO: move this to the antag datum)
 	current = new_character								//associate ourself with our new body
 	new_character.mind = src							//and associate our new body with ourself
+
+	transfer_antag_huds(new_character)					//inherit the antag HUDs from this mind (TODO: move this to a possible antag datum)
+
 	for(var/obj/effect/knowspell/mime/M in current)
 		del M
 	for(var/obj/effect/knowspell/KS in current.contents)
