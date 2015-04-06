@@ -25,7 +25,7 @@
 		M.stop_pulling()
 		M << "\blue You slipped on the [name]!"
 		playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
-		M.Stun(4)
-		M.Weaken(2)
+		M.Stun(1)
+		M.Weaken(1)
 		if(prob(20))
 			step_rand(src)
