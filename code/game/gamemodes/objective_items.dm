@@ -395,7 +395,7 @@ datum/objective_item/special/aegun
 
 datum/objective_item/special/ddrill
 	name = "a diamond drill"
-	targetitem = /obj/item/weapon/pickaxe/diamonddrill
+	targetitem = /obj/item/weapon/pickaxe/drill/diamonddrill
 	difficulty = 10
 	antag_types = list("Space Ninja")
 
