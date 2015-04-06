@@ -611,6 +611,7 @@ datum/design/mailhub
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = "/obj/item/weapon/circuitboard/mailhub"
+	category = list ("Misc. Machinery")
 
 /obj/machinery/vending/refillable/mail
 	name = "Mail supplies"

@@ -33,3 +33,4 @@
 	build_type = PROTOLATHE
 	materials = list("$metal" = 3000, "$glass" = 2000, "$silver" = 100)
 	build_path = "/obj/item/device/translator"
+	category = list("Medical Designs")
