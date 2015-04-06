@@ -12,7 +12,6 @@
 	select_fire(user)
 	update_icon()
 
-
 /obj/item/weapon/gun/energy/gun/nuclear
 	name = "advanced energy gun"
 	desc = "An energy gun with an experimental miniaturized nuclear reactor that automatically charges the internal power cell."

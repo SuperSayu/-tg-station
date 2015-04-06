@@ -54,13 +54,6 @@
 	proj_hit = 1
 	qdel(src)
 
-
-/obj/item/projectile/proc/delete()
-	// Garbage collect the projectiles
-	loc = null
-
-
-
 /obj/item/projectile/proc/on_hit(atom/target, blocked = 0, hit_zone)
 	if(!isliving(target))	return 0
 	if(isanimal(target))	return 0
