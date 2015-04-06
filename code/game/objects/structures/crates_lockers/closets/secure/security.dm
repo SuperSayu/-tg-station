@@ -54,7 +54,7 @@
 	new /obj/item/clothing/glasses/sunglasses/sunglasses3(src)
 	new /obj/item/weapon/mining_voucher(src)
 	new /obj/item/clothing/suit/toggle/wintercoat/cargo(src)
-	new /obj/item/clothing/head/hardhat/reindeer()
+	new /obj/item/clothing/head/hardhat/reindeer(src)
 	return
 
 
