@@ -241,3 +241,12 @@ obj/item/projectile/kinetic/New()
 	if(!gun)
 		qdel(src)
 	gun.create_portal(src)
+
+/obj/item/projectile/bullet/frag12
+	name ="explosive slug"
+	damage = 25
+	weaken = 5
+
+/obj/item/projectile/bullet/frag12/on_hit(atom/target, blocked = 0)
+	explosion(target, -1, 0, 2)
+	return 1
