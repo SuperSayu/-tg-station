@@ -17,6 +17,7 @@
 		H.dna.species = new /datum/species/slime()
 		H.regenerate_icons()
 		H.reagents.del_reagent(chem.type)
+		H.faction |= "slime"
 		return 1
 
 /*
