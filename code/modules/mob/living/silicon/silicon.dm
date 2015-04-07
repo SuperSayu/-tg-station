@@ -402,5 +402,5 @@
 				return 1
 			else
 				visible_message("<span class='danger'>[M] punches [src], but doesn't leave a dent.</span>", \
-						"<span class='userdanger'>[M] punches [src], but doesn't leave a dent.!</span>")
+						"<span class='userdanger'>[M] punches [src], but doesn't leave a dent!</span>")
 	return 0
