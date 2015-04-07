@@ -2,6 +2,7 @@
 	name = "Undead rising"
 	typepath = /datum/round_event/undead
 	max_occurrences = 1
+	holidayID = "Halloween"
 
 /datum/round_event/undead
 	var/spawn_prob = 5
