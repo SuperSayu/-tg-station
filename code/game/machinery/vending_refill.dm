@@ -186,7 +186,7 @@
 	premium = list(/obj/item/clothing/head/beret = 2, /obj/item/clothing/head/cakehat = 0, /obj/item/clothing/head/flatcap = 2, /obj/item/clothing/head/that = 2,
 					/obj/item/clothing/under/suit_jacket = 1,/obj/item/clothing/under/suit_jacket/female = 1,/obj/item/clothing/under/suit_jacket/really_black = 1, /obj/item/clothing/under/sundress = 1, /obj/item/clothing/shoes/sandal = 1,
 					/obj/item/clothing/glasses/monocle = 1)
-	contraband = list(/obj/item/clothing/under/color/rainbow = 1, /obj/item/clothing/head/soft/rainbow = 1, /obj/item/clothing/gloves/rainbow = 1, /obj/item/clothing/shoes/sneakers/rainbow = 1, /obj/item/clothing/under/blackskirt = 2, /obj/item/clothing/shoes/clown_shoes = 1, /obj/item/clothing/shoes/laceup = 3)
+	contraband = list(/obj/item/clothing/under/color/rainbow = 1, /obj/item/clothing/head/soft/rainbow = 1, /obj/item/clothing/gloves/color/rainbow = 1, /obj/item/clothing/shoes/sneakers/rainbow = 1, /obj/item/clothing/under/blackskirt = 2, /obj/item/clothing/shoes/clown_shoes = 1, /obj/item/clothing/shoes/laceup = 3)
 
 
 /obj/machinery/vending/refillable/food
@@ -232,7 +232,7 @@
 	products = list(/obj/item/weapon/reagent_containers/glass/beaker/large = 5, /obj/item/weapon/reagent_containers/glass/beaker = 12,
 					/obj/item/weapon/storage/pill_bottle = 10, /obj/item/weapon/reagent_containers/syringe = 18,
 					/obj/item/weapon/reagent_containers/dropper = 4, /obj/item/weapon/reagent_containers/spray = 2,
-					/obj/item/weapon/storage/pill_bottle = 10, /obj/item/clothing/gloves/latex = 4, /obj/item/clothing/glasses/science = 4, /obj/item/clothing/glasses/science/science3 = 4)
+					/obj/item/weapon/storage/pill_bottle = 10, /obj/item/clothing/gloves/color/latex = 4, /obj/item/clothing/glasses/science = 4, /obj/item/clothing/glasses/science/science3 = 4)
 	premium = list(/obj/item/weapon/cartridge/chemistry = 2, /obj/item/weapon/storage/belt/medical = 4, /obj/item/weapon/gun/syringe = 1)
 	contraband = list(/obj/item/weapon/grenade/chem_grenade = 10, /obj/item/device/assembly/igniter = 4, /obj/item/device/assembly/timer = 6)
 	req_one_access_txt = "33;39"
