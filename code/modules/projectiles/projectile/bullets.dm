@@ -29,7 +29,7 @@
 
 /obj/item/projectile/bullet/midbullet
 	damage = 20
-	stamina = 50
+	stamina = 50 //two round bursts from the c20r
 
 /obj/item/projectile/bullet/midbullet2
 	damage = 25
@@ -51,8 +51,6 @@
 	range = 7
 	icon_state = "spark"
 	color = "#FFFF00"
-
-/obj/item/projectile/bullet/incendiary
 
 /obj/item/projectile/bullet/incendiary/on_hit(var/atom/target, var/blocked = 0)
 	..()
