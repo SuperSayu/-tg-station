@@ -17,7 +17,7 @@
 								//anything with a (non-null) holidayID which does not match holiday, cannot run.
 	var/wizardevent = 0
 
-	var/minimumCrew		=	0
+	var/minimumCrew = 0
 
 /datum/round_event_control/wizard
 	wizardevent = 1
