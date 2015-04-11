@@ -486,62 +486,67 @@
 	var/add_string = null
 	var/remove_string = null
 
-	proc/filter_mutations(var/list/possible,var/mob/living/target)
-		var/list/selectable = list()
+/obj/effect/knowspell/target/mutate/proc/filter_mutations(var/list/possible,var/mob/living/target)
+	var/list/selectable = list()
+
+	if(ishuman(target))
+		var/mob/living/carbon/human/H = target
+
 		for(var/reference in possible)
 			var/mut_no = possible[reference]
-			if(mut_no in target.mutations)
+
+			if(H.dna.check_mutation(mut_no))
 				continue
-			selectable[reference] = mut_no
-		return selectable
 
-	before_cast(var/mob/caster, var/mob/living/target)
-		if(!istype(caster)) return 0
+			selectable[reference]=mut_no
+	return selectable
 
-		var/list/selected = filter_mutations(possible_mutations,target)
+/obj/effect/knowspell/target/mutate/before_cast(var/mob/caster, var/mob/living/target)
+	if(!istype(caster)) return 0
 
-		if(!selected.len)
-			caster << "This spell can do no more to [target==caster?"you":"[target]"]!"
-			return 0
-		var/answer
-		if(allow_choice)
-			answer = input(caster, "Select a mutation:","Mutation",null) in selected
-		else
-			answer = pick(selected)
+	var/list/selected = filter_mutations(possible_mutations,target)
 
-		if(!isnull(answer) && cast_check(caster))
-
-			mutation = possible_mutations[answer]
-			add_string = describe_addition[answer]
-			remove_string = describe_removal[answer]
-			incantation = incantations[answer]
-
-			if(caster == target)
-				incant_volume = 1 // whisper
-			else
-				incant_volume = 2 // shout
-
-			incant(caster, target)
-			return 1
-
+	if(!selected.len)
+		caster << "This spell can do no more to [target==caster?"you":"[target]"]!"
 		return 0
+	var/answer
+	if(allow_choice)
+		answer = input(caster, "Select a mutation:","Mutation",null) in selected
+	else
+		answer = pick(selected)
 
-	cast(var/mob/caster, var/mob/target)
+	if(!isnull(answer) && cast_check(caster))
 
-		target.mutations += mutation
-		target.update_mutations()
-		target << "\red [add_string]"
-		scatter_lightning(target)
+		mutation = possible_mutations[answer]
+		add_string = describe_addition[answer]
+		remove_string = describe_removal[answer]
+		incantation = incantations[answer]
+
+		if(caster == target)
+			incant_volume = 1 // whisper
+		else
+			incant_volume = 2 // shout
+
+		incant(caster, target)
+		return 1
+
+	return 0
+
+/obj/effect/knowspell/target/mutate/cast(var/mob/caster, var/mob/target)
+	if(ishuman(target))
+		var/mob/living/carbon/human/H = target
+		H.dna.add_mutation(mutation)
+		H << "\red [add_string]"
+		scatter_lightning(H)
 		var/temp = mutation
 		var/tempstring = remove_string
 
 		if(remove_after)
 			spawn(remove_after)
-				if(target)
-					target.mutations -= temp
-					target.update_mutations()
-					target << "\red [tempstring]"
-					scatter_lightning(target)
+				if(ishuman(H)) //maybe it got turned into a monkey
+					H.dna.remove_mutation(temp)
+					H << "\red [tempstring]"
+					scatter_lightning(H)
 
 /obj/effect/knowspell/target/mutate/good
 	name = "beneficial mutation"
@@ -551,7 +556,7 @@
 
 	staff_state = "healing"
 
-	possible_mutations = list("Hulkitis" = HULK, "Telekinesis" = TK, "Cold Resistance" = COLD_RESISTANCE, "X-ray vision" = XRAY, "Laser Eyes" = LASER)
+	possible_mutations = list("Hulkitis" = HULK, "Telekinesis" = TK, "Cold Resistance" = COLDRES, "X-ray vision" = XRAY, "Laser Eyes" = LASEREYES)
 	incantations = list("Hulkitis" = "BIRUZ BANNAR", "Telekinesis" = "JIN GREI", "X-ray vision" = "ZU PERMA NAI", "Cold Resistance" = "JONIST ORM",
 						"Laser Eyes" = "PSI CLOPHS")
 	describe_addition = list("Hulkitis" = "Your muscles bulge and an indescribable rage burns in your heart!",
@@ -573,7 +578,7 @@
 	chargemax = 300
 	remove_after = 1200
 
-	possible_mutations = list("Clumsiness" = CLUMSY, "Epileptic Siezures" = EPILEPSY, "Coughing fits" = COUGHING, "Beguiled Tongue" = TOURETTES, "Blindness" = BLIND, "Muteness" = MUTE, "Deafness" = DEAF,  "Nearsightedness" = NEARSIGHTED)
+	possible_mutations = list("Clumsiness" = CLOWNMUT, "Epileptic Siezures" = EPILEPSY, "Coughing fits" = COUGH, "Beguiled Tongue" = TOURETTES, "Blindness" = BLIND, "Muteness" = MUTE, "Deafness" = DEAF,  "Nearsightedness" = BADSIGHT)
 	incantations = list("Clumsiness" = "DRO PSI DESI", "Epileptic Siezures" = "NURV USDIS", "Coughing fits" = "BAHD JOHK", "Beguiled Tongue" = "FUCK SHIT", "Blindness" = "HELL UNKELL", "Muteness" = "SI LENDED", "Deafness" = "HEER NO",  "Nearsightedness" = "KLO PSI")
 	describe_addition = list("Clumsiness" = "Your fingers suddenly twist uncontrollably!",
 							"Epileptic Siezures" = "Your entire nervous system lights up with pain and agony!", "Coughing fits" = "Something's stabbing at your lungs!",
@@ -582,68 +587,6 @@
 	describe_removal = list("Clumsiness" = "Your fingers feel better.", "Fatness" = "Your gut shrinks down a bit.", "Epileptic Siezures" = "Your body stops hurting quite so much.",
 							"Coughing fits" = "Your chest feels better.", "Beguiled Tongue" = "Your lips stop flapping of their own accord.",
 							"Blindness" = "The world doesn't seem quite as dark.", "Muteness" = "Your tongue feels lighter.", "Deafness" = "Your hearing slowly returns.",  "Nearsightedness" = "The blurriness subsides.")
-
-	filter_mutations(var/list/possible,var/mob/living/target)
-		var/list/selectable = list()
-		for(var/reference in possible)
-			var/mut_no = possible[reference]
-			switch(mut_no)
-				if(CLUMSY)
-					if(mut_no in target.mutations)
-						continue
-				if(EPILEPSY, NEARSIGHTED, COUGHING,TOURETTES,NERVOUS)
-					if(target.disabilities&mut_no)
-						continue
-				if(BLIND,DEAF)
-					if(target.sdisabilities&mut_no)
-						continue
-			selectable[reference]=mut_no
-		return selectable
-
-	cast(var/mob/caster, var/mob/target)
-		switch(mutation)
-			if(CLUMSY)
-				target.mutations += mutation
-				target.update_mutations()
-			if(EPILEPSY, NEARSIGHTED, COUGHING,TOURETTES,NERVOUS)
-				if(target.disabilities&mutation) // bitfield, cannot double act and then remove cleanly
-					return
-				target.disabilities |= mutation
-			if(BLIND)
-				if(target.sdisabilities&mutation)
-					return
-				target.sdisabilities |= mutation
-			if(DEAF)
-				if(target.sdisabilities&mutation)
-					return
-				target.sdisabilities |= mutation
-				target.ear_deaf = 1
-			else
-				world.log << "strange bad mutation: [mutation]"
-				return
-		target << "\red [add_string]"
-		scatter_lightning(target)
-		var/temp = mutation
-		var/tempstring = remove_string
-
-		if(remove_after)
-			spawn(remove_after)
-				if(target)
-					switch(temp)
-						if(CLUMSY)
-							target.mutations -= temp
-							target.update_mutations()
-						if(EPILEPSY, NEARSIGHTED, COUGHING,TOURETTES,NERVOUS)
-							target.disabilities &= ~temp
-						if(BLIND)
-							target.sdisabilities &= ~temp
-						if(DEAF)
-							target.sdisabilities &= ~temp
-							target.ear_deaf = 0
-
-					target.update_mutations()
-					target << "\red [tempstring]"
-					scatter_lightning(target)
 
 /obj/effect/knowspell/target/gender_swap
 	name = "Swap Gender"
