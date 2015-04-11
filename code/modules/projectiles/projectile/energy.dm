@@ -28,6 +28,15 @@
 			proj_hit = 1
 	..()
 
+
+/obj/item/projectile/energy/electrode/on_range() //to ensure the bolt sparks when it reaches the end of its range if it didn't hit a target yet
+	if(!proj_hit)
+		var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread
+		sparks.set_up(1, 1, src)
+		sparks.start()
+		proj_hit = 1
+	..()
+
 /obj/item/projectile/energy/declone
 	name = "radiation beam"
 	icon_state = "declone"
@@ -42,7 +51,7 @@
 	damage = 5
 	damage_type = TOX
 	weaken = 5
-
+	range = 7
 
 /obj/item/projectile/energy/bolt //ebow bolts
 	name = "bolt"

@@ -2,7 +2,8 @@
 	name 			= "Electrical Storm"
 	typepath 		= /datum/round_event/electrical_storm
 	earliest_start	= 6000
-	weight 			= 20
+	weight 			= 40
+	alertadmins = 0
 	minimumCrew		= 3
 
 /datum/round_event/electrical_storm

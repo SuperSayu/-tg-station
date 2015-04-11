@@ -9,18 +9,6 @@
 	caliber = ".50"
 	projectile_type = /obj/item/projectile/bullet
 
-/obj/item/ammo_casing/a418
-	desc = "A .418 bullet casing."
-	caliber = "357"
-	projectile_type = /obj/item/projectile/bullet/suffocationbullet
-
-
-/obj/item/ammo_casing/a666
-	desc = "A .666 bullet casing."
-	caliber = "357"
-	projectile_type = /obj/item/projectile/bullet/cyanideround
-
-
 /obj/item/ammo_casing/c38
 	desc = "A .38 bullet casing."
 	caliber = "38"
@@ -36,7 +24,7 @@
 /obj/item/ammo_casing/c9mm
 	desc = "A 9mm bullet casing."
 	caliber = "9mm"
-	projectile_type = /obj/item/projectile/bullet/midbullet2
+	projectile_type = /obj/item/projectile/bullet/weakbullet3
 
 
 /obj/item/ammo_casing/c45
@@ -109,6 +97,12 @@
 	icon_state = "ishell"
 	projectile_type = /obj/item/projectile/bullet/incendiary/shell
 
+/obj/item/ammo_casing/shotgun/frag12
+	name = "FRAG-12 slug"
+	desc = "A high explosive breaching round for a 12 gauge shotgun."
+	icon_state = "heshell"
+	projectile_type = /obj/item/projectile/bullet/frag12
+
 /obj/item/ammo_casing/shotgun/incendiary/dragonsbreath
 	name = "dragonsbreath shell"
 	desc = "A shotgun shell which fires a spread of incendiary pellets."
@@ -143,6 +137,10 @@
 	caliber = "a762"
 	projectile_type = /obj/item/projectile/bullet
 
+/obj/item/ammo_casing/a545
+	desc = "A 5.45mm bullet casing."
+	caliber = "a545"
+	projectile_type = /obj/item/projectile/bullet/heavybullet
 
 /obj/item/ammo_casing/caseless
 	desc = "A caseless bullet casing."
@@ -161,26 +159,9 @@
 	caliber = "75"
 	projectile_type = /obj/item/projectile/bullet/gyro
 
-/obj/item/ammo_casing/shotgun/dart/bananacreme
-	name = "banana creme bullet casing"
-	desc = "Isn't this just... a banana?"
-	caliber = "honk"
-	icon = 'icons/obj/items.dmi'
-	icon_state = "banana_peel"
-	projectile_type = /obj/item/projectile/reagent/bananacreme
-
-/obj/item/ammo_casing/shotgun/dart/bananacreme/Crossed(AM as mob|obj)
-	if(BB)
-		return // not really a peel if it's full
-	if (istype(AM, /mob/living/carbon))
-		var/mob/M =	AM
-		if (istype(M, /mob/living/carbon/human) && (isobj(M:shoes) && M:shoes.flags&NOSLIP))
-			return
-
-		M.stop_pulling()
-		M << "\blue You slipped on the [name]!"
-		playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
-		M.Stun(4)
-		M.Weaken(2)
-		if(prob(20))
-			step_rand(src)
+/obj/item/ammo_casing/a40mm
+	name = "40mm HE shell"
+	desc = "A cased high explosive grenade that can only be activated once fired out of a grenade launcher."
+	caliber = "40mm"
+	icon_state = "40mmHE"
+	projectile_type = /obj/item/projectile/bullet/a40mm

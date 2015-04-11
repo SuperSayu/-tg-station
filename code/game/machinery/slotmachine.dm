@@ -92,16 +92,16 @@
 
 		return
 
-	else if(istype(I, /obj/item/weapon/card/emag) && !emagged)
-		emagged = 1
+	else if(!balance) //to prevent coins from magically disappearing
+		..()
 
+/obj/machinery/computer/slot_machine/emag_act()
+	if(!emagged)
+		emagged = 1
 		var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
 		spark_system.set_up(4, 0, src.loc)
 		spark_system.start()
 		playsound(src.loc, "sparks", 50, 1)
-
-	else if(!balance) //to prevent coins from magically disappearing
-		..()
 
 /obj/machinery/computer/slot_machine/attack_hand(mob/living/user)
 	. = ..() //Sanity checks.
@@ -251,6 +251,7 @@
 		user << "<span class='notice'>You win three free games!</span>"
 		balance += SPIN_PRICE * 4
 		money = max(money - SPIN_PRICE * 4, money)
+
 	else
 		user << "<span class='warning'>No luck!</span>"
 

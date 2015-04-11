@@ -23,6 +23,8 @@
 #define ui_action_slot3 "WEST+2:10,NORTH-1:26"
 #define ui_action_slot4 "WEST+3:12,NORTH-1:26"
 #define ui_action_slot5 "WEST+4:14,NORTH-1:26"
+#define ui_action_slot6 "WEST+5:16,NORTH-1:26"
+#define ui_action_slot7 "WEST+6:18,NORTH-1:26"
 
 //Lower left, persistant menu
 #define ui_inventory "WEST:6,SOUTH:5"
@@ -91,8 +93,9 @@
 //Middle right (status indicators)
 #define ui_nutrition "EAST-1:28,CENTER-3:11"
 #define ui_temp "EAST-1:28,CENTER-2:13"
-#define ui_health "EAST-1:28,CENTER-1:15"
-#define ui_internal "EAST-1:28,CENTER:17"
+#define ui_healthdoll "EAST-1:28,CENTER-1:15"
+#define ui_health "EAST-1:28,CENTER:17"
+#define ui_internal "EAST-1:28,CENTER+1:19"
 
 //borgs and aliens
 #define ui_borg_health "EAST-1:28,CENTER-1:15"		//borgs have the health display where humans have the pressure damage indicator.
@@ -130,4 +133,3 @@
 #define ui_ears "WEST+2:10,SOUTH+2:9"
 
 #define ui_head "WEST+1:8,SOUTH+3:11"
-

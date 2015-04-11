@@ -464,23 +464,6 @@
 				update_icon()
 			else
 				user << "<span class='warning'>Access denied.</span>"
-	else if (istype(W, /obj/item/weapon/card/emag) && !(emagged || malfhack))		// trying to unlock with an emag card
-		if(opened)
-			user << "You must close the cover to swipe an ID card."
-		else if(wiresexposed)
-			user << "You must close the panel first"
-		else if(stat & (BROKEN|MAINT))
-			user << "Nothing happens."
-		else
-			flick("apc-spark", src)
-			if (do_after(user,6))
-				if(prob(50))
-					emagged = 1
-					locked = 0
-					user << "<span class='notice'>You emag the APC interface.</span>"
-					update_icon()
-				else
-					user << "<span class='warning'>You fail to [ locked ? "unlock" : "lock"] the APC interface.</span>"
 	else if (istype(W, /obj/item/stack/cable_coil) && !terminal && opened && has_electronics!=2)
 		if (src.loc:intact)
 			user << "<span class='warning'>You must remove the floor plating in front of the APC first.</span>"
@@ -599,10 +582,26 @@
 				(istype(W, /obj/item/device/multitool) || \
 				istype(W, /obj/item/weapon/wirecutters) || istype(W, /obj/item/device/assembly/signaler)))
 				return src.attack_hand(user)
-			user.do_attack_animation(src)
-			user.visible_message("<span class='danger'>[user.name] has hit the [src.name] with the [W.name]!</span>", \
-				"<span class='danger'>You hit the [src.name] with your [W.name]!</span>", \
-				"You hear bang")
+			..()
+
+/obj/machinery/power/apc/emag_act(mob/user as mob)
+	if(!emagged && !malfhack)
+		if(opened)
+			user << "You must close the cover to swipe an ID card."
+		else if(wiresexposed)
+			user << "You must close the panel first"
+		else if(stat & (BROKEN|MAINT))
+			user << "Nothing happens."
+		else
+			flick("apc-spark", src)
+			if (do_after(user,6))
+				if(prob(50))
+					emagged = 1
+					locked = 0
+					user << "<span class='notice'>You emag the APC interface.</span>"
+					update_icon()
+				else
+					user << "<span class='warning'>You fail to [ locked ? "unlock" : "lock"] the APC interface.</span>"
 
 // attack with hand - remove cell (if cover open) or interact with the APC
 
@@ -691,7 +690,7 @@
 		"chargingStatus" = charging,
 		"totalLoad" = lastused_equip + lastused_light + lastused_environ,
 		"coverLocked" = coverlocked,
-		"siliconUser" = istype(user, /mob/living/silicon),
+		"siliconUser" = user.has_unlimited_silicon_privilege,
 		"malfStatus" = get_malf_status(user),
 
 		"powerChannels" = list(
@@ -779,7 +778,7 @@
 	if(user.lying)
 		user << "<span class='warning'>You must stand to use [src]!</span>"
 		return 0
-	if (istype(user, /mob/living/silicon))
+	if(user.has_unlimited_silicon_privilege)
 		var/mob/living/silicon/ai/AI = user
 		var/mob/living/silicon/robot/robot = user
 		if (                                                             \
@@ -845,7 +844,7 @@
 		update()
 
 	else if (href_list["overload"])
-		if(istype(usr, /mob/living/silicon))
+		if(usr.has_unlimited_silicon_privilege)
 			src.overload_lighting()
 
 	else if (href_list["malfhack"])
@@ -882,7 +881,7 @@
 			malfvacate()
 
 	else if (href_list["toggleaccess"])
-		if(istype(usr, /mob/living/silicon))
+		if(usr.has_unlimited_silicon_privilege)
 			if(emagged || (stat & (BROKEN|MAINT)))
 				usr << "The APC does not respond to the command."
 			else

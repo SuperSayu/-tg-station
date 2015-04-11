@@ -56,15 +56,6 @@
 	if(HULK in mutations)	return
 	..()
 
-mob/living/carbon/human/proc/hat_fall_prob()
-	var/multiplier = 1
-	var/obj/item/clothing/head/H = head
-	var/loose = 100
-	if(istype(H)) loose = H.loose
-	if(stat || (status_flags & FAKEDEATH))
-		multiplier = 2
-	return loose * multiplier
-
 ////////////////////////////////////////////
 
 //Returns a list of damaged organs

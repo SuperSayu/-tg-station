@@ -18,7 +18,7 @@
 /datum/round_event_control/radiation_storm/healing
 	name 			= "Healing Radiation"
 	typepath 		= /datum/round_event/radiation_storm/healing
-	weight 			= 5
+	weight 			= 0
 	max_occurrences = 10
 
 /datum/round_event/radiation_storm/proc/rad_armorcheck(mob/living/M as mob,var/multiplier = 0.5)

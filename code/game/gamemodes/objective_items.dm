@@ -293,11 +293,11 @@ datum/objective_item/steal/reagent/unique/booze // Beer run!
 	antag_types = list("Wizard","Space Ninja") // all factions respect the booze run
 
 datum/objective_item/steal/reagent/unique/booze/check_reagent(var/datum/reagent/R)
-	var/static/list/other_alcohols = list(/datum/reagent/atomicbomb,/datum/reagent/gargle_blaster,/datum/reagent/neurotoxin,/datum/reagent/hippies_delight)
+	var/static/list/other_alcohols = list(/datum/reagent/consumable/atomicbomb,/datum/reagent/consumable/gargle_blaster,/datum/reagent/consumable/neurotoxin,/datum/reagent/consumable/hippies_delight)
 
 	if(R.volume < 1) return
 
-	if(istype(R,/datum/reagent/ethanol) || (R.type in other_alcohols))
+	if(istype(R,/datum/reagent/consumable/ethanol) || (R.type in other_alcohols))
 		samples |= R.type
 
 // This type will be added instead to the random pool, and the subtypes below
@@ -395,7 +395,7 @@ datum/objective_item/special/aegun
 
 datum/objective_item/special/ddrill
 	name = "a diamond drill"
-	targetitem = /obj/item/weapon/pickaxe/diamonddrill
+	targetitem = /obj/item/weapon/pickaxe/drill/diamonddrill
 	difficulty = 10
 	antag_types = list("Space Ninja")
 

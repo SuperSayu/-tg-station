@@ -445,7 +445,7 @@
 "iC" = (/obj/structure/alien/weeds{icon_state = "weeds1"},/turf/simulated/floor/holofloor{tag = "icon-alienvault (EAST)"; icon_state = "alienvault"; dir = 4},/area/holodeck/theater/alien)
 "iD" = (/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/theater/base)
 "iE" = (/obj/structure/table/wood,/obj/effect/decal/cleanable/generic,/turf/unsimulated/floor{dir = 8; icon_state = "wood"},/area/wizard_station)
-"iF" = (/obj/machinery/vending/refillable/food/snack,/turf/unsimulated/floor{dir = 8; icon_state = "wood"},/area/wizard_station)
+"iF" = (/obj/machinery/vending/snack,/turf/unsimulated/floor{dir = 8; icon_state = "wood"},/area/wizard_station)
 "iG" = (/obj/effect/landmark/start{name = "wizard"},/turf/unsimulated/floor{icon_state = "dark"},/area/wizard_station)
 "iH" = (/obj/effect/decal/cleanable/blood/old,/obj/effect/decal/cleanable/molten_item,/turf/unsimulated/floor{icon_state = "dark"},/area/space)
 "iI" = (/obj/item/weapon/shard,/obj/item/weapon/spacecash/c1000,/turf/unsimulated/floor{tag = "icon-floorscorched2"; icon_state = "floorscorched2"},/area/space)

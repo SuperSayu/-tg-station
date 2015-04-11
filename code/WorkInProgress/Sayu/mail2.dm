@@ -564,16 +564,6 @@
 	update_icon()	// until there are hub sprites, this is useless
 		return
 
-	attackby(obj/item/P as obj, mob/user as mob)
-		if(istype(P,/obj/item/weapon/card/emag))
-			user << "The mail hub tries to reject the [P], but yields after a moment."
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(2, 1, src)
-			s.start()
-			emagged = 1
-			return
-		..(P,user)
-
 	InsertPackage(var/obj/item/smallDelivery/package)
 		var/obj/item/smallDelivery/M = new(src)
 		M.wrap(package)
@@ -666,6 +656,16 @@
 				return
 
 		return ..(MH,vend)
+
+
+/obj/machinery/mail/hubemag_act(mob/user as mob)
+	if(user)
+		user << "The mail hub tries to reject the item, but yields after a moment."
+	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+	s.set_up(2, 1, src)
+	s.start()
+	emagged = 1
+	return
 
 /obj/item/weapon/circuitboard/mailstation
 	name = "Circuit board (Mail Station)"

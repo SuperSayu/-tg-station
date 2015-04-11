@@ -89,7 +89,6 @@ BLIND     // can't see anything
 	icon = 'icons/obj/clothing/hats.dmi'
 	body_parts_covered = HEAD
 	slot_flags = SLOT_HEAD
-	var/loose = 10 // propensity to fall off, 0..100
 
 //Mask
 /obj/item/clothing/mask
@@ -158,6 +157,7 @@ BLIND     // can't see anything
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	slot_flags = SLOT_OCLOTHING
 	var/blood_overlay_type = "suit"
+	var/togglename = null
 
 //Spacesuit
 //Note: Everything in modules/clothing/spacesuits should have the entire suit grouped together.
@@ -176,7 +176,6 @@ BLIND     // can't see anything
 	heat_protection = HEAD
 	max_heat_protection_temperature = SPACE_HELM_MAX_TEMP_PROTECT
 	flash_protect = 2
-	loose = 0 // This falling off would be A Bad Thing
 	strip_delay = 50
 	put_on_delay = 50
 
@@ -291,22 +290,24 @@ atom/proc/generate_female_clothing(index,t_color,icon)
 	if(src.has_sensor <= 0)
 		usr << "This suit does not have any sensors."
 		return 0
-	src.sensor_mode += 1
-	if(src.sensor_mode > 3)
-		src.sensor_mode = 0
-	switch(src.sensor_mode)
-		if(0)
-			M << "You disable your suit's remote sensing equipment."
-		if(1)
-			M << "Your suit will now report whether you are live or dead."
-		if(2)
-			M << "Your suit will now report your vital lifesigns."
-		if(3)
-			M << "Your suit will now report your vital lifesigns as well as your coordinate position."
-	if(istype(loc,/mob/living/carbon/human))
-		var/mob/living/carbon/human/H = loc
-		if(H.w_uniform == src)
-			H.update_suit_sensors()
+
+	var/list/modes = list("Off", "Binary vitals", "Exact vitals", "Tracking beacon")
+	var/switchMode = input("Select a sensor mode:", "Suit Sensor Mode", modes[sensor_mode + 1]) in modes
+	if(get_dist(usr, src) > 1)
+		usr << "You have moved too far away."
+		return
+	sensor_mode = modes.Find(switchMode) - 1
+
+	if (src.loc == usr)
+		switch(sensor_mode)
+			if(0)
+				usr << "You disable your suit's remote sensing equipment."
+			if(1)
+				usr << "Your suit will now only report whether you are alive or dead."
+			if(2)
+				usr << "Your suit will now only report your exact vital lifesigns."
+			if(3)
+				usr << "Your suit will now report your exact vital lifesigns as well as your coordinate position."
 	..()
 
 /obj/item/clothing/under/verb/rolldown()
@@ -365,7 +366,7 @@ atom/proc/generate_female_clothing(index,t_color,icon)
 			flags |= (visor_flags)
 			flags_inv |= (visor_flags_inv)
 			icon_state = initial(icon_state)
-			usr << "You pull the [src] down."
+			usr << "You pull \the [src] down."
 			flash_protect = initial(flash_protect)
 			tint = initial(tint)
 		else
@@ -373,7 +374,7 @@ atom/proc/generate_female_clothing(index,t_color,icon)
 			flags &= ~(visor_flags)
 			flags_inv &= ~(visor_flags_inv)
 			icon_state = "[initial(icon_state)]up"
-			usr << "You push the [src] up."
+			usr << "You push \the [src] up."
 			flash_protect = 0
 			tint = 0
 

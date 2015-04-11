@@ -84,3 +84,11 @@
 
 #define BONE_INTACT	1
 #define BONE_BROKEN	2
+
+//Nutrition levels for humans. No idea where else to put it
+#define NUTRITION_LEVEL_FAT 600
+#define NUTRITION_LEVEL_FULL 550
+#define NUTRITION_LEVEL_WELL_FED 450
+#define NUTRITION_LEVEL_FED 350
+#define NUTRITION_LEVEL_HUNGRY 250
+#define NUTRITION_LEVEL_STARVING 150

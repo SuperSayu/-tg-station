@@ -164,8 +164,6 @@
 
 	else if(stage == EMPTY && istype(I, /obj/item/device/assembly_holder))
 		var/obj/item/device/assembly_holder/A = I
-		if(!A.secured)
-			return
 		if(isigniter(A.a_left) == isigniter(A.a_right))	//Check if either part of the assembly has an igniter, but if both parts are igniters, then fuck it
 			return
 
@@ -234,6 +232,14 @@
 	if(nadeassembly)
 		nadeassembly.HasProximity(AM)
 
+/obj/item/weapon/grenade/chem_grenade/Crossed(atom/movable/AM)
+	if(nadeassembly)
+		nadeassembly.Crossed(AM)
+
+/obj/item/weapon/grenade/chem_grenade/on_found(mob/finder)
+	if(nadeassembly)
+		nadeassembly.on_found(finder)
+
 /obj/item/weapon/grenade/chem_grenade/prime()
 	if(stage != READY)
 		return
@@ -270,7 +276,6 @@
 	update_mob()
 
 	mix_reagents()
-	del(nadeassembly) // do this now to stop infrared beams
 
 	if(reagents.total_volume)	//The possible reactions didnt use up all reagents.
 		var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
@@ -291,13 +296,14 @@
 	for(var/atom/A in reactable)
 		reagents.reaction(A, TOUCH, fraction)
 
-
-	spawn(15)		   //Making sure all reagents can work
+	invisibility = INVISIBILITY_MAXIMUM
+	spawn(50)		   //Making sure all reagents can work
 		qdel(src)	   //correctly before deleting the grenade.
 
 /obj/item/weapon/grenade/chem_grenade/proc/mix_reagents()
 	for(var/obj/item/weapon/reagent_containers/glass/G in beakers)
 		G.reagents.trans_to(src, G.reagents.total_volume)
+
 /obj/item/weapon/grenade/chem_grenade/proc/CreateDefaultTrigger(var/typekey)
 	if(ispath(typekey,/obj/item/device/assembly))
 		nadeassembly = new(src)
@@ -308,7 +314,6 @@
 		if(!nadeassembly.a_right.secured)
 			nadeassembly.a_right.toggle_secure() // necessary because fuxing prock_sensors
 		nadeassembly.a_right.holder = nadeassembly
-		nadeassembly.secured = 1
 		nadeassembly.master = src
 		nadeassembly.update_icon()
 		stage = READY

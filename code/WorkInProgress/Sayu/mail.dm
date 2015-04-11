@@ -519,16 +519,6 @@
 
 	update_icon()
 		return
-	attackby(obj/item/P as obj, mob/user as mob)
-		if(istype(P,/obj/item/weapon/card/emag)) // mail stations cannot be emagged, but the hub can
-			user << "The mail hub doesn't seem to like the [P], but yields after a moment."
-			playsound(src.loc, 'sound/machines/twobeep.ogg', 50, 0)
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(2, 1, src)
-			s.start()
-			emagged = 1
-			return
-		..(P,user)
 
 	Recieve(var/obj/item/smallDelivery/MH,var/vend)
 		ChillingEffect()
@@ -581,7 +571,13 @@
 				removed.temperature = max((removed.temperature*heat_capacity - 10000)/heat_capacity, 0)
 			env.merge(removed)
 
-
+/obj/machinery/mail/hub/emag_act()
+	playsound(src.loc, 'sound/machines/twobeep.ogg', 50, 0)
+	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+	s.set_up(2, 1, src)
+	s.start()
+	emagged = 1
+	return
 
 /obj/item/weapon/circuitboard/mailstation
 	name = "Circuit board (Mail Station)"
@@ -615,6 +611,7 @@ datum/design/mailhub
 	build_type = IMPRINTER
 	materials = list("$glass" = 2000, "sacid" = 20)
 	build_path = "/obj/item/weapon/circuitboard/mailhub"
+	category = list ("Misc. Machinery")
 
 /obj/machinery/vending/refillable/mail
 	name = "Mail supplies"

@@ -285,6 +285,10 @@
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_health
 
+	mymob.healthdoll = new /obj/screen()
+	mymob.healthdoll.name = "health doll"
+	mymob.healthdoll.screen_loc = ui_healthdoll
+
 	mymob.nutrition_icon = new /obj/screen()
 	mymob.nutrition_icon.icon_state = "nutrition0"
 	mymob.nutrition_icon.name = "nutrition"
@@ -332,7 +336,7 @@
 
 	mymob.client.screen = null
 
-	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.nutrition_icon, mymob.pullin, mymob.blind, mymob.flash, mymob.damageoverlay, lingchemdisplay, lingstingdisplay) //, mymob.hands, mymob.rest, mymob.sleep) //, mymob.mach )
+	mymob.client.screen += list( mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.pressure, mymob.toxin, mymob.bodytemp, mymob.internals, mymob.fire, mymob.healths, mymob.healthdoll, mymob.nutrition_icon, mymob.pullin, mymob.blind, mymob.flash, mymob.damageoverlay, lingchemdisplay, lingstingdisplay) //, mymob.hands, mymob.rest, mymob.sleep) //, mymob.mach )
 	mymob.client.screen += adding + hotkeybuttons
 	inventory_shown = 0;
 
@@ -393,5 +397,9 @@
 					A.screen_loc = ui_action_slot4
 				if(5)
 					A.screen_loc = ui_action_slot5
-					break //5 slots available, so no more can be added.
+				if(6)
+					A.screen_loc = ui_action_slot6
+				if(7)
+					A.screen_loc = ui_action_slot7
+					break //7 slots available, so no more can be added.
 			num++

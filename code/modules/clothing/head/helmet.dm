@@ -10,7 +10,6 @@
 	min_cold_protection_temperature = HELMET_MIN_TEMP_PROTECT
 	heat_protection = HEAD
 	max_heat_protection_temperature = HELMET_MAX_TEMP_PROTECT
-	loose = 0
 	strip_delay = 60
 
 /obj/item/clothing/head/helmet/riot
@@ -33,14 +32,14 @@
 			flags |= (visor_flags)
 			flags_inv |= (visor_flags_inv)
 			icon_state = initial(icon_state)
-			usr << "You pull the [src] down."
+			usr << "You pull \the [src] down."
 			usr.update_inv_head(0)
 		else
 			up = !up
 			flags &= ~(visor_flags)
 			flags_inv &= ~(visor_flags_inv)
 			icon_state = "[initial(icon_state)]up"
-			usr << "You push the [src] up."
+			usr << "You push \the [src] up."
 			usr.update_inv_head(0)
 
 /obj/item/clothing/head/helmet/swat
@@ -54,12 +53,6 @@
 	heat_protection = HEAD
 	max_heat_protection_temperature = SPACE_HELM_MAX_TEMP_PROTECT
 	strip_delay = 80
-
-/obj/item/clothing/head/helmet/swat/syndicate
-	name = "blood-red helmet"
-	desc = "An extremely robust, space-worthy helmet that lacks a visor to allow for goggle usage underneath. Property of Gorlex Marauders."
-	icon_state = "helmetsyndi"
-	item_state = "helmet"
 
 /obj/item/clothing/head/helmet/thunderdome
 	name = "\improper Thunderdome helmet"
@@ -95,7 +88,7 @@
 	flags = HEADCOVERSEYES|BLOCKHAIR
 	item_state = "gladiator"
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES
-	loose = 0 // full-head objects (almost) never fall off
+
 obj/item/clothing/head/helmet/redtaghelm
 	name = "red laser tag helmet"
 	desc = "They have chosen their own end."

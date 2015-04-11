@@ -53,6 +53,8 @@
 	var/datum/changeling/changeling		//changeling holder
 
 	var/miming = 0 // Mime's vow of silence
+	var/antag_hud_icon_state = null //this mind's ANTAG_HUD should have this icon_state
+	var/datum/atom_hud/antag/antag_hud = null //this mind's antag HUD
 
 /datum/mind/New(var/key)
 	src.key = key
@@ -97,9 +99,11 @@
 	if(new_character.mind)								//disassociate any mind currently in our new body's mind variable
 		new_character.mind.current = null
 
-	new_character.refresh_huds(current)					//inherit the HUDs from the old body
 	current = new_character								//associate ourself with our new body
 	new_character.mind = src							//and associate our new body with ourself
+
+	transfer_antag_huds(new_character)					//inherit the antag HUDs from this mind (TODO: move this to a possible antag datum)
+
 	for(var/obj/effect/knowspell/mime/M in current)
 		del M
 	for(var/obj/effect/knowspell/KS in current.contents)

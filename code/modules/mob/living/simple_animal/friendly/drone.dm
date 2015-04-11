@@ -30,6 +30,7 @@
 	voice_name = "synthesized chirp"
 	languages = DRONE
 	mob_size = 0
+	has_unlimited_silicon_privilege = 1
 	var/picked = FALSE
 	var/list/drone_overlays[TOTAL_LAYERS]
 	var/laws = \
@@ -521,8 +522,6 @@
 	icon = 'icons/mob/drone.dmi'
 	icon_state = "drone_item"
 	origin_tech = "programming=2;biotech=4"
-	var/construction_cost = list("metal"=800, "glass"=350)
-	var/construction_time=150
 	var/drone_type = /mob/living/simple_animal/drone //Type of drone that will be spawned
 
 /obj/item/drone_shell/attack_ghost(mob/user)

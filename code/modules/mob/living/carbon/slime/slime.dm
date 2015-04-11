@@ -7,6 +7,7 @@
 	ventcrawler = 2
 	var/is_adult = 0
 	languages = SLIME | HUMAN
+	faction = list("slime")
 
 	layer = 5
 
@@ -412,7 +413,16 @@
 	return
 
 /mob/living/carbon/slime/attackby(obj/item/W, mob/living/user)
-	if(W.force > 0)
+	if(istype(W,/obj/item/stack/sheet/mineral/plasma)) //Let's you feed slimes plasma.
+		if (user in Friends)
+			++Friends[user]
+		else
+			Friends[user] = 1
+		user << "You feed the slime the plasma. It chirps happily."
+		var/obj/item/stack/sheet/mineral/plasma/S = W
+		S.use(1)
+		return
+	else if(W.force > 0)
 		attacked += 10
 		if(prob(25))
 			user.do_attack_animation(src)
@@ -420,7 +430,7 @@
 			return
 		if(Discipline && prob(50)) // wow, buddy, why am I getting attacked??
 			Discipline = 0
-	if(W.force >= 3)
+	else if(W.force >= 3)
 		if(is_adult)
 			if(prob(5 + round(W.force/2)))
 				if(Victim || Target)
@@ -783,7 +793,6 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	desc = "a golem's head"
 	unacidable = 1
 	flags = ABSTRACT | NODROP
-	loose = 0 // not even
 
 /obj/effect/golemrune
 	anchored = 1

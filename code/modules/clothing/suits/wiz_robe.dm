@@ -5,7 +5,6 @@
 	gas_transfer_coefficient = 0.01 // IT'S MAGICAL OKAY JEEZ +1 TO NOT DIE
 	permeability_coefficient = 0.01
 	armor = list(melee = 30, bullet = 20, laser = 20, energy = 20, bomb = 20, bio = 20, rad = 20)
-	loose = 0 // a wizard and his hat are not so easily parted
 	//Not given any special protective value since the magic robes are full-body protection --NEO
 	strip_delay = 50
 	put_on_delay = 50
@@ -40,6 +39,11 @@
 	icon_state = "magus"
 	item_state = "magus"
 
+/obj/item/clothing/head/wizard/santa
+	name = "Santa's hat"
+	desc = "Ho ho ho. Merrry X-mas!"
+	icon_state = "santahat"
+	flags = BLOCKHAIR
 
 /obj/item/clothing/suit/wizrobe
 	name = "wizard robe"
@@ -87,6 +91,12 @@
 	icon_state = "magusred"
 	item_state = "magusred"
 
+
+/obj/item/clothing/suit/wizrobe/santa
+	name = "Santa's suit"
+	desc = "Festive!"
+	icon_state = "santa"
+	item_state = "santa"
 
 /obj/item/clothing/suit/wizrobe/fake
 	name = "wizard robe"

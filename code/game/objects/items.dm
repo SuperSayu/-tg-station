@@ -42,6 +42,9 @@
 	var/list/attack_verb = list() //Used in attackby() to say how something was attacked "[x] has been [z.attack_verb] by [y] with [z]"
 	var/list/species_exception = list()	// even if a species cannot put items in a certain slot, if the species id is in the item's exception list, it will be able to wear that item
 
+	var/suittoggled = 0
+	var/hooded = 0
+
 /obj/item/device
 	icon = 'icons/obj/device.dmi'
 
@@ -116,7 +119,7 @@
 	if (istype(src.loc, /obj/item/weapon/storage))
 		//If the item is in a storage item, take it out
 		var/obj/item/weapon/storage/S = src.loc
-		S.remove_from_storage(src)
+		S.remove_from_storage(src, user.loc)
 
 	src.throwing = 0
 	if (loc == user)
