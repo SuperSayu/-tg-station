@@ -84,32 +84,6 @@
 	icon_state = "c20r[magazine ? "-[Ceiling(get_ammo(0)/4)*4]" : ""][chambered ? "" : "-e"][suppressed ? "-suppressed" : ""]"
 	return
 
-/obj/item/weapon/gun/projectile/automatic/clown
-	name = "\improper clown machine gun"
-	desc = "A lightweight, fast firing gun, for when you REALLY need someone honked.  Idiot-proofed to prevent malfunctions."
-	icon_state = "clown"
-	item_state = "clowngun"
-	w_class = 3.0
-	mag_type = /obj/item/ammo_box/magazine/bananacreme
-	fire_sound = 'sound/items/bikehorn.ogg'
-	clumsy_check = 0
-	origin_tech = null
-
-
-	New()
-		..()
-		update_icon()
-		return
-
-	update_icon()
-		..()
-		if(magazine)
-			icon_state = "clown-[round(get_ammo(0),4)]"
-		else
-			icon_state = "clown"
-		return
-
-
 /obj/item/weapon/gun/projectile/automatic/l6_saw
 	name = "syndicate LMG"
 	desc = "A heavily modified 7.62 light machine gun, designated 'L6 SAW'. Has 'Aussec Armoury - 2531' engraved on the reciever below the designation."

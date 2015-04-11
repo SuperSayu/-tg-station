@@ -5,6 +5,7 @@
 	caliber = "honk"
 	max_ammo = 20
 	origin_tech = null
+	icon = 'icons/obj/sayu_ammo.dmi'
 
 /obj/item/ammo_casing/shotgun/dart/bananacreme
 	name = "banana creme bullet casing"
