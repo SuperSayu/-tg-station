@@ -39,7 +39,7 @@
 	New(l,duration = 450)
 		..()
 		SetLuminosity(4)
-		processing_objects.Add(src)
+		SSobj.processing.Add(src)
 		spawn(duration)
 			del src
 	process()
@@ -245,11 +245,11 @@
 	on_hit(var/atom/target, var/blocked = 0)
 		for(var/mob/M in range(1,target))
 			M.bodytemperature = max(10,M.bodytemperature - 20)
-		if(air_master)
+		if(SSair)
 			for(var/turf/simulated/floor/TSF in range(1,target))
 				if(TSF.air)
 					TSF.air.temperature = max(20,TSF.air.temperature - 20)
-					air_master.add_to_active(TSF,0)
+					SSair.add_to_active(TSF,0)
 		..()
 /obj/item/projectile/magic/sweep
 	name = "sweeping bolt"

@@ -36,11 +36,11 @@
 
 /obj/item/weapon/gun/energy/crossbow/New()
 	..()
-	processing_objects.Add(src)
+	SSobj.processing.Add(src)
 
 
 /obj/item/weapon/gun/energy/crossbow/Destroy()
-	processing_objects.Remove(src)
+	SSobj.processing.Remove(src)
 	..()
 
 

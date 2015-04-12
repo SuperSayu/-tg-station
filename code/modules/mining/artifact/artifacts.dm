@@ -42,7 +42,7 @@ var/global/ankh = 0 // only one can spawn
 
 /obj/item/artifact/New()
 	..()
-	processing_objects.Add(src)
+	SSobj.processing.Add(src)
 	if(adminart == 0)
 		set_type()
 		rand_stim()
@@ -65,7 +65,7 @@ var/global/ankh = 0 // only one can spawn
 				pass_flags = 0
 
 /obj/item/artifact/Del()
-	processing_objects.Remove(src)
+	SSobj.processing.Remove(src)
 	..()
 
 /obj/item/artifact/MouseDrop(obj/over_object)

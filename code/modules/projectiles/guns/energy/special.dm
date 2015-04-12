@@ -33,11 +33,11 @@
 
 /obj/item/weapon/gun/energy/floragun/New()
 	..()
-	processing_objects.Add(src)
+	SSobj.processing.Add(src)
 
 
 /obj/item/weapon/gun/energy/floragun/Destroy()
-	processing_objects.Remove(src)
+	SSobj.processing.Remove(src)
 	..()
 
 
@@ -69,11 +69,11 @@
 
 /obj/item/weapon/gun/energy/meteorgun/New()
 	..()
-	processing_objects.Add(src)
+	SSobj.processing.Add(src)
 
 
 /obj/item/weapon/gun/energy/meteorgun/Destroy()
-	processing_objects.Remove(src)
+	SSobj.processing.Remove(src)
 	..()
 
 /obj/item/weapon/gun/energy/meteorgun/process()
@@ -143,11 +143,11 @@
 
 /obj/item/weapon/gun/energy/disabler/cyborg/New()
 	..()
-	processing_objects.Add(src)
+	SSobj.processing.Add(src)
 
 
 /obj/item/weapon/gun/energy/disabler/cyborg/Destroy()
-	processing_objects.Remove(src)
+	SSobj.processing.Remove(src)
 	..()
 
 /obj/item/weapon/gun/energy/disabler/cyborg/process() //Every [recharge_time] ticks, recharge a shot for the cyborg

@@ -276,11 +276,11 @@
 				var/mob/holder = get(M.loc, /mob)
 				if(holder)
 					text += " held by [holder.real_name] \icon[M.loc]"
-			var/area/A = get_area(M.loc)
-			switch(A.type)
-				if(/area/shuttle/escape/centcom,/area/shuttle/escape_pod1/centcom,/area/shuttle/escape_pod2/centcom,/area/shuttle/escape_pod3/centcom,/area/shuttle/escape_pod4/centcom)
+			if(M.loc)
+				var/area/A = get_area(M.loc)
+				if(A.type == /area/shuttle && M.loc.z == ZLEVEL_CENTCOM)
 					text += " (escaped the station)"
-				if(/area)
+				else
 					text += " (lost in space)"
 
 		world << text + "<br>"

@@ -62,9 +62,8 @@
 		for(var/datum/mutation/human/HM in dna.mutations)
 			HM.on_life(src)
 
-		if(air_master.current_cycle%4==2 || failed_last_breath) 	//First, resolve location and get a breath
+		if(SSmob.times_fired%4==2 || failed_last_breath) 	//First, resolve location and get a breath
 			breathe() 				//Only try to take a breath every 4 ticks, unless suffocating
-
 		else //Still give containing object the chance to interact
 			if(istype(loc, /obj/))
 				var/obj/location_as_object = loc
@@ -681,7 +680,7 @@
 					qdel(M)
 					continue
 
-				if(air_master.current_cycle%3==1)
+				if(SSmob.times_fired%3==1)
 					if(!(M.status_flags & GODMODE))
 						M.adjustBruteLoss(5)
 					nutrition += 10

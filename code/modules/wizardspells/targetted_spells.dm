@@ -142,7 +142,7 @@
 		return "Targets [english_list(categories, final_comma_text = ",", and_text = " or ")] [english_list(target_types)] within [range] squares."
 
 	prepare(mob/caster as mob)
-		processing_objects |= src
+		SSobj.processing.Add(src)
 		caster << browse("<script language='javascript' type='text/javascript'>[js_byjax]</script><center>[src]<br>[desc]<br>[describe_range()]</center><hr><div id='targets'></div>","window=[name]")
 		process()
 
@@ -150,7 +150,7 @@
 		if(..(href,href_list)) return
 
 		if("close" in href_list)
-			processing_objects.Remove(src)
+			SSobj.processing.Remove(src)
 			usr << browse(null,"window=[name]")
 			return
 		if("target" in href_list)

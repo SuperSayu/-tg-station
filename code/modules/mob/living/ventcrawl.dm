@@ -71,7 +71,7 @@
 	if(istype(M) && M.client)
 		M.reset_view(src)
 		if(!visage)
-			visage = image(icon,src,icon_state,LIGHTING_LAYER+1,dir)
+			visage = image(icon,src,icon_state)
 		else
 			visage.icon_state = icon_state
 			visage.dir = dir

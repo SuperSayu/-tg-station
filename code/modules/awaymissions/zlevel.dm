@@ -46,7 +46,6 @@ proc/createRandomZlevel()
 				continue
 			awaydestinations.Add(L)
 
-		makepowernets()
 		world << "<span class='userdanger'>Away mission loaded.</span>"
 
 

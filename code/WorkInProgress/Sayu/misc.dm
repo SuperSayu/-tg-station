@@ -103,7 +103,7 @@
 
 	New()
 		..()
-		processing_objects.Add(src)
+		SSobj.processing.Add(src)
 
 	proc/Time(var/length)
 		var/m = round(length / 600)

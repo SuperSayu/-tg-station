@@ -20,14 +20,14 @@
 
 /obj/item/weapon/cloaking_device/New()
 	..()
-	processing_objects.Add(src)
+	SSobj.processing.Add(src)
 	battery = new
 
 /obj/item/weapon/cloaking_device/Del()
 	active=0
 	if(cloaked_user)
 		cloaked_user.update_icons()
-	processing_objects.Remove(src)
+	SSobj.processing.Remove(src)
 	..()
 
 /obj/item/weapon/cloaking_device/process()
