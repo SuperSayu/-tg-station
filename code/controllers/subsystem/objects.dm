@@ -17,9 +17,9 @@ var/datum/subsystem/objects/SSobj
 			parse_area(locate(subtype))
 	distribute_secrets()
 
-	for(var/atom/movable/AM in machines)
+	for(var/atom/movable/AM in world)
 		AM.initialize()
-	for(var/turf/simulated/floor/F in machines)
+	for(var/turf/simulated/floor/F in world)
 		F.MakeDirty()
 	..()
 
