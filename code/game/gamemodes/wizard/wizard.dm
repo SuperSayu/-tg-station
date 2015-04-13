@@ -278,7 +278,7 @@
 					text += " held by [holder.real_name] \icon[M.loc]"
 			if(M.loc)
 				var/area/A = get_area(M.loc)
-				if(A.type == /area/shuttle && M.loc.z == ZLEVEL_CENTCOM)
+				if(A.type == /area/shuttle && M.onCentcom())
 					text += " (escaped the station)"
 				else
 					text += " (lost in space)"
