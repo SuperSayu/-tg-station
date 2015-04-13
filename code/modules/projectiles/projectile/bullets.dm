@@ -7,7 +7,7 @@
 	flag = "bullet"
 
 
-/obj/item/projectile/bullet/weakbullet  //beanbag, heavy stamina damage
+/obj/item/projectile/bullet/weakbullet //beanbag, heavy stamina damage
 	damage = 5
 	stamina = 80
 
@@ -29,7 +29,8 @@
 
 /obj/item/projectile/bullet/midbullet
 	damage = 20
-	stamina = 50 //two round bursts from the c20r
+	stamina = 65 //two round bursts from the c20r knocks people down
+
 
 /obj/item/projectile/bullet/midbullet2
 	damage = 25
@@ -40,10 +41,9 @@
 /obj/item/projectile/bullet/heavybullet
 	damage = 35
 
-/obj/item/projectile/bullet/stunshot
+/obj/item/projectile/bullet/stunshot //taser slugs for shotguns, nothing special
 	name = "stunshot"
 	damage = 5
-	stamina = 50
 	stun = 5
 	weaken = 5
 	stutter = 5

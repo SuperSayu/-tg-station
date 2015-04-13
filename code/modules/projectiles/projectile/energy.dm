@@ -4,7 +4,6 @@
 	damage = 0
 	damage_type = BURN
 	flag = "energy"
-	color = "#FFFF00"
 
 
 /obj/item/projectile/energy/electrode
@@ -16,7 +15,7 @@
 	weaken = 5
 	stutter = 5
 	jitter = 20
-	hitsound = "sound/weapons/taserhit.ogg"
+	hitsound = 'sound/weapons/taserhit.ogg'
 	range = 7
 
 /obj/item/projectile/energy/electrode/on_hit(var/atom/target, var/blocked = 0)
@@ -53,7 +52,7 @@
 	weaken = 5
 	range = 7
 
-/obj/item/projectile/energy/bolt //ebow bolts
+/obj/item/projectile/energy/bolt //xbow bolts
 	name = "bolt"
 	icon_state = "cbbolt"
 	damage = 15
@@ -61,8 +60,15 @@
 	nodamage = 0
 	weaken = 5
 	stutter = 5
-	range = 10
+	range = 7
 
-/obj/item/projectile/energy/bolt/large
-	name = "largebolt"
-	damage = 20
+/obj/item/projectile/energy/bolt/on_hit(var/atom/target, var/blocked = 0) //drop a bolt on hitting basically anything
+	if(!proj_hit)
+		proj_hit = 1
+		new /obj/item/ammo_casing/caseless/bolt(src.loc)
+	..()
+
+/obj/item/projectile/energy/bolt/on_range() //drop a bolt after 7 tiles
+	if(!proj_hit)
+		new /obj/item/ammo_casing/caseless/bolt(src.loc)
+		..()

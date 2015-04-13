@@ -46,15 +46,6 @@
 	projectile_type = /obj/item/projectile/lasertag/redtag
 	select_name = "redtag"
 
-/obj/item/ammo_casing/energy/bolt
-	projectile_type = /obj/item/projectile/energy/bolt
-	select_name = "bolt"
-	fire_sound = 'sound/weapons/Genhit.ogg'
-
-/obj/item/ammo_casing/energy/bolt/large
-	projectile_type = /obj/item/projectile/energy/bolt/large
-	select_name = "heavy bolt"
-
 /obj/item/ammo_casing/energy/xray
 	projectile_type = /obj/item/projectile/beam/xray
 	e_cost = 50

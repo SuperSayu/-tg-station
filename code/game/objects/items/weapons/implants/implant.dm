@@ -204,6 +204,7 @@
 	imp_in.SetStunned(0)
 	imp_in.SetWeakened(0)
 	imp_in.SetParalysis(0)
+	imp_in.adjustStaminaLoss(-75)
 	imp_in.lying = 0
 	imp_in.update_canmove()
 	imp_in.adjustStaminaLoss(-75)
