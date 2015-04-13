@@ -4,7 +4,7 @@
 	if(usr)
 		return // built not spawned
 	var/area/A = get_area(src)
-	if(istype(A,/area/construction/supplyshuttle))
+	if(istype(A,/area/space))
 		return // no booze in supply crates
 
 	//Can be found in any valid locker or crate
