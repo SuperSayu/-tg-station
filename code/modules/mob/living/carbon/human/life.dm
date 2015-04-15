@@ -579,7 +579,7 @@
 			damageoverlay.overlays += I
 	else
 		//Oxygen damage overlay
-		if(oxyloss && !numbness)
+		if(oxyloss)
 			var/image/I = image("icon" = 'icons/mob/screen_full.dmi', "icon_state" = "oxydamageoverlay0")
 			switch(oxyloss)
 				if(10 to 20)
@@ -601,7 +601,7 @@
 		//Fire and Brute damage overlay (BSSR)
 		var/hurtdamage = src.getBruteLoss() + src.getFireLoss() + damageoverlaytemp
 		damageoverlaytemp = 0 // We do this so we can detect if someone hits us or not.
-		if(hurtdamage  && !numbness)
+		if(hurtdamage)
 			var/image/I = image("icon" = 'icons/mob/screen_full.dmi', "icon_state" = "brutedamageoverlay0")
 			I.blend_mode = BLEND_ADD
 			switch(hurtdamage)

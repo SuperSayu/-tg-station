@@ -10,7 +10,6 @@ datum/reagent/medicine/morphine
 datum/reagent/medicine/morphine/on_mob_life(var/mob/living/M as mob)
 	if(!M) M = holder.my_atom
 	M.adjustStaminaLoss(-1*REM)
-	M.Numb(10)
 	..()
 	return
 

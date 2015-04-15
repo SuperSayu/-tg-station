@@ -7,7 +7,7 @@
 /mob/living/carbon/human/var/last_break = 0
 /mob/living/carbon/human/Move()
 
-	if(prob(2) && !numbness && !last_break && !buckled)
+	if(prob(2) && !last_break && !buckled)
 		var/list/broken_limbs = list()
 
 		for(var/obj/item/organ/limb/L in organs)
@@ -21,21 +21,6 @@
 				last_break = 1
 				spawn(50)
 					last_break = 0
-
-	// ugh this looks so ugly
-	/*
-	if(prob(2) && !numbness && broken.len && !last_break && has_gravity(src))
-		spawn()
-			var/list/affected = broken&list("left leg","right leg","chest")
-			if(affected.len)
-				var/which = pick(affected)
-				src << "\red Pain shoots up your [which]!"
-				adjustStaminaLoss(10)
-				playsound(src, 'sound/weapons/pierce.ogg', 25)
-				last_break = 1
-				spawn(50)
-					last_break = 0
-	*/
 	..()
 
 /mob/living/carbon/human/Process_Spacemove(var/movement_dir = 0)

@@ -746,10 +746,9 @@
 	if(H.bodytemperature < 283.222 && grav)
 		mspeed += (283.222 - H.bodytemperature) / 10 * 1.75
 
-	if(!H.numbness)
-		for(var/obj/item/organ/limb/L in H.organs)
-			if(L.bone_status == BONE_BROKEN)
-				mspeed += 0.5
+	for(var/obj/item/organ/limb/L in H.organs)
+		if(L.bone_status == BONE_BROKEN)
+			mspeed += 0.25
 
 	mspeed += speedmod
 
@@ -1415,7 +1414,7 @@
 ////////
 
 /datum/species/proc/spec_bone_use_check(var/mob/living/carbon/human/M, var/agony_prob)
-	if(M.numbness || !bone_chance_adjust || !prob(agony_prob)) return 0 //bone chance ajust does not make agony worse, but can prevent it whole
+	if(!bone_chance_adjust || !prob(agony_prob)) return 0 //bone chance ajust does not make agony worse, but can prevent it whole
 	var/obj/item/organ/limb/usedLimb = M.hand ? M.get_organ("l_arm") : M.get_organ("r_arm")
 
 	if(usedLimb.bone_status == BONE_INTACT) return 0
