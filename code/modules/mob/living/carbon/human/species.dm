@@ -765,6 +765,9 @@
 		H.visible_message("<span class='warning'>[M] attempted to touch [H]!</span>")
 		return 0
 
+	if(M.dna)
+		M.dna.species.spec_bone_use_check(M, 50) // interacting with broken bones hurts
+
 	switch(M.a_intent)
 		if("help")
 			if(H.health >= 0)
@@ -810,14 +813,8 @@
 			else if(M.dna)
 				atk_verb = M.dna.species.attack_verb
 
-			spec_bone_use_check(M, 60)
-			// can still punch with a broken arm (but ow)
-
 			var/damage = rand(0, 9)
 			damage += punchmod
-
-			if(spec_bone_use_check(M, 50))
-				return // cannot grab with a broken arm
 
 			if(!damage)
 				if(M.dna)

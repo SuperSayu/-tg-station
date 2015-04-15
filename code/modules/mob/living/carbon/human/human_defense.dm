@@ -138,6 +138,11 @@ emp_act
 	var/hit_area = parse_zone(affecting.name)
 	var/target_area = parse_zone(target_limb.name)
 
+	if(ishuman(user)) // interacting with broken bones hurts
+		var/mob/living/carbon/human/Huser = user
+		if(Huser.dna && Huser.dna.species)
+			Huser.dna.species.spec_bone_use_check(Huser, 50)
+
 	if(dna)	// allows your species to affect the attacked_by code
 		return dna.species.spec_attacked_by(I,user,def_zone,affecting,hit_area,src.a_intent,target_limb,target_area,src)
 
