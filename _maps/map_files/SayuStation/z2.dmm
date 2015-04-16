@@ -527,7 +527,7 @@
 "kg" = (/turf/unsimulated/floor{icon_state = "green"; dir = 5},/area/centcom/control)
 "kh" = (/turf/space,/area/centcom/evac)
 "ki" = (/obj/structure/table/wood,/obj/item/weapon/coin/mythril,/turf/unsimulated/floor{dir = 8; icon_state = "wood"},/area/wizard_station)
-"kj" = (/obj/structure/table/wood,/obj/machinery/librarycomp,/turf/unsimulated/floor{dir = 8; icon_state = "wood"},/area/wizard_station)
+"kj" = (/obj/structure/table/wood,/obj/machinery/computer/libraryconsole,/turf/unsimulated/floor{dir = 8; icon_state = "wood"},/area/wizard_station)
 "kk" = (/turf/unsimulated/wall{tag = "icon-uranium2"; icon_state = "uranium2"},/area/wizard_station)
 "kl" = (/obj/machinery/vending/refillable/drink/boozeomat{req_access_txt = "0"},/turf/unsimulated/floor{icon_state = "dark"},/area/wizard_station)
 "km" = (/obj/machinery/vending/magivend,/turf/unsimulated/floor{icon_state = "dark"},/area/wizard_station)
