@@ -74,51 +74,6 @@
 	burnmod = 1.5
 	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/plant
 
-/datum/species/plant/handle_chemicals_in_body(var/mob/living/carbon/human/H)
-	if(H.reagents) H.reagents.metabolize(H)
-
-	if(FAT in H.mutations)
-		if(H.overeatduration < 200)	// Plantpeople become fit sooner...
-			H << "<span class='notice'>You feel your vines loosen, and once again nutrients begin to flow within you.</span>"
-			H.mutations -= FAT
-			H.update_inv_w_uniform(0)
-			H.update_inv_wear_suit()
-	else
-		if(H.overeatduration > 650)	// ...and become fat later
-			H << "<span class='danger'>You feel your vines constrict tightly.</span>"
-			H.mutations |= FAT
-			H.update_inv_w_uniform(0)
-			H.update_inv_wear_suit()
-
-	if (H.nutrition > 0 && H.stat != 2)	// Plantpeople lose nutrition slower.
-		H.nutrition = max (0, H.nutrition - (HUNGER_FACTOR*0.75))
-
-	if (H.nutrition > 450)
-		if(H.overeatduration < 600)
-			H.overeatduration++
-	else
-		if(H.overeatduration > 1)
-			H.overeatduration -= 2
-
-	if(H.drowsyness)
-		H.drowsyness--
-		H.eye_blurry = max(2, H.eye_blurry)
-		if (prob(5))
-			H.sleeping += 1
-			H.Paralyse(5)
-
-	H.confused = max(0, H.confused - 1)
-	if(H.resting)
-		H.dizziness = max(0, H.dizziness - 15)
-		H.jitteriness = max(0, H.jitteriness - 15)
-	else
-		H.dizziness = max(0, H.dizziness - 3)
-		H.jitteriness = max(0, H.jitteriness - 3)
-
-	H.updatehealth()
-
-	return
-
 /datum/species/plant/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
 	if(chem.id == "plantbgone")
 		H.adjustToxLoss(3)
