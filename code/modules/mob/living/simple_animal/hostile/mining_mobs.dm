@@ -442,7 +442,7 @@
 /obj/item/asteroid/goliath_hide
 	name = "goliath shell plating"
 	desc = "Pieces of a goliath's rocky shell, these might be able to make your suit a bit more durable to attack from the local fauna."
-	icon = 'icons/obj/items.dmi'
+	icon = 'icons/obj/sayu_items.dmi'
 	icon_state = "goliath_hide"
 	flags = NOBLUDGEON
 	w_class = 3

@@ -796,6 +796,7 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	cost = 50
 	containertype = /obj/structure/closet/critter/pug
 	containername = "pug crate"
+
 /datum/supply_packs/organic/collars
 	name = "Pet Collars"
 	cost = 25

@@ -71,7 +71,7 @@
 /obj/item/weapon/pet_collar
 	name = "Pet Collar"
 	desc = "Helps you keep track of an animal's name."
-	icon = 'icons/obj/items.dmi'
+	icon = 'icons/obj/sayu_items.dmi'
 	icon_state = "collar"
 
 /obj/item/weapon/storage/box/collars
