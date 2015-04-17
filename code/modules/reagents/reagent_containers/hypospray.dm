@@ -42,6 +42,17 @@
 	..()
 	reagents.add_reagent("doctorsdelight", 30)
 
+
+/obj/item/weapon/reagent_containers/hypospray/admin
+	name = "Admin's Hypospray"
+	desc = "When I said 'Don't die on me', that wasn't a suggestion, it was an order."
+	volume = 300
+
+/obj/item/weapon/reagent_containers/hypospray/admin/New()
+	..()
+	reagents.clear_reagents()
+	reagents.add_reagent("adminordrazine",300)
+
 /obj/item/weapon/reagent_containers/hypospray/combat
 	name = "combat stimulant injector"
 	desc = "A modified air-needle autoinjector, used by operatives trained in medical practices to quickly heal injuries in the field."
@@ -53,15 +64,17 @@
 /obj/item/weapon/reagent_containers/hypospray/combat/New()
 	..()
 	reagents.add_reagent("synaptizine", 30)
-/obj/item/weapon/reagent_containers/hypospray/admin
-	name = "Admin's Hypospray"
-	desc = "When I said 'Don't die on me', that wasn't a suggestion, it was an order."
-	volume = 300
 
-	New()
-		..()
-		reagents.clear_reagents()
-		reagents.add_reagent("adminordrazine",300)
+obj/item/weapon/reagent_containers/hypospray/combat/nanites
+	desc = "A modified air-needle autoinjector for use in combat situations. Prefilled with expensive medical nanites for rapid healing."
+	volume = 100
+
+/obj/item/weapon/reagent_containers/hypospray/combat/nanites/New()
+	..()
+	reagents.remove_reagent("synaptizine", 30)
+	reagents.add_reagent("nanites", 100)
+
+//MediPens
 
 /obj/item/weapon/reagent_containers/hypospray/medipen
 	name = "inaprovaline medipen" //lol epipen is copyrighted
