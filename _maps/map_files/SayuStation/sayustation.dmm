@@ -192,7 +192,7 @@
 "adJ" = (/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor/plasteel{dir = 8; icon_state = "warning"},/area/ai_monitored/security/armory)
 "adK" = (/obj/structure/rack,/obj/item/clothing/suit/armor/bulletproof{pixel_x = -4; pixel_y = 3},/obj/item/clothing/suit/armor/laserproof,/obj/item/weapon/gun/energy/ionrifle,/turf/simulated/floor/plasteel{dir = 2; icon_state = "bot"},/area/ai_monitored/security/armory)
 "adL" = (/obj/structure/rack,/obj/item/weapon/storage/box/chemimp{pixel_x = 4; pixel_y = 3},/obj/item/weapon/storage/box/trackimp,/obj/item/weapon/storage/box/teargas,/turf/simulated/floor/plasteel{dir = 2; icon_state = "bot"},/area/ai_monitored/security/armory)
-"adM" = (/obj/structure/rack,/obj/item/weapon/storage/box/handcuffs,/obj/item/weapon/storage/box/flashbangs{pixel_x = -2; pixel_y = -2},/turf/simulated/floor/plasteel{dir = 2; icon_state = "bot"},/area/ai_monitored/security/armory)
+"adM" = (/obj/structure/rack,/obj/item/weapon/storage/box/handcuffs,/obj/item/weapon/storage/box/flashbangs{pixel_x = -2; pixel_y = -2},/obj/item/weapon/storage/box/firingpins,/turf/simulated/floor/plasteel{dir = 2; icon_state = "bot"},/area/ai_monitored/security/armory)
 "adN" = (/obj/structure/rack,/obj/item/weapon/gun/projectile/shotgun/riot,/obj/item/weapon/gun/projectile/shotgun/riot,/turf/simulated/floor/plasteel{dir = 2; icon_state = "bot"},/area/ai_monitored/security/armory)
 "adO" = (/turf/simulated/floor/plasteel,/area/ai_monitored/security/armory)
 "adP" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plasteel{dir = 4; icon_state = "warning"},/area/ai_monitored/security/armory)

@@ -9,6 +9,7 @@
 	clumsy_check = 0
 	origin_tech = null
 	icon = 'icons/obj/sayu_gun.dmi'
+	pin = /obj/item/device/firing_pin
 
 
 	New()

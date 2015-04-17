@@ -355,6 +355,11 @@
 		/obj/item/weapon/gun/projectile/automatic/l6_saw)
 
 /obj/effect/knowspell/summon/world/guns/summon_effect(var/atom/A)
+
+	if(istype(A,/obj/item/weapon/gun))
+		var/obj/item/weapon/gun/gat = A
+		gat.pin = /obj/item/device/firing_pin
+
 	if(istype(A,/obj/item/weapon/gun/projectile/automatic/pistol))
 		new /obj/item/weapon/suppressor(A.loc)
 	return 1
