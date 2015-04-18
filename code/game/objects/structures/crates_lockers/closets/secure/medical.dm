@@ -17,10 +17,10 @@
 	new /obj/item/weapon/reagent_containers/dropper(src)
 	new /obj/item/weapon/reagent_containers/glass/beaker(src)
 	new /obj/item/weapon/reagent_containers/glass/beaker(src)
-	new /obj/item/weapon/reagent_containers/glass/bottle/inaprovaline(src)
-	new /obj/item/weapon/reagent_containers/glass/bottle/inaprovaline(src)
-	new /obj/item/weapon/reagent_containers/glass/bottle/antitoxin(src)
-	new /obj/item/weapon/reagent_containers/glass/bottle/antitoxin(src)
+	new /obj/item/weapon/reagent_containers/glass/bottle/epinephrine(src)
+	new /obj/item/weapon/reagent_containers/glass/bottle/epinephrine(src)
+	new /obj/item/weapon/reagent_containers/glass/bottle/charcoal(src)
+	new /obj/item/weapon/reagent_containers/glass/bottle/charcoal(src)
 	return
 
 
@@ -174,6 +174,6 @@
 /obj/structure/closet/secure_closet/medical_wall/hop/New()
 	..()
 	new /obj/item/stack/medical/bruise_pack(src)
-	new /obj/item/weapon/reagent_containers/syringe/inaprovaline(src)
+	new /obj/item/weapon/reagent_containers/hypospray/medipen
 	new /obj/item/weapon/reagent_containers/pill/ethylredox(src)
 	new /obj/item/weapon/reagent_containers/pill/ethylredox(src)

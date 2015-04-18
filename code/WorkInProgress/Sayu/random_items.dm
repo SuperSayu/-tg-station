@@ -68,7 +68,7 @@
 	identify_probability = 0
 
 /obj/item/weapon/reagent_containers/glass/bottle/random_chem/New()
-	var/global/list/chems_only = list("slimejelly","blood","water","lube","anti_toxin","toxin","cyanide","stoxin","inaprovaline","space_drugs","oxygen","copper","nitrogen","hydrogen","potassium","mercury","sulfur","carbon","chlorine","fluorine","sodium","phosphorus","lithium","sugar","sacid","pacid","glycerol","radium","ryetalyn","thermite","mutagen","virusfood","iron","gold","silver","uranium","aluminium","silicon","fuel","cleaner","plantbgone","plasma","leporazine","cryptobiolin","lexorin","kelotane","dermaline","dexalin","dexalinp","tricordrazine","synaptizine","impedrezene","hyronalin","arithrazine","alkysine","imidazoline","bicaridine","hyperzine","cryoxadone","clonexadone","spaceacillin","carpotoxin","zombiepowder","mindbreaker","fluorosurfactant","foaming_agent","ethanol","ammonia","diethylamine","ethylredoxrazine","chloralhydrate","lipozine","condensedcapsaicin","frostoil","amatoxin","mushroomhallucinogen","enzyme","nothing","doctorsdelight","antifreeze","neurotoxin")
+	var/global/list/chems_only = list("slimejelly","blood","water","lube","charcoal","toxin","cyanide","morphine","epinephrine","space_drugs","oxygen","copper","nitrogen","hydrogen","potassium","mercury","sulfur","carbon","chlorine","fluorine","sodium","phosphorus","lithium","sugar","sacid","pacid","glycerol","radium","mutadone","thermite","mutagen","virusfood","iron","gold","silver","uranium","aluminium","silicon","fuel","cleaner","plantbgone","plasma","leporazine","cryptobiolin","lexorin","salglu_solution","salbutamol","omnizine","synaptizine","impedrezene","potass_iodide","pen_acid","mannitol","oculine","cryoxadone","clonexadone","spaceacillin","carpotoxin","zombiepowder","mindbreaker","fluorosurfactant","foaming_agent","ethanol","ammonia","diethylamine","ethylredoxrazine","chloralhydrate","lipozine","condensedcapsaicin","frostoil","amatoxin","mushroomhallucinogen","enzyme","nothing","doctorsdelight","antifreeze","neurotoxin")
 	var/global/list/rare_chems = list("minttoxin","nanites","xenomicrobes","adminordrazine")
 
 	var/reagentId = pick(chems_only + rare_chems)
@@ -108,7 +108,7 @@
 	..()
 	var/list/drinks_only = list("beer2","hot_coco","orangejuice","tomatojuice","limejuice","carrotjuice","berryjuice","poisonberryjuice","watermelonjuice","lemonjuice","banana","nothing","potato","milk","soymilk","cream","coffee","tea","icecoffee","icetea","cola","nuka_cola","spacemountainwind","thirteenloko","dr_gibb","space_up","lemon_lime","beer","whiskey","gin","rum","vodka","holywater","tequilla","vermouth","wine","tonic","kahlua","cognac","hooch","ale","sodawater","ice","bilk","atomicbomb","threemileisland","goldschlager","patron","gintonic","cubalibre","whiskeycola","martini","vodkamartini","whiterussian","screwdrivercocktail","booger","bloodymary","gargleblaster","bravebull","tequillasunrise","toxinsspecial","beepskysmash","doctorsdelight","irishcream","manlydorf","longislandicedtea","moonshine","b52","irishcoffee","margarita","blackrussian","manhattan","manhattan_proj","whiskeysoda","antifreeze","barefoot","snowwhite","demonsblood","vodkatonic","ginfizz","bahama_mama","singulo","sbiten","devilskiss","red_mead","mead","iced_beer","grog","aloe","andalusia","alliescocktail","soy_latte","cafe_latte","acidspit","amasec","neurotoxin","hippiesdelight","bananahonk","silencer","changelingsting","irishcarbomb","syndicatebomb","erikasurprise","driestmartini")
 	if(prob(50))
-		drinks_only += list("chloralhydrate","adminordrazine","mindbreaker","tricordrazine","blood")
+		drinks_only += list("chloralhydrate","adminordrazine","mindbreaker","omnizine","blood")
 
 	var/datum/reagent/R = pick(drinks_only)
 	if(R == "blood" && prob(40)) // it's entirely natural for you to have blood in drinking bottles.
@@ -151,7 +151,7 @@
 
 /obj/item/weapon/storage/pill_bottle/random_meds/New()
 	..()
-	var/global/list/meds_only = list("anti_toxin","toxin","cyanide","stoxin","inaprovaline","space_drugs","ryetalyn","mutagen","leporazine","cryptobiolin","lexorin","kelotane","dermaline","dexalin","dexalinp","tricordrazine","synaptizine","impedrezene","hyronalin","arithrazine","alkysine","imidazoline","bicaridine","hyperzine","spaceacillin","carpotoxin","zombiepowder","mindbreaker","ethanol","ammonia","diethylamine","ethylredoxrazine","chloralhydrate","lipozine","condensedcapsaicin","frostoil","amatoxin","mushroomhallucinogen","nothing","doctorsdelight","neurotoxin")
+	var/global/list/meds_only = list("charcoal","toxin","cyanide","morphine","epinephrine","space_drugs","mutadone","mutagen","leporazine","cryptobiolin","lexorin", "salglu_solution","salbutamol","omnizine","synaptizine","impedrezene","potass_iodide","pen_acid","mannitol","oculine","spaceacillin","carpotoxin","zombiepowder","mindbreaker","ethanol","ammonia","diethylamine","ethylredoxrazine","chloralhydrate","lipozine","condensedcapsaicin","frostoil","amatoxin","mushroomhallucinogen","nothing","doctorsdelight","neurotoxin")
 	var/global/list/rare_meds = list("nanites","xenomicrobes","minttoxin","adminordrazine","blood")
 
 	var/i = 1

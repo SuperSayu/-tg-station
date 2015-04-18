@@ -143,7 +143,7 @@
 
 /obj/item/weapon/storage/box/medipens
 	name = "box of medipens"
-	desc = "A box full of inaprovaline MediPens."
+	desc = "A box full of epinephrine MediPens."
 	icon_state = "syringe"
 
 /obj/item/weapon/storage/box/medipens/New()

@@ -157,8 +157,8 @@ MASS SPECTROMETER
 			if(L.bone_status == BONE_BROKEN)
 				user.show_message(text("<span class='alert'>Warning: Subject's [L.bone_name] is broken.</span>"), 1)
 
-	if (M.reagents && M.reagents.get_reagent_amount("inaprovaline"))
-		user.show_message("<span class='notice'>Bloodstream Analysis located [M.reagents:get_reagent_amount("inaprovaline")] units of rejuvenation chemicals.</span>", 1)
+	if (M.reagents && M.reagents.get_reagent_amount("epinephrine"))
+		user.show_message("<span class='notice'>Bloodstream Analysis located [M.reagents:get_reagent_amount("epinephrine")] units of rejuvenation chemicals.</span>", 1)
 	if (M.getBrainLoss() >= 100 || !M.getorgan(/obj/item/organ/brain))
 		user.show_message("<span class='warning'>Subject brain function is non-existant.</span>", 1)
 	else if (M.getBrainLoss() >= 60)

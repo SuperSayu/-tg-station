@@ -1018,7 +1018,7 @@
 "tD" = (/obj/machinery/door/window{base_state = "right"; dir = 4; icon_state = "right"; name = "Infirmary"; req_access_txt = "150"},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/space)
 "tE" = (/obj/machinery/door/window{dir = 8; name = "Tool Storage"; req_access_txt = "150"},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/space)
 "tF" = (/obj/structure/table,/obj/item/weapon/gun/syringe{pixel_x = 1; pixel_y = 2},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/space)
-"tG" = (/obj/structure/table,/obj/item/weapon/reagent_containers/syringe/antitoxin,/obj/item/weapon/reagent_containers/syringe/antitoxin{pixel_y = 2},/obj/item/weapon/reagent_containers/syringe/antitoxin{pixel_y = 4},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/space)
+"tG" = (/obj/structure/table,/obj/item/weapon/reagent_containers/syringe/charcoal,/obj/item/weapon/reagent_containers/syringe/charcoal{pixel_y = 2},/obj/item/weapon/reagent_containers/syringe/charcoal{pixel_y = 4},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/space)
 "tH" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 1},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/space)
 "tI" = (/obj/machinery/door/window{dir = 1; name = "Secure Storage"; req_access_txt = "150"},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/space)
 "tJ" = (/obj/structure/table,/obj/item/device/sbeacondrop/bomb{pixel_y = 5},/obj/item/device/sbeacondrop/bomb,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/space)
