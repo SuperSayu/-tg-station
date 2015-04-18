@@ -10,7 +10,8 @@
 	origin_tech = null
 	icon = 'icons/obj/sayu_gun.dmi'
 	pin = /obj/item/device/firing_pin
-
+	lefthand_file = 'icons/mob/inhands/sayu_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/sayu_righthand.dmi'
 
 	New()
 		..()
