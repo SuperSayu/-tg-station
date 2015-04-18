@@ -202,6 +202,7 @@
 			step(mob, pick(cardinal))
 		else
 			. = ..()
+		mob.last_movement=world.time
 
 		moving = 0
 		if(mob && .)
