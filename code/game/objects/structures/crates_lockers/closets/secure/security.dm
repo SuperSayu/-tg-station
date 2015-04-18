@@ -211,6 +211,7 @@
 	new /obj/item/clothing/suit/armor/vest/det_suit(src)
 	new /obj/item/ammo_box/c38(src)
 	new /obj/item/ammo_box/c38(src)
+	new /obj/item/weapon/storage/belt/holster(src)
 	new /obj/item/weapon/gun/projectile/revolver/detective(src)
 	new /obj/item/clothing/glasses/sunglasses/sunglasses3(src)
 	return
