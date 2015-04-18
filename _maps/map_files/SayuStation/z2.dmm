@@ -1032,7 +1032,7 @@
 "tR" = (/turf/simulated/floor/plasteel,/area/tdome/arena)
 "tS" = (/obj/structure/table,/obj/item/robot_parts/r_arm,/obj/item/weapon/storage/firstaid/regular{pixel_x = 0; pixel_y = 0},/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/space)
 "tT" = (/obj/structure/closet/crate/internals,/obj/item/weapon/tank/oxygen/red,/obj/item/clothing/mask/gas,/obj/item/weapon/tank/oxygen/red,/obj/item/clothing/mask/gas,/obj/item/weapon/tank/oxygen/red,/obj/item/clothing/mask/gas,/obj/item/weapon/tank/oxygen/red,/obj/item/clothing/mask/gas,/obj/item/weapon/tank/oxygen/red,/obj/item/clothing/mask/gas,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/space)
-"tU" = (/obj/structure/closet/crate/medical,/obj/item/weapon/surgicaldrill,/obj/item/weapon/scalpel,/obj/item/weapon/reagent_containers/glass/bottle/stoxin,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/space)
+"tU" = (/obj/structure/closet/crate/medical,/obj/item/weapon/surgicaldrill,/obj/item/weapon/scalpel,/obj/item/weapon/reagent_containers/glass/bottle/morphine,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/space)
 "tV" = (/obj/structure/shuttle/engine/heater,/obj/structure/window/reinforced{dir = 1},/turf/simulated/shuttle/plating,/area/space)
 "tW" = (/obj/machinery/teleport/station,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/space)
 "tX" = (/obj/machinery/teleport/hub/syndicate,/turf/simulated/shuttle/floor{icon_state = "floor4"},/area/space)

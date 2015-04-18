@@ -175,5 +175,5 @@
 	..()
 	new /obj/item/stack/medical/bruise_pack(src)
 	new /obj/item/weapon/reagent_containers/hypospray/medipen
-	new /obj/item/weapon/reagent_containers/pill/ethylredox(src)
-	new /obj/item/weapon/reagent_containers/pill/ethylredox(src)
+	new /obj/item/weapon/reagent_containers/pill/antihol(src)
+	new /obj/item/weapon/reagent_containers/pill/antihol(src)

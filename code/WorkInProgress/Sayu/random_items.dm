@@ -68,7 +68,7 @@
 	identify_probability = 0
 
 /obj/item/weapon/reagent_containers/glass/bottle/random_chem/New()
-	var/global/list/chems_only = list("slimejelly","blood","water","lube","charcoal","toxin","cyanide","morphine","epinephrine","space_drugs","oxygen","copper","nitrogen","hydrogen","potassium","mercury","sulfur","carbon","chlorine","fluorine","sodium","phosphorus","lithium","sugar","sacid","pacid","glycerol","radium","mutadone","thermite","mutagen","virusfood","iron","gold","silver","uranium","aluminium","silicon","fuel","cleaner","plantbgone","plasma","leporazine","cryptobiolin","lexorin","salglu_solution","salbutamol","omnizine","synaptizine","impedrezene","potass_iodide","pen_acid","mannitol","oculine","cryoxadone","clonexadone","spaceacillin","carpotoxin","zombiepowder","mindbreaker","fluorosurfactant","foaming_agent","ethanol","ammonia","diethylamine","ethylredoxrazine","chloralhydrate","lipozine","condensedcapsaicin","frostoil","amatoxin","mushroomhallucinogen","enzyme","nothing","doctorsdelight","antifreeze","neurotoxin")
+	var/global/list/chems_only = list("slimejelly","blood","water","lube","charcoal","toxin","cyanide","morphine","epinephrine","space_drugs","oxygen","copper","nitrogen","hydrogen","potassium","mercury","sulfur","carbon","chlorine","fluorine","sodium","phosphorus","lithium","sugar","sacid","pacid","glycerol","radium","mutadone","thermite","mutagen","virusfood","iron","gold","silver","uranium","aluminium","silicon","fuel","cleaner","plantbgone","plasma","leporazine","cryptobiolin","lexorin","salglu_solution","salbutamol","omnizine","synaptizine","impedrezene","potass_iodide","pen_acid","mannitol","oculine","cryoxadone","spaceacillin","carpotoxin","zombiepowder","mindbreaker","fluorosurfactant","foaming_agent","ethanol","ammonia","diethylamine","antihol","chloralhydrate","lipozine","condensedcapsaicin","frostoil","amatoxin","mushroomhallucinogen","enzyme","nothing","doctorsdelight","antifreeze","neurotoxin")
 	var/global/list/rare_chems = list("minttoxin","nanites","xenomicrobes","adminordrazine")
 
 	var/reagentId = pick(chems_only + rare_chems)
@@ -151,7 +151,7 @@
 
 /obj/item/weapon/storage/pill_bottle/random_meds/New()
 	..()
-	var/global/list/meds_only = list("charcoal","toxin","cyanide","morphine","epinephrine","space_drugs","mutadone","mutagen","leporazine","cryptobiolin","lexorin", "salglu_solution","salbutamol","omnizine","synaptizine","impedrezene","potass_iodide","pen_acid","mannitol","oculine","spaceacillin","carpotoxin","zombiepowder","mindbreaker","ethanol","ammonia","diethylamine","ethylredoxrazine","chloralhydrate","lipozine","condensedcapsaicin","frostoil","amatoxin","mushroomhallucinogen","nothing","doctorsdelight","neurotoxin")
+	var/global/list/meds_only = list("charcoal","toxin","cyanide","morphine","epinephrine","space_drugs","mutadone","mutagen","leporazine","cryptobiolin","lexorin", "salglu_solution","salbutamol","omnizine","synaptizine","impedrezene","potass_iodide","pen_acid","mannitol","oculine","spaceacillin","carpotoxin","zombiepowder","mindbreaker","ethanol","ammonia","diethylamine","antihol","chloralhydrate","lipozine","condensedcapsaicin","frostoil","amatoxin","mushroomhallucinogen","nothing","doctorsdelight","neurotoxin")
 	var/global/list/rare_meds = list("nanites","xenomicrobes","minttoxin","adminordrazine","blood")
 
 	var/i = 1

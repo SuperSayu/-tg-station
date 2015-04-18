@@ -666,8 +666,8 @@
 					/obj/item/weapon/reagent_containers/food/drinks/bottle/cream = 4,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/tonic = 8,
 					/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola = 8, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sodawater = 15,
 					/obj/item/weapon/reagent_containers/food/drinks/ice = 9)
-	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/tea = 10,/obj/item/weapon/reagent_containers/pill/drugs = 10, /obj/item/weapon/reagent_containers/pill/stox = 2)
-	premium = list(/obj/item/weapon/reagent_containers/food/drinks/golden_cup = 1, /obj/item/weapon/reagent_containers/food/drinks/britcup = 2, /obj/item/weapon/reagent_containers/food/drinks/shaker = 1,/obj/item/weapon/reagent_containers/pill/ethylredox = 5)
+	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/tea = 10,/obj/item/weapon/reagent_containers/pill/drugs = 10, /obj/item/weapon/reagent_containers/pill/morphine = 2)
+	premium = list(/obj/item/weapon/reagent_containers/food/drinks/golden_cup = 1, /obj/item/weapon/reagent_containers/food/drinks/britcup = 2, /obj/item/weapon/reagent_containers/food/drinks/shaker = 1,/obj/item/weapon/reagent_containers/pill/antihol = 5)
 	vend_delay = 15
 	product_slogans = "I hope nobody asks me for a bloody cup o' tea...;Alcohol is humanity's friend. Would you abandon a friend?;Quite delighted to serve you!;Is nobody thirsty on this station?"
 	product_ads = "Drink up!;Booze is good for you!;Alcohol is humanity's best friend.;Quite delighted to serve you!;Care for a nice, cold beer?;Nothing cures you like booze!;Have a sip!;Have a drink!;Have a beer!;Beer is good for you!;Only the finest alcohol!;Best quality booze since 2053!;Award-winning wine!;Maximum alcohol!;Man loves beer.;A toast for progress!"
@@ -833,10 +833,10 @@
 	product_ads = "Go save some lives!;The best stuff for your medbay.;Only the finest tools.;Natural chemicals!;This stuff saves lives.;Don't you want some?;Ping!"
 	req_access_txt = "5"
 	products = list(/obj/item/weapon/reagent_containers/glass/bottle/charcoal = 4,/obj/item/weapon/reagent_containers/glass/bottle/epinephrine = 4,
-					/obj/item/weapon/reagent_containers/glass/bottle/stoxin = 4,/obj/item/weapon/reagent_containers/glass/bottle/toxin = 4,
+					/obj/item/weapon/reagent_containers/glass/bottle/morphine = 4,/obj/item/weapon/reagent_containers/glass/bottle/toxin = 4,
 					/obj/item/weapon/reagent_containers/syringe/antiviral = 4,/obj/item/weapon/reagent_containers/syringe = 12,/obj/item/weapon/reagent_containers/hypospray/medipen = 5,
 					/obj/item/device/healthanalyzer = 5,/obj/item/weapon/reagent_containers/glass/beaker = 4, /obj/item/weapon/reagent_containers/dropper = 2, /obj/item/device/sensor_device = 2)
-	contraband = list(/obj/item/weapon/reagent_containers/pill/tox = 3,/obj/item/weapon/reagent_containers/pill/stox = 4,/obj/item/weapon/reagent_containers/pill/charcoal = 6)
+	contraband = list(/obj/item/weapon/reagent_containers/pill/tox = 3,/obj/item/weapon/reagent_containers/pill/morphine = 4,/obj/item/weapon/reagent_containers/pill/charcoal = 6)
 
 
 //This one's from bay12

@@ -106,13 +106,13 @@
 	reagents.add_reagent("adminordrazine", 50)
 
 
-/obj/item/weapon/reagent_containers/pill/stox
-	name = "sleeping pill"
+/obj/item/weapon/reagent_containers/pill/morphine
+	name = "morphine pill"
 	desc = "Commonly used to treat insomnia."
 	icon_state = "pill8"
-/obj/item/weapon/reagent_containers/pill/stox/New()
+/obj/item/weapon/reagent_containers/pill/morphine/New()
 	..()
-	reagents.add_reagent("stoxin", 30)
+	reagents.add_reagent("morphine", 30)
 
 /obj/item/weapon/reagent_containers/pill/stimulant
 	name = "stimulant pill"
@@ -121,7 +121,7 @@
 
 /obj/item/weapon/reagent_containers/pill/stimulant/New()
 	..()
-	reagents.add_reagent("morphine", 10)
+	reagents.add_reagent("ephedrine", 10)
 	reagents.add_reagent("ethylredoxrazine", 10)
 	reagents.add_reagent("coffee", 30)
 
@@ -170,10 +170,10 @@
 	..()
 	reagents.add_reagent("space_drugs",30)
 
-/obj/item/weapon/reagent_containers/pill/ethylredox
-	name = "ethylredoxrazine pill"
+/obj/item/weapon/reagent_containers/pill/antihol
+	name = "antihol pill"
 	desc = "For punishing drunks with sobriety."
 	icon_state = "pill16"
-/obj/item/weapon/reagent_containers/pill/ethylredox/New()
+/obj/item/weapon/reagent_containers/pill/antihol/New()
 	..()
-	reagents.add_reagent("ethylredoxrazine",30)
+	reagents.add_reagent("antihol",30)
