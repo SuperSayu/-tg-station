@@ -19,7 +19,6 @@
 	new /obj/item/clothing/mask/gas(src)
 	new /obj/item/clothing/glasses/science(src)
 	new /obj/item/clothing/glasses/science/science3(src)
-	new /obj/item/clothing/suit/toggle/wintercoat/science(src)
 	return
 
 /obj/structure/closet/secure_closet/RD
@@ -34,6 +33,7 @@
 
 /obj/structure/closet/secure_closet/RD/New()
 	..()
+	new /obj/item/clothing/suit/toggle/wintercoat/science(src)
 	new /obj/item/clothing/suit/bio_suit/scientist(src)
 	new /obj/item/clothing/head/bio_hood/scientist(src)
 	new /obj/item/clothing/suit/toggle/labcoat(src)
@@ -52,5 +52,4 @@
 	new /obj/item/clothing/gloves/ring/plasma(src)
 	new /obj/item/clothing/glasses/science(src)
 	new /obj/item/clothing/glasses/science/science3(src)
-	new /obj/item/clothing/suit/toggle/wintercoat/science(src)
 	return
