@@ -32,11 +32,10 @@
 	// Passes the sniff test
 	var/list/smell_approved = list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat, /obj/item/weapon/reagent_containers/food/snacks/meat/monkey,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh, /obj/item/weapon/reagent_containers/food/snacks/donut,
-		/obj/item/weapon/reagent_containers/food/snacks/donut/normal, /obj/item/weapon/reagent_containers/food/snacks/donut/jelly,
-		/obj/item/weapon/reagent_containers/food/snacks/donut/cherryjelly, /obj/item/weapon/reagent_containers/food/snacks/meatbreadslice,
-		/obj/item/weapon/reagent_containers/food/snacks/monkeykebab, /obj/item/weapon/reagent_containers/food/snacks/meatpie,
-		/obj/item/weapon/reagent_containers/food/snacks/sosjerky)
+		/obj/item/weapon/reagent_containers/food/snacks/donut,/obj/item/weapon/reagent_containers/food/snacks/donut/normal,
+		/obj/item/weapon/reagent_containers/food/snacks/donut/jelly, /obj/item/weapon/reagent_containers/food/snacks/donut/cherryjelly,
+		/obj/item/weapon/reagent_containers/food/snacks/meatbreadslice, /obj/item/weapon/reagent_containers/food/snacks/monkeykebab,
+		/obj/item/weapon/reagent_containers/food/snacks/meatpie, /obj/item/weapon/reagent_containers/food/snacks/sosjerky)
 
 	// Fails the sniff test
 	var/list/smell_offensive = list(
