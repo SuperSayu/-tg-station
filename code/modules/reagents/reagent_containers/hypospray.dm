@@ -77,6 +77,7 @@ obj/item/weapon/reagent_containers/hypospray/combat/nanites
 	volume = 10
 	ignore_flags = 1
 	flags = null
+	list_reagents = list("epinephrine" = 10)
 
 /obj/item/weapon/reagent_containers/hypospray/medipen/New()
 	..()
