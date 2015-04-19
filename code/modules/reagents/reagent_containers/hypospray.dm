@@ -126,8 +126,8 @@ obj/item/weapon/reagent_containers/hypospray/combat/nanites
 	update_icon()
 	return
 
-/obj/item/weapon/reagent_containers/hypospray/medipen/stimpack
-	name = "stimpack medipen"
+/obj/item/weapon/reagent_containers/hypospray/medipen/stimpack //goliath kiting
+	name = "ephedrine medipen"
 	desc = "A rapid way to stimulate your body's adrenaline, allowing for freer movement in restrictive armor at the cost of some shortness of breath."
 	icon_state = "stimpen"
 	starting_reagent = "ephedrine"
