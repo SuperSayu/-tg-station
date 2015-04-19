@@ -12,10 +12,6 @@
 	var/active = 0 //Whether or not you are a hedgehog
 
 /obj/effect/proc_holder/changeling/strained_muscles/sting_action(var/mob/living/carbon/user)
-	if(!user)
-		active = 0
-		return 0
-
 	active = !active
 	if(active)
 		user << "<span class='notice'>Our muscles tense and strengthen.</span>"
