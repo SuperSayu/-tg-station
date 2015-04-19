@@ -7,6 +7,7 @@
 	g_amt = 120
 	origin_tech = "magnets=1"
 	wires = WIRE_RECEIVE | WIRE_PULSE | WIRE_RADIO_PULSE | WIRE_RADIO_RECEIVE
+	attachable = 1
 
 	bomb_name = "remote-control bomb"
 
@@ -126,14 +127,6 @@ Code:
 				spawn(0)
 					if(S)	S.pulse(0)
 		return 0*/
-
-
-/obj/item/device/assembly/signaler/pulse(var/radio = 0)
-	if(src.connected && src.wires)
-		connected.Pulse(src)
-	else
-		return ..(radio)
-
 
 /obj/item/device/assembly/signaler/receive_signal(datum/signal/signal)
 	if(!signal)	return 0
