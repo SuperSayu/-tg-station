@@ -16,5 +16,5 @@
 
 /datum/game_mode/sandbox/post_setup()
 	..()
-	SSshuttle.emergencyAlwaysFakeRecall = 1
 	unlock_centcom = 1
+	SSshuttle.emergencyNoEscape = 1
