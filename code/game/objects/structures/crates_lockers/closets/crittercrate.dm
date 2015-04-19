@@ -6,6 +6,7 @@
 	icon_closed = "critter"
 	var/already_opened = 0
 	var/content_mob = null
+	var/amount = 1
 
 /obj/structure/closet/critter/can_open()
 	if(locked || welded)
@@ -21,23 +22,9 @@
 		return ..()
 
 	if(content_mob != null && already_opened == 0)
-		if(content_mob == /mob/living/simple_animal/chick)
-			var/num = rand(1, 3)
-			for(var/i = 0, i < num, i++)
-				new content_mob(loc)
-				if(prob(50))
-					new /obj/item/weapon/pet_collar(loc)
-		else if(content_mob == /mob/living/simple_animal/corgi)
-			content_mob = pick(/mob/living/simple_animal/corgi/,/mob/living/simple_animal/corgi/Lisa,/mob/living/simple_animal/corgi/puppy)
+		for(var/i = 0, i <= amount, i++)
 			new content_mob(loc)
-		else if(content_mob == /mob/living/simple_animal/cat)
-			if(prob(50))
-				content_mob = /mob/living/simple_animal/cat/Proc
-			new /obj/item/weapon/pet_collar(loc)
-			new content_mob(loc)
-		else
-			new content_mob(loc)
-			new /obj/item/weapon/pet_collar(loc)
+		new /obj/item/weapon/pet_collar(loc)
 		already_opened = 1
 	..()
 
@@ -58,7 +45,12 @@
 
 /obj/structure/closet/critter/corgi
 	name = "corgi crate"
-	content_mob = /mob/living/simple_animal/corgi //This statement is (not) false. See above.
+	content_mob = /mob/living/simple_animal/corgi
+
+/obj/structure/closet/critter/corgi/New()
+	if(prob(50))
+		content_mob = /mob/living/simple_animal/corgi/Lisa
+	..()
 
 /obj/structure/closet/critter/cow
 	name = "cow crate"
@@ -72,9 +64,18 @@
 	name = "chicken crate"
 	content_mob = /mob/living/simple_animal/chick
 
+/obj/structure/closet/critter/chick/New()
+	amount = rand(1, 3)
+	..()
+
 /obj/structure/closet/critter/cat
 	name = "cat crate"
 	content_mob = /mob/living/simple_animal/cat
+
+/obj/structure/closet/critter/cat/New()
+	if(prob(50))
+		content_mob = /mob/living/simple_animal/cat/Proc
+	..()
 
 /obj/structure/closet/critter/pug
 	name = "pug crate"
@@ -83,3 +84,8 @@
 /obj/structure/closet/critter/fox
 	name = "fox crate"
 	content_mob = /mob/living/simple_animal/fox
+
+/obj/structure/closet/critter/butterfly
+	name = "butterflies crate"
+	content_mob = /mob/living/simple_animal/butterfly
+	amount = 50
