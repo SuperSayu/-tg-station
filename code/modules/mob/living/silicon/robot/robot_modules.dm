@@ -91,8 +91,8 @@
 	modules += new /obj/item/device/portacrew(src)
 	emag = new /obj/item/weapon/reagent_containers/spray(src)
 
-	emag.reagents.add_reagent("pacid", 250)
-	emag.name = "polyacid spray"
+	emag.reagents.add_reagent("facid", 250)
+	emag.name = "Fluacid spray"
 
 	var/obj/item/weapon/reagent_containers/spray/S = emag
 	S.banned_reagents = list()
