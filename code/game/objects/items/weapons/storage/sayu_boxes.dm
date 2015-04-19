@@ -18,7 +18,7 @@
 		new /obj/item/weapon/reagent_containers/food/snacks/burger/superbite(src)
 
 	else // why would you buy a salad at a fast food joint? (0.8%)
-		new /obj/item/weapon/reagent_containers/food/snacks/validsalad(src)
+		new /obj/item/weapon/reagent_containers/food/snacks/salad/validsalad(src)
 		new /obj/item/weapon/reagent_containers/food/snacks/grown/apple(src)
 		new /obj/item/weapon/reagent_containers/food/drinks/tea(src)
 		new /obj/item/toy/random(src)
@@ -26,7 +26,7 @@
 
 	// Side and a drink:
 	var/side = pick(/obj/item/weapon/reagent_containers/food/snacks/fries,/obj/item/weapon/reagent_containers/food/snacks/cheesyfries,
-					/obj/item/weapon/reagent_containers/food/snacks/hotchili)
+					/obj/item/weapon/reagent_containers/food/snacks/soup/hotchili)
 	var/drink = pick(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb,
 					/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lemon_lime,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind,
 					/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist)

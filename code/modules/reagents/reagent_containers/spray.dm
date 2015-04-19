@@ -100,11 +100,7 @@
 /obj/item/weapon/reagent_containers/spray/cleaner
 	name = "space cleaner"
 	desc = "BLAM!-brand non-foaming space cleaner!"
-
-
-/obj/item/weapon/reagent_containers/spray/cleaner/New()
-	..()
-	reagents.add_reagent("cleaner", 250)
+	list_reagents = list("cleaner" = 250)
 
 //pepperspray
 /obj/item/weapon/reagent_containers/spray/pepper
@@ -116,11 +112,7 @@
 	volume = 40
 	spray_maxrange = 4
 	amount_per_transfer_from_this = 5
-
-
-/obj/item/weapon/reagent_containers/spray/pepper/New()
-	..()
-	reagents.add_reagent("condensedcapsaicin", 40)
+	list_reagents = list("condensedcapsaicin" = 40)
 
 //water flower
 /obj/item/weapon/reagent_containers/spray/waterflower
@@ -131,10 +123,7 @@
 	item_state = "sunflower"
 	amount_per_transfer_from_this = 1
 	volume = 10
-
-/obj/item/weapon/reagent_containers/spray/waterflower/New()
-	..()
-	reagents.add_reagent("water", 10)
+	list_reagents = list("water" = 10)
 
 /obj/item/weapon/reagent_containers/spray/waterflower/attack_self(var/mob/user) //Don't allow changing how much the flower sprays
 	return
@@ -198,43 +187,26 @@
 	amount_per_transfer_from_this = (amount_per_transfer_from_this == 10 ? 5 : 10)
 	user << "<span class='notice'>You adjust the output switch. You'll now use [amount_per_transfer_from_this] units per spray.</span>"
 
-/obj/item/weapon/reagent_containers/spray/chemsprayer/bioterror/New()
-	..()
-	reagents.add_reagent("spore", 150)
-	reagents.add_reagent("cryptobiolin", 150)
-	reagents.add_reagent("mutagen", 150)
-	reagents.add_reagent("chloralhydrate", 150)
-
+/obj/item/weapon/reagent_containers/spray/chemsprayer/bioterror
+	list_reagents = list("spore" = 150, "cryptobiolin" = 150, "mutagen" = 150, "chloralhydrate" = 150)
 
 /obj/item/weapon/reagent_containers/spray/chemsprayer/honkmaster
 	name = "Honkblaster Unlimited"
 	desc = "Made with the finest cheap plastic."
 	flags = null
-
-/obj/item/weapon/reagent_containers/spray/chemsprayer/honkmaster/New()
-	..()
-	reagents.add_reagent("water",volume)
+	list_reagents = list("water" = 200)
 
 /obj/item/weapon/reagent_containers/spray/chemsprayer/cleanblaster
 	name = "Megamaid's Little Friend"
 	desc = "She has promised to shove this through the digestive system of anyone who tells her secrets--starting at the wrong end."
 	flags = null //get a backpack for refillable cleaning glory
-
-/obj/item/weapon/reagent_containers/spray/chemsprayer/cleanblaster/New()
-	..()
-	reagents.add_reagent("cleaner",volume)
+	list_reagents = list("cleaner" = 200)
 
 /obj/item/weapon/reagent_containers/spray/chemsprayer/dirtblaster
 	name = "Megamaid's Dirty Little Secret"
 	desc = "Janitors everywhere shed a tear and know not why."
 	flags = null
-
-/obj/item/weapon/reagent_containers/spray/chemsprayer/dirtblaster/New()
-	..()
-	var/Q = round(volume/3)
-	reagents.add_reagent("carbon",Q)
-	reagents.add_reagent("flour",Q)
-	reagents.add_reagent("blood",Q)
+	list_reagents = list("carbon" = 100, "flour" = 100, "blood" = 100)
 
 // Plant-B-Gone
 /obj/item/weapon/reagent_containers/spray/plantbgone // -- Skie
@@ -244,8 +216,4 @@
 	icon_state = "plantbgone"
 	item_state = "plantbgone"
 	volume = 100
-
-
-/obj/item/weapon/reagent_containers/spray/plantbgone/New()
-	..()
-	reagents.add_reagent("plantbgone", 100)
+	list_reagents = list("plantbgone" = 100)

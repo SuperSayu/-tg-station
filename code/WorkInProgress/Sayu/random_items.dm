@@ -46,6 +46,7 @@
 /obj/item/weapon/reagent_containers/glass/bottle/random_reagent
 	name = "unlabelled bottle"
 	identify_probability = 0
+	list_reagents = list()
 
 /obj/item/weapon/reagent_containers/glass/bottle/random_reagent/New()
 	var/reagentId = pick(chemical_reagents_list)
@@ -53,11 +54,10 @@
 	if(reagentId == "blood" && prob(50)) // in contrast to pills, it is entirely reasonable to have vials of virus-free blood lying around.
 		spawned_disease = /datum/disease/advance
 	else
-		spawned_reagent = reagentId
 		if(rare_chems.Find(reagentId))
-			spawned_amount = 10
+			list_reagents[reagentId] = 10
 		else
-			spawned_amount = rand(2,3)*10
+			list_reagents[reagentId] = rand(2,3)*10
 	pixel_x = rand(-10,10)
 	pixel_y = rand(-10,10)
 	..()
@@ -66,6 +66,7 @@
 /obj/item/weapon/reagent_containers/glass/bottle/random_chem
 	name = "unlabelled chemical bottle"
 	identify_probability = 0
+	list_reagents = list()
 
 /obj/item/weapon/reagent_containers/glass/bottle/random_chem/New()
 	var/global/list/chems_only = list("slimejelly","blood","water","lube","charcoal","toxin","cyanide","morphine","epinephrine","space_drugs","oxygen","copper","nitrogen","hydrogen","potassium","mercury","sulfur","carbon","chlorine","fluorine","sodium","phosphorus","lithium","sugar","sacid","facid","glycerol","radium","mutadone","thermite","mutagen","virusfood","iron","gold","silver","uranium","aluminium","silicon","fuel","cleaner","plantbgone","plasma","leporazine","cryptobiolin","lexorin","salglu_solution","salbutamol","omnizine","synaptizine","impedrezene","potass_iodide","pen_acid","mannitol","oculine","cryoxadone","spaceacillin","carpotoxin","zombiepowder","mindbreaker","fluorosurfactant","foaming_agent","ethanol","ammonia","diethylamine","antihol","chloralhydrate","lipozine","condensedcapsaicin","frostoil","amatoxin","mushroomhallucinogen","enzyme","nothing","doctorsdelight","antifreeze","neurotoxin")
@@ -75,11 +76,10 @@
 	if(reagentId == "blood" && prob(50))
 		spawned_disease = /datum/disease/advance
 	else
-		spawned_reagent = reagentId
 		if(rare_chems.Find(reagentId))
-			spawned_amount = 10
+			list_reagents[reagentId] = 10
 		else
-			spawned_amount = rand(2,3)*10
+			list_reagents[reagentId] = rand(2,3)*10
 
 	name = "unlabelled bottle"
 	pixel_x = rand(-10,10)
@@ -89,12 +89,12 @@
 /obj/item/weapon/reagent_containers/glass/bottle/random_base_chem
 	name = "unlabelled chemical bottle"
 	identify_probability = 0
+	list_reagents = list()
 
 /obj/item/weapon/reagent_containers/glass/bottle/random_base_chem/New()
 	name = "unlabelled bottle"
 	var/global/list/base_chems = list("water","oxygen","nitrogen","hydrogen","potassium","mercury","carbon","chlorine","fluorine","phosphorus","lithium","sulfur","sacid","radium","iron","aluminium","silicon","sugar","ethanol")
-	spawned_reagent = pick(base_chems)
-	spawned_amount = rand(2,6)*5
+	list_reagents[pick(base_chems)] = rand(2,6)*5
 	pixel_x = rand(-10,10)
 	pixel_y = rand(-10,10)
 	..()
@@ -103,81 +103,86 @@
 /obj/item/weapon/reagent_containers/food/drinks/bottle/random_drink
 	name = "unlabelled drink"
 	icon = 'icons/obj/sayu_drinks.dmi'
+	list_reagents = list()
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/random_drink/New()
-	..()
 	var/list/drinks_only = list("beer2","hot_coco","orangejuice","tomatojuice","limejuice","carrotjuice","berryjuice","poisonberryjuice","watermelonjuice","lemonjuice","banana","nothing","potato","milk","soymilk","cream","coffee","tea","icecoffee","icetea","cola","nuka_cola","spacemountainwind","thirteenloko","dr_gibb","space_up","lemon_lime","beer","whiskey","gin","rum","vodka","holywater","tequilla","vermouth","wine","tonic","kahlua","cognac","hooch","ale","sodawater","ice","bilk","atomicbomb","threemileisland","goldschlager","patron","gintonic","cubalibre","whiskeycola","martini","vodkamartini","whiterussian","screwdrivercocktail","booger","bloodymary","gargleblaster","bravebull","tequillasunrise","toxinsspecial","beepskysmash","doctorsdelight","irishcream","manlydorf","longislandicedtea","moonshine","b52","irishcoffee","margarita","blackrussian","manhattan","manhattan_proj","whiskeysoda","antifreeze","barefoot","snowwhite","demonsblood","vodkatonic","ginfizz","bahama_mama","singulo","sbiten","devilskiss","red_mead","mead","iced_beer","grog","aloe","andalusia","alliescocktail","soy_latte","cafe_latte","acidspit","amasec","neurotoxin","hippiesdelight","bananahonk","silencer","changelingsting","irishcarbomb","syndicatebomb","erikasurprise","driestmartini")
 	if(prob(50))
 		drinks_only += list("chloralhydrate","adminordrazine","mindbreaker","omnizine","blood")
 
-	var/datum/reagent/R = pick(drinks_only)
-	if(R == "blood" && prob(40)) // it's entirely natural for you to have blood in drinking bottles.
-		var/datum/disease/advance/F = new(0) // it only rarely has to do with diseases.
-		var/list/data = list("viruses"= list(F))
-		reagents.add_reagent(R,volume,data)
+	var/datum/reagent/reagentId = pick(drinks_only)
+
+	if(reagentId == "blood" && prob(40))
+		spawned_disease = /datum/disease/advance
 	else
-		reagents.add_reagent(R,volume)
+		list_reagents[reagentId] = rand(2,3)*10
+
 	name = "unlabelled bottle"
 	icon_state = pick("alco-white","alco-green","alco-blue","alco-clear","alco-red")
 	pixel_x = rand(-5,5)
 	pixel_y = rand(-5,5)
+	..()
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/random_reagent // Same as the chembottle code except the container
 	name = "unlabelled drink?"
 	icon = 'icons/obj/sayu_drinks.dmi'
+	list_reagents = list()
+
 /obj/item/weapon/reagent_containers/food/drinks/bottle/random_reagent/New()
-	..()
-	var/datum/reagent/R = pick(chemical_reagents_list)
+	var/datum/reagent/reagentId = pick(chemical_reagents_list)
 	var/global/list/rare_chems = list("minttoxin","nanites","xenomicrobes","adminordrazine")
-	if(R == "blood" && prob(50))
-		var/datum/disease/advance/F = new(0)
-		var/list/data = list("viruses"= list(F))
-		reagents.add_reagent(R,volume,data)
+
+	if(reagentId == "blood" && prob(40))
+		spawned_disease = /datum/disease/advance
 	else
-		if(rare_chems.Find(R))
-			reagents.add_reagent(R,10)
+		list_reagents[reagentId] = rand(2,3)*10
+
+	if(reagentId == "blood" && prob(40))
+		spawned_disease = /datum/disease/advance
+	else
+		if(rare_chems.Find(reagentId))
+			list_reagents[reagentId] = 10
 		else
-			reagents.add_reagent(R,rand(3,10)*10)
+			list_reagents[reagentId] = rand(2,3)*10
+
 	name = "unlabelled bottle"
 	icon_state = pick("alco-white","alco-green","alco-blue","alco-clear","alco-red")
 	pixel_x = rand(-5,5)
 	pixel_y = rand(-5,5)
-	spawn(1)
-		qdel(src)
+	..()
 
 /obj/item/weapon/storage/pill_bottle/random_meds
 	name = "unlabelled pillbottle"
 	desc = "The sheer recklessness of this bottle's existence astounds you."
 
 /obj/item/weapon/storage/pill_bottle/random_meds/New()
-	..()
 	var/global/list/meds_only = list("charcoal","toxin","cyanide","morphine","epinephrine","space_drugs","mutadone","mutagen","leporazine","cryptobiolin","lexorin", "salglu_solution","salbutamol","omnizine","synaptizine","impedrezene","potass_iodide","pen_acid","mannitol","oculine","spaceacillin","carpotoxin","zombiepowder","mindbreaker","ethanol","ammonia","diethylamine","antihol","chloralhydrate","lipozine","condensedcapsaicin","frostoil","amatoxin","mushroomhallucinogen","nothing","doctorsdelight","neurotoxin")
 	var/global/list/rare_meds = list("nanites","xenomicrobes","minttoxin","adminordrazine","blood")
 
 	var/i = 1
 	while(i < storage_slots)
 
-		var/datum/reagent/R
+		var/datum/reagent/reagentId
 		if(prob(50))
-			R = pick(meds_only + rare_meds)
+			reagentId = pick(meds_only + rare_meds)
 		else
-			R = pick(meds_only)
+			reagentId = pick(meds_only)
 		var/obj/item/weapon/reagent_containers/pill/P = new(src)
-		if(R == "blood") // 100% disease chance.  Why else would you make a blood pill?  I can think of nothing.
-			var/datum/disease/advance/F = new(0)  // okay maybe vampires but that's about it
-			var/list/data = list("viruses"= list(F))
-			P.reagents.add_reagent(R,P.volume,data)
+
+		if(reagentId == "blood" && prob(40))
+			P.spawned_disease = /datum/disease/advance
 		else
-			if(rare_meds.Find(R))
-				P.reagents.add_reagent(R,10)
+			if(rare_meds.Find(reagentId))
+				P.list_reagents[reagentId] = 10
 			else
-				P.reagents.add_reagent(R,rand(2,5)*10)
+				P.list_reagents[reagentId] = rand(2,3)*10
+
 		P.name = "Unlabelled Pill"
 		P.desc = "Something about this pill entices you to try it, against your better judgement."
 		i++
 	pixel_x = rand(-10,10)
 	pixel_y = rand(-10,10)
-	return
+	..()
 
 // -------------------------------------
 //    Containers full of unknown crap
