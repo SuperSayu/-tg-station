@@ -664,7 +664,8 @@
 					/obj/item/weapon/reagent_containers/food/drinks/bottle/tomatojuice = 4,/obj/item/weapon/reagent_containers/food/drinks/bottle/limejuice = 4,
 					/obj/item/weapon/reagent_containers/food/drinks/bottle/cream = 4,/obj/item/weapon/reagent_containers/food/drinks/soda_cans/tonic = 8,
 					/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola = 8, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sodawater = 15,
-					/obj/item/weapon/reagent_containers/food/drinks/ice = 9)
+					/obj/item/weapon/reagent_containers/food/drinks/drinkingglass = 30,/obj/item/weapon/reagent_containers/food/drinks/ice = 9,
+					/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/shotglass = 8)
 	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/tea = 10,/obj/item/weapon/reagent_containers/pill/drugs = 10, /obj/item/weapon/reagent_containers/pill/morphine = 2)
 	premium = list(/obj/item/weapon/reagent_containers/food/drinks/golden_cup = 1, /obj/item/weapon/reagent_containers/food/drinks/britcup = 2, /obj/item/weapon/reagent_containers/food/drinks/shaker = 1,/obj/item/weapon/reagent_containers/pill/antihol = 5)
 	vend_delay = 15
