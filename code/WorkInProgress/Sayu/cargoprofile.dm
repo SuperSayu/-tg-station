@@ -232,7 +232,7 @@
 /datum/cargoprofile/clothing
 	name = "Crew Kit"
 	id = "clothing"
-	blacklist = list(/obj/item/weapon/tank/plasma,/obj/item/weapon/tank/anesthetic, // the rest are air tanks
+	blacklist = list(/obj/item/weapon/tank/internals/plasma,/obj/item/weapon/tank/internals/anesthetic, // the rest are air tanks
 					/obj/item/clothing/mask/facehugger) // NOT CLOTHING AT ALLLLL
 	whitelist = list(/obj/item/clothing,/obj/item/weapon/storage/belt,/obj/item/weapon/storage/backpack,
 					/obj/item/device/radio/headset,/obj/item/device/pda,/obj/item/weapon/card/id,/obj/item/weapon/tank,
