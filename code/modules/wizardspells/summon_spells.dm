@@ -349,7 +349,7 @@
 	spawns_possible = list(
 		/obj/item/weapon/gun/energy/taser, /obj/item/weapon/gun/energy/gun, /obj/item/weapon/gun/energy/laser,/obj/item/weapon/gun/projectile,
 		/obj/item/weapon/gun/projectile/revolver/detective,/obj/item/weapon/gun/projectile/automatic/c20r,/obj/item/weapon/gun/energy/gun/nuclear,
-		/obj/item/weapon/gun/projectile/automatic/pistol/deagle/camo,/obj/item/weapon/gun/projectile/automatic/gyropistol,/obj/item/weapon/gun/energy/pulse_rifle,
+		/obj/item/weapon/gun/projectile/automatic/pistol/deagle/camo,/obj/item/weapon/gun/projectile/automatic/gyropistol,/obj/item/weapon/gun/energy/pulse,
 		/obj/item/weapon/gun/projectile/automatic/pistol,/obj/item/weapon/gun/energy/lasercannon,/obj/item/weapon/gun/projectile/shotgun,
 		/obj/item/weapon/gun/projectile/shotgun/combat,/obj/item/weapon/gun/projectile/revolver/mateba,/obj/item/weapon/gun/energy/kinetic_accelerator/crossbow,
 		/obj/item/weapon/gun/projectile/automatic/l6_saw)
