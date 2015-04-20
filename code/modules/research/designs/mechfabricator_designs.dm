@@ -637,7 +637,7 @@
 
 /datum/design/borg_upgrade_disablercooler
 	name = "Cyborg Upgrade Module (Rapid Disabler Cooling Module)"
-	id = "borg_upgrade_tasercooler"
+	id = "borg_upgrade_disablercooler"
 	build_type = MECHFAB
 	build_path = /obj/item/borg/upgrade/disablercooler
 	req_tech = list("combat" = 5, "power" = 4)
