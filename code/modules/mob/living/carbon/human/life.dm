@@ -84,6 +84,9 @@
 		//Disabilities
 		handle_disabilities()
 
+		//Blud
+		handle_blood()
+
 		//Random events (vomiting etc)
 		handle_random_events()
 
@@ -451,15 +454,6 @@
 		//CONSCIOUS
 		else
 			stat = CONSCIOUS
-
-		//Blood loss
-		//var/tot_damage = maxHealth-health
-		if(getBruteLoss() >= 50 && prob(15) && !paralysis)
-			adjustStaminaLoss(5)
-			var/turf/pos = get_turf(src)
-			pos.add_blood_floor(src)
-			playsound(pos, 'sound/effects/splat.ogg', 10, 1)
-			src << pick("<span class='warning'>You feel woozy...</span>","<span class='warning'>You feel drained...</span>","<span class='warning'>Your wounds open...</span>","<span class='warning'>Your blood flows...</span>")
 
 		//Eyes
 		if(disabilities & BLIND || stat)	//disabled-blind, doesn't get better on its own

@@ -6,6 +6,7 @@
 /obj/effect/decal/cleanable/blood/old
 	name = "dried blood"
 	desc = "Looks like it's been here a while.  Eew."
+	printamount = 1
 
 /obj/effect/decal/cleanable/blood/old/New()
 	..()
