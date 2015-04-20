@@ -13,9 +13,9 @@
 
 
 /obj/item/weapon/phone/attack_ghost()
-		if(config.ghost_interaction && prob(2))
-			playsound(src.loc, hitsound, 50, 1, -1)
-			visible_message("[src] rings")
+	if(config.ghost_interaction && prob(2))
+		playsound(src.loc, hitsound, 50, 1, -1)
+		visible_message("[src] rings")
 
 /obj/item/weapon/phone/suicide_act(mob/user)
 	if(locate(/obj/structure/stool) in user.loc)
