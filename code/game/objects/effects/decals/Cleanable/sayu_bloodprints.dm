@@ -6,9 +6,6 @@
 	if(iscarbon(AM))
 		if(sayu_footprint_helper(AM, amount, "blood"))
 			printamount -= amount
-			if(printamount <= 0)
-				icon_state += "-old"
-				name = "dried " + name
 
 /obj/effect/decal/cleanable/xenoblood/Crossed(var/atom/movable/AM)
 	if(printamount <= 0)
