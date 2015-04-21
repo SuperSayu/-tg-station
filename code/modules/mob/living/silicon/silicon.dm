@@ -417,3 +417,6 @@
 /mob/living/silicon/proc/GetPhoto()
 	if (aicamera)
 		return aicamera.selectpicture(aicamera)
+
+/mob/living/silicon/grabbedby(mob/living/user)
+	return
