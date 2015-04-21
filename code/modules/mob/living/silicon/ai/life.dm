@@ -12,7 +12,7 @@
 
 		src.updatehealth()
 
-		update_action_buttons()
+		update_gravity(mob_has_gravity())
 
 		if (src.malfhack)
 			if (src.malfhack.aidisabled)
