@@ -1,10 +1,10 @@
-#define EMPTY 0
-#define WIRED 1
-#define READY 2
+#define EMPTY 1
+#define WIRED 2
+#define READY 3
 
 /obj/item/weapon/grenade/chem_grenade
 	name = "grenade"
-	desc = "A do it yourself grenade casing!"
+	desc = "A custom made grenade."
 	icon_state = "chemg"
 	item_state = "flashbang"
 	var/bomb_state = "chembomb"
@@ -24,6 +24,7 @@
 	if(payload_name)
 		payload_name += " " // formatting, ignore me
 	update_icon()
+	stage_change() // If no argument is set, it will change the stage to the current stage, useful for stock grenades that start READY.
 
 
 /obj/item/weapon/grenade/chem_grenade/examine(mob/user)
@@ -210,18 +211,19 @@
 
 
 /obj/item/weapon/grenade/chem_grenade/proc/stage_change(var/N)
-	stage = N
-	if (stage == EMPTY)
+	if(N)
+		stage = N
+	if(stage == EMPTY)
 		name = "[initial(name)] casing"
-		desc = initial(desc)
+		desc = "A do it yourself [initial(name)] casing!"
 		icon_state = initial(icon_state)
-	else if (stage == WIRED)
+	else if(stage == WIRED)
 		name = "unsecured [initial(name)]"
 		desc = "An unsecured [initial(name)] assembly."
 		icon_state = "[initial(icon_state)]_ass"
-	else if (stage == READY)
+	else if(stage == READY)
 		name = initial(name)
-		desc = "A custom made [initial(name)]."
+		desc = initial(desc)
 		icon_state = "[initial(icon_state)]_locked"
 
 
@@ -340,8 +342,8 @@
 
 //Large chem grenades accept slime cores and use the appropriately.
 /obj/item/weapon/grenade/chem_grenade/large
-	name = "large grenade casing"
-	desc = "An oversized grenade casing."
+	name = "large grenade"
+	desc = "A custom made large grenade."
 	icon_state = "large_grenade"
 	bomb_state = "largebomb"
 	allowed_containers = list(/obj/item/weapon/reagent_containers/glass,/obj/item/weapon/reagent_containers/food/condiment,
@@ -392,7 +394,6 @@
 
 	beakers += B1
 	beakers += B2
-	update_icon()
 
 
 /obj/item/weapon/grenade/chem_grenade/incendiary
@@ -411,7 +412,7 @@
 
 	beakers += B1
 	beakers += B2
-	update_icon()
+
 
 /obj/item/weapon/grenade/chem_grenade/antiweed
 	payload_name = "weed killer"
@@ -430,7 +431,7 @@
 
 	beakers += B1
 	beakers += B2
-	update_icon()
+
 
 /obj/item/weapon/grenade/chem_grenade/cleaner
 	payload_name = "cleaner"
@@ -448,7 +449,7 @@
 
 	beakers += B1
 	beakers += B2
-	update_icon()
+
 
 /obj/item/weapon/grenade/chem_grenade/teargas
 	payload_name = "teargas"
@@ -467,7 +468,6 @@
 
 	beakers += B1
 	beakers += B2
-	update_icon()
 
 
 /obj/item/weapon/grenade/chem_grenade/facid
@@ -480,14 +480,13 @@
 	var/obj/item/weapon/reagent_containers/glass/beaker/B1 = new(src)
 	var/obj/item/weapon/reagent_containers/glass/beaker/B2 = new(src)
 
-	B1.reagents.add_reagent("facid", 100)
+	B1.reagents.add_reagent("facid", 25)
 	B1.reagents.add_reagent("potassium", 25)
 	B2.reagents.add_reagent("phosphorus", 25)
 	B2.reagents.add_reagent("sugar", 25)
 
 	beakers += B1
 	beakers += B2
-	icon_state = "grenade"
 
 #undef EMPTY
 #undef WIRED

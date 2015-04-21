@@ -645,9 +645,9 @@ datum/preferences
 						var/new_spec_hair
 						switch(pref_species.id)
 							if("lizard")
-								new_spec_hair = previous_list_item(hair_style, spec_hair_lizard_list)
+								new_spec_hair = previous_list_item(spec_hair, spec_hair_lizard_list)
 							if("bird")
-								new_spec_hair = previous_list_item(hair_style, spec_hair_bird_list)
+								new_spec_hair = previous_list_item(spec_hair, spec_hair_bird_list)
 						if(new_spec_hair)
 							spec_hair = new_spec_hair
 
