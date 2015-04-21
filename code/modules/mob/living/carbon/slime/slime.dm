@@ -815,7 +815,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 	New()
 		..()
-		SSobj.processing.Add(src)
+		SSobj.processing |= src
 
 /obj/effect/golemrune/process()
 	var/mob/dead/observer/ghost
@@ -927,7 +927,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 /obj/item/weapon/reagent_containers/food/snacks/egg/slime/proc/Grow()
 	grown = 1
 	icon_state = "slime egg-grown"
-	SSobj.processing.Add(src)
+	SSobj.processing |= src
 	return
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/slime/proc/Hatch()

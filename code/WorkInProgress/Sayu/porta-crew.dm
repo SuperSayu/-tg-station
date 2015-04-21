@@ -8,7 +8,7 @@
 
 	New()
 		..()
-		SSobj.processing.Add(src)
+		SSobj.processing |= src
 
 	attack_self()
 		interact()

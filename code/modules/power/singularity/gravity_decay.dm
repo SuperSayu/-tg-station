@@ -120,7 +120,7 @@
 			spawn(1)
 				if(loc)
 					loc:ChangeTurf(/turf/space)
-		SSobj.processing.Add(src)
+		SSobj.processing |= src
 
 		spawn(rand(2,8))
 			if(loc)

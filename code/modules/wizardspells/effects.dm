@@ -39,7 +39,7 @@
 	New(l,duration = 450)
 		..()
 		SetLuminosity(4)
-		SSobj.processing.Add(src)
+		SSobj.processing |= src
 		spawn(duration)
 			del src
 	process()

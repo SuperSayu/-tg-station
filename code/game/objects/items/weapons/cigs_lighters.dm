@@ -50,7 +50,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		name = "lit match"
 		desc = "A match. This one is lit."
 		attack_verb = list("burnt","singed")
-		SSobj.processing.Add(src)
+		SSobj.processing |= src
 		update_icon()
 	return
 
@@ -197,7 +197,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		if(flavor_text)
 			var/turf/T = get_turf(src)
 			T.visible_message(flavor_text)
-		SSobj.processing.Add(src)
+		SSobj.processing |= src
 
 		//can't think of any other way to update the overlays :<
 		if(ismob(loc))
@@ -487,7 +487,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 					user.visible_message("<span class='notice'>After a few attempts, [user] manages to light [src], they however burn their finger in the process.</span>")
 
 			user.AddLuminosity(1)
-			SSobj.processing.Add(src)
+			SSobj.processing |= src
 		else
 			lit = 0
 			icon_state = icon_off

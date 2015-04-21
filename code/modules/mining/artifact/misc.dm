@@ -55,7 +55,7 @@
 /obj/effect/artlight/New(l,var/duration = 450)
 	..()
 	SetLuminosity(8)
-	SSobj.processing.Add(src)
+	SSobj.processing |= src
 	spawn(duration)
 		if(src)
 			qdel(src)

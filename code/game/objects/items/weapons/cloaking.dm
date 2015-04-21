@@ -20,7 +20,7 @@
 
 /obj/item/weapon/cloaking_device/New()
 	..()
-	SSobj.processing.Add(src)
+	SSobj.processing |= src
 	battery = new
 
 /obj/item/weapon/cloaking_device/Del()

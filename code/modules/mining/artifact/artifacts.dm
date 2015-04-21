@@ -42,7 +42,7 @@ var/global/ankh = 0 // only one can spawn
 
 /obj/item/artifact/New()
 	..()
-	SSobj.processing.Add(src)
+	SSobj.processing |= src
 	if(adminart == 0)
 		set_type()
 		rand_stim()
