@@ -1788,7 +1788,7 @@
 "aIt" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/simulated/wall,/area/holodeck/betadeck)
 "aIu" = (/obj/machinery/door/airlock/maintenance{name = "Bar Maintenance"; req_access_txt = "12"},/obj/structure/disposalpipe/segment,/turf/simulated/floor/plating,/area/maintenance/fsmaint2)
 "aIv" = (/turf/simulated/wall,/area/crew_quarters/bar)
-"aIw" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/item/weapon/reagent_containers/food/drinks/shaker,/obj/item/weapon/gun/projectile/revolver/doublebarrel,/obj/structure/table/wood,/turf/simulated/floor/wood,/area/crew_quarters/bar)
+"aIw" = (/obj/item/weapon/reagent_containers/food/drinks/shaker,/obj/item/weapon/gun/projectile/revolver/doublebarrel,/obj/structure/table/wood,/obj/item/stack/sheet/metal{amount = 50},/obj/item/stack/sheet/glass{amount = 50},/obj/item/stack/cable_coil,/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor/wood,/area/crew_quarters/bar)
 "aIx" = (/obj/structure/disposalpipe/segment,/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/simulated/floor/wood,/area/crew_quarters/bar)
 "aIy" = (/obj/structure/sink/kitchen{pixel_y = 28},/turf/simulated/floor/wood,/area/crew_quarters/bar)
 "aIz" = (/obj/machinery/door/window/southleft{base_state = "left"; dir = 2; icon_state = "left"; name = "Bar Delivery"; req_access_txt = "25"},/turf/simulated/floor/plasteel{icon_state = "delivery"},/area/crew_quarters/bar)
