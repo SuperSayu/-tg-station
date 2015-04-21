@@ -42,6 +42,7 @@
 	var/hair_luminosity = 0 // added/subtracted to the hair color's luminosity
 	var/use_skintones = 0	// does it use skintones or not? (spoiler alert this is only used by humans)
 	var/spec_hair = 0	// uses special species "hair" instead of real hair (ex. horns for lizards)
+	var/exotic_blood = null	// If your race wants to bleed something other than bog standard blood, change this.
 	var/meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human //What the species drops on gibbing
 
 	var/list/no_equip = list()	// slots the race can't equip stuff to
