@@ -47,7 +47,7 @@
 
 	// Also fails the sniff test
 	var/list/nasty_reagents = list("mutationtoxin","amutationtoxin","toxin","amatoxin","mutagen","plasma","slimejelly",
-		"carpotoxin","mindbreaker","chloralhydrate","sacid","pacid")
+		"carpotoxin","mindbreaker","chloralhydrate","sacid","facid")
 
 
 

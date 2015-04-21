@@ -839,9 +839,8 @@
 		if(A_SMOKE)
 			// EXTRA 1: Amount of reagents in the smoke
 			var/list/reagent = list("water","carbon","flour","radium","toxin","cleaner","nutriment","condensedcapsaicin",
-									"mushroomhallucinogen","lube","plantbgone","lipozine","anti_toxin","space_drugs",
-									"hyperzine","holywater","ethanol","chloralhydrate","pacid","bicaridine","dermaline",
-									"dexalinp","zombiepowder","mindbreaker","spore")
+									"mushroomhallucinogen","lube","plantbgone","lipozine","charcoal","space_drugs",
+									"morphine","holywater","ethanol","chloralhydrate","facid","zombiepowder","mindbreaker","spore")
 			var/datum/reagents/R = new/datum/reagents(extra1)
 			R.my_atom = artloc
 			R.add_reagent(pick(reagent), extra1)
