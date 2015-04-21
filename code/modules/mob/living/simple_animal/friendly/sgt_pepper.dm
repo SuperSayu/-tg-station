@@ -34,15 +34,15 @@
 		/obj/item/weapon/reagent_containers/food/snacks/meat, /obj/item/weapon/reagent_containers/food/snacks/meat/monkey,
 		/obj/item/weapon/reagent_containers/food/snacks/donut,
 		/obj/item/weapon/reagent_containers/food/snacks/donut/jelly, /obj/item/weapon/reagent_containers/food/snacks/donut/jelly/cherryjelly,
-		/obj/item/weapon/reagent_containers/food/snacks/meatbreadslice, /obj/item/weapon/reagent_containers/food/snacks/monkeykebab,
-		/obj/item/weapon/reagent_containers/food/snacks/meatpie, /obj/item/weapon/reagent_containers/food/snacks/sosjerky)
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice/meat, /obj/item/weapon/reagent_containers/food/snacks/kebab/monkey,
+		/obj/item/weapon/reagent_containers/food/snacks/pie/meatpie, /obj/item/weapon/reagent_containers/food/snacks/sosjerky)
 
 	// Fails the sniff test
 	var/list/smell_offensive = list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat/human, /obj/item/weapon/reagent_containers/food/snacks/meat/corgi,
 		/obj/item/weapon/reagent_containers/food/snacks/badrecipe, /obj/item/weapon/reagent_containers/food/snacks/burger/clown,
-		/obj/item/weapon/reagent_containers/food/snacks/xenomeat, /obj/item/weapon/reagent_containers/food/snacks/xenomeatbreadslice,
-		/obj/item/weapon/reagent_containers/food/snacks/soup/mysterysoup, /obj/item/weapon/reagent_containers/food/snacks/carpmeat,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/xeno, /obj/item/weapon/reagent_containers/food/snacks/pie/xemeatpie,
+		/obj/item/weapon/reagent_containers/food/snacks/soup/mystery, /obj/item/weapon/reagent_containers/food/snacks/carpmeat,
 		/obj/item/weapon/reagent_containers/food/snacks/burger/brain,/obj/item/weapon/reagent_containers/food/snacks/spesslaw) // that's offensive to the legal system, sir
 
 	// Also fails the sniff test
