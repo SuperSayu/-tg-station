@@ -156,32 +156,37 @@
 	desc = "The sheer recklessness of this bottle's existence astounds you."
 
 /obj/item/weapon/storage/pill_bottle/random_meds/New()
-	var/global/list/meds_only = list("charcoal","toxin","cyanide","morphine","epinephrine","space_drugs","mutadone","mutagen","leporazine","cryptobiolin","lexorin", "salglu_solution","salbutamol","omnizine","synaptizine","impedrezene","potass_iodide","pen_acid","mannitol","oculine","spaceacillin","carpotoxin","zombiepowder","mindbreaker","ethanol","ammonia","diethylamine","antihol","chloralhydrate","lipozine","condensedcapsaicin","frostoil","amatoxin","mushroomhallucinogen","nothing","doctorsdelight","neurotoxin")
-	var/global/list/rare_meds = list("nanomachines","xenomicrobes","minttoxin","adminordrazine","blood")
-
 	var/i = 1
 	while(i < storage_slots)
-
-		var/datum/reagent/reagentId
-		if(prob(50))
-			reagentId = pick(meds_only + rare_meds)
-		else
-			reagentId = pick(meds_only)
-		var/obj/item/weapon/reagent_containers/pill/P = new(src)
-
-		if(reagentId == "blood" && prob(40))
-			P.spawned_disease = /datum/disease/advance
-		else
-			if(rare_meds.Find(reagentId))
-				P.list_reagents[reagentId] = 10
-			else
-				P.list_reagents[reagentId] = rand(2,3)*10
-
-		P.name = "Unlabelled Pill"
-		P.desc = "Something about this pill entices you to try it, against your better judgement."
+		new /obj/item/weapon/reagent_containers/pill/random_pill(src)
 		i++
+
 	pixel_x = rand(-10,10)
 	pixel_y = rand(-10,10)
+	..()
+
+/obj/item/weapon/reagent_containers/pill/random_pill
+	name = "Unlabelled Pill"
+	desc = "Something about this pill entices you to try it, against your better judgement."
+
+/obj/item/weapon/reagent_containers/pill/random_pill/New()
+	var/global/list/meds_only = list("charcoal","toxin","cyanide","morphine","epinephrine","space_drugs","mutadone","mutagen","leporazine","cryptobiolin","lexorin", "salglu_solution","salbutamol","omnizine","synaptizine","impedrezene","potass_iodide","pen_acid","mannitol","oculine","spaceacillin","carpotoxin","zombiepowder","mindbreaker","ethanol","ammonia","diethylamine","antihol","chloralhydrate","lipozine","condensedcapsaicin","frostoil","amatoxin","mushroomhallucinogen","nothing","doctorsdelight","neurotoxin")
+	var/global/list/rare_meds = list("nanomachines","xenomicrobes","minttoxin","adminordrazine","blood")
+	list_reagents = list()
+	var/datum/reagent/reagentId
+	if(prob(50))
+		reagentId = pick(meds_only + rare_meds)
+	else
+		reagentId = pick(meds_only)
+
+	if(reagentId == "blood" && prob(40))
+		spawned_disease = /datum/disease/advance
+	else
+		if(rare_meds.Find(reagentId))
+			list_reagents[reagentId] = 10
+		else
+			list_reagents[reagentId] = rand(2,3)*10
+
 	..()
 
 // -------------------------------------
