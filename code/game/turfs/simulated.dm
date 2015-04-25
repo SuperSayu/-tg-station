@@ -1,9 +1,6 @@
 /turf/simulated
 	name = "station"
 	var/wet = 0
-	var/bloody = 0		// for blood trails
-	var/oily = 0		// for oil trails
-	var/xenobloody = 0	//for xenoblood trails
 	var/image/wet_overlay = null
 
 	var/thermite = 0
@@ -15,6 +12,8 @@
 /turf/simulated/New()
 	..()
 	levelupdate()
+
+/turf/simulated/proc/burn_tile()
 
 /turf/simulated/proc/MakeSlippery(var/wet_setting = 1) // 1 = Water, 2 = Lube
 	if(wet >= wet_setting)
@@ -40,34 +39,13 @@
 	if (istype(A,/mob/living/carbon))
 		var/mob/living/carbon/M = A
 		if(M.lying)	return
-
 		switch (src.wet)
 			if(1) //wet floor
 				if(!M.slip(4, 2, null, (NO_SLIP_WHEN_WALKING|STEP)))
 					M.inertia_dir = 0
 				return
-
 			if(2) //lube
 				M.slip(0, 7, null, (STEP|SLIDE|GALOSHES_DONT_HELP))
-
-
-
-		if(!istype(M, /mob/living/carbon/slime))
-			var/amount = max(M.trail,rand(4,8))
-			if(xenobloody > 0)
-				M.trail = amount
-				M.trailtype = "xeno"
-				xenobloody = max(xenobloody-amount,0)
-
-			else if(bloody > 0)
-				M.trail = amount
-				M.trailtype = "blood"
-				bloody = max(bloody-amount,0)
-
-			else if(oily > 0)
-				M.trail = amount
-				M.trailtype = "oil"
-				oily = max(oily-amount,0)
 
 /turf/simulated/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
 	if(istype(mover,/obj/structure/faketurf))

@@ -11,7 +11,7 @@
 
 /obj/item/target/Destroy()
 	// if a target is deleted and associated with a stake, force stake to forget
-	for(var/obj/structure/stool/bed/chair/target_stake/T in view(3,src))
+	for(var/obj/structure/target_stake/T in view(3,src))
 		if(T.pinned_target == src)
 			T.pinned_target = null
 			T.density = 1
@@ -21,7 +21,7 @@
 /obj/item/target/Move()
 	..()
 	// After target moves, check for nearby stakes. If associated, move to target
-	for(var/obj/structure/stool/bed/chair/target_stake/M in view(3,src))
+	for(var/obj/structure/target_stake/M in view(3,src))
 		if(M.density == 0 && M.pinned_target == src)
 			M.loc = loc
 
@@ -43,8 +43,8 @@
 
 /obj/item/target/attack_hand(mob/user as mob)
 	// taking pinned targets off!
-	var/obj/structure/stool/bed/chair/target_stake/stake
-	for(var/obj/structure/stool/bed/chair/target_stake/T in view(3,src))
+	var/obj/structure/target_stake/stake
+	for(var/obj/structure/target_stake/T in view(3,src))
 		if(T.pinned_target == src)
 			stake = T
 			break
@@ -113,7 +113,7 @@
 			bmark.pixel_x--
 			bmark.pixel_y--
 
-			if(Proj.damage >= 20 || istype(Proj, /obj/item/projectile/practice))
+			if(Proj.damage >= 20 || istype(Proj, /obj/item/projectile/beam/practice))
 				bmark.icon_state = "scorch"
 				bmark.dir = pick(NORTH,SOUTH,EAST,WEST) // random scorch design
 

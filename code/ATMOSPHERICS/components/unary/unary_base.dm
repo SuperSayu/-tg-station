@@ -10,10 +10,12 @@
 
 /obj/machinery/atmospherics/unary/New()
 	..()
-	initialize_directions = dir
 	air_contents = new
 	air_contents.volume = 200
 
+
+/obj/machinery/atmospherics/unary/SetInitDirections()
+	initialize_directions = dir
 /*
 Iconnery
 */
@@ -66,6 +68,10 @@ Housekeeping and pipe network stuff below
 	if(level == 2)
 		showpipe = 1
 	update_icon()
+
+/obj/machinery/atmospherics/unary/construction()
+	..()
+	parent.update = 1
 
 /obj/machinery/atmospherics/unary/default_change_direction_wrench(mob/user, obj/item/weapon/wrench/W)
 	if(..())

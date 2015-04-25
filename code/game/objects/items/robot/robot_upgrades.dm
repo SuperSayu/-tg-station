@@ -1,4 +1,4 @@
-// robot_upgrades.dm
+	// robot_upgrades.dm
 // Contains various borg upgrades.
 
 /obj/item/borg/upgrade
@@ -97,6 +97,8 @@
 	R.speed--
 	return 1
 
+
+/obj/item/borg/upgrade/disablercooler
 	name = "cyborg rapid disabler cooling module"
 	desc = "Used to cool a mounted disabler, increasing the potential current in it and thus its recharge rate."
 	icon_state = "cyborg_upgrade3"
@@ -144,10 +146,10 @@
 		usr << "There's no mounting point for the module!"
 		return 0
 	else
-		R.module.modules += new/obj/item/weapon/tank/jetpack/carbondioxide
+		R.module.modules += new/obj/item/weapon/tank/jetpack/carbondioxide(R.module)
 		for(var/obj/item/weapon/tank/jetpack/carbondioxide in R.module.modules)
 			R.internals = src
-		R.icon_state="Miner+j"
+		R.jetpackoverlay = 1
 		R.module.rebuild()
 		return 1
 

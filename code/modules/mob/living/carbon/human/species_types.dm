@@ -61,8 +61,7 @@
 	// Creatures made of leaves and plant matter.
 	name = "Chlorophyte" // WIP name
 	id = "plant"
-	desc = "Made entirely of plant matter, the Chlorophytes can store vast quantities of nutrients within their bodies. \
-	They are naturally free spirits, and do not care much for conformity."
+	desc = "Made entirely of plant matter, the Chlorophytes are naturally free spirits, and do not care much for conformity."
 	default_color = "59CE00"
 	roundstart = 1
 	specflags = list(MUTCOLORS,HAIR,FACEHAIR,EYECOLOR,NOPIXREMOVE)
@@ -73,51 +72,6 @@
 	miss_sound = 'sound/weapons/slashmiss.ogg'
 	burnmod = 1.5
 	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/plant
-
-/datum/species/plant/handle_chemicals_in_body(var/mob/living/carbon/human/H)
-	if(H.reagents) H.reagents.metabolize(H)
-
-	if(FAT in H.mutations)
-		if(H.overeatduration < 200)	// Plantpeople become fit sooner...
-			H << "<span class='notice'>You feel your vines loosen, and once again nutrients begin to flow within you.</span>"
-			H.mutations -= FAT
-			H.update_inv_w_uniform(0)
-			H.update_inv_wear_suit()
-	else
-		if(H.overeatduration > 650)	// ...and become fat later
-			H << "<span class='danger'>You feel your vines constrict tightly.</span>"
-			H.mutations |= FAT
-			H.update_inv_w_uniform(0)
-			H.update_inv_wear_suit()
-
-	if (H.nutrition > 0 && H.stat != 2)	// Plantpeople lose nutrition slower.
-		H.nutrition = max (0, H.nutrition - (HUNGER_FACTOR*0.75))
-
-	if (H.nutrition > 450)
-		if(H.overeatduration < 600)
-			H.overeatduration++
-	else
-		if(H.overeatduration > 1)
-			H.overeatduration -= 2
-
-	if(H.drowsyness)
-		H.drowsyness--
-		H.eye_blurry = max(2, H.eye_blurry)
-		if (prob(5))
-			H.sleeping += 1
-			H.Paralyse(5)
-
-	H.confused = max(0, H.confused - 1)
-	if(H.resting)
-		H.dizziness = max(0, H.dizziness - 15)
-		H.jitteriness = max(0, H.jitteriness - 15)
-	else
-		H.dizziness = max(0, H.dizziness - 3)
-		H.jitteriness = max(0, H.jitteriness - 3)
-
-	H.updatehealth()
-
-	return
 
 /datum/species/plant/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
 	if(chem.id == "plantbgone")
@@ -188,6 +142,7 @@
 	sexes = 0
 	ignored_by = list(/mob/living/simple_animal/hostile/faithless)
 	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/shadow
+	specflags = list(NOBREATH,NOBLOOD,RADIMMUNE)
 
 /datum/species/shadow/spec_life(mob/living/carbon/human/H)
 	var/light_amount = 0
@@ -213,18 +168,40 @@
 	default_color = "00FFFF"
 	darksight = 3
 	invis_sight = SEE_INVISIBLE_LEVEL_ONE
-	specflags = list(MUTCOLORS,EYECOLOR,HAIR,FACEHAIR)
+	specflags = list(MUTCOLORS,EYECOLOR,HAIR,FACEHAIR,NOBLOOD)
 	hair_color = "mutcolor"
 	hair_alpha = 165
 	hair_luminosity = -75
 	ignored_by = list(/mob/living/carbon/slime)
 	bone_chance_adjust = 0
 	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/slime
+	exotic_blood = /datum/reagent/toxin/slimejelly
+	var/recently_changed = 1
 
 /datum/species/slime/spec_life(mob/living/carbon/human/H)
-	if ((HULK in H.mutations))
-		H.mutations.Remove(HULK)
+	if(!H.reagents.get_reagent_amount("slimejelly"))
+		if(recently_changed)
+			H.reagents.add_reagent("slimejelly", 80)
+			recently_changed = 0
+		else
+			H.reagents.add_reagent("slimejelly", 5)
+			H.adjustBruteLoss(5)
+			H << "<span class='danger'>You feel empty!</span>"
 
+	for(var/datum/reagent/toxin/slimejelly/S in H.reagents.reagent_list)
+		if(S.volume < 100)
+			if(H.nutrition >= NUTRITION_LEVEL_STARVING)
+				H.reagents.add_reagent("slimejelly", 0.5)
+				H.nutrition -= 5
+		if(S.volume < 50)
+			if(prob(5))
+				H << "<span class='danger'>You feel drained!</span>"
+		if(S.volume < 10)
+			H.losebreath++
+
+/datum/species/slime/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
+	if(chem.id == "slimejelly")
+		return 1
 /*
  JELLYPEOPLE
 */
@@ -266,59 +243,8 @@
 		return 1
 
 /datum/species/jelly/spec_life(mob/living/carbon/human/H)
-	if ((HULK in H.mutations))
-		H.mutations.Remove(HULK)
 	if(H.getCloneLoss()) // clone loss is slowly regenerated
 		H.adjustCloneLoss(-0.2)
-
-/*
- AXOLOTL PEOPLE -- WIP IN PROGRESS
-*/
-
-/*/datum/species/axolotl
-	// The Lotyn are a race of axolotl-like aliens who are known for being religious, although a handful of them have rejected
-	// their customs.
-
-	name = "Lotyn"
-	id = "axolotl"
-	roundstart = 1
-	specflags = list(MUTCOLORS,EYECOLOR,LIPS,NOPIXREMOVE)
-	default_color = "#EC88FF"
-
-/datum/species/axolotl/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
-	if(chem.id == "holywater")	// holy water acts as ryetalyn
-		H.mutations = list()
-		H.disabilities = 0
-		H.sdisabilities = 0
-		H.update_mutations()
-		H.reagents.remove_reagent(chem.id, 2) // metabolizes faster
-		return 1*/
-
-/*
- BIRD PEOPLE -- ALSO A WIP IN PROGRESS
- */
-
-/*/datum/species/bird
-	name = "Aven"
-	id = "bird"
-	desc = "Stuff goes here."
-	specflags = list(HAIR,MUTCOLORS,LAYER2,EYECOLOR)
-	say_mod = "hisses"
-	spec_hair = 1
-	hair_color = "mutcolor"
-	speedmod = -1
-	no_equip = list(slot_wear_mask, slot_shoes)
-	roundstart = 1
-
-/*/datum/species/bird/before_equip_job(var/datum/job/J, var/mob/living/carbon/human/H)
-	H.equip_to_slot(new /obj/item/weapon/tank/co2(H), slot_r_store)
-	H.equip_to_slot(new /obj/item/clothing/mask/breath(H), slot_wear_mask)*/
-
-/datum/species/bird/after_equip_job(var/datum/job/J, var/mob/living/carbon/human/H)
-	if(H.job == "Head of Security" || H.job == "Warden" || H.job == "Security Officer")
-		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/roman(H), slot_shoes)
-	else
-		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(H), slot_shoes)*/
 
 /*
  GOLEMS
@@ -377,7 +303,7 @@
 	id = "skeleton"
 	sexes = 0
 	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/skeleton
-
+	specflags = list(NOBREATH,HEATRES,COLDRES,NOBLOOD,RADIMMUNE)
 /*
  ZOMBIES
 */
@@ -389,6 +315,7 @@
 	say_mod = "moans"
 	sexes = 0
 	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/zombie
+	specflags = list(NOBREATH,HEATRES,COLDRES,NOBLOOD,RADIMMUNE)
 
 /datum/species/zombie/handle_speech(message)
 	var/list/message_list = text2list(message, " ")
@@ -405,3 +332,52 @@
 			message_list.Insert(insertpos, "[pick("BRAINS", "Brains", "Braaaiinnnsss", "BRAAAIIINNSSS")]...")
 
 	return list2text(message_list, " ")
+
+/*
+ AXOLOTL PEOPLE -- WIP IN PROGRESS
+*/
+
+/*/datum/species/axolotl
+	// The Lotyn are a race of axolotl-like aliens who are known for being religious, although a handful of them have rejected
+	// their customs.
+
+	name = "Lotyn"
+	id = "axolotl"
+	roundstart = 1
+	specflags = list(MUTCOLORS,EYECOLOR,LIPS,NOPIXREMOVE)
+	default_color = "#EC88FF"
+
+/datum/species/axolotl/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
+	if(chem.id == "holywater")	// holy water acts as ryetalyn
+		H.mutations = list()
+		H.disabilities = 0
+		H.sdisabilities = 0
+		H.update_mutations()
+		H.reagents.remove_reagent(chem.id, 2) // metabolizes faster
+		return 1*/
+
+/*
+ BIRD PEOPLE -- ALSO A WIP IN PROGRESS
+ */
+
+/*/datum/species/bird
+	name = "Aven"
+	id = "bird"
+	desc = "Stuff goes here."
+	specflags = list(HAIR,MUTCOLORS,LAYER2,EYECOLOR)
+	say_mod = "hisses"
+	spec_hair = 1
+	hair_color = "mutcolor"
+	speedmod = -1
+	no_equip = list(slot_wear_mask, slot_shoes)
+	roundstart = 1
+
+/*/datum/species/bird/before_equip_job(var/datum/job/J, var/mob/living/carbon/human/H)
+	H.equip_to_slot(new /obj/item/weapon/tank/co2(H), slot_r_store)
+	H.equip_to_slot(new /obj/item/clothing/mask/breath(H), slot_wear_mask)*/
+
+/datum/species/bird/after_equip_job(var/datum/job/J, var/mob/living/carbon/human/H)
+	if(H.job == "Head of Security" || H.job == "Warden" || H.job == "Security Officer")
+		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/roman(H), slot_shoes)
+	else
+		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(H), slot_shoes)*/

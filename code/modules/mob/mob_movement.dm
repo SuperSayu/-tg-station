@@ -72,10 +72,10 @@
 
 
 /client/Center()
-	if (isobj(mob.loc))
+	if(isobj(mob.loc))
 		var/obj/O = mob.loc
-		if (mob.canmove)
-			return O.relaymove(mob, 16)
+		if(mob.canmove)
+			return O.relaymove(mob, 0)
 	return
 
 
@@ -118,6 +118,9 @@
 
 	if(mob.buckled)							//if we're buckled to something, tell it we moved.
 		return mob.buckled.relaymove(mob, direct)
+
+	if(mob.remote_control)					//we're controlling something, our movement is relayed to it
+		return mob.remote_control.relaymove(mob, direct)
 
 	if(!mob.canmove)
 		return 0
@@ -199,6 +202,7 @@
 			step(mob, pick(cardinal))
 		else
 			. = ..()
+		mob.last_movement=world.time
 
 		moving = 0
 		if(mob && .)

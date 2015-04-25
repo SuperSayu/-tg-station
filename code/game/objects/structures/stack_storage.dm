@@ -1,7 +1,7 @@
 /obj/structure/stack_dispenser
 	name = "Materials Storage Unit"
 	desc = "Also called 'shelves'.  Used for storing metal and glass stacks."
-	icon = 'icons/obj/structures.dmi'
+	icon = 'icons/obj/sayu_structures.dmi'
 	icon_state = "shelves0"
 	density = 1
 	anchored = 1

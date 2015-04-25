@@ -72,7 +72,7 @@
 
 /obj/item/device/camera_bug/New()
 	..()
-	processing_objects += src
+	SSobj.processing += src
 
 /obj/item/device/camera_bug/Destroy()
 	if(expansion)
@@ -102,7 +102,7 @@
 
 /obj/item/device/camera_bug/check_eye(var/mob/user as mob)
 	if(issilicon(user)) return 1
-	if (user.stat || loc != user || !user.canmove || user.blinded || !current)
+	if (user.stat || loc != user || !user.canmove || user.eye_blind || !current)
 		user.reset_view(null)
 		user.unset_machine()
 		return null

@@ -59,7 +59,7 @@
 			var/obj/item/clothing/C = new U
 			eye_choices += C
 
-	processing_objects.Add(src)
+	SSobj.processing |= src
 
 	mic = new/obj/item/device/radio/off{frequency=1441}(src)
 	mic.icon = icon

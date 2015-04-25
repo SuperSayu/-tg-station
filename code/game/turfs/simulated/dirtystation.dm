@@ -6,6 +6,7 @@
 /obj/effect/decal/cleanable/blood/old
 	name = "dried blood"
 	desc = "Looks like it's been here a while.  Eew."
+	printamount = 1
 
 /obj/effect/decal/cleanable/blood/old/New()
 	..()
@@ -57,10 +58,8 @@
 		new /obj/effect/decal/cleanable/dirt(src)	//vanilla, but it works
 		return
 
-
 	if(prob(80))	//mid dirt  - 1/15
 		return
-
 
 	if(istype(A, /area/engine) || istype(A,/area/assembly) || istype(A,/area/maintenance) || istype(A,/area/construction))
 	 	//Blood, sweat, and oil.  Oh, and dirt.
@@ -82,23 +81,15 @@
 				new /obj/effect/decal/cleanable/vomit/old(src)
 			else
 				new /obj/effect/decal/cleanable/blood/old(src)
-		else
-			new /obj/effect/decal/cleanable/dirt(src)
 		return
 
 	if(istype(A, /area/quartermaster))
-		if(prob(75))
-			new /obj/effect/decal/cleanable/dirt(src)
-		else
+		if(prob(25))
 			new /obj/effect/decal/cleanable/oil(src)
 		return
 
-
-
 	if(prob(75))	//low dirt  - 1/60
 		return
-
-
 
 	if(istype(A, /area/turret_protected) || istype(A, /area/security))	//chance of incident
 		if(prob(20))
@@ -106,8 +97,6 @@
 				new /obj/effect/decal/cleanable/blood/gibs/old(src)
 			else
 				new /obj/effect/decal/cleanable/blood/old(src)
-		else
-			new /obj/effect/decal/cleanable/dirt(src)
 		return
 
 
@@ -117,8 +106,6 @@
 				new /obj/effect/decal/cleanable/egg_smudge(src)
 			else
 				new /obj/effect/decal/cleanable/flour(src)
-		else if(prob(33))
-			new /obj/effect/decal/cleanable/dirt(src)
 		return
 
 	if(istype(A, /area/medical))	//Kept clean, but chance of blood
@@ -136,12 +123,8 @@
 		return
 
 	if(istype(A, /area/toxins))
-		if(prob(80))
-			new /obj/effect/decal/cleanable/dirt(src)
-		else
+		if(prob(20))
 			new /obj/effect/decal/cleanable/greenglow(src)	//this cleans itself up but it might startle you when you see it.
 		return
 
-	//default
-	new /obj/effect/decal/cleanable/dirt(src)
 	return

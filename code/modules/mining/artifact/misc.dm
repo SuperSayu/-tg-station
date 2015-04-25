@@ -55,7 +55,7 @@
 /obj/effect/artlight/New(l,var/duration = 450)
 	..()
 	SetLuminosity(8)
-	processing_objects.Add(src)
+	SSobj.processing |= src
 	spawn(duration)
 		if(src)
 			qdel(src)
@@ -251,6 +251,7 @@
 /obj/effect/effect/wing_trails
 	name = "wing trails"
 	icon_state = "wingtrails"
+	icon = 'icons/effects/sayu_effects.dmi'
 	anchored = 1.0
 
 /datum/effect/effect/system/wing_trail_follow

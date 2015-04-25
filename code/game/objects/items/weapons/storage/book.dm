@@ -18,6 +18,10 @@
 	var/mob/affecting = null
 	var/deity_name = "Christ"
 
+/obj/item/weapon/storage/book/bible/suicide_act(mob/user)
+	user.visible_message("<span class='suicide'>[user] is offering \himself to [src.deity_name]! It looks like \he's trying to commit suicide.</span>")
+	return (BRUTELOSS)
+
 /obj/item/weapon/storage/book/bible/booze
 	name = "bible"
 	desc = "To be applied to the head repeatedly."
@@ -44,7 +48,7 @@
 					H.update_damage_overlays(0)
 	return
 
-/obj/item/weapon/storage/book/bible/attack(mob/living/M as mob, mob/living/user as mob)
+/obj/item/weapon/storage/book/bible/attack(mob/living/M as mob, mob/living/carbon/human/user as mob)
 
 	var/chaplain = 0
 	if(user.mind && (user.mind.assigned_role == "Chaplain"))
@@ -60,7 +64,7 @@
 		user.take_organ_damage(0,10)
 		return
 
-	if ((CLUMSY in user.mutations) && prob(50))
+	if (user.disabilities & CLUMSY && prob(50))
 		user << "<span class='danger'>The [src] slips out of your hand and hits your head.</span>"
 		user.take_organ_damage(10)
 		user.Paralyse(20)

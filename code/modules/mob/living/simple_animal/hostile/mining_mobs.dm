@@ -20,6 +20,7 @@
 	a_intent = "harm"
 	var/throw_message = "bounces off of"
 	var/icon_aggro = null // for swapping to when we get aggressive
+	icon = 'icons/mob/sayu_animal.dmi'
 
 /mob/living/simple_animal/hostile/asteroid/Aggro()
 	..()
@@ -50,7 +51,7 @@
 /mob/living/simple_animal/hostile/asteroid/basilisk
 	name = "basilisk"
 	desc = "A territorial beast, covered in a thick shell that absorbs energy. Its stare causes victims to freeze from the inside."
-	icon = 'icons/mob/animal.dmi'
+	icon = 'icons/mob/sayu_animal.dmi'
 	icon_state = "Basilisk"
 	icon_living = "Basilisk"
 	icon_aggro = "Basilisk_alert"
@@ -118,7 +119,7 @@
 /mob/living/simple_animal/hostile/asteroid/goldgrub
 	name = "goldgrub"
 	desc = "A worm that grows fat from eating everything in its sight. Seems to enjoy precious metals and other shiny things, hence the name."
-	icon = 'icons/mob/animal.dmi'
+	icon = 'icons/mob/sayu_animal.dmi'
 	icon_state = "Goldgrub"
 	icon_living = "Goldgrub"
 	icon_aggro = "Goldgrub_alert"
@@ -216,7 +217,7 @@
 /mob/living/simple_animal/hostile/asteroid/hivelord
 	name = "hivelord"
 	desc = "A truly alien creature made of self-replicating neural cells. When it feels threatened, it rapidly divides into an army."
-	icon = 'icons/mob/animal.dmi'
+	icon = 'icons/mob/sayu_animal.dmi'
 	icon_state = "Hivelord"
 	icon_living = "Hivelord"
 	icon_aggro = "Hivelord_alert"
@@ -292,7 +293,7 @@
 /mob/living/simple_animal/hostile/asteroid/hivelordbrood
 	name = "hivelord brood"
 	desc = "A fragment of the original Hivelord, rallying behind its original. One isn't much of a threat, but..."
-	icon = 'icons/mob/animal.dmi'
+	icon = 'icons/mob/sayu_animal.dmi'
 	icon_state = "Hivelordbrood"
 	icon_living = "Hivelordbrood"
 	icon_aggro = "Hivelordbrood"
@@ -324,7 +325,7 @@
 /mob/living/simple_animal/hostile/asteroid/goliath
 	name = "goliath"
 	desc = "A massive beast that uses long tentacles to ensare its prey, threatening them is not advised under any conditions."
-	icon = 'icons/mob/animal.dmi'
+	icon = 'icons/mob/sayu_animal.dmi'
 	icon_state = "Goliath"
 	icon_living = "Goliath"
 	icon_aggro = "Goliath_alert"
@@ -395,7 +396,7 @@
 
 /obj/effect/goliath_tentacle/
 	name = "Goliath tentacle"
-	icon = 'icons/mob/animal.dmi'
+	icon = 'icons/mob/sayu_animal.dmi'
 	icon_state = "Goliath_tentacle"
 
 /obj/effect/goliath_tentacle/New()
@@ -441,7 +442,7 @@
 /obj/item/asteroid/goliath_hide
 	name = "goliath shell plating"
 	desc = "Pieces of a goliath's rocky shell, these might be able to make your suit a bit more durable to attack from the local fauna."
-	icon = 'icons/obj/items.dmi'
+	icon = 'icons/obj/sayu_items.dmi'
 	icon_state = "goliath_hide"
 	flags = NOBLUDGEON
 	w_class = 3

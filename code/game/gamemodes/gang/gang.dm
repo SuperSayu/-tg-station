@@ -116,7 +116,7 @@
 	if (mob.mind)
 		if (mob.mind.assigned_role == "Clown")
 			mob << "Your training has allowed you to overcome your clownish nature, allowing you to wield weapons without harming yourself."
-			mob.mutations.Remove(CLUMSY)
+			mob.dna.remove_mutation(CLOWNMUT)
 
 	// find a radio! toolbox(es), backpack, belt, headset
 	var/loc = ""
@@ -323,7 +323,7 @@
 			if(boss_mind.current.stat == DEAD || !ishuman(boss_mind.current) || !boss_mind.current.ckey)
 				return 1
 			var/turf/T = get_turf(boss_mind.current)
-			if(T && (T.z != 1))			//If they leave the station they count as dead for this
+			if(T && (T.z != ZLEVEL_STATION))			//If they leave the station they count as dead for this
 				return 1
 			return 0
 		return 1
@@ -389,7 +389,7 @@
 		if(gang_mind.current)
 			if(gang_mind.current.stat == DEAD || isbrain(gang_mind.current))
 				text += "died"
-			else if(gang_mind.current.z != 1)
+			else if(gang_mind.current.z != ZLEVEL_STATION)
 				text += "fled the station"
 			else
 				text += "survived"

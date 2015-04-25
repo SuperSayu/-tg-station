@@ -11,33 +11,12 @@
 	icon_state = "xfloor1"
 	random_icon_states = list("xfloor1", "xfloor2", "xfloor3", "xfloor4", "xfloor5", "xfloor6", "xfloor7")
 	var/list/viruses = list()
-	blood_DNA = list()
+	blood_DNA = list("UNKNOWN DNA" = "X*")
+	var/printamount = 5
 
 /obj/effect/decal/cleanable/xenoblood/Destroy()
 	for(var/datum/disease/D in viruses)
 		D.cure(0)
-	var/turf/simulated/cur_turf = get_turf(src.loc)
-	if(istype(cur_turf, /turf/simulated))
-		cur_turf.xenobloody = 0
-	..()
-
-/obj/effect/decal/cleanable/xenoblood/New()
-	var/turf/simulated/cur_turf = get_turf(src.loc)
-	if(istype(cur_turf, /turf/simulated))
-		cur_turf.bloody = 0
-		cur_turf.oily = 0
-		cur_turf.xenobloody = 30
-	// lame copypasta time x2 combo
-	if(src.loc && isturf(src.loc))
-		for(var/obj/effect/decal/cleanable/blood/B in src.loc)
-			if(B != src)
-				del(B)
-		for(var/obj/effect/decal/cleanable/xenoblood/B in src.loc)
-			if(B != src)
-				del(B)
-		for(var/obj/effect/decal/cleanable/oil/B in src.loc)
-			if(B != src)
-				del(B)
 	..()
 
 /obj/effect/decal/cleanable/xenoblood/xgibs/proc/streak(var/list/directions)
@@ -56,6 +35,7 @@
 
 /obj/effect/decal/cleanable/xenoblood/xsplatter
 	random_icon_states = list("xgibbl1", "xgibbl2", "xgibbl3", "xgibbl4", "xgibbl5")
+	printamount = 0
 
 /obj/effect/decal/cleanable/xenoblood/xgibs
 	name = "xeno gibs"
@@ -64,6 +44,7 @@
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "xgib1"
 	random_icon_states = list("xgib1", "xgib2", "xgib3", "xgib4", "xgib5", "xgib6")
+	printamount = 0
 
 /obj/effect/decal/cleanable/xenoblood/xgibs/ex_act()
 	return
@@ -86,3 +67,5 @@
 /obj/effect/decal/cleanable/blood/xtracks
 	icon_state = "xtracks"
 	random_icon_states = null
+	blood_DNA = list("UNKNOWN DNA" = "X*")
+	printamount = 0

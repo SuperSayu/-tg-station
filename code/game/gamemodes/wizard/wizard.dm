@@ -9,7 +9,7 @@
 	required_enemies = 1
 	recommended_enemies = 1
 	pre_setup_before_jobs = 1
-
+	var/use_huds = 0
 	var/finished = 0
 
 /datum/game_mode/wizard/announce()
@@ -41,6 +41,8 @@
 		name_wizard(wizard.current)
 		greet_wizard(wizard)
 
+		if(use_huds)
+			update_wiz_icons_added(wizard)
 	..()
 	return
 
@@ -165,11 +167,15 @@
 	if(wizard_mob.backbag == 3) wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel_norm(wizard_mob), slot_back)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival(wizard_mob), slot_in_backpack)
 //	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/scrying_gem(wizard_mob), slot_l_store) For scrying gem.
-	//wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/teleportation_scroll(wizard_mob), slot_r_store)
-	//wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/spellbook(wizard_mob), slot_r_hand)
+	/*
+	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/teleportation_scroll(wizard_mob), slot_r_store)
+	var/obj/item/weapon/spellbook/spellbook = new /obj/item/weapon/spellbook(wizard_mob)
+	spellbook.owner = wizard_mob
+	wizard_mob.equip_to_slot_or_del(spellbook, slot_r_hand)*/
 	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/magic/spellbook(wizard_mob),slot_r_hand)
 
 	wizard_mob << "You will find a list of available spells in your spell book. Choose your magic arsenal carefully."
+	wizard_mob << "The spellbook is bound to you, and others cannot use it."
 	wizard_mob << "In your pockets you will find a teleport scroll. Use it as needed."
 	wizard_mob.mind.store_memory("<B>Remember:</B> do not forget to prepare your spells.")
 	wizard_mob.update_icons()
@@ -276,11 +282,11 @@
 				var/mob/holder = get(M.loc, /mob)
 				if(holder)
 					text += " held by [holder.real_name] \icon[M.loc]"
-			var/area/A = get_area(M.loc)
-			switch(A.type)
-				if(/area/shuttle/escape/centcom,/area/shuttle/escape_pod1/centcom,/area/shuttle/escape_pod2/centcom,/area/shuttle/escape_pod3/centcom,/area/shuttle/escape_pod4/centcom)
+			if(M.loc)
+				var/area/A = get_area(M.loc)
+				if(A.type == /area/shuttle && M.onCentcom())
 					text += " (escaped the station)"
-				if(/area)
+				else
 					text += " (lost in space)"
 
 		world << text + "<br>"
@@ -312,3 +318,19 @@ Made a proc so this is not repeated 14 (or more) times.*/
 		return 0
 	else
 		return 1
+
+
+/proc/iswizard(mob/living/M as mob)
+	return istype(M) && M.mind && ticker && ticker.mode && (M.mind in ticker.mode.wizards)
+
+
+/datum/game_mode/proc/update_wiz_icons_added(datum/mind/wiz_mind)
+	var/datum/atom_hud/antag/wizhud = huds[ANTAG_HUD_WIZ]
+	wizhud.join_hud(wiz_mind.current)
+	set_antag_hud(wiz_mind.current, ((wiz_mind in wizards) ? "wizard" : "apprentice"))
+
+
+/datum/game_mode/proc/update_wiz_icons_removed(datum/mind/wiz_mind)
+	var/datum/atom_hud/antag/wizhud = huds[ANTAG_HUD_WIZ]
+	wizhud.leave_hud(wiz_mind.current)
+	set_antag_hud(wiz_mind.current, null)

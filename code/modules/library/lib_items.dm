@@ -18,6 +18,7 @@
 	density = 1
 	opacity = 0
 	var/state = 0
+	var/list/allowed_books = list(/obj/item/weapon/book, /obj/item/weapon/spellbook, /obj/item/weapon/storage/book, /obj/item/weapon/magic/spellbook) //Things allowed in the bookcase
 
 
 /obj/structure/bookcase/initialize()
@@ -61,7 +62,7 @@
 				state = 0
 
 		if(2)
-			if(istype(I, /obj/item/weapon/book) || istype(I, /obj/item/weapon/spellbook) || istype(I,/obj/item/weapon/magic/spellbook))
+			if(is_type_in_list(I, allowed_books))
 				user.drop_item()
 				I.loc = src
 				update_icon()
@@ -294,7 +295,7 @@
 	throw_speed = 3
 	throw_range = 5
 	w_class = 1.0
-	var/obj/machinery/librarycomp/computer	//Associated computer - Modes 1 to 3 use this
+	var/obj/machinery/computer/libraryconsole/bookmanagement/computer	//Associated computer - Modes 1 to 3 use this
 	var/obj/item/weapon/book/book			//Currently scanned book
 	var/mode = 0							//0 - Scan only, 1 - Scan and Set Buffer, 2 - Scan and Attempt to Check In, 3 - Scan and Attempt to Add to Inventory
 

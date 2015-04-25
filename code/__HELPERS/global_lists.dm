@@ -11,6 +11,8 @@
 	init_sprite_accessory_subtypes(/datum/sprite_accessory/underwear, underwear_list, underwear_m, underwear_f)
 	//undershirt
 	init_sprite_accessory_subtypes(/datum/sprite_accessory/undershirt, undershirt_list, undershirt_m, undershirt_f)
+	//socks
+	init_sprite_accessory_subtypes(/datum/sprite_accessory/socks, socks_list, socks_m, socks_f)
 
 	//spec hair
 	init_species_accessory_subtypes(/datum/sprite_accessory/species/lizard, spec_hair_lizard_list)

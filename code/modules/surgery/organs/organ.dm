@@ -47,7 +47,7 @@
 	var/status = ORGAN_ORGANIC
 	var/bone_status = BONE_INTACT //needed its own flag variable, otherwise it would have wrought havoc with most checks
 	var/bone_name = "bone"
-	var/break_chance_multiplier = 1.5 //buff the weight class of the attacking item a bit
+	var/break_chance_multiplier = 1
 
 /obj/item/organ/limb/chest
 	name = "chest"

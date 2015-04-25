@@ -38,7 +38,7 @@
 			// this is complicated by the fact that other sandbox users may have moved the shuttle,
 			// so I cannot use syndicate start locations (off the shuttle).
 			for(var/obj/effect/landmark/L in landmarks_list)
-				if(L.name == "syndicate teleporter")
+				if(L.name == "Syndicate-Teleporter")
 					if(user.z != src.z)	return
 					user.loc.loc.Exited(user)
 					user.forceMove(L.loc)

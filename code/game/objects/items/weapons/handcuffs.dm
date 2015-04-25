@@ -18,8 +18,8 @@
 	var/cuffsound = 'sound/weapons/handcuffs.ogg'
 	var/trashtype = null //for disposable cuffs
 
-/obj/item/weapon/restraints/handcuffs/attack(mob/living/carbon/C, mob/user)
-	if(CLUMSY in user.mutations && prob(50))
+/obj/item/weapon/restraints/handcuffs/attack(mob/living/carbon/C, mob/living/carbon/human/user)
+	if(user.disabilities & CLUMSY && prob(50))
 		user << "<span class='warning'>Uh... how do those things work?!</span>"
 		apply_cuffs(user,user)
 
@@ -151,7 +151,8 @@
 	var/armed = 0
 
 /obj/item/weapon/restraints/legcuffs/beartrap/suicide_act(mob/user)
-	user.visible_message("<span class='suicide'>[user] is putting the [src.name] on \his head! It looks like \he's trying to commit suicide.</span>")
+	user.visible_message("<span class='suicide'>[user] is sticking \his head in the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 	return (BRUTELOSS)
 
 /obj/item/weapon/restraints/legcuffs/beartrap/attack_self(mob/user as mob)

@@ -10,7 +10,6 @@
 	var/active = 0 //Whether or not vision is enhanced
 
 /obj/effect/proc_holder/changeling/augmented_eyesight/sting_action(var/mob/user)
-
 	active = !active
 	if(active)
 		user << "<span class='notice'>We feel a minute twitch in our eyes, and darkness creeps away.</span>"
@@ -18,9 +17,11 @@
 		user << "<span class='notice'>Our vision dulls. Shadows gather.</span>"
 		user.sight -= SEE_MOBS
 	while(active)
+
 		if(!user)
 			active = 0
 			return 1
+
 		user.see_in_dark = 8
 		user.see_invisible = 2
 		user.sight |= SEE_MOBS
