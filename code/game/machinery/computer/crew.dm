@@ -63,6 +63,7 @@ proc/crewmonitor(mob/user,var/atom/source)
 	jobs["Clown"] = 66
 	jobs["Mime"] = 67
 	jobs["Janitor"] = 68
+	jobs["Lawyer"] = 69
 	jobs["Admiral"] = 200
 	jobs["Centcom Commander"] = 210
 	jobs["Custodian"] = 211

@@ -48,7 +48,7 @@
 /obj/item/weapon/storage/fancy/donut_box/New()
 	..()
 	for(var/i=1; i <= storage_slots; i++)
-		new /obj/item/weapon/reagent_containers/food/snacks/donut/normal(src)
+		new /obj/item/weapon/reagent_containers/food/snacks/donut(src)
 	return
 
 /obj/item/weapon/storage/fancy/donut_box/init_scatter()

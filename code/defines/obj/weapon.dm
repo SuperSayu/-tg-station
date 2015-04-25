@@ -11,10 +11,18 @@
 	attack_verb = list("called", "rang")
 	hitsound = 'sound/weapons/ring.ogg'
 
-	attack_ghost()
-		if(config.ghost_interaction && prob(2))
-			playsound(src.loc, hitsound, 50, 1, -1)
-			visible_message("[src] rings")
+
+/obj/item/weapon/phone/attack_ghost()
+	if(config.ghost_interaction && prob(2))
+		playsound(src.loc, hitsound, 50, 1, -1)
+		visible_message("[src] rings")
+
+/obj/item/weapon/phone/suicide_act(mob/user)
+	if(locate(/obj/structure/stool) in user.loc)
+		user.visible_message("<span class='notice'>[user] begins to tie a noose with the [src.name]'s cord! It looks like \he's trying to commit suicide.</span>")
+	else
+		user.visible_message("<span class='notice'>[user] is strangling \himself with the [src.name]'s cord! It looks like \he's trying to commit suicide.</span>")
+	return(OXYLOSS)
 
 /obj/item/weapon/rsp
 	name = "\improper Rapid-Seed-Producer (RSP)"
@@ -197,6 +205,11 @@
 	attack_verb = list("chopped", "torn", "cut")
 	hitsound = 'sound/weapons/bladeslice.ogg'
 
+/obj/item/weapon/hatchet/suicide_act(mob/user)
+	user.visible_message("<span class='suicide'>[user] is chopping at \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
+	return (BRUTELOSS)
+
 /obj/item/weapon/scythe
 	icon_state = "scythe0"
 	name = "scythe"
@@ -211,6 +224,11 @@
 	origin_tech = "materials=2;combat=2"
 	attack_verb = list("chopped", "sliced", "cut", "reaped")
 	hitsound = 'sound/weapons/bladeslice.ogg'
+
+/obj/item/weapon/scythe/suicide_act(mob/user)  // maybe later i'll actually figure out how to make it behead them
+	user.visible_message("<span class='suicide'>[user] is beheading \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
+	return (BRUTELOSS)
 
 /*
 /obj/item/weapon/cigarpacket
@@ -475,6 +493,10 @@
 		step_away(src,user)
 	else if(prob(15))
 		step_rand(src)
+
+/obj/item/weapon/ectoplasm/suicide_act(mob/user)
+	user.visible_message("<span class='suicide'>[user] is inhaling the [src.name]! It looks like \he's trying to visit the astral plane.</span>")
+	return (OXYLOSS)
 
 /obj/item/weapon/research//Makes testing much less of a pain -Sieve
 	name = "research"

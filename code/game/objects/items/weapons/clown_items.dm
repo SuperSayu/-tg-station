@@ -99,7 +99,7 @@
 
 /obj/item/weapon/soap/attackby(obj/item/I as obj, mob/user as mob) //todo: implement isSharp for soap splitting
 
-	if(istype(I,/obj/item/weapon/kitchenknife) || istype(I,/obj/item/weapon/kitchen/utensil/knife) || istype(I,/obj/item/weapon/butch))
+	if(is_sharp(I))
 
 		if(usesize == 0)
 			user << "You try to split the soap in twain, but alas, it is too though."

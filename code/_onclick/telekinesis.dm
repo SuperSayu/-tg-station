@@ -29,13 +29,10 @@ var/const/tk_maxrange = 15
 
 /obj/item/attack_tk(mob/user)
 	if(user.stat || !isturf(loc)) return
-	if(!user.get_active_hand()) // both should already be true to get here
-		var/obj/item/tk_grab/O = new(src)
-		user.put_in_active_hand(O)
-		O.host = user
-		O.focus_object(src)
-//	else
-//		WARNING("Strange attack_tk(): TK([TK in user.mutations]) empty hand([!user.get_active_hand()])")
+	var/obj/item/tk_grab/O = new(src)
+	user.put_in_active_hand(O)
+	O.host = user
+	O.focus_object(src)
 	return
 
 
@@ -78,17 +75,19 @@ var/const/tk_maxrange = 15
 	if(focus)
 		focus.attack_self_tk(user)
 
-/obj/item/tk_grab/afterattack(atom/target, mob/living/user, proximity)//TODO: go over this
+/obj/item/tk_grab/afterattack(atom/target, mob/living/carbon/user, proximity)//TODO: go over this
 	if(!target || !user)	return
 	if(last_throw+3 > world.time)	return
 	if(!host || host != user)
 		qdel(src)
 		return
-	if(!(TK in host.mutations))
+
+	if(!(user.dna.check_mutation(TK)))
 		var/mob/living/carbon/human/H = user
 		if(!istype(H) || !H.gloves || !istype(H.gloves, /obj/item/clothing/gloves/white/tkglove))
 			qdel(src)
 			return
+
 	if(isobj(target) && !isturf(target.loc))
 		return
 
@@ -170,6 +169,10 @@ var/const/tk_maxrange = 15
 	if(focus && focus.icon && focus.icon_state)
 		overlays += icon(focus.icon,focus.icon_state)
 	return
+
+obj/item/tk_grab/suicide_act(mob/user)
+	user.visible_message("<span class='suicide'>[user] is using \his telekinesis to choke \himself! It looks like \he's trying to commit suicide.</span>")
+	return (OXYLOSS)
 
 /*Not quite done likely needs to use something thats not get_step_to
 /obj/item/tk_grab/proc/check_path()

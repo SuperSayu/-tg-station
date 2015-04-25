@@ -34,12 +34,11 @@ There are several things that need to be remembered:
 
 
 >	There are also these special cases:
-		update_mutations()			//handles updating your appearance for certain mutations.  e.g TK head-glows
 		update_damage_overlays()	//handles damage overlays for brute/burn damage
 		update_base_icon_state()	//Handles updating var/base_icon_state (WIP) This is used to update the
 									mob's icon_state easily e.g. "[base_icon_state]_s" is the standing icon_state
 		update_body()				//Handles updating your mob's icon_state (using update_base_icon_state())
-									as well as sprite-accessories that didn't really fit elsewhere (underwear, undershirts, lips, eyes)
+									as well as sprite-accessories that didn't really fit elsewhere (underwear, undershirts, socks, lips, eyes)
 									//NOTE: update_mutantrace() is now merged into this!
 		update_hair()				//Handles updating your hair overlay (used to be update_face, but mouth and
 									eyes were merged into update_body())
@@ -91,7 +90,7 @@ Please contact me on #coderbus IRC. ~Carnie x
 	if(dna)
 		base_icon_state = dna.species.update_base_icon_state(src)
 	else
-		if(HUSK in mutations)
+		if(disabilities & HUSK)
 			base_icon_state = "husk"
 		else
 			base_icon_state = "[skin_tone]_[(gender == FEMALE) ? "f" : "m"]"
@@ -101,8 +100,7 @@ Please contact me on #coderbus IRC. ~Carnie x
 /mob/living/carbon/human/proc/update_layer_2()
 	remove_overlay(SPECIES_LAYER_2)
 
-	if(HUSK in mutations)
-		return
+	if(disabilities & HUSK)	return
 
 	if(dna)
 		dna.species.update_layer_2(src)
@@ -167,7 +165,7 @@ Please contact me on #coderbus IRC. ~Carnie x
 	//Reset our hair
 	remove_overlay(HAIR_LAYER)
 
-	if( (HUSK in mutations) || (head && (head.flags & BLOCKHAIR)) || (wear_mask && (wear_mask.flags & BLOCKHAIR)) )
+	if( (disabilities & HUSK) || (head && (head.flags & BLOCKHAIR)) || (wear_mask && (wear_mask.flags & BLOCKHAIR)) )
 		return
 
 	if((wear_suit) && (wear_suit.hooded) && (wear_suit.suittoggled == 1))
@@ -176,30 +174,8 @@ Please contact me on #coderbus IRC. ~Carnie x
 	if(dna)
 		dna.species.handle_hair(src)
 
-/mob/living/carbon/human/update_mutations()
-	remove_overlay(MUTATIONS_LAYER)
-
-	var/list/standing	= list()
-
-	var/g = (gender == FEMALE) ? "f" : "m"
-
-	for(var/mut in mutations)
-		switch(mut)
-			if(HULK)
-				standing	+= image("icon"='icons/effects/genetics.dmi', "icon_state"="hulk_[g]_s", "layer"=-MUTATIONS_LAYER)
-			if(COLD_RESISTANCE)
-				standing	+= image("icon"='icons/effects/genetics.dmi', "icon_state"="fire_s", "layer"=-MUTATIONS_LAYER)
-			if(TK)
-				standing	+= image("icon"='icons/effects/genetics.dmi', "icon_state"="telekinesishead_s", "layer"=-MUTATIONS_LAYER)
-			if(LASER)
-				standing	+= image("icon"='icons/effects/genetics.dmi', "icon_state"="lasereyes_s", "layer"=-MUTATIONS_LAYER)
-	if(standing.len)
-		overlays_standing[MUTATIONS_LAYER]	= standing
-
-	apply_overlay(MUTATIONS_LAYER)
-
 /mob/living/carbon/human/proc/update_mutcolor()
-	if(dna && !(HUSK in mutations))
+	if(dna && !(disabilities & HUSK))
 		dna.species.update_color(src)
 
 /mob/living/carbon/human/proc/update_body()
@@ -258,7 +234,6 @@ Please contact me on #coderbus IRC. ~Carnie x
 	if(notransform)		return
 	update_body()
 	update_hair()
-	update_mutations()
 	update_inv_w_uniform()
 	update_inv_wear_id()
 	update_inv_gloves()
@@ -308,8 +283,8 @@ Please contact me on #coderbus IRC. ~Carnie x
 
 		if(dna && dna.species.sexes && !(NOPIXREMOVE in dna.species.specflags))
 			var/G = (gender == FEMALE) ? "f" : "m"
-			if(G == "f" && U.fitted == 1)
-				standing	= wear_female_version(t_color, 'icons/mob/uniform.dmi', UNIFORM_LAYER)
+			if(G == "f" && U.fitted != NO_FEMALE_UNIFORM)
+				standing	= wear_female_version(t_color, 'icons/mob/uniform.dmi', UNIFORM_LAYER, U.fitted)
 				overlays_standing[UNIFORM_LAYER]	= standing
 
 		if(w_uniform.blood_DNA)
@@ -357,7 +332,7 @@ Please contact me on #coderbus IRC. ~Carnie x
 
 	else
 		if(blood_DNA)
-			overlays_standing[GLOVES_LAYER]	= image("icon"='icons/effects/blood.dmi', "icon_state"="bloodyhands")
+			overlays_standing[GLOVES_LAYER]	= image("icon"='icons/effects/blood.dmi', "icon_state"="bloodyhands", "layer"=-GLOVES_LAYER)
 
 	apply_overlay(GLOVES_LAYER)
 
@@ -585,7 +560,7 @@ Please contact me on #coderbus IRC. ~Carnie x
 		var/t_state = r_hand.item_state
 		if(!t_state)	t_state = r_hand.icon_state
 
-		overlays_standing[R_HAND_LAYER] = image("icon"='icons/mob/items_righthand.dmi', "icon_state"="[t_state]", "layer"=-R_HAND_LAYER)
+		overlays_standing[R_HAND_LAYER] = image("icon" = r_hand.righthand_file, "icon_state"="[t_state]", "layer"=-R_HAND_LAYER)
 
 	apply_overlay(R_HAND_LAYER)
 
@@ -604,15 +579,15 @@ Please contact me on #coderbus IRC. ~Carnie x
 		var/t_state = l_hand.item_state
 		if(!t_state)	t_state = l_hand.icon_state
 
-		overlays_standing[L_HAND_LAYER] = image("icon"='icons/mob/items_lefthand.dmi', "icon_state"="[t_state]", "layer"=-L_HAND_LAYER)
+		overlays_standing[L_HAND_LAYER] = image("icon" = l_hand.lefthand_file, "icon_state"="[t_state]", "layer"=-L_HAND_LAYER)
 
 	apply_overlay(L_HAND_LAYER)
 
-/mob/living/carbon/human/proc/wear_female_version(t_color, icon, layer)
+/mob/living/carbon/human/proc/wear_female_version(t_color, icon, layer, type)
 	var/index = "[t_color]_s"
 	var/icon/female_clothing_icon = female_clothing_icons[index]
 	if(!female_clothing_icon) 	//Create standing/laying icons if they don't exist
-		generate_female_clothing(index,t_color,icon)
+		generate_female_clothing(index,t_color,icon,type)
 	var/standing	= image("icon"=female_clothing_icons["[t_color]_s"], "layer"=-layer)
 	return(standing)
 

@@ -376,7 +376,7 @@ ________________________________________________________________________________
 	equip_to_slot_or_del(new /obj/item/device/flashlight(src), slot_belt)
 	equip_to_slot_or_del(new /obj/item/weapon/c4(src), slot_r_store)
 	equip_to_slot_or_del(new /obj/item/weapon/c4(src), slot_l_store)
-	equip_to_slot_or_del(new /obj/item/weapon/tank/emergency_oxygen(src), slot_s_store)
+	equip_to_slot_or_del(new /obj/item/weapon/tank/internals/emergency_oxygen(src), slot_s_store)
 	equip_to_slot_or_del(new /obj/item/weapon/tank/jetpack/carbondioxide(src), slot_back)
 
 	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive(src)
@@ -1556,7 +1556,7 @@ ________________________________________________________________________________
 			P.tnote += "<i><b>&larr; From [!s_control?(A):"an unknown source"]:</b></i><br>[t]<br>"
 			if (!P.silent)
 				playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
-				P.loc.audible_message("\icon[P] *[P.ttone]*", null, 3)
+				P.audible_message("\icon[P] *[P.ttone]*", null, 3)
 			P.overlays.Cut()
 			P.overlays += image('icons/obj/pda.dmi', "pda-r")
 
@@ -2397,13 +2397,12 @@ It is possible to destroy the net by the occupant or someone else.
 	..()
 	return
 
-/obj/effect/energy_net/attack_hand(mob/user)
-	if (HULK in user.mutations)
-		user.visible_message("<span class='danger'>[user] rips the energy net apart!</span>", \
+/obj/effect/energy_net/attack_hulk(mob/living/carbon/human/user)
+	..(user, 1)
+	user.visible_message("<span class='danger'>[user] rips the energy net apart!</span>", \
 								"<span class='notice'>You easily destroy the energy net.</span>")
-		health-=50
+	health-=50
 	healthcheck()
-	return
 
 /obj/effect/energy_net/attack_paw(mob/user)
 	return attack_hand()

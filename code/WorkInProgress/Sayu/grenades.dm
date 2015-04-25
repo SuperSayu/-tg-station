@@ -30,7 +30,7 @@
 		B1.reagents.add_reagent("blood",60)
 		if(prob(5))
 			B1.reagents.add_reagent("blood",1) // Quality control problems, causes a mess
-		B2.reagents.add_reagent("clonexadone",30)
+		B2.reagents.add_reagent("cryoxadone",30)
 
 		beakers += B1
 		beakers += B2
@@ -143,7 +143,7 @@
 		B1.reagents.add_reagent("glycerol",30) // todo: someone says NG is overpowered, test.
 		B1.reagents.add_reagent("sacid",15)
 		B2.reagents.add_reagent("sacid",15)
-		B2.reagents.add_reagent("pacid",30)
+		B2.reagents.add_reagent("facid",30)
 		beakers += B1
 		beakers += B2
 

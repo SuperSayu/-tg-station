@@ -105,7 +105,7 @@
 		if(!isturf(caster.loc))
 			return 0
 		if(caster.buckled)
-			caster.buckled.unbuckle()
+			caster.buckled.unbuckle_mob()
 		..()
 		return 1
 

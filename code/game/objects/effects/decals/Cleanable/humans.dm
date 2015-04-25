@@ -11,56 +11,34 @@
 	var/list/viruses = list()
 	var/old = 0
 	var/weight = 0
+	var/printamount = 10
 	blood_DNA = list()
 
 /obj/effect/decal/cleanable/blood/Destroy()
 	for(var/datum/disease/D in viruses)
 		D.cure(0)
-	var/turf/simulated/cur_turf = get_turf(src.loc)
-	if(istype(cur_turf, /turf/simulated))
-		cur_turf.bloody = 0
 	..()
 
 /obj/effect/decal/cleanable/blood/New()
 	..()
-	var/turf/simulated/cur_turf = get_turf(src.loc)
-	if(istype(cur_turf, /turf/simulated) && !old)
-		cur_turf.bloody = rand(10,20)
-		cur_turf.oily = 0
-		cur_turf.xenobloody = 0
-	if(istype(src, /obj/effect/decal/cleanable/blood/gibs))
-		return
-	remove_ex_blood()
-	spawn(12000) // 20 minutes
-		icon_state += "-old"
-		name = "dried blood"
-		desc = "Looks like it's been here a while.  Eew."
-		blood_DNA = list()
-		if(istype(cur_turf, /turf/simulated))
-			cur_turf.bloody = 0
-
-/obj/effect/decal/cleanable/blood/proc/remove_ex_blood() //removes existant blood on the turf
-	if(src.loc && isturf(src.loc))
-		// lame copypasta time
-		for(var/obj/effect/decal/cleanable/blood/B in src.loc)
-			if(B != src)
-				qdel(B)
-		for(var/obj/effect/decal/cleanable/xenoblood/B in src.loc)
-			if(B != src)
-				del(B)
-		for(var/obj/effect/decal/cleanable/oil/B in src.loc)
-			if(B != src)
-				del(B)
-
+	if(src.type == /obj/effect/decal/cleanable/blood)
+		if(src.loc && isturf(src.loc))
+			for(var/obj/effect/decal/cleanable/blood/B in src.loc)
+				if(B != src)
+					if (B.blood_DNA)
+						blood_DNA |= B.blood_DNA.Copy()
+					qdel(B)
 
 /obj/effect/decal/cleanable/blood/splatter
 	random_icon_states = list("gibbl1", "gibbl2", "gibbl3", "gibbl4", "gibbl5")
+	printamount = 0
 
 /obj/effect/decal/cleanable/blood/tracks
 	icon_state = "tracks"
 	desc = "They look like tracks left by wheels."
 	gender = PLURAL
 	random_icon_states = null
+	printamount = 0
 
 /obj/effect/decal/cleanable/trail_holder //not a child of blood on purpose
 	name = "blood"
@@ -84,12 +62,10 @@
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "gibbl5"
 	random_icon_states = list("gib1", "gib2", "gib3", "gib4", "gib5", "gib6")
+	printamount = 0
 
 /obj/effect/decal/cleanable/blood/gibs/ex_act(severity, target)
 	return
-
-/obj/effect/decal/cleanable/blood/gibs/remove_ex_blood()
-    return
 
 /obj/effect/decal/cleanable/blood/gibs/up
 	random_icon_states = list("gib1", "gib2", "gib3", "gib4", "gib5", "gib6","gibup1","gibup1","gibup1")
@@ -118,8 +94,22 @@
 					var/datum/disease/ND = D.Copy(1)
 					b.viruses += ND
 					ND.holder = b
-
 			if (step_to(src, get_step(src, direction), 0))
 				break
 		if(gross)
 			gross.loc = loc
+
+/obj/effect/decal/cleanable/blood/drip
+	name = "drips of blood"
+	desc = "It's red."
+	gender = PLURAL
+	icon = 'icons/effects/drip.dmi'
+	icon_state = "1"
+	random_icon_states = list("1","2","3","4","5")
+	var/list/drips = list()
+	printamount = 0
+
+/obj/effect/decal/cleanable/blood/drip/New()
+	..()
+	spawn(1)
+		drips |= icon_state

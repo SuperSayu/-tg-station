@@ -6,39 +6,12 @@
 	var/SStun = 0 // stun variable
 
 /mob/living/carbon/slime/Life()
-	set invisibility = 0
-	set background = BACKGROUND_ENABLED
-
-	if (src.notransform)
-		return
-
-	..()
-
-	if(stat != DEAD)
-		//Chemicals in the body
-		handle_chemicals_in_body()
-
+	if(..())
 		handle_nutrition()
-
 		handle_targets()
-
 		if (!ckey)
 			handle_speech_and_mood()
 
-	var/datum/gas_mixture/environment
-	if(src.loc)
-		environment = loc.return_air()
-
-	//Apparently, the person who wrote this code designed it so that
-	//blinded get reset each cycle and then get activated later in the
-	//code. Very ugly. I dont care. Moving this stuff here so its easy
-	//to find it.
-	src.blinded = null
-
-	if(environment)
-		handle_environment(environment) // Handle temperature/pressure differences between body and environment
-
-	handle_regular_status_updates() // Status updates, death etc.
 
 /mob/living/carbon/slime/proc/AIprocess()  // the master AI process
 
@@ -119,10 +92,7 @@
 
 	AIproc = 0
 
-/mob/living/carbon/slime/proc/handle_environment(datum/gas_mixture/environment)
-	if(status_flags & GODMODE)
-		return
-
+/mob/living/carbon/slime/handle_environment(datum/gas_mixture/environment)
 	if(!environment)
 		adjustToxLoss(rand(10,20))
 		return
@@ -171,21 +141,21 @@
 	temp_change = (temperature - current)
 	return temp_change
 
-/mob/living/carbon/slime/proc/handle_chemicals_in_body()
+/mob/living/carbon/slime/handle_chemicals_in_body()
 
 	if(reagents) reagents.metabolize(src)
 
 	if (reagents.get_reagent_amount("plasma")>=5)
 		mutation_chance = min(mutation_chance + 5,50) //Prevents mutation chance going >50%
 		reagents.remove_reagent("plasma", 5)
-	if (reagents.get_reagent_amount("inaprovaline")>=5)
+	if (reagents.get_reagent_amount("epinephrine")>=5)
 		mutation_chance = max(mutation_chance - 5,0) //Prevents muation chance going <0%
-		reagents.remove_reagent("inaprovaline", 5)
+		reagents.remove_reagent("epinephrine", 5)
 	src.updatehealth()
 
 	return //TODO: DEFERRED
 
-/mob/living/carbon/slime/proc/handle_regular_status_updates()
+/mob/living/carbon/slime/handle_regular_status_updates()
 
 	if(is_adult)
 		health = 200 - (getOxyLoss() + getToxLoss() + getFireLoss() + getBruteLoss() + getCloneLoss())
@@ -198,7 +168,7 @@
 
 	else if(src.health < config.health_threshold_crit)
 
-		if(!src.reagents.has_reagent("inaprovaline"))
+		if(!src.reagents.has_reagent("epinephrine"))
 			src.adjustOxyLoss(10)
 
 		if(src.stat != DEAD)
@@ -213,7 +183,7 @@
 
 	if (src.stat == DEAD)
 		src.lying = 1
-		src.blinded = 1
+		src.eye_blind = max(eye_blind, 1)
 	else
 		if (src.paralysis || src.stunned || src.weakened || (status_flags && FAKEDEATH)) //Stunned etc.
 			if (src.stunned > 0)
@@ -225,7 +195,7 @@
 				src.stat = 0
 			if (src.paralysis > 0)
 				AdjustParalysis(-1)
-				src.blinded = 0
+				src.eye_blind = 0
 				src.lying = 0
 				src.stat = 0
 
@@ -237,18 +207,14 @@
 
 	if (src.eye_blind)
 		src.eye_blind = 0
-		src.blinded = 1
+		src.eye_blind = max(eye_blind, 1)
 
-	if (src.ear_deaf > 0) src.ear_deaf = 0
-	if (src.ear_damage < 25)
-		src.ear_damage = 0
+	setEarDamage((ear_damage < 25 ? 0 : ear_damage),(disabilities & DEAF ? 1 :0))
 
 	src.density = !( src.lying )
 
-	if (src.sdisabilities & BLIND)
-		src.blinded = 1
-	if (src.sdisabilities & DEAF)
-		src.ear_deaf = 1
+	if (src.disabilities & BLIND)
+		src.eye_blind = max(eye_blind, 1)
 
 	if (src.eye_blurry > 0)
 		src.eye_blurry = 0

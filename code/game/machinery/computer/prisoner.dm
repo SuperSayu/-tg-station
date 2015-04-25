@@ -54,7 +54,7 @@
 
 			var/loc_display = "Unknown"
 			var/mob/living/carbon/M = T.imp_in
-			if(Tr.z == 1 && !istype(M.loc, /turf/space))
+			if(Tr.z == ZLEVEL_STATION && !istype(M.loc, /turf/space))
 				var/turf/mob_loc = get_turf(M)
 				loc_display = mob_loc.loc
 
@@ -111,14 +111,14 @@
 							inserted_id.goal = num
 		else if(href_list["inject1"])
 			var/obj/item/weapon/implant/I = locate(href_list["inject1"])
-			if(I)	I.activate("1")
+			if(I)	I.activate(1)
 		else if(href_list["inject5"])
 			var/obj/item/weapon/implant/I = locate(href_list["inject5"])
-			if(I)	I.activate("5")
+			if(I)	I.activate(5)
 
 		else if(href_list["inject10"])
 			var/obj/item/weapon/implant/I = locate(href_list["inject10"])
-			if(I)	I.activate("10")
+			if(I)	I.activate(10)
 
 		else if(href_list["lock"])
 			if(src.allowed(usr))

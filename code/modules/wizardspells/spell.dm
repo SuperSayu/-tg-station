@@ -207,11 +207,11 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 			if(caster.stunned || caster.weakened || caster.paralysis)
 				return 0
 		if(incant_volume > 0)
-			if(caster.sdisabilities&MUTE)
+			if(caster.disabilities &MUTE)
 				caster << "<span class='notice'>Your tongue refuses to form the words!</span>"
 				return 0
-			if(caster.stuttering || caster.disabilities&(COUGHING|TOURETTES))
-				if(prob(20))
+			if(caster.stuttering)
+				if(prob(10))
 					caster << "<span class='notice'>You fumble over the words and lose the spell!</span>"
 					caster.visible_message("<span class='notice'>[caster] stammers out half a magic phrase before being forced to stop.</span>")
 					after_cast(caster,caster) // discharge/recharge

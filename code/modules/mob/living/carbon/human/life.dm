@@ -7,7 +7,6 @@
 #define TINT_BLIND 3			//Threshold of tint level to obscure vision fully
 
 #define HUMAN_MAX_OXYLOSS 3 //Defines how much oxyloss humans can get per tick. A tile with no air at all (such as space) applies this value, otherwise it's a percentage of it.
-#define HUMAN_CRIT_MAX_OXYLOSS ( (last_tick_duration) /3) //The amount of damage you'll get when in critical condition. We want this to be a 5 minute deal = 300s. There are 100HP to get through, so (1/3)*last_tick_duration per second. Breaths however only happen every 4 ticks.
 
 #define HEAT_DAMAGE_LEVEL_1 2 //Amount of damage applied when your body temperature just passes the 360.15k safety point
 #define HEAT_DAMAGE_LEVEL_2 3 //Amount of damage applied when your body temperature passes the 400K point
@@ -37,74 +36,26 @@
 
 
 /mob/living/carbon/human/Life()
-	set invisibility = 0
-	set background = BACKGROUND_ENABLED
 
-	if (notransform)	return
-	if(!loc)			return	// Fixing a null error that occurs when the mob isn't found in the world -- TLE
-
-	..()
-
-	//Apparently, the person who wrote this code designed it so that
-	//blinded get reset each cycle and then get activated later in the
-	//code. Very ugly. I dont care. Moving this stuff here so its easy
-	//to find it.
-	blinded = null
 	fire_alert = 0 //Reset this here, because both breathe() and handle_environment() have a chance to set it.
 	tinttotal = tintcheck() //here as both hud updates and status updates call it
 
-	//TODO: seperate this out
-	var/datum/gas_mixture/environment = loc.return_air()
-
-	//No need to update all of these procs if the guy is dead.
-	if(stat != DEAD)
-		if(air_master.current_cycle%4==2 || failed_last_breath) 	//First, resolve location and get a breath
+	if(..())
+		if(dna)
+			for(var/datum/mutation/human/HM in dna.mutations)
+				HM.on_life(src)
+		if(SSmob.times_fired%4==2 || failed_last_breath) 	//First, resolve location and get a breath
 			breathe() 				//Only try to take a breath every 4 ticks, unless suffocating
-
 		else //Still give containing object the chance to interact
 			if(istype(loc, /obj/))
 				var/obj/location_as_object = loc
 				location_as_object.handle_internal_lifeform(src, 0)
 
-		//Updates the number of stored chemicals for powers
-		handle_changeling()
-
-		//Mutations and radiation
-		handle_mutations_and_radiation()
-
-		//Chemicals in the body
-		handle_chemicals_in_body()
-
-		//Disabilities
-		handle_disabilities()
-
-		//Random events (vomiting etc)
-		handle_random_events()
-
-	//Handle temperature/pressure differences between body and environment
-	handle_environment(environment)
-
-	//Check if we're on fire
-	handle_fire()
-
-	//stuff in the stomach
-	handle_stomach()
-
-	//Status updates, death etc.
-	handle_regular_status_updates()		//TODO: optimise ~Carn
-	update_canmove()
-
 	//Update our name based on whether our face is obscured/disfigured
 	name = get_visible_name()
 
-	handle_regular_hud_updates()
-
 	if(dna)
 		dna.species.spec_life(src) // for mutantraces
-
-	// Grabbing
-	for(var/obj/item/weapon/grab/G in src)
-		G.process()
 
 
 /mob/living/carbon/human/calculate_affecting_pressure(var/pressure)
@@ -124,35 +75,7 @@
 		return ONE_ATMOSPHERE - pressure_difference
 
 
-/mob/living/carbon/human/proc/handle_disabilities()
-	if (disabilities & EPILEPSY)
-		if ((prob(1) && paralysis < 1))
-			src << "<span class='danger'>You have a seizure!</span>"
-			for(var/mob/O in viewers(src, null))
-				if(O == src)
-					continue
-				O.show_message(text("<span class='userdanger'>[src] starts having a seizure!</span>"), 1)
-			Paralyse(10)
-			Jitter(1000)
-	if (disabilities & COUGHING)
-		if ((prob(5) && paralysis <= 1))
-			drop_item()
-			emote("cough")
-	if (disabilities & TOURETTES)
-		if ((prob(10) && paralysis <= 1))
-			Stun(10)
-			switch(rand(1, 3))
-				if(1)
-					emote("twitch")
-				if(2 to 3)
-					say("[prob(50) ? ";" : ""][pick("SHIT", "PISS", "FUCK", "CUNT", "COCKSUCKER", "MOTHERFUCKER", "TITS")]")
-			var/x_offset = pixel_x + rand(-2,2) //Should probably be moved into the twitch emote at some point.
-			var/y_offset = pixel_y + rand(-1,1)
-			animate(src, pixel_x = pixel_x + x_offset, pixel_y = pixel_y + y_offset, time = 1)
-			animate(pixel_x = initial(pixel_x) , pixel_y = initial(pixel_y), time = 1)
-	if (disabilities & NERVOUS)
-		if (prob(10))
-			stuttering = max(10, stuttering)
+/mob/living/carbon/human/handle_disabilities()
 	if (getBrainLoss() >= 60 && stat != 2)
 		if (prob(3))
 			switch(pick(1,2,3))
@@ -164,7 +87,7 @@
 					emote("drool")
 
 
-/mob/living/carbon/human/proc/handle_mutations_and_radiation()
+/mob/living/carbon/human/handle_mutations_and_radiation()
 	if(dna)
 		dna.species.handle_mutations_and_radiation(src)
 
@@ -174,7 +97,7 @@
 
 	return
 
-/mob/living/carbon/human/proc/handle_environment(datum/gas_mixture/environment)
+/mob/living/carbon/human/handle_environment(datum/gas_mixture/environment)
 	if(dna)
 		dna.species.handle_environment(environment, src)
 	if(istype(loc, /obj/machinery/atmospherics/pipe)) return
@@ -335,7 +258,7 @@
 
 /mob/living/carbon/human/proc/get_cold_protection(temperature)
 
-	if(COLD_RESISTANCE in mutations)
+	if(dna.check_mutation(COLDRES))
 		return 1 //Fully protected from the cold.
 
 	if(dna && COLDRES in dna.species.specflags)
@@ -429,21 +352,19 @@
 			apply_damage(0.4*discomfort, BURN, "r_arm")
 */
 
-/mob/living/carbon/human/proc/handle_chemicals_in_body()
+/mob/living/carbon/human/handle_chemicals_in_body()
 	if(dna)
 		dna.species.handle_chemicals_in_body(src)
 
 	return //TODO: DEFERRED
 
-/mob/living/carbon/human/proc/handle_regular_status_updates()
+/mob/living/carbon/human/handle_regular_status_updates()
 	if(stat == DEAD)	//DEAD. BROWN BREAD. SWIMMING WITH THE SPESS CARP
-		blinded = 1
 		silent = 0
 	else				//ALIVE. LIGHTS ARE ON
 		updatehealth()	//TODO
 		if(health <= config.health_threshold_dead || !getorgan(/obj/item/organ/brain))
 			death()
-			blinded = 1
 			silent = 0
 			return 1
 
@@ -451,13 +372,6 @@
 		//UNCONSCIOUS. NO-ONE IS HOME
 		if( (getOxyLoss() > 50) || (config.health_threshold_crit >= health) )
 			Paralyse(3)
-
-			/* Done by handle_breath()
-			if( health <= 20 && prob(1) )
-				spawn(0)
-					emote("gasp")
-			if(!reagents.has_reagent("inaprovaline"))
-				adjustOxyLoss(1)*/
 
 		if(hallucination)
 			spawn handle_hallucinations()
@@ -473,52 +387,39 @@
 
 		if(paralysis)
 			AdjustParalysis(-1)
-			blinded = 1
 			stat = UNCONSCIOUS
 		else if(sleeping)
 			handle_dreams()
 			adjustStaminaLoss(-10)
 			sleeping = max(sleeping-1, 0)
-			blinded = 1
 			stat = UNCONSCIOUS
 			if( prob(10) && health && !hal_crit )
 				spawn(0)
 					emote("snore")
+		else if (status_flags & FAKEDEATH)
+			stat = UNCONSCIOUS
 		//CONSCIOUS
 		else
 			stat = CONSCIOUS
 
-		//Blood loss
-		//var/tot_damage = maxHealth-health
-		if(getBruteLoss() >= 50 && prob(15) && !paralysis)
-			adjustStaminaLoss(5)
-			var/turf/pos = get_turf(src)
-			pos.add_blood_floor(src)
-			playsound(pos, 'sound/effects/splat.ogg', 10, 1)
-			src << pick("<span class='warning'>You feel woozy...</span>","<span class='warning'>You feel drained...</span>","<span class='warning'>Your wounds open...</span>","<span class='warning'>Your blood flows...</span>")
-
 		//Eyes
-		if(sdisabilities & BLIND)	//disabled-blind, doesn't get better on its own
-			blinded = 1
+		if(disabilities & BLIND || stat)	//disabled-blind, doesn't get better on its own
+			eye_blind = max(eye_blind, 1)
 		else if(eye_blind)			//blindness, heals slowly over time
 			eye_blind = max(eye_blind-1,0)
-			blinded = 1
 		else if(tinttotal >= TINT_BLIND)		//covering your eyes heals blurry eyes faster
 			eye_blurry = max(eye_blurry-3, 0)
-		//	blinded = 1				//now handled under /handle_regular_hud_updates()
 		else if(eye_blurry)	//blurry eyes heal slowly
 			eye_blurry = max(eye_blurry-1, 0)
 
 		//Ears
-		if(sdisabilities & DEAF)	//disabled-deaf, doesn't get better on its own
-			ear_deaf = max(ear_deaf, 1)
-		else if(istype(ears, /obj/item/clothing/ears/earmuffs))	//resting your ears with earmuffs heals ear damage faster, and slowly heals deafness
-			ear_damage = max(ear_damage-0.15, 0)
-			ear_deaf = max(ear_deaf-1, 1)
-		else if(ear_deaf) //deafness, heals slowly over time
-			ear_deaf = max(ear_deaf-1, 0)
-		else if(ear_damage < 25)	//ear damage heals slowly under this threshold. otherwise you'll need earmuffs
-			ear_damage = max(ear_damage-0.05, 0)
+		if(disabilities & DEAF)	//disabled-deaf, doesn't get better on its own
+			setEarDamage(-1, max(ear_deaf, 1))
+		else if (ear_damage < 100) // deafness heals slowly over time, unless ear_damage is over 100
+			if(istype(ears, /obj/item/clothing/ears/earmuffs)) // earmuffs rest your ears, healing 3x faster, but keeping you deaf.
+				setEarDamage(max(ear_damage-0.15, 0), max(ear_deaf - 1, 1))
+			else
+				adjustEarDamage(-0.05, -1)
 
 		//Dizziness
 		if(dizziness)
@@ -548,13 +449,7 @@
 
 		//Jitteryness
 		if(jitteriness)
-			var/amplitude = min(4, (jitteriness/100) + 1)
-			var/pixel_x_diff = rand(-amplitude, amplitude)
-			var/pixel_y_diff = rand(-amplitude/3, amplitude/3)
-
-			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 2, loop = 6)
-			animate(pixel_x = initial(pixel_x) , pixel_y = initial(pixel_y) , time = 2)
-			floating = 0 // If we were without gravity, the bouncing animation got stopped, so we make sure we restart the bouncing after the next movement.
+			do_jitter_animation(jitteriness)
 			jitteriness = max(jitteriness-1, 0)
 
 		//Other
@@ -567,6 +462,9 @@
 		if(stuttering)
 			stuttering = max(stuttering-1, 0)
 
+		if(slurring)
+			slurring = max(slurring-1,0)
+
 		if(silent)
 			silent = max(silent-1, 0)
 
@@ -575,9 +473,12 @@
 
 		CheckStamina()
 
+	if(dna)
+		dna.species.handle_vision(src)
+
 	return 1
 
-/mob/living/carbon/human/proc/handle_regular_hud_updates()
+/mob/living/carbon/human/handle_regular_hud_updates()
 	if(!client)	return 0
 
 	client.screen.Remove(global_hud.blurry, global_hud.druggy, global_hud.vimpaired, global_hud.darkMask)
@@ -616,7 +517,7 @@
 			damageoverlay.overlays += I
 	else
 		//Oxygen damage overlay
-		if(oxyloss && !numbness)
+		if(oxyloss)
 			var/image/I = image("icon" = 'icons/mob/screen_full.dmi', "icon_state" = "oxydamageoverlay0")
 			switch(oxyloss)
 				if(10 to 20)
@@ -638,7 +539,7 @@
 		//Fire and Brute damage overlay (BSSR)
 		var/hurtdamage = src.getBruteLoss() + src.getFireLoss() + damageoverlaytemp
 		damageoverlaytemp = 0 // We do this so we can detect if someone hits us or not.
-		if(hurtdamage  && !numbness)
+		if(hurtdamage)
 			var/image/I = image("icon" = 'icons/mob/screen_full.dmi', "icon_state" = "brutedamageoverlay0")
 			I.blend_mode = BLEND_ADD
 			switch(hurtdamage)
@@ -665,12 +566,11 @@
 			if(!client.adminobs)			reset_view(null)
 
 	if(dna)
-		dna.species.handle_vision(src)
 		dna.species.handle_hud_icons(src)
 
 	return 1
 
-/mob/living/carbon/human/proc/handle_random_events()
+/mob/living/carbon/human/handle_random_events()
 	// Puke if toxloss is too high
 	if(!stat)
 		if (getToxLoss() >= 45 && nutrition > 20)
@@ -692,27 +592,8 @@
 				// make it so you can only puke so fast
 				lastpuke = 0
 
-/mob/living/carbon/human/proc/handle_stomach()
-	spawn(0)
-		for(var/mob/living/M in stomach_contents)
-			if(M.loc != src)
-				stomach_contents.Remove(M)
-				continue
-			if(istype(M, /mob/living/carbon) && stat != 2)
-				if(M.stat == 2)
-					M.death(1)
-					stomach_contents.Remove(M)
-					qdel(M)
-					continue
-
-				if(air_master.current_cycle%3==1)
-					if(!(M.status_flags & GODMODE))
-						M.adjustBruteLoss(5)
-					nutrition += 10
-
-/mob/living/carbon/human/proc/handle_changeling()
+/mob/living/carbon/human/handle_changeling()
 	if(mind && mind.changeling)
 		mind.changeling.regenerate()
 
 #undef HUMAN_MAX_OXYLOSS
-#undef HUMAN_CRIT_MAX_OXYLOSS

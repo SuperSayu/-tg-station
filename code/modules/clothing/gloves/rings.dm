@@ -5,6 +5,7 @@
 	transfer_prints = TRUE
 	icon_state = "ironring"
 	item_state = ""
+	icon = 'icons/obj/clothing/rings.dmi'
 	var/material = "iron"
 	var/stud = 0
 	New()

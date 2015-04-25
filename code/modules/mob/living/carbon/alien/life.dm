@@ -1,5 +1,21 @@
-/mob/living/carbon/alien/proc/handle_chemicals_in_body()
-	if(reagents) reagents.metabolize(src)
+
+/mob/living/carbon/alien/Life()
+
+	if(..())
+		//First, resolve location and get a breath
+		if(SSair.times_fired%4==2)
+			//Only try to take a breath every 4 seconds, unless suffocating
+			spawn(0) breathe()
+		else //Still give containing object the chance to interact
+			if(istype(loc, /obj/))
+				var/obj/location_as_object = loc
+				location_as_object.handle_internal_lifeform(src, 0)
+		return 1
+
+
+/mob/living/carbon/alien/handle_chemicals_in_body()
+	if(reagents)
+		reagents.metabolize(src)
 
 	if (drowsyness)
 		drowsyness--
@@ -13,11 +29,9 @@
 	if(resting)
 		dizziness = max(0, dizziness - 5)
 		jitteriness = max(0, jitteriness - 5)
-		numbness = max(0, numbness - 5)
 	else
 		dizziness = max(0, dizziness - 1)
 		jitteriness = max(0, jitteriness - 1)
-		numbness = max(0, numbness - 1)
 
 	updatehealth()
 
@@ -103,7 +117,7 @@
 	breath.toxins -= toxins_used
 	breath.oxygen += toxins_used
 
-	if(breath.temperature > (T0C+66) && !(COLD_RESISTANCE in mutations)) // Hot air hurts :(
+	if(breath.temperature > (T0C+66)) // Hot air hurts :(
 		if(prob(20))
 			src << "<span class='danger'>You feel a searing heat in your lungs!</span>"
 		fire_alert = max(fire_alert, 1)
@@ -114,19 +128,4 @@
 
 	return 1
 
-/mob/living/carbon/alien/proc/handle_stomach()
-	spawn(0)
-		for(var/mob/living/M in stomach_contents)
-			if(M.loc != src)
-				stomach_contents.Remove(M)
-				continue
-			if(istype(M, /mob/living/carbon) && stat != 2)
-				if(M.stat == 2)
-					M.death(1)
-					stomach_contents.Remove(M)
-					qdel(M)
-					continue
-				if(air_master.current_cycle%3==1)
-					if(!(M.status_flags & GODMODE))
-						M.adjustBruteLoss(5)
-					nutrition += 10
+

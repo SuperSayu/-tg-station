@@ -4,7 +4,6 @@
 	damage = 0
 	damage_type = BURN
 	flag = "energy"
-	color = "#FFFF00"
 
 
 /obj/item/projectile/energy/electrode
@@ -13,10 +12,9 @@
 	color = "#FFFF00"
 	nodamage = 1
 	stun = 5
-	weaken = 5
 	stutter = 5
 	jitter = 20
-	hitsound = "sound/weapons/taserhit.ogg"
+	hitsound = 'sound/weapons/taserhit.ogg'
 	range = 7
 
 /obj/item/projectile/energy/electrode/on_hit(var/atom/target, var/blocked = 0)
@@ -26,6 +24,14 @@
 			sparks.set_up(1, 1, src)
 			sparks.start()
 			proj_hit = 1
+		else if(iscarbon(target))
+			var/mob/living/carbon/C = target
+			if(C.dna && C.dna.check_mutation(HULK))
+				C.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+			else if(C.status_flags & CANWEAKEN)
+				C.do_jitter_animation(jitter)
+				spawn(20)
+					C.Weaken(5)
 	..()
 
 
@@ -61,8 +67,6 @@
 	nodamage = 0
 	weaken = 5
 	stutter = 5
-	range = 10
 
 /obj/item/projectile/energy/bolt/large
-	name = "largebolt"
 	damage = 20

@@ -232,7 +232,7 @@
 /datum/cargoprofile/clothing
 	name = "Crew Kit"
 	id = "clothing"
-	blacklist = list(/obj/item/weapon/tank/plasma,/obj/item/weapon/tank/anesthetic, // the rest are air tanks
+	blacklist = list(/obj/item/weapon/tank/internals/plasma,/obj/item/weapon/tank/internals/anesthetic, // the rest are air tanks
 					/obj/item/clothing/mask/facehugger) // NOT CLOTHING AT ALLLLL
 	whitelist = list(/obj/item/clothing,/obj/item/weapon/storage/belt,/obj/item/weapon/storage/backpack,
 					/obj/item/device/radio/headset,/obj/item/device/pda,/obj/item/weapon/card/id,/obj/item/weapon/tank,
@@ -253,7 +253,7 @@
 	id = "weapons"
 	blacklist = null
 	//This one is hard since 'weapon contains a lot of things better categorized as devices
-	whitelist = list(/obj/item/weapon/banhammer,/obj/item/weapon/sord,/obj/item/weapon/butch,/obj/item/weapon/claymore,/obj/item/weapon/holo/esword,
+	whitelist = list(/obj/item/weapon/banhammer,/obj/item/weapon/sord,/obj/item/weapon/kitchenknife/butcher,/obj/item/weapon/claymore,/obj/item/weapon/holo/esword,
 					/obj/item/weapon/flamethrower,/obj/item/weapon/grenade,/obj/item/weapon/gun,/obj/item/weapon/hatchet,/obj/item/weapon/katana,
 					/obj/item/weapon/kitchenknife,/obj/item/weapon/melee,/obj/item/weapon/nullrod,/obj/item/weapon/pickaxe,/obj/item/weapon/twohanded,
 					/obj/item/weapon/c4,/obj/item/weapon/scalpel,/obj/item/weapon/shield,/obj/item/weapon/grown/nettle/death)

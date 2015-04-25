@@ -21,7 +21,6 @@
 	icon_state = "id_mod"
 	item_state = "electronic"
 	origin_tech = "programming=2"
-	var/id = null
 	var/frequency = null
 	var/build_path = null
 	var/board_type = "computer"
@@ -81,12 +80,10 @@
 	name = "circuit board (Communications)"
 	build_path = /obj/machinery/computer/communications
 	origin_tech = "programming=2;magnets=2"
-	var/cooldown = 0
-/obj/item/weapon/circuitboard/communications/New()
-	..()
-	processing_objects |= src
-/obj/item/weapon/circuitboard/communications/process()
-	cooldown = max(cooldown - 1, 0)
+	var/lastTimeUsed = 0
+/obj/item/weapon/circuitboard/communications/proc/cooldownLeft(deciseconds=600)
+	return max(deciseconds - (world.time - lastTimeUsed), 0)
+
 /obj/item/weapon/circuitboard/card
 	name = "circuit board (ID Console)"
 	build_path = /obj/machinery/computer/card
@@ -211,7 +208,8 @@
 /obj/item/weapon/circuitboard/shuttle
 	name = "circuit board (Shuttle)"
 	build_path = /obj/machinery/computer/shuttle
-	id = "1"
+	var/shuttleId
+	var/possible_destinations = ""
 /obj/item/weapon/circuitboard/labor_shuttle
 	name = "circuit Board (Labor Shuttle)"
 	build_path = /obj/machinery/computer/shuttle/labor
@@ -244,6 +242,10 @@
 /obj/item/weapon/circuitboard/slot_machine
 	name = "circuit board (Slot Machine)"
 	build_path = /obj/machinery/computer/slot_machine
+	origin_tech = "programming=1"
+/obj/item/weapon/circuitboard/libraryconsole
+	name = "circuit board (Library Visitor Console)"
+	build_path = /obj/machinery/computer/libraryconsole
 	origin_tech = "programming=1"
 
 
@@ -281,11 +283,25 @@
 			user << "<span class='notice'>Defaulting access protocols.</span>"
 	return
 
+/obj/item/weapon/circuitboard/libraryconsole/attackby(obj/item/I as obj, mob/user as mob)
+	if(istype(I,/obj/item/weapon/screwdriver))
+		if(build_path == /obj/machinery/computer/libraryconsole/bookmanagement)
+			name = "circuit board (Library Visitor Console)"
+			build_path = /obj/machinery/computer/libraryconsole
+			user << "<span class='notice'>Defaulting access protocols.</span>"
+		else
+			name = "circuit board (Book Inventory Management Console)"
+			build_path = /obj/machinery/computer/libraryconsole/bookmanagement
+			user << "<span class='notice'>Access protocols successfully updated.</span>"
+	return
+
 /obj/item/weapon/circuitboard/shuttle/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/device/multitool))
-		var/chosen_id = round(input(usr, "Choose a shuttle id:", "Input an ID", null) as null|anything in list("mining","laborcamp"))
-		if(chosen_id)
-			id = chosen_id
+		var/chosen_id = round(input(usr, "Choose an ID number (-1 for reset):", "Input an Integer", null) as num|null)
+		if(chosen_id >= 0)
+			shuttleId = chosen_id
+		else
+			shuttleId = initial(shuttleId)
 	return
 
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)

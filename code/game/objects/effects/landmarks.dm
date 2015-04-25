@@ -15,10 +15,6 @@ var/global/xartnum = 0 // Extra artifact number. Used to prevent too many extra 
 	landmarks_list += src
 
 	switch(name)			//some of these are probably obsolete
-		if("shuttle")
-			shuttle_z = z
-			qdel(src)
-			return
 		if("monkey")
 			monkeystart += loc
 			qdel(src)
@@ -57,16 +53,16 @@ var/global/xartnum = 0 // Extra artifact number. Used to prevent too many extra 
 			blobstart += loc
 			qdel(src)
 			return
-		if("beacon_maybe")
-			if(prob(33))
-				maybe_beacons += loc
-			del(src)
 		if("secequipment")
 			secequipment += loc
 			qdel(src)
 			return
 		if("Deathsquad")
 			deathsquadspawn += loc
+			qdel(src)
+			return
+		if("Emergencyresponseteam")
+			emergencyresponseteamspawn += loc
 			qdel(src)
 			return
 		if("xeno_spawn")

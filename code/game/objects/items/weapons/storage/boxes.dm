@@ -70,7 +70,7 @@
 	..()
 	contents = list()
 	new /obj/item/clothing/mask/breath(src)
-	new /obj/item/weapon/tank/emergency_oxygen(src)
+	new /obj/item/weapon/tank/internals/emergency_oxygen(src)
 	new /obj/item/weapon/reagent_containers/hypospray/medipen(src)
 	return
 
@@ -80,7 +80,7 @@
 	..()
 	contents = list()
 	new /obj/item/clothing/mask/breath(src)
-	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
+	new /obj/item/weapon/tank/internals/emergency_oxygen/engi(src)
 	new /obj/item/weapon/reagent_containers/hypospray/medipen(src)
 	return
 
@@ -143,7 +143,7 @@
 
 /obj/item/weapon/storage/box/medipens
 	name = "box of medipens"
-	desc = "A box full of inaprovaline MediPens."
+	desc = "A box full of epinephrine MediPens."
 	icon_state = "syringe"
 
 /obj/item/weapon/storage/box/medipens/New()
@@ -452,6 +452,21 @@
 	new /obj/item/weapon/cartridge/security(src)
 	new /obj/item/weapon/cartridge/security(src)
 
+/obj/item/weapon/storage/box/firingpins
+	name = "box of standard firing pins"
+	desc = "A box full of standard firing pins, to allow newly-developed firearms to operate."
+	icon_state = "id"
+
+/obj/item/weapon/storage/box/firingpins/New()
+	..()
+	new /obj/item/device/firing_pin(src)
+	new /obj/item/device/firing_pin(src)
+	new /obj/item/device/firing_pin(src)
+	new /obj/item/device/firing_pin(src)
+	new /obj/item/device/firing_pin(src)
+	new /obj/item/device/firing_pin(src)
+	new /obj/item/device/firing_pin(src)
+
 /obj/item/weapon/storage/box/handcuffs
 	name = "box of spare handcuffs"
 	desc = "A box full of handcuffs."
@@ -618,3 +633,18 @@
 	new /obj/item/clothing/tie/armband/deputy(src)
 	new /obj/item/clothing/tie/armband/deputy(src)
 	new /obj/item/clothing/tie/armband/deputy(src)
+
+/obj/item/weapon/storage/box/metalfoam
+	name = "box of metal foam grenades"
+	desc = "To be used to rapidly seal hull breaches"
+	icon_state = "flashbang"
+
+/obj/item/weapon/storage/box/metalfoam/New()
+	..()
+	new /obj/item/weapon/grenade/chem_grenade/metalfoam(src)
+	new /obj/item/weapon/grenade/chem_grenade/metalfoam(src)
+	new /obj/item/weapon/grenade/chem_grenade/metalfoam(src)
+	new /obj/item/weapon/grenade/chem_grenade/metalfoam(src)
+	new /obj/item/weapon/grenade/chem_grenade/metalfoam(src)
+	new /obj/item/weapon/grenade/chem_grenade/metalfoam(src)
+	new /obj/item/weapon/grenade/chem_grenade/metalfoam(src)
