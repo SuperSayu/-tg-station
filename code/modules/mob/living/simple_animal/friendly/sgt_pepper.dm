@@ -7,6 +7,13 @@
 	icon_dead = "sgt_pepper_dead"
 	icon = 'icons/mob/sayu_animal.dmi'
 
+	New()
+		if(isturf(loc) && type == /mob/living/simple_animal/corgi/puppy/smart/sgt_pepper && prob(10))
+			new /mob/living/simple_animal/corgi/puppy/smart/sgt_pepper/steak(loc)
+			qdel(src)
+			return
+		..()
+
 /mob/living/simple_animal/corgi/puppy/smart
 	gender = "female" // the smarter of the two genders
 	response_help  = "pets"
@@ -316,3 +323,41 @@
 				dislike |= user
 				fears += user
 	..(user)
+
+// My apologies for this.  -Sayu
+/mob/living/simple_animal/corgi/puppy/smart/sgt_pepper/steak
+	name = "Sgt. Peppersteak"
+	real_name = "Sgt. Peppersteak"
+	desc = "The biggest, tastiest, most vigilant bovine on the station."
+	icon_state = "sgt_peppersteak"
+	icon_living = "sgt_peppersteak"
+	icon_dead = "sgt_peppersteak_dead"
+	icon_gib = "cow_gib"
+
+	friendly_emotes = list("follows _T and wags her tail hopefully.","looks at _T with bright eyes.","moos pleasantly at _T!")
+	aggressor_emotes = list("moos hauntingly at _T!","glares stoicly at _T!","chases _T, mooing incessantly!")
+
+	speak = list("MOO!", "Moo!", "Mooooooo!")
+	speak_emote = list("moos")
+	emote_hear = list("moos", "moos", "moos", "moos contentedly", "moos impatiently", "moos hauntingly")
+
+	childtype = null
+	species = /mob/living/simple_animal/cow
+
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
+
+	//somewhat more vegetarian than Pepper - not really complete though
+	smell_approved = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosia, /obj/item/weapon/reagent_containers/food/snacks/grown/apple, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/grass,/obj/item/weapon/reagent_containers/food/snacks/grown/harebell, /obj/item/weapon/reagent_containers/food/snacks/grown/sugarcane,
+		/obj/item/weapon/reagent_containers/food/snacks/donut,/obj/item/weapon/reagent_containers/food/snacks/breadslice/plain,
+		/obj/item/weapon/reagent_containers/food/snacks/donut/jelly, /obj/item/weapon/reagent_containers/food/snacks/donut/jelly/cherryjelly)
+	smell_offensive = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat, /obj/item/weapon/reagent_containers/food/snacks/meat/monkey,
+		/obj/item/weapon/reagent_containers/food/snacks/breadslice/meat, /obj/item/weapon/reagent_containers/food/snacks/kebab/monkey,
+		/obj/item/weapon/reagent_containers/food/snacks/pie/meatpie, /obj/item/weapon/reagent_containers/food/snacks/sosjerky,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/human, /obj/item/weapon/reagent_containers/food/snacks/meat/corgi,
+		/obj/item/weapon/reagent_containers/food/snacks/badrecipe, /obj/item/weapon/reagent_containers/food/snacks/burger/clown,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/xeno, /obj/item/weapon/reagent_containers/food/snacks/pie/xemeatpie,
+		/obj/item/weapon/reagent_containers/food/snacks/soup/mystery, /obj/item/weapon/reagent_containers/food/snacks/carpmeat,
+		/obj/item/weapon/reagent_containers/food/snacks/burger/brain,/obj/item/weapon/reagent_containers/food/snacks/spesslaw) // that's offensive to the legal system, sir
