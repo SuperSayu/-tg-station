@@ -5,6 +5,7 @@
 	icon_state = "sgt_pepper"
 	icon_living = "sgt_pepper"
 	icon_dead = "sgt_pepper_dead"
+	icon = 'icons/mob/sayu_animal.dmi'
 
 /mob/living/simple_animal/corgi/puppy/smart
 	gender = "female" // the smarter of the two genders
