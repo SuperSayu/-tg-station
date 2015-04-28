@@ -411,14 +411,22 @@
 	target_area = /area/holodeck/betadeck
 	offline_area = /area/holodeck/theater/base
 
+	var/list/area_cache = list()
+
+	initialize()
+		for(var/typekey in typesof(/area/holodeck/theater) - /area/holodeck/theater)
+			var/area/A = locate(typekey)
+			if(A)
+				area_cache += A
+		if(area_cache.len)
+			loadProgram(pick(area_cache),1)
+
 	attack_hand(var/mob/user as mob)
 		user.set_machine(src)
 
 		var/dat = "<h3>Current Loaded Programs</h3>"
-		for(var/typekey in typesof(/area/holodeck/theater) - /area/holodeck/theater)
-			var/area/A = locate(typekey)
-			if(!A) continue
-			dat += "<a href='?src=\ref[src];loadarea=[typekey]'>[A.name]</a><br>"
+		for(var/area/A in area_cache)
+			dat += "<a href='?src=\ref[src];loadarea=[A.type]'>[A.name]</a><br>"
 
 		//user << browse(dat, "window=computer;size=400x500")
 		//onclose(user, "computer")
@@ -450,7 +458,7 @@
 /turf/simulated/floor/holofloor/asteroid
 	name = "Asteroid"
 	icon_state = "asteroid0"
-	floor_tile = new/obj/item/stack/tile/grass
+	floor_tile = new/obj/item/stack/tile
 
 /turf/simulated/floor/holofloor/asteroid/New()
 	floor_tile = null //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
@@ -461,7 +469,7 @@
 	name = "Space"
 	icon = 'icons/turf/space.dmi'
 	icon_state = "0"
-	floor_tile = new/obj/item/stack/tile/grass
+	floor_tile = new/obj/item/stack/tile
 
 /turf/simulated/floor/holofloor/fakespace/New()
 	floor_tile = null
@@ -472,7 +480,7 @@
 	name = "Hyperspace"
 	icon = 'icons/turf/space.dmi'
 	icon_state = "speedspace_eq_1"
-	floor_tile = new/obj/item/stack/tile/grass
+	floor_tile = new/obj/item/stack/tile
 
 /turf/simulated/floor/holofloor/hyperspace/New()
 	floor_tile = null
