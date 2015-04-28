@@ -130,6 +130,12 @@
 *   SmartFridge Menu
 ********************/
 
+/obj/machinery/smartfridge/proc/is_seed(var/inv_name)
+	for(var/obj/item/seeds/s in src)
+		if(s.name == inv_name)
+			return 1
+	return 0
+
 /obj/machinery/smartfridge/interact(mob/user as mob)
 	if(stat)
 		return 0
@@ -154,7 +160,7 @@
 							dat += "(<a href='byond://?src=\ref[src];vend=[itemName];amount=25'>x25</A>)"
 				if(N > 1)
 					dat += "(<a href='?src=\ref[src];vend=[itemName];amount=[N]'>All</A>)"
-				if((findtext(O,"seeds") || findtext(O,"mycelium")) && N>1)
+				if(is_seed(itemName) && N>1)
 					var/max_bags = round((N-1)/7)+1
 					dat += "(<a href='?src=\ref[src];bagvend=[itemName];amount=1'>1 Bag</A>)"
 					if(max_bags > 2) // at least 14
@@ -189,7 +195,7 @@
 		var/j = 0
 		var/obj/item/weapon/storage/bag/seeds/SB = new(loc)
 		for(var/obj/O in contents)
-			if(name_filter(O.name) == N)
+			if(name_filter(O.name) == N && istype(O,/obj/item/seeds))
 				O.loc = SB
 				i--
 				j++
@@ -199,7 +205,10 @@
 					j = 0
 					SB.update_icon()
 					SB = new(loc)
-		SB.update_icon()
+		if(SB.contents.len)
+			SB.update_icon()
+		else
+			qdel(SB)
 
 		src.updateUsrDialog()
 		return
