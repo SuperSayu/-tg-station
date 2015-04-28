@@ -3,15 +3,18 @@
 	var/book_count = 2
 	anchored = 1
 	state = 2
-	New()
-		..()
+
+	initialize()
+		// Normally subtype bookshelves have the right sort of books in them
+		// this simulates them being improperly stocked.
 		if(type != /obj/structure/bookcase/random && prob(25))
 			var/obj/structure/bookcase/random/R = new(loc)
 			R.name = name
 			qdel(src)
 			return
+
 		book_count = rand(book_count-2,book_count+2)
-		if(book_count)
+		if(book_count > 0)
 			var/list/spawned = list()
 			for(var/i=1; i<=book_count; i++)
 				var/obj/item/weapon/book/B = new booktype(src)
@@ -40,7 +43,7 @@
 	var/force_category = ""
 	var/fallback_type = null
 	New()
-		if(ticker) // do not do this during world spawn, congestion ahead
+		if(ticker && ticker.current_state == GAME_STATE_PLAYING) // do not do this during world spawn, congestion ahead
 			fulfill()
 			return
 		..()
@@ -56,6 +59,10 @@
 			if(prob(5))
 				var/obj/item/weapon/paper/P = new(get_turf(loc))
 				P.info = "There once was a book from nantucket<br>But the database failed us, so f*$! it.<br>I did something nice for you<br>So this is an I.O.U<br>If you've any objections, well, stuff it!<br><br><font color='gray'>~</font>"
+			var/obj/structure/bookcase/B = loc
+			loc = null
+			if(istype(B))
+				B.update_icon()
 			qdel(src)
 			return
 		if(!fallback_type || prob(95)) // sometimes replace it with the default
