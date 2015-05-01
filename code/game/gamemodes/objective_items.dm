@@ -41,6 +41,13 @@ datum/objective_item/steal/caplaser
 	excludefromjob = list("Captain")
 	antag_types = list("traitor","Changeling","Wizard","Space Ninja")
 
+datum/objective_item/steal/hoslaser
+	name = "the head of security's recreated antique laser gun"
+	targetitem = /obj/item/weapon/gun/energy/gun/hos
+	difficulty = 10
+	excludefromjob = list("Head Of Security")
+	antag_types = list("traitor","Changeling","Wizard","Space Ninja")
+
 datum/objective_item/steal/handtele
 	name = "a hand teleporter"
 	targetitem = /obj/item/weapon/hand_tele

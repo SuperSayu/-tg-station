@@ -87,10 +87,10 @@
 	new /obj/item/clothing/mask/gas/sechailer/swat(src)
 	new /obj/item/weapon/shield/riot/tele(src)
 	new /obj/item/weapon/melee/baton/loaded(src)
-	new /obj/item/weapon/gun/energy/gun/advtaser(src)
 	new /obj/item/clothing/glasses/night(src)
 	new /obj/item/clothing/glasses/night/night3(src)
 	new /obj/item/weapon/storage/belt/security/full(src)
+	new /obj/item/weapon/gun/energy/gun/hos(src)
 	return
 
 
