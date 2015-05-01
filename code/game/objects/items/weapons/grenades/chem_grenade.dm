@@ -105,19 +105,7 @@
 			spawn(det_time)
 				prime()
 
-
-/obj/item/weapon/grenade/chem_grenade/attackby(obj/item/I, mob/user)
-	if(istype(I,/obj/item/weapon/hand_labeler))
-		var/obj/item/weapon/hand_labeler/HL = I
-		if(length(HL.label))
-			label = " ([HL.label])"
-			return 0
-		else
-			if(label)
-				label = null
-				update_icon()
-				user << "You remove the label from [src]."
-				return 1
+/obj/item/weapon/grenade/chem_grenade/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/weapon/screwdriver))
 		if(stage == WIRED)
 			if(beakers.len)
@@ -368,7 +356,7 @@
 	//I tried to just put it in the allowed_containers list but
 	//if you do that it must have reagents.  If you're going to
 	//make a special case you might as well do it explicitly. -Sayu
-/obj/item/weapon/grenade/chem_grenade/large/attackby(obj/item/I, mob/user)
+/obj/item/weapon/grenade/chem_grenade/large/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/slime_extract) && stage == WIRED)
 		user << "<span class='notice'>You add [I] to the [initial(name)] assembly.</span>"
 		user.drop_item()

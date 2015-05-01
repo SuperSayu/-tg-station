@@ -140,7 +140,7 @@ var/global/ankh = 0 // only one can spawn
 	else if(usetype == A_CLICK)
 		use_power(user)
 
-/obj/item/artifact/attackby(obj/item/W, mob/user)
+/obj/item/artifact/attackby(obj/item/W, mob/user, params)
 	var/turf/artloc = get_turf(src)
 	if(istype(W, /obj/item/device/mining_scanner) ||istype(W,/obj/item/device/t_scanner/adv_mining_scanner) || istype(W,/obj/item/device/analyzer))
 		if(integrity > 0)

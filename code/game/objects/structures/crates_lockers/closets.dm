@@ -153,8 +153,8 @@
 		dump_contents()
 		qdel(src)
 
+/obj/structure/closet/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 
-/obj/structure/closet/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/rcs) && !src.opened)
 		var/obj/item/weapon/rcs/E = W
 		if(E.rcharges != 0)

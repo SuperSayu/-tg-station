@@ -25,7 +25,6 @@
 	var/framestack = /obj/item/stack/rods
 	var/buildstack = /obj/item/stack/sheet/metal
 	var/busy = 0
-	var/holo = 0
 	var/buildstackamount = 1
 	var/framestackamount = 2
 
@@ -277,12 +276,12 @@
 		return 1
 	qdel(I)
 
-/obj/structure/table/attackby(obj/item/I, mob/user)
+/obj/structure/table/attackby(obj/item/I, mob/user, params)
 	if (istype(I, /obj/item/weapon/grab))
 		tablepush(I, user)
 		return
 
-	if (!holo && istype(I, /obj/item/weapon/screwdriver))
+	if (istype(I, /obj/item/weapon/screwdriver))
 		if(istype(src, /obj/structure/table/reinforced))
 			var/obj/structure/table/reinforced/RT = src
 			if(RT.status == 1)
@@ -292,7 +291,7 @@
 			table_destroy(2, user)
 			return
 
-	if (!holo && istype(I, /obj/item/weapon/wrench))
+	if (istype(I, /obj/item/weapon/wrench))
 		if(istype(src, /obj/structure/table/reinforced))
 			var/obj/structure/table/reinforced/RT = src
 			if(RT.status == 1)
@@ -331,6 +330,10 @@
 	if(!(I.flags & ABSTRACT)) //rip more parems rip in peace ;_;
 		if(user.drop_item())
 			I.Move(loc)
+			var/list/click_params = params2list(params)
+			//Center the icon where the user clicked.
+			I.pixel_x = (text2num(click_params["icon-x"]) - 16)
+			I.pixel_y = (text2num(click_params["icon-y"]) - 16)
 
 
 /*
@@ -453,8 +456,8 @@
 	var/status = 2
 	buildstack = /obj/item/stack/sheet/plasteel
 
-/obj/structure/table/reinforced/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (!holo && istype(W, /obj/item/weapon/weldingtool))
+/obj/structure/table/reinforced/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
+	if (istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			if(src.status == 2)
@@ -553,7 +556,7 @@
 		step(O, get_dir(O, src))
 	return
 
-/obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	if (istype(W, /obj/item/weapon/wrench))
 		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 		rack_destroy()
@@ -619,7 +622,7 @@
  * Rack Parts
  */
 
-/obj/item/weapon/rack_parts/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/rack_parts/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	..()
 	if (istype(W, /obj/item/weapon/wrench))
 		new /obj/item/stack/sheet/metal( user.loc )

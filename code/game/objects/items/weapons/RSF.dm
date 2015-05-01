@@ -26,11 +26,7 @@ RSF
 	matter = matter_max
 	return
 
-/obj/item/weapon/rsf/examine()
-	..()
-	usr << "It currently holds [matter]/[matter_max] fabrication-units."
-
-/obj/item/weapon/rsf/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/rsf/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	..()
 	if (istype(W, /obj/item/weapon/rcd_ammo))
 		if ((matter + 10) > 30)

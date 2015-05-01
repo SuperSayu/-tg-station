@@ -443,7 +443,7 @@
 	icon_state = "floor"
 	thermal_conductivity = 0
 
-/turf/simulated/floor/holofloor/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/simulated/floor/holofloor/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	return
 	// HOLOFLOOR DOES NOT GIVE A FUCK
 
@@ -452,7 +452,7 @@
 	gender = PLURAL
 	name = "lush grass"
 
-/turf/simulated/floor/fancy/grass/holo/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/simulated/floor/fancy/grass/holo/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	return
 
 /turf/simulated/floor/holofloor/asteroid
@@ -487,6 +487,17 @@
 	src.icon_state = "speedspace_ew_[(x + 5*y + (y%2+1)*7)%15+1]"
 	..()
 
+/obj/structure/table/holotable/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
+	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
+		var/obj/item/weapon/grab/G = W
+		if(G.state < GRAB_AGGRESSIVE)
+			user << "<span class='danger'> You need a better grip to do that!</span>"
+			return
+		G.affecting.loc = src.loc
+		G.affecting.Weaken(5)
+		visible_message("<span class='danger'> [G.assailant] puts [G.affecting] on the table.</span>")
+		qdel(W)
+		return
 
 /turf/simulated/floor/holofloor/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	return
@@ -497,18 +508,15 @@
 	desc = "A square piece of metal standing on four metal legs. It can not move."
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "table"
-	holo = 1
 
 /obj/structure/table/holotable/wood
 	name = "wooden table"
 	icon_state = "woodtable"
 	desc = "A classic design in a classic material."
-	holo = 1
 
 /obj/structure/table/holotable/reinforced
 	name = "reinforced table"
 	desc = "A version of the four legged table with multiple layers of metal."
-	holo = 1
 
 /obj/structure/table/holotable/attack_hand(mob/user as mob)
 	return
@@ -613,7 +621,7 @@
 	density = 1
 	throwpass = 1
 
-/obj/structure/holohoop/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/holohoop/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
 		var/obj/item/weapon/grab/G = W
 		if(G.state < GRAB_AGGRESSIVE)
@@ -671,7 +679,7 @@
 	..()
 
 
-/obj/machinery/readybutton/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/readybutton/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	user << "The device is a solid button, there's nothing you can do with it!"
 
 /obj/machinery/readybutton/attack_hand(mob/user as mob)
