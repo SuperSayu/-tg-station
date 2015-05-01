@@ -36,6 +36,7 @@
 	specflags = list(HAIR,MUTCOLORS,LAYER2,EYECOLOR,LIPS)
 	spec_hair = 1 // They have crests/horns instead of hair
 	hair_color = "mutcolor"
+	mutant_bodyparts = list("tail", "snout")
 	attack_verb = "slash"
 	attack_sound = 'sound/weapons/slash.ogg'
 	miss_sound = 'sound/weapons/slashmiss.ogg'
