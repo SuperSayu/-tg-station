@@ -151,7 +151,6 @@
 			qdel(changeling)
 			changeling = null
 	special_role = null
-	remove_objectives()
 	remove_antag_equip()
 
 /datum/mind/proc/remove_traitor()
@@ -162,7 +161,6 @@
 			A.set_zeroth_law("")
 			A.show_laws()
 	special_role = null
-	remove_objectives()
 	remove_antag_equip()
 
 /datum/mind/proc/remove_nukeop()
@@ -178,7 +176,6 @@
 		ticker.mode.wizards -= src
 		current.spellremove(current)
 	special_role = null
-	remove_objectives()
 	remove_antag_equip()
 
 /datum/mind/proc/remove_cultist()
