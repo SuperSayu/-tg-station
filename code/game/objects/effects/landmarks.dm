@@ -86,6 +86,8 @@ var/global/xartnum = 0 // Extra artifact number. Used to prevent too many extra 
 	..()
 	tag = "start*[name]"
 	invisibility = 101
+	start_landmarks_list += src
+
 	return 1
 
 /obj/effect/landmark/artifact/New()
