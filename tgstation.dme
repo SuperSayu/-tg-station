@@ -1424,6 +1424,7 @@
 #include "code\modules\surgery\multiple_location_example.dm"
 #include "code\modules\surgery\omnitalk.dm"
 #include "code\modules\surgery\plastic_surgery.dm"
+#include "code\modules\surgery\remove_embedded_object.dm"
 #include "code\modules\surgery\surgery.dm"
 #include "code\modules\surgery\surgery_step.dm"
 #include "code\modules\surgery\tools.dm"

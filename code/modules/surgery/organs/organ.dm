@@ -45,6 +45,9 @@
 	var/burn_dam = 0
 	var/max_damage = 0
 	var/status = ORGAN_ORGANIC
+	var/list/embedded_objects = list()
+
+
 	var/bone_status = BONE_INTACT //needed its own flag variable, otherwise it would have wrought havoc with most checks
 	var/bone_name = "bone"
 	var/break_chance_multiplier = 1
