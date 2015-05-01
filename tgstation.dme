@@ -1016,6 +1016,7 @@
 #include "code\modules\hydroponics\growninedible.dm"
 #include "code\modules\hydroponics\hydroitemdefines.dm"
 #include "code\modules\hydroponics\hydroponics.dm"
+#include "code\modules\hydroponics\sayu_growninedibles.dm"
 #include "code\modules\hydroponics\seed_extractor.dm"
 #include "code\modules\hydroponics\seeds.dm"
 #include "code\modules\library\lib_items.dm"
