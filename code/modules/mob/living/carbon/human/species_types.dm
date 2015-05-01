@@ -28,8 +28,7 @@
 	// Reptilian humanoids with scaled skin and tails.
 	name = "Kokiyg"
 	id = "lizard"
-	desc = "The Kokiyg are reptilian creatures known for their dexterity and perseverance. Because they are coldblooded, \
-	their bodies adjust to external temperatures faster. They are not the type of being you would want to cross."
+	desc = "The Kokiyg are coldblooded reptilian creatures known for their dexterity and perseverance."
 	say_mod = "hisses"
 	default_color = "00FF00"
 	roundstart = 1
@@ -211,9 +210,7 @@
 	// Entirely alien beings that seem to be made entirely out of gel. They have three eyes and a skeleton visible within them.
 	name = "Xenoid" // WIP name
 	id = "jelly"
-	desc = "The three-eyed Xenoids hail from the outer reaches of the galaxy. They are perceptive beings not known \
-	for being unnecessarily violent. Because their bodies are made of gel-like goo, they naturally heal from \
-	genetic damage. However, they are also fragile, and take more damage from freezing."
+	desc = "The three-eyed Xenoids hail from the outer reaches of the galaxy. They are vulnerable to freezing, but are also resistant to cellular damage."
 	default_color = "00FF90"
 	roundstart = 1
 	eyes = "jelleyes"

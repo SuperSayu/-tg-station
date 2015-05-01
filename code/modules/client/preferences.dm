@@ -177,50 +177,73 @@ datum/preferences
 				dat += "<table width='100%'><tr><td width='24%' valign='top'>"
 
 				dat += "<b>Blood Type:</b> [blood_type]<BR>"
-				dat += "<b>Skin Tone:</b><BR><a href='?_src_=prefs;preference=s_tone;task=input'>[skin_tone]</a><BR>"
 				dat += "<b>Underwear:</b><BR><a href ='?_src_=prefs;preference=underwear;task=input'>[underwear]</a><BR>"
 				dat += "<b>Undershirt:</b><BR><a href ='?_src_=prefs;preference=undershirt;task=input'>[undershirt]</a><BR>"
 				dat += "<b>Socks:</b><BR><a href ='?_src_=prefs;preference=socks;task=input'>[socks]</a><BR>"
 				dat += "<b>Backpack:</b><BR><a href ='?_src_=prefs;preference=bag;task=input'>[backbaglist[backbag]]</a><BR>"
 
+				if(pref_species.use_skintones)
 
-				dat += "</td><td valign='top' width='21%'>"
+					dat += "</td><td valign='top' width='21%'>"
+					dat += "<h3>Skin Tone</h3>"
 
-				if(pref_species && pref_species.spec_hair == 1)
-					dat += "<h3>Species Accessory</h3>"
-					dat += "<a href='?_src_=prefs;preference=spec_hair;task=input'>[spec_hair]</a><BR>"
-					dat += "<a href='?_src_=prefs;preference=previous_spec_hair_style;task=input'>&lt;</a> <a href='?_src_=prefs;preference=next_spec_hair_style;task=input'>&gt;</a><BR>"
+					dat += "<a href='?_src_=prefs;preference=s_tone;task=input'>[skin_tone]</a><BR>"
 
-				else
-					dat += "<h3>Hair Style</h3>"
-
-					dat += "<a href='?_src_=prefs;preference=hair_style;task=input'>[hair_style]</a><BR>"
-					dat += "<a href='?_src_=prefs;preference=previous_hair_style;task=input'>&lt;</a> <a href='?_src_=prefs;preference=next_hair_style;task=input'>&gt;</a><BR>"
-
-					dat += "<span style='border:1px solid #161616; background-color: #[hair_color];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=hair;task=input'>Change</a><BR>"
-
-				dat += "</td><td valign='top' width='21%'>"
-
-				dat += "<h3>Facial Hair Style</h3>"
-
-				dat += "<a href='?_src_=prefs;preference=facial_hair_style;task=input'>[facial_hair_style]</a><BR>"
-				dat += "<a href='?_src_=prefs;preference=previous_facehair_style;task=input'>&lt;</a> <a href='?_src_=prefs;preference=next_facehair_style;task=input'>&gt;</a><BR>"
-				dat += "<span style='border: 1px solid #161616; background-color: #[facial_hair_color];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=facial;task=input'>Change</a><BR>"
+					dat += "</td>"
 
 
-				dat += "</td><td valign='top' width='21%'>"
 
-				dat += "<h3>Eye Color</h3>"
 
-				dat += "<span style='border: 1px solid #161616; background-color: #[eye_color];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=eyes;task=input'>Change</a><BR>"
+				if(HAIR in pref_species.specflags)
 
-				dat += "</td><td valign='top' width='21%'>"
+					dat += "<td valign='top' width='21%'>"
 
-				dat += "<h3>Alien Color</h3>"  // even if choosing your mutantrace is off, this is here in case you gain one during a round
+					if(pref_species.spec_hair == 1)
+						dat += "<h3>Species Accessory</h3>"
 
-				dat += "<span style='border: 1px solid #161616; background-color: #[mutant_color];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=mutant_color;task=input'>Change</a><BR>"
+						dat += "<a href='?_src_=prefs;preference=spec_hair;task=input'>[spec_hair]</a><BR>"
+						dat += "<a href='?_src_=prefs;preference=previous_spec_hair_style;task=input'>&lt;</a> <a href='?_src_=prefs;preference=next_spec_hair_style;task=input'>&gt;</a><BR>"
+						dat += "</td>"
 
-				dat += "</td></tr></table>"
+					else
+						dat += "<h3>Hair Style</h3>"
+
+						dat += "<a href='?_src_=prefs;preference=hair_style;task=input'>[hair_style]</a><BR>"
+						dat += "<a href='?_src_=prefs;preference=previous_hair_style;task=input'>&lt;</a> <a href='?_src_=prefs;preference=next_hair_style;task=input'>&gt;</a><BR>"
+						dat += "<span style='border:1px solid #161616; background-color: #[hair_color];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=hair;task=input'>Change</a><BR>"
+
+
+						dat += "</td><td valign='top' width='21%'>"
+
+						dat += "<h3>Facial Hair Style</h3>"
+
+						dat += "<a href='?_src_=prefs;preference=facial_hair_style;task=input'>[facial_hair_style]</a><BR>"
+						dat += "<a href='?_src_=prefs;preference=previous_facehair_style;task=input'>&lt;</a> <a href='?_src_=prefs;preference=next_facehair_style;task=input'>&gt;</a><BR>"
+						dat += "<span style='border: 1px solid #161616; background-color: #[facial_hair_color];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=facial;task=input'>Change</a><BR>"
+
+						dat += "</td>"
+
+				if(EYECOLOR in pref_species.specflags)
+
+					dat += "<td valign='top' width='21%'>"
+
+					dat += "<h3>Eye Color</h3>"
+
+					dat += "<span style='border: 1px solid #161616; background-color: #[eye_color];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=eyes;task=input'>Change</a><BR>"
+
+					dat += "</td>"
+
+				if(MUTCOLORS in pref_species.specflags)
+
+					dat += "<td valign='top' width='21%'>"
+
+					dat += "<h3>Alien Color</h3>"
+
+					dat += "<span style='border: 1px solid #161616; background-color: #[mutant_color];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=mutant_color;task=input'>Change</a><BR>"
+
+					dat += "</td>"
+
+				dat += "</tr></table>"
 
 			if (1) // Game Preferences
 				dat += "<table><tr><td width='340px' height='300px' valign='top'>"
