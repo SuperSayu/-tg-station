@@ -13,6 +13,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	required_players = 6
 	required_enemies = 2
 	recommended_enemies = 3
+	reroll_friendly = 1
 
 	var/const/prob_int_murder_target = 50 // intercept names the assassination target half the time
 	var/const/prob_right_murder_target_l = 25 // lower bound on probability of naming right assassination target
