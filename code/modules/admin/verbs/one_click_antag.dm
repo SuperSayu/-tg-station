@@ -77,8 +77,9 @@ client/proc/one_click_antag()
 				if(applicant.mind)
 					if (!applicant.mind.special_role)
 						if(!jobban_isbanned(applicant, "traitor") && !jobban_isbanned(applicant, "Syndicate"))
-							if(!(applicant.job in temp.restricted_jobs))
-								candidates += applicant
+							if(temp.age_check(applicant.client))
+								if(!(applicant.job in temp.restricted_jobs))
+									candidates += applicant
 
 	if(candidates.len)
 		var/numTraitors = min(candidates.len, 3)
@@ -114,8 +115,9 @@ client/proc/one_click_antag()
 				if(applicant.mind)
 					if (!applicant.mind.special_role)
 						if(!jobban_isbanned(applicant, "changeling") && !jobban_isbanned(applicant, "Syndicate"))
-							if(!(applicant.job in temp.restricted_jobs))
-								candidates += applicant
+							if(temp.age_check(applicant.client))
+								if(!(applicant.job in temp.restricted_jobs))
+									candidates += applicant
 
 	if(candidates.len)
 		var/numChanglings = min(candidates.len, 3)
@@ -149,8 +151,9 @@ client/proc/one_click_antag()
 				if(applicant.mind)
 					if(!applicant.mind.special_role)
 						if(!jobban_isbanned(applicant, "revolutionary") && !jobban_isbanned(applicant, "Syndicate"))
-							if(!(applicant.job in temp.restricted_jobs))
-								candidates += applicant
+							if(temp.age_check(applicant.client))
+								if(!(applicant.job in temp.restricted_jobs))
+									candidates += applicant
 
 	if(candidates.len)
 		var/numRevs = min(candidates.len, 3)
@@ -164,22 +167,24 @@ client/proc/one_click_antag()
 	return 0
 
 /datum/admins/proc/makeWizard()
+	var/datum/game_mode/wizard/temp = new
 	var/list/mob/dead/observer/candidates = list()
 	var/mob/dead/observer/theghost = null
 	var/time_passed = world.time
 
 	for(var/mob/dead/observer/G in player_list)
 		if(!jobban_isbanned(G, "wizard") && !jobban_isbanned(G, "Syndicate"))
-			spawn(0)
-				switch(alert(G, "Do you wish to be considered for the position of Space Wizard Foundation 'diplomat'?","Please answer in 30 seconds!","Yes","No"))
-					if("Yes")
-						if((world.time-time_passed)>300)//If more than 30 game seconds passed.
+			if(temp.age_check(G.client))
+				spawn(0)
+					switch(alert(G, "Do you wish to be considered for the position of Space Wizard Foundation 'diplomat'?","Please answer in 30 seconds!","Yes","No"))
+						if("Yes")
+							if((world.time-time_passed)>300)//If more than 30 game seconds passed.
+								return
+							candidates += G
+						if("No")
 							return
-						candidates += G
-					if("No")
-						return
-					else
-						return
+						else
+							return
 
 	sleep(300)
 
@@ -219,8 +224,9 @@ client/proc/one_click_antag()
 				if(applicant.mind)
 					if(!applicant.mind.special_role)
 						if(!jobban_isbanned(applicant, "cultist") && !jobban_isbanned(applicant, "Syndicate"))
-							if(!(applicant.job in temp.restricted_jobs))
-								candidates += applicant
+							if(temp.age_check(applicant.client))
+								if(!(applicant.job in temp.restricted_jobs))
+									candidates += applicant
 
 	if(candidates.len)
 		var/numCultists = min(candidates.len, 4)
@@ -239,6 +245,7 @@ client/proc/one_click_antag()
 
 /datum/admins/proc/makeNukeTeam()
 
+	var/datum/game_mode/nuclear/temp = new
 	var/list/mob/dead/observer/candidates = list()
 	var/list/mob/dead/observer/chosen = list()
 	var/mob/dead/observer/theghost = null
@@ -246,16 +253,17 @@ client/proc/one_click_antag()
 
 	for(var/mob/dead/observer/G in player_list)
 		if(!jobban_isbanned(G, "operative") && !jobban_isbanned(G, "Syndicate"))
-			spawn(0)
-				switch(alert(G,"Do you wish to be considered for a nuke team being sent in?","Please answer in 30 seconds!","Yes","No"))
-					if("Yes")
-						if((world.time-time_passed)>300)//If more than 30 game seconds passed.
+			if(temp.age_check(G.client))
+				spawn(0)
+					switch(alert(G,"Do you wish to be considered for a nuke team being sent in?","Please answer in 30 seconds!","Yes","No"))
+						if("Yes")
+							if((world.time-time_passed)>300)//If more than 30 game seconds passed.
+								return
+							candidates += G
+						if("No")
 							return
-						candidates += G
-					if("No")
-						return
-					else
-						return
+						else
+							return
 
 	sleep(300)
 
@@ -422,8 +430,9 @@ client/proc/one_click_antag()
 				if(applicant.mind)
 					if(!applicant.mind.special_role)
 						if(!jobban_isbanned(applicant, "gangster") && !jobban_isbanned(applicant, "Syndicate"))
-							if(!(applicant.job in temp.restricted_jobs))
-								candidates += applicant
+							if(temp.age_check(applicant.client))
+								if(!(applicant.job in temp.restricted_jobs))
+									candidates += applicant
 
 	if(candidates.len >= 2)
 		H = pick(candidates)
