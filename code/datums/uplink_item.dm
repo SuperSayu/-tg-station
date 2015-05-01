@@ -62,7 +62,7 @@ var/list/uplink_items = list()
 	if(!istype(U))
 		return 0
 
-	if (!user || user.stat || user.restrained())
+	if (!user || user.incapacitated())
 		return 0
 
 	// If the uplink's holder is in the user's contents
@@ -244,18 +244,18 @@ var/list/uplink_items = list()
 	cost = 2
 	gamemodes = list(/datum/game_mode/nuclear)
 
-/datum/uplink_item/ammo/bullstun
-	name = "Drum Magazine - 12g Stun Slug"
-	desc = "An additional 8-round stun slug magazine for use in the Bulldog shotgun. Saying that they're completely non-lethal would be lying."
-	item = /obj/item/ammo_box/magazine/m12g/stun
+/datum/uplink_item/ammo/bullbuck
+	name = "Drum Magazine - 12g Buckshot"
+	desc = "An additional 8-round buckshot magazine for use in the Bulldog shotgun. Front towards enemy."
+	item = /obj/item/ammo_box/magazine/m12g
 	cost = 2
 	gamemodes = list(/datum/game_mode/nuclear)
 
-/datum/uplink_item/ammo/bullbuck
-	name = "Drum Magazine - 12g Buckshot"
-	desc = "An alternative 8-round buckshot magazine for use in the Bulldog shotgun. Front towards enemy."
-	item = /obj/item/ammo_box/magazine/m12g
-	cost = 2
+/datum/uplink_item/ammo/bullstun
+	name = "Drum Magazine - 12g Stun Slug"
+	desc = "An alternative 8-round stun slug magazine for use in the Bulldog shotgun. Saying that they're completely non-lethal would be lying."
+	item = /obj/item/ammo_box/magazine/m12g/stun
+	cost = 3
 	gamemodes = list(/datum/game_mode/nuclear)
 
 /datum/uplink_item/ammo/bulldragon
@@ -570,7 +570,7 @@ var/list/uplink_items = list()
 	name = "Explosive Implant"
 	desc = "An implant injected into the body, and later activated either manually or automatically upon death. Creates a moderately-sized fiery explosion. For those agents who know there is no going back."
 	item = /obj/item/weapon/storage/box/syndie_kit/imp_explosive
-	cost = 9
+	cost = 6
 
 // POINTLESS BADASSERY
 
