@@ -594,7 +594,7 @@
 "lv" = (/obj/structure/stool/bed/chair{dir = 4},/turf/simulated/shuttle/floor,/area/space)
 "lw" = (/obj/machinery/computer/security,/turf/simulated/shuttle/floor{icon_state = "floor3"},/area/space)
 "lx" = (/turf/unsimulated/floor{tag = "icon-cult"; icon_state = "cult"},/turf/unsimulated/wall/other{icon = 'icons/effects/effects.dmi'; icon_state = "m_shield"; name = "wall of force"; opacity = 0},/area/wizard_station)
-"ly" = (/obj/structure/mirror{pixel_x = 30},/turf/unsimulated/floor{tag = "icon-cult"; icon_state = "cult"},/area/wizard_station)
+"ly" = (/obj/structure/mirror/magic{pixel_x = 30},/turf/unsimulated/floor{tag = "icon-cult"; icon_state = "cult"},/area/wizard_station)
 "lz" = (/turf/unsimulated/wall{tag = "icon-uranium7"; icon_state = "uranium7"},/area/wizard_station)
 "lA" = (/turf/unsimulated/floor{icon_state = "dark"},/turf/unsimulated/wall/fakedoor{icon = 'icons/obj/doors/door_assembly.dmi'; icon_state = "door_as_mhatch1"; name = "Engine Room"; opacity = 0},/area/space)
 "lB" = (/turf/unsimulated/wall{tag = "icon-uranium11"; icon_state = "uranium11"},/area/space)
