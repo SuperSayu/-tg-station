@@ -891,23 +891,9 @@
 	if(armor >= 100)	return 0
 	var/Iforce = I.force //to avoid runtimes on the forcesay checks at the bottom. Some items might delete themselves if you drop them. (stunning yourself, ninja swords)
 
-	if(H.wear_suit && istype(H.wear_suit, /obj/item/))
-		var/obj/item/A = H.wear_suit
-		A.check_retaliate()
-	if(H.l_hand && istype(H.l_hand, /obj/item/))
-		var/obj/item/A = H.l_hand
-		A.check_retaliate()
-	if(H.r_hand && istype(H.r_hand, /obj/item/))
-		var/obj/item/A = H.r_hand
-		A.check_retaliate()
-	if(H.gloves && istype(H.gloves, /obj/item/))
-		var/obj/item/A = H.gloves
-		A.check_retaliate()
-
 	apply_damage(I.force, I.damtype, affecting, armor, H)
 
 	var/bloody = 0
-
 
 	if(I.force > 1 && I.damtype == BRUTE)
 		var/breakchance = ( I.force / 4 ) * I.w_class
