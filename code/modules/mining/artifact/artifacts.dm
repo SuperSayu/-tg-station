@@ -1,8 +1,5 @@
 var/global/ankh = 0 // only one can spawn
 
-/obj/proc/check_retaliate() // used for retaliation artifacts
-	return 0
-
 /obj/item/artifact
 	name = "artifact"
 	desc = "An artifact left behind by an ancient people. It has unknown powers and an unknown method of activation, although \
@@ -31,6 +28,7 @@ var/global/ankh = 0 // only one can spawn
 	var/powerdelay = 0 // delay for checking power
 	var/hitdelay = 0 // for some reason throwing an item at a wall does throw_impact twice, so here's something to prevent that
 	var/raddelay = 0 // used for the grav gen... god, this is getting stupid
+	var/reflect_chance = 0
 	// Extra values, their uses depend on the other artifact attributes.
 	var/extra1 = 0 // Used for power
 	var/extra2 = 0 // Used for power
@@ -275,7 +273,7 @@ var/global/ankh = 0 // only one can spawn
 		if(A_RING)
 			title = "ring"
 			power = pick(A_REFLECT,A_CLOAK,A_PHASE,A_BLINK,A_DIRTY,A_THERMAL)
-			usetype = pick(A_RETALIATE,A_CONSTANT)
+			usetype = pick(A_CONSTANT)
 			body_parts_covered = HANDS
 			slot_flags = SLOT_GLOVES
 		// MEDIUM
