@@ -553,7 +553,7 @@
 	desc = "These may, or may not, grow into oat."
 	icon_state = "seed-oat"
 	species = "oat"
-	plantname = "oat Stalks"
+	plantname = "Oat Stalks"
 	product = /obj/item/weapon/reagent_containers/food/snacks/grown/oat
 	lifespan = 25
 	endurance = 15
@@ -570,7 +570,7 @@
 	desc = "These may, or may not, grow into rice."
 	icon_state = "seed-rice"
 	species = "rice"
-	plantname = "rice Stalks"
+	plantname = "Rice Stalks"
 	product = /obj/item/weapon/reagent_containers/food/snacks/grown/rice
 	lifespan = 25
 	endurance = 15
