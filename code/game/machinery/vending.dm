@@ -65,13 +65,26 @@
 /obj/machinery/vending/New()
 	..()
 	wires = new(src)
-	spawn(4)
-		slogan_list = text2list(product_slogans, ";")
-		// So not all machines speak at the exact same time.
-		// The first time this machine says something will be at slogantime + this random value,
-		// so if slogantime is 10 minutes, it will say it at somewhere between 10 and 20 minutes after the machine is crated.
-		last_slogan = world.time + rand(0, slogan_delay)
-		power_change()
+	if(refill_canister) //constructable vending machine
+		component_parts = list()
+		var/obj/item/weapon/circuitboard/vendor/V = new(null)
+		V.set_type(type)
+		component_parts += V
+		component_parts += new refill_canister
+		component_parts += new refill_canister
+		component_parts += new refill_canister
+		RefreshParts()
+	else
+		build_inventory(products)
+		build_inventory(contraband, 1)
+		build_inventory(premium, 0, 1)
+
+	slogan_list = text2list(product_slogans, ";")
+	// So not all machines speak at the exact same time.
+	// The first time this machine says something will be at slogantime + this random value,
+	// so if slogantime is 10 minutes, it will say it at somewhere between 10 and 20 minutes after the machine is crated.
+	last_slogan = world.time + rand(0, slogan_delay)
+	power_change()
 
 /obj/machinery/vending/Destroy()
 	qdel(wires)
@@ -87,9 +100,6 @@
 
 /obj/machinery/vending/initialize()
 	..()
-	build_inventory(products)
-	build_inventory(contraband, 1)
-	build_inventory(premium, 0, 1)
 
 	var/area/A = get_area(src)
 	if(!A || !A.parsed) return
@@ -120,9 +130,12 @@
 
 /obj/machinery/vending/RefreshParts()         //Better would be to make constructable child
 	if(component_parts)
+		product_records = list()
+		hidden_records = list()
+		coin_records = list()
 		build_inventory(products, start_empty = 1)
-		build_inventory(contraband, 1, 1)
-		build_inventory(premium, 0, 1, 1)
+		build_inventory(contraband, 1, start_empty = 1)
+		build_inventory(premium, 0, 1, start_empty = 1)
 		for(var/obj/item/weapon/vending_refill/VR in component_parts)
 			refill_inventory(VR, product_records)
 
@@ -157,7 +170,7 @@
 		else
 			product_records += R
 
-/obj/machinery/vending/proc/refill_inventory(obj/item/weapon/vending_refill/refill, datum/data/vending_product/machine, mob/user)
+/obj/machinery/vending/proc/refill_inventory(obj/item/weapon/vending_refill/refill, datum/data/vending_product/machine)
 	var/total = 0
 
 	var/to_restock = 0
@@ -676,17 +689,6 @@
 	initvend_minimum = 3
 	initvend_maximum = 7
 
-
-/obj/machinery/vending/refillable/drink/boozeomat/New()
-	..()
-	component_parts = list()
-	var/obj/item/weapon/circuitboard/vendor/V = new(null)
-	V.set_type(type)
-	component_parts += V
-	component_parts += new /obj/item/weapon/vending_refill/boozeomat(0)
-	component_parts += new /obj/item/weapon/vending_refill/boozeomat(0)
-	component_parts += new /obj/item/weapon/vending_refill/boozeomat(0)
-
 /obj/machinery/vending/refillable/assist
 	products = list(	/obj/item/device/flashlight = 5,/obj/item/weapon/wirecutters = 1, /obj/item/weapon/reagent_containers/glass/bucket = 2, /obj/item/weapon/soap = 3,
 						/obj/item/weapon/clipboard = 2, /obj/item/weapon/storage/bag/tray = 2, /obj/item/stack/sheet/cardboard = 5, /obj/item/device/camera = 1, /obj/item/weapon/paper_bin = 2)
@@ -708,17 +710,6 @@
 	initvend_minimum = 1
 	initvend_maximum = 3
 
-
-/obj/machinery/vending/coffee/New()
-	..()
-	component_parts = list()
-	var/obj/item/weapon/circuitboard/vendor/V = new(null)
-	V.set_type(type)
-	component_parts += V
-	component_parts += new /obj/item/weapon/vending_refill/coffee(0)
-	component_parts += new /obj/item/weapon/vending_refill/coffee(0)
-	component_parts += new /obj/item/weapon/vending_refill/coffee(0)
-
 /obj/machinery/vending/snack
 	name = "\improper Getmore Chocolate Corp"
 	desc = "A snack machine courtesy of the Getmore Chocolate Corporation, based out of Mars"
@@ -735,16 +726,6 @@
 	var/chef_compartment_access = "28"
 	initvend_minimum = 1
 	initvend_maximum = 3
-
-/obj/machinery/vending/snack/New()
-	..()
-	component_parts = list()
-	var/obj/item/weapon/circuitboard/vendor/V = new(null)
-	V.set_type(type)
-	component_parts += V
-	component_parts += new /obj/item/weapon/vending_refill/snack(0)
-	component_parts += new /obj/item/weapon/vending_refill/snack(0)
-	component_parts += new /obj/item/weapon/vending_refill/snack(0)
 
 /obj/machinery/vending/sustenance
 	name = "\improper Sustenance Vendor"
@@ -771,17 +752,6 @@
 	refill_canister = /obj/item/weapon/vending_refill/cola
 	initvend_minimum = 1
 	initvend_maximum = 3
-
-
-/obj/machinery/vending/refillable/drink/cola/New()
-	..()
-	component_parts = list()
-	var/obj/item/weapon/circuitboard/vendor/V = new(null)
-	V.set_type(type)
-	component_parts += V
-	component_parts += new /obj/item/weapon/vending_refill/cola(0)
-	component_parts += new /obj/item/weapon/vending_refill/cola(0)
-	component_parts += new /obj/item/weapon/vending_refill/cola(0)
 
 //This one's from bay12
 /obj/machinery/vending/cart
@@ -827,17 +797,6 @@
 	contraband = list(/obj/item/weapon/lighter/zippo = 4)
 	premium = list(/obj/item/clothing/mask/cigarette/cigar/havana = 2, /obj/item/weapon/storage/fancy/cigarettes/cigpack_robustgold = 1)
 	refill_canister = /obj/item/weapon/vending_refill/cigarette
-
-
-/obj/machinery/vending/cigarette/New()
-	..()
-	component_parts = list()
-	var/obj/item/weapon/circuitboard/vendor/V = new(null)
-	V.set_type(type)
-	component_parts += V
-	component_parts += new /obj/item/weapon/vending_refill/cigarette(0)
-	component_parts += new /obj/item/weapon/vending_refill/cigarette(0)
-	component_parts += new /obj/item/weapon/vending_refill/cigarette(0)
 
 /obj/machinery/vending/medical
 	name = "\improper NanoMed Plus"
@@ -1070,22 +1029,13 @@
 	refill_canister = /obj/item/weapon/vending_refill/autodrobe
 	initvend_minimum = 0
 	initvend_maximum = 6
-	init_vend()
-		. = ..()
-		for(var/obj/item/I in .) // you can tell I hold the cleanliness of actors in the highest of esteem
-			spawn(10)
-				step_rand(I)	// or maybe it's just nanotrasen folk
-				step_rand(I)
 
-/obj/machinery/vending/refillable/wardrobe/autodrobe/New()
-	..()
-	component_parts = list()
-	var/obj/item/weapon/circuitboard/vendor/V = new(null)
-	V.set_type(type)
-	component_parts += V
-	component_parts += new /obj/item/weapon/vending_refill/autodrobe(0)
-	component_parts += new /obj/item/weapon/vending_refill/autodrobe(0)
-	component_parts += new /obj/item/weapon/vending_refill/autodrobe(0)
+/obj/machinery/vending/refillable/wardrobe/autodrobe/init_vend()
+	. = ..()
+	for(var/obj/item/I in .) // you can tell I hold the cleanliness of actors in the highest of esteem
+		spawn(10)
+			step_rand(I)	// or maybe it's just nanotrasen folk
+			step_rand(I)
 
 /obj/machinery/vending/refillable/dinnerware
 	name = "\improper Plasteel Chef's Dinnerware Vendor"
@@ -1185,12 +1135,3 @@
 	premium = list(/obj/item/clothing/under/suit_jacket/checkered=1,/obj/item/clothing/head/mailman=1,/obj/item/clothing/under/rank/mailman=1,/obj/item/clothing/suit/jacket/leather=1,/obj/item/clothing/under/pants/mustangjeans=1)
 	refill_canister = /obj/item/weapon/vending_refill/clothing
 
-/obj/machinery/vending/clothing/New()
-	..()
-	component_parts = list()
-	var/obj/item/weapon/circuitboard/vendor/V = new(null)
-	V.set_type(type)
-	component_parts += V
-	component_parts += new /obj/item/weapon/vending_refill/clothing(0)
-	component_parts += new /obj/item/weapon/vending_refill/clothing(0)
-	component_parts += new /obj/item/weapon/vending_refill/clothing(0)
