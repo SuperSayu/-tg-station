@@ -86,6 +86,13 @@
 			contained.reagents.add_reagent("minttoxin",1)
 		return
 
+/obj/item/projectile/ion/weak
+
+/obj/item/projectile/ion/weak/on_hit(atom/target, blocked = 0)
+	empulse(target, 0, 0)
+	return 1
+
+
 /obj/item/projectile/bullet/gyro
 	name ="explosive bolt"
 	icon_state= "bolter"
@@ -257,7 +264,7 @@ obj/item/projectile/kinetic/New()
 	weaken = 5
 
 /obj/item/projectile/bullet/frag12/on_hit(atom/target, blocked = 0)
-	explosion(target, -1, 0, 2)
+	explosion(target, -1, 0, 1)
 	return 1
 
 /obj/item/projectile/bullet/magspear
