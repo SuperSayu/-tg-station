@@ -42,7 +42,7 @@ datum/objective_item/steal/caplaser
 	antag_types = list("traitor","Changeling","Wizard","Space Ninja")
 
 datum/objective_item/steal/hoslaser
-	name = "the head of security's recreated antique laser gun"
+	name = "the head of security's personal laser gun"
 	targetitem = /obj/item/weapon/gun/energy/gun/hos
 	difficulty = 10
 	excludefromjob = list("Head Of Security")
