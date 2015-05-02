@@ -22,6 +22,8 @@
 	var/med_hud = DATA_HUD_MEDICAL_ADVANCED //Determines the med hud to use
 	var/sec_hud = DATA_HUD_SECURITY_ADVANCED //Determines the sec hud to use
 
+	var/law_change_counter = 0
+
 /mob/living/silicon/contents_explosion(severity, target)
 	return
 
@@ -413,6 +415,9 @@
 
 /mob/living/silicon/setEarDamage()
 	return
+
+/mob/living/silicon/check_eye_prot()
+	return 2
 
 /mob/living/silicon/proc/GetPhoto()
 	if (aicamera)
