@@ -146,7 +146,8 @@
 /obj/structure/stool/bed/chair/holo/comfy
 	name = "comfy chair"
 	desc = "It looks comfy."
-	icon_state = "comfychair_brown"
+	icon_state = "comfychair"
+	color = rgb(255,113,0)
 
 /obj/structure/stool/bed/chair/office
 	anchored = 0
