@@ -17,6 +17,7 @@
 	var/filling_color = "#FFFFFF" //color to use when added to custom food.
 	var/custom_food_type = null  //for food customizing. path of the custom food to create
 	var/junkiness = 0  //for junk food. used to lower human satiety.
+	var/list/bonus_reagents = list() //the amount of reagents (usually nutriment and vitamin) added to crafted/cooked snacks, on top of the ingredients reagents.
 
 
 /obj/item/weapon/reagent_containers/food/snacks/initialize()
@@ -90,8 +91,8 @@
 			fullness += C.nutriment_factor * C.volume / C.metabolization_rate
 
 		if(M == user)								//If you're eating it yourself.
-			if(src.reagents.has_reagent("sugar") && M.satiety < -150 && M.nutrition > NUTRITION_LEVEL_STARVING + 50 )
-				M << "<span class='notice'>You don't feel like eating any more sugary food at the moment.</span>"
+			if(junkiness && M.satiety < -150 && M.nutrition > NUTRITION_LEVEL_STARVING + 50 )
+				M << "<span class='notice'>You don't feel like eating any more junk food at the moment.</span>"
 				return 0
 
 			if(wrapped)
@@ -164,19 +165,19 @@
 		user << "[src] was bitten multiple times!"
 
 
-/obj/item/weapon/reagent_containers/food/snacks/attackby(obj/item/weapon/W, mob/user)
+/obj/item/weapon/reagent_containers/food/snacks/attackby(obj/item/weapon/W, mob/user, params)
 	if(istype(W,/obj/item/weapon/storage))
 		..() // -> item/attackby()
 		return 0
 	if(istype(W,/obj/item/weapon/reagent_containers/food/snacks))
 		var/obj/item/weapon/reagent_containers/food/snacks/S = W
-		if(S.w_class > 2)
-			user << "<span class='warning'>The ingredient is too big for [src].</span>"
-			return 0
-		if(contents.len >= 20)
-			user << "<span class='warning'>You can't add more ingredients to [src].</span>"
-			return 0
 		if(custom_food_type && ispath(custom_food_type))
+			if(S.w_class > 2)
+				user << "<span class='warning'>The ingredient is too big for [src].</span>"
+				return 0
+			if(contents.len >= 20)
+				user << "<span class='warning'>You can't add more ingredients to [src].</span>"
+				return 0
 			var/obj/item/weapon/reagent_containers/food/snacks/customizable/C = new custom_food_type(get_turf(src))
 			C.initialize_custom_food(src, S, user)
 			return 0
@@ -185,6 +186,12 @@
 		if(slice(sharpness, W, user))
 			return 1
 
+//Called when you finish tablecrafting a snack.
+/obj/item/weapon/reagent_containers/food/snacks/CheckParts()
+	if(bonus_reagents.len)
+		for(var/r_id in bonus_reagents)
+			var/amount = bonus_reagents[r_id]
+			reagents.add_reagent(r_id, amount)
 
 /obj/item/weapon/reagent_containers/food/snacks/proc/slice(var/accuracy, obj/item/weapon/W, mob/user)
 	if((slices_num <= 0 || !slices_num) || !slice_path) //is the food sliceable?
@@ -217,11 +224,12 @@
 	var/reagents_per_slice = reagents.total_volume/slices_num
 	for(var/i=1 to (slices_num-slices_lost))
 		var/obj/item/weapon/reagent_containers/food/snacks/slice = new slice_path (loc)
-		initialize_slice(slice)
-		reagents.trans_to(slice,reagents_per_slice)
+		initialize_slice(slice, reagents_per_slice)
 	qdel(src)
 
-/obj/item/weapon/reagent_containers/food/snacks/proc/initialize_slice(obj/item/weapon/reagent_containers/food/snacks/slice)
+/obj/item/weapon/reagent_containers/food/snacks/proc/initialize_slice(obj/item/weapon/reagent_containers/food/snacks/slice, reagents_per_slice)
+	slice.create_reagents(slice.volume)
+	reagents.trans_to(slice,reagents_per_slice)
 	return
 
 /obj/item/weapon/reagent_containers/food/snacks/proc/update_overlays(obj/item/weapon/reagent_containers/food/snacks/S)
@@ -234,10 +242,15 @@
 
 	overlays += I
 
-// cook() is called when microwaving the food
-/obj/item/weapon/reagent_containers/food/snacks/proc/initialize_cooked_food(obj/item/weapon/reagent_containers/food/snacks/S)
+// initialize_cooked_food() is called when microwaving the food
+/obj/item/weapon/reagent_containers/food/snacks/proc/initialize_cooked_food(obj/item/weapon/reagent_containers/food/snacks/S, cooking_efficiency = 1)
+	S.create_reagents(S.volume)
 	if(reagents)
 		reagents.trans_to(S, reagents.total_volume)
+	if(S.bonus_reagents.len)
+		for(var/r_id in S.bonus_reagents)
+			var/amount = S.bonus_reagents[r_id] * cooking_efficiency
+			S.reagents.add_reagent(r_id, amount)
 
 /obj/item/weapon/reagent_containers/food/snacks/Destroy()
 	if(contents)
@@ -294,7 +307,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/store
 	w_class = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/store/attackby(obj/item/weapon/W, mob/user)
+/obj/item/weapon/reagent_containers/food/snacks/store/attackby(obj/item/weapon/W, mob/user, params)
 	if(W.w_class > 2 || custom_food_type) //can't store objects inside food needed to start a customizable snack.
 		..()
 	else

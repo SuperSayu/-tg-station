@@ -169,7 +169,7 @@ Auto Patrol[]"},
 			declare_arrests = !declare_arrests
 			updateUsrDialog()
 
-/obj/machinery/bot/ed209/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/bot/ed209/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if (allowed(user) && !open && !emagged)
 			locked = !locked
@@ -408,7 +408,7 @@ Auto Patrol[]"},
 
 /obj/machinery/bot/ed209/explode()
 	walk_to(src,0)
-	visible_message("<span class='userdanger'>[src] blows apart!</span>")
+	visible_message("<span class='boldannounce'>[src] blows apart!</span>")
 	var/turf/Tsec = get_turf(src)
 
 	var/obj/item/weapon/ed209_assembly/Sa = new /obj/item/weapon/ed209_assembly(Tsec)
@@ -542,7 +542,7 @@ Auto Patrol[]"},
 
 
 
-/obj/item/weapon/ed209_assembly/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/ed209_assembly/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	..()
 
 	if(istype(W, /obj/item/weapon/pen))

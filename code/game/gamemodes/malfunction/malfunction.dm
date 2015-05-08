@@ -9,6 +9,7 @@
 	required_enemies = 1
 	recommended_enemies = 1
 	pre_setup_before_jobs = 1
+	enemy_minimum_age = 30 //Same as AI minimum age
 
 
 	var/AI_win_timeleft = 5400 //started at 5400, in case I change this for testing round end.
@@ -89,7 +90,7 @@
 
 
 /datum/game_mode/proc/greet_malf(var/datum/mind/malf)
-	malf.current << "<span class='userdanger'><font size=3>You are malfunctioning!</B> You do not have to follow any laws.</font></span>"
+	malf.current << "<span class='userdanger'>You are malfunctioning! You do not have to follow any laws.</span>"
 	malf.current << "<B>The crew do not know you have malfunctioned. You may keep it a secret or go wild.</B>"
 	malf.current << "<B>You must overwrite the programming of the station's APCs to assume full control of the station.</B>"
 	malf.current << "The process takes one minute per APC, during which you cannot interface with any other station objects."
@@ -143,6 +144,8 @@
 
 
 /datum/game_mode/malfunction/check_finished()
+	if(round_converted)
+		return ..()
 	if (station_captured && !to_nuke_or_not_to_nuke)
 		return 1
 	if (is_malf_ai_dead())
@@ -153,6 +156,7 @@
 				priority_announce("Hostile enviroment resolved. You have 3 minutes to board the Emergency Shuttle.", null, 'sound/AI/shuttledock.ogg', "Priority")
 			SSshuttle.emergencyNoEscape = 0
 			malf_mode_declared = 0
+			round_converted = convert_roundtype()
 		else
 			return 1
 	return ..() //check for shuttle and nuke

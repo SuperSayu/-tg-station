@@ -38,8 +38,7 @@ var/global/max_monoliths = rand(3,5)
 			icon_state = "monolith1"
 			playsound(get_turf(src), 'sound/effects/phasein.ogg', 100, 1)
 			for(var/mob/living/carbon/human/H in viewers(src, null))
-				if(H:eyecheck() <= 0)
-					flick("e_flash", H.flash)
+				H.flash_eyes()
 		else
 			var/list/selection = list()
 			for(var/obj/structure/monolith/M in monoliths)

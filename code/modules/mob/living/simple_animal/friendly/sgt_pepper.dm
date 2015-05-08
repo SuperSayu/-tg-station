@@ -7,12 +7,12 @@
 	icon_dead = "sgt_pepper_dead"
 	icon = 'icons/mob/sayu_animal.dmi'
 
-	New()
-		if(isturf(loc) && type == /mob/living/simple_animal/corgi/puppy/smart/sgt_pepper && prob(10))
-			new /mob/living/simple_animal/corgi/puppy/smart/sgt_pepper/steak(loc)
-			qdel(src)
-			return
-		..()
+/mob/living/simple_animal/corgi/puppy/smart/sgt_pepper/New()
+	if(isturf(loc) && type == /mob/living/simple_animal/corgi/puppy/smart/sgt_pepper && prob(10))
+		new /mob/living/simple_animal/corgi/puppy/smart/sgt_pepper/steak(loc)
+		qdel(src)
+		return
+	..()
 
 /mob/living/simple_animal/corgi/puppy/smart
 	gender = "female" // the smarter of the two genders

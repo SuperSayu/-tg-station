@@ -9,6 +9,7 @@
 	required_enemies = 1
 	recommended_enemies = 1
 	pre_setup_before_jobs = 1
+	enemy_minimum_age = 14
 	var/use_huds = 0
 	var/finished = 0
 
@@ -24,7 +25,7 @@
 	wizard.assigned_role = "MODE" //So they aren't chosen for other jobs.
 	wizard.special_role = "Wizard"
 	if(wizardstart.len == 0)
-		wizard.current << "<span class='userdanger'>A starting location for you could not be found, please report this bug!</span>"
+		wizard.current << "<span class='boldannounce'>A starting location for you could not be found, please report this bug!</span>"
 		return 0
 	for(var/datum/mind/wiz in wizards)
 		wiz.current.loc = pick(wizardstart)
@@ -126,7 +127,7 @@
 
 /datum/game_mode/proc/greet_wizard(var/datum/mind/wizard, var/you_are=1)
 	if (you_are)
-		wizard.current << "<span class='userdanger'>You are the Space Wizard!</span>"
+		wizard.current << "<span class='boldannounce'>You are the Space Wizard!</span>"
 	wizard.current << "<B>The Space Wizards Federation has given you the following tasks:</B>"
 
 	var/obj_count = 1
@@ -184,7 +185,7 @@
 
 /datum/game_mode/wizard/check_finished()
 
-	if(config.continuous_round_wiz)
+	if(round_converted)
 		return ..()
 
 	var/wizards_alive = 0
@@ -206,16 +207,22 @@
 
 	if (wizards_alive || traitors_alive)
 		return ..()
-	else
-		finished = 1
-		return 1
 
+	if(config.continuous_round_wiz)
+		round_converted = convert_roundtype()
+		if(!round_converted)
+			finished = 1
+			return 1
+		else
+			return ..()
 
+	finished = 1
+	return 1
 
 /datum/game_mode/wizard/declare_completion()
 	if(finished)
 		feedback_set_details("round_end_result","loss - wizard killed")
-		world << "<span class='userdanger'><FONT size = 3>The wizard[(wizards.len>1)?"s":""] has been killed by the crew! The Space Wizards Federation has been taught a lesson they will not soon forget!</FONT></span>"
+		world << "<span class='userdanger'>The wizard[(wizards.len>1)?"s":""] has been killed by the crew! The Space Wizards Federation has been taught a lesson they will not soon forget!</span>"
 	..()
 	return 1
 

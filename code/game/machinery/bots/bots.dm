@@ -203,7 +203,7 @@
 				usr << "<span class='warning'>[text_hack]</span>"
 				bot_reset()
 			else if(!hacked)
-				usr << "<span class='userdanger'>[text_dehack_fail]</span>"
+				usr << "<span class='boldannounce'>[text_dehack_fail]</span>"
 			else
 				emagged = 0
 				hacked = 0
@@ -238,7 +238,7 @@
 	return 1 //Successful completion. Used to prevent child process() continuing if this one is ended early.
 
 
-/obj/machinery/bot/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/bot/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	if(istype(W, /obj/item/weapon/screwdriver))
 		if(!locked)
 			open = !open

@@ -350,7 +350,7 @@
 	aggro_vision_range = 9
 	idle_vision_range = 5
 	anchored = 1 //Stays anchored until death as to be unpullable
-	mob_size = 2
+	mob_size = MOB_SIZE_LARGE
 	var/pre_attack = 0
 
 /mob/living/simple_animal/hostile/asteroid/goliath/Life()
@@ -398,6 +398,7 @@
 	name = "Goliath tentacle"
 	icon = 'icons/mob/sayu_animal.dmi'
 	icon_state = "Goliath_tentacle"
+	var/latched = 0
 
 /obj/effect/goliath_tentacle/New()
 	var/turftype = get_turf(src)
@@ -424,15 +425,15 @@
 
 /obj/effect/goliath_tentacle/proc/Trip()
 	for(var/mob/living/M in src.loc)
-		M.Weaken(5)
-		visible_message("<span class='warning'>The [src.name] knocks [M.name] down!</span>")
-	qdel(src)
-
-/obj/effect/goliath_tentacle/Crossed(AM as mob|obj)
-	if(isliving(AM))
-		Trip()
-		return
-	..()
+		M.Stun(5)
+		M.adjustBruteLoss(rand(10,15))
+		latched = 1
+		visible_message("<span class='danger'>The [src.name] grabs hold of [M.name]!</span>")
+	if(!latched)
+		qdel(src)
+	else
+		spawn(50)
+			qdel(src)
 
 /mob/living/simple_animal/hostile/asteroid/goliath/Die()
 	var/obj/item/asteroid/goliath_hide/G = new /obj/item/asteroid/goliath_hide(src.loc)

@@ -48,13 +48,13 @@ var/const/MAX_ACTIVE_TIME = 400
 		return
 	switch(stat)
 		if(DEAD,UNCONSCIOUS)
-			user << "<span class='userdanger'>[src] is not moving.</span>"
+			user << "<span class='boldannounce'>[src] is not moving.</span>"
 		if(CONSCIOUS)
-			user << "<span class='userdanger'>[src] seems to be active!</span>"
+			user << "<span class='boldannounce'>[src] seems to be active!</span>"
 	if (sterile)
-		user << "<span class='userdanger'>It looks like the proboscis has been removed.</span>"
+		user << "<span class='boldannounce'>It looks like the proboscis has been removed.</span>"
 
-/obj/item/clothing/mask/facehugger/attackby(var/obj/item/O,var/mob/m)
+/obj/item/clothing/mask/facehugger/attackby(var/obj/item/O,var/mob/m, params)
 	if(O.force)
 		Die()
 	return
@@ -223,7 +223,7 @@ var/const/MAX_ACTIVE_TIME = 400
 	icon_state = "[initial(icon_state)]_dead"
 	stat = DEAD
 
-	src.visible_message("<span class='userdanger'>[src] curls up into a ball!</span>")
+	visible_message("<span class='danger'>[src] curls up into a ball!</span>")
 
 	return
 

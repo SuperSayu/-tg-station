@@ -123,7 +123,7 @@
 		return
 	..()
 
-/obj/machinery/door/attackby(obj/item/I as obj, mob/user as mob)
+/obj/machinery/door/attackby(obj/item/I as obj, mob/user as mob, params)
 	if(istype(I, /obj/item/device/detective_scanner))
 		return
 	if(isrobot(user))	return //borgs can't attack doors open because it conflicts with their AI-like interaction with them.
@@ -270,6 +270,8 @@
 		var/turf/location = src.loc
 		if(istype(location, /turf/simulated)) //add_blood doesn't work for borgs/xenos, but add_blood_floor does.
 			location.add_blood_floor(L)
+	for(var/obj/mecha/M in get_turf(src))
+		M.take_damage(DOOR_CRUSH_DAMAGE)
 
 /obj/machinery/door/proc/requiresID()
 	return 1

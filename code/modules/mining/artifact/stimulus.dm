@@ -117,8 +117,7 @@ obj/item/artifact/proc/set_stim()
 		artloc.visible_message("<span class='notice'>With a flash of light, \the [src] activates!</span>")
 		playsound(artloc, 'sound/effects/phasein.ogg', 100, 1)
 		for(var/mob/living/L in viewers(artloc, null))
-			if(L:eyecheck() <= 0)
-				flick("e_flash", L.flash)
+			L.flash_eyes()
 		activated = 1
 		on = 1
 		update_icons()

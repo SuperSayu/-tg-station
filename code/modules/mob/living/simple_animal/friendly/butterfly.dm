@@ -8,7 +8,7 @@
 	emote_see = list("flutters")
 	response_help = "shoos"
 	response_disarm = "brushes aside"
-	response_harm = "aquashes"
+	response_harm = "squashes"
 	speak_chance = 0
 	maxHealth = 2
 	health = 2
@@ -16,7 +16,7 @@
 	friendly = "nudges"
 	pass_flags = PASSTABLE
 	ventcrawler = 2
-	mob_size = 0
+	mob_size = MOB_SIZE_SMALL
 
 /mob/living/simple_animal/butterfly/New()
 	..()

@@ -67,7 +67,7 @@ emp_act
 		return 2
 	return (..(P , def_zone))
 
-/mob/living/carbon/human/proc/check_reflect(var/def_zone) //Reflection checks for anything in your l_hand, r_hand, gloves, or wear_suit based on reflect_chance var of the object
+/mob/living/carbon/human/proc/check_reflect(var/def_zone) //Reflection checks for anything in your l_hand, r_hand, or wear_suit based on the reflection chance of the object
 	if(wear_suit && istype(wear_suit, /obj/item/))
 		var/obj/item/I = wear_suit
 		if(I.IsReflect(def_zone) == 1)
@@ -80,10 +80,6 @@ emp_act
 		var/obj/item/I = r_hand
 		if(I.IsReflect(def_zone) == 1)
 			return 1
-	if(gloves && istype(gloves, /obj/item/))
-		var/obj/item/I = gloves
-		if(I.IsReflect(def_zone) == 1)
-			return 1
 	return 0
 
 
@@ -92,21 +88,18 @@ emp_act
 /mob/living/carbon/human/proc/check_shields(var/damage = 0, var/attack_text = "the attack")
 	if(l_hand && istype(l_hand, /obj/item/weapon))//Current base is the prob(50-d/3)
 		var/obj/item/weapon/I = l_hand
-		I.check_retaliate()
 		if(I.IsShield() && (prob(50 - round(damage / 3))))
 			visible_message("<span class='danger'>[src] blocks [attack_text] with [l_hand]!</span>", \
 							"<span class='userdanger'>[src] blocks [attack_text] with [l_hand]!</span>")
 			return 1
 	if(r_hand && istype(r_hand, /obj/item/weapon))
 		var/obj/item/weapon/I = r_hand
-		I.check_retaliate()
 		if(I.IsShield() && (prob(50 - round(damage / 3))))
 			visible_message("<span class='danger'>[src] blocks [attack_text] with [r_hand]!</span>", \
 							"<span class='userdanger'>[src] blocks [attack_text] with [r_hand]!</span>")
 			return 1
 	if(wear_suit && istype(wear_suit, /obj/item/))
 		var/obj/item/I = wear_suit
-		I.check_retaliate()
 		if(I.IsShield() && (prob(35)))
 			visible_message("<span class='danger'>The reactive teleport system flings [src] clear of [attack_text]!</span>", \
 							"<span class='userdanger'>The reactive teleport system flings [src] clear of [attack_text]!</span>")
@@ -124,9 +117,6 @@ emp_act
 				buckled.unbuckle_mob()
 			src.loc = picked
 			return 1
-	if(gloves && istype(gloves, /obj/item/))
-		var/obj/item/I = gloves
-		I.check_retaliate()
 	return 0
 
 
@@ -466,3 +456,4 @@ emp_act
 		..()
 
 	return
+

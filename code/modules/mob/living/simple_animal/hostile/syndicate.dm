@@ -57,7 +57,7 @@
 	attacktext = "slashes"
 	status_flags = 0
 
-/mob/living/simple_animal/hostile/syndicate/melee/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/mob/living/simple_animal/hostile/syndicate/melee/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	if(O.force)
 		if(prob(80))
 			var/damage = O.force
@@ -79,7 +79,7 @@
 		if((Proj.damage_type == BRUTE || Proj.damage_type == BURN))
 			src.health -= Proj.damage
 	else
-		visible_message("<span class='userdanger'>[src] blocks [Proj] with its shield!</span>")
+		visible_message("<span class='danger'>[src] blocks [Proj] with its shield!</span>")
 	return 0
 
 
@@ -158,7 +158,7 @@
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
-	mob_size = 0
+	mob_size = MOB_SIZE_SMALL
 
 /mob/living/simple_animal/hostile/viscerator/Die()
 	..()

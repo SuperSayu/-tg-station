@@ -127,7 +127,7 @@
 	origin_tech = "magnets=3"
 	vision_flags = SEE_MOBS
 	invis_view = 2
-	flash_protect = -1
+	flash_protect = 0
 
 	emp_act(severity)
 		if(istype(src.loc, /mob/living/carbon/human))
@@ -146,6 +146,7 @@
 	desc = "Used by engineering and mining staff to see basic structural and terrain layouts through walls, regardless of lighting condition."
 	icon_state = "meson"
 	origin_tech = "magnets=3;syndicate=4"
+	flash_protect = -1
 
 
 /obj/item/clothing/glasses/thermal/monocle
@@ -160,5 +161,28 @@
 	desc = "An eyepatch with built-in thermal optics."
 	icon_state = "eyepatch"
 	item_state = "eyepatch"
-
 	lenses = 0
+
+/obj/item/clothing/glasses/cold
+	name = "cold goggles"
+	desc = "A pair of goggles meant for low temperatures."
+	icon_state = "cold"
+	item_state = "cold"
+
+obj/item/clothing/glasses/heat
+	name = "heat goggles"
+	desc = "A pair of goggles meant for high temperatures."
+	icon_state = "heat"
+	item_state = "heat"
+
+obj/item/clothing/glasses/orange
+	name = "orange glasses"
+	desc = "A sweet pair of orange shades."
+	icon_state = "orangeglasses"
+	item_state = "orangeglasses"
+
+obj/item/clothing/glasses/red
+	name = "red glasses"
+	desc = "A sweet pair of red shades."
+	icon_state = "redglasses"
+	item_state = "redglasses"

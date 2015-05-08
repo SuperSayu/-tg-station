@@ -318,14 +318,14 @@
 	name = "\improper Mysterious Crate"
 	desc = "What could it be?"
 
-/obj/structure/largecrate/evil/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/largecrate/evil/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	if(istype(W, /obj/item/weapon/crowbar))
 		var/list/menace = pick(	/mob/living/simple_animal/hostile/carp,/mob/living/simple_animal/hostile/faithless,/mob/living/simple_animal/hostile/pirate,
 								/mob/living/simple_animal/hostile/creature,/mob/living/simple_animal/hostile/pirate/ranged,
 								/mob/living/simple_animal/hostile/hivebot,/mob/living/simple_animal/hostile/viscerator,/mob/living/simple_animal/hostile/pirate)
 
 		visible_message("\red Something falls out of the [src]!")
-		var/obj/item/weapon/grenade/flashbang/clusterbang/C = new(src.loc)
+		var/obj/item/weapon/grenade/clusterbuster/C = new(src.loc)
 		C.prime()
 		spawn(10)
 			new menace(src.loc)
@@ -348,7 +348,7 @@
 	name = "Schrodinger's Crate"
 	desc = "What happens if you open it?"
 
-/obj/structure/largecrate/schrodinger/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/largecrate/schrodinger/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	if(istype(W, /obj/item/weapon/crowbar))
 		var/mob/living/simple_animal/cat/Cat1 = new(loc)
 		Cat1.apply_damage(250)//,TOX)

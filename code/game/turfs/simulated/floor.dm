@@ -130,7 +130,7 @@ var/list/icons_to_ignore_at_floor_init = list("damaged1","damaged2","damaged3","
 	W.update_icon()
 	return W
 
-/turf/simulated/floor/attackby(obj/item/C as obj, mob/user as mob)
+/turf/simulated/floor/attackby(obj/item/C as obj, mob/user as mob, params)
 	if(!C || !user)
 		return 1
 	if(..())
@@ -190,3 +190,6 @@ var/list/icons_to_ignore_at_floor_init = list("damaged1","damaged2","damaged3","
 						dirtoverlay.alpha = 10
 					else if(dirt > 100)
 						dirtoverlay.alpha = min(dirtoverlay.alpha+10, 200)
+
+/turf/simulated/floor/can_have_cabling()
+	return !burnt & !broken & !lava

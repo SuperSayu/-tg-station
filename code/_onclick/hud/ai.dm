@@ -208,6 +208,7 @@
 	using.screen_loc = ui_ai_view_images
 	adding += using
 
+
 //Camera bug
 	using = new /obj/screen/ai/camera_bug()
 	using.screen_loc = ui_ai_camera_bug

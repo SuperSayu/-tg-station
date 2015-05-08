@@ -307,11 +307,100 @@
 		new /obj/item/device/multitool(src) // used to adjust the chemgrenade's signaller
 		new /obj/item/device/assembly/signaler(src)
 		return
+
 // --------------------------------------
 // Clusterbuster Variable Payload Grenade
 //   Adapted from flashbang/clusterbang
 // --------------------------------------
 
+/obj/item/weapon/grenade/clusterbuster/meat
+	name = "Mega Meat Grenade"
+	payload = /obj/item/weapon/grenade/chem_grenade/meat
+
+/obj/item/weapon/grenade/clusterbuster/booze
+	name = "Booze Grenade"
+	payload = /obj/item/weapon/reagent_containers/food/drinks/bottle/random_drink
+
+/obj/item/weapon/grenade/clusterbuster/honk
+	name = "Mega Honk Grenade"
+	payload = /obj/item/weapon/grown/bananapeel
+
+/obj/item/weapon/grenade/clusterbuster/magichonk
+	name = "Magi-Honk Grenade"
+	payload = /obj/item/weapon/grown/bananapeel/wizard
+
+/obj/item/weapon/grenade/clusterbuster/xmas
+	name = "Christmas Miracle"
+	payload = /obj/item/weapon/a_gift
+
+/obj/item/weapon/grenade/clusterbuster/soap
+	name = "Megamaid's Passive-Aggressive Soap-creation Grenade"
+	payload = /obj/item/weapon/grenade/chem_grenade/soap
+
+/obj/item/weapon/grenade/clusterbuster/dirt
+	name = "Megamaid's Job Security Grenade"
+	payload = /obj/effect/decal/cleanable/random
+
+/obj/item/weapon/grenade/clusterbuster/megadirt
+	name = "Megamaid's Revenge Grenade"
+	payload = /obj/item/weapon/grenade/chem_grenade/dirt
+
+/obj/item/weapon/grenade/clusterbuster/inferno
+	name = "Little Boy"
+	payload = /obj/item/weapon/grenade/chem_grenade/incendiary
+
+/obj/item/weapon/grenade/clusterbuster/apocalypsefake
+	name = "Fun Bomb"
+	desc = "Not like the other bomb."
+	payload = /obj/item/toy/spinningtoy
+
+// Mob spawning grenades
+/obj/item/weapon/grenade/clusterbuster/aviary
+	name = "Poly-Poly Grenade"
+	desc = "That's an uncomfortable number of birds."
+	payload = /mob/living/simple_animal/parrot
+
+/obj/item/weapon/grenade/clusterbuster/monkey
+	name = "Barrel of Monkeys"
+	desc = "Not really that much fun."
+	payload = /mob/living/carbon/monkey
+
+/obj/item/weapon/grenade/clusterbuster/fluffy
+	name = "Fluffy Love Bomb"
+	desc = "Exactly as snuggly as it sounds."
+	payload = /mob/living/simple_animal/corgi/puppy
+
+
+// Grenades that should never see the light of day
+/obj/item/weapon/grenade/clusterbuster/apocalypse
+	name = "Apocalypse Bomb"
+	desc = "No matter what, do not EVER use this."
+	payload = /obj/singularity
+
+/obj/item/weapon/grenade/clusterbuster/ultima
+	name = "Earth Shattering Kaboom"
+	desc = "Contains one Aludium Q-36 explosive space modulator."
+	payload = /obj/item/weapon/grenade/chem_grenade/explosion
+
+/obj/item/weapon/grenade/clusterbuster/lube
+	name = "Newton's First Law"
+	desc = "An object in motion remains in motion."
+	payload = /obj/item/weapon/grenade/chem_grenade/lube
+
+/obj/item/weapon/grenade/clusterbuster/bluespace
+	name = "Maximum Warp"
+	desc = "Spacetime: Nice job breaking it, hero."
+	payload = /obj/item/weapon/grenade/chem_grenade/large/bluespace
+/obj/item/weapon/grenade/clusterbuster/monster
+	name = "The Monster Mash"
+	desc = "It's a graveyeard smash."
+	payload = /obj/item/weapon/grenade/chem_grenade/large/monster
+/obj/item/weapon/grenade/clusterbuster/banquet
+	name = "Bork Bork Bonanza"
+	desc = "Bork bork bork."
+	payload = /obj/item/weapon/grenade/chem_grenade/large/feast
+
+/*
 /obj/item/weapon/grenade/clusterbuster
 	desc = "This highly intimidating bunch of hardware seems eager to be let loose."
 	name = "Clusterbang"
@@ -332,85 +421,6 @@
 /obj/item/weapon/grenade/clusterbuster/smoke
 	name = "Ninja Vanish"
 	payload = /obj/item/weapon/grenade/smokebomb
-
-// Not serious grenades
-/obj/item/weapon/grenade/clusterbuster/meat
-	name = "Mega Meat Grenade"
-	payload = /obj/item/weapon/grenade/chem_grenade/meat
-/obj/item/weapon/grenade/clusterbuster/booze
-	name = "Booze Grenade"
-	payload = /obj/item/weapon/reagent_containers/food/drinks/bottle/random_drink
-/obj/item/weapon/grenade/clusterbuster/honk
-	name = "Mega Honk Grenade"
-	payload = /obj/item/weapon/grown/bananapeel
-/obj/item/weapon/grenade/clusterbuster/magichonk
-	name = "Magi-Honk Grenade"
-	payload = /obj/item/weapon/grown/bananapeel/wizard
-/obj/item/weapon/grenade/clusterbuster/xmas
-	name = "Christmas Miracle"
-	payload = /obj/item/weapon/a_gift
-/obj/item/weapon/grenade/clusterbuster/soap
-	name = "Megamaid's Passive-Aggressive Soap-creation Grenade"
-	payload = /obj/item/weapon/grenade/chem_grenade/soap
-/obj/item/weapon/grenade/clusterbuster/dirt
-	name = "Megamaid's Job Security Grenade"
-	payload = /obj/effect/decal/cleanable/random
-/obj/item/weapon/grenade/clusterbuster/megadirt
-	name = "Megamaid's Revenge Grenade"
-	payload = /obj/item/weapon/grenade/chem_grenade/dirt
-/obj/item/weapon/grenade/clusterbuster/inferno
-	name = "Little Boy"
-	payload = /obj/item/weapon/grenade/chem_grenade/incendiary
-/obj/item/weapon/grenade/clusterbuster/apocalypsefake
-	name = "Fun Bomb"
-	desc = "Not like the other bomb."
-	payload = /obj/item/toy/spinningtoy
-
-// Grenades that should never see the light of day
-/obj/item/weapon/grenade/clusterbuster/apocalypse
-	name = "Apocalypse Bomb"
-	desc = "No matter what, do not EVER use this."
-	payload = /obj/singularity
-
-/obj/item/weapon/grenade/clusterbuster/ultima
-	name = "Earth Shattering Kaboom"
-	desc = "Contains one Aludium Q-36 explosive space modulator."
-	payload = /obj/item/weapon/grenade/chem_grenade/explosion
-
-/obj/item/weapon/grenade/clusterbuster/lube
-	name = "Newton's First Law"
-	desc = "An object in motion remains in motion."
-	payload = /obj/item/weapon/grenade/chem_grenade/lube
-
-
-/obj/item/weapon/grenade/clusterbuster/bluespace
-	name = "Maximum Warp"
-	desc = "Spacetime: Nice job breaking it, hero."
-	payload = /obj/item/weapon/grenade/chem_grenade/large/bluespace
-/obj/item/weapon/grenade/clusterbuster/monster
-	name = "The Monster Mash"
-	desc = "It's a graveyeard smash."
-	payload = /obj/item/weapon/grenade/chem_grenade/large/monster
-/obj/item/weapon/grenade/clusterbuster/banquet
-	name = "Bork Bork Bonanza"
-	desc = "Bork bork bork."
-	payload = /obj/item/weapon/grenade/clusterbuster/banquet/child
-	child
-		payload = /obj/item/weapon/grenade/chem_grenade/large/feast
-
-// Mob spawning grenades
-/obj/item/weapon/grenade/clusterbuster/aviary
-	name = "Poly-Poly Grenade"
-	desc = "That's an uncomfortable number of birds."
-	payload = /mob/living/simple_animal/parrot
-/obj/item/weapon/grenade/clusterbuster/monkey
-	name = "Barrel of Monkeys"
-	desc = "Not really that much fun."
-	payload = /mob/living/carbon/monkey
-/obj/item/weapon/grenade/clusterbuster/fluffy
-	name = "Fluffy Love Bomb"
-	desc = "Exactly as snuggly as it sounds."
-	payload = /mob/living/simple_animal/corgi/puppy
 
 /obj/item/weapon/grenade/clusterbuster/prime()
 	var/numspawned = rand(4,8)
@@ -483,3 +493,4 @@
 		if(istype(A,/obj/singularity)) // I can't emphasize enough how much you should never use this grenade
 			A:energy = 200
 		qdel(src)
+*/

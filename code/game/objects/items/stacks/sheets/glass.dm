@@ -24,7 +24,7 @@
 /obj/item/stack/sheet/glass/attack_self(mob/user as mob)
 	construct_window(user)
 
-/obj/item/stack/sheet/glass/attackby(obj/item/W, mob/user)
+/obj/item/stack/sheet/glass/attackby(obj/item/W, mob/user, params)
 	..()
 	add_fingerprint(user)
 	if(istype(W, /obj/item/stack/cable_coil))
@@ -62,6 +62,7 @@
 	if(!user.IsAdvancedToolUser())
 		user << "<span class='danger'>You don't have the dexterity to do this!</span>"
 		return 0
+	if(zero_amount())	return 0
 	var/title = "Sheet-Glass"
 	title += " ([src.get_amount()] sheet\s left)"
 	switch(alert(title, "Would you like full tile glass or one direction?", "One Direction", "Full Window", "Cancel", null))
@@ -315,7 +316,7 @@
 		M.adjustBruteLoss(force / 2)
 
 
-/obj/item/weapon/shard/attackby(obj/item/I, mob/user)
+/obj/item/weapon/shard/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = I
 		if(WT.remove_fuel(0, user))

@@ -139,7 +139,7 @@
 	for(var/obj/item/toy/crayon/crayon in contents)
 		overlays += image('icons/obj/crayons.dmi',crayon.colourName)
 
-/obj/item/weapon/storage/fancy/crayons/attackby(obj/item/W as obj, mob/user as mob)
+/obj/item/weapon/storage/fancy/crayons/attackby(obj/item/W as obj, mob/user as mob, params)
 	if(istype(W,/obj/item/toy/crayon))
 		switch(W:colourName)
 			if("mime")
@@ -250,7 +250,7 @@
 /obj/item/weapon/storage/fancy/cigarettes/cigpack_syndicate/New()
 	..()
 	for(var/i = 1 to storage_slots)
-		reagents.add_reagent("doctorsdelight",15)
+		reagents.add_reagent("omnizine",15)
 
 
 /obj/item/weapon/storage/fancy/cigarettes/cigpack_midori

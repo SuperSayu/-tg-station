@@ -45,6 +45,9 @@
 	var/burn_dam = 0
 	var/max_damage = 0
 	var/status = ORGAN_ORGANIC
+	var/list/embedded_objects = list()
+
+
 	var/bone_status = BONE_INTACT //needed its own flag variable, otherwise it would have wrought havoc with most checks
 	var/bone_name = "bone"
 	var/break_chance_multiplier = 1
@@ -176,7 +179,7 @@
 		return 0
 
 //Returns a display name for the organ
-/obj/item/organ/limb/proc/getDisplayName() //Added "Chest" and "Head" just in case, this may not be needed - RR.
+/obj/item/organ/limb/proc/getDisplayName() //Added "Chest" and "Head" just in case, this may not be needed
 	switch(name)
 		if("l_leg")		return "left leg"
 		if("r_leg")		return "right leg"
@@ -249,5 +252,13 @@
 		M.adjustBrainLoss(1)
 
 	playsound(owner.loc, 'sound/weapons/pierce.ogg', 25)
-
 	return 1
+
+//Remove all embedded objects from all limbs on the human mob
+/mob/living/carbon/human/proc/remove_all_embedded_objects()
+	var/turf/T = get_turf(src)
+
+	for(var/obj/item/organ/limb/L in organs)
+		for(var/obj/item/I in L.embedded_objects)
+			L.embedded_objects -= I
+			I.loc = T

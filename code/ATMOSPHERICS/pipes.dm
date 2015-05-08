@@ -35,7 +35,7 @@
 		parent = new /datum/pipeline()
 		parent.build_pipeline(src)
 
-/obj/machinery/atmospherics/pipe/attackby(obj/item/weapon/W, mob/user)
+/obj/machinery/atmospherics/pipe/attackby(obj/item/weapon/W, mob/user, params)
 	if(istype(W, /obj/item/device/analyzer))
 		atmosanalyzer_scan(parent.air, user)
 		return
@@ -56,3 +56,7 @@
 			meter.transfer_fingerprints_to(PM)
 			qdel(meter)
 	..()
+
+/obj/machinery/atmospherics/pipe/proc/update_node_icon()
+	//Used for pipe painting. Overriden in the children.
+	return

@@ -128,7 +128,7 @@
 	var/range_add = 0
 	var/overheat_time = 20
 	upgrades = list("diamond" = 0, "screwdriver" = 0, "plasma" = 0)
-
+	unique_rename = 1
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/newshot()
 	..()
@@ -137,7 +137,7 @@
 		charge.range += range_add
 
 
-/obj/item/weapon/gun/energy/kinetic_accelerator/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/gun/energy/kinetic_accelerator/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	if(istype(W, /obj/item/weapon/screwdriver) && upgrades["screwdriver"] < 3)
 		upgrades["screwdriver"]++
 		overheat_time -= 1
@@ -160,6 +160,8 @@
 			if(prob(5 * (range_add + 1) * (range_add + 1)) && power_supply)
 				power_supply.rigged = 1 // This is dangerous!
 			S.use(1)
+
+	..()
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/shoot_live_shot()
 	overheat = 1
@@ -192,6 +194,7 @@
 	origin_tech = "combat=2;magnets=2;syndicate=5"
 	suppressed = 1
 	ammo_type = list(/obj/item/ammo_casing/energy/bolt)
+	unique_rename = 0
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/crossbow/large
 	name = "energy crossbow"
