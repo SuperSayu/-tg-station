@@ -52,6 +52,19 @@ datum/reagent/consumable/sugar
 	reagent_state = SOLID
 	color = "#FFFFFF" // rgb: 255, 255, 255
 	nutriment_factor = 10 * REAGENTS_METABOLISM
+	metabolization_rate = 2 * REAGENTS_METABOLISM
+	overdose_threshold = 200 // Hyperglycaemic shock
+
+datum/reagent/consumable/sugar/overdose_start(var/mob/living/M as mob)
+	M << "<span class = 'userdanger'>You go into hyperglycaemic shock! Lay off the twinkies!</span>"
+	M.sleeping += 30
+	..()
+	return
+
+datum/reagent/consumable/sugar/overdose_process(var/mob/living/M as mob)
+	M.sleeping += 3
+	..()
+	return
 
 datum/reagent/consumable/virus_food
 	name = "Virus Food"
@@ -359,7 +372,7 @@ datum/reagent/consumable/hell_ramen/on_mob_life(var/mob/living/M as mob)
 	return
 
 datum/reagent/consumable/flour
-	name = "flour"
+	name = "Flour"
 	id = "flour"
 	description = "This is what you rub all over yourself to pretend to be a ghost."
 	reagent_state = SOLID
@@ -376,3 +389,24 @@ datum/reagent/consumable/cherryjelly
 	description = "Totally the best. Only to be spread on foods with excellent lateral symmetry."
 	color = "#801E28" // rgb: 128, 30, 40
 
+datum/reagent/consumable/rice
+	name = "Rice"
+	id = "rice"
+	description = "tiny nutritious grains"
+	reagent_state = SOLID
+	nutriment_factor = 3 * REAGENTS_METABOLISM
+	color = "#FFFFFF" // rgb: 0, 0, 0
+
+datum/reagent/consumable/vanilla
+	name = "Vanilla Powder"
+	id = "vanilla"
+	description = "A fatty, bitter paste made from vanilla pods."
+	reagent_state = SOLID
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	color = "#FFFACD"
+
+datum/reagent/consumable/eggyolk
+	name = "Egg Yolk"
+	id = "eggyolk"
+	description = "It's full of protein."
+	color = "#FFB500"

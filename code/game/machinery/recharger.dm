@@ -9,10 +9,10 @@ obj/machinery/recharger
 	var/obj/item/weapon/charging = null
 
 
-obj/machinery/recharger/attackby(obj/item/weapon/G, mob/user)
+/obj/machinery/recharger/attackby(obj/item/weapon/G, mob/user, params)
 	if(istype(user,/mob/living/silicon))
 		return
-	if(istype(G, /obj/item/weapon/gun/energy) || istype(G, /obj/item/weapon/melee/baton) || istype(G,/obj/item/weapon/cloaking_device))
+	if(istype(G, /obj/item/weapon/gun/energy) || istype(G, /obj/item/weapon/melee/baton) || istype(G, /obj/item/weapon/pickaxe/drill) || istype(G,/obj/item/weapon/cloaking_device))
 		if(charging)
 			return
 
@@ -86,10 +86,22 @@ obj/machinery/recharger/process()
 					icon_state = "recharger2"
 			else
 				icon_state = "recharger3"
+
 		if(istype(charging, /obj/item/weapon/cloaking_device))
 			var/obj/item/weapon/cloaking_device/C = charging
-			if(C.battery)
-				if(C.battery.give(175))
+			if(C.bcell)
+				if(C.bcell.give(175))
+					icon_state = "recharger1"
+					use_power(200)
+				else
+					icon_state = "recharger2"
+			else
+				icon_state = "recharger3"
+
+		if(istype(charging, /obj/item/weapon/pickaxe/drill))
+			var/obj/item/weapon/pickaxe/drill/D = charging
+			if(D.bcell)
+				if(D.bcell.give(D.bcell.chargerate))
 					icon_state = "recharger1"
 					use_power(200)
 				else

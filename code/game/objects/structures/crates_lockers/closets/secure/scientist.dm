@@ -19,6 +19,10 @@
 	new /obj/item/clothing/mask/gas(src)
 	new /obj/item/clothing/glasses/science(src)
 	new /obj/item/clothing/glasses/science/science3(src)
+	new /obj/item/weapon/storage/backpack/science(src)
+	new /obj/item/weapon/storage/backpack/science(src)
+	new /obj/item/weapon/storage/backpack/satchel_tox(src)
+	new /obj/item/weapon/storage/backpack/satchel_tox(src)
 	return
 
 /obj/structure/closet/secure_closet/RD

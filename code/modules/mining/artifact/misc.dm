@@ -132,7 +132,7 @@
 	popup.set_content(dat)
 	popup.open()
 
-/obj/machinery/rad_machine/attackby(var/obj/item/artifact/A, var/mob/user)
+/obj/machinery/rad_machine/attackby(var/obj/item/artifact/A, var/mob/user, params)
 	if(istype(A))
 		if(!art)
 			user.drop_item()

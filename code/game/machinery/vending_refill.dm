@@ -193,6 +193,7 @@
 	name = "fresh food vendor"
 	desc = "Straight from the cook's hands to your mouth.  Mmm, MMM!"
 	icon_state = "nutrimat" // could use smartfridge but I want it visually distinct
+	icon = 'icons/obj/sayu_vending.dmi'
 
 	product_slogans = "Kiss the cook!;Please don't harrass the cook.;Have a snack.;Don't forget to eat!"
 	product_ads = "Don't forget to say thank you.;Please, have something to eat.;The management is not responsible for the quality of these meals."

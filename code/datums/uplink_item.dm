@@ -62,7 +62,7 @@ var/list/uplink_items = list()
 	if(!istype(U))
 		return 0
 
-	if (!user || user.stat || user.restrained())
+	if (!user || user.incapacitated())
 		return 0
 
 	// If the uplink's holder is in the user's contents
@@ -292,6 +292,14 @@ var/list/uplink_items = list()
 /datum/uplink_item/stealthy_weapons
 	category = "Stealthy and Inconspicuous Weapons"
 
+
+/datum/uplink_item/stealthy_weapons/throwingstars
+	name = "Box of Throwing Stars"
+	desc = "A box of throwing stars with a high chance of embedding themselves in people's limbs."
+	item = /obj/item/weapon/storage/box/throwing_stars
+	cost = 6
+	excludefrom = list(/datum/game_mode/nuclear)
+
 /datum/uplink_item/stealthy_weapons/sleepy_pen
 	name = "Sleepy Pen"
 	desc = "A syringe disguised as a functional pen, filled with a potent mix of drugs, including a strong anaesthetic and a chemical that is capable of blocking the movement of the vocal chords. \
@@ -419,7 +427,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/badass/syndiecigs
 	name = "Syndicate Smokes"
-	desc = "Strong flavor, dense smoke, infused with Doctor's Delight."
+	desc = "Strong flavor, dense smoke, infused with Omnizine."
 	item = /obj/item/weapon/storage/fancy/cigarettes/cigpack_syndicate
 	cost = 4
 
@@ -562,7 +570,7 @@ var/list/uplink_items = list()
 	name = "Explosive Implant"
 	desc = "An implant injected into the body, and later activated either manually or automatically upon death. Creates a moderately-sized fiery explosion. For those agents who know there is no going back."
 	item = /obj/item/weapon/storage/box/syndie_kit/imp_explosive
-	cost = 9
+	cost = 6
 
 // POINTLESS BADASSERY
 

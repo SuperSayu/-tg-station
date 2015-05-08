@@ -7,7 +7,7 @@
 	var/points = 0 //How many points this ore gets you from the ore redemption machine
 	var/refined_type = null //What this ore defaults to being refined into
 
-/obj/item/weapon/ore/attackby(obj/item/I as obj, mob/user as mob)
+/obj/item/weapon/ore/attackby(obj/item/I as obj, mob/user as mob, params)
 	if(istype(I, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/W = I
 		if(W.remove_fuel(15))
@@ -38,17 +38,22 @@
 	points = 1
 	refined_type = /obj/item/stack/sheet/glass
 
-/obj/item/weapon/ore/glass/attack_self(mob/living/user as mob) //It's magic I ain't gonna explain how instant conversion with no tool works. -- Urist
+/obj/item/weapon/ore/glass/attack_self(mob/living/user as mob)
 	user << "<span class='notice'>You use the sand to make sandstone.</span>"
-	for(var/i = 0,i < 1,i++)
-		var/obj/item/stack/sheet/mineral/sandstone/S = new (user.loc)
-		for (var/obj/item/weapon/ore/glass/G in user.loc)
-			if(S.amount < S.max_amount)
-				S.amount++
-				qdel(G)
-			else
-				i--
-				break
+	var/sandAmt = 1
+	for(var/obj/item/weapon/ore/glass/G in user.loc) // The sand on the floor
+		sandAmt += 1
+		qdel(G)
+	while(sandAmt > 0)
+		var/obj/item/stack/sheet/mineral/sandstone/SS = new /obj/item/stack/sheet/mineral/sandstone(user.loc)
+		if(sandAmt >= SS.max_amount)
+			SS.amount = SS.max_amount
+		else
+			SS.amount = sandAmt
+			for(var/obj/item/stack/sheet/mineral/sandstone/SA in user.loc)
+				if(SA != SS && SA.amount < SA.max_amount)
+					SA.attackby(SS, user) //we try to transfer all old unfinished stacks to the new stack we created.
+		sandAmt -= SS.max_amount
 	qdel(src)
 	return
 
@@ -59,7 +64,7 @@
 	points = 36
 	refined_type = /obj/item/stack/sheet/mineral/plasma
 
-/obj/item/weapon/ore/plasma/attackby(obj/item/I as obj, mob/user as mob)
+/obj/item/weapon/ore/plasma/attackby(obj/item/I as obj, mob/user as mob, params)
 	if(istype(I, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/W = I
 		if(W.welding)
@@ -114,7 +119,7 @@
 	var/det_time = 100
 	var/quality = 1 //How pure this gibtonite is, determines the explosion produced by it and is derived from the det_time of the rock wall it was taken from, higher value = better
 
-/obj/item/weapon/twohanded/required/gibtonite/attackby(obj/item/I, mob/user)
+/obj/item/weapon/twohanded/required/gibtonite/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/weapon/pickaxe) || istype(I, /obj/item/weapon/resonator))
 		GibtoniteReaction(user)
 		return
@@ -248,7 +253,7 @@
 	value = 20
 
 
-/obj/item/weapon/coin/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/coin/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	if(istype(W, /obj/item/stack/cable_coil))
 		var/obj/item/stack/cable_coil/CC = W
 		if(string_attached)

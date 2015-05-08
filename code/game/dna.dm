@@ -295,7 +295,7 @@
 
 //////////////////////////////////////////////////////////// Monkey Block
 	if(M)
-		M.update_icon = 1	//queue a full icon update at next life() call
+		M.regenerate_icons()
 	return 1
 /////////////////////////// DNA MISC-PROCS
 
@@ -433,7 +433,7 @@
 	open_machine()
 	return
 
-/obj/machinery/dna_scannernew/attackby(var/obj/item/I, mob/user)
+/obj/machinery/dna_scannernew/attackby(var/obj/item/I, mob/user, params)
 
 	if(!occupant && default_deconstruction_screwdriver(user, icon_state, icon_state, I))//sent icon_state is irrelevant...
 		update_icon()//..since we're updating the icon here, since the scanner can be unpowered when opened/closed
@@ -495,7 +495,7 @@
 	idle_power_usage = 10
 	active_power_usage = 400
 
-/obj/machinery/computer/scan_consolenew/attackby(obj/item/I as obj, mob/user as mob)
+/obj/machinery/computer/scan_consolenew/attackby(obj/item/I as obj, mob/user as mob, params)
 	if (istype(I, /obj/item/weapon/disk/data)) //INSERT SOME DISKETTES
 		if (!src.diskette)
 			user.drop_item()

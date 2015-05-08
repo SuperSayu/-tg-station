@@ -315,23 +315,12 @@
 	else
 		..()
 
-/obj/structure/closet/crate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/closet/crate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	if(istype(W, /obj/item/weapon/card) && src.allowed(user) && !locked && !opened && !broken)
 		user << "<span class='notice'>You lock \the [src].</span>"
 		src.locked = 1
 		overlays.Cut()
 		overlays += redlight
-		add_fingerprint(user)
-		return
-	else if (istype(W, /obj/item/weapon/melee/energy/blade) && locked && !broken)
-		overlays.Cut()
-		overlays += emag
-		overlays += sparks
-		spawn(6) overlays -= sparks //Tried lots of stuff but nothing works right. so i have to use this *sadface*
-		playsound(src.loc, "sparks", 60, 1)
-		src.locked = 0
-		src.broken = 1
-		user << "<span class='notice'>You unlock \the [src].</span>"
 		add_fingerprint(user)
 		return
 
@@ -352,10 +341,11 @@
 /obj/structure/closet/crate/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
-/obj/structure/closet/crate/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/closet/crate/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	if(istype(W, /obj/item/weapon/rcs) && !src.opened)
 		..()
 		return
+
 	if(opened)
 		if(isrobot(user))
 			return

@@ -9,7 +9,7 @@
 	var/obj/item/weapon/reagent_containers/B1 = null
 	var/obj/item/weapon/reagent_containers/B2 = null
 
-	attackby(var/obj/item/I as obj, var/mob/living/ML as mob)
+	attackby(var/obj/item/I as obj, var/mob/living/ML as mob, params)
 		if(istype(I,/obj/item/weapon/reagent_containers/glass/beaker) || istype(I,/obj/item/weapon/reagent_containers/glass/bottle) || istype(I,/obj/item/weapon/reagent_containers/food/drinks) || istype(I,/obj/item/weapon/reagent_containers/spray) || istype(I,/obj/item/weapon/reagent_containers/hypospray))
 			if(B1 && B2)
 				ML << "\red Both slots on [src] are full!"

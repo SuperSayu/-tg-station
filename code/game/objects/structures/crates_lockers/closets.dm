@@ -14,7 +14,7 @@
 	var/wall_mounted = 0 //never solid (You can always pass over it)
 	var/health = 100
 	var/lastbang
-	var/max_mob_size = 1 //Biggest mob_size accepted by the container
+	var/max_mob_size = MOB_SIZE_HUMAN //Biggest mob_size accepted by the container
 	var/mob_storage_capacity = 3 // how many human sized mob/living can fit together inside a closet.
 	var/storage_capacity = 30 //This is so that someone can't pack hundreds of items in a locker/crate
 							  //then open it in a populated area to crash clients.
@@ -153,8 +153,8 @@
 		dump_contents()
 		qdel(src)
 
+/obj/structure/closet/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 
-/obj/structure/closet/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/rcs) && !src.opened)
 		var/obj/item/weapon/rcs/E = W
 		if(E.rcharges != 0)
@@ -322,7 +322,7 @@
 	src.add_fingerprint(user)
 
 	if(!src.toggle())
-		usr << "<span class='notice'>It won't budge!</span>"
+		user << "<span class='notice'>It won't budge!</span>"
 
 /obj/structure/closet/verb/verb_toggleopen()
 	set src in oview(1)

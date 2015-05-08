@@ -38,7 +38,7 @@
 	user.examinate(src)
 
 
-/obj/item/weapon/photo/attackby(obj/item/weapon/P, mob/user)
+/obj/item/weapon/photo/attackby(obj/item/weapon/P, mob/user, params)
 	if(istype(P, /obj/item/weapon/pen) || istype(P, /obj/item/toy/crayon))
 		var/txt = sanitize(input(user, "What would you like to write on the back?", "Photo Writing", null)  as text)
 		txt = copytext(txt, 1, 128)
@@ -135,7 +135,7 @@
 	return
 
 
-/obj/item/device/camera/attackby(obj/item/I, mob/user)
+/obj/item/device/camera/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/device/camera_film))
 		if(pictures_left)
 			user << "<span class='notice'>[src] still has some film in it!</span>"
@@ -336,7 +336,7 @@ obj/item/device/camera/siliconcam/proc/selectpicture(var/obj/item/device/camera/
 	var/list/nametemp = list()
 	var/find
 	if(targetloc.aipictures.len == 0)
-		usr << "<span class='userdanger'>No images saved</span>"
+		usr << "<span class='boldannounce'>No images saved</span>"
 		return
 	for(var/datum/picture/t in targetloc.aipictures)
 		nametemp += t.fields["name"]

@@ -5,7 +5,8 @@
 	name = "chocolate egg"
 	desc = "Such, sweet, fattening food."
 	icon_state = "chocolateegg"
-	list_reagents = list("nutriment" = 1, "vitamin" = 1)
+	bonus_reagents = list("nutriment" = 1, "vitamin" = 1)
+	list_reagents = list("nutriment" = 4, "sugar" = 2, "cocoa" = 2)
 	filling_color = "#A0522D"
 
 /obj/item/weapon/reagent_containers/food/snacks/egg
@@ -22,7 +23,7 @@
 	reagents.reaction(hit_atom, TOUCH)
 	del(src) // Not qdel, because it'll hit other mobs then the floor for runtimes.
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/reagent_containers/food/snacks/egg/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	if(istype( W, /obj/item/toy/crayon ))
 		var/obj/item/toy/crayon/C = W
 		var/clr = C.colourName
@@ -73,27 +74,30 @@
 	name = "fried egg"
 	desc = "A fried egg, with a touch of salt and pepper."
 	icon_state = "friedegg"
-	list_reagents = list("nutriment" = 1, "vitamin" = 1)
+	bonus_reagents = list("nutriment" = 1, "vitamin" = 1)
 	bitesize = 1
 	filling_color = "#FFFFF0"
+	list_reagents = list("nutriment" = 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledegg
 	name = "boiled egg"
 	desc = "A hard boiled egg."
 	icon_state = "egg"
-	list_reagents = list("nutriment" = 1, "vitamin" = 1)
+	bonus_reagents = list("nutriment" = 1, "vitamin" = 1)
 	filling_color = "#FFFFF0"
+	list_reagents = list("nutriment" = 2, "vitamin" = 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
 	name = "omelette du fromage"
 	desc = "That's all you can say!"
 	icon_state = "omelette"
 	trash = /obj/item/trash/plate
-	list_reagents = list("nutriment" = 1, "vitamin" = 2)
+	bonus_reagents = list("nutriment" = 1, "vitamin" = 2)
+	list_reagents = list("nutriment" = 8, "vitamin" = 1)
 	bitesize = 1
 	w_class = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/omelette/attackby(obj/item/weapon/W, mob/user)
+/obj/item/weapon/reagent_containers/food/snacks/omelette/attackby(obj/item/weapon/W, mob/user, params)
 	if(istype(W,/obj/item/weapon/kitchen/utensil/fork))
 		if(W.icon_state == "forkloaded")
 			user << "<span class='notice'>You already have omelette on your fork.</span>"
@@ -113,6 +117,7 @@
 	name = "eggs benedict"
 	desc = "There is only one egg on this, how rude."
 	icon_state = "benedict"
-	list_reagents = list("vitamin" = 4)
+	bonus_reagents = list("vitamin" = 4)
 	trash = /obj/item/trash/plate
 	w_class = 3
+	list_reagents = list("nutriment" = 6, "vitamin" = 4)

@@ -37,7 +37,7 @@
 		icon_state = "[base_state]1-p"
 
 //Don't want to render prison breaks impossible
-/obj/machinery/flasher/attackby(obj/item/weapon/W, mob/user)
+/obj/machinery/flasher/attackby(obj/item/weapon/W, mob/user, params)
 	if (istype(W, /obj/item/weapon/wirecutters))
 		if (bulb)
 			user.visible_message("<span class='warning'>[user] begins to disconnect [src]'s flashbulb.</span>", "<span class='warning'>You begin to disconnect [src]'s flashbulb.</span>")
@@ -78,26 +78,13 @@
 	last_flash = world.time
 	use_power(1000)
 
-	for (var/mob/O in viewers(src, null))
-		if (get_dist(src, O) > src.range)
+	for (var/mob/living/L in viewers(src, null))
+		if (get_dist(src, L) > range)
 			continue
 
-		if (istype(O, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = O
-			if(!H.eyecheck() <= 0)
-				continue
+		if(L.flash_eyes())
+			L.Weaken(strength)
 
-		if (istype(O, /mob/living/carbon/alien))//So aliens don't get flashed (they have no external eyes)/N
-			continue
-
-		O.Weaken(strength)
-		if ((O.eye_stat > 15 && prob(O.eye_stat + 50)))
-			flick("e_flash", O:flash)
-			O.eye_stat += rand(1, 2)
-		else
-			if(!O.eye_blind)
-				flick("flash", O:flash)
-				O.eye_stat += rand(0, 2)
 	return 1
 
 
@@ -127,7 +114,7 @@
 		bulb.burn_out()
 		power_change()
 
-/obj/machinery/flasher/portable/attackby(obj/item/weapon/W, mob/user)
+/obj/machinery/flasher/portable/attackby(obj/item/weapon/W, mob/user, params)
 	if (istype(W, /obj/item/weapon/wrench))
 		playsound(src.loc, 'sound/items/Ratchet.ogg', 100, 1)
 
@@ -151,7 +138,7 @@
 /obj/machinery/flasher_button/attack_paw(mob/user)
 	return attack_hand(user)
 
-/obj/machinery/flasher_button/attackby(obj/item/weapon/W, mob/user)
+/obj/machinery/flasher_button/attackby(obj/item/weapon/W, mob/user, params)
 	return attack_hand(user)
 
 /obj/machinery/flasher_button/attack_hand(mob/user)

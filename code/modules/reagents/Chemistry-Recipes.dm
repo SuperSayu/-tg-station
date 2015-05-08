@@ -183,8 +183,8 @@ silicate
 	name = "Sodium Chloride"
 	id = "sodiumchloride"
 	result = "sodiumchloride"
-	required_reagents = list("sodium" = 1, "chlorine" = 1)
-	result_amount = 2
+	required_reagents = list("water" = 1, "sodium" = 1, "chlorine" = 1)
+	result_amount = 3
 
 /datum/chemical_reaction/flash_powder
 	name = "Flash powder"
@@ -198,7 +198,7 @@ silicate
 	s.set_up(2, 1, location)
 	s.start()
 	for(var/mob/living/carbon/C in get_hearers_in_view(5, location))
-		if(C.eyecheck())
+		if(C.check_eye_prot())
 			continue
 		flick("e_flash", C.flash)
 		if(get_dist(C, location) < 4)
@@ -610,7 +610,7 @@ datum/chemical_reaction/pestkiller
 		O.show_message(text("<span class='danger'>The slime extract begins to vibrate violently !</span>"), 1)
 	spawn(50)
 
-		chemical_mob_spawn(holder, 1, "Gold Slime")
+		chemical_mob_spawn(holder, 5, "Gold Slime")
 
 /datum/chemical_reaction/slimecritlesser
 	name = "Slime Crit Lesser"
@@ -626,7 +626,7 @@ datum/chemical_reaction/pestkiller
 		O.show_message(text("<span class='danger'>The slime extract begins to vibrate violently !</span>"), 1)
 	spawn(50)
 
-		chemical_mob_spawn(holder, 1, "Lesser Gold Slime")
+		chemical_mob_spawn(holder, 1, "Lesser Gold Slime", "neutral")
 
 //Silver
 /datum/chemical_reaction/slimebork
@@ -647,8 +647,7 @@ datum/chemical_reaction/pestkiller
 	playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
 	for(var/mob/living/carbon/human/M in viewers(get_turf(holder.my_atom), null))
-		if(M:eyecheck() <= 0)
-			flick("e_flash", M.flash)
+		M.flash_eyes()
 
 	for(var/i = 1, i <= 4 + rand(1,2), i++)
 		var/chosen = pick(borks)
@@ -678,8 +677,7 @@ datum/chemical_reaction/pestkiller
 	playsound(get_turf(holder.my_atom), 'sound/effects/phasein.ogg', 100, 1)
 
 	for(var/mob/living/carbon/human/M in viewers(get_turf(holder.my_atom), null))
-		if(M:eyecheck() <= 0)
-			flick("e_flash", M.flash)
+		M.flash_eyes()
 
 	for(var/i = 1, i <= 4 + rand(1,2), i++)
 		var/chosen = pick(borks)
@@ -877,7 +875,7 @@ datum/chemical_reaction/pestkiller
 	required_other = 1
 /datum/chemical_reaction/slimeppotion/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
-	var/obj/item/weapon/slimepotion/P = new /obj/item/weapon/slimepotion
+	var/obj/item/slimepotion/P = new /obj/item/slimepotion
 	P.loc = get_turf(holder.my_atom)
 
 
@@ -920,7 +918,7 @@ datum/chemical_reaction/pestkiller
 	required_other = 1
 /datum/chemical_reaction/slimepotion2/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used","[replacetext(name," ","_")]")
-	var/obj/item/weapon/slimepotion2/P = new /obj/item/weapon/slimepotion2
+	var/obj/item/slimepotion2/P = new /obj/item/slimepotion2
 	P.loc = get_turf(holder.my_atom)
 //Adamantine
 /datum/chemical_reaction/slimegolem
@@ -955,10 +953,9 @@ datum/chemical_reaction/pestkiller
 	playsound(TO, 'sound/effects/phasein.ogg', 100, 1)
 
 	var/list/flashers = list()
-	for(var/mob/living/carbon/human/M in viewers(TO, null))
-		if(M:eyecheck() <= 0)
-			flick("e_flash", M.flash) // flash dose faggots
-			flashers += M
+	for(var/mob/living/carbon/human/H in viewers(TO, null))
+		if(H.flash_eyes())
+			flashers += H
 
 
 	var/t_range = rand(0,2) * created_volume

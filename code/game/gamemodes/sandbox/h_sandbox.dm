@@ -32,8 +32,7 @@ datum/hSB
 		/obj/item/device/uplink/hidden, /obj/item/smallDelivery, /obj/item/missile,/obj/item/projectile,
 		/obj/item/borg/sight,/obj/item/borg/overdrive,/obj/item/borg/stun,/obj/item/weapon/bombcore/badmin,
 		/obj/item/organ, /obj/item/alien_embryo, /obj/item/weapon/robot_module, /obj/item/weapon/storage/secure/safe,
-		/obj/item/weapon/storage/belt/bluespace/admin, /obj/item/weapon/grenade/clusterbuster/apocalypse,/obj/item/weapon/veilrender,
-		/obj/item/weapon/grenade/clusterbuster/node,/obj/item/weapon/grenade/clusterbuster/segment,/obj/item/weapon/grenade/flashbang/cluster, /obj/item/weapon/grenade/flashbang/clusterbang/segment)
+		/obj/item/weapon/storage/belt/bluespace/admin, /obj/item/weapon/grenade/clusterbuster/apocalypse,/obj/item/weapon/veilrender)
 
 datum/hSB/proc/update()
 	var/global/list/hrefs = list(
@@ -118,7 +117,7 @@ datum/hSB/Topic(href, href_list)
 			if("hsbtobj")
 				if(!admin) return
 				if(hsboxspawn)
-					world << "<span class='userdanger'>Sandbox:</span> <b>\black[usr.key] has disabled object spawning!</b>"
+					world << "<span class='boldannounce'>Sandbox:</span> <b>\black[usr.key] has disabled object spawning!</b>"
 					hsboxspawn = 0
 					return
 				else

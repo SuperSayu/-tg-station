@@ -14,13 +14,17 @@
 /obj/item/weapon/gun/projectile/revolver/process_chamber()
 	return ..(0, 1)
 
-/obj/item/weapon/gun/projectile/revolver/attackby(var/obj/item/A as obj, mob/user as mob)
-	var/num_loaded = magazine.attackby(A, user, 1)
+/obj/item/weapon/gun/projectile/revolver/attackby(var/obj/item/A as obj, mob/user as mob, params)
+	var/num_loaded = magazine.attackby(A, user, params, 1)
 	if(num_loaded)
 		user << "<span class='notice'>You load [num_loaded] shell\s into \the [src].</span>"
 		A.update_icon()
 		update_icon()
 		chamber_round()
+
+	if(unique_rename)
+		if(istype(A, /obj/item/weapon/pen))
+			rename_gun(user)
 
 /obj/item/weapon/gun/projectile/revolver/attack_self(mob/living/user as mob)
 	var/num_unloaded = 0
@@ -57,6 +61,17 @@
 	icon_state = "detective"
 	origin_tech = "combat=2;materials=2"
 	mag_type = /obj/item/ammo_box/magazine/internal/cylinder/rev38
+	unique_rename = 1
+	unique_reskin = 1
+
+/obj/item/weapon/gun/projectile/revolver/detective/New()
+	..()
+	options["Default"] = "detective"
+	options["Leopard Spots"] = "detective_leopard"
+	options["Black Panther"] = "detective_panther"
+	options["Gold Trim"] = "detective_gold"
+	options["The Peacemaker"] = "detective_peacemaker"
+	options["Cancel"] = null
 
 /obj/item/weapon/gun/projectile/revolver/detective/process_fire(atom/target as mob|obj|turf, mob/living/user as mob|obj, var/message = 1, params)
 	if(magazine.caliber != initial(magazine.caliber))
@@ -69,40 +84,7 @@
 			return 0
 	..()
 
-
-/obj/item/weapon/gun/projectile/revolver/detective/verb/rename_gun()
-	set name = "Name Gun"
-	set category = "Object"
-	set desc = "Click to rename your gun."
-
-	var/mob/M = usr
-	var/input = stripped_input(M,"What do you want to name the gun?", ,"", MAX_NAME_LEN)
-
-	if(src && input && !M.stat && in_range(M,src) && !M.restrained() && M.canmove)
-		name = input
-		M << "You name the gun [input]. Say hello to your new friend."
-		return 1
-
-/obj/item/weapon/gun/projectile/revolver/detective/verb/reskin_gun()
-	set name = "Reskin gun"
-	set category = "Object"
-	set desc = "Click to reskin your gun."
-
-	var/mob/M = usr
-	var/list/options = list()
-	options["The Original"] = "detective"
-	options["Leopard Spots"] = "detective_leopard"
-	options["Black Panther"] = "detective_panther"
-	options["Gold Trim"] = "detective_gold"
-	options["The Peacemaker"] = "detective_peacemaker"
-	var/choice = input(M,"What do you want to skin the gun to?","Reskin Gun") in options
-
-	if(src && choice && !M.stat && in_range(M,src) && !M.restrained() && M.canmove)
-		icon_state = options[choice]
-		M << "Your gun is now skinned as [choice]. Say hello to your new friend."
-		return 1
-
-/obj/item/weapon/gun/projectile/revolver/detective/attackby(var/obj/item/A as obj, mob/user as mob)
+/obj/item/weapon/gun/projectile/revolver/detective/attackby(var/obj/item/A as obj, mob/user as mob, params)
 	..()
 	if(istype(A, /obj/item/weapon/screwdriver))
 		if(magazine.caliber == "38")
@@ -145,7 +127,7 @@
 
 /obj/item/weapon/gun/projectile/revolver/russian
 	name = "russian revolver"
-	desc = "A Russian-made revolver for drinking games. Uses .357 ammo, and has a mechanism that spins the chamber before each trigger pull."
+	desc = "A Russian-made revolver for drinking games. Uses .357 ammo, and has a mechanism requiring you to spin the chamber before each trigger pull."
 	origin_tech = "combat=2;materials=2"
 	mag_type = /obj/item/ammo_box/magazine/internal/cylinder/rus357
 	var/spun = 0
@@ -162,7 +144,7 @@
 		chamber_round()
 	spun = 1
 
-/obj/item/weapon/gun/projectile/revolver/russian/attackby(var/obj/item/A as obj, mob/user as mob)
+/obj/item/weapon/gun/projectile/revolver/russian/attackby(var/obj/item/A as obj, mob/user as mob, params)
 	var/num_loaded = ..()
 	if(num_loaded)
 		user.visible_message("<span class='warning'>[user] loads a single bullet into the revolver and spins the chamber.</span>", "<span class='warning'>You load a single bullet into the chamber and spin it.</span>")
@@ -193,13 +175,17 @@
 			user << "<span class='notice'>[src] is empty.</span>"
 
 /obj/item/weapon/gun/projectile/revolver/russian/afterattack(atom/target as mob|obj|turf, mob/living/user as mob|obj, flag, params)
-	if(user.a_intent == "harm") // Flogging action
-		return
+	if(flag)
+		if(!(target in user.contents) && ismob(target))
+			if(user.a_intent == "harm") // Flogging action
+				return
+
 	if(isliving(user))
 		if(!can_trigger_gun(user))
 			return
 	if(target != user)
-		user << "<span class='warning'>A mechanism prevents you from shooting anyone but yourself.</span>"
+		if(ismob(target))
+			user << "<span class='warning'>A mechanism prevents you from shooting anyone but yourself.</span>"
 		return
 
 	if(ishuman(user))
@@ -216,7 +202,7 @@
 				playsound(user, fire_sound, 50, 1)
 				var/obj/item/organ/limb/affecting = H.get_organ(check_zone(user.zone_sel.selecting))
 				var/limb_name = affecting.getDisplayName()
-				if(affecting == "head" || affecting == "eyes" || affecting == "mouth")
+				if(affecting.name == "head" || affecting.name == "eyes" || affecting.name == "mouth")
 					user.apply_damage(300, BRUTE, affecting)
 					user.visible_message("<span class='danger'>[user.name] fires [src] at \his head!</span>", "<span class='userdanger'>You fire [src] at your head!</span>", "You hear a gunshot!")
 				else

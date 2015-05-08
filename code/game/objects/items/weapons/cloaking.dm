@@ -14,14 +14,14 @@
 	origin_tech = "magnets=3;syndicate=4"
 	var/active_power_use = 15
 	var/mob/living/cloaked_user = null
-	var/obj/item/weapon/stock_parts/cell/battery
+	var/obj/item/weapon/stock_parts/cell/bcell
 
 	action_button_name = "Activate Cloak"
 
 /obj/item/weapon/cloaking_device/New()
 	..()
 	SSobj.processing |= src
-	battery = new
+	bcell = new
 
 /obj/item/weapon/cloaking_device/Del()
 	active=0
@@ -32,13 +32,13 @@
 
 /obj/item/weapon/cloaking_device/process()
 	if(!active || !istype(loc,/mob/living/carbon/human))
-		if(active && !battery.use(active_power_use))
+		if(active && !bcell.use(active_power_use))
 			active = 0
 			visible_message("[src] flickers back into view!")
 		update_icon()
 		return
 
-	if(!battery || !battery.use(active_power_use))
+	if(!bcell || !bcell.use(active_power_use))
 		if(active)
 			if(istype(loc,/mob))
 				loc.visible_message("[loc] flickers back into view!")
@@ -95,7 +95,7 @@
 	..()
 */
 /obj/item/weapon/cloaking_device/attack_self(mob/user as mob)
-	if(battery.charge < active_power_use && !active)
+	if(bcell.charge < active_power_use && !active)
 		user << "You flip the switch, but nothing happens!"
 		return
 	src.active = !( src.active )

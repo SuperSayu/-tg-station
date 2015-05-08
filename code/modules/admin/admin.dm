@@ -499,7 +499,7 @@ var/global/floorIsLava = 0
 	if(confirm == "Cancel")
 		return
 	if(confirm == "Yes")
-		world << "<span class='userdanger'>Restarting world!</span> <span class='adminnotice'> Initiated by [usr.client.holder.fakekey ? "Admin" : usr.key]!</span>"
+		world << "<span class='boldannounce'>Restarting world!</span> <span class='adminnotice'> Initiated by [usr.client.holder.fakekey ? "Admin" : usr.key]!</span>"
 		log_admin("[key_name(usr)] initiated a reboot.")
 
 		feedback_set_details("end_error","admin reboot - by [usr.key] [usr.client.holder.fakekey ? "(stealth)" : ""]")
@@ -654,7 +654,7 @@ var/global/floorIsLava = 0
 	if(!usr.client.holder)	return
 	if( alert("Reboot server?",,"Yes","No") == "No")
 		return
-	world << "<span class='userdanger'>Rebooting world!</span> <span class='adminnotice'>Initiated by [usr.client.holder.fakekey ? "Admin" : usr.key]!</span>"
+	world << "<span class='boldannounce'>Rebooting world!</span> <span class='adminnotice'>Initiated by [usr.client.holder.fakekey ? "Admin" : usr.key]!</span>"
 	log_admin("[key_name(usr)] initiated an immediate reboot.")
 
 	feedback_set_details("end_error","immediate admin reboot - by [usr.key] [usr.client.holder.fakekey ? "(stealth)" : ""]")
@@ -816,22 +816,29 @@ var/global/floorIsLava = 0
 			var/J_title = html_encode(job.title)
 			var/J_opPos = html_encode(job.total_positions - (job.total_positions - job.current_positions))
 			var/J_totPos = html_encode(job.total_positions)
-			if(job.total_positions <= 0)
-				dat += "[J_title]: [J_opPos]"
+			if(job.total_positions < 0)
+				dat += "[J_title]: [J_opPos]   (unlimited)"
 			else
 				dat += "[J_title]: [J_opPos]/[J_totPos]"
-			if(initial(job.total_positions) > 0)
+
+			if(job.title == "AI" || job.title == "Cyborg")
+				dat += "   (Cannot Late Join)<br>"
+				continue
+			if(job.total_positions >= 0)
 				dat += "   <A href='?src=\ref[src];addjobslot=[job.title]'>Add</A>  |  "
 				if(job.total_positions > job.current_positions)
-					dat += "<A href='?src=\ref[src];removejobslot=[job.title]'>Remove</A>"
+					dat += "<A href='?src=\ref[src];removejobslot=[job.title]'>Remove</A>  |  "
 				else
-					dat += "Remove"
+					dat += "Remove  |  "
+				dat += "<A href='?src=\ref[src];unlimitjobslot=[job.title]'>Unlimit</A>"
+			else
+				dat += "   <A href='?src=\ref[src];limitjobslot=[job.title]'>Limit</A>"
 			dat += "<br>"
 
 	dat += "</body>"
 	var/winheight = 100 + (count * 20)
 	winheight = min(winheight, 690)
-	usr << browse(dat, "window=players;size=316x[winheight]")
+	usr << browse(dat, "window=players;size=375x[winheight]")
 
 //
 //

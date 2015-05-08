@@ -22,7 +22,7 @@
 	if(buckled_mob) // moves the unlucky person around. wheeeeeee!
 		buckled_mob.loc = loc
 
-/obj/structure/target_stake/attackby(obj/item/W as obj, mob/user as mob)
+/obj/structure/target_stake/attackby(obj/item/W as obj, mob/user as mob, params)
 	// Putting objects on the stake. Most importantly, targets
 	if(pinned_target)
 		return // get rid of that pinned target first!

@@ -37,7 +37,7 @@
 	return
 
 
-/obj/structure/janitorialcart/attackby(obj/item/I, mob/user)
+/obj/structure/janitorialcart/attackby(obj/item/I, mob/user, params)
 	var/fail_msg = "<span class='notice'>There is already one of those in [src].</span>"
 
 	if(istype(I, /obj/item/weapon/mop))
@@ -195,7 +195,7 @@
 		user << "It has been upgraded with a floor buffer."
 
 
-/obj/structure/stool/bed/chair/janicart/attackby(obj/item/I, mob/user)
+/obj/structure/stool/bed/chair/janicart/attackby(obj/item/I, mob/user, params)
 	if(istype(I, keytype))
 		user << "Hold [I] in one of your hands while you drive this [callme]."
 	else if(istype(I, /obj/item/weapon/storage/bag/trash))
@@ -251,9 +251,14 @@
 	else
 		user << "<span class='notice'>You'll need the keys in one of your hands to drive this [callme].</span>"
 
-
 /obj/structure/stool/bed/chair/janicart/user_buckle_mob(mob/living/M, mob/user)
-	M.loc = loc
+	if(user.incapacitated()) //user can't move the mob on the janicart's turf if incapacitated
+		return
+	for(var/atom/movable/A in get_turf(src)) //we check for obstacles on the turf.
+		if(A.density)
+			if(A != src && A != M)
+				return
+	M.loc = loc //we move the mob on the janicart's turf before checking if we can buckle.
 	..()
 	update_mob()
 

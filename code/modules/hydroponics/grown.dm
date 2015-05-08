@@ -17,7 +17,7 @@
 	var/production = 0
 	var/yield = 0
 	var/plant_type = 0
-	icon = 'icons/obj/harvest.dmi'
+	icon = 'icons/obj/hydroponics/harvest.dmi'
 	potency = -1
 	dried_type = -1 //bit different. saves us from having to define each stupid grown's dried_type as itself. If you don't want a plant to be driable (watermelons) set this to null in the time definition.
 
@@ -72,7 +72,7 @@
 		return 1
 	return 0
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/item/weapon/reagent_containers/food/snacks/grown/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	..()
 	if (istype(O, /obj/item/device/analyzer/plant_analyzer))
 		var/msg
@@ -96,7 +96,7 @@
 		return
 	return
 
-/obj/item/weapon/grown/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/item/weapon/grown/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	..()
 	if (istype(O, /obj/item/device/analyzer/plant_analyzer))
 		var/msg
@@ -147,6 +147,19 @@
 		reagents.add_reagent("sugar", 1 + round((potency / 15), 1))
 		bitesize = 1 + round(reagents.total_volume / 2, 1)
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/bluecherries
+	seed = /obj/item/seeds/bluecherryseed
+	name = "blue cherries"
+	desc = "They're cherries that are blue."
+	icon_state = "bluecherry"
+	filling_color = "#6495ED"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/bluecherries/add_juice()
+	if(..())
+		reagents.add_reagent("nutriment", 1 + round((potency / 15), 1))
+		reagents.add_reagent("sugar", 1 + round((potency / 50), 1))
+		bitesize = 1 + round(reagents.total_volume / 2, 1)
+
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/poppy
 	seed = /obj/item/seeds/poppyseed
@@ -159,14 +172,27 @@
 /obj/item/weapon/reagent_containers/food/snacks/grown/poppy/add_juice()
 	if(..())
 		reagents.add_reagent("nutriment", 1 + round((potency / 20), 1))
-		reagents.add_reagent("salglu_solution", 1 + round((potency / 10), 1))
+		reagents.add_reagent("hotline", 3 + round((potency / 10), 1))
 		bitesize = 1 + round(reagents.total_volume / 3, 1)
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/poppy/lily
+	seed = /obj/item/seeds/lilyseed
+	name = "lily"
+	desc = "A beautiful orange flower"
+	icon_state = "lily"
+	filling_color = "#FFA500"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/poppy/geranium
+	seed = /obj/item/seeds/geraniumseed
+	name = "geranium"
+	desc = "A beautiful blue flower"
+	icon_state = "geranium"
+	filling_color = "#008B8B"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/harebell
 	seed = /obj/item/seeds/harebell
 	name = "harebell"
-	desc = "\"I'll sweeten thy sad grave: thou shalt not lack the flower that's like thy face, pale primrose, nor the azured hare-bell, like thy veins; no, nor the leaf of eglantine, whom not to slander, out-sweeten’d not thy breath.\""
+	desc = "\"I'll sweeten thy sad grave: thou shalt not lack the flower that's like thy face, pale primrose, nor the azured hare-bell, like thy veins; no, nor the leaf of eglantine, whom not to slander, out-sweetenâ€™d not thy breath.\""
 	icon_state = "harebell"
 	slot_flags = SLOT_HEAD
 	filling_color = "#E6E6FA"
@@ -190,7 +216,7 @@
 		reagents.add_reagent("vitamin", 1 + round((potency / 25), 1))
 		bitesize = reagents.total_volume
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/potato/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/reagent_containers/food/snacks/grown/potato/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	..()
 	if(istype(W, /obj/item/stack/cable_coil))
 		var/obj/item/stack/cable_coil/C = W
@@ -324,6 +350,19 @@
 		reagents.add_reagent("cocoa", 4 + round((potency / 5), 1))
 		bitesize = 1 + round(reagents.total_volume / 2, 1)
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/vanillapod
+	seed = /obj/item/seeds/vanillapodseed
+	name = "vanilla pod"
+	desc = "Fattening... Mmmmm... vanilla."
+	icon_state = "vanillapod"
+	filling_color = "#FFD700"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/vanillapod/add_juice()
+	if(..())
+		reagents.add_reagent("nutriment", 1 + round((potency / 10), 1))
+		reagents.add_reagent("vanilla", 4 + round((potency / 5), 1))
+		bitesize = 1 + round(reagents.total_volume / 2, 1)
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/sugarcane
 	seed = /obj/item/seeds/sugarcaneseed
 	name = "sugarcane"
@@ -375,7 +414,6 @@
 	..()
 	reagents.add_reagent("omnizine", 1 + round(potency / 8, 1))
 	reagents.add_reagent("synaptizine", 1 + round(potency / 8, 1))
-	reagents.add_reagent("morphine", 1 + round(potency / 10, 1))
 	reagents.add_reagent("space_drugs", 1 + round(potency / 10, 1))
 	reagents.add_reagent("vitamin", 1 + round((potency / 25), 1))
 
@@ -417,7 +455,7 @@
 	..()
 	reagents.add_reagent("gold", 1 + round((potency / 5), 1))
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/apple/gold/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/item/weapon/reagent_containers/food/snacks/grown/apple/gold/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	. = ..()
 	if (istype(O, /obj/item/device/analyzer/plant_analyzer))
 		user << "<span class='info'>- Mineral Content: <i>[reagents.get_reagent_amount("gold")]%</i></span>"
@@ -440,6 +478,19 @@
 		reagents.add_reagent("vitamin", 1 + round((potency / 25), 1))
 		bitesize = 1 + round(reagents.total_volume / 2, 1)
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/holymelon
+	seed = /obj/item/seeds/holymelonseed
+	name = "holymelon"
+	desc = "The water within this melon has been blessed by some deity that's particularly fond of watermelon."
+	icon_state = "holymelon"
+	filling_color = "#FFD700"
+	dried_type = null
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/holymelon/add_juice()
+	if(..())
+		reagents.add_reagent("holywater", 1 + round((potency / 6), 1))
+		bitesize = 1 + round(reagents.total_volume / 2, 1)
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin
 	seed = /obj/item/seeds/pumpkinseed
 	name = "pumpkin"
@@ -453,14 +504,26 @@
 		reagents.add_reagent("vitamin", 1 + round((potency / 25), 1))
 		bitesize = 1 + round(reagents.total_volume / 2, 1)
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	..()
-	if(istype(W, /obj/item/weapon/circular_saw) || istype(W, /obj/item/weapon/hatchet) || istype(W, /obj/item/weapon/twohanded/fireaxe) || istype(W, /obj/item/weapon/kitchen/utensil/knife) || istype(W, /obj/item/weapon/kitchenknife) || istype(W, /obj/item/weapon/melee/energy))
+	if(is_sharp(W))
 		user.show_message("<span class='notice'>You carve a face into [src]!</span>", 1)
 		new /obj/item/clothing/head/hardhat/pumpkinhead (user.loc)
 		qdel(src)
 		return
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/blumpkin
+	seed = /obj/item/seeds/blumpkinseed
+	name = "blumpkin"
+	desc = "When you're making a mess this blumpkin's there to clean you up."
+	icon_state = "blumpkin"
+	filling_color = "#87CEFA"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/blumpkin/add_juice()
+	if(..())
+		reagents.add_reagent("nutriment", 1 + round((potency / 6), 1))
+		reagents.add_reagent("ammonia", 1 + round((potency / 6), 1))
+		bitesize = 1 + round(reagents.total_volume / 2, 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/citrus/ //abstract type
 	seed = /obj/item/seeds/limeseed
@@ -510,6 +573,43 @@
 		reagents.add_reagent("sugar", 1 + round((potency / 5), 1))
 		bitesize = 1 + round(reagents.total_volume / 2, 1)
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/sweetpotato
+	seed = /obj/item/seeds/sweetpotatoseed
+	name = "sweet potato"
+	desc = "It's sweet."
+	icon_state = "sweetpotato"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/sweetpotato/add_juice()
+	if(..())
+		reagents.add_reagent("nutriment", 1 + round((potency / 10), 1))
+		reagents.add_reagent("vitamin", 1 + round((potency / 10), 1))
+		reagents.add_reagent("sugar", 1 + round((potency / 10), 1))
+		bitesize = reagents.total_volume
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/parsnip
+	seed = /obj/item/seeds/parsnipseed
+	name = "parsnip"
+	desc = "Closely related to carrots."
+	icon_state = "parsnip"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/parsnip/add_juice()
+	if(..())
+		reagents.add_reagent("nutriment", 1 + round((potency / 20), 1))
+		reagents.add_reagent("vitamin", 1 + round((potency / 20), 1))
+		bitesize = 1 + round(reagents.total_volume / 2, 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/redbeet
+	seed = /obj/item/seeds/redbeetseed
+	name = "red beet"
+	desc = "You can't beat red beet."
+	icon_state = "redbeet"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/redbeet/add_juice()
+	if(..())
+		reagents.add_reagent("nutriment", round((potency / 20), 1))
+		reagents.add_reagent("vitamin", 1 + round((potency / 20), 1))
+		bitesize = 1 + round(reagents.total_volume / 2, 1)
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/banana
 	seed = /obj/item/seeds/bananaseed
 	name = "banana"
@@ -536,6 +636,21 @@
 	user.visible_message("<B>[user]</B> laughs so hard they begin to suffocate!")
 	return (OXYLOSS)
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/mimana
+	seed = /obj/item/seeds/mimanaseed
+	name = "mimana"
+	desc = "It's an excellent prop for a mime."
+	icon_state = "mimana"
+	trash = /obj/item/weapon/grown/bananapeel/mimanapeel
+	filling_color = "#FFFFEE"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/mimana/add_juice()
+	if(..())
+		reagents.add_reagent("nutriment", 1 + round((potency / 50), 1))
+		reagents.add_reagent("nothing", 2 + round((potency / 10), 1))
+		reagents.add_reagent("mutetoxin", 2 + round((potency / 10), 1))
+		bitesize = 5
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/chili
 	seed = /obj/item/seeds/chiliseed
 	name = "chili"
@@ -550,7 +665,7 @@
 		reagents.add_reagent("vitamin", 1 + round((potency / 25), 1))
 		bitesize = 1 + round(reagents.total_volume / 2, 1)
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/chili/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/item/weapon/reagent_containers/food/snacks/grown/chili/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	. = ..()
 	if (istype(O, /obj/item/device/analyzer/plant_analyzer))
 		user << "<span class='info'>- Capsaicin: <i>[reagents.get_reagent_amount("capsaicin")]%</i></span>"
@@ -570,7 +685,7 @@
 	reagents.add_reagent("frostoil", 3+round(potency / 5, 1))
 	bitesize = 1 + round(reagents.total_volume / 2, 1)
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	. = ..()
 	if (istype(O, /obj/item/device/analyzer/plant_analyzer))
 		user << "<span class='info'>- Frostoil: <i>[reagents.get_reagent_amount("frostoil")]%</i></span>"
@@ -591,7 +706,7 @@
 	reagents.add_reagent("condensedcapsaicin", 4+round(potency / 4, 1))
 	bitesize = 1 + round(reagents.total_volume / 4, 1)
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/ghost_chili/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/item/weapon/reagent_containers/food/snacks/grown/ghost_chili/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	. = ..()
 	if (istype(O, /obj/item/device/analyzer/plant_analyzer))
 		user << "<span class='info'>- Capsaicin: <i>[reagents.get_reagent_amount("capsaicin")]%</i></span>"
@@ -827,6 +942,32 @@ obj/item/weapon/reagent_containers/food/snacks/grown/shell/eggy/add_juice()
 		reagents.add_reagent("nutriment", 1 + round((potency / 25), 1))
 		bitesize = 1 + round(reagents.total_volume / 2, 1)
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/oat
+	seed = /obj/item/seeds/oatseed
+	name = "oat"
+	desc = "Eat oats, do squats."
+	gender = PLURAL
+	icon_state = "oat"
+	filling_color = "#556B2F"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/oat/add_juice()
+	if(..())
+		reagents.add_reagent("nutriment", 1 + round((potency / 25), 1))
+		bitesize = 1 + round(reagents.total_volume / 2, 1)
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/rice
+	seed = /obj/item/seeds/riceseed
+	name = "rice"
+	desc = "Rice to meet you."
+	gender = PLURAL
+	icon_state = "rice"
+	filling_color = "#FAFAD2"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/rice/add_juice()
+	if(..())
+		reagents.add_reagent("rice", 1 + round((potency / 6), 1))
+		bitesize = 1 + round(reagents.total_volume / 2, 1)
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/grass
 	seed = /obj/item/seeds/grassseed
 	name = "grass"
@@ -851,6 +992,9 @@ obj/item/weapon/reagent_containers/food/snacks/grown/shell/eggy/add_juice()
 			GT.amount = GT.max_amount
 		else
 			GT.amount = grassAmt
+			for(var/obj/item/stack/tile/grass/GR in user.loc)
+				if(GR != GT && GR.amount < GR.max_amount)
+					GR.attackby(GT, user) //we try to transfer all old unfinished stacks to the new stack we created.
 		grassAmt -= GT.max_amount
 	qdel(src)
 	return
@@ -873,6 +1017,9 @@ obj/item/weapon/reagent_containers/food/snacks/grown/shell/eggy/add_juice()
 			CT.amount = CT.max_amount
 		else
 			CT.amount = carpetAmt
+			for(var/obj/item/stack/tile/carpet/CA in user.loc)
+				if(CA != CT && CA.amount < CA.max_amount)
+					CA.attackby(CT, user) //we try to transfer all old unfinished stacks to the new stack we created.
 		carpetAmt -= CT.max_amount
 	qdel(src)
 	return
@@ -883,7 +1030,6 @@ obj/item/weapon/reagent_containers/food/snacks/grown/shell/eggy/add_juice()
 	desc = "<I>Pueraria Virallis</I>: An invasive species with vines that rapidly creep and wrap around whatever they contact."
 	icon_state = "kudzupod"
 	var/list/mutations = list()
-	var/mutating = 0
 	filling_color = "#6B8E23"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/kudzupod/add_juice()
@@ -922,7 +1068,7 @@ obj/item/weapon/reagent_containers/food/snacks/grown/shell/eggy/add_juice()
 	reagents.add_reagent("morphine", 3+round(potency / 3, 1))
 	bitesize = 1 + round(reagents.total_volume / 2, 1)
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/reishi/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/reishi/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	. = ..()
 	if (istype(O, /obj/item/device/analyzer/plant_analyzer))
 		user << "<span class='info'>- Anti-Toxin: <i>[reagents.get_reagent_amount("charcoal")]%</i></span>"
@@ -942,7 +1088,7 @@ obj/item/weapon/reagent_containers/food/snacks/grown/shell/eggy/add_juice()
 	reagents.add_reagent("mushroomhallucinogen", 1 + round(potency / 25, 1))
 	bitesize = 1 + round(reagents.total_volume / 2, 1)
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/amanita/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/amanita/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	. = ..()
 	if (istype(O, /obj/item/device/analyzer/plant_analyzer))
 		user << "<span class='info'>- Amatoxins: <i>[reagents.get_reagent_amount("amatoxin")]%</i></span>"
@@ -962,7 +1108,7 @@ obj/item/weapon/reagent_containers/food/snacks/grown/shell/eggy/add_juice()
 	reagents.add_reagent("mushroomhallucinogen", 1 + round(potency / 25, 1))
 	bitesize = 1 + round(reagents.total_volume / 2, 1)
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/angel/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/angel/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	. = ..()
 	if (istype(O, /obj/item/device/analyzer/plant_analyzer))
 		user << "<span class='info'>- Amatoxins: <i>[reagents.get_reagent_amount("amatoxin")]%</i></span>"
@@ -981,7 +1127,7 @@ obj/item/weapon/reagent_containers/food/snacks/grown/shell/eggy/add_juice()
 	reagents.add_reagent("mushroomhallucinogen", 3+round(potency / 5, 1))
 	bitesize = 1 + round(reagents.total_volume / 2, 1)
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/libertycap/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/libertycap/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	. = ..()
 	if (istype(O, /obj/item/device/analyzer/plant_analyzer))
 		user << "<span class='info'>- Mushroom Hallucinogen: <i>[reagents.get_reagent_amount("mushroomhallucinogen")]%</i></span>"
@@ -1175,7 +1321,7 @@ obj/item/weapon/reagent_containers/food/snacks/grown/shell/eggy/add_juice()
 /obj/item/weapon/reagent_containers/food/snacks/grown/tobacco/add_juice()
 	if(..())
 		reagents.add_reagent("nutriment", 1 + round((potency / 40), 1))
-		reagents.add_reagent("vitamin", 1 + round((potency / 40), 1))
+		reagents.add_reagent("nicotine", 1 + round((potency / 40), 1))
 
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/tobacco/space
@@ -1188,7 +1334,7 @@ obj/item/weapon/reagent_containers/food/snacks/grown/shell/eggy/add_juice()
 /obj/item/weapon/reagent_containers/food/snacks/grown/tobacco/space/add_juice()
 	..()
 	reagents.add_reagent("salbutamol", 1 + round((potency / 20), 1))
-
+	reagents.add_reagent("nicotine", 1 + round((potency / 20), 1))
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/tea //abstract type
 	seed = /obj/item/seeds/tea_aspera_seed

@@ -2,38 +2,18 @@
 
 /////////////////// Dough Ingredients ////////////////////////
 
-// Flour + egg = dough
-/obj/item/weapon/reagent_containers/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/reagent_containers/food/snacks/egg))
-		var/obj/item/weapon/reagent_containers/food/snacks/egg/E = W
-		if(flags & OPENCONTAINER)
-			if(reagents)
-				if(reagents.has_reagent("flour"))
-					if(reagents.get_reagent_amount("flour") >= 15)
-						var/obj/item/weapon/reagent_containers/food/snacks/S = new /obj/item/weapon/reagent_containers/food/snacks/dough(get_turf(src))
-						user << "<span class='notice'>You mix egg and flour to make some dough.</span>"
-						reagents.remove_reagent("flour", 15)
-						if(E.reagents)
-							E.reagents.trans_to(S,E.reagents.total_volume)
-						qdel(E)
-					else
-						user << "<span class='notice'>Not enough flour to make dough.</span>"
-			return
-	..()
-
 /obj/item/weapon/reagent_containers/food/snacks/dough
 	name = "dough"
 	desc = "A piece of dough."
 	icon = 'icons/obj/food_ingredients.dmi'
 	icon_state = "dough"
 	cooked_type = /obj/item/weapon/reagent_containers/food/snacks/store/bread/plain
-	list_reagents = list("nutriment" = 3)
+	list_reagents = list("nutriment" = 6)
 	w_class = 3
-	flags = OPENCONTAINER
 
 
 // Dough + rolling pin = flat dough
-/obj/item/weapon/reagent_containers/food/snacks/dough/attackby(obj/item/I, mob/user)
+/obj/item/weapon/reagent_containers/food/snacks/dough/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/weapon/kitchen/rollingpin))
 		if(isturf(loc))
 			new /obj/item/weapon/reagent_containers/food/snacks/flatdough(loc)
@@ -54,9 +34,8 @@
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/doughslice
 	slices_num = 3
 	cooked_type = /obj/item/weapon/reagent_containers/food/snacks/pizzabread
-	list_reagents = list("nutriment" = 3)
+	list_reagents = list("nutriment" = 6)
 	w_class = 3
-	flags = OPENCONTAINER
 
 /obj/item/weapon/reagent_containers/food/snacks/pizzabread
 	name = "pizza bread"
@@ -75,7 +54,6 @@
 	icon_state = "doughslice"
 	cooked_type = /obj/item/weapon/reagent_containers/food/snacks/bun
 	filling_color = "#CD853F"
-	flags = OPENCONTAINER
 
 
 /obj/item/weapon/reagent_containers/food/snacks/bun
@@ -93,11 +71,11 @@
 	icon = 'icons/obj/food_ingredients.dmi'
 	icon_state = "cakebatter"
 	cooked_type = /obj/item/weapon/reagent_containers/food/snacks/store/cake/plain
-	list_reagents = list("nutriment" = 3)
+	list_reagents = list("nutriment" = 9)
 	w_class = 3
 
 // Cake batter + rolling pin = pie dough
-/obj/item/weapon/reagent_containers/food/snacks/cakebatter/attackby(obj/item/I, mob/user)
+/obj/item/weapon/reagent_containers/food/snacks/cakebatter/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/weapon/kitchen/rollingpin))
 		if(isturf(loc))
 			new /obj/item/weapon/reagent_containers/food/snacks/piedough(loc)
@@ -116,7 +94,7 @@
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/rawpastrybase
 	slices_num = 3
 	cooked_type = /obj/item/weapon/reagent_containers/food/snacks/pie/plain
-	list_reagents = list("nutriment" = 3)
+	list_reagents = list("nutriment" = 9)
 	w_class = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/rawpastrybase

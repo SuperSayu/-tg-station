@@ -130,7 +130,7 @@ By design, d1 is the smallest direction and d2 is the highest
 //   - Cable coil : merge cables
 //   - Multitool : get the power currently passing through the cable
 //
-/obj/structure/cable/attackby(obj/item/W, mob/user)
+/obj/structure/cable/attackby(obj/item/W, mob/user, params)
 	var/turf/T = src.loc
 	if(T.intact)
 		return
@@ -561,7 +561,7 @@ obj/structure/cable/proc/avail()
 // Items usable on a cable coil :
 //   - Wirecutters : cut them duh !
 //   - Cable coil : merge cables
-/obj/item/stack/cable_coil/attackby(obj/item/weapon/W, mob/user)
+/obj/item/stack/cable_coil/attackby(obj/item/weapon/W, mob/user, params)
 	..()
 	if( istype(W, /obj/item/weapon/wirecutters) && src.amount > 1)
 		src.amount--
@@ -638,7 +638,7 @@ obj/structure/cable/proc/avail()
 	if(!isturf(user.loc))
 		return
 
-	if(!T.cancable)
+	if(!T.can_have_cabling())
 		user << "You can only lay cables on catwalks and plating!"
 		return
 
@@ -648,10 +648,6 @@ obj/structure/cable/proc/avail()
 
 	if(get_dist(T,user) > 1) // Too far
 		user << "You can't lay cable at a place that far away."
-		return
-
-	if(T.intact)		// Ff floor is intact, complain
-		user << "You can't lay cable there unless the floor tiles are removed."
 		return
 
 	else
@@ -717,7 +713,7 @@ obj/structure/cable/proc/avail()
 
 	// one end of the clicked cable is pointing towards us
 	if(C.d1 == dirn || C.d2 == dirn)
-		if(!U.cancable)						//checking if it's a plating or catwalk
+		if(!U.can_have_cabling())						//checking if it's a plating or catwalk
 			user << "You can only lay cables on catwalks and plating!"
 			return
 		if(U.intact)						//can't place a cable if it's a plating with a tile on it

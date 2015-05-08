@@ -934,6 +934,14 @@
 			update_icons()
 	return
 
-/obj/item/artifact/check_retaliate()
+/obj/item/artifact/proc/check_retaliate()
 	if(on == 1 && usetype == A_RETALIATE)
 		use_power()
+
+/obj/item/artifact/IsShield()
+	check_retaliate()
+	return 0
+
+/obj/item/artifact/IsReflect()
+	check_retaliate()
+	return prob(reflect_chance)

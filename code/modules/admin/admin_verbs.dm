@@ -101,7 +101,8 @@ var/list/admin_verbs_server = list(
 	/datum/admins/proc/toggleAI,
 	/client/proc/cmd_admin_delete,		/*delete an instance/object/mob/etc*/
 	/client/proc/cmd_debug_del_all,
-	/client/proc/toggle_random_events
+	/client/proc/toggle_random_events,
+	/client/proc/panicbunker
 	)
 var/list/admin_verbs_debug = list(
 	/client/proc/restart_controller,
@@ -118,7 +119,8 @@ var/list/admin_verbs_debug = list(
 	/client/proc/callproc_datum,
 	/client/proc/SDQL2_query,
 	/client/proc/test_movable_UI,
-	/client/proc/test_snap_UI
+	/client/proc/test_snap_UI,
+	/client/proc/debugNatureMapGenerator
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -191,7 +193,8 @@ var/list/admin_verbs_hideable = list(
 	/proc/possess,
 	/proc/release,
 	/client/proc/reload_admins,
-	/client/proc/reset_all_tcs
+	/client/proc/reset_all_tcs,
+	/client/proc/panicbunker
 	)
 
 /client/proc/add_admin_verbs()
@@ -317,7 +320,7 @@ var/list/admin_verbs_hideable = list(
 	if(holder && mob)
 		if(mob.invisibility == INVISIBILITY_OBSERVER)
 			mob.invisibility = initial(mob.invisibility)
-			mob << "<span class='userdanger'>Invisimin off. Invisibility reset.</span>"
+			mob << "<span class='boldannounce'>Invisimin off. Invisibility reset.</span>"
 		else
 			mob.invisibility = INVISIBILITY_OBSERVER
 			mob << "<span class='adminnotice'><b>Invisimin on. You are now as invisible as a ghost.</b></span>"
