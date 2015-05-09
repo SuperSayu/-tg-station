@@ -716,6 +716,16 @@
 					var/mob/living/silicon/robot/R = target
 					R.adjustBruteLoss(-extra1)
 					R.updatehealth()
+		if(A_SURGERY)
+			if(istype(target,/mob/living/carbon/human))
+				var/mob/living/carbon/human/H = target
+				H.restore_blood()
+				var/obj/item/organ/limb/affecting = H.get_organ(check_zone(user.zone_sel.selecting))
+				if(affecting)
+					affecting.bone_mend(1)
+					for(var/obj/item/I in affecting.embedded_objects)
+						I.loc = get_turf(H)
+						affecting.embedded_objects -= I
 		if(A_DECLONE)
 			// EXTRA 1: Clone damage
 			if(target)
