@@ -6,14 +6,12 @@
 	if(isliving(A))
 		var/mob/living/L = A
 		if(!L.stat)
-			stance = HOSTILE_STANCE_ATTACK
 			return L
 		else
 			enemies -= L
 	else if(istype(A, /obj/mecha))
 		var/obj/mecha/M = A
 		if(M.occupant)
-			stance = HOSTILE_STANCE_ATTACK
 			return A
 
 /mob/living/simple_animal/hostile/retaliate/ListTargets()
@@ -24,7 +22,6 @@
 	return see
 
 /mob/living/simple_animal/hostile/retaliate/proc/Retaliate()
-	..()
 	var/list/around = view(src, vision_range)
 
 	for(var/atom/movable/A in around)
