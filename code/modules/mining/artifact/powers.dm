@@ -827,7 +827,7 @@
 		if(A_PINKSLIME)
 			// EXTRA 1: Range of effect
 			// EXTRA 2: Nutrition level
-			for(var/mob/living/carbon/slime/S in range(extra1,artloc))
+			for(var/mob/living/simple_animal/slime/S in range(extra1,artloc))
 				S.nutrition = max(extra2,S.nutrition)
 				S.rabid = 0
 				S.holding_still += 5

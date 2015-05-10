@@ -172,7 +172,7 @@
 	hair_color = "mutcolor"
 	hair_alpha = 165
 	hair_luminosity = -75
-	ignored_by = list(/mob/living/carbon/slime)
+	ignored_by = list(/mob/living/simple_animal/slime)
 	bone_chance_adjust = 0
 	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/slime
 	exotic_blood = /datum/reagent/toxin/slimejelly
