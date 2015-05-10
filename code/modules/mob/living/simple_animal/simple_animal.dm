@@ -363,22 +363,6 @@
 				return
 		else
 			user << "<span class='notice'> [src] is dead, medical items won't bring it back to life.</span>"
-	if(istype(O,/obj/item/weapon/pet_collar))
-		if(!renamable)
-			if(istype(src,/mob/living/simple_animal/hostile) && src.type != /mob/living/simple_animal/hostile/retaliate/goat)
-				user << "\red [src] doesn't seem to like being labelled a pet."
-				return
-			user << "\red [src] is already quite attached to their existing name."
-			return
-
-		var/tag = input(user,"Pet's name:","Name the pet",real_name) as text|null
-		if(O && src && length(tag) && (O in user) && get_dist(user,src) <= 1)
-			src.real_name = tag
-			src.name = tag
-			src.visible_message("[user] gives [src] a shiny new pet collar!")
-			src.renamable = 0
-			del O
-		return
 
 	if((meat_type || skin_type) && (stat == DEAD))	//if the animal has a meat, and if it is dead.
 		var/sharpness = is_sharp(O)

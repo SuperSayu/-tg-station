@@ -395,9 +395,9 @@
 	incant_volume = 1 // sssh
 
 	spawns_possible = list(
-		/mob/living/simple_animal/corgi, /mob/living/simple_animal/corgi/puppy, /mob/living/simple_animal/cat, /mob/living/simple_animal/chicken,
+		/mob/living/simple_animal/pet/corgi, /mob/living/simple_animal/pet/corgi/puppy, /mob/living/simple_animal/pet/cat, /mob/living/simple_animal/chicken,
 		/obj/item/weapon/ore = list("name" = "pet rock"),
-		/mob/living/simple_animal/corgi/puppy/smart
+		/mob/living/simple_animal/pet/corgi/puppy/smart
 		)
 
 /obj/effect/knowspell/summon/world/puppies/summon_effect(var/atom/movable/AM)

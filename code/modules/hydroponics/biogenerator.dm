@@ -276,7 +276,7 @@
 			else new/obj/item/weapon/storage/bag/ore(src.loc)
 		if("collar")
 			if (check_cost(100)) return 0
-			else new/obj/item/weapon/pet_collar(src.loc)
+			else new/obj/item/clothing/tie/petcollar(src.loc)
 		if("soap")
 			if (check_cost(100)) return 0
 			else new/obj/item/weapon/soap/deluxe(src.loc)

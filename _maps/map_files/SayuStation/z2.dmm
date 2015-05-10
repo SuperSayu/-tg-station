@@ -496,7 +496,7 @@
 "jB" = (/obj/structure/closet/secure_closet/cargotech,/turf/unsimulated/floor{dir = 1; icon_state = "loadingarea"},/area/centcom/suppy)
 "jC" = (/obj/structure/closet/secure_closet/quartermaster,/turf/unsimulated/floor{dir = 1; icon_state = "loadingarea"},/area/centcom/suppy)
 "jD" = (/obj/item/weapon/spacecash/c1000,/turf/unsimulated/floor{tag = "icon-floorscorched2"; icon_state = "floorscorched2"},/area/space)
-"jE" = (/obj/item/weapon/pet_collar,/turf/unsimulated/floor{tag = "icon-floorscorched1"; icon_state = "floorscorched1"},/area/space)
+"jE" = (/obj/item/clothing/tie/petcollar,/turf/unsimulated/floor{tag = "icon-floorscorched1"; icon_state = "floorscorched1"},/area/space)
 "jF" = (/mob/living/simple_animal/hostile/creature,/turf/unsimulated/floor{tag = "icon-floorscorched1"; icon_state = "floorscorched1"},/area/space)
 "jG" = (/turf/unsimulated/wall/fakeglass,/area/space)
 "jH" = (/obj/machinery/conveyor{dir = 4; id = "QMLoad2"},/obj/machinery/door/poddoor{id = "QMLoaddoor2"; name = "supply dock loading door"},/turf/simulated/shuttle/plating,/area/space)

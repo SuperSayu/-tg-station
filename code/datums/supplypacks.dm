@@ -817,31 +817,28 @@ var/list/all_supply_groups = list(supply_emergency,supply_security,supply_engine
 	name = "Corgi Crate"
 	cost = 50
 	containertype = /obj/structure/closet/critter/corgi
+	contains = list(/obj/item/clothing/tie/petcollar)
 	containername = "corgi crate"
 
 /datum/supply_packs/organic/cat
 	name = "Cat Crate"
 	cost = 50 //Cats are worth as much as corgis.
 	containertype = /obj/structure/closet/critter/cat
+	contains = list(/obj/item/clothing/tie/petcollar)
 	containername = "cat crate"
 
 /datum/supply_packs/organic/pug
 	name = "Pug Crate"
 	cost = 50
 	containertype = /obj/structure/closet/critter/pug
+	contains = list(/obj/item/clothing/tie/petcollar)
 	containername = "pug crate"
-
-/datum/supply_packs/organic/collars
-	name = "Pet Collars"
-	cost = 25
-	containertype = /obj/structure/closet/crate
-	contains = list(/obj/item/weapon/storage/box/collars,/obj/item/weapon/storage/box/collars,/obj/item/weapon/storage/box/collars)
-	containername = "pet supplies"
 
 /datum/supply_packs/organic/fox
 	name = "Fox Crate"
 	cost = 55 //Foxes are cool.
 	containertype = /obj/structure/closet/critter/fox
+	contains = list(/obj/item/clothing/tie/petcollar)
 	containername = "fox crate"
 
 /datum/supply_packs/organic/butterfly
