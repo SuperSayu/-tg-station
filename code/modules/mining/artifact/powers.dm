@@ -858,7 +858,7 @@
 			smoke.set_up(R, rand(1, 2), 0, artloc, 0, silent = 1)
 			playsound(artloc, 'sound/effects/smoke.ogg', 50, 1, -3)
 			smoke.start()
-			R.delete()
+			qdel(R)
 		if(A_SHOCKER) // A lot of repeat code here, couldn't quite get it to be in a way where I'd be able to avoid it
 			// EXTRA 1: Shock power
 			if(target == user)
