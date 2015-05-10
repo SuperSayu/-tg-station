@@ -203,14 +203,14 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/scotchegg
 
 /obj/item/weapon/reagent_containers/food/snacks/soup/mammi
-	name = "Mämmi"
+	name = "MÃ¤mmi"
 	desc = "A bowl of mushy bread and milk. It reminds you, not too fondly, of a bowel movement."
 	icon_state = "mammi"
 	bonus_reagents = list("nutriment" = 3, "vitamin" = 1)
 	list_reagents = list("nutriment" = 8, "vitamin" = 1)
 
 /datum/table_recipe/mammi
-	name = "Mämmi"
+	name = "MÃ¤mmi"
 	reqs = list(
 		/obj/item/weapon/reagent_containers/food/snacks/store/bread/plain = 1,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar = 1,
