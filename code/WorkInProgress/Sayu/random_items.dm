@@ -288,12 +288,7 @@
 /obj/structure/closet/secure_closet/random_drinks
 	name = "Unlabelled Booze"
 	req_access = list(access_bar)
-	icon_state = "cabinetdetective_locked"
-	icon_closed = "cabinetdetective"
-	icon_locked = "cabinetdetective_locked"
-	icon_opened = "cabinetdetective_open"
-	icon_broken = "cabinetdetective_broken"
-	icon_off = "cabinetdetective_broken"
+	icon_state = "cabinet"
 
 /obj/structure/closet/secure_closet/random_drinks/New()
 	..()

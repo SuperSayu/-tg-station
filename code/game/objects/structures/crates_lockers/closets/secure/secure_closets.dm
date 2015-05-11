@@ -1,19 +1,31 @@
 /obj/structure/closet/secure_closet
 	name = "secure locker"
-	desc = "It's a card-locked storage unit."
-	icon = 'icons/obj/closet.dmi'
-	icon_state = "secure1"
+	desc = "It's an immobile card-locked storage unit."
 	density = 1
 	opened = 0
 	locked = 1
-	icon_closed = "secure"
-	var/icon_locked = "secure1"
-	icon_opened = "secureopen"
-	var/icon_broken = "securebroken"
-	var/icon_off = "secureoff"
-	var/panel = 0
+	icon_state = "secure"
 	wall_mounted = 0 //never solid (You can always pass over it)
 	health = 200
+	var/panel_uncovered = 0
+
+/obj/structure/closet/secure_closet/update_icon()//Putting the welded stuff in updateicon() so it's easy to overwrite for special cases (Fridges, cabinets, and whatnot)
+	..()
+
+	if(panel_uncovered)
+		if(!broken)
+			overlays += image('icons/obj/sayu_closet.dmi', "hacking")
+		else
+			overlays += image('icons/obj/sayu_closet.dmi', "hackingsparks")
+		return
+
+	if(!broken)
+		if(locked)
+			overlays += "locked"
+		else
+			overlays += "unlocked"
+	else
+		overlays += "off"
 
 /obj/structure/closet/secure_closet/examine(mob/user)
 	..()
@@ -42,12 +54,6 @@
 		return 0
 	return 1
 
-/obj/structure/closet/secure_closet/close()
-	..()
-	if(broken)
-		icon_state = src.icon_off
-	return 1
-
 /obj/structure/closet/secure_closet/emp_act(severity)
 	for(var/obj/O in src)
 		O.emp_act(severity)
@@ -70,10 +76,7 @@
 		for(var/mob/O in viewers(user, 3))
 			if((O.client && !( O.eye_blind )))
 				O << "<span class='notice'>[user] has [locked ? null : "un"]locked the locker.</span>"
-		if(src.locked)
-			src.icon_state = src.icon_locked
-		else
-			src.icon_state = src.icon_closed
+		update_icon()
 	else
 		user << "<span class='notice'>Access Denied</span>"
 
@@ -90,54 +93,40 @@
 			return
 		else
 			src.add_fingerprint(user)
-			panel = !panel
-			// this part is super sloppy but idk
-			if(!panel) // if the panel is now closed
-				if(!broken)
-					overlays -= "hacking"
-				else
-					overlays -= "hackingsparks"
+			panel_uncovered = !panel_uncovered
+			if(!panel_uncovered) // if the panel is now closed
 				user << "<span class='notice'>You close the locking mechanism's panel on the locker.</span>"
 			else
-				if(!broken)
-					overlays += "hacking"
-				else
-					overlays += "hackingsparks"
 				user << "<span class='notice'>You open the locking mechanism's panel on the locker.</span>"
+			update_icon()
 			return
-	else if(src.panel && istype(W, /obj/item/device/multitool))
+	else if(panel_uncovered && istype(W, /obj/item/device/multitool))
 		src.add_fingerprint(user)
 		playsound(src.loc, 'sound/machines/twobeep.ogg', 150, 1)
 		if(!broken)
 			user << "<span class='danger'>You begin hacking the locker open. (This action will take 20 seconds to complete.)</span>"
-			if(do_after(user,200) && panel) // makes sure that the user stays in place and does not close the panel
-				overlays -= "hacking"
-				overlays += "hackingsparks"
+			if(do_after(user,200) && panel_uncovered) // makes sure that the user stays in place and does not close the panel
 				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 				s.set_up(5, 1, src)
 				s.start()
 				broken = 1
 				locked = 0
 				desc = "It appears to be broken."
-				for(var/mob/O in viewers(user, 3))
-					O.show_message("<span class='warning'>The locker has been broken by [user] with a multitool!</span>", 1, "You hear a faint electrical spark.", 2)
-				icon_state = icon_off
+				visible_message("<span class='warning'>The locker has been broken by [user] with a multitool!</span>")
+				update_icon()
 		else
 			user << "<span class='danger'>You begin repairing the broken locker. (This action will take 30 seconds to complete.)</span>"
-			if(do_after(user,300) && panel) // longer than hacking it open for reasons
-				overlays -= "hackingsparks"
-				overlays += "hacking"
+			if(do_after(user,300) && panel_uncovered) // longer than hacking it open for reasons
 				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 				s.set_up(5, 1, src)
 				s.start()
 				broken = 0
 				locked = 0	// the locker stays unlocked after it's been fixed, which should be noticable to anyone who's paying attention (read: nobody at all)
-				desc = "It's a card-locked storage unit."
-				for(var/mob/O in viewers(user, 3))
-					O.show_message("<span class='warning'>The locker has been repaired by [user] with a multitool!</span>", 1, "You hear a faint electrical spark.", 2)
-				icon_state = icon_closed
+				desc = initial(desc)
+				visible_message("<span class='warning'>The locker has been repaired by [user] with a multitool!</span>")
+				update_icon()
 		return
-	else if(src.panel)
+	else if(src.panel_uncovered)
 		user << "<span class='notice'>You cannot do that while the locker's panel is open!</span>"
 		return
 	else if(!src.opened && src.broken)
@@ -150,11 +139,14 @@
 	if(!broken)
 		broken = 1
 		locked = 0
-		desc = "It appears to be broken."
-		icon_state = icon_off
-		flick(icon_broken, src)
+		desc += "It appears to be broken."
+		update_icon()
+
 		for(var/mob/O in viewers(user, 3))
 			O.show_message("<span class='warning'>The locker has been broken by [user] with an electromagnetic card!</span>", 1, "You hear a faint electrical spark.", 2)
+		overlays += "sparking"
+		spawn(4) //overlays don't support flick so we have to cheat
+		update_icon()
 
 /obj/structure/closet/secure_closet/relaymove(mob/user as mob)
 	if(user.stat || !isturf(src.loc))
@@ -173,7 +165,7 @@
 /obj/structure/closet/secure_closet/attack_hand(mob/user as mob)
 	src.add_fingerprint(user)
 
-	if(panel)
+	if(panel_uncovered)
 		user << "<span class='notice'>You cannot do that while the locker's panel is open!</span>"
 		return
 	if(!src.toggle())
@@ -181,20 +173,3 @@
 
 /obj/structure/closet/secure_closet/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
-
-/obj/structure/closet/secure_closet/update_icon()//Putting the welded stuff in updateicon() so it's easy to overwrite for special cases (Fridges, cabinets, and whatnot)
-	overlays.Cut()
-	if(!opened)
-		if(locked)
-			icon_state = icon_locked
-		else
-			icon_state = icon_closed
-		if(welded)
-			overlays += "welded"
-		if(panel)
-			if(broken)
-				overlays += "hackingsparks"
-			else
-				overlays += "hacking"
-	else
-		icon_state = icon_opened
