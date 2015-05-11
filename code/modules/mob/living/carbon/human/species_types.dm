@@ -41,7 +41,7 @@
 	miss_sound = 'sound/weapons/slashmiss.ogg'
 	species_temp_coeff = 0.5
 	species_temp_offset = -20
-	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/lizard
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/lizard
 
 //NOPE
 /*
@@ -70,8 +70,9 @@
 	attack_verb = "slash"
 	attack_sound = 'sound/weapons/slice.ogg'
 	miss_sound = 'sound/weapons/slashmiss.ogg'
-	burnmod = 1.5
-	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/plant
+	burnmod = 1.25
+	heatmod = 1.5
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/plant
 
 /datum/species/plant/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
 	if(chem.id == "plantbgone")
@@ -141,7 +142,7 @@
 	darksight = 8
 	sexes = 0
 	ignored_by = list(/mob/living/simple_animal/hostile/faithless)
-	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/shadow
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/shadow
 	specflags = list(NOBREATH,NOBLOOD,RADIMMUNE)
 
 /datum/species/shadow/spec_life(mob/living/carbon/human/H)
@@ -174,7 +175,7 @@
 	hair_luminosity = -75
 	ignored_by = list(/mob/living/simple_animal/slime)
 	bone_chance_adjust = 0
-	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/slime
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/slime
 	exotic_blood = /datum/reagent/toxin/slimejelly
 	var/recently_changed = 1
 
@@ -220,7 +221,7 @@
 	hair_alpha = 195
 	hair_luminosity = -75
 	bone_chance_adjust = 1.2
-	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/slime
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/slime
 
 	// COLD DAMAGE LEVEL ONE: 0.9 (+0.4)
 	// COLD DAMAGE LEVEL TWO: 2.7 (+1.2)
@@ -260,7 +261,7 @@
 	no_equip = list(slot_wear_mask, slot_wear_suit, slot_gloves, slot_shoes, slot_head, slot_w_uniform)
 	nojumpsuit = 1
 	bone_chance_adjust = 0
-	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/golem
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/golem
 
 /*
  ADAMANTINE GOLEMS
@@ -269,7 +270,7 @@
 /datum/species/golem/adamantine
 	name = "Adamantine Golem"
 	id = "adamantine"
-	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/golem/adamantine
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/golem/adamantine
 
 /*
  FLIES
@@ -280,7 +281,7 @@
 	name = "Human?"
 	id = "fly"
 	say_mod = "buzzes"
-	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/fly
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/fly
 
 /datum/species/fly/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
 	if(chem.id == "pestkiller")
@@ -301,7 +302,7 @@
 	id = "skeleton"
 	say_mod = "rattles"
 	sexes = 0
-	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/skeleton
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/skeleton
 	specflags = list(NOBREATH,HEATRES,COLDRES,NOBLOOD,RADIMMUNE)
 /*
  ZOMBIES
@@ -313,7 +314,7 @@
 	id = "zombie"
 	say_mod = "moans"
 	sexes = 0
-	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/zombie
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/zombie
 	specflags = list(NOBREATH,HEATRES,COLDRES,NOBLOOD,RADIMMUNE)
 
 /datum/species/zombie/handle_speech(message)
@@ -336,7 +337,7 @@
 	name = "Human"
 	id = "zombie"
 	sexes = 0
-	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/human/mutant/zombie
+	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/zombie
 
 /*
  AXOLOTL PEOPLE -- WIP IN PROGRESS

@@ -258,8 +258,8 @@
 /obj/item/asteroid/hivelord_core
 	name = "hivelord remains"
 	desc = "Found in the remains of a hivelord, an organ which allows it to divide without being harmed... its healing properties will soon become inert if not used quickly. Try not to think about what you're eating."
-	icon = 'icons/obj/food.dmi'
-	icon_state = "phelmbiscuit"
+	icon = 'icons/obj/food/food.dmi'
+	icon_state = "boiledrorocore"
 	var/inert = 0
 
 /obj/item/asteroid/hivelord_core/New()
