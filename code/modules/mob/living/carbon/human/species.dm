@@ -723,8 +723,8 @@
 
 			if((H.disabilities & FAT))
 				mspeed += 1.5
-			if(H.bodytemperature < 283.222)
-				mspeed += (283.222 - H.bodytemperature) / 10 * (grav+0.5)
+			if(H.bodytemperature < BODYTEMP_COLD_DAMAGE_LIMIT)
+				mspeed += (BODYTEMP_COLD_DAMAGE_LIMIT - H.bodytemperature) / COLD_SLOWDOWN_FACTOR
 
 			for(var/obj/item/organ/limb/L in H.organs)
 				if(L.bone_status == BONE_BROKEN)
