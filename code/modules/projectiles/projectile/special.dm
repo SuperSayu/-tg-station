@@ -8,6 +8,7 @@
 
 
 /obj/item/projectile/ion/on_hit(atom/target, blocked = 0)
+	..()
 	empulse(target, 1, 1)
 	return 1
 
@@ -89,6 +90,7 @@
 /obj/item/projectile/ion/weak
 
 /obj/item/projectile/ion/weak/on_hit(atom/target, blocked = 0)
+	..()
 	empulse(target, 0, 0)
 	return 1
 
@@ -100,6 +102,7 @@
 	flag = "bullet"
 
 /obj/item/projectile/bullet/gyro/on_hit(atom/target, blocked = 0)
+	..()
 	explosion(target, -1, 0, 2)
 	return 1
 
@@ -111,6 +114,7 @@
 	flag = "bullet"
 
 /obj/item/projectile/bullet/a40mm/on_hit(atom/target, blocked = 0)
+	..()
 	explosion(target, -1, 0, 2, 1, 0, flame_range = 3)
 	return 1
 
@@ -125,7 +129,8 @@
 
 
 /obj/item/projectile/temp/on_hit(atom/target, blocked = 0)//These two could likely check temp protection on the mob
-	if(istype(target, /mob/living))
+	..()
+	if(isliving(target))
 		var/mob/M = target
 		M.bodytemperature = temperature
 	return 1
@@ -143,7 +148,9 @@
 	nodamage = 1
 	flag = "bullet"
 
-/obj/item/projectile/meteor/Bump(atom/A)
+/obj/item/projectile/meteor/Bump(atom/A, yes)
+	if(!yes) //prevents multi bumps.
+		return
 	if(A == firer)
 		loc = A.loc
 		return
@@ -174,6 +181,7 @@
 	name = "flayer ray"
 
 /obj/item/projectile/beam/mindflayer/on_hit(atom/target, blocked = 0)
+	. = ..()
 	if(ishuman(target))
 		var/mob/living/carbon/human/M = target
 		M.adjustBrainLoss(20)
@@ -209,6 +217,7 @@ obj/item/projectile/kinetic/New()
 		qdel(src)
 
 /obj/item/projectile/kinetic/on_hit(atom/target)
+	. = ..()
 	var/turf/target_turf= get_turf(target)
 	if(istype(target_turf, /turf/simulated/mineral))
 		var/turf/simulated/mineral/M = target_turf
@@ -219,7 +228,6 @@ obj/item/projectile/kinetic/New()
 			if(istype(T, /turf/simulated/mineral))
 				var/turf/simulated/mineral/M = T
 				M.gets_drilled(firer)
-	..()
 
 /obj/item/effect/kinetic_blast
 	name = "kinetic explosion"
@@ -252,11 +260,17 @@ obj/item/projectile/kinetic/New()
 
 /obj/item/projectile/beam/wormhole/on_hit(var/atom/target)
 	if(ismob(target))
-		..()
-		return
+		return ..()
 	if(!gun)
 		qdel(src)
 	gun.create_portal(src)
+
+
+/obj/item/projectile/bullet/gyro/on_hit(atom/target, blocked = 0)
+	..()
+	explosion(target, -1, 0, 2)
+	return 1
+
 
 /obj/item/projectile/bullet/frag12
 	name ="explosive slug"
@@ -264,6 +278,7 @@ obj/item/projectile/kinetic/New()
 	weaken = 5
 
 /obj/item/projectile/bullet/frag12/on_hit(atom/target, blocked = 0)
+	..()
 	explosion(target, -1, 0, 1)
 	return 1
 
