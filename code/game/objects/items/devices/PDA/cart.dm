@@ -23,6 +23,11 @@
 	var/access_status_display = 0
 	var/access_quartermaster = 0
 	var/access_hydroponics = 0
+	var/access_secbots = 0
+	var/access_medbots = 0
+	var/access_floorbots = 0
+	var/access_cleanbots = 0
+	var/access_multibots = 0
 	var/mode = null
 	var/menu
 	var/datum/data/record/active1 = null //General
@@ -40,6 +45,7 @@
 	name = "\improper Power-ON cartridge"
 	icon_state = "cart-e"
 	access_engine = 1
+	access_floorbots = 1
 
 	/obj/item/weapon/cartridge/engineering/New()
 		..()
@@ -49,6 +55,7 @@
 	name = "\improper BreatheDeep cartridge"
 	icon_state = "cart-a"
 	access_atmos = 1
+	access_floorbots = 1
 
 	/obj/item/weapon/cartridge/atmos/New()
 		..()
@@ -58,6 +65,7 @@
 	name = "\improper Med-U cartridge"
 	icon_state = "cart-m"
 	access_medical = 1
+	access_medbots = 1
 
 	/obj/item/weapon/cartridge/medical/New()
 		..()
@@ -67,6 +75,7 @@
 	name = "\improper ChemWhiz cartridge"
 	icon_state = "cart-chem"
 	access_reagent_scanner = 1
+	access_medbots = 1
 
 	/obj/item/weapon/cartridge/chemistry/New()
 		..()
@@ -76,6 +85,7 @@
 	name = "\improper R.O.B.U.S.T. cartridge"
 	icon_state = "cart-s"
 	access_security = 1
+	access_secbots = 1
 
 /obj/item/weapon/cartridge/security/New()
 	..()
@@ -87,6 +97,7 @@
 	access_security = 1
 	access_medical = 1
 	access_manifest = 1
+	access_secbots = 1
 
 /obj/item/weapon/cartridge/detective/New()
 	..()
@@ -97,6 +108,7 @@
 	desc = "The ultimate in clean-room design."
 	icon_state = "cart-j"
 	access_janitor = 1
+	access_cleanbots = 1
 
 /obj/item/weapon/cartridge/janitor/New()
 	..()
@@ -172,6 +184,7 @@
 	access_quartermaster = 1
 	access_janitor = 1
 	access_security = 1
+	access_newscaster = 1
 
 /obj/item/weapon/cartridge/hop/New()
 	..()
@@ -183,6 +196,7 @@
 	access_manifest = 1
 	access_status_display = 1
 	access_security = 1
+	access_medbots = 1
 
 /obj/item/weapon/cartridge/hos/New()
 	..()
@@ -195,6 +209,7 @@
 	access_status_display = 1
 	access_engine = 1
 	access_atmos = 1
+	access_floorbots = 1
 
 /obj/item/weapon/cartridge/ce/New()
 	..()
@@ -207,6 +222,7 @@
 	access_status_display = 1
 	access_reagent_scanner = 1
 	access_medical = 1
+	access_medbots = 1
 
 /obj/item/weapon/cartridge/cmo/New()
 	..()
@@ -226,7 +242,7 @@
 
 /obj/item/weapon/cartridge/captain
 	name = "\improper Value-PAK cartridge"
-	desc = "Now with 200% more value!"
+	desc = "Now with 250% more value!"
 	icon_state = "cart-c"
 	access_manifest = 1
 	access_engine = 1
@@ -235,10 +251,12 @@
 	access_reagent_scanner = 1
 	access_status_display = 1
 	access_atmos = 1
+	access_newscaster = 1
+	access_multibots = 1
 
 /obj/item/weapon/cartridge/captain/New()
 	..()
-	radio = new /obj/item/radio/integrated/beepsky(src)
+	radio = new /obj/item/radio/integrated/multi(src)
 
 /obj/item/weapon/cartridge/syndicate
 	name = "\improper Detomatix cartridge"
@@ -347,7 +365,7 @@
 	return menu
 
 
-/obj/item/weapon/cartridge/proc/generate_menu()
+/obj/item/weapon/cartridge/proc/generate_menu(mob/user)
 	switch(mode)
 		if(40) //signaller
 			menu = "<h4><img src=pda_signaler.png> Remote Signaling System</h4>"
@@ -698,7 +716,7 @@ Code:
 				menu += "<h4>Located Cleanbots:</h4>"
 
 				ldat = null
-				for (var/obj/machinery/bot/cleanbot/B in world)
+				for (var/obj/machinery/bot/cleanbot/B in SSbot.processing)
 					var/turf/bl = get_turf(B)
 
 					if(bl)
@@ -741,9 +759,22 @@ Code:
 			if(!current)
 				menu += "<h5> ERROR : NO CHANNEL FOUND </h5>"
 				return
+			var/i = 1
 			for(var/datum/feed_message/msg in current.messages)
 				menu +="-[msg.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[msg.author]</FONT>\]</FONT><BR>"
+				menu +="<b><font size=1>[msg.comments.len] comment[msg.comments.len > 1 ? "s" : ""]</font></b><br>"
+				if(msg.img)
+					user << browse_rsc(msg.img, "tmp_photo[i].png")
+					menu +="<img src='tmp_photo[i].png' width = '180'><BR>"
+				i++
+				for(var/datum/feed_comment/comment in msg.comments)
+					menu +="<font size=1><small>[comment.body]</font><br><font size=1><small><small><small>[comment.author] [comment.time_stamp]</small></small></small></small></font><br>"
 			menu += "<br> <A href='byond://?src=\ref[src];choice=Newscaster Message'>Post Message</a>"
+
+		if (54) // Beepsky, Medibot, Floorbot, and Cleanbot access
+			menu = "<h4><img src=pda_medbot.png> Multi-Bot Interlink</h4>"
+			var/obj/item/radio/integrated/multi/SC = radio
+			bot_control(SC)
 
 /obj/item/weapon/cartridge/Topic(href, href_list)
 	..()
@@ -847,7 +878,7 @@ Code:
 
 
 
-	generate_menu()
+	generate_menu(usr)
 	print_to_host(menu)
 
 /obj/item/weapon/cartridge
