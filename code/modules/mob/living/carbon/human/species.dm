@@ -100,9 +100,6 @@
 
 	var/g = (H.gender == FEMALE) ? "f" : "m"
 
-	if(!config.mutant_colors)
-		H.dna.mutant_color = default_color
-
 	if(MUTCOLORS in specflags)
 		var/image/spec_base
 		var/icon_state_string = "[id]_"
@@ -137,10 +134,7 @@
 			if(hair_color)
 				if(hair_color == "mutcolor")
 					var/list/temp_hsv = list()
-					if(!config.mutant_colors)
-						temp_hsv = ReadHSV(RGBtoHSV(default_color))
-					else
-						temp_hsv = ReadHSV(RGBtoHSV(H.dna.mutant_color))
+					temp_hsv = ReadHSV(RGBtoHSV(H.dna.mutant_color))
 					var/newlum = (temp_hsv[3] + hair_luminosity)
 					temp_hsv = hsv(temp_hsv[1],temp_hsv[2],newlum)
 					temp_hsv = HSVtoRGB(temp_hsv)
@@ -181,10 +175,7 @@
 			if(hair_color)
 				if(hair_color == "mutcolor")
 					var/list/temp_hsv = list()
-					if(!config.mutant_colors)
-						temp_hsv = ReadHSV(RGBtoHSV(default_color))
-					else
-						temp_hsv = ReadHSV(RGBtoHSV(H.dna.mutant_color))
+					temp_hsv = ReadHSV(RGBtoHSV(H.dna.mutant_color))
 					var/newlum = (temp_hsv[3] + hair_luminosity)
 					temp_hsv = hsv(temp_hsv[1],temp_hsv[2],newlum)
 					temp_hsv = HSVtoRGB(temp_hsv)
@@ -279,9 +270,6 @@
 		icon_state_string += "[g]_s"
 	else
 		icon_state_string += "_s"
-
-	if(!config.mutant_colors)
-		H.dna.mutant_color = default_color
 
 	for(var/layer in relevent_layers)
 		for(var/bodypart in bodyparts_to_add)
