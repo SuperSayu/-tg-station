@@ -1,12 +1,5 @@
 // This code handles different species in the game.
 
-#define SPECIES_LAYER			26
-#define BODY_BEHIND_LAYER		25
-#define BODY_LAYER				24
-#define BODY_ADJ_LAYER			23
-#define HAIR_LAYER				9
-#define BODY_FRONT_LAYER		2
-
 #define TINT_IMPAIR 2
 #define TINT_BLIND 3
 
@@ -1348,13 +1341,6 @@
 	if(affecting.bone_break(break_prob*bone_chance_adjust))
 		return 1
 	return 0
-
-#undef SPECIES_LAYER
-#undef BODY_BEHIND_LAYER
-#undef BODY_LAYER
-#undef BODY_ADJ_LAYER
-#undef HAIR_LAYER
-#undef BODY_FRONT_LAYER
 
 #undef HUMAN_MAX_OXYLOSS
 #undef HUMAN_CRIT_MAX_OXYLOSS
