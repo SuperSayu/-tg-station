@@ -196,6 +196,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 /obj/item/device/pda/ai
 	icon_state = "pda-clear"
 	ttone = "data"
+	fon = 0
 	mode = 5
 	noreturn = 1
 	detonate = 0
@@ -225,6 +226,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 /obj/item/device/pda/New()
 	..()
+	if(fon)
+		if(!isturf(loc))
+			loc.AddLuminosity(f_lum)
+			SetLuminosity(0)
+		else
+			SetLuminosity(f_lum)
 	PDAs += src
 	if(default_cartridge)
 		cartridge = new default_cartridge(src)
