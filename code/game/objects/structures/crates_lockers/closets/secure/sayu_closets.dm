@@ -51,3 +51,92 @@
 		for(var/i in 1 to 4)
 			var/typekey = pick_n_take(mysteryseeds)
 			new typekey(src)
+
+//RCS sending code
+/obj/structure/closet/proc/use_rcs(var/obj/item/weapon/rcs/E, mob/user as mob)
+	if(E.rcharges != 0)
+		if(E.mode == 0)
+			if(!E.teleporting)
+				var/list/L = list()
+				var/list/areaindex = list()
+				for(var/obj/machinery/telepad_cargo/R in world)
+					if(R.stage == 0)
+						var/turf/T = get_turf(R)
+						var/tmpname = T.loc.name
+						if(areaindex[tmpname])
+							tmpname = "[tmpname] ([++areaindex[tmpname]])"
+						else
+							areaindex[tmpname] = 1
+						L[tmpname] = R
+				var/desc = input("Please select a telepad.", "RCS") in L
+				E.pad = L[desc]
+				playsound(E.loc, 'sound/machines/click.ogg', 50, 1)
+				user << "\blue Teleporting [src.name]..."
+				E.teleporting = 1
+				sleep(50)
+				E.teleporting = 0
+				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+				s.set_up(5, 1, src)
+				s.start()
+				do_teleport(src, E.pad, 0)
+				E.rcharges--
+				if(E.rcharges != 1)
+					user << "\blue Teleport successful. [E.rcharges] charges left."
+					E.desc = "Use this to send crates and closets to cargo telepads. There are [E.rcharges] charges left."
+					return
+				else
+					user << "\blue Teleport successful. [E.rcharges] charge left."
+					E.desc = "Use this to send crates and closets to cargo telepads. There is [E.rcharges] charge left."
+				return
+		else
+			E.rand_x = rand(50,200)
+			E.rand_y = rand(50,200)
+			var/L = locate(E.rand_x, E.rand_y, 6)
+			playsound(E.loc, 'sound/machines/click.ogg', 50, 1)
+			user << "\blue Teleporting [src.name]..."
+			E.teleporting = 1
+			sleep(50)
+			E.teleporting = 0
+			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+			s.set_up(5, 1, src)
+			s.start()
+			do_teleport(src, L)
+			E.rcharges--
+			if(E.rcharges != 1)
+				user << "\blue Teleport successful. [E.rcharges] charges left."
+				E.desc = "Use this to send crates and closets to cargo telepads. There are [E.rcharges] charges left."
+				return
+			else
+				user << "\blue Teleport successful. [E.rcharges] charge left."
+				E.desc = "Use this to send crates and closets to cargo telepads. There is [E.rcharges] charge left."
+				return
+	else
+		user << "\red Out of charges."
+		return
+
+/obj/structure/closet/proc/attempt_hack(var/obj/item/weapon/multitool, mob/user as mob)
+	src.add_fingerprint(user)
+	if(!broken)
+		playsound(src.loc, 'sound/machines/warning-buzzer.ogg', 150, 1)
+		user << "<span class='danger'>You begin hacking the locker open. (This action will take 20 seconds to complete.)</span>"
+		if(do_after(user,200) && hacking_panel_uncovered) // makes sure that the user stays in place and does not close the panel
+			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+			s.set_up(5, 1, src)
+			s.start()
+			broken = 1
+			locked = 0
+			desc = "It appears to be broken."
+			visible_message("<span class='warning'>The locker has been broken by [user] with a multitool!</span>")
+			update_icon()
+	else
+		playsound(src.loc, 'sound/machines/twobeep.ogg', 150, 1)
+		user << "<span class='danger'>You begin repairing the broken locker. (This action will take 30 seconds to complete.)</span>"
+		if(do_after(user,300) && hacking_panel_uncovered) // longer than hacking it open for reasons
+			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+			s.set_up(5, 1, src)
+			s.start()
+			broken = 0
+			locked = 0
+			desc = initial(desc)
+			visible_message("<span class='warning'>The locker has been repaired by [user] with a multitool!</span>")
+			update_icon()
