@@ -336,7 +336,7 @@
 				return 0
 			if(!H.w_uniform && !nojumpsuit)
 				if(!disable_warning)
-					H << "<span class='danger'>You need a jumpsuit before you can attach this [I.name].</span>"
+					H << "<span class='warning'>You need a jumpsuit before you can attach this [I.name]!</span>"
 				return 0
 			if( !(I.slot_flags & SLOT_BELT) )
 				return
@@ -370,7 +370,7 @@
 				return 0
 			if(!H.w_uniform && !nojumpsuit)
 				if(!disable_warning)
-					H << "<span class='danger'>You need a jumpsuit before you can attach this [I.name].</span>"
+					H << "<span class='warning'>You need a jumpsuit before you can attach this [I.name]!</span>"
 				return 0
 			if( !(I.slot_flags & SLOT_ID) )
 				return 0
@@ -382,7 +382,7 @@
 				return 0
 			if(!H.w_uniform && !nojumpsuit)
 				if(!disable_warning)
-					H << "<span class='danger'>You need a jumpsuit before you can attach this [I.name].</span>"
+					H << "<span class='warning'>You need a jumpsuit before you can attach this [I.name]!</span>"
 				return 0
 			if(I.slot_flags & SLOT_DENYPOCKET)
 				return
@@ -395,7 +395,7 @@
 				return 0
 			if(!H.w_uniform && !nojumpsuit)
 				if(!disable_warning)
-					H << "<span class='danger'>You need a jumpsuit before you can attach this [I.name].</span>"
+					H << "<span class='warning'>You need a jumpsuit before you can attach this [I.name]!</span>"
 				return 0
 			if(I.slot_flags & SLOT_DENYPOCKET)
 				return 0
@@ -409,7 +409,7 @@
 				return 0
 			if(!H.wear_suit)
 				if(!disable_warning)
-					H << "<span class='danger'>You need a suit before you can attach this [I.name].</span>"
+					H << "<span class='warning'>You need a suit before you can attach this [I.name]!</span>"
 				return 0
 			if(!H.wear_suit.allowed)
 				if(!disable_warning)
@@ -882,7 +882,7 @@
 	else
 		return 0
 
-	var/armor = H.run_armor_check(affecting, "melee", "<span class='warning'>Your armor has protected your [hit_area].</span>", "<span class='warning'>Your armor has softened a hit to your [hit_area].</span>")
+	var/armor = H.run_armor_check(affecting, "melee", "<span class='notice'>Your armor has protected your [hit_area].</span>", "<span class='notice'>Your armor has softened a hit to your [hit_area].</span>")
 	if(armor >= 100)	return 0
 	var/Iforce = I.force //to avoid runtimes on the forcesay checks at the bottom. Some items might delete themselves if you drop them. (stunning yourself, ninja swords)
 

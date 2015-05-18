@@ -124,7 +124,7 @@
 		var/list/reinsert = list()
 		for(var/obj/item/I in S)
 			S.remove_from_storage(I,loc)
-			accepted += recycle(I,1)
+			accepted += recycle(user, I,1)
 			if(I) // not accepted)
 				reinsert += I
 		for(var/obj/item/I in reinsert)
@@ -135,11 +135,11 @@
 			usr << "There is nothing in [S] to put in [src]!"
 		return
 
-	if(recycle(O,0)) // It's magic, y'knooooow
+	if(recycle(user,O,0)) // It's magic, y'knooooow
 		src.updateUsrDialog()
 	return 1
 
-/obj/machinery/autolathe/proc/recycle(var/obj/item/O, var/silent = 0)
+/obj/machinery/autolathe/proc/recycle(mob/user, var/obj/item/O, var/silent = 0)
 	if (src.m_amount + O.m_amt > max_m_amount)
 		usr << "<span class=\"alert\">The autolathe is full. Please remove metal from the autolathe in order to insert more.</span>"
 		return 1
@@ -165,15 +165,15 @@
 			flick("autolathe_r",src)//plays glass insertion animation
 		stack.use(amount)
 	else
-		usr.unEquip(O)
+		if(!user.unEquip(O))
+			user << "<span class='warning'>/the [O] is stuck to your hand, you can't put it in \the [src]!</span>"
 		O.loc = src
 	icon_state = "autolathe"
 	busy = 1
 	use_power(max(1000, (m_amt+g_amt)*amount/10))
 	src.m_amount += m_amt * amount
 	src.g_amount += g_amt * amount
-	if(!silent)
-		usr << "You insert [amount] sheet[amount>1 ? "s" : ""] into the autolathe."
+	user << "<span class='notice'>You insert [amount] sheet[amount>1 ? "s" : ""] to the autolathe.</span>"
 	if (O && O.loc == src)
 		qdel(O)
 	busy = 0

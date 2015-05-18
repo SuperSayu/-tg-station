@@ -2724,7 +2724,7 @@
 "bat" = (/turf/simulated/floor/plasteel{dir = 8; icon_state = "warning"},/area/quartermaster/office)
 "bau" = (/turf/simulated/floor/plasteel,/area/quartermaster/office)
 "bav" = (/obj/item/weapon/storage/box,/obj/structure/table,/obj/item/weapon/storage/box,/obj/item/weapon/storage/box,/obj/item/device/radio/intercom{broadcasting = 0; listening = 1; name = "Station Intercom (General)"; pixel_y = 20},/turf/simulated/floor/plasteel{icon_state = "arrival"; dir = 1},/area/quartermaster/office)
-"baw" = (/obj/structure/table,/obj/item/weapon/wrapping_paper,/obj/item/weapon/wrapping_paper,/obj/machinery/requests_console{department = "Cargo Bay"; departmentType = 2; pixel_y = 30},/turf/simulated/floor/plasteel{icon_state = "arrival"; dir = 1},/area/quartermaster/office)
+"baw" = (/obj/structure/table,/obj/item/stack/wrapping_paper,/obj/item/stack/wrapping_paper,/obj/machinery/requests_console{department = "Cargo Bay"; departmentType = 2; pixel_y = 30},/turf/simulated/floor/plasteel{icon_state = "arrival"; dir = 1},/area/quartermaster/office)
 "bax" = (/obj/structure/table,/obj/item/stack/packageWrap,/obj/item/stack/packageWrap,/obj/item/stack/packageWrap,/obj/item/stack/packageWrap,/obj/item/stack/packageWrap,/obj/item/stack/packageWrap,/obj/item/stack/packageWrap,/obj/item/stack/packageWrap,/turf/simulated/floor/plasteel{icon_state = "arrival"; dir = 5},/area/quartermaster/office)
 "bay" = (/obj/machinery/firealarm{dir = 8; pixel_x = -24},/turf/simulated/floor/plasteel,/area/hallway/primary/central)
 "baz" = (/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/simulated/floor/plasteel,/area/hallway/primary/central)
