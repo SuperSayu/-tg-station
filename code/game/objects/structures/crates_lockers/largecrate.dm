@@ -1,7 +1,7 @@
 /obj/structure/largecrate
 	name = "large crate"
 	desc = "A hefty wooden crate."
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/crates.dmi'
 	icon_state = "densecrate"
 	density = 1
 
@@ -27,8 +27,7 @@
 
 /obj/structure/largecrate/cat/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/crowbar))
-		new /mob/living/simple_animal/cat(loc)
-		new /obj/item/weapon/pet_collar(loc)
+		new /mob/living/simple_animal/pet/cat(loc)
 	..()
 
 /obj/structure/largecrate/lisa
@@ -39,22 +38,19 @@
 /obj/structure/largecrate/lisa/attackby(obj/item/weapon/W as obj, mob/user as mob)	//ugly but oh well
 	if(istype(W, /obj/item/weapon/crowbar))
 		if(lisa)
-			new /mob/living/simple_animal/corgi/Lisa(loc)
+			new /mob/living/simple_animal/pet/corgi/Lisa(loc)
 			lisa = 0
 		else
 			if(prob(50)) // 50% adult corgi
 				if(prob(80)) // net 40% renamable gender-ambiguous woofers
-					new /mob/living/simple_animal/corgi(loc)
-					new /obj/item/weapon/pet_collar(loc)
+					new /mob/living/simple_animal/pet/corgi(loc)
 				else // net 10% dainty bow dog
-					new /mob/living/simple_animal/corgi/Lisa(loc)
+					new /mob/living/simple_animal/pet/corgi/Lisa(loc)
 			else	// 50% child corgi
 				if(prob(80)) // net 40% normal puppy
-					new /mob/living/simple_animal/corgi/puppy(loc)
-					new /obj/item/weapon/pet_collar(loc)
+					new /mob/living/simple_animal/pet/corgi/puppy(loc)
 				else	// net 10% smart girl
-					new /mob/living/simple_animal/corgi/puppy/smart(loc)
-					new /obj/item/weapon/pet_collar(loc)
+					new /mob/living/simple_animal/pet/corgi/puppy/smart(loc)
 	..()
 
 /obj/structure/largecrate/pug
@@ -62,8 +58,7 @@
 
 /obj/structure/largecrate/pug/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/crowbar))
-		new /mob/living/simple_animal/pug(loc)
-		new /obj/item/weapon/pet_collar(loc)
+		new /mob/living/simple_animal/pet/pug(loc)
 	..()
 
 /obj/structure/largecrate/cow
@@ -73,7 +68,6 @@
 /obj/structure/largecrate/cow/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/crowbar))
 		new /mob/living/simple_animal/cow(loc)
-		new /obj/item/weapon/pet_collar(loc)
 	..()
 
 /obj/structure/largecrate/goat
@@ -83,7 +77,6 @@
 /obj/structure/largecrate/goat/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/crowbar))
 		new /mob/living/simple_animal/hostile/retaliate/goat(loc)
-		new /obj/item/weapon/pet_collar(loc)
 	..()
 
 /obj/structure/largecrate/chick
@@ -95,6 +88,4 @@
 		var/num = rand(4, 6)
 		for(var/i = 0, i < num, i++)
 			new /mob/living/simple_animal/chick(loc)
-		new /obj/item/weapon/pet_collar(loc)
-		new /obj/item/weapon/pet_collar(loc)
 	..()

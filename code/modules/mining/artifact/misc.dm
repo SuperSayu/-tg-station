@@ -277,7 +277,7 @@
 				W.dir = src.holder.dir
 				spawn( 4 )
 					if(W)
-						W && W.delete()
+						W && qdel(W)
 			spawn(2)
 				if(src.on)
 					src.processing = 1

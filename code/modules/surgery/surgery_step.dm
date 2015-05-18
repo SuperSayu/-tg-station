@@ -6,7 +6,6 @@
 	var/time = 10					//how long does the step take?
 	var/new_organ = null 			//Used for multilocation operations
 	var/list/allowed_organs = list()//Allowed organs, see Handle_Multi_Loc below - RR
-	var/allow_surgery_multitool = 1
 
 
 /datum/surgery_step/proc/try_op(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
@@ -16,10 +15,6 @@
 			success = 1
 	if(accept_any_item)
 		if(tool && tool_check(user, tool))
-			success = 1
-	else if(allow_surgery_multitool && istype(tool,/obj/item/artifact))
-		var/obj/item/artifact/A = tool
-		if(A.power == A_SURGERY)
 			success = 1
 
 	if(!success)
@@ -92,6 +87,28 @@
 	user.visible_message("<span class='warning'>[user] screws up!</span>")
 	return 0
 
+/datum/surgery_step/close/success(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
+	if(locate(/datum/surgery_step/saw) in surgery.steps)
+		var/limb_type
+		switch(target_zone)
+			if("head")
+				limb_type = /obj/item/organ/limb/head
+			if("chest")
+				limb_type = /obj/item/organ/limb/chest
+			if("l_arm")
+				limb_type = /obj/item/organ/limb/l_arm
+			if("r_arm")
+				limb_type = /obj/item/organ/limb/r_arm
+			if("l_leg")
+				limb_type = /obj/item/organ/limb/l_leg
+			if("r_leg")
+				limb_type = /obj/item/organ/limb/r_leg
+			else
+				return
+		var/obj/item/organ/limb/limb = target.getlimb(limb_type)
+		if(limb)
+			limb.heal_damage(45,0,0)
+	return ..()
 
 /datum/surgery_step/proc/tool_check(mob/user, obj/item/tool)
 	return 1

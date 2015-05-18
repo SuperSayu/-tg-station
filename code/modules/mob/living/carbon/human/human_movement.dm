@@ -4,25 +4,6 @@
 
 	return (. + config.human_delay)
 
-/mob/living/carbon/human/var/last_break = 0
-/mob/living/carbon/human/Move()
-
-	if(prob(2) && !last_break && !buckled)
-		var/list/broken_limbs = list()
-
-		for(var/obj/item/organ/limb/L in organs)
-			if(L.bone_status == BONE_BROKEN) //BONE_BROKEN is supposed to exclude nonorganic bones but have to be sure
-				broken_limbs += L
-
-		if(broken_limbs && broken_limbs.len > 0)
-			var/obj/item/organ/limb/picked_bone = pick(broken_limbs)
-
-			if(picked_bone.bone_agony())
-				last_break = 1
-				spawn(50)
-					last_break = 0
-	..()
-
 /mob/living/carbon/human/Process_Spacemove(var/movement_dir = 0)
 
 	if(..())
@@ -33,6 +14,11 @@
 		var/obj/item/weapon/tank/jetpack/J = back
 		if((movement_dir || J.stabilization_on) && J.allow_thrust(0.01, src))
 			return 1
+	if(istype(wear_suit, /obj/item/clothing/suit/space/hardsuit) && isturf(loc)) //Second check is so you can't use a jetpack in a mech
+		var/obj/item/clothing/suit/space/hardsuit/C = wear_suit
+		if(C.jetpack)
+			if((movement_dir || C.jetpack.stabilization_on) && C.jetpack.allow_thrust(0.01, src))
+				return 1
 
 	if(istype(back, /obj/item/wings) && isturf(loc))
 		return 1
@@ -54,6 +40,9 @@
 /mob/living/carbon/human/mob_negates_gravity()
 	return shoes && shoes.negates_gravity()
 
+
+/mob/living/carbon/human/var/last_break = 0
+
 /mob/living/carbon/human/Move(NewLoc, direct)
 	..()
 	if(shoes)
@@ -64,3 +53,17 @@
 				var/obj/item/clothing/shoes/S = shoes
 				S.step_action()
 
+	if(prob(2) && !(status_flags & IGNORESLOWDOWN) && !last_break && !buckled && !stat)
+		var/list/broken_limbs = list()
+
+		for(var/obj/item/organ/limb/L in organs)
+			if(L.bone_status == BONE_BROKEN) //BONE_BROKEN is supposed to exclude nonorganic bones but have to be sure
+				broken_limbs += L
+
+		if(broken_limbs && broken_limbs.len > 0)
+			var/obj/item/organ/limb/picked_bone = pick(broken_limbs)
+
+			if(picked_bone.bone_agony())
+				last_break = 1
+				spawn(50)
+					last_break = 0

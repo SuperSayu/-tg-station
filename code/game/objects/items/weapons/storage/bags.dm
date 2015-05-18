@@ -79,6 +79,9 @@
 	max_w_class = 3
 	can_hold = list(/obj/item/weapon/ore)
 
+/obj/item/weapon/storage/bag/ore/cyborg
+	name = "cyborg mining satchel"
+
 /obj/item/weapon/storage/bag/ore/holding //miners, your messiah has arrived
 	name = "mining satchel of holding"
 	desc = "A revolution in convenience, this satchel allows for infinite ore storage. It's been outfitted with anti-malfunction safety measures."
@@ -86,7 +89,6 @@
 	max_combined_w_class = INFINITY
 	origin_tech = "bluespace=3"
 	icon_state = "satchel_bspace"
-
 
 // -----------------------------
 //          Plant bag
@@ -291,7 +293,7 @@
  */
 /obj/item/weapon/storage/bag/tray
 	name = "tray"
-	icon = 'icons/obj/food.dmi'
+	icon = 'icons/obj/food/containers.dmi'
 	icon_state = "tray"
 	desc = "A metal tray to lay food on."
 	force = 5

@@ -327,10 +327,10 @@
 /obj/machinery/computer/HolodeckControl/proc/petspawn(var/turf/T)
 	switch(pettype)
 		if("dogs")
-			var/dogtype = pick(/mob/living/simple_animal/corgi,/mob/living/simple_animal/corgi/Lisa,/mob/living/simple_animal/corgi/puppy,/mob/living/simple_animal/pug)
+			var/dogtype = pick(/mob/living/simple_animal/pet/corgi,/mob/living/simple_animal/pet/corgi/Lisa,/mob/living/simple_animal/pet/corgi/puppy,/mob/living/simple_animal/pet/pug)
 			holographic_items += new dogtype(T)
 		if("cats")
-			var/cattype = pick(/mob/living/simple_animal/cat,/mob/living/simple_animal/cat/Proc,/mob/living/simple_animal/cat/kitten)
+			var/cattype = pick(/mob/living/simple_animal/pet/cat,/mob/living/simple_animal/pet/cat/Proc,/mob/living/simple_animal/pet/cat/kitten)
 			holographic_items += new cattype(T)
 		if("chicks")
 			holographic_items += new /mob/living/simple_animal/chick{never_grow = 1}(T)
@@ -390,7 +390,6 @@
 		for(var/mob/living/simple_animal/M in holographic_items)
 			step_rand(M)
 			step_rand(M)
-			M.renamable = 0
 
 /obj/machinery/computer/HolodeckControl/proc/emergencyShutdown()
 	if(!istype(target,/area/holodeck/source_plating))

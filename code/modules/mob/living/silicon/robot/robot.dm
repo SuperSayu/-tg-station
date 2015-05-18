@@ -8,6 +8,7 @@
 	var/sight_mode = 0
 	var/custom_name = ""
 	designation = "Default" //used for displaying the prefix & getting the current module of cyborg
+	has_limbs = 1
 
 //Hud stuff
 
@@ -636,7 +637,7 @@
 
 
 
-/mob/living/silicon/robot/attack_slime(mob/living/carbon/slime/M as mob)
+/mob/living/silicon/robot/attack_slime(mob/living/simple_animal/slime/M as mob)
 	if(..()) //successful slime shock
 		flick("noise", flash)
 		var/stunprob = M.powerlevel * 7 + 10

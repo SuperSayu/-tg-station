@@ -716,6 +716,16 @@
 					var/mob/living/silicon/robot/R = target
 					R.adjustBruteLoss(-extra1)
 					R.updatehealth()
+		if(A_SURGERY)
+			if(istype(target,/mob/living/carbon/human))
+				var/mob/living/carbon/human/H = target
+				H.restore_blood()
+				var/obj/item/organ/limb/affecting = H.get_organ(check_zone(user.zone_sel.selecting))
+				if(affecting)
+					affecting.bone_mend(1)
+					for(var/obj/item/I in affecting.embedded_objects)
+						I.loc = get_turf(H)
+						affecting.embedded_objects -= I
 		if(A_DECLONE)
 			// EXTRA 1: Clone damage
 			if(target)
@@ -817,7 +827,7 @@
 		if(A_PINKSLIME)
 			// EXTRA 1: Range of effect
 			// EXTRA 2: Nutrition level
-			for(var/mob/living/carbon/slime/S in range(extra1,artloc))
+			for(var/mob/living/simple_animal/slime/S in range(extra1,artloc))
 				S.nutrition = max(extra2,S.nutrition)
 				S.rabid = 0
 				S.holding_still += 5
@@ -848,7 +858,7 @@
 			smoke.set_up(R, rand(1, 2), 0, artloc, 0, silent = 1)
 			playsound(artloc, 'sound/effects/smoke.ogg', 50, 1, -3)
 			smoke.start()
-			R.delete()
+			qdel(R)
 		if(A_SHOCKER) // A lot of repeat code here, couldn't quite get it to be in a way where I'd be able to avoid it
 			// EXTRA 1: Shock power
 			if(target == user)

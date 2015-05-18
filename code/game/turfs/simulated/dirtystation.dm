@@ -6,11 +6,12 @@
 /obj/effect/decal/cleanable/blood/old
 	name = "dried blood"
 	desc = "Looks like it's been here a while.  Eew."
-	printamount = 1
+	printamount = 0
 
 /obj/effect/decal/cleanable/blood/old/New()
 	..()
 	icon_state += "-old"
+	blood_DNA["Non-human DNA"] = "A+"
 
 /obj/effect/decal/cleanable/blood/gibs/old
 	name = "old rotting gibs"
@@ -20,6 +21,7 @@
 	..()
 	icon_state += "-old"
 	dir = pick(1,2,4,8)
+	blood_DNA["Non-human DNA"] = "A+"
 
 /obj/effect/decal/cleanable/vomit/old
 	name = "crusty dried vomit"

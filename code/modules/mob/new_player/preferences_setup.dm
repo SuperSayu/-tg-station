@@ -92,10 +92,7 @@
 		if(pref_species.hair_color != null)
 			var/list/temp_hsv = list()
 			if(pref_species.hair_color == "mutcolor")
-				if(!config.mutant_colors)
-					temp_hsv = ReadHSV(RGBtoHSV(pref_species.default_color))
-				else
-					temp_hsv = ReadHSV(RGBtoHSV(mutant_color))
+				temp_hsv = ReadHSV(RGBtoHSV(mutant_color))
 			else
 				temp_hsv = ReadHSV(RGBtoHSV(pref_species.hair_color))
 			var/newlum = (temp_hsv[3] + pref_species.hair_luminosity)
@@ -112,10 +109,7 @@
 		if(pref_species.hair_color != null)
 			var/list/temp_hsv = list()
 			if(pref_species.hair_color == "mutcolor")
-				if(!config.mutant_colors)
-					temp_hsv = ReadHSV(RGBtoHSV(pref_species.default_color))
-				else
-					temp_hsv = ReadHSV(RGBtoHSV(mutant_color))
+				temp_hsv = ReadHSV(RGBtoHSV(mutant_color))
 			else
 				temp_hsv = ReadHSV(RGBtoHSV(pref_species.hair_color))
 			var/newlum = (temp_hsv[3] + pref_species.hair_luminosity)

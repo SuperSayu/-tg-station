@@ -209,7 +209,7 @@
 /obj/item/weapon/reagent_containers/glass/afterattack(obj/target, mob/user, proximity)
 	if((!proximity) || !check_allowed_items(target)) return
 
-	if(istype(target,/mob/living/simple_animal/corgi/puppy/smart) && user.a_intent == "help")
+	if(istype(target,/mob/living/simple_animal/pet/corgi/puppy/smart) && user.a_intent == "help")
 		return //sgt. pepper can do a sniff test on reagent containers
 
 	if(ismob(target) && target.reagents && reagents.total_volume)
@@ -262,6 +262,9 @@
 	//Safety for dumping stuff into a ninja suit. It handles everything through attackby() and this is unnecessary.	//gee thanks noize
 	//NINJACODE
 	else if(istype(target, /obj/item/clothing/suit/space/space_ninja))
+		return
+
+	else if(istype(target, /obj/effect/decal/cleanable)) //stops splashing while scooping up fluids
 		return
 
 	else if(reagents.total_volume)

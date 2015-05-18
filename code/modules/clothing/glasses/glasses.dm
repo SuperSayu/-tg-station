@@ -4,7 +4,7 @@
 	icon_state = "meson"
 	item_state = "meson"
 	origin_tech = "magnets=2;engineering=2"
-	darkness_view = 1
+	darkness_view = 2
 	vision_flags = SEE_TURFS
 	invis_view = SEE_INVISIBLE_MINIMUM
 
@@ -14,6 +14,17 @@
 	icon_state = "nvgmeson"
 	item_state = "nvgmeson"
 	darkness_view = 8
+
+/obj/item/clothing/glasses/meson/gar
+	name = "gar mesons"
+	icon_state = "garm"
+	item_state = "garm"
+	desc = "Do the impossible, see the invisible!"
+	force = 10
+	throwforce = 10
+	throw_speed = 4
+	attack_verb = list("sliced")
+	hitsound = 'sound/weapons/bladeslice.ogg'
 
 /obj/item/clothing/glasses/science
 	name = "Science Goggles"
@@ -80,6 +91,44 @@
 	flash_protect = 1
 	tint = 1
 
+/obj/item/clothing/glasses/sunglasses/garb
+	desc = "Go beyond impossible and kick reason to the curb!"
+	name = "black gar glasses"
+	icon_state = "garb"
+	item_state = "garb"
+	force = 10
+	throwforce = 10
+	throw_speed = 4
+	attack_verb = list("sliced")
+	hitsound = 'sound/weapons/bladeslice.ogg'
+
+/obj/item/clothing/glasses/sunglasses/garb/supergarb
+	desc = "Believe in us humans."
+	name = "black giga gar glasses"
+	icon_state = "supergarb"
+	item_state = "garb"
+	force = 12
+	throwforce = 12
+
+/obj/item/clothing/glasses/sunglasses/gar
+	desc = "Just who the hell do you think I am?!"
+	name = "gar glasses"
+	icon_state = "gar"
+	item_state = "gar"
+	force = 10
+	throwforce = 10
+	throw_speed = 4
+	attack_verb = list("sliced")
+	hitsound = 'sound/weapons/bladeslice.ogg'
+
+/obj/item/clothing/glasses/sunglasses/gar/supergar
+	desc = "We evolve past the person we were a minute before. Little by little we advance with each turn. That's how a drill works!"
+	name = "giga gar glasses"
+	icon_state = "supergar"
+	item_state = "gar"
+	force = 12
+	throwforce = 12
+
 /obj/item/clothing/glasses/welding
 	name = "welding goggles"
 	desc = "Protects the eyes from welders; approved by the mad scientist association."
@@ -132,8 +181,8 @@
 	emp_act(severity)
 		if(istype(src.loc, /mob/living/carbon/human))
 			var/mob/living/carbon/human/M = src.loc
-			M << "<span class='danger'>The Optical Thermal Scanner overloads and blinds you!</span>"
 			if(M.glasses == src)
+				M << "<span class='danger'>The Optical Thermal Scanner overloads and blinds you!</span>"
 				M.eye_blind = 3
 				M.eye_blurry = 5
 				M.disabilities |= NEARSIGHT

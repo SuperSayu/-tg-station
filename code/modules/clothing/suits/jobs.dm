@@ -60,8 +60,7 @@
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.50
 	body_parts_covered = CHEST|GROIN|ARMS
-	allowed = list(/obj/item/weapon/kitchenknife,/obj/item/weapon/kitchenknife/butcher)
-	action_button_name = "Toggle Jacket Sleeves"
+	allowed = list(/obj/item/weapon/kitchenknife)
 	togglename = "sleeves"
 
 //Cook

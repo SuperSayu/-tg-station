@@ -14,7 +14,7 @@
 						/obj/item/weapon/reagent_containers/food/drinks/bottle/random_drink,
 						/obj/item/toy/random,/obj/item/candle,/obj/item/device/camera,
 						/obj/item/clothing/tie/medal/conduct,/obj/item/clothing/tie/medal/silver/valor,/obj/item/clothing/tie/medal/gold/heroism,
-						/obj/item/weapon/spacecash/c10,/obj/item/weapon/spacecash/c20)
+						/obj/item/stack/spacecash/c10,/obj/item/stack/spacecash/c20)
 
 	//Maintenance and private locations
 	var/list/hidden_loot = list(/obj/item/weapon/grenade/chem_grenade/dirt,/obj/item/weapon/grenade/chem_grenade/meat,

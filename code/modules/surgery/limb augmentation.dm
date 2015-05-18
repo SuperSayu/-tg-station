@@ -18,7 +18,6 @@
 	time = 32
 	var/obj/item/organ/limb/L = null // L because "limb"
 	allowed_organs = list("r_arm","l_arm","r_leg","l_leg","chest","head")
-	allow_surgery_multitool = 0
 
 /datum/surgery_step/add_limb/preop(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
 	L = new_organ

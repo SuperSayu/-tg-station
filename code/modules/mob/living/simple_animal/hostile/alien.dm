@@ -10,7 +10,7 @@
 	response_disarm = "shoves"
 	response_harm = "hits"
 	speed = 0
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/xeno
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/xeno
 	skin_type = /obj/item/stack/sheet/animalhide/xeno
 	meat_amount = 3
 	maxHealth = 100
@@ -19,21 +19,16 @@
 	melee_damage_lower = 25
 	melee_damage_upper = 25
 	attacktext = "slashes"
+	speak_emote = list("hisses")
 	a_intent = "harm"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
-	min_oxy = 0
-	max_oxy = 0
-	min_tox = 0
-	max_tox = 0
-	min_co2 = 0
-	max_co2 = 0
-	min_n2 = 0
-	max_n2 = 0
+	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
 	unsuitable_atmos_damage = 15
 	faction = list("alien")
 	status_flags = CANPUSH
 	minbodytemp = 0
-	heat_damage_per_tick = 20
+	see_in_dark = 8
+	see_invisible = SEE_INVISIBLE_MINIMUM
 
 /mob/living/simple_animal/hostile/alien/drone
 	name = "alien drone"
@@ -136,7 +131,13 @@
 	damage = 30
 	icon_state = "toxin"
 
-/mob/living/simple_animal/hostile/alien/Die()
-	..()
+/mob/living/simple_animal/hostile/alien/death(gibbed)
+	..(gibbed)
 	visible_message("[src] lets out a waning guttural screech, green blood bubbling from its maw...")
 	playsound(src, 'sound/voice/hiss6.ogg', 100, 1)
+
+/mob/living/simple_animal/hostile/alien/handle_temperature_damage()
+	if(bodytemperature < minbodytemp)
+		adjustBruteLoss(2)
+	else if(bodytemperature > maxbodytemp)
+		adjustBruteLoss(20)

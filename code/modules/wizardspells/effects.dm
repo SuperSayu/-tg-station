@@ -176,7 +176,7 @@
 		spawn(duration)
 			qdel(src) // why are these not dying
 	process()
-		if(kill_count < 1 || bumped)
+		if(kill_count < 1)
 			qdel(src)
 			return
 		kill_count--
@@ -192,7 +192,7 @@
 				sidestep--
 				step(src,sidestep_dir)
 			sleep(bullet_speed)
-			if(!bumped && !isturf(original))
+			if(!isturf(original))
 				if(loc == get_turf(original))
 					if(!(original in permutated))
 						Bump(original)
@@ -209,7 +209,7 @@
 			if(ispath(trail_effect)) new trail_effect(loc)
 			step_towards(src, current)
 			sleep(bullet_speed)
-			if(!bumped && !isturf(original))
+			if(!isturf(original))
 				if(loc == get_turf(original))
 					if(!(original in permutated))
 						Bump(original)

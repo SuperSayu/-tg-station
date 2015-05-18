@@ -78,7 +78,7 @@
 		if(istype(M,/mob/living/carbon/alien))
 			return pick_xeno
 
-		if(istype(M,/mob/living/carbon/slime))
+		if(istype(M,/mob/living/simple_animal/slime))
 			return pick_slime
 
 	proc/scan(mob/caster as mob)

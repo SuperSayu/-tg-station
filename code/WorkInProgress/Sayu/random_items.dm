@@ -5,7 +5,7 @@
 	name = "Random Toy"
 /obj/item/toy/random/New()
 	..()
-	var/list/types = list(/obj/item/toy/crossbow,/obj/item/toy/balloon,/obj/item/toy/AI,/obj/item/toy/spinningtoy,/obj/item/weapon/reagent_containers/spray/waterflower) + typesof(/obj/item/toy/prize) - /obj/item/toy/prize
+	var/list/types = list(/obj/item/weapon/gun/projectile/shotgun/toy/crossbow,/obj/item/toy/balloon,/obj/item/toy/AI,/obj/item/toy/spinningtoy,/obj/item/weapon/reagent_containers/spray/waterflower) + typesof(/obj/item/toy/prize) - /obj/item/toy/prize
 	var/T = pick(types)
 	new T(loc)
 	spawn(1)
@@ -69,7 +69,7 @@
 	list_reagents = list()
 
 /obj/item/weapon/reagent_containers/glass/bottle/random_chem/New()
-	var/global/list/chems_only = list("slimejelly","blood","water","lube","charcoal","toxin","cyanide","morphine","epinephrine","space_drugs","oxygen","copper","nitrogen","hydrogen","potassium","mercury","sulfur","carbon","chlorine","fluorine","sodium","phosphorus","lithium","sugar","sacid","facid","glycerol","radium","mutadone","thermite","mutagen","virusfood","iron","gold","silver","uranium","aluminium","silicon","fuel","cleaner","plantbgone","plasma","leporazine","cryptobiolin","lexorin","salglu_solution","salbutamol","omnizine","synaptizine","impedrezene","potass_iodide","pen_acid","mannitol","oculine","cryoxadone","spaceacillin","carpotoxin","zombiepowder","mindbreaker","fluorosurfactant","foaming_agent","ethanol","ammonia","diethylamine","antihol","chloralhydrate","lipozine","condensedcapsaicin","frostoil","amatoxin","mushroomhallucinogen","enzyme","nothing","doctorsdelight","antifreeze","neurotoxin")
+	var/global/list/chems_only = list("slimejelly","blood","water","lube","charcoal","toxin","cyanide","morphine","epinephrine","space_drugs","oxygen","copper","nitrogen","hydrogen","potassium","mercury","sulfur","carbon","chlorine","fluorine","sodium","phosphorus","lithium","sugar","sacid","facid","glycerol","radium","mutadone","thermite","mutagen","virusfood","iron","gold","silver","uranium","aluminium","silicon","fuel","cleaner","plantbgone","plasma","leporazine","cryptobiolin","lexorin","salglu_solution","salbutamol","omnizine","synaptizine","impedrezene","potass_iodide","pen_acid","mannitol","oculine","cryoxadone","spaceacillin","carpotoxin","zombiepowder","mindbreaker","fluorosurfactant","foaming_agent","ethanol","ammonia","diethylamine","antihol","chloralhydrate","lipolicide","condensedcapsaicin","cryostylane","amatoxin","mushroomhallucinogen","enzyme","nothing","doctorsdelight","antifreeze","neurotoxin")
 	var/global/list/rare_chems = list("minttoxin","nanomachines","xenomicrobes","adminordrazine")
 
 	var/reagentId = pick(chems_only + rare_chems)
@@ -170,7 +170,7 @@
 	desc = "Something about this pill entices you to try it, against your better judgement."
 
 /obj/item/weapon/reagent_containers/pill/random_pill/New()
-	var/global/list/meds_only = list("charcoal","toxin","cyanide","morphine","epinephrine","space_drugs","mutadone","mutagen","leporazine","cryptobiolin","lexorin", "salglu_solution","salbutamol","omnizine","synaptizine","impedrezene","potass_iodide","pen_acid","mannitol","oculine","spaceacillin","carpotoxin","zombiepowder","mindbreaker","ethanol","ammonia","diethylamine","antihol","chloralhydrate","lipozine","condensedcapsaicin","frostoil","amatoxin","mushroomhallucinogen","nothing","doctorsdelight","neurotoxin")
+	var/global/list/meds_only = list("charcoal","toxin","cyanide","morphine","epinephrine","space_drugs","mutadone","mutagen","leporazine","cryptobiolin","lexorin", "salglu_solution","salbutamol","omnizine","synaptizine","impedrezene","potass_iodide","pen_acid","mannitol","oculine","spaceacillin","carpotoxin","zombiepowder","mindbreaker","ethanol","ammonia","diethylamine","antihol","chloralhydrate","lipolicide","condensedcapsaicin","cryostylane","amatoxin","mushroomhallucinogen","nothing","doctorsdelight","neurotoxin")
 	var/global/list/rare_meds = list("nanomachines","xenomicrobes","minttoxin","adminordrazine","blood")
 	list_reagents = list()
 	var/datum/reagent/reagentId
@@ -288,12 +288,7 @@
 /obj/structure/closet/secure_closet/random_drinks
 	name = "Unlabelled Booze"
 	req_access = list(access_bar)
-	icon_state = "cabinetdetective_locked"
-	icon_closed = "cabinetdetective"
-	icon_locked = "cabinetdetective_locked"
-	icon_opened = "cabinetdetective_open"
-	icon_broken = "cabinetdetective_broken"
-	icon_off = "cabinetdetective_broken"
+	icon_state = "cabinet"
 
 /obj/structure/closet/secure_closet/random_drinks/New()
 	..()
@@ -350,12 +345,12 @@
 
 /obj/structure/largecrate/schrodinger/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	if(istype(W, /obj/item/weapon/crowbar))
-		var/mob/living/simple_animal/cat/Cat1 = new(loc)
+		var/mob/living/simple_animal/pet/cat/Cat1 = new(loc)
 		Cat1.apply_damage(250)//,TOX)
 		Cat1.name = "Schrodinger's Cat"
 		Cat1.desc = "It seems it's been dead for a while."
 
-		var/mob/living/simple_animal/cat/Cat2 = new(loc)
+		var/mob/living/simple_animal/pet/cat/Cat2 = new(loc)
 		Cat2.name = "Schrodinger's Cat"
 		Cat2.desc = "It's was alive the whole time!"
 		sleep(2)

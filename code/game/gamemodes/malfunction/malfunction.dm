@@ -99,6 +99,24 @@
 	return
 
 /datum/game_mode/malfunction/process(seconds)
+	/*var/timer_paused
+
+	for(var/datum/mind/AI_mind in malf_ai)
+		if(timer_paused)
+			return
+		if(AI_mind.current.loc.z == ZLEVEL_STATION || AI_mind.current.onCentcom())
+			return
+		timer_paused = 1
+		priority_announce("Hostile runtimes within station systems now inactive. Possible relocation of AI core(s) off-station.", "Anomaly Alert", 'sound/AI/attention.ogg')
+
+	for(var/datum/mind/AI_mind in malf_ai)					//Prototype of progress stopping when AI leaves the station; for now it's just a lose
+		if(!timer_paused)
+			return
+		if(AI_mind.current.loc != ZLEVEL_STATION)
+			return
+		timer_paused = 0
+		priority_announce("Hostile runtime activity resumed. AI core(s) presumably on-station once more.", "Anomaly Alert", 'sound/AI/attention.ogg')*/
+
 	if ((apcs > 0) && malf_mode_declared)
 		AI_win_timeleft -= apcs * seconds	//Victory timer de-increments based on how many APCs are hacked
 	..()
@@ -143,20 +161,36 @@
 	return all_dead
 
 
+/datum/game_mode/proc/check_ai_loc()
+	for(var/datum/mind/AI_mind in malf_ai)
+		var/turf/ai_location = get_turf(AI_mind.current)
+		if(ai_location && (ai_location.z == ZLEVEL_STATION))
+			return 1
+	return 0
+
+
 /datum/game_mode/malfunction/check_finished()
-	if(round_converted)
-		return ..()
+	if(replacementmode && round_converted == 2)
+		return replacementmode.check_finished()
+	if(round_converted == 1) //No reason to waste resources
+		return ..() //Check for evacuation/nuke
 	if (station_captured && !to_nuke_or_not_to_nuke)
 		return 1
-	if (is_malf_ai_dead())
-		if(config.continuous_round_malf)
+	if (is_malf_ai_dead() || !check_ai_loc())
+		if(config.continuous["malfunction"])
 			if(SSshuttle.emergency.mode == SHUTTLE_STRANDED)
 				SSshuttle.emergency.mode = SHUTTLE_DOCKED
 				SSshuttle.emergency.timer = world.time
 				priority_announce("Hostile enviroment resolved. You have 3 minutes to board the Emergency Shuttle.", null, 'sound/AI/shuttledock.ogg', "Priority")
 			SSshuttle.emergencyNoEscape = 0
 			malf_mode_declared = 0
-			round_converted = convert_roundtype()
+			if(get_security_level() == "delta")
+				set_security_level("red")
+			if(config.midround_antag["malfunction"])
+				round_converted = convert_roundtype()
+				if(!round_converted)
+					return 1
+			return ..()
 		else
 			return 1
 	return ..() //check for shuttle and nuke
@@ -225,18 +259,18 @@
 
 	if      ( station_captured &&                station_was_nuked)
 		feedback_set_details("round_end_result","win - AI win - nuke")
-		world << "<FONT size = 3><B>AI Victory</B></FONT>"
-		world << "<B>Everyone was killed by the self-destruct!</B>"
+		world << "<FONT size = 3><B>Major AI Victory</B></FONT>"
+		world << "<B>The self-destruction of [station_name()] killed everyone on board!</B>"
 
 	else if ( station_captured &&  malf_dead && !station_was_nuked)
 		feedback_set_details("round_end_result","halfwin - AI killed, staff lost control")
 		world << "<FONT size = 3><B>Neutral Victory</B></FONT>"
-		world << "<B>The AI has been killed!</B> The staff has lose control over the station."
+		world << "<B>The AI has been killed!</B> However, the staff have lost control of [station_name()]."
 
 	else if ( station_captured && !malf_dead && !station_was_nuked)
 		feedback_set_details("round_end_result","win - AI win - no explosion")
-		world << "<FONT size = 3><B>AI Victory</B></FONT>"
-		world << "<B>The AI has chosen not to explode you all!</B>"
+		world << "<FONT size = 3><B>Major AI Victory</B></FONT>"
+		world << "<B>The AI has chosen not to detonate the station!</B>"
 
 	else if (!station_captured &&                station_was_nuked)
 		feedback_set_details("round_end_result","halfwin - everyone killed by nuke")
@@ -245,13 +279,18 @@
 
 	else if (!station_captured &&  malf_dead && !station_was_nuked)
 		feedback_set_details("round_end_result","loss - staff win")
-		world << "<FONT size = 3><B>Human Victory</B></FONT>"
+		world << "<FONT size = 3><B>Major Human Victory</B></FONT>"
 		world << "<B>The AI has been destroyed!</B> The staff is victorious."
+
+	else if(!station_captured && !malf_dead && !check_ai_loc())
+		feedback_set_details("round_end_result", "loss - malf ai left zlevel")
+		world << "<font size=3><b>Minor Human Victory</b></font>"
+		world << "<b>The malfunctioning AI has left the station's z-level and was disconnected from its systems!</b> The crew are victorious."
 
 	else if (!station_captured && !malf_dead && !station_was_nuked && crew_evacuated)
 		feedback_set_details("round_end_result","halfwin - evacuated")
 		world << "<FONT size = 3><B>Neutral Victory</B></FONT>"
-		world << "<B>The Corporation has lost [station_name()]! All survived personnel will be fired!</B>"
+		world << "<B>Nanotrasen has lost control of [station_name()]! All surviving personnel will be fired.</B>"
 
 	else if (!station_captured && !malf_dead && !station_was_nuked && !crew_evacuated)
 		feedback_set_details("round_end_result","halfwin - interrupted")
@@ -263,7 +302,7 @@
 
 /datum/game_mode/proc/auto_declare_completion_malfunction()
 	if( malf_ai.len || istype(ticker.mode,/datum/game_mode/malfunction) )
-		var/text = "<br><FONT size=3><B>The malfunctioning AI were:</B></FONT>"
+		var/text = "<br><FONT size=3><B>The malfunctioning AIs were:</B></FONT>"
 
 		for(var/datum/mind/malf in malf_ai)
 

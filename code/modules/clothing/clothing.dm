@@ -8,6 +8,13 @@
 	lefthand_file = 'icons/mob/inhands/clothing_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/clothing_righthand.dmi'
 	var/alt_desc = null
+	var/toggle_message = null
+	var/alt_toggle_message = null
+	var/activation_sound = null
+	var/toggle_cooldown = null
+	var/cooldown = 0
+	var/obj/item/device/flashlight/F = null
+	var/can_flashlight = 0
 
 //Ears: currently only used for headsets and earmuffs
 /obj/item/clothing/ears
@@ -93,6 +100,7 @@ BLIND     // can't see anything
 	body_parts_covered = HEAD
 	slot_flags = SLOT_HEAD
 	var/blockTracking = 0 //For AI tracking
+	var/can_toggle = null
 
 //Mask
 /obj/item/clothing/mask
@@ -100,7 +108,6 @@ BLIND     // can't see anything
 	icon = 'icons/obj/clothing/masks.dmi'
 	body_parts_covered = HEAD
 	slot_flags = SLOT_MASK
-	var/alloweat = 0
 	strip_delay = 40
 	put_on_delay = 40
 	var/mask_adjusted = 0
@@ -114,7 +121,7 @@ BLIND     // can't see anything
 //Proc that moves gas/breath masks out of the way, disabling them and allowing pill/food consumption
 /obj/item/clothing/mask/proc/adjustmask(var/mob/user)
 	if(!ignore_maskadjust)
-		if(!user.canmove || user.stat || user.restrained())
+		if(user.incapacitated())
 			return
 		if(src.mask_adjusted == 1)
 			src.icon_state = initial(icon_state)
@@ -136,6 +143,7 @@ BLIND     // can't see anything
 			if(adjusted_flags)
 				slot_flags = adjusted_flags
 		usr.update_inv_wear_mask()
+
 
 
 
@@ -420,3 +428,4 @@ atom/proc/generate_female_clothing(index,t_color,icon,type)
 		if(!user.stat && user.canmove && !user.restrained())
 			return 1
 	return 0
+

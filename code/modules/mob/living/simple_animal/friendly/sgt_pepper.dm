@@ -1,4 +1,4 @@
-/mob/living/simple_animal/corgi/puppy/smart/sgt_pepper
+/mob/living/simple_animal/pet/corgi/puppy/smart/sgt_pepper
 	name = "Sgt. Pepper"
 	real_name = "Sgt. Pepper"
 	desc = "The ruffest, tuffest, most vigilant puppy on the station."
@@ -7,14 +7,14 @@
 	icon_dead = "sgt_pepper_dead"
 	icon = 'icons/mob/sayu_animal.dmi'
 
-/mob/living/simple_animal/corgi/puppy/smart/sgt_pepper/New()
-	if(isturf(loc) && type == /mob/living/simple_animal/corgi/puppy/smart/sgt_pepper && prob(10))
-		new /mob/living/simple_animal/corgi/puppy/smart/sgt_pepper/steak(loc)
+/mob/living/simple_animal/pet/corgi/puppy/smart/sgt_pepper/New()
+	if(isturf(loc) && type == /mob/living/simple_animal/pet/corgi/puppy/smart/sgt_pepper && prob(10))
+		new /mob/living/simple_animal/pet/corgi/puppy/smart/sgt_pepper/steak(loc)
 		qdel(src)
 		return
 	..()
 
-/mob/living/simple_animal/corgi/puppy/smart
+/mob/living/simple_animal/pet/corgi/puppy/smart
 	gender = "female" // the smarter of the two genders
 	response_help  = "pets"
 	response_disarm = "bops"
@@ -39,7 +39,7 @@
 
 	// Passes the sniff test
 	var/list/smell_approved = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat, /obj/item/weapon/reagent_containers/food/snacks/meat/monkey,
+		/obj/item/weapon/reagent_containers/food/snacks/meat, /obj/item/weapon/reagent_containers/food/snacks/meat/slab/monkey,
 		/obj/item/weapon/reagent_containers/food/snacks/donut,
 		/obj/item/weapon/reagent_containers/food/snacks/donut/jelly, /obj/item/weapon/reagent_containers/food/snacks/donut/jelly/cherryjelly,
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice/meat, /obj/item/weapon/reagent_containers/food/snacks/kebab/monkey,
@@ -47,9 +47,9 @@
 
 	// Fails the sniff test
 	var/list/smell_offensive = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat/human, /obj/item/weapon/reagent_containers/food/snacks/meat/corgi,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/slab/human, /obj/item/weapon/reagent_containers/food/snacks/meat/slab/corgi,
 		/obj/item/weapon/reagent_containers/food/snacks/badrecipe, /obj/item/weapon/reagent_containers/food/snacks/burger/clown,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/xeno, /obj/item/weapon/reagent_containers/food/snacks/pie/xemeatpie,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/slab/xeno, /obj/item/weapon/reagent_containers/food/snacks/pie/xemeatpie,
 		/obj/item/weapon/reagent_containers/food/snacks/soup/mystery, /obj/item/weapon/reagent_containers/food/snacks/carpmeat,
 		/obj/item/weapon/reagent_containers/food/snacks/burger/brain,/obj/item/weapon/reagent_containers/food/snacks/spesslaw) // that's offensive to the legal system, sir
 
@@ -59,7 +59,7 @@
 
 
 
-/mob/living/simple_animal/corgi/puppy/smart/proc/decide_interest(var/mob/M)
+/mob/living/simple_animal/pet/corgi/puppy/smart/proc/decide_interest(var/mob/M)
 	if(M in like || M in dislike)
 		return
 	if(ishuman(M) && M.mind)
@@ -124,7 +124,7 @@
 
 
 	//return (-1, 0, 1) based on bad, indifferent, good
-/mob/living/simple_animal/corgi/puppy/smart/proc/sniff_test(var/obj/item/weapon/reagent_containers/RC)
+/mob/living/simple_animal/pet/corgi/puppy/smart/proc/sniff_test(var/obj/item/weapon/reagent_containers/RC)
 	if((RC.type in smell_approved) && prob(95))
 		return 1
 	if(RC.type in smell_offensive)
@@ -135,7 +135,7 @@
 			return -1
 	return 0
 
-/mob/living/simple_animal/corgi/puppy/smart/Life()
+/mob/living/simple_animal/pet/corgi/puppy/smart/Life()
 	..()
 	if(stat != CONSCIOUS || prob(21))
 		return // distractable
@@ -269,13 +269,13 @@
 		decide_interest(ML)
 		return
 
-/mob/living/simple_animal/corgi/puppy/smart/attack_animal(mob/living/simple_animal/M as mob)
+/mob/living/simple_animal/pet/corgi/puppy/smart/attack_animal(mob/living/simple_animal/M as mob)
 	like -= M
 	fears += M
 	target = M
 	..()
 
-/mob/living/simple_animal/corgi/puppy/smart/attackby(var/obj/item/W as obj,var/mob/user as mob)
+/mob/living/simple_animal/pet/corgi/puppy/smart/attackby(var/obj/item/W as obj,var/mob/user as mob)
 	if(istype(W,/obj/item/weapon/reagent_containers) && !(user in fears))
 		emote("me", 1, " sniffs at [W].")
 		sleep(30)
@@ -303,7 +303,7 @@
 	fears += user
 	..(W,user)
 
-/mob/living/simple_animal/corgi/puppy/smart/attack_hand(var/mob/user as mob)
+/mob/living/simple_animal/pet/corgi/puppy/smart/attack_hand(var/mob/user as mob)
 	if(iscarbon(user))
 		switch(user.a_intent)
 			if("grab")
@@ -325,7 +325,7 @@
 	..(user)
 
 // My apologies for this.  -Sayu
-/mob/living/simple_animal/corgi/puppy/smart/sgt_pepper/steak
+/mob/living/simple_animal/pet/corgi/puppy/smart/sgt_pepper/steak
 	name = "Sgt. Peppersteak"
 	real_name = "Sgt. Peppersteak"
 	desc = "The biggest, tastiest, most vigilant bovine on the station."
@@ -344,7 +344,7 @@
 	childtype = null
 	species = /mob/living/simple_animal/cow
 
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slab
 
 	//somewhat more vegetarian than Pepper - not really complete though
 	smell_approved = list(
@@ -353,11 +353,11 @@
 		/obj/item/weapon/reagent_containers/food/snacks/donut,/obj/item/weapon/reagent_containers/food/snacks/breadslice/plain,
 		/obj/item/weapon/reagent_containers/food/snacks/donut/jelly, /obj/item/weapon/reagent_containers/food/snacks/donut/jelly/cherryjelly)
 	smell_offensive = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat, /obj/item/weapon/reagent_containers/food/snacks/meat/monkey,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/slab, /obj/item/weapon/reagent_containers/food/snacks/meat/slab/monkey,
 		/obj/item/weapon/reagent_containers/food/snacks/breadslice/meat, /obj/item/weapon/reagent_containers/food/snacks/kebab/monkey,
 		/obj/item/weapon/reagent_containers/food/snacks/pie/meatpie, /obj/item/weapon/reagent_containers/food/snacks/sosjerky,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/human, /obj/item/weapon/reagent_containers/food/snacks/meat/corgi,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/slab/human, /obj/item/weapon/reagent_containers/food/snacks/meat/slab/corgi,
 		/obj/item/weapon/reagent_containers/food/snacks/badrecipe, /obj/item/weapon/reagent_containers/food/snacks/burger/clown,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/xeno, /obj/item/weapon/reagent_containers/food/snacks/pie/xemeatpie,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/slab/xeno, /obj/item/weapon/reagent_containers/food/snacks/pie/xemeatpie,
 		/obj/item/weapon/reagent_containers/food/snacks/soup/mystery, /obj/item/weapon/reagent_containers/food/snacks/carpmeat,
 		/obj/item/weapon/reagent_containers/food/snacks/burger/brain,/obj/item/weapon/reagent_containers/food/snacks/spesslaw) // that's offensive to the legal system, sir

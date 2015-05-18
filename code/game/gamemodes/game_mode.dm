@@ -88,7 +88,7 @@
 		spawn (rand(waittime_l, waittime_h))
 			send_intercept(0)
 	start_state = new /datum/station_state()
-	start_state.count()
+	start_state.count(1)
 	return 1
 
 ///make_antag_chance()
@@ -101,13 +101,28 @@
 ///convert_roundtype()
 ///Allows rounds to basically be "rerolled" should the initial premise fall through
 /datum/game_mode/proc/convert_roundtype()
-	var/list/datum/game_mode/runnable_modes = config.get_runnable_modes()
+	var/living_crew = 0
+
+	for(var/mob/Player in mob_list)
+		if(Player.mind && Player.stat != DEAD && !isnewplayer(Player) &&!isbrain(Player))
+			living_crew++
+	if(living_crew / joined_player_list.len <= config.midround_antag_life_check) //If a lot of the player base died, we start fresh
+		message_admins("Convert_roundtype failed due to too many dead people. Limit is [config.midround_antag_life_check * 100]% living crew")
+		return null
+
+	var/list/datum/game_mode/runnable_modes = config.get_runnable_midround_modes(living_crew)
+	var/list/datum/game_mode/usable_modes = list()
 	for(var/datum/game_mode/G in runnable_modes)
-		if(!G.reroll_friendly)	del(G)
+		if(G.reroll_friendly)
+			usable_modes += G
+		else
+			del(G)
 
-	if(!runnable_modes)	return 0
+	if(!usable_modes)
+		message_admins("Convert_roundtype failed due to no valid modes to convert to. Please report this error to the Coders.")
+		return null
 
-	replacementmode = pickweight(runnable_modes)
+	replacementmode = pickweight(usable_modes)
 
 	switch(SSshuttle.emergency.mode) //Rounds on the verge of ending don't get new antags, they just run out
 		if(SHUTTLE_STRANDED, SHUTTLE_ESCAPE)
@@ -117,15 +132,8 @@
 				return 1
 
 	if(world.time >= (config.midround_antag_time_check * 600))
-		return 0
-
-	var/living_crew = 0
-
-	for(var/mob/Player in mob_list)
-		if(Player.mind && Player.stat != DEAD && !isnewplayer(Player) &&!isbrain(Player))
-			living_crew++
-	if(living_crew / joined_player_list.len <= config.midround_antag_life_check) //If a lot of the player base died, we start fresh
-		return 0
+		message_admins("Convert_roundtype failed due to round length. Limit is [config.midround_antag_time_check] minutes.")
+		return null
 
 	var/list/antag_canadates = list()
 
@@ -134,7 +142,8 @@
 			antag_canadates += H
 
 	if(!antag_canadates)
-		return 0
+		message_admins("Convert_roundtype failed due to no antag canadates.")
+		return null
 
 	antag_canadates = shuffle(antag_canadates)
 
@@ -143,19 +152,21 @@
 	if(config.protect_assistant_from_antagonist)
 		replacementmode.restricted_jobs += "Assistant"
 
-	message_admins("The roundtype will be converted. If you feel that the round should not continue, <A HREF='?_src_=holder;end_round=\ref[usr]'>end the round now</A>.")
+	message_admins("The roundtype will be converted. If you have other plans for the station or think the round should end <A HREF='?_src_=holder;toggle_midround_antag=\ref[usr]'>stop the creation of antags</A> or <A HREF='?_src_=holder;end_round=\ref[usr]'>end the round now</A>.")
 
-	spawn(rand(1800,4200)) //somewhere between 3 and 7 minutes from now
+	spawn(rand(1200,3000)) //somewhere between 2 and 5 minutes from now
+		if(!config.midround_antag[ticker.mode.config_tag])
+			round_converted = 0
+			return 1
 		for(var/mob/living/carbon/human/H in antag_canadates)
 			replacementmode.make_antag_chance(H)
 		round_converted = 2
 		message_admins("The roundtype has been converted, antagonists may have been created")
-
 	return 1
 
 ///process()
 ///Called by the gameticker
-/datum/game_mode/proc/process()
+/datum/game_mode/process()
 	return 0
 
 
@@ -220,6 +231,7 @@
 		if(BE_GANG)			roletext="gangster"
 		if(BE_CULTIST)		roletext="cultist"
 		if(BE_MONKEY)		roletext="monkey"
+		if(BE_ABDUCTOR)		roletext="abductor"
 
 
 	// Ultimate randomizing code right here

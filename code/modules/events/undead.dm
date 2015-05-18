@@ -2,7 +2,7 @@
 	name = "Undead rising"
 	typepath = /datum/round_event/undead
 	max_occurrences = 1
-	holidayID = "Halloween"
+	holidayID = HALLOWEEN
 
 /datum/round_event/undead
 	var/spawn_prob = 5
@@ -21,7 +21,6 @@
 	start()
 		for(var/area/A)
 			if(A.luminosity) continue // prevents all tiles that have any light in them
-			if(A.lighting_space) continue // should prevent all space tiles--they are space-lit
 			if(A.type == /area) continue
 			var/list/turflist = list()
 			for(var/turf/T in A)
