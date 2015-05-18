@@ -274,14 +274,6 @@
 			return
 
 		if(component_parts && istype(W, /obj/item/weapon/crowbar))
-			var/list/all_products = product_records + hidden_records + coin_records
-			for(var/datum/data/vending_product/machine_content in all_products)
-				while(machine_content.amount !=0)
-					for(var/obj/item/weapon/vending_refill/VR in component_parts)
-						VR.charges++
-						machine_content.amount--
-						if(!machine_content.amount)
-							break
 			default_deconstruction_crowbar(W)
 
 	if(istype(W, /obj/item/weapon/screwdriver) && anchored)
@@ -339,6 +331,25 @@
 			user << "<span class='notice'>You should probably unscrew the service panel first.</span>"
 	else
 		..()
+
+
+/obj/machinery/vending/default_deconstruction_crowbar(var/obj/item/O)
+	var/list/all_products = product_records + hidden_records + coin_records
+	for(var/datum/data/vending_product/machine_content in all_products)
+		while(machine_content.amount !=0)
+			var/safety = 0 //to avoid infinite loop
+			for(var/obj/item/weapon/vending_refill/VR in component_parts)
+				safety++
+				if(VR.charges < initial(VR.charges))
+					VR.charges++
+					machine_content.amount--
+					if(!machine_content.amount)
+						break
+				else
+					safety--
+			if(safety <= 0)
+				break
+	..()
 
 /obj/machinery/vending/emag_act(user as mob)
 	if(!emagged)
@@ -650,6 +661,7 @@
 	contraband = list()
 	premium = list()
 
+IF YOU MODIFY THE PRODUCTS LIST OF A MACHINE, MAKE SURE TO UPDATE ITS RESUPPLY CANISTER CHARGES in vending_items.dm
 */
 
 /*
@@ -777,7 +789,7 @@
 	products = list(/obj/item/weapon/gun/projectile/automatic/pistol/deagle/gold = 2,/obj/item/weapon/gun/projectile/automatic/pistol/deagle/camo = 2,
 					/obj/item/weapon/gun/projectile/automatic/pistol/m1911 = 2,/obj/item/weapon/gun/projectile/automatic/proto = 2,
 					/obj/item/weapon/gun/projectile/shotgun/combat = 2,/obj/item/weapon/gun/projectile/automatic/gyropistol = 1,
-					/obj/item/weapon/gun/projectile/shotgun = 2)
+					/obj/item/weapon/gun/projectile/shotgun = 2,/obj/item/weapon/gun/projectile/automatic/ar = 2)
 	premium = list(/obj/item/ammo_box/magazine/smgm9mm = 2,/obj/item/ammo_box/magazine/m50 = 4,/obj/item/ammo_box/magazine/m45 = 2,/obj/item/ammo_box/magazine/m75 = 2)
 	contraband = list(/obj/item/clothing/under/patriotsuit = 1,/obj/item/weapon/bedsheet/patriot = 3)
 
