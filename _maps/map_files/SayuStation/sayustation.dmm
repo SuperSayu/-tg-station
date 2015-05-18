@@ -2496,7 +2496,7 @@
 "aVZ" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/floor/plasteel,/area/hallway/primary/central)
 "aWa" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/floor/plasteel,/area/hallway/primary/central)
 "aWb" = (/obj/structure/disposalpipe/segment{dir = 2; icon_state = "pipe-c"},/turf/simulated/floor/plasteel,/area/hallway/primary/central)
-"aWc" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/structure/table,/obj/item/weapon/kitchen/utensil/fork,/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/bar)
+"aWc" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden,/obj/structure/table,/obj/item/weapon/kitchen/fork,/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/bar)
 "aWd" = (/obj/machinery/smartfridge/drinks{use_power = 0},/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/bar)
 "aWe" = (/obj/structure/table/reinforced,/obj/item/weapon/lighter/zippo,/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/bar)
 "aWf" = (/obj/machinery/door/window/southright{name = "Bar Door"; req_access_txt = "0"; req_one_access_txt = "25;28"},/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/bar)

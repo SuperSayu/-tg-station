@@ -8784,6 +8784,7 @@
 "aVK" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/floor/plasteel,/area/hallway/primary/central)
 "aVL" = (/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/floor/plasteel,/area/hallway/primary/central)
 "aVM" = (/obj/structure/disposalpipe/segment{dir = 2; icon_state = "pipe-c"},/turf/simulated/floor/plasteel,/area/hallway/primary/central)
+<<<<<<< HEAD
 "aVN" = (/obj/machinery/light{icon_state = "tube1"; dir = 8},/obj/machinery/computer/security/telescreen/entertainment{pixel_x = -31},/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/bar)
 "aVO" = (/obj/structure/stool/bed/chair{dir = 4},/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/bar)
 "aVP" = (/obj/structure/table,/obj/item/weapon/kitchen/utensil/fork,/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/bar)
@@ -8792,6 +8793,11 @@
 "aVR" = (/obj/structure/stool/bed/chair{dir = 4},/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/bar)
 "aVS" = (/obj/structure/table,/obj/item/weapon/reagent_containers/food/condiment/peppermill{pixel_x = 3},/obj/item/weapon/reagent_containers/food/condiment/saltshaker{pixel_x = -3; pixel_y = 0},/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/bar)
 =======
+=======
+"aVN" = (/obj/structure/table/reinforced,/obj/item/weapon/lighter/zippo,/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/bar)
+"aVO" = (/obj/structure/stool,/obj/effect/landmark/start{name = "Assistant"},/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/bar)
+"aVP" = (/obj/structure/table,/obj/item/weapon/kitchen/fork,/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/bar)
+>>>>>>> 36df27a... Merge pull request #9205 from phil235/SpiderKnifeFixes
 "aVQ" = (/obj/machinery/atmospherics/pipe/simple/yellow/visible{dir = 4},/turf/simulated/wall/r_wall,/area/atmos)
 "aVR" = (/obj/structure/grille,/obj/structure/window/reinforced/fulltile,/obj/machinery/atmospherics/pipe/simple/cyan/visible{dir = 9},/turf/simulated/floor/plating,/area/atmos)
 "aVS" = (/obj/machinery/light{dir = 4},/obj/machinery/atmospherics/pipe/simple/cyan/visible{dir = 6},/turf/simulated/floor/plasteel,/area/atmos)
@@ -12771,7 +12777,10 @@
 "cuA" = (/obj/structure/sign/directions/medical{dir = 4; icon_state = "direction_med"; pixel_x = 32; pixel_y = -24; tag = "icon-direction_med (EAST)"},/obj/structure/sign/directions/science{dir = 4; icon_state = "direction_sci"; pixel_x = 32; pixel_y = -32; tag = "icon-direction_sci (EAST)"},/obj/structure/sign/directions/engineering{pixel_x = 32; pixel_y = -40},/turf/simulated/floor/plasteel,/area/hallway/primary/central)
 "cuB" = (/obj/structure/disposalpipe/junction{icon_state = "pipe-j2"; dir = 2},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/structure/sign/directions/engineering{pixel_x = -32; pixel_y = -40},/obj/structure/sign/directions/medical{dir = 4; icon_state = "direction_med"; pixel_x = -32; pixel_y = -24; tag = "icon-direction_med (EAST)"},/obj/structure/sign/directions/evac{dir = 4; icon_state = "direction_evac"; pixel_x = -32; pixel_y = -32; tag = "icon-direction_evac (EAST)"},/turf/simulated/floor/plasteel,/area/hallway/primary/central)
 "cuD" = (/obj/machinery/light_switch{pixel_y = 28},/obj/machinery/camera{c_tag = "Custodial Closet"},/obj/structure/stool/bed/chair/janicart,/turf/simulated/floor/plasteel,/area/janitor)
+<<<<<<< HEAD
 >>>>>>> 55c320d... Merge pull request #8824 from Jordie0608/howdoyouknowyourbestfriendisntsecretlyawizard
+=======
+>>>>>>> 36df27a... Merge pull request #9205 from phil235/SpiderKnifeFixes
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
