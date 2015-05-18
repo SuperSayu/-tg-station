@@ -188,6 +188,12 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["backbag"]			>> backbag
 	S["mutant_color"]		>> mutant_color
 	S["spec_hair"]			>> spec_hair // I'll need to add more stuff when more species that use hair are added to roundstart. ;-;
+	S["clown_name"]			>> custom_names["clown"]
+	S["mime_name"]			>> custom_names["mime"]
+	S["ai_name"]			>> custom_names["ai"]
+	S["cyborg_name"]		>> custom_names["cyborg"]
+	S["religion_name"]		>> custom_names["religion"]
+	S["deity_name"]			>> custom_names["deity"]
 
 	//Jobs
 	S["userandomjob"]		>> userandomjob
@@ -276,6 +282,12 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["species"]			<< pref_species.name
 	S["mutant_color"]		<< mutant_color
 	S["spec_hair"]			<< spec_hair // I'll need to add more stuff when more species that use hair are added to roundstart. ;-;
+	S["clown_name"]			<< custom_names["clown"]
+	S["mime_name"]			<< custom_names["mime"]
+	S["ai_name"]			<< custom_names["ai"]
+	S["cyborg_name"]		<< custom_names["cyborg"]
+	S["religion_name"]		<< custom_names["religion"]
+	S["deity_name"]			<< custom_names["deity"]
 
 	//Jobs
 	S["userandomjob"]		<< userandomjob
