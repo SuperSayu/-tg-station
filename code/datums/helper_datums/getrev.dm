@@ -65,6 +65,7 @@ client/verb/showrevinfo()
 	src << "Allow Latejoin Antagonists: [config.allow_latejoin_antagonists]"
 	src << "Protect Assistant From Antagonist: [config.protect_assistant_from_antagonist]"
 
+
 	if(config.show_game_type_odds)
 		var/output  = ""
 		output += "<br><b>Game Type Odds:</b><br>"
@@ -72,4 +73,7 @@ client/verb/showrevinfo()
 			var/p = config.probabilities[i]
 			output += "[p] [config.probabilities[p]]<br>"
 		src << output
+
+	src << "Enforce Continuous Rounds: [config.continuous.len] of [config.modes.len] roundtypes"
+	src << "Allow Midround Antagonists: [config.midround_antag.len] of [config.modes.len] roundtypes"
 	return
