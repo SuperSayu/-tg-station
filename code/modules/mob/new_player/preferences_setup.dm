@@ -51,12 +51,6 @@
 		if(MUTCOLORS in pref_species.specflags)
 			preview_icon.Blend("#[mutant_color]", ICON_MULTIPLY)
 
-	if(LAYER2 in pref_species.specflags)
-		if(pref_species.sexes)
-			preview_icon.Blend(new /icon('icons/mob/human.dmi', "[pref_species.id]_[g]_olay"), ICON_OVERLAY)
-		else
-			preview_icon.Blend(new /icon('icons/mob/human.dmi', "[pref_species.id]_olay"), ICON_OVERLAY)
-
 	var/datum/sprite_accessory/S
 	if(underwear)
 		S = underwear_list[underwear]
