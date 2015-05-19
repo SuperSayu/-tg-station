@@ -152,4 +152,6 @@
 	var/turf/listed_turf = null	//the current turf being examined in the stat panel
 
 	var/list/permanent_huds = list()
-	var/list/permanent_sight_flags = list()
+	var/permanent_sight_flags = 0
+
+	var/resize = 1 //Badminnery resize
