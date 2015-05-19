@@ -276,7 +276,7 @@
 			src.attack_hand(user)
 
 /obj/structure/closet/proc/place(var/mob/user, var/obj/item/I)
-	if(!src.opened)
+	if(!src.opened && secure)
 		togglelock(user)
 		return 1
 	return 0
@@ -337,7 +337,7 @@
 	if(!usr.canmove || usr.stat || usr.restrained())
 		return
 
-	if(ishuman(usr))
+	if(iscarbon(usr) || issilicon(usr))
 		src.attack_hand(usr)
 	else
 		usr << "<span class='warning'>This mob type can't use this verb.</span>"

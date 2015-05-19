@@ -40,6 +40,7 @@
 
 	var/assigned_role
 	var/special_role
+	var/list/restricted_roles = list()
 
 	var/datum/job/assigned_job
 
