@@ -229,8 +229,8 @@
 		if(world.time > last_event+15)
 			active = 1
 			for(var/mob/living/L in range(3,src))
-				L.irradiate(12)
-			for(var/turf/simulated/wall/mineral/uranium/T in range(3,src))
+				L.irradiate(4)
+			for(var/turf/simulated/wall/mineral/uranium/T in orange(1,src))
 				T.radiate()
 			for(var/obj/item/artifact/A in range(3,src)) // This is terrible
 				if(!A.raddelay)
