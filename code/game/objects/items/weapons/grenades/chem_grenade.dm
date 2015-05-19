@@ -164,7 +164,8 @@
 		assemblyattacher = user.ckey
 
 		stage_change(WIRED)
-		user << "<span class='notice'>You add [A] to the [initial(name)] assembly./span>"
+		user << "<span class='notice'>You add [A] to the [initial(name)] assembly.</span>"
+
 		update_icon()
 
 	else if(stage == EMPTY && istype(I, /obj/item/stack/cable_coil))
