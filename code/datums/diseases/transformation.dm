@@ -93,10 +93,8 @@
 
 /datum/disease/transformation/jungle_fever/do_disease_transformation(var/mob/living/carbon/affected_mob)
 	if(!ismonkey(affected_mob))
-		var/mind = affected_mob.mind //TODOpl: this might not be needed
+		ticker.mode.add_monkey(affected_mob.mind)
 		affected_mob.monkeyize(TR_KEEPITEMS | TR_KEEPIMPLANTS | TR_KEEPDAMAGE | TR_KEEPVIRUS | TR_KEEPSE)
-		if(mind)
-			ticker.mode.add_monkey(mind)
 
 /datum/disease/transformation/jungle_fever/stage_act()
 	..()
