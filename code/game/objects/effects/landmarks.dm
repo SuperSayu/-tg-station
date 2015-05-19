@@ -85,6 +85,9 @@ var/global/xartnum = 0 // Extra artifact number. Used to prevent too many extra 
 	start_landmarks_list += src
 
 	return 1
+/obj/effect/landmark/start/Destroy()
+	..()
+	start_landmarks_list -= src
 
 /obj/effect/landmark/artifact/New()
 	..()
