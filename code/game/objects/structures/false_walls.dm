@@ -45,11 +45,11 @@
 
 	for(var/turf/simulated/wall/W in orange(src,1))
 		if(abs(src.x-W.x)-abs(src.y-W.y)) //doesn't count diagonal walls
-			if(walltype == W.walltype)//Only 'like' walls connect -Sieve
+			if(mineral == W.mineral)//Only 'like' walls connect -Sieve
 				junction |= get_dir(src,W)
 	for(var/obj/structure/falsewall/W in orange(src,1))
 		if(abs(src.x-W.x)-abs(src.y-W.y)) //doesn't count diagonal walls
-			if(walltype == W.walltype)
+			if(mineral == W.mineral)
 				junction |= get_dir(src,W)
 	icon_state = "[walltype][junction]"
 	return
@@ -159,6 +159,7 @@
 	desc = "A huge chunk of reinforced metal used to seperate rooms."
 	icon_state = "r_wall"
 	var/start_closed = 1
+	walltype = "rwall"
 
 /obj/structure/falsewall/reinforced/ChangeToWall(delete = 1)
 	var/turf/T = get_turf(src)
@@ -179,25 +180,6 @@
 		src.relativewall()
 	else
 		icon_state = "frwall_open"
-
-/obj/structure/falsewall/reinforced/relativewall()
-
-	if(!density)
-		icon_state = "frwall_open"
-		return
-
-	var/junction = 0 //will be used to determine from which side the wall is connected to other walls
-
-	for(var/turf/simulated/wall/W in orange(src,1))
-		if(abs(src.x-W.x)-abs(src.y-W.y)) //doesn't count diagonal walls
-			if(src.walltype == W.walltype)//Only 'like' walls connect -Sieve
-				junction |= get_dir(src,W)
-	for(var/obj/structure/falsewall/W in orange(src,1))
-		if(abs(src.x-W.x)-abs(src.y-W.y)) //doesn't count diagonal walls
-			if(src.walltype == W.walltype)
-				junction |= get_dir(src,W)
-	icon_state = "rwall[junction]"
-	return
 
 /*
  * Uranium Falsewalls
