@@ -84,6 +84,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/toggle_random_events,
 	/client/proc/set_ooc,
 	/client/proc/cmd_admin_artreroll,
+	/client/proc/reset_ooc,
 	/client/proc/forceEvent,
 	/client/proc/bluespace_artillery
 	)
@@ -137,6 +138,7 @@ var/list/admin_verbs_rejuv = list(
 //verbs which can be hidden - needs work
 var/list/admin_verbs_hideable = list(
 	/client/proc/set_ooc,
+	/client/proc/reset_ooc,
 	/client/proc/deadmin_self,
 	/client/proc/deadchat,
 	/client/proc/toggleprayers,
