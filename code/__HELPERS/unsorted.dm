@@ -885,7 +885,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	var/y_pos = null
 	var/z_pos = null
 
-/proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
+/proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0, var/newloc = null)
 	if(!original)
 		return null
 
@@ -894,7 +894,10 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	if(sameloc)
 		O=new original.type(original.loc)
 	else
-		O=new original.type(locate(0,0,0))
+		if(newloc)
+			O=new original.type(newloc)
+		else
+			O= new original.type(locate(0,0,0))
 
 	if(perfectcopy)
 		if((O) && (original))
