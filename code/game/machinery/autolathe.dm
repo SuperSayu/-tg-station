@@ -124,7 +124,7 @@
 		var/list/reinsert = list()
 		for(var/obj/item/I in S)
 			S.remove_from_storage(I,loc)
-			accepted += recycle(I,1)
+			accepted += recycle(user, I,1)
 			if(I) // not accepted)
 				reinsert += I
 		for(var/obj/item/I in reinsert)
@@ -135,19 +135,22 @@
 			usr << "There is nothing in [S] to put in [src]!"
 		return
 
-	if(recycle(O,0)) // It's magic, y'knooooow
+	if(recycle(user,O,0)) // It's magic, y'knooooow
 		src.updateUsrDialog()
 	return 1
 
-/obj/machinery/autolathe/proc/recycle(var/obj/item/O, var/silent = 0)
+/obj/machinery/autolathe/proc/recycle(mob/user, var/obj/item/O, var/silent = 0)
 	if (src.m_amount + O.m_amt > max_m_amount)
-		usr << "<span class=\"alert\">The autolathe is full. Please remove metal from the autolathe in order to insert more.</span>"
+		user << "<span class='warning'>The autolathe is full. Please remove metal from the autolathe in order to insert more.</span>"
 		return 1
 	if (src.g_amount + O.g_amt > max_g_amount)
-		usr << "<span class=\"alert\">The autolathe is full. Please remove glass from the autolathe in order to insert more.</span>"
+		user << "<span class='warning'>The autolathe is full. Please remove glass from the autolathe in order to insert more.</span>"
 		return 1
-	if (O.m_amt == 0 && O.g_amt == 0)
-		usr << "<span class=\"alert\">This object does not contain significant amounts of metal or glass, or cannot be accepted by the autolathe due to size or hazardous materials.</span>"
+	if (!O.m_amt && !O.g_amt)
+		user << "<span class='warning'>This object does not contain sufficient amounts of metal or glass to be accepted by the autolathe.</span>"
+		return 1
+	if(!user.unEquip(O))
+		user << "<span class='warning'>\The [O] is stuck to you and cannot be placed into the autolathe.</span>"
 		return 1
 
 	var/amount = 1
@@ -165,15 +168,15 @@
 			flick("autolathe_r",src)//plays glass insertion animation
 		stack.use(amount)
 	else
-		usr.unEquip(O)
+		if(!user.unEquip(O))
+			user << "<span class='warning'>/the [O] is stuck to your hand, you can't put it in \the [src]!</span>"
 		O.loc = src
 	icon_state = "autolathe"
 	busy = 1
 	use_power(max(1000, (m_amt+g_amt)*amount/10))
 	src.m_amount += m_amt * amount
 	src.g_amount += g_amt * amount
-	if(!silent)
-		usr << "You insert [amount] sheet[amount>1 ? "s" : ""] into the autolathe."
+	user << "<span class='notice'>You insert [amount] sheet[amount>1 ? "s" : ""] to the autolathe.</span>"
 	if (O && O.loc == src)
 		qdel(O)
 	busy = 0
@@ -234,8 +237,27 @@
 					if(is_stack)
 						m_amount -= metal_cost*multiplier
 						g_amount -= glass_cost*multiplier
-						var/obj/item/stack/S = new being_built.build_path(T)
-						S.amount = multiplier
+
+						for(var/obj/item/stack/S in T)
+							if(multiplier <= 0)
+								break
+							if(S.amount >= S.max_amount)
+								continue
+							var/to_transfer = S.max_amount - S.amount
+							if(to_transfer < multiplier)
+								S.amount += to_transfer
+								multiplier -= to_transfer
+								S.update_icon()
+								continue
+							else
+								S.amount += multiplier
+								multiplier = 0
+								S.update_icon()
+								break
+						if(multiplier)
+							var/obj/item/stack/N = new being_built.build_path(T)
+							N.amount = multiplier
+							N.update_icon()
 					else
 						m_amount -= metal_cost/coeff
 						g_amount -= glass_cost/coeff

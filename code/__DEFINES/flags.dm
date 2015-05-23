@@ -68,9 +68,10 @@
 #define NOGUNS		512
 #define NOBLOOD		1024
 #define NOFIRE		2048
-#define NOPIXREMOVE	4096
-#define LAYER2		8192
-
+#define VIRUSIMMUNE	4096
+#define HARDFEET	8192
+#define NOPIXREMOVE		16384
+#define LAYER2 32768
 /*
 	These defines are used specifically with the atom/movable/languages bitmask.
 	They are used in atom/movable/Hear() and atom/movable/say() to determine whether hearers can understand a message.

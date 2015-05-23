@@ -69,6 +69,7 @@ var/list/admin_verbs_ban = list(
 var/list/admin_verbs_sounds = list(
 	/client/proc/play_local_sound,
 	/client/proc/play_sound,
+	/client/proc/set_round_end_sound,
 	)
 var/list/admin_verbs_fun = list(
 	/client/proc/cmd_admin_dress,
@@ -83,6 +84,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/toggle_random_events,
 	/client/proc/set_ooc,
 	/client/proc/cmd_admin_artreroll,
+	/client/proc/reset_ooc,
 	/client/proc/forceEvent,
 	/client/proc/bluespace_artillery
 	)
@@ -136,6 +138,7 @@ var/list/admin_verbs_rejuv = list(
 //verbs which can be hidden - needs work
 var/list/admin_verbs_hideable = list(
 	/client/proc/set_ooc,
+	/client/proc/reset_ooc,
 	/client/proc/deadmin_self,
 	/client/proc/deadchat,
 	/client/proc/toggleprayers,
@@ -159,6 +162,7 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/check_words,
 	/client/proc/play_local_sound,
 	/client/proc/play_sound,
+	/client/proc/set_round_end_sound,
 	/client/proc/cmd_admin_dress,
 	/client/proc/cmd_admin_gib_self,
 	/client/proc/drop_bomb,

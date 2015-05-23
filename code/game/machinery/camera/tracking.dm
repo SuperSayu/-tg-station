@@ -73,11 +73,10 @@
 			//Cameras can't track people wearing an agent card or a ninja hood.
 			if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
 				continue
-		 	//Generic variable who's existance is to blame on shitty old ninja code
-		 	if(istype(H.head, /obj/item/clothing/head))
-		 		var/obj/item/clothing/head/hat = H.head
-		 		if(hat.blockTracking)
-		 			continue
+			if(istype(H.head, /obj/item/clothing/head))
+				var/obj/item/clothing/head/hat = H.head
+				if(hat.blockTracking)
+					continue
 
 		 // Cloaking reduces your alpha to the point where the camera should not be able to detect you
 		if(M.alpha <= 10)
@@ -133,10 +132,10 @@
 					U << "Follow camera mode terminated."
 					U.cameraFollow = null
 					return
-		 		if(istype(H.head, /obj/item/clothing/head))
-		 			var/obj/item/clothing/head/hat = H.head
-		 			if(hat.blockTracking)
-		 				U << "Follow camera mode terminated."
+				if(istype(H.head, /obj/item/clothing/head))
+					var/obj/item/clothing/head/hat = H.head
+					if(hat.blockTracking)
+						U << "Follow camera mode terminated."
 						U.cameraFollow = null
 						return
 				if(H.digitalcamo)

@@ -13,23 +13,28 @@ var/datum/subsystem/objects/SSobj
 /datum/subsystem/objects/New()
 	NEW_SS_GLOBAL(SSobj)
 
-/datum/subsystem/objects/Initialize()
+/datum/subsystem/objects/Initialize(timeofday, zlevel)
 
-	for(var/typekey in the_station_areas + /area/wizard_station)
-		if(ispath(typekey,/area/hallway/primary)) continue
-		for(var/subtype in typesof(typekey))
-			parse_area(locate(subtype))
-	distribute_secrets()
+	if(!zlevel || zlevel == ZLEVEL_STATION)
+		for(var/typekey in the_station_areas)
+			if(ispath(typekey,/area/hallway/primary)) continue
+			for(var/subtype in typesof(typekey))
+				parse_area(locate(subtype))
+		distribute_secrets()
 
 	for(var/atom/movable/AM in world)
+		if (zlevel && AM.z != zlevel)
+			continue
 		AM.initialize()
+	if (zlevel)
+		return ..()
 	for(var/turf/simulated/floor/F in world)
 		F.MakeDirty()
 	..()
 
 
 /datum/subsystem/objects/stat_entry()
-	stat(name, "[round(cost,0.001)]ds\t(CPU:[round(cpu,1)]%)\t[processing.len]")
+	..("P:[processing.len]")
 
 
 /datum/subsystem/objects/fire()
@@ -42,12 +47,3 @@ var/datum/subsystem/objects/SSobj
 		SSobj.processing.Cut(i, i+1)
 
 
-/*	This is FPSS13 code, has not yet been ported/implemented
-/obj/New()
-	..()
-	if(map_ready)
-		spawn(0)
-			if(garbage_collecting)
-				return
-			initialize()
-*/

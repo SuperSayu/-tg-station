@@ -344,7 +344,7 @@
 	childtype = null
 	species = /mob/living/simple_animal/cow
 
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slab
+	butcher_results = list(/obj/item/weapon/reagent_containers/food/snacks/meat/slab = 3)
 
 	//somewhat more vegetarian than Pepper - not really complete though
 	smell_approved = list(

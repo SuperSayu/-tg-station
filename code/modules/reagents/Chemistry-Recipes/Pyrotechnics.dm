@@ -109,7 +109,7 @@
 /datum/chemical_reaction/clf3/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/turf/T = get_turf(holder.my_atom)
 	for(var/turf/turf in range(1,T))
-		new /obj/effect/hotspot(turf)
+		PoolOrNew(/obj/effect/hotspot, turf)
 	holder.chem_temp = 1000 // hot as shit
 
 /datum/chemical_reaction/sorium
@@ -190,6 +190,7 @@
 	id = "flash_powder_flash"
 	result = null
 	required_reagents = list("flash_powder" = 1)
+	result_amount = 1
 	required_temp = 374
 
 /datum/chemical_reaction/flash_powder_flash/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -235,6 +236,7 @@
 	result = null
 	required_reagents = list("smoke_powder" = 1)
 	required_temp = 374
+	result_amount = 1
 	secondary = 1
 	mob_react = 1
 
@@ -285,6 +287,7 @@
 	result = null
 	required_reagents = list("sonic_powder" = 1)
 	required_temp = 374
+	result_amount = 1
 
 /datum/chemical_reaction/sonic_powder_deafen/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
@@ -322,7 +325,7 @@
 	name = "Napalm"
 	id = "napalm"
 	result = "napalm"
-	required_reagents = list("sugar" = 1, "fuel" = 1, "ethanol" = 1 )
+	required_reagents = list("sugar" = 1, "welding_fuel" = 1, "ethanol" = 1 )
 	result_amount = 3
 
 

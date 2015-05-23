@@ -253,9 +253,9 @@
 	id = "weapons"
 	blacklist = null
 	//This one is hard since 'weapon contains a lot of things better categorized as devices
-	whitelist = list(/obj/item/weapon/banhammer,/obj/item/weapon/sord,/obj/item/weapon/kitchenknife/butcher,/obj/item/weapon/claymore,/obj/item/weapon/holo/esword,
+	whitelist = list(/obj/item/weapon/banhammer,/obj/item/weapon/sord,/obj/item/weapon/kitchen/knife/butcher,/obj/item/weapon/claymore,/obj/item/weapon/holo/esword,
 					/obj/item/weapon/flamethrower,/obj/item/weapon/grenade,/obj/item/weapon/gun,/obj/item/weapon/hatchet,/obj/item/weapon/katana,
-					/obj/item/weapon/kitchenknife,/obj/item/weapon/melee,/obj/item/weapon/nullrod,/obj/item/weapon/pickaxe,/obj/item/weapon/twohanded,
+					/obj/item/weapon/kitchen/knife,/obj/item/weapon/melee,/obj/item/weapon/nullrod,/obj/item/weapon/pickaxe,/obj/item/weapon/twohanded,
 					/obj/item/weapon/c4,/obj/item/weapon/scalpel,/obj/item/weapon/shield,/obj/item/weapon/grown/nettle/death)
 
 /datum/cargoprofile/tools
@@ -265,9 +265,9 @@
 	whitelist = list(/obj/item/device,/obj/item/weapon/card,/obj/item/weapon/cartridge,/obj/item/weapon/cautery,/obj/item/weapon/stock_parts/cell,/obj/item/weapon/circuitboard,
 					/obj/item/weapon/aiModule,/obj/item/weapon/airalarm_electronics,/obj/item/weapon/airlock_electronics,/obj/item/weapon/circular_saw,
 					/obj/item/weapon/cloaking_device,/obj/item/weapon/crowbar,/obj/item/weapon/disk,/obj/item/weapon/firealarm_electronics,/obj/item/weapon/hand_tele,
-					/obj/item/weapon/hand_labeler,/obj/item/weapon/hemostat,/obj/item/weapon/mop,/obj/item/weapon/locator,/obj/item/weapon/minihoe,
+					/obj/item/weapon/hand_labeler,/obj/item/weapon/hemostat,/obj/item/weapon/mop,/obj/item/weapon/locator,/obj/item/weapon/cultivator,
 					/obj/item/stack/packageWrap,/obj/item/weapon/paint,/obj/item/weapon/pen,/obj/item/weapon/pickaxe,/obj/item/weapon/pinpointer,
-					/obj/item/weapon/rcd,/obj/item/weapon/rcd_ammo,/obj/item/weapon/retractor,/obj/item/weapon/rsf,/obj/item/weapon/rsp,/obj/item/weapon/scalpel,
+					/obj/item/weapon/rcd,/obj/item/weapon/rcd_ammo,/obj/item/weapon/retractor,/obj/item/weapon/rsf,/obj/item/weapon/scalpel,
 					/obj/item/weapon/screwdriver,/obj/item/weapon/shovel,/obj/item/weapon/soap,/obj/item/weapon/stamp,/obj/item/weapon/weldingtool,
 					/obj/item/weapon/wirecutters,/obj/item/weapon/wrench,/obj/item/weapon/extinguisher)
 

@@ -11,7 +11,7 @@ var/global/list/special_roles = list( //keep synced with the defines BE_* in set
 	"malf AI" = /datum/game_mode/malfunction,		//4
 	"revolutionary" = /datum/game_mode/revolution,	//5
 	"alien",										//6
-	"pAI",											//7
+	"pAI/posibrain",								//7
 	"cultist" = /datum/game_mode/cult,				//8
 	"blob" = /datum/game_mode/blob,					//9
 	"ninja",										//10
@@ -35,7 +35,7 @@ datum/preferences
 
 	//game-preferences
 	var/lastchangelog = ""				//Saved changlog filesize to detect if there was a change
-	var/ooccolor = "#002eb8"
+	var/ooccolor = null
 	var/be_special = 0					//Special role selection
 	var/UI_style = "Midnight"
 	var/toggles = TOGGLES_DEFAULT
@@ -63,6 +63,7 @@ datum/preferences
 	var/datum/species/pref_species = new /datum/species/human()	//Mutant race
 	var/mutant_color = "FFF"			//Mutant race skin color
 	var/spec_hair = "None"				// species-specific "hair" (ex. horns for lizards)
+	var/list/custom_names = list("clown", "mime", "ai", "cyborg", "religion", "deity")
 
 		//Mob preview
 	var/icon/preview_icon_front = null
@@ -94,7 +95,10 @@ datum/preferences
 
 /datum/preferences/New(client/C)
 	blood_type = random_blood_type()
-	ooccolor = normal_ooc_colour
+	custom_names["ai"] = pick(ai_names)
+	custom_names["cyborg"] = pick(ai_names)
+	custom_names["clown"] = pick(clown_names)
+	custom_names["mime"] = pick(mime_names)
 	if(istype(C))
 		if(!IsGuestKey(C.key))
 			load_path(C.ckey)
@@ -167,7 +171,16 @@ datum/preferences
 					dat += "<b>Species:</b> Human<BR>"
 				dat += "[pref_species.desc]"
 
-				dat += "</td><td valign='center'>"
+				dat += "<b>Special Names:</b><BR>"
+				dat += "<a href ='?_src_=prefs;preference=clown_name;task=input'><b>Clown:</b> [custom_names["clown"]]</a> "
+				dat += "<a href ='?_src_=prefs;preference=mime_name;task=input'><b>Mime:</b>[custom_names["mime"]]</a><BR>"
+				dat += "<a href ='?_src_=prefs;preference=ai_name;task=input'><b>AI:</b> [custom_names["ai"]]</a> "
+				dat += "<a href ='?_src_=prefs;preference=cyborg_name;task=input'><b>Cyborg:</b> [custom_names["cyborg"]]</a><BR>"
+				dat += "<a href ='?_src_=prefs;preference=religion_name;task=input'><b>Chaplain religion:</b> [custom_names["religion"]] </a>"
+				dat += "<a href ='?_src_=prefs;preference=deity_name;task=input'><b>Chaplain deity:</b> [custom_names["deity"]]</a><BR></td>"
+
+
+				dat += "<td valign='center'>"
 
 				dat += "<div class='statusDisplay'><center><img src=previewicon.png height=32 width=32><img src=previewicon2.png height=32 width=32></center></div>"
 				dat += "<div class='statusDisplay'><center><img src=previewicon.png height=64 width=64><img src=previewicon2.png height=64 width=64></center></div>"
@@ -184,11 +197,11 @@ datum/preferences
 				dat += "<b>Underwear:</b><BR><a href ='?_src_=prefs;preference=underwear;task=input'>[underwear]</a><BR>"
 				dat += "<b>Undershirt:</b><BR><a href ='?_src_=prefs;preference=undershirt;task=input'>[undershirt]</a><BR>"
 				dat += "<b>Socks:</b><BR><a href ='?_src_=prefs;preference=socks;task=input'>[socks]</a><BR>"
-				dat += "<b>Backpack:</b><BR><a href ='?_src_=prefs;preference=bag;task=input'>[backbaglist[backbag]]</a><BR>"
+				dat += "<b>Backpack:</b><BR><a href ='?_src_=prefs;preference=bag;task=input'>[backbaglist[backbag]]</a><BR></td>"
 
 				if(pref_species.use_skintones)
+					dat += "<td valign='top' width='21%'>"
 
-					dat += "</td><td valign='top' width='21%'>"
 					dat += "<h3>Skin Tone</h3>"
 
 					dat += "<a href='?_src_=prefs;preference=s_tone;task=input'>[skin_tone]</a><BR>"
@@ -271,7 +284,7 @@ datum/preferences
 						dat += "<a href='?_src_=prefs;preference=hear_adminhelps'>[(toggles & SOUND_ADMINHELP)?"On":"Off"]</a><br>"
 
 					if(unlock_content || check_rights_for(user.client, R_ADMIN))
-						dat += "<b>OOC:</b> <span style='border: 1px solid #161616; background-color: [ooccolor];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=ooccolor;task=input'>Change</a><br>"
+						dat += "<b>OOC:</b> <span style='border: 1px solid #161616; background-color: [ooccolor ? ooccolor : normal_ooc_colour];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=ooccolor;task=input'>Change</a><br>"
 
 					if(unlock_content)
 						dat += "<b>BYOND Membership Publicity:</b> <a href='?_src_=prefs;preference=publicity'>[(toggles & MEMBER_PUBLIC) ? "Public" : "Hidden"]</a><br>"
@@ -315,7 +328,7 @@ datum/preferences
 		dat += "</center>"
 
 		//user << browse(dat, "window=preferences;size=560x560")
-		var/datum/browser/popup = new(user, "preferences", "<div align='center'>Character Setup</div>", 640, 700)
+		var/datum/browser/popup = new(user, "preferences", "<div align='center'>Character Setup</div>", 640, 750)
 		popup.set_content(dat)
 		popup.open(0)
 
@@ -791,6 +804,50 @@ datum/preferences
 						var/new_backbag = input(user, "Choose your character's style of bag:", "Character Preference")  as null|anything in backbaglist
 						if(new_backbag)
 							backbag = backbaglist.Find(new_backbag)
+
+					if("clown_name")
+						var/new_clown_name = reject_bad_name( input(user, "Choose your character's clown name:", "Character Preference")  as text|null )
+						if(new_clown_name)
+							custom_names["clown"] = new_clown_name
+						else
+							user << "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>"
+
+					if("mime_name")
+						var/new_mime_name = reject_bad_name( input(user, "Choose your character's mime name:", "Character Preference")  as text|null )
+						if(new_mime_name)
+							custom_names["mime"] = new_mime_name
+						else
+							user << "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>"
+
+					if("ai_name")
+						var/new_ai_name = reject_bad_name( input(user, "Choose your character's AI name:", "Character Preference")  as text|null, 1 )
+						if(new_ai_name)
+							custom_names["ai"] = new_ai_name
+						else
+							user << "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, 0-9, -, ' and .</font>"
+
+					if("cyborg_name")
+						var/new_cyborg_name = reject_bad_name( input(user, "Choose your character's cyborg name:", "Character Preference")  as text|null, 1 )
+						if(new_cyborg_name)
+							custom_names["cyborg"] = new_cyborg_name
+						else
+							user << "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, 0-9, -, ' and .</font>"
+
+					if("religion_name")
+						var/new_religion_name = reject_bad_name( input(user, "Choose your character's religion:", "Character Preference")  as text|null )
+						if(new_religion_name)
+							custom_names["religion"] = new_religion_name
+						else
+							user << "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>"
+
+					if("deity_name")
+						var/new_deity_name = reject_bad_name( input(user, "Choose your character's deity:", "Character Preference")  as text|null )
+						if(new_deity_name)
+							custom_names["deity"] = new_deity_name
+						else
+							user << "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>"
+
+
 			else
 				switch(href_list["preference"])
 					if("publicity")
@@ -902,9 +959,9 @@ datum/preferences
 		if(character.dna)
 			character.dna.real_name = character.real_name
 			if(pref_species != /datum/species/human && config.mutant_races)
-				character.dna.species = new pref_species.type()
+				hardset_dna(character, null, null, null, null, pref_species.type)
 			else
-				character.dna.species = new /datum/species/human()
+				hardset_dna(character, null, null, null, null, /datum/species/human)
 			character.dna.mutant_color = mutant_color
 			character.update_mutcolor()
 
