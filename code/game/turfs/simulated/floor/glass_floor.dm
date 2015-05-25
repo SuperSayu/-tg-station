@@ -1,6 +1,7 @@
 
 /turf/simulated/floor/plating/glass
 	name = "glass plating"
+	icon = 'icons/turf/sayu_floors.dmi'
 	icon_state = "glassplating"
 	icon_plating = "glassplating"
 	floor_tile = null
@@ -13,6 +14,7 @@
 
 /turf/simulated/floor/plating/airless/glass
 	name = "glass plating"
+	icon = 'icons/turf/sayu_floors.dmi'
 	icon_state = "glassplating"
 	icon_plating = "glassplating"
 	floor_tile = null
