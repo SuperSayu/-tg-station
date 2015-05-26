@@ -46,14 +46,12 @@
 	desc = "Yarr."
 	icon_state = "eyepatch"
 	item_state = "eyepatch"
-	lenses = 0
 
 /obj/item/clothing/glasses/monocle
 	name = "monocle"
 	desc = "Such a dapper eyepiece!"
 	icon_state = "monocle"
 	item_state = "headset" // lol
-	lenses = 1
 
 /obj/item/clothing/glasses/material
 	name = "Optical Material Scanner"
@@ -161,7 +159,6 @@
 //	vision_flags = BLIND	//handled in life.dm/handle_regular_hud_updates()
 	flash_protect = 2
 	tint = 3			// to make them blind
-	lenses = 0
 
 /obj/item/clothing/glasses/sunglasses/big
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Larger than average enhanced shielding blocks many flashes."
@@ -203,14 +200,12 @@
 	desc = "A monocle thermal."
 	icon_state = "thermoncle"
 	flags = null //doesn't protect eyes because it's a monocle, duh
-	lenses = 1
 
 /obj/item/clothing/glasses/thermal/eyepatch
 	name = "Optical Thermal Eyepatch"
 	desc = "An eyepatch with built-in thermal optics."
 	icon_state = "eyepatch"
 	item_state = "eyepatch"
-	lenses = 0
 
 /obj/item/clothing/glasses/cold
 	name = "cold goggles"

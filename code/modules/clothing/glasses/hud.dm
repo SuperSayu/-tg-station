@@ -4,7 +4,6 @@
 	flags = null //doesn't protect eyes because it's a monocle, duh
 	origin_tech = "magnets=3;biotech=2"
 	var/hud_type = null
-	lenses = 1
 
 /obj/item/clothing/glasses/hud/equipped(mob/living/carbon/human/user, slot)
 	if(hud_type && slot == slot_glasses)
@@ -53,7 +52,6 @@
 	darkness_view = 1
 	flash_protect = 1
 	tint = 1
-	lenses = 2
 
 /obj/item/clothing/glasses/hud/security/night
 	name = "Night Vision Security HUD"
