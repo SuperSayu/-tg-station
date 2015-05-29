@@ -45,24 +45,8 @@
 	var/invis_view = SEE_INVISIBLE_LIVING
 	var/emagged = 0
 	var/list/icon/current = list() //the current hud icons
-	var/lenses = 2
 	strip_delay = 20
 	put_on_delay = 25
-
-/obj/item/clothing/glasses/New()
-	set_lenses(lenses)
-	..()
-
-/obj/item/clothing/glasses/proc/set_lenses(var/lense_number)
-	lenses = lense_number
-	if(lense_number == 1)
-		desc += " These glasses have 1 lense."
-	else
-		desc += " These glasses have [lense_number] lenses."
-	if(lense_number > 2)
-		icon_state += "[lense_number]"
-		item_state += "[lense_number]"
-		name = "[lense_number]-lensed [initial(name)]"
 
 /*
 SEE_SELF  // can see self, no matter what

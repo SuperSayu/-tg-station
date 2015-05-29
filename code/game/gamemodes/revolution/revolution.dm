@@ -46,12 +46,6 @@
 	if(config.protect_assistant_from_antagonist)
 		restricted_jobs += "Assistant"
 
-	var/head_check = 0
-	for(var/mob/new_player/player in player_list)
-		if(player.mind.assigned_role in command_positions)
-			head_check = 1
-			break
-
 	for (var/i=1 to max_headrevs)
 		if (antag_candidates.len==0)
 			break
@@ -60,7 +54,7 @@
 		head_revolutionaries += lenin
 		lenin.restricted_roles = restricted_jobs
 
-	if((head_revolutionaries.len < required_enemies)||(!head_check))
+	if(head_revolutionaries.len < required_enemies)
 		return 0
 
 	return 1
@@ -347,7 +341,7 @@
 			if(headrev.current)
 				if(headrev.current.stat == DEAD)
 					text += "died"
-				else if(headrev.current.z != ZLEVEL_STATION)
+				else if(headrev.current.z > ZLEVEL_STATION)
 					text += "fled the station"
 				else
 					text += "survived the revolution"
@@ -371,7 +365,7 @@
 			if(rev.current)
 				if(rev.current.stat == DEAD || isbrain(rev.current))
 					text += "died"
-				else if(rev.current.z != ZLEVEL_STATION)
+				else if(rev.current.z > ZLEVEL_STATION)
 					text += "fled the station"
 				else
 					text += "survived the revolution"
@@ -397,7 +391,7 @@
 			if(head.current)
 				if(head.current.stat == DEAD || isbrain(head.current))
 					text += "died"
-				else if(head.current.z != ZLEVEL_STATION)
+				else if(head.current.z > ZLEVEL_STATION)
 					text += "fled the station"
 				else
 					text += "survived the revolution"
