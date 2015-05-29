@@ -460,11 +460,6 @@ Sorry Giacom. Please don't be mad :(
 			for(var/datum/reagent/R in C.reagents.reagent_list)
 				C.reagents.clear_reagents()
 
-	if(ishuman(src))
-		var/mob/living/carbon/human/C = src
-		for(var/obj/item/organ/limb/L in C.organs)
-			L.bone_mend()
-
 			C.reagents.addiction_list = list()
 	for(var/datum/disease/D in viruses)
 		D.cure(0)
@@ -476,6 +471,9 @@ Sorry Giacom. Please don't be mad :(
 		var/mob/living/carbon/human/human_mob = src
 		human_mob.restore_blood()
 		human_mob.remove_all_embedded_objects()
+
+		for(var/obj/item/organ/limb/L in human_mob.organs)
+			L.bone_mend()
 
 	update_fire()
 	regenerate_icons()
