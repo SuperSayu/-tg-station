@@ -1424,6 +1424,7 @@
 #include "code\modules\reagents\Chemistry-Recipes\Medicine.dm"
 #include "code\modules\reagents\Chemistry-Recipes\Others.dm"
 #include "code\modules\reagents\Chemistry-Recipes\Pyrotechnics.dm"
+#include "code\modules\reagents\Chemistry-Recipes\sayu_recipes.dm"
 #include "code\modules\reagents\Chemistry-Recipes\Slime_extracts.dm"
 #include "code\modules\reagents\Chemistry-Recipes\Toxins.dm"
 #include "code\modules\reagents\reagent_containers\blood_pack.dm"
