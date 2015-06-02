@@ -56,22 +56,22 @@
 
 //flags for species
 
-#define MUTCOLORS	1
-#define HAIR		2
-#define FACEHAIR	4
-#define EYECOLOR	8
-#define LIPS		16
-#define COLDRES		32
-#define HEATRES		64
-#define RADIMMUNE	128
-#define NOBREATH	256
-#define NOGUNS		512
-#define NOBLOOD		1024
-#define NOFIRE		2048
-#define VIRUSIMMUNE	4096
-#define HARDFEET	8192
+#define MUTCOLORS		1
+#define HAIR			2
+#define FACEHAIR		4
+#define EYECOLOR		8
+#define LIPS			16
+#define COLDRES			32
+#define HEATRES			64
+#define RADIMMUNE		128
+#define NOBREATH		256
+#define NOGUNS			512
+#define NOBLOOD			1024
+#define NOFIRE			2048
+#define VIRUSIMMUNE		4096
+#define PIERCEIMMUNE	8192
 #define NOPIXREMOVE		16384
-#define LAYER2 32768
+
 /*
 	These defines are used specifically with the atom/movable/languages bitmask.
 	They are used in atom/movable/Hear() and atom/movable/say() to determine whether hearers can understand a message.
