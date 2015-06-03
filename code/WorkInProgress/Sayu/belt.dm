@@ -62,7 +62,7 @@
 /obj/item/weapon/storage/belt/bluespace/owlman/afterattack(atom/target as obj|turf, mob/user as mob, flag)
 	if (!flag)
 		return
-	if (istype(target, /turf/unsimulated) || istype(target, /turf/simulated/shuttle) || istype(target, /obj/item/weapon/storage) || istype(target, /obj/structure/table) || istype(target, /obj/structure/closet))
+	if (istype(target, /obj/item/weapon/storage) || istype(target, /obj/structure/table) || istype(target, /obj/structure/closet))
 		return
 	user << "Planting explosives..."
 	user.visible_message("[user.name] is fiddling with their toolbelt.")
