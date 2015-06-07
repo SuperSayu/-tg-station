@@ -52,7 +52,7 @@
 	anchored = 1
 	var/piles = list()
 
-obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
+/obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
 	if(isrobot(user))
 		return
 
@@ -109,15 +109,15 @@ obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob
 	else
 		user << "<span class='warning'>You can't extract any seeds from \the [O.name]!</span>"
 
-datum/seed_pile
+/datum/seed_pile
 	var/obj/item/seeds/template = null
 	var/list/seeds = list()
 
-datum/seed_pile/New(var/obj/item/seeds/master)
+/datum/seed_pile/New(var/obj/item/seeds/master)
 	template = master
 	seeds += master
 
-datum/seed_pile/proc/compare(var/obj/item/seeds/candidate)
+/datum/seed_pile/proc/compare(var/obj/item/seeds/candidate)
 	if(candidate.type != template.type) return 0
 	if(candidate.lifespan != template.lifespan) return 0
 	if(candidate.endurance != template.endurance) return 0
@@ -127,7 +127,7 @@ datum/seed_pile/proc/compare(var/obj/item/seeds/candidate)
 	if(candidate.potency != template.potency) return 0
 	return 1
 
-datum/seed_pile/proc/pop()
+/datum/seed_pile/proc/pop()
 	. = seeds[seeds.len]
 	seeds.len--
 
@@ -152,12 +152,11 @@ datum/seed_pile/proc/pop()
 	var/obj/item/seeds/O = P.template
 	return "<i>[O.plantname] L([O.lifespan]) E([O.endurance]) M([O.maturation]) Po([O.potency]) Pr([O.production]) Y([O.yield])</i>"
 
-
 /obj/machinery/seed_extractor/attack_hand(mob/user as mob)
 	user.set_machine(src)
 	interact(user)
 
-obj/machinery/seed_extractor/interact(mob/user as mob)
+/obj/machinery/seed_extractor/interact(mob/user as mob)
 	if (stat)
 		return 0
 
@@ -172,7 +171,7 @@ obj/machinery/seed_extractor/interact(mob/user as mob)
 	popup.open()
 	return
 
-obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
+/obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
 	if(..())
 		return
 	usr.set_machine(src)
@@ -204,7 +203,7 @@ obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
 	src.updateUsrDialog()
 	return
 
-obj/machinery/seed_extractor/proc/add(var/obj/item/seeds/O as obj)
+/obj/machinery/seed_extractor/proc/add(var/obj/item/seeds/O as obj)
 	if(contents.len >= 999)
 		usr << "<span class='notice'>\The [src] is full.</span>"
 		return 0
