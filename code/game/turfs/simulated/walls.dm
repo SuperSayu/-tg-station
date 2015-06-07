@@ -64,10 +64,11 @@
 		return
 	switch(severity)
 		if(1.0)
-			if(prob(90))
+/*			if(prob(90))
 				src.ChangeTurf(/turf/space)
 			else
-				new /obj/structure/faketurf(src)
+				new /obj/structure/faketurf(src)*/
+			src.ChangeTurf(src.baseturf)
 			return
 		if(2.0)
 			if (prob(45))
