@@ -35,6 +35,7 @@ var/list/ai_list = list()
 	var/obj/item/device/pda/ai/aiPDA = null
 	var/obj/item/device/multitool/aiMulti = null
 	var/obj/machinery/bot/Bot
+	var/tracking = 0 //this is 1 if the AI is currently tracking somebody, but the track has not yet been completed.
 
 	var/obj/item/device/camera_bug/ai/aibug = null
 
@@ -474,7 +475,8 @@ var/list/ai_list = list()
 
 /mob/living/silicon/ai/proc/switchCamera(var/obj/machinery/camera/C)
 
-	src.cameraFollow = null
+	if(!tracking)
+		cameraFollow = null
 
 	if (!C || stat == 2) //C.can_use())
 		return 0
@@ -606,7 +608,7 @@ var/list/ai_list = list()
 	set category = "AI Commands"
 	set name = "Jump To Network"
 	unset_machine()
-	src.cameraFollow = null
+	cameraFollow = null
 	var/cameralist[0]
 
 	if(usr.stat == 2)
