@@ -32,7 +32,7 @@
 	say_mod = "hisses"
 	default_color = "00FF00"
 	roundstart = 1
-	specflags = list(HAIR,MUTCOLORS,LAYER2,EYECOLOR,LIPS)
+	specflags = list(HAIR,MUTCOLORS,EYECOLOR,LIPS)
 	spec_hair = 1 // They have crests/horns instead of hair
 	hair_color = "mutcolor"
 	mutant_bodyparts = list("tail", "snout")
@@ -52,6 +52,11 @@
 
 		return message
 */
+
+//I wag in death
+/datum/species/lizard/spec_death(var/gibbed, var/mob/living/carbon/human/H)
+	if(H)
+		H.endTailWag()
 
 /*
  PLANTPEOPLE
@@ -254,7 +259,7 @@
 	name = "Golem"
 	id = "golem"
 	sexes = 0
-	specflags = list(NOBREATH,HEATRES,COLDRES,NOGUNS,NOBLOOD,RADIMMUNE,VIRUSIMMUNE,HARDFEET)
+	specflags = list(NOBREATH,HEATRES,COLDRES,NOGUNS,NOBLOOD,RADIMMUNE,VIRUSIMMUNE,PIERCEIMMUNE)
 	speedmod = 3
 	armor = 55
 	punchmod = 5
@@ -303,7 +308,7 @@
 	say_mod = "rattles"
 	sexes = 0
 	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/skeleton
-	specflags = list(NOBREATH,HEATRES,COLDRES,NOBLOOD,RADIMMUNE,VIRUSIMMUNE,HARDFEET)
+	specflags = list(NOBREATH,HEATRES,COLDRES,NOBLOOD,RADIMMUNE,VIRUSIMMUNE,PIERCEIMMUNE)
 /*
  ZOMBIES
 */
@@ -370,7 +375,7 @@
 	name = "Aven"
 	id = "bird"
 	desc = "Stuff goes here."
-	specflags = list(HAIR,MUTCOLORS,LAYER2,EYECOLOR)
+	specflags = list(HAIR,MUTCOLORS,EYECOLOR)
 	say_mod = "hisses"
 	spec_hair = 1
 	hair_color = "mutcolor"

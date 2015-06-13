@@ -52,12 +52,6 @@
 	playsound(src, 'sound/effects/bang.ogg', 50, 1)
 	audible_message("CLANG")
 
-	if(istype(clong, /turf/unsimulated) || istype(clong, /turf/simulated/shuttle)) //Unstoppable force meets immovable object
-		explosion(src.loc, 4, 5, 6, 7, 0)
-		if(src)
-			qdel(src)
-		return
-
 	if(clong && prob(25))
 		x = clong.x
 		y = clong.y

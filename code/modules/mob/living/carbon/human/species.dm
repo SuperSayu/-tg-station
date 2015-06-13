@@ -41,7 +41,7 @@
 	var/meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human //What the species drops on gibbing
 	var/list/no_equip = list()	// slots the race can't equip stuff to
 	var/nojumpsuit = 0	// this is sorta... weird. it basically lets you equip stuff that usually needs jumpsuits without one, like belts and pockets and ids
-	var/dangerous_existence = 0 //A flag for transformation spells that tells them "hey if you turn a person into one of these without preperation, they'll probably die!"
+	var/dangerous_existence = null //A flag for transformation spells that tells them "hey if you turn a person into one of these without preperation, they'll probably die!"
 	var/say_mod = "says"	// affects the speech message
 
 	var/list/mutant_bodyparts = list() 	// Parts of the body that are diferent enough from the standard human model that they cause clipping with some equipment
@@ -265,6 +265,12 @@
 	if("tail" in mutant_bodyparts)
 		if(H.wear_suit && (H.wear_suit.flags_inv & HIDEJUMPSUIT))
 			bodyparts_to_add -= "tail"
+
+	if("waggingtail" in mutant_bodyparts)
+		if(H.wear_suit && (H.wear_suit.flags_inv & HIDEJUMPSUIT))
+			bodyparts_to_add -= "waggingtail"
+		else if ("tail" in mutant_bodyparts)
+			bodyparts_to_add -= "waggingtail"
 
 	if("snout" in mutant_bodyparts) //Take a closer look at that snout!
 		if(H.wear_mask && (H.wear_mask.flags_inv & HIDEFACE))

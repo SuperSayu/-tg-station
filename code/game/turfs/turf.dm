@@ -3,12 +3,14 @@
 	level = 1.0
 
 	var/intact = 1
+	var/baseturf = /turf/space
 
 	//Properties for open tiles (/floor)
 	var/oxygen = 0
 	var/carbon_dioxide = 0
 	var/nitrogen = 0
 	var/toxins = 0
+
 
 	//Properties for airtight tiles (/wall)
 	var/thermal_conductivity = 0.05
@@ -133,11 +135,9 @@
 	SSair.remove_from_active(src)
 
 	var/turf/W = new path(src)
-
 	if(istype(W, /turf/simulated))
 		W:Assimilate_Air()
 		W.RemoveLattice()
-
 	W.levelupdate()
 	W.CalculateAdjacentTurfs()
 	return W
@@ -174,11 +174,11 @@
 		SSair.add_to_active(src)
 
 /turf/proc/ReplaceWithLattice()
-	src.ChangeTurf(/turf/space)
+	src.ChangeTurf(src.baseturf)
 	new /obj/structure/lattice(locate(src.x, src.y, src.z) )
 
 /turf/proc/ReplaceWithCatwalk()
-	src.ChangeTurf(/turf/space)
+	src.ChangeTurf(src.baseturf)
 	new /obj/structure/lattice/catwalk(locate(src.x, src.y, src.z) )
 
 /turf/proc/phase_damage_creatures(damage,mob/U = null)//>Ninja Code. Hurts and knocks out creatures on this turf //NINJACODE
@@ -250,7 +250,7 @@
 			if(O.invisibility == 101)
 				O.singularity_act(S,size)
 	if(size > STAGE_ONE)
-		ChangeTurf(/turf/space)
+		ChangeTurf(src.baseturf)
 		return(2)
 	return 0
 
@@ -259,3 +259,33 @@
 
 /turf/proc/can_lay_cable()
 	return can_have_cabling() & !intact
+
+
+/turf/indestructible
+	name = "wall"
+	icon = 'icons/turf/walls.dmi'
+	density = 1
+	blocks_air = 1
+	opacity = 1
+
+/turf/indestructible/splashscreen
+	name = "Space Station 13"
+	icon = 'icons/misc/fullscreen.dmi'
+	icon_state = "title"
+	layer = FLY_LAYER
+
+/turf/indestructible/riveted
+	icon_state = "riveted"
+
+/turf/indestructible/abductor
+	icon_state = "alien1"
+
+/turf/indestructible/fakeglass
+	name = "window"
+	icon_state = "fakewindows"
+	opacity = 0
+
+/turf/indestructible/fakedoor
+	name = "Centcom Access"
+	icon = 'icons/obj/doors/Doorele.dmi'
+	icon_state = "door_closed"

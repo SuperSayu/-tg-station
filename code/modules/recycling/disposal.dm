@@ -592,7 +592,7 @@
 	return
 
 /obj/structure/disposalholder/allow_drop()
-	return 0
+	return 1
 
 // Disposal pipes
 

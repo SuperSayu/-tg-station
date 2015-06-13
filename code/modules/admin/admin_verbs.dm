@@ -98,7 +98,6 @@ var/list/admin_verbs_server = list(
 	/datum/admins/proc/delay,
 	/datum/admins/proc/toggleaban,
 	/client/proc/toggle_log_hrefs,
-	/datum/admins/proc/immreboot,
 	/client/proc/everyone_random,
 	/datum/admins/proc/toggleAI,
 	/client/proc/cmd_admin_delete,		/*delete an instance/object/mob/etc*/
@@ -122,7 +121,8 @@ var/list/admin_verbs_debug = list(
 	/client/proc/SDQL2_query,
 	/client/proc/test_movable_UI,
 	/client/proc/test_snap_UI,
-	/client/proc/debugNatureMapGenerator
+	/client/proc/debugNatureMapGenerator,
+	/proc/machine_upgrade
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -179,7 +179,6 @@ var/list/admin_verbs_hideable = list(
 	/datum/admins/proc/delay,
 	/datum/admins/proc/toggleaban,
 	/client/proc/toggle_log_hrefs,
-	/datum/admins/proc/immreboot,
 	/client/proc/everyone_random,
 	/datum/admins/proc/toggleAI,
 	/client/proc/restart_controller,

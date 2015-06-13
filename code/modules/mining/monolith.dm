@@ -20,9 +20,9 @@ var/global/max_monoliths = rand(3,5)
 	name += " [letter]"
 	monoliths += src
 	for(var/turf/simulated/wall/W in range(1,src))
-		new /turf/simulated/floor/engine/cult(W)
+		new /turf/simulated/floor/plasteel/cult(W)
 	for(var/turf/simulated/mineral/M in range(1,src))
-		new /turf/simulated/floor/engine/cult(M)
+		new /turf/simulated/floor/plasteel/cult(M)
 
 /obj/structure/monolith/proc/make_artifact()
 	var/turf/artloc = get_turf(src)
