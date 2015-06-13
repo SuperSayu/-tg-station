@@ -383,7 +383,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 		//Figure out what to log
 		var/loggable = "Fax transmission"
 		if (copy)
-			var/stripped = replacetext(strip_html_properly(replacetext(copy.info, "<br>", "&lt;br&gt;")), "&lt;br&gt;", "<br>") // This should remove the tags entirely with adminscrub or strip_html but neither seem to work.
+			var/stripped = replacetext(html_encode(replacetext(copy.info, "<br>", "&lt;br&gt;")), "&lt;br&gt;", "<br>") // This should remove the tags entirely with adminscrub or strip_html but neither seem to work.
 			loggable = "Faxed document: [stripped]"
 		if (photocopy)
 			loggable = "Faxed photograph: [photocopy.desc]"		//Log server needs modification to properly log images, so log descriptions instead.
