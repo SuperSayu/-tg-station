@@ -13,6 +13,7 @@
 	var/current_size = 1
 	var/allowed_size = 1
 	var/contained = 1 //Are we going to move around?
+	var/containment = 0 // per-tick check for containment
 	var/energy = 100 //How strong are we?
 	var/dissipate = 1 //Do we lose energy over time?
 	var/dissipate_delay = 10
@@ -21,7 +22,6 @@
 	var/move_self = 1 //Do we move on our own?
 	var/grav_pull = 4 //How many tiles out do we pull?
 	var/consume_range = 0 //How many tiles out do we eat
-	var/decay_range = 0
 	var/event_chance = 15 //Prob for event each tick
 	var/target = null //its target. moves towards the target if it has one
 	var/last_failed_movement = 0//Will not move in the same dir if it couldnt before, will help with the getting stuck on fields thing
@@ -59,8 +59,8 @@
 	consume(user)
 	return 1
 
-/obj/singularity/Process_Spacemove() //The singularity stops drifting for no man!
-	return 0
+/obj/singularity/Process_Spacemove()
+	return pick(0,1)
 
 /obj/singularity/blob_act(severity)
 	return
@@ -101,10 +101,13 @@
 		pulse()
 		if(prob(event_chance))//Chance for it to run a special event TODO:Come up with one or two more that fit
 			event()
+	else
+		contained = 1
 	eat()
 	dissipate()
 	check_energy()
-
+	contained = force_contained || (containment >= 4) // containment: prevents turf pulling.  Enforced by fields and shields.
+	containment = 0
 	return
 
 
@@ -138,20 +141,22 @@
 			icon_state = "singularity_s1"
 			grav_pull = 4
 			consume_range = 0
-			decay_range = 0
 			dissipate_delay = 10
 			dissipate_track = 0
 			dissipate_strength = 1
+			pixel_x = 0
+			pixel_y = 0
 		if(STAGE_TWO)//1 to 3 does not check for the turfs if you put the gens right next to a 1x1 then its going to eat them
 			current_size = STAGE_TWO
 			icon = 'icons/effects/96x96.dmi'
 			icon_state = "singularity_s3"
 			grav_pull = 6
 			consume_range = 1
-			decay_range = 1
 			dissipate_delay = 5
 			dissipate_track = 0
 			dissipate_strength = 5
+			pixel_x = -32
+			pixel_y = -32
 		if(STAGE_THREE)
 			if((check_turfs_in(1,2))&&(check_turfs_in(2,2))&&(check_turfs_in(4,2))&&(check_turfs_in(8,2)))
 				current_size = STAGE_THREE
@@ -159,10 +164,11 @@
 				icon_state = "singularity_s5"
 				grav_pull = 8
 				consume_range = 2
-				decay_range = 3 // note that contained singulos are safe
 				dissipate_delay = 4
 				dissipate_track = 0
 				dissipate_strength = 20
+				pixel_x = -64
+				pixel_y = -64
 		if(STAGE_FOUR)
 			if((check_turfs_in(1,3))&&(check_turfs_in(2,3))&&(check_turfs_in(4,3))&&(check_turfs_in(8,3)))
 				current_size = STAGE_FOUR
@@ -170,17 +176,17 @@
 				icon_state = "singularity_s7"
 				grav_pull = 10
 				consume_range = 3
-				decay_range = 5
 				dissipate_delay = 10
 				dissipate_track = 0
 				dissipate_strength = 10
+				pixel_x = -96
+				pixel_y = -96
 		if(STAGE_FIVE)//this one also lacks a check for gens because it eats everything
 			current_size = STAGE_FIVE
 			icon = 'icons/effects/288x288.dmi'
 			icon_state = "singularity_s9"
 			grav_pull = 10
 			consume_range = 4
-			decay_range = 7
 			dissipate = 0 //It cant go smaller due to e loss
 			pixel_x = -128
 			pixel_y = -128
@@ -381,3 +387,11 @@
 	explosion(src.loc,(dist),(dist*2),(dist*4))
 	qdel(src)
 	return(gain)
+
+
+/obj/machinery/field/containment/singularity_pull(var/obj/singularity/S, current_size)
+	if(current_size < STAGE_FIVE)
+		S.containment++
+/obj/machinery/shieldwall/singularity_pull(var/obj/singularity/S, current_size)
+	if(current_size < STAGE_FOUR)
+		S.containment++

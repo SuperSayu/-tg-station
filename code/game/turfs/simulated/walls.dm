@@ -248,14 +248,28 @@
 			if(O)	qdel(O)
 	return
 
-/turf/simulated/wall/singularity_pull(S, current_size)
-	if(current_size >= STAGE_FIVE)
-		if(prob(50))
-			dismantle_wall()
+/turf/simulated/wall/singularity_pull(var/obj/singularity/S, current_size)
+	if(prob(25) || S.contained) return ..()
+	var/counter = 0
+	for(var/d in cardinal)
+		var/turf/simulated/TS = get_step(src,d)
+		if(istype(TS))
+			counter++
+	var scalar = current_size * 3
+	if(prob(80 - (scalar * counter)))
+		new /obj/structure/faketurf(src,counter)
 		return
-	if(current_size == STAGE_FOUR)
-		if(prob(30))
-			dismantle_wall()
+	else if(prob(scalar))
+		for(var/obj/O in contents)
+			O.anchored = 0
+			if(istype(O,/obj/machinery))
+				O:stat |= pick(NOPOWER,BROKEN,MAINT,EMPED)
+				O.update_icon()
+	if(prob(10))
+		dismantle_wall(1,0)
+		return
+	if(prob(60))
+		dismantle_wall(0,0)
 
 /turf/simulated/wall/narsie_act()
 	if(prob(20))

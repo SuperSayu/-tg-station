@@ -130,8 +130,31 @@
 	if(pulledby)
 		return 1
 
-	if(locate(/obj/structure/lattice) in range(1, get_turf(src))) //Not realistic but makes pushing things in space easier
-		return 1
+	var/d = inertia_dir | movement_dir
+	//if(!d) return 1
+
+	for(var/obj/structure/lattice/L in range(1,get_turf(src))) //Not realistic but makes pushing things in space easier
+		if(L.loc == loc) return 1
+		if(get_dir(src,L) & d)
+			return 1
+
+	return 0
+/obj/structure/faketurf/Process_Spacemove(var/movement_dir = 0)
+	var/list/r1 = range(1,get_turf(src))
+
+	var/d = inertia_dir | movement_dir
+	//if(!d) return 1
+
+	for(var/turf/simulated/TS in r1)
+		if(get_dir(src,TS) & d)
+			return 1
+	for(var/obj/structure/lattice/L in r1) //Not realistic but makes pushing things in space easier
+		if(L.loc == loc) return 1
+		if(get_dir(src,L) & d)
+			return 1
+	for(var/obj/structure/faketurf/FT in r1)
+		if(get_dir(src,FT) & d)
+			return prob(50)
 
 	return 0
 

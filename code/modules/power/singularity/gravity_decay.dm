@@ -85,6 +85,8 @@
 	var/last_movement
 	var/original_type
 	var/list/anchored_objects = null
+	anchored = 0
+	layer = TURF_LAYER + 0.1
 
 	New(var/atom/newloc,var/counter=0)
 		if(!istype(newloc,/turf/simulated))
@@ -108,6 +110,8 @@
 		anchored_objects = list()
 		for(var/obj/O in loc.contents)
 			if(O.anchored)
+				if(istype(O,/obj/effect/meteor))
+					continue
 				anchored_objects += O
 			if(istype(O,/obj/machinery))
 				var/obj/machinery/OM = O
@@ -146,7 +150,7 @@
 /obj/structure/faketurf/Move()
 	..()
 	for(var/obj/O in anchored_objects)
-		if(!O || !O.anchored)
+		if(!O || !O.anchored || O.loc != loc)
 			anchored_objects -= O
 			continue
 		if(prob(10))
@@ -169,3 +173,12 @@
 	return
 // There is also an exception in turf/simulated/Enter() to prevent this from entering one of those tiles, ever.
 
+/obj/structure/faketurf/singularity_pull(S,current_size)
+	if(prob(current_size * 5))
+		step_to(src,S)
+
+//Disable these
+/obj/structure/faketurf/throw_at()
+	return
+/obj/structure/faketurf/SpinAnimation()
+	return

@@ -242,15 +242,17 @@
 			return 1
 	return 0 // no success. Used in clown pda and wet floors
 
-/turf/singularity_act()
+/turf/singularity_act(S,size)
 	if(intact)
 		for(var/obj/O in contents) //this is for deleting things like wires contained in the turf
 			if(O.level != 1)
 				continue
 			if(O.invisibility == 101)
-				O.singularity_act()
-	ChangeTurf(/turf/space)
-	return(2)
+				O.singularity_act(S,size)
+	if(size > STAGE_ONE)
+		ChangeTurf(/turf/space)
+		return(2)
+	return 0
 
 /turf/proc/can_have_cabling()
 	return !density
