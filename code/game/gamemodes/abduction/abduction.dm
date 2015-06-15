@@ -279,7 +279,7 @@
 		var/datum/mind/smind = scientists[team_number]
 		var/mob/living/carbon/human/agent = amind.current
 		var/mob/living/carbon/human/scientist = smind.current
-		if (console.experiment.points > objective.target_amount)
+		if (console.experiment.points >= objective.target_amount)
 			world << "<font size = 3 color='green'><b>[team_name] team fullfilled its mission! </b></font>"
 			world << "<b>Team Members : [agent.name]([agent.ckey]),[scientist.name]([scientist.ckey])</b>"
 		else
