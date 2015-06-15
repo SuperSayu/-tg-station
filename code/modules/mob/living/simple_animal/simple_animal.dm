@@ -348,16 +348,17 @@
 						MED.amount -= 1
 						if(MED.amount <= 0)
 							qdel(MED)
-						visible_message("<span class='notice'> [user] applies [MED] on [src].</span>")
+						visible_message("<span class='notice'>[user] applies [MED] on [src].</span>")
 						return
 					else
-						user << "<span class='notice'> [MED] won't help at all.</span>"
+						user << "<span class='notice'>[MED] won't help at all.</span>"
 						return
 			else
-				user << "<span class='notice'> [src] is at full health.</span>"
+				user << "<span class='notice'>[src] is at full health.</span>"
 				return
 		else
-			user << "<span class='notice'> [src] is dead, medical items won't bring it back to life.</span>"
+			user << "<span class='notice'>[src] is dead, medical items won't bring it back to life.</span>"
+			return
 
 	if((butcher_results) && (stat == DEAD))
 		user.changeNext_move(CLICK_CD_MELEE)
@@ -495,11 +496,11 @@
 /mob/living/simple_animal/update_transform()
 	var/matrix/ntransform = matrix(transform) //aka transform.Copy()
 	var/changed = 0
-	
+
 	if(resize != RESIZE_DEFAULT_SIZE)
 		changed++
 		ntransform.Scale(resize)
 		resize = RESIZE_DEFAULT_SIZE
-	
+
 	if(changed)
 		animate(src, transform = ntransform, time = 2, easing = EASE_IN|EASE_OUT)
