@@ -32,10 +32,8 @@
 	say_mod = "hisses"
 	default_color = "00FF00"
 	roundstart = 1
-	specflags = list(HAIR,MUTCOLORS,EYECOLOR,LIPS)
-	spec_hair = 1 // They have crests/horns instead of hair
-	hair_color = "mutcolor"
-	mutant_bodyparts = list("tail", "snout")
+	specflags = list(MUTCOLORS,EYECOLOR,LIPS)
+	mutant_bodyparts = list("tail", "snout", "spines", "horns", "frills", "body_markings")
 	attack_verb = "slash"
 	attack_sound = 'sound/weapons/slash.ogg'
 	miss_sound = 'sound/weapons/slashmiss.ogg'

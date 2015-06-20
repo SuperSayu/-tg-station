@@ -151,7 +151,7 @@
 							else
 								output += "[O.optiontext]<br>"
 						else
-							output += "<input type='radio' name='voteoptionid' value='[O.optionid]'> [O.optiontext]<br>"
+							output += "<input type='radio' name='voteoptionid' value='[O.optionid]'>[O.optiontext]<br>"
 				output += "</td></tr></table>"
 
 				if(!voted)	//Only make this a form if we have not voted yet
@@ -326,7 +326,7 @@
 							else
 								output += "[O.optiontext]<br>"
 						else
-							output += "<input type='checkbox' name='option_[O.optionid]' value='[O.optionid]'> [O.optiontext]<br>"
+							output += "<input type='checkbox' name='option_[O.optionid]' value='[O.optionid]'>[O.optiontext]<br>"
 				output += "</td></tr></table>"
 
 				if(!voted)	//Only make this a form if we have not voted yet
