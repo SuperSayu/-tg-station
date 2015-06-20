@@ -154,31 +154,23 @@ var/list/icons_to_ignore_at_floor_init = list("damaged1","damaged2","damaged3","
 		return 1
 	return 0
 
-/turf/simulated/floor/singularity_pull(var/obj/singularity/S, current_size)
-	if(prob(50) || S.contained) return
-	var/counter = 0
-	for(var/d in cardinal)
-		var/turf/simulated/TS = get_step(src,d)
-		if(istype(TS))
-			counter++
-	if(prob(20+counter*20)) return
-	var scalar = current_size * 3
-	if(prob(80 - (scalar * counter)))
+/turf/simulated/floor/decay(var/obj/singularity/S, current_size, dist, counter)
+	if(prob(90 - counter * 20 - dist * 5))
 		new /obj/structure/faketurf(src,counter)
 		return
-	else if(prob(scalar*3))
-		for(var/obj/O in contents)
-			O.anchored = 0
-			if(istype(O,/obj/machinery))
-				O:stat |= pick(NOPOWER,BROKEN,MAINT,EMPED)
-				O.update_icon()
-		if(builtin_tile)
-			builtin_tile.loc = src
-			make_plating()
-			if(prob(33))
-				break_tile()
-		else
-			ReplaceWithLattice()
+	if(prob(dist * 10)) return
+	for(var/obj/O in contents)
+		O.anchored = 0
+		if(istype(O,/obj/machinery))
+			O:stat |= pick(NOPOWER,BROKEN,MAINT,EMPED)
+			O.update_icon()
+	if(builtin_tile)
+		builtin_tile.loc = src
+		make_plating()
+		if(prob(33))
+			break_tile()
+	else
+		ReplaceWithLattice()
 
 /turf/simulated/floor/narsie_act()
 	if(prob(20))

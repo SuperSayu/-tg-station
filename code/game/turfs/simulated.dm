@@ -55,3 +55,17 @@
 	if(istype(mover,/obj/structure/faketurf))
 		return 0
 	return ..(mover,forget)
+
+/turf/simulated/proc/decay(var/obj/singularity/S, size, dist, counter)
+	//default behavior
+	if(prob(90 - counter * 20 - dist * 5))
+		new /obj/structure/faketurf(src,counter)
+
+/turf/simulated/singularity_decay(var/obj/singularity/S, current_size, dist)
+	if(type == baseturf) return
+	var/counter = 0
+	for(var/d in cardinal)
+		var/turf/simulated/TS = get_step(src,d)
+		if(istype(TS))
+			counter++
+	decay(S,current_size, dist, counter)

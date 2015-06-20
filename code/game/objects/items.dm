@@ -404,13 +404,11 @@
 		transfer_blood = 0
 		bloody_hands_mob = null
 
-/obj/item/singularity_pull(S, current_size)
-	var/d = get_dist(src,S)
+// decay so that items are thrown when they get close, not all the time
+/obj/item/singularity_decay(var/obj/singularity/S, current_size, dist)
+	if(anchored || prob(40)) return ..()
 	spawn(0) //this is needed or multiple items will be thrown sequentially and not simultaneously
-		if(prob((current_size*2 - d) * 3))
-		//if(current_size >= STAGE_FOUR)
-			throw_at(S,14,3)
-		else ..()
+		throw_at(S,14,3)
 
 /obj/item/acid_act(var/acidpwr, var/toxpwr, var/acid_volume)
 	. = 1

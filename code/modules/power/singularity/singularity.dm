@@ -21,6 +21,7 @@
 	var/dissipate_strength = 1 //How much energy do we lose?
 	var/move_self = 1 //Do we move on our own?
 	var/grav_pull = 4 //How many tiles out do we pull?
+	var/decay_range = 0 // Maximum distance to do turf decay checks
 	var/consume_range = 0 //How many tiles out do we eat
 	var/event_chance = 15 //Prob for event each tick
 	var/target = null //its target. moves towards the target if it has one
@@ -140,6 +141,7 @@
 			icon = 'icons/obj/singularity.dmi'
 			icon_state = "singularity_s1"
 			grav_pull = 4
+			decay_range = 0
 			consume_range = 0
 			dissipate_delay = 10
 			dissipate_track = 0
@@ -151,6 +153,7 @@
 			icon = 'icons/effects/96x96.dmi'
 			icon_state = "singularity_s3"
 			grav_pull = 6
+			decay_range = 2
 			consume_range = 1
 			dissipate_delay = 5
 			dissipate_track = 0
@@ -163,6 +166,7 @@
 				icon = 'icons/effects/160x160.dmi'
 				icon_state = "singularity_s5"
 				grav_pull = 8
+				decay_range = 4
 				consume_range = 2
 				dissipate_delay = 4
 				dissipate_track = 0
@@ -175,6 +179,7 @@
 				icon = 'icons/effects/224x224.dmi'
 				icon_state = "singularity_s7"
 				grav_pull = 10
+				decay_range = 6
 				consume_range = 3
 				dissipate_delay = 10
 				dissipate_track = 0
@@ -186,6 +191,7 @@
 			icon = 'icons/effects/288x288.dmi'
 			icon_state = "singularity_s9"
 			grav_pull = 10
+			decay_range = 8
 			consume_range = 4
 			dissipate = 0 //It cant go smaller due to e loss
 			pixel_x = -128
@@ -224,11 +230,13 @@
 	set background = BACKGROUND_ENABLED
 	for(var/atom/X in orange(grav_pull,src))
 		var/dist = get_dist(X, src)
-		var/obj/singularity/S = src
-		if(dist > consume_range)
-			X.singularity_pull(S, current_size)
-		else if(dist <= consume_range)
+		if(dist <= consume_range)
 			consume(X)
+		else
+			if(dist <= decay_range && !contained)
+				X.singularity_decay(src, current_size, dist)
+			else
+				X.singularity_pull(src,current_size, dist)
 	return
 
 

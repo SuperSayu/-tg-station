@@ -210,6 +210,6 @@
 				return 1
 	return 0
 
-/turf/simulated/wall/r_wall/singularity_pull(S, current_size)
+/turf/simulated/wall/r_wall/singularity_decay(S, current_size)
 	if(prob(current_size*10))
 		..()

@@ -242,14 +242,14 @@
 			return 1
 	return 0 // no success. Used in clown pda and wet floors
 
-/turf/singularity_act(S,size)
+/turf/singularity_act(size)
 	if(intact)
 		for(var/obj/O in contents) //this is for deleting things like wires contained in the turf
 			if(O.level != 1)
 				continue
 			if(O.invisibility == 101)
-				O.singularity_act(S,size)
-	if(size > STAGE_ONE)
+				O.singularity_act(size)
+	if(prob(size * 40))
 		ChangeTurf(src.baseturf)
 		return(2)
 	return 0

@@ -434,6 +434,9 @@ var/list/blood_splatter_icons = list()
 /atom/proc/singularity_act()
 	return
 
+/atom/proc/singularity_decay(S,s)
+	singularity_pull(S,s)
+
 /atom/proc/singularity_pull()
 	return
 
