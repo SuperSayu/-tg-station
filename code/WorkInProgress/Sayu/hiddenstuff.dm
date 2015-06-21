@@ -1,5 +1,5 @@
 /obj/structure/closet/initialize()
-	if(istype(src,/obj/structure/closet/secure_closet) || istype(src,/obj/structure/closet/crate/secure) || istype(src,/obj/structure/closet/body_bag) || istype(src,/obj/structure/closet/coffin) || istype(src,/obj/structure/closet/lasertag) || istype(src,/obj/structure/closet/fireaxecabinet))
+	if(istype(src,/obj/structure/closet/secure_closet) || istype(src,/obj/structure/closet/crate/secure) || istype(src,/obj/structure/closet/body_bag) || istype(src,/obj/structure/closet/coffin) || istype(src,/obj/structure/closet/lasertag))
 		return
 	if(usr)
 		return // built not spawned
