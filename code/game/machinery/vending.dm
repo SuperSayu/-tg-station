@@ -210,7 +210,8 @@
 			return
 		if(junk_check(W))
 			if(!iscompartmentfull(user))
-				user.drop_item()
+				if(!user.drop_item())
+					return
 				W.loc = src
 				food_load(W)
 				user << "<span class='notice'>You insert [W] into [src]'s chef compartment.</span>"
@@ -290,7 +291,8 @@
 			attack_hand(user)
 		return 1
 	else if(istype(W, /obj/item/weapon/coin) && premium.len > 0)
-		user.drop_item()
+		if(!user.drop_item())
+			return
 		W.loc = src
 		coin = W
 		user << "<span class='notice'>You insert [W] into [src].</span>"
