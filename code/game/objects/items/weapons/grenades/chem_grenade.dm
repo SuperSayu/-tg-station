@@ -93,7 +93,7 @@
 		else if(clown_check(user))
 			var/turf/bombturf = get_turf(src)
 			var/area/A = get_area(bombturf)
-			message_admins("[key_name(usr)]<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A> has primed a [name] for detonation at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>.")
+			message_admins("[key_name_admin(usr)]<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A> (<A HREF='?_src_=holder;adminplayerobservefollow=\ref[usr]'>FLW</A>) has primed a [name] for detonation at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>.")
 			log_game("[key_name(usr)] has primed a [name] for detonation at [A.name] ([bombturf.x],[bombturf.y],[bombturf.z]).")
 			user << "<span class='warning'>You prime the [name]! [det_time / 10] second\s!</span>"
 			playsound(user.loc, 'sound/weapons/armbomb.ogg', 60, 1)
@@ -252,18 +252,9 @@
 		var/mob/last = get_mob_by_ckey(nadeassembly.fingerprintslast)
 		var/turf/T = get_turf(src)
 		var/area/A = get_area(T)
-		var/attacher_spiel = " (spawned)"
-		var/attacher_admin_spiel = ""
-		var/last_spiel = " (none)"
-		var/last_admin_spiel = ""
-		if(M)
-			attacher_spiel = ", attached by [M.key]/[M]"
-			attacher_admin_spiel = "<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>(?)</A>"
-		if(last)
-			last_spiel = "[last.key]/[last]"
-			last_admin_spiel = "<A HREF='?_src_=holder;adminmoreinfo=\ref[last]'>(?)</A>"
-		message_admins("grenade primed by an assembly[attacher_spiel][attacher_admin_spiel] and last touched by [last_spiel][last_admin_spiel] ([nadeassembly.a_left.name] and [nadeassembly.a_right.name]) at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[A.name] (JMP)</a>.")
-		log_game("grenade primed by an assembly[attacher_spiel] and last touched by [last_spiel] ([nadeassembly.a_left.name] and [nadeassembly.a_right.name]) at [A.name] ([T.x], [T.y], [T.z])")
+
+		message_admins("grenade primed by an assembly, attached by [key_name_admin(M)]<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>(?)</A> (<A HREF='?_src_=holder;adminplayerobservefollow=\ref[M]'>FLW</A>) and last touched by [key_name_admin(last)]<A HREF='?_src_=holder;adminmoreinfo=\ref[last]'>(?)</A> (<A HREF='?_src_=holder;adminplayerobservefollow=\ref[last]'>FLW</A>) ([nadeassembly.a_left.name] and [nadeassembly.a_right.name]) at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[A.name] (JMP)</a>.")
+		log_game("grenade primed by an assembly, attached by [key_name(M)] and last touched by [key_name(last)] ([nadeassembly.a_left.name] and [nadeassembly.a_right.name]) at [A.name] ([T.x], [T.y], [T.z])")
 
 	playsound(loc, 'sound/effects/bamf.ogg', 50, 1)
 
