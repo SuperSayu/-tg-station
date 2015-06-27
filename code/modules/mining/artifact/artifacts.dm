@@ -8,6 +8,7 @@ var/global/ankh = 0 // only one can spawn
 	icon_state = "artifact0"
 	unacidable = 1
 	layer = 3.1
+	burn_state = -1 //Won't burn in fires
 	var/title = "artifact"
 	var/prefix = "ancient"
 	var/integrity = 100

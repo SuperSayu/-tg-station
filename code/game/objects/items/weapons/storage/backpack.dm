@@ -18,6 +18,8 @@
 	slot_flags = SLOT_BACK	//ERROOOOO
 	max_w_class = 3
 	max_combined_w_class = 21
+	burn_state = 0 //Burnable
+	burntime = 20
 
 /obj/item/weapon/storage/backpack/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	playsound(src.loc, "rustle", 50, 1, -5)
@@ -34,7 +36,8 @@
 	icon_state = "holdingpack"
 	storage_slots = 20
 	max_w_class = 5
-	max_combined_w_class = 60 // 21*2, 14*3, ~10*4, ~8*5
+	max_combined_w_class = 35
+	burn_state = -1 // NotBurnable
 
 /obj/item/weapon/storage/backpack/holding/suicide_act(mob/user)
 	user.visible_message("<span class='suicide'>[user] is jumping into [src]! It looks like \he's trying to commit suicide.</span>")
@@ -131,12 +134,14 @@
 	desc = "It's a special backpack made exclusively for Nanotrasen officers."
 	icon_state = "captainpack"
 	item_state = "captainpack"
+	burn_state = -1 //Not Burnable
 
 /obj/item/weapon/storage/backpack/industrial
 	name = "industrial backpack"
 	desc = "It's a tough backpack for the daily grind of station life."
 	icon_state = "engiepack"
 	item_state = "engiepack"
+	burn_state = -1 //Not Burnable
 
 /obj/item/weapon/storage/backpack/botany
 	name = "botany backpack"
@@ -161,6 +166,7 @@
 	desc = "A specially designed backpack. It's fire resistant and smells vaguely of plasma."
 	icon_state = "toxpack"
 	item_state = "toxpack"
+	burn_state = -1 //Not Burnable
 
 /obj/item/weapon/storage/backpack/virology
 	name = "virology backpack"
@@ -177,6 +183,7 @@
 	name = "leather satchel"
 	desc = "It's a very fancy satchel made with fine leather."
 	icon_state = "satchel"
+	burn_state = -1 //Not Burnable
 
 /obj/item/weapon/storage/backpack/satchel/withwallet/New()
 	..()
@@ -192,6 +199,7 @@
 	desc = "A tough satchel with extra pockets."
 	icon_state = "satchel-eng"
 	item_state = "engiepack"
+	burn_state = -1 //Not Burnable
 
 /obj/item/weapon/storage/backpack/satchel_med
 	name = "medical satchel"
@@ -222,6 +230,7 @@
 	desc = "Useful for holding research materials."
 	icon_state = "satchel-tox"
 	item_state = "satchel-tox"
+	burn_state = -1 //Not Burnable
 
 /obj/item/weapon/storage/backpack/satchel_hyd
 	name = "botanist satchel"
@@ -240,6 +249,7 @@
 	desc = "An exclusive satchel for Nanotrasen officers."
 	icon_state = "satchel-cap"
 	item_state = "captainpack"
+	burn_state = -1 //Not Burnable
 
 /obj/item/weapon/storage/backpack/satchel_flat
 	name = "smuggler's satchel"
@@ -312,6 +322,7 @@
 	desc = "A large dufflebag for holding extra captainly goods."
 	icon_state = "duffle-captain"
 	item_state = "duffle-captain"
+	burn_state = -1 //Not Burnable
 
 /obj/item/weapon/storage/backpack/dufflebag/med
 	name = "medical dufflebag"
@@ -330,6 +341,7 @@
 	desc = "A large dufflebag for holding extra tools and supplies."
 	icon_state = "duffle-eng"
 	item_state = "duffle-eng"
+	burn_state = -1 //Not Burnable
 
 /obj/item/weapon/storage/backpack/dufflebag/clown
 	name = "clown's dufflebag"

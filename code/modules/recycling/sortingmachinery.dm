@@ -117,6 +117,7 @@
 	flags = NOBLUDGEON
 	amount = 25
 	max_amount = 25
+	burn_state = 0 //burnable
 
 	initialize()
 		for(var/obj/item/I in range(3))

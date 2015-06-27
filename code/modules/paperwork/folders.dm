@@ -5,6 +5,7 @@
 	icon_state = "folder"
 	w_class = 2
 	pressure_resistance = 2
+	burn_state = 0 //Burnable
 
 /obj/item/weapon/folder/blue
 	desc = "A blue folder."
@@ -73,15 +74,6 @@
 		//Update everything
 		attack_self(usr)
 		update_icon()
-
-/obj/item/weapon/folder/fire_act(air,temp,volume)
-	if(prob(25))
-		del src
-	else if(contents.len)
-		var/obj/item/I = pick(contents)
-		if(I)
-			I.fire_act(air,temp,volume)
-
 
 /obj/item/weapon/folder/documents
 	name = "folder- 'TOP SECRET'"

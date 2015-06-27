@@ -118,13 +118,6 @@
 /obj/structure/filingcabinet/security
 	var/virgin = 1
 
-/obj/structure/filingcabinet/security/fire_act()
-	if(!virgin)
-		..()
-	else if(prob(5))
-		virgin = 0 // all records lost
-
-
 /obj/structure/filingcabinet/security/proc/populate()
 	if(virgin)
 		for(var/datum/data/record/G in data_core.general)
@@ -154,13 +147,6 @@
  */
 /obj/structure/filingcabinet/medical
 	var/virgin = 1
-
-/obj/structure/filingcabinet/medical/fire_act()
-	if(!virgin)
-		..()
-	else if(prob(5))
-		virgin = 0 // all records lost
-
 
 /obj/structure/filingcabinet/medical/proc/populate()
 	if(virgin)
