@@ -48,7 +48,7 @@
 	var/list/candidates = get_candidates(BE_WIZARD)
 	if(candidates.len)
 		var/client/C = pick(candidates)
-		new /obj/effect/effect/harmless_smoke(user.loc)
+		new /obj/effect/effect/smoke(user.loc)
 		var/mob/living/carbon/human/M = new/mob/living/carbon/human(user.loc)
 		M.key = C.key
 		M << "<B>You are the [user.real_name]'s apprentice! You are bound by magic contract to follow their orders and help them in accomplishing their goals."
