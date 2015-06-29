@@ -118,11 +118,11 @@
 			allowed = 0
 		if(!allowed)
 			current << "You forgot \i[KS]."
+			if(KS in spell_list)
+				spell_list -= KS
 		else
 			KS.loc = new_character
-	spell_list = list()
-	for(var/obj/effect/knowspell/KS in new_character)
-		spell_list |= KS
+			spell_list |= KS
 
 	if(active)
 		new_character.key = key		//now transfer the key to link the client to our new body

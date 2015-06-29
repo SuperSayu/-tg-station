@@ -54,7 +54,7 @@
 			lich.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/black(lich), slot_head)
 
 			lich.real_name = user.mind.name
-			user.mind.transfer_to(lich)
+			user.mind.clone_to(lich)
 			hardset_dna(lich,null,null,lich.real_name,null,/datum/species/skeleton)
 			lich << "<span class='warning'>Your bones clatter and shutter as they're pulled back into this world!</span>"
 			charge_max += 600

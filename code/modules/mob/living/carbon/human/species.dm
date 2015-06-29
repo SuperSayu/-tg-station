@@ -754,7 +754,7 @@
 				if(P.allow_thrust(0.01, H))
 					hasjetpack = 1
 
-			mspeed = 1 - hasjetpack
+			mspeed = -1 - hasjetpack
 
 		if(grav || !hasjetpack)
 			var/health_deficiency = (100 - H.health + H.staminaloss)
@@ -783,11 +783,12 @@
 
 			mspeed += speedmod
 
-	if(H.status_flags & GOTTAGOFAST)
-		mspeed -= 1
+		if(grav)
+			if(H.status_flags & GOTTAGOFAST)
+				mspeed -= 1
 
-	if(H.status_flags & GOTTAGOREALLYFAST)
-		mspeed -= 2
+			if(H.status_flags & GOTTAGOREALLYFAST)
+				mspeed -= 2
 
 	return mspeed
 
