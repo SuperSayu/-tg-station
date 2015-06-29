@@ -492,7 +492,7 @@
 "jx" = (/turf/simulated/floor/plasteel{icon_state = "dark"},/turf/indestructible{icon = 'icons/effects/effects.dmi'; icon_state = "m_shield"; name = "wall of force"; opacity = 0},/area/space)
 "jy" = (/obj/item/weapon/shard,/turf/simulated/floor/plasteel{tag = "icon-damaged4"; icon_state = "damaged4"},/area/space)
 "jz" = (/obj/structure/closet,/turf/simulated/floor/plasteel{icon_state = "floor"},/area/centcom/supply)
-"jA" = (/obj/structure/closet/secure_closet/cargotech,/turf/simulated/floor/plasteel{dir = 1; icon_state = "loadingarea"},/area/centcom/supply)
+"jA" = (/obj/structure/closet/wardrobe/cargotech,/turf/simulated/floor/plasteel{dir = 1; icon_state = "loadingarea"},/area/centcom/supply)
 "jB" = (/obj/structure/closet/secure_closet/quartermaster,/turf/simulated/floor/plasteel{dir = 1; icon_state = "loadingarea"},/area/centcom/supply)
 "jC" = (/obj/item/stack/spacecash/c1000,/turf/simulated/floor/plasteel{tag = "icon-floorscorched2"; icon_state = "floorscorched2"},/area/space)
 "jD" = (/obj/item/clothing/tie/petcollar,/turf/simulated/floor/plasteel{tag = "icon-floorscorched1"; icon_state = "floorscorched1"},/area/space)
