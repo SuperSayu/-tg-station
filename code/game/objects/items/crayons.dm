@@ -163,6 +163,7 @@
 	if(!proximity)
 		return
 	if(capped)
+		user << "<span class='warning'>Take the cap off first!</span>"
 		return
 	else
 		if(iscarbon(target))
