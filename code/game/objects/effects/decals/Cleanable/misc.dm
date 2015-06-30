@@ -168,3 +168,4 @@
 /obj/effect/decal/cleanable/shreds/New()
 	pixel_x = rand(-5, 5)
 	pixel_y = rand(-5, 5)
+	..()
