@@ -74,8 +74,10 @@
 	layer = 3
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "cobweb1"
-	burn_state = 0 //Burnable
 	burntime = 1
+
+/obj/effect/decal/cleanable/cobweb/fire_act()
+	qdel(src)
 
 /obj/effect/decal/cleanable/molten_item
 	name = "gooey grey mass"
@@ -107,12 +109,6 @@
 	icon_state = "vomit_1"
 	random_icon_states = list("vomit_1", "vomit_2", "vomit_3", "vomit_4")
 	var/list/viruses = list()
-
-/obj/effect/decal/cleanable/vomit/New()
-	spawn(12000) // 20 minutes
-		icon_state += "-old"
-		name = "crusty dried vomit"
-		desc = "You try not to look at the chunks, and fail."
 
 /obj/effect/decal/cleanable/vomit/Destroy()
 	for(var/datum/disease/D in viruses)
