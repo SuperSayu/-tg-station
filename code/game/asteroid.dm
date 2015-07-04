@@ -174,7 +174,7 @@ var/global/list/spawned_surprises = list()
 			y_size = 5
 			areapoints = 25
 
-	if(monolith != 1)
+	if(!monolith)
 		possiblethemes -= theme //once a theme is selected, it's out of the running!
 
 	var/floor = pick(floortypes)

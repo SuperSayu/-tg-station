@@ -56,4 +56,3 @@
 	attack_verb = list("played metal on", "serenaded", "crashed", "smashed")
 	hitsound = "swing_hit"
 	instrumentId = "guitar"
-

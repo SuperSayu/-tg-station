@@ -299,6 +299,7 @@
 //Artifact Meteor
 /obj/effect/meteor/artifact
 	name = "ancient meteor"
+	icon = 'icons/obj/sayumeteor.dmi'
 	icon_state = "artifact"
 	desc = "Contains ancient alien technology."
 	dropamt = 1

@@ -927,7 +927,7 @@
 		if(A_TRAVEL)
 			var/list/pos_levels = list()
 			if(user.z == 1)
-				pos_levels = list(3,4,5,6,7)
+				pos_levels = list(ZLEVEL_ABANDONNEDTSAT,4,ZLEVEL_MINING,6,ZLEVEL_SPACEMAX)
 			else
 				pos_levels = list(1)
 			var/new_z = pick(pos_levels)
