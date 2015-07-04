@@ -28,11 +28,6 @@
 	for(var/datum/mind/possible_target in ticker.minds)
 		if(possible_target != owner && ishuman(possible_target.current) && (possible_target.current.stat != 2) && is_unique_objective(possible_target))
 			possible_targets += possible_target
-
-	if(owner) // avoid duplicates where possible
-		for(var/datum/objective/O in owner.objectives)
-			possible_targets -= O.target
-
 	if(possible_targets.len > 0)
 		target = pick(possible_targets)
 	update_explanation_text()
@@ -350,34 +345,24 @@ var/global/list/possible_items = list()
 	if(!possible_items.len)//Only need to fill the list when it's needed.
 		init_subtypes(/datum/objective_item,possible_items)
 
-// this is remarkably inefficient but it should get everything
 /datum/objective/steal/find_target()
-	if(!owner)
-		return set_target(pick(possible_items))
-	var/list/loot = possible_items.Copy()
-	var/i=1
-	while(i<=loot.len) //otherwise would skip checking the last item. The list is 1 indexed, not 0 indexed, so this shouldn't cause problems.
-		var/datum/objective_item/item = loot[i]
-		if(!(owner.special_role in item.antag_types))
-			loot.Cut(i,i+1)
-			continue
-		if(owner.assigned_role in item.excludefromjob)
-			loot.Cut(i,i+1)
-			continue
-		i++
-
-	var/datum/objective_item/item = pick(loot)
-	var/trial_limit = 5
-	while(--trial_limit && item.find_duplicate(owner) && loot.len)
-		item = pick_n_take(loot)
-	return set_target(item)
+	var/approved_targets = list()
+	for(var/datum/objective_item/possible_item in possible_items)
+		if(is_unique_objective(possible_item.targetitem) && (owner.current.mind.special_role in possible_item.antag_types) && !(owner.current.mind.assigned_role in possible_item.excludefromjob))
+			approved_targets += possible_item
+	return set_target(safepick(approved_targets))
 
 /datum/objective/steal/proc/set_target(var/datum/objective_item/item)
-	targetinfo = item.add_objective() // A few steal item datums need copies instead of working on the global copy
-	steal_target = targetinfo.targetitem
-	explanation_text = "Steal [targetinfo.name]."
-	dangerrating = targetinfo.difficulty
-	return steal_target
+	if(item)
+		targetinfo = item.add_objective()
+
+		steal_target = targetinfo.targetitem
+		explanation_text = "Steal [targetinfo.name]."
+		dangerrating = targetinfo.difficulty
+		return steal_target
+	else
+		explanation_text = "Free objective"
+		return
 
 /datum/objective/steal/proc/select_target() //For admins setting objectives manually.
 	var/list/possible_items_all = possible_items+"custom"
