@@ -210,7 +210,7 @@
 */
 
 /obj/item/weapon/reagent_containers/glass/afterattack(obj/target, mob/user, proximity)
-	if((!proximity) || !check_allowed_items(target)) return
+	if((!proximity) || !check_allowed_items(target,1)) return
 
 	if(istype(target,/mob/living/simple_animal/pet/corgi/puppy/smart) && user.a_intent == "help")
 		return //sgt. pepper can do a sniff test on reagent containers
