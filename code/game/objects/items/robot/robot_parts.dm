@@ -113,28 +113,32 @@
 			return
 	if(istype(W, /obj/item/robot_parts/l_leg))
 		if(src.l_leg)	return
-		user.drop_item()
+		if(!user.unEquip(W))
+			return
 		W.loc = src
 		src.l_leg = W
 		src.update_icon()
 
 	if(istype(W, /obj/item/robot_parts/r_leg))
 		if(src.r_leg)	return
-		user.drop_item()
+		if(!user.unEquip(W))
+			return
 		W.loc = src
 		src.r_leg = W
 		src.update_icon()
 
 	if(istype(W, /obj/item/robot_parts/l_arm))
 		if(src.l_arm)	return
-		user.drop_item()
+		if(!user.unEquip(W))
+			return
 		W.loc = src
 		src.l_arm = W
 		src.update_icon()
 
 	if(istype(W, /obj/item/robot_parts/r_arm))
 		if(src.r_arm)	return
-		user.drop_item()
+		if(!user.unEquip(W))
+			return
 		W.loc = src
 		src.r_arm = W
 		src.update_icon()
@@ -142,7 +146,8 @@
 	if(istype(W, /obj/item/robot_parts/chest))
 		if(src.chest)	return
 		if(W:wires && W:cell)
-			user.drop_item()
+			if(!user.unEquip(W))
+				return
 			W.loc = src
 			src.chest = W
 			src.update_icon()
@@ -154,7 +159,8 @@
 	if(istype(W, /obj/item/robot_parts/head))
 		if(src.head)	return
 		if(W:flash2 && W:flash1)
-			user.drop_item()
+			if(!user.unEquip(W))
+				return
 			W.loc = src
 			src.head = W
 			src.update_icon()
@@ -201,7 +207,13 @@
 			var/mob/living/silicon/robot/O = new /mob/living/silicon/robot(get_turf(loc))
 			if(!O)	return
 
-			user.drop_item()
+			if(!user.unEquip(W))
+				return
+
+			if(M.syndiemmi)
+				aisync = 0
+				lawsync = 0
+				O.laws = new /datum/ai_laws/syndicate_override
 
 			O.invisibility = 0
 			//Transfer debug settings to new mob
@@ -215,7 +227,7 @@
 				O.notify_ai(1)
 				if(forced_ai)
 					O.connected_ai = forced_ai
-			if(!lawsync)
+			if(!lawsync && !M.syndiemmi)
 				O.lawupdate = 0
 				O.make_laws()
 				if(ticker.mode.config_tag == "malfunction") //Don't let humans get a cyborg on their side during malf, for balance reasons.
@@ -306,7 +318,8 @@
 			user << "<span class='warning'>You have already inserted a cell!</span>"
 			return
 		else
-			user.drop_item()
+			if(!user.unEquip(W))
+				return
 			W.loc = src
 			src.cell = W
 			user << "<span class='notice'>You insert the cell.</span>"
@@ -333,7 +346,8 @@
 			user << "<span class='warning'>You can't use a broken flash!</span>"
 			return
 		else
-			user.drop_item()
+			if(!user.unEquip(W))
+				return
 			F.loc = src
 			if(src.flash1)
 				src.flash2 = F

@@ -19,7 +19,7 @@
 			else
 				if(src && loc)
 					visible_message("[src] disappears with a \i [magic_soundfx()].")
-					var/datum/effect/effect/system/harmless_smoke_spread/smoke = new
+					var/datum/effect/effect/system/smoke_spread/smoke = new
 					smoke.set_up(1, 0, loc)
 					smoke.start()
 					loc = null

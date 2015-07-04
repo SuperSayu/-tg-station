@@ -68,12 +68,6 @@
 	excludefromjob = list("Chief Engineer")
 	antag_types = list("traitor","Changeling","Space Ninja")
 
-/datum/objective_item/steal/corgimeat
-	name = "a piece of corgi meat"
-	targetitem = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/corgi
-	difficulty = 5
-	excludefromjob = list("Quartermaster","Cargo Technician","Head of Personnel") //>hurting your little buddy ever
-	antag_types = list("traitor","Changeling","Wizard")
 /*
 //	We often don't have enough for captains to be a sure thing
 

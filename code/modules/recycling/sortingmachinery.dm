@@ -117,6 +117,7 @@
 	flags = NOBLUDGEON
 	amount = 25
 	max_amount = 25
+	burn_state = 0 //burnable
 
 	initialize()
 		for(var/obj/item/I in range(3))
@@ -321,7 +322,7 @@
 		if(W.remove_fuel(0,user))
 			playsound(loc, 'sound/items/Welder2.ogg', 100, 1)
 			user << "<span class='notice'>You start slicing the floorweld off the delivery chute...</span>"
-			if(do_after(user,20))
+			if(do_after(user,20, target = src))
 				if(!src || !W.isOn()) return
 				Deconstruct()
 				user << "<span class='notice'>You slice the floorweld off the delivery chute.</span>"

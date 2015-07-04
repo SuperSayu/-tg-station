@@ -59,16 +59,28 @@
 	name = "Supplemental Camera Interface"
 	skip_bugcheck = 1
 	bugtype = AI_BUG
-	proc/show_interface()
-		interact(usr)
+
+/obj/item/device/camera_bug/ai/proc/show_interface()
+	var/isAi = istype(usr, /mob/living/silicon/ai)
+
+	if(!isAi)
+		return
+	else
+		var/mob/living/silicon/ai/A = usr
+		if(A.control_disabled)
+			usr << "Wireless control is disabled!"
+			return
+	interact(usr)
+
 /obj/item/device/camera_bug/pai
 	name = "Supplemental Camera Interface"
 	skip_bugcheck = 1
 	bugtype = AI_BUG
-	proc/show_interface()
-		set category="pAI Commands"
-		set name="Show Camera Monitor"
-		interact(usr)
+
+/obj/item/device/camera_bug/pai/proc/show_interface()
+	set category="pAI Commands"
+	set name="Show Camera Monitor"
+	interact(usr)
 
 /obj/item/device/camera_bug/New()
 	..()
@@ -439,11 +451,14 @@
 
 	for(var/entry in expandables)
 		if(istype(W,entry))
+
 			if(bugtype > VANILLA_BUG)
 				user << "You cannot modify [src]."
+
+			if(!user.unEquip(W))
 				return
+
 			bugtype = expandables[entry]
-			user.drop_item()
 			W.loc = src
 			expansion = W
 			user << "<span class='notice'>You add [W] to [src].</span>"

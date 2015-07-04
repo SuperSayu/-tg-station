@@ -19,6 +19,9 @@
 /obj/effect/decal/cleanable/ash/New()
 	..()
 	reagents.add_reagent("ash", 30)
+	pixel_x = rand(-5, 5)
+	pixel_y = rand(-5, 5)
+
 
 /obj/effect/decal/cleanable/greenglow
 	name = "green glow"
@@ -71,6 +74,10 @@
 	layer = 3
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "cobweb1"
+	burntime = 1
+
+/obj/effect/decal/cleanable/cobweb/fire_act()
+	qdel(src)
 
 /obj/effect/decal/cleanable/molten_item
 	name = "gooey grey mass"
@@ -102,12 +109,6 @@
 	icon_state = "vomit_1"
 	random_icon_states = list("vomit_1", "vomit_2", "vomit_3", "vomit_4")
 	var/list/viruses = list()
-
-/obj/effect/decal/cleanable/vomit/New()
-	spawn(12000) // 20 minutes
-		icon_state += "-old"
-		name = "crusty dried vomit"
-		desc = "You try not to look at the chunks, and fail."
 
 /obj/effect/decal/cleanable/vomit/Destroy()
 	for(var/datum/disease/D in viruses)
@@ -149,3 +150,18 @@
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "ash"
 	anchored = 1
+
+/obj/effect/decal/cleanable/shreds
+	name = "shreds"
+	desc = "The shredded remains of what appears to be clothing."
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "shreds"
+	gender = PLURAL
+	density = 0
+	anchored = 1
+	layer = 2
+
+/obj/effect/decal/cleanable/shreds/New()
+	pixel_x = rand(-5, 5)
+	pixel_y = rand(-5, 5)
+	..()

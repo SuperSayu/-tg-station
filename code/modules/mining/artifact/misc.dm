@@ -195,6 +195,7 @@
 	icon_state = "wings"
 	slot_flags = SLOT_BACK
 	action_button_name = "Toggle Wings"
+	burn_state = -1 //Won't burn in fires
 	var/state = 1 // 0 = retracted, 1 = extended
 	var/datum/effect/effect/system/wing_trail_follow/wing_trail
 	var/mob/living/carbon/human/wearer = null

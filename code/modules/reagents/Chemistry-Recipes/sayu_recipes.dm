@@ -3,7 +3,7 @@
 	name = "Slime Teleport"
 	id = "m_tele"
 	result = null
-	required_reagents = list("plasma" = 5)
+	required_reagents = list("mutagen" = 5)
 	result_amount = 1
 	required_container = /obj/item/slime_extract/bluespace
 	required_other = 1

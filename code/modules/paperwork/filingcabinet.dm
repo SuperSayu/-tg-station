@@ -44,8 +44,9 @@
 
 /obj/structure/filingcabinet/attackby(obj/item/P, mob/user, params)
 	if(istype(P, /obj/item/weapon/paper) || istype(P, /obj/item/weapon/folder) || istype(P, /obj/item/weapon/photo) || istype(P, /obj/item/documents))
+		if(!user.drop_item())
+			return
 		user << "<span class='notice'>You put [P] in [src].</span>"
-		user.drop_item()
 		P.loc = src
 		icon_state = "[initial(icon_state)]-open"
 		sleep(5)
@@ -117,13 +118,6 @@
 /obj/structure/filingcabinet/security
 	var/virgin = 1
 
-/obj/structure/filingcabinet/security/fire_act()
-	if(!virgin)
-		..()
-	else if(prob(5))
-		virgin = 0 // all records lost
-
-
 /obj/structure/filingcabinet/security/proc/populate()
 	if(virgin)
 		for(var/datum/data/record/G in data_core.general)
@@ -153,13 +147,6 @@
  */
 /obj/structure/filingcabinet/medical
 	var/virgin = 1
-
-/obj/structure/filingcabinet/medical/fire_act()
-	if(!virgin)
-		..()
-	else if(prob(5))
-		virgin = 0 // all records lost
-
 
 /obj/structure/filingcabinet/medical/proc/populate()
 	if(virgin)

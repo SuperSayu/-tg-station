@@ -1,7 +1,8 @@
 /obj/machinery/computer/telescience
 	name = "\improper Telepad Control Console"
 	desc = "Used to teleport objects to and from the telescience telepad."
-	icon_state = "teleport"
+	icon_screen = "teleport"
+	icon_keyboard = "teleport_key"
 	circuit = /obj/item/weapon/circuitboard/telesci_console
 	var/sending = 1
 	var/obj/machinery/telepad/telepad = null
@@ -58,7 +59,8 @@
 		if(crystals.len >= max_crystals)
 			user << "<span class='warning'>There are not enough crystal slots.</span>"
 			return
-		user.drop_item()
+		if(!user.drop_item())
+			return
 		crystals += W
 		W.loc = null
 		user.visible_message("[user] inserts [W] into \the [src]'s crystal slot.", "<span class='notice'>You insert [W] into \the [src]'s crystal slot.</span>")

@@ -25,17 +25,17 @@
 	SSshuttle.shuttle_loan = src
 	switch(dispatch_type)
 		if(HIJACK_SYNDIE)
-			priority_announce("The syndicate are trying to infiltrate your station. If you let them hijack your shuttle, you'll save us a headache.","Centcom Counter Intelligence")
+			priority_announce("Cargo: The syndicate are trying to infiltrate your station. If you let them hijack your cargo shuttle, you'll save us a headache.","Centcom Counter Intelligence")
 		if(RUSKY_PARTY)
-			priority_announce("A group of angry russians want to have a party, can you send them your cargo shuttle then make them disappear?","Centcom Russian Outreach Program")
+			priority_announce("Cargo: A group of angry russians want to have a party, can you send them your cargo shuttle then make them disappear?","Centcom Russian Outreach Program")
 		if(SPIDER_GIFT)
-			priority_announce("The Spider Clan has sent us a mysterious gift, can we ship it to you to see what's inside?","Centcom Diplomatic Corps")
+			priority_announce("Cargo: The Spider Clan has sent us a mysterious gift, can we ship it to you to see what's inside?","Centcom Diplomatic Corps")
 		if(DEPARTMENT_RESUPPLY)
-			priority_announce("Seems we've ordered doubles of our department resupply packages this month. Can we send them to you?","Centcom Supply Department")
+			priority_announce("Cargo: Seems we've ordered doubles of our department resupply packages this month. Can we send them to you?","Centcom Supply Department")
 			thanks_msg = "The shuttle will be returned in 5 minutes."
 			bonus_points = 0
 		if(FLEEING_WIZARD)
-			priority_announce("A rogue wizard is offering to pay us off with artifacts if we help him hide from his master.  Can he borrow the shuttle for a bit?","Centcom Witness Protection Program")
+			priority_announce("Cargo: A rogue wizard is offering to pay us off with artifacts if we help him hide from his master. Can he borrow the cargo shuttle for a bit?","Centcom Witness Protection Program")
 
 /datum/round_event/shuttle_loan/proc/loan_shuttle()
 	priority_announce(thanks_msg, "Cargo shuttle commandeered by Centcom.")
