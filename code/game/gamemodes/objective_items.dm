@@ -116,6 +116,7 @@
 	name = "the plutonium core from the onboard self-destruct"
 	targetitem = /obj/item/nuke_core
 	difficulty = 15
+	antag_types = list("traitor","Changeling","Wizard","Space Ninja")
 
 /datum/objective_item/steal/nuke_core/New()
 	special_equipment += new /obj/item/weapon/storage/box/syndie_kit/nuke()
