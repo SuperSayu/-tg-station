@@ -6,7 +6,7 @@
 	var/difficulty = 9001							//vaguely how hard it is to do this objective
 	var/list/excludefromjob = list()				//If you don't want a job to get a certain objective (no captain stealing his own medal, etcetc)
 	var/list/altitems = list()				//Items which can serve as an alternative to the objective (darn you blueprints)
-
+	var/list/special_equipment = list()
 
 	var/list/antag_types = list("traitor","Changeling","Wizard","Space Ninja")
 
@@ -111,6 +111,14 @@
 	targetitem = /obj/item/documents //Any set of secret documents. Doesn't have to be NT's
 	difficulty = 5
 	antag_types = list("traitor","Changeling","Wizard","Space Ninja")
+
+/datum/objective_item/steal/nuke_core
+	name = "the plutonium core from the onboard self-destruct"
+	targetitem = /obj/item/nuke_core
+	difficulty = 15
+
+/datum/objective_item/steal/nuke_core/New()
+	special_equipment += new /obj/item/weapon/storage/box/syndie_kit/nuke()
 
 //Items with special checks!
 /datum/objective_item/steal/plasma
