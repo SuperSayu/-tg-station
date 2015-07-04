@@ -8,7 +8,7 @@
 			new /obj/item/clothing/mask/gas/voice(src)
 			new /obj/item/weapon/card/id/syndicate(src)
 			new /obj/item/weapon/card/id/syndicate(src)
-			new /obj/item/clothing/shoes/syndigaloshes(src)
+			new /obj/item/clothing/shoes/sneakers/syndigaloshes(src)
 			new /obj/item/device/camera_bug(src)
 			return
 
@@ -49,7 +49,7 @@
 			new /obj/item/weapon/melee/energy/sword(src)
 			new /obj/item/clothing/glasses/thermal/syndi(src)
 			new /obj/item/weapon/card/emag(src)
-			new /obj/item/clothing/shoes/syndigaloshes(src)
+			new /obj/item/clothing/shoes/sneakers/syndigaloshes(src)
 			return
 
 		if("implant")
@@ -112,12 +112,22 @@
 	return
 */
 
-/obj/item/weapon/storage/box/syndie_kit/imp_explosive
-	name = "Explosive Implant (with injector)"
+/obj/item/weapon/storage/box/syndie_kit/imp_microbomb
+	name = "Microbomb Implant (with injector)"
 
-/obj/item/weapon/storage/box/syndie_kit/imp_explosive/New()
+/obj/item/weapon/storage/box/syndie_kit/imp_microbomb/New()
 	var/obj/item/weapon/implanter/O = new(src)
 	O.imp = new /obj/item/weapon/implant/explosive(O)
+	O.update_icon()
+	..()
+	return
+
+/obj/item/weapon/storage/box/syndie_kit/imp_macrobomb
+	name = "Macrobomb Implant (with injector)"
+
+/obj/item/weapon/storage/box/syndie_kit/imp_macrobomb/New()
+	var/obj/item/weapon/implanter/O = new(src)
+	O.imp = new /obj/item/weapon/implant/explosive/macro(O)
 	O.update_icon()
 	..()
 	return

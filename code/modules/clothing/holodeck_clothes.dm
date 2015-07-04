@@ -30,7 +30,7 @@
 	var/performing = 0 // when on, the owner's speech is copied into the theater-chat
 
 	var/global/list/forbidden = list(/obj/item/clothing/under/actorsuit, /obj/item/clothing/under/actorsuit/clown, /obj/item/clothing/under/actorsuit/mime, /obj/item/clothing/under/chameleon,/obj/item/clothing/under/chameleon/all,
-		/obj/item/clothing/mask/facehugger, /obj/item/clothing/mask/horsehead, /obj/item/clothing/suit/space/space_ninja, /obj/item/clothing/gloves/space_ninja,
+		/obj/item/clothing/mask/facehugger, /obj/item/clothing/mask/horsehead, /obj/item/clothing/suit/space/space_ninja, /obj/item/clothing/gloves/space_ninja, /obj/item/clothing/head/wig,
 		/obj/item/clothing/head/helmet/space/space_ninja,/obj/item/clothing/mask/gas/voice/space_ninja, /obj/item/clothing/gloves/magic/shadow)
 
 /obj/item/clothing/under/actorsuit/New()

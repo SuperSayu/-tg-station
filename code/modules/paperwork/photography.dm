@@ -17,7 +17,7 @@
 	icon_state = "film"
 	item_state = "electropack"
 	w_class = 1.0
-
+	burn_state = 0 //Burnable
 
 /*
  * Photo
@@ -28,6 +28,8 @@
 	icon_state = "photo"
 	item_state = "paper"
 	w_class = 1.0
+	burn_state = 0 //Burnable
+	burntime = 5
 	var/icon/img		//Big photo image
 	var/scribble		//Scribble on the back.
 	var/blueprints = 0	//Does it include the blueprints?
@@ -53,7 +55,7 @@
 	if(in_range(user, src))
 		show(user)
 	else
-		user << "You need to get closer to get a good look at this photo."
+		user << "<span class='warning'>You need to get closer to get a good look at this photo!</span>"
 
 
 /obj/item/weapon/photo/proc/show(mob/user)
@@ -92,7 +94,7 @@
 	icon_state = "album"
 	item_state = "briefcase"
 	can_hold = list(/obj/item/weapon/photo)
-
+	burn_state = 0 //Burnable
 
 /*
  * Camera
@@ -140,8 +142,9 @@
 		if(pictures_left)
 			user << "<span class='notice'>[src] still has some film in it!</span>"
 			return
+		if(!user.unEquip(I))
+			return
 		user << "<span class='notice'>You insert [I] into [src].</span>"
-		user.drop_item()
 		qdel(I)
 		pictures_left = pictures_max
 		return
@@ -332,7 +335,7 @@
 	else
 		injectaialbum(icon, img, desc, pixel_x, pixel_y, blueprintsinject)
 
-obj/item/device/camera/siliconcam/proc/selectpicture(var/obj/item/device/camera/siliconcam/targetloc)
+/obj/item/device/camera/siliconcam/proc/selectpicture(var/obj/item/device/camera/siliconcam/targetloc)
 	var/list/nametemp = list()
 	var/find
 	if(targetloc.aipictures.len == 0)
@@ -345,18 +348,19 @@ obj/item/device/camera/siliconcam/proc/selectpicture(var/obj/item/device/camera/
 		if(q.fields["name"] == find)
 			return q
 
-obj/item/device/camera/siliconcam/proc/viewpichelper(var/obj/item/device/camera/siliconcam/targetloc)
+/obj/item/device/camera/siliconcam/proc/viewpichelper(var/obj/item/device/camera/siliconcam/targetloc)
 	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
 	var/datum/picture/selection = selectpicture(targetloc)
-	P.photocreate(selection.fields["icon"], selection.fields["img"], selection.fields["desc"])
-	P.pixel_x = selection.fields["pixel_x"]
-	P.pixel_y = selection.fields["pixel_y"]
+	if(selection)
+		P.photocreate(selection.fields["icon"], selection.fields["img"], selection.fields["desc"])
+		P.pixel_x = selection.fields["pixel_x"]
+		P.pixel_y = selection.fields["pixel_y"]
 
-	P.show(usr)
-	usr << P.desc
+		P.show(usr)
+		usr << P.desc
 	qdel(P)    //so 10 thousand picture items are not left in memory should an AI take them and then view them all
 
-obj/item/device/camera/siliconcam/proc/viewpictures(user)
+/obj/item/device/camera/siliconcam/proc/viewpictures(user)
 	if(isrobot(user)) // Cyborg
 		var/mob/living/silicon/robot/C = src.loc
 		var/obj/item/device/camera/siliconcam/Cinfo
@@ -398,7 +402,7 @@ obj/item/device/camera/siliconcam/proc/viewpictures(user)
 	src.in_camera_mode = 1
 	usr << "<B>Camera Mode activated</B>"
 
-obj/item/device/camera/siliconcam/robot_camera/proc/borgprint()
+/obj/item/device/camera/siliconcam/robot_camera/proc/borgprint()
 	var/list/nametemp = list()
 	var/find
 	var/datum/picture/selection
@@ -427,4 +431,4 @@ obj/item/device/camera/siliconcam/robot_camera/proc/borgprint()
 	p.pixel_y = rand(-10, 10)
 	C.toner -= 20	 //Cyborgs are very ineffeicient at printing an image
 	visible_message("[C.name] spits out a photograph from a narrow slot on it's chassis.")
-	usr << "You print a photograph."
+	usr << "<span class='notice'>You print a photograph.</span>"

@@ -11,6 +11,9 @@
 		/obj/machinery/chem_heater/,
 		/obj/machinery/reagentgrinder,
 		/obj/machinery/biogenerator,
+		/obj/machinery/r_n_d/destructive_analyzer,
+		/obj/machinery/r_n_d/experimentor,
+		/obj/machinery/autolathe,
 		/obj/structure/table,
 		/obj/structure/rack,
 		/obj/structure/closet,
@@ -229,7 +232,7 @@
 	else if(istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
 
 		if(target.reagents && !target.reagents.total_volume)
-			user << "<span class='notice'>[target] is empty and can't be refilled.</span>"
+			user << "<span class='warning'>[target] is empty and can't be refilled!</span>"
 			return
 
 		if(reagents.total_volume >= reagents.maximum_volume)
@@ -241,20 +244,12 @@
 
 	else if(target.is_open_container() && target.reagents) //Something like a glass. Player probably wants to transfer TO it.
 		if(!reagents.total_volume)
-			user << "<span class='notice'>[src] is empty.</span>"
+			user << "<span class='warning'>[src] is empty!</span>"
 			return
 
 		if(target.reagents.total_volume >= target.reagents.maximum_volume)
 			user << "<span class='notice'>[target] is full.</span>"
 			return
-
-
-		if(istype(target, /obj/item/weapon/reagent_containers))
-			var/obj/item/weapon/reagent_containers/RC = target
-			for(var/bad_reg in RC.banned_reagents)
-				if(reagents.has_reagent(bad_reg, 1)) //Message is a bit "Game-y" but I can't think up a better one.
-					user << "<span class='warning'>A chemical in [src] is far too dangerous to transfer to [RC]!</span>"
-					return
 
 		var/trans = reagents.trans_to(target, amount_per_transfer_from_this)
 		user << "<span class='notice'>You transfer [trans] unit\s of the solution to [target].</span>"
@@ -284,7 +279,7 @@
 				user << "<span class='notice'>You heat [src] with [I].</span>"
 				reagents.handle_reactions()
 			else
-				user << "<span class='warning'>[src] is already hotter than [I].</span>"
+				user << "<span class='warning'>[src] is already hotter than [I]!</span>"
 
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/egg)) //breaking eggs
 		var/obj/item/weapon/reagent_containers/food/snacks/egg/E = I
@@ -416,12 +411,19 @@
 	flags = OPENCONTAINER
 	identify_probability = 30
 
-/obj/item/weapon/reagent_containers/glass/bucket/attackby(var/obj/D, mob/user as mob, params)
-	if(isprox(D))
-		user << "<span class='notice'>You add [D] to [src].</span>"
-		qdel(D)
-		user.put_in_hands(new /obj/item/weapon/bucket_sensor)
+/obj/item/weapon/reagent_containers/glass/bucket/attackby(var/obj/O, mob/user as mob, params)
+	if(istype(O, /obj/item/weapon/mop))
+		if(reagents.total_volume < 1)
+			user << "<span class='warning'>[src] is out of water!</span>"
+		else
+			reagents.trans_to(O, 5)
+			user << "<span class='notice'>You wet [O] in [src].</span>"
+			playsound(loc, 'sound/effects/slosh.ogg', 25, 1)
+	else if(isprox(O))
+		user << "<span class='notice'>You add [O] to [src].</span>"
+		qdel(O)
 		user.unEquip(src)
 		qdel(src)
+		user.put_in_hands(new /obj/item/weapon/bucket_sensor)
 	else
 		..()

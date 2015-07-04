@@ -3,6 +3,17 @@
 
 #define SMESRATE 0.05			// rate of internal charge to external power
 
+//Cache defines
+#define SMES_CLEVEL_1		1
+#define SMES_CLEVEL_2		2
+#define SMES_CLEVEL_3		3
+#define SMES_CLEVEL_4		4
+#define SMES_CLEVEL_5		5
+#define SMES_OUTPUTTING		6
+#define SMES_NOT_OUTPUTTING 7
+#define SMES_INPUTTING		8
+#define SMES_INPUT_ATTEMPT	9
+
 /obj/machinery/power/smes
 	name = "power storage unit"
 	desc = "A high-capacity superconducting magnetic energy storage (SMES) unit."
@@ -11,10 +22,10 @@
 	anchored = 1
 	use_power = 0
 	var/capacity = 5e6 // maximum charge
-	var/charge = 1e6 // actual charge
+	var/charge = 0 // actual charge
 
-	var/input_attempt = 0 // 1 = attempting to charge, 0 = not attempting to charge
-	var/inputting = 0 // 1 = actually inputting, 0 = not inputting
+	var/input_attempt = 1 // 1 = attempting to charge, 0 = not attempting to charge
+	var/inputting = 1 // 1 = actually inputting, 0 = not inputting
 	var/input_level = 50000 // amount of power the SMES attempts to charge by
 	var/input_level_max = 200000 // cap on input_level
 	var/input_available = 0 // amount of charge available from input last tick
@@ -26,6 +37,8 @@
 	var/output_used = 0 // amount of power actually outputted. may be less than output_level if the powernet returns excess power
 
 	var/obj/machinery/power/terminal/terminal = null
+
+	var/static/list/smesImageCache
 
 
 /obj/machinery/power/smes/New()
@@ -101,28 +114,28 @@
 			return
 
 		if(terminal) //is there already a terminal ?
-			user << "<span class='alert'>This SMES already have a power terminal!</span>"
+			user << "<span class='warning'>This SMES already have a power terminal!</span>"
 			return
 
 		if(!panel_open) //is the panel open ?
-			user << "<span class='alert'>You must open the maintenance panel first!</span>"
+			user << "<span class='warning'>You must open the maintenance panel first!</span>"
 			return
 
 		var/turf/T = get_turf(user)
 		if (T.intact) //is the floor plating removed ?
-			user << "<span class='alert'>You must first remove the floor plating!</span>"
+			user << "<span class='warning'>You must first remove the floor plating!</span>"
 			return
 
 
 		var/obj/item/stack/cable_coil/C = I
 		if(C.amount < 10)
-			user << "<span class='alert'>You need more wires.</span>"
+			user << "<span class='warning'>You need more wires!</span>"
 			return
 
-		user << "You start building the power terminal..."
+		user << "<span class='notice'>You start building the power terminal...</span>"
 		playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 
-		if(do_after(user, 20) && C.amount >= 10)
+		if(do_after(user, 20, target = src) && C.amount >= 10)
 			var/obj/structure/cable/N = T.get_cable_node() //get the connecting node cable, if there's one
 			if (prob(50) && electrocute_mob(usr, N, N)) //animate the electrocution if uncautious and unlucky
 				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
@@ -132,8 +145,8 @@
 
 			C.use(10)
 			user.visible_message(\
-				"<span class='alert'>[user.name] has build a power terminal!</span>",\
-				"You build the power terminal.")
+				"[user.name] has built a power terminal.",\
+				"<span class='notice'>You build the power terminal.</span>")
 
 			//build the terminal and link it to the network
 			make_terminal(T)
@@ -177,18 +190,35 @@
 	if(panel_open)
 		return
 
+	if(!smesImageCache || !smesImageCache.len)
+		smesImageCache = list()
+		smesImageCache.len = 9
 
-	overlays += image('icons/obj/power.dmi', "smes-op[outputting]")
+		smesImageCache[SMES_CLEVEL_1] = image('icons/obj/power.dmi',"smes-og1")
+		smesImageCache[SMES_CLEVEL_2] = image('icons/obj/power.dmi',"smes-og2")
+		smesImageCache[SMES_CLEVEL_3] = image('icons/obj/power.dmi',"smes-og3")
+		smesImageCache[SMES_CLEVEL_4] = image('icons/obj/power.dmi',"smes-og4")
+		smesImageCache[SMES_CLEVEL_5] = image('icons/obj/power.dmi',"smes-og5")
+
+		smesImageCache[SMES_OUTPUTTING] = image('icons/obj/power.dmi', "smes-op1")
+		smesImageCache[SMES_NOT_OUTPUTTING] = image('icons/obj/power.dmi',"smes-op0")
+		smesImageCache[SMES_INPUTTING] = image('icons/obj/power.dmi', "smes-oc1")
+		smesImageCache[SMES_INPUT_ATTEMPT] = image('icons/obj/power.dmi', "smes-oc0")
+
+	if(outputting)
+		overlays += smesImageCache[SMES_OUTPUTTING]
+	else
+		overlays += smesImageCache[SMES_NOT_OUTPUTTING]
 
 	if(inputting)
-		overlays += image('icons/obj/power.dmi', "smes-oc1")
+		overlays += smesImageCache[SMES_INPUTTING]
 	else
 		if(input_attempt)
-			overlays += image('icons/obj/power.dmi', "smes-oc0")
+			overlays += smesImageCache[SMES_INPUT_ATTEMPT]
 
 	var/clevel = chargedisplay()
 	if(clevel>0)
-		overlays += image('icons/obj/power.dmi', "smes-og[clevel]")
+		overlays += smesImageCache[clevel]
 	return
 
 
@@ -296,6 +326,10 @@
 	if(!user)
 		return
 
+	// update the ui if it exists, create a new one if it doesn't
+	ui = SSnano.push_open_or_new_ui(user, src, ui_key, ui, "smes.tmpl", "SMES - [name]", 350, 560, 1)
+
+/obj/machinery/power/smes/get_ui_data()
 	var/list/data = list(
 		"capacityPercent" = round(100.0*charge/capacity, 0.1),
 		"capacity" = capacity,
@@ -313,19 +347,7 @@
 		"outputLevelMax" = output_level_max,
 		"outputUsed" = output_used
 	)
-
-	// update the ui if it exists, returns null if no ui is passed/found
-	ui = SSnano.try_update_ui(user, src, ui_key, ui, data)
-	if (!ui)
-		// the ui does not exist, so we'll create a new() one
-		// for a list of parameters and their descriptions see the code docs in \code\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "smes.tmpl", "SMES - [name]", 350, 560)
-		// when the ui is first opened this is the data it will use
-		ui.set_initial_data(data)
-		// open the new ui window
-		ui.open()
-		// auto update every Master Controller tick
-		ui.set_auto_update(1)
+	return data
 
 /obj/machinery/power/smes/Topic(href, href_list)
 //	world << "[href] ; [href_list[href]]"
@@ -408,7 +430,8 @@
 	log_smes("an emp")
 	..()
 
-
+/obj/machinery/power/smes/engineering
+	charge = 1.5e6 // Engineering starts with some charge for singulo
 
 /obj/machinery/power/smes/magical
 	name = "magical power storage unit"
@@ -420,3 +443,13 @@
 
 
 #undef SMESRATE
+
+#undef SMES_CLEVEL_1
+#undef SMES_CLEVEL_2
+#undef SMES_CLEVEL_3
+#undef SMES_CLEVEL_4
+#undef SMES_CLEVEL_5
+#undef SMES_OUTPUTTING
+#undef SMES_NOT_OUTPUTTING
+#undef SMES_INPUTTING
+#undef SMES_INPUT_ATTEMPT

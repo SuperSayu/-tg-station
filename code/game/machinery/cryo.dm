@@ -25,7 +25,7 @@
 	component_parts += new /obj/item/weapon/stock_parts/console_screen(null)
 	component_parts += new /obj/item/weapon/stock_parts/console_screen(null)
 	component_parts += new /obj/item/stack/cable_coil(null, 1)
-	RefreshParts()
+
 
 /obj/machinery/atmospherics/unary/cryo_cell/construction()
 	..(dir,dir)
@@ -40,10 +40,18 @@
 /obj/machinery/atmospherics/unary/cryo_cell/Destroy()
 	var/turf/T = loc
 	T.contents += contents
-	var/obj/item/weapon/reagent_containers/glass/B = beaker
+
 	if(beaker)
-		B.loc = get_step(loc, SOUTH) //Beaker is carefully ejected from the wreckage of the cryotube
+		beaker.loc = get_step(loc, SOUTH) //Beaker is carefully ejected from the wreckage of the cryotube
+	beaker = null
 	..()
+/obj/machinery/atmospherics/unary/cryo_cell/process_atmos()
+	..()
+	if(air_contents)
+		temperature_archived = air_contents.temperature
+		heat_gas_contents()
+	if(abs(temperature_archived-air_contents.temperature) > 1)
+		parent.update = 1
 
 /obj/machinery/atmospherics/unary/cryo_cell/process()
 	..()
@@ -54,19 +62,15 @@
 			playsound(src.loc, 'sound/machines/ding.ogg', 50, 1)
 	if(!node || !is_operational())
 		return
+
 	if(!on)
 		updateDialog()
 		return
 
 	if(air_contents)
-		temperature_archived = air_contents.temperature
-		heat_gas_contents()
-		expel_gas()
-
-		if(occupant)
+		if (occupant)
 			process_occupant()
-	if(abs(temperature_archived-air_contents.temperature) > 1)
-		parent.update = 1
+		expel_gas()
 
 	updateDialog()
 	return 1
@@ -76,11 +80,7 @@
 		return
 	close_machine(target)
 
-/obj/machinery/atmospherics/unary/cryo_cell/allow_drop()
-	return 0
-
 /obj/machinery/atmospherics/unary/cryo_cell/relaymove(var/mob/user)
-//	..()
 	open_machine()
 
 /obj/machinery/atmospherics/unary/cryo_cell/container_resist()
@@ -102,6 +102,9 @@
 		open_machine()
 		add_fingerprint(usr)
 	else
+		if(!istype(usr, /mob/living) || usr.stat)
+			usr << "<span class='warning'>You can't do that!</span>"
+			return
 		open_machine()
 
 /obj/machinery/atmospherics/unary/cryo_cell/examine(mob/user)
@@ -132,16 +135,20 @@
   *
   * @return nothing
   */
-/obj/machinery/atmospherics/unary/cryo_cell/ui_interact(mob/user, ui_key = "main")
+/obj/machinery/atmospherics/unary/cryo_cell/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	if(user == occupant || user.stat || panel_open)
 		return
 
+	ui = SSnano.push_open_or_new_ui(user, src, ui_key, ui, "cryo.tmpl", "Cryo Cell Control System", 520, 410, 1)
+	//user.set_machine(src)
+
+/obj/machinery/atmospherics/unary/cryo_cell/get_ui_data()
 	// this is the data which will be sent to the ui
-	var/data[0]
+	var/data = list()
 	data["isOperating"] = on
 	data["hasOccupant"] = occupant ? 1 : 0
 
-	var/occupantData[0]
+	var/occupantData = list()
 	if (!occupant)
 		occupantData["name"] = null
 		occupantData["stat"] = null
@@ -164,7 +171,7 @@
 		occupantData["toxLoss"] = occupant.getToxLoss()
 		occupantData["fireLoss"] = occupant.getFireLoss()
 		occupantData["bodyTemperature"] = occupant.bodytemperature
-	data["occupant"] = occupantData;
+	data["occupant"] = occupantData
 
 	data["isOpen"] = state_open
 	data["cellTemperature"] = round(air_contents.temperature)
@@ -202,21 +209,7 @@
 		for(var/datum/reagent/R in beaker:reagents.reagent_list)
 			beakerContents.Add(list(list("name" = R.name, "volume" = R.volume))) // list in a list because Byond merges the first list...
 	data["beakerContents"] = beakerContents
-
-	var/datum/nanoui/ui = SSnano.get_open_ui(user, src, ui_key)
-	if (!ui)
-		// the ui does not exist, so we'll create a new one
-		ui = new(user, src, ui_key, "cryo.tmpl", "Cryo Cell Control System", 520, 410)
-		// When the UI is first opened this is the data it will use
-		ui.set_initial_data(data)
-		ui.open()
-		// Auto update every Master Controller tick
-		ui.set_auto_update(1)
-	else
-		// The UI is already open so push the new data to it
-		ui.push_data(data)
-		return
-	//user.set_machine(src)
+	return data
 
 /obj/machinery/atmospherics/unary/cryo_cell/Topic(href, href_list)
 	if(usr == occupant || panel_open)
@@ -251,14 +244,17 @@
 
 /obj/machinery/atmospherics/unary/cryo_cell/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/weapon/reagent_containers/glass))
+		if(isrobot(user))
+			return
 		if(beaker)
-			user << "<span class='notice'>A beaker is already loaded into [src].</span>"
+			user << "<span class='warning'>A beaker is already loaded into [src]!</span>"
+			return
+		if(!user.drop_item())
 			return
 
 		beaker = I
-		user.drop_item()
 		I.loc = src
-		user.visible_message("<span class='notice'>[user] places [I] in [src].</span>", \
+		user.visible_message("[user] places [I] in [src].", \
 							"<span class='notice'>You place [I] in [src].</span>")
 
 	if(!(on || occupant || state_open))

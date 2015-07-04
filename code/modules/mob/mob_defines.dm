@@ -4,6 +4,7 @@
 	animate_movement = 2
 	flags = HEAR
 	hud_possible = list(ANTAG_HUD)
+	pressure_resistance = 8
 	var/datum/mind/mind
 
 	var/stat = 0 //Whether a mob is alive or dead. TODO: Move this to living - Nodrak
@@ -99,8 +100,6 @@
 
 	var/in_throw_mode = 0
 
-	var/coughedtime = null
-
 	var/music_lastplayed = "null"
 
 	var/job = null//Living
@@ -152,4 +151,6 @@
 	var/turf/listed_turf = null	//the current turf being examined in the stat panel
 
 	var/list/permanent_huds = list()
-	var/list/permanent_sight_flags = list()
+	var/permanent_sight_flags = 0
+
+	var/resize = 1 //Badminnery resize

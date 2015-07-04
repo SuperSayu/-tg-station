@@ -59,7 +59,7 @@
 	required_reagents = list("blackpowder" = 1)
 	result_amount = 1
 	required_temp = 474
-	mix_message = "<span class = 'boldannounce'>Sparks start flying around the black powder!</span>"
+	mix_message = "<span class='boldannounce'>Sparks start flying around the black powder!</span>"
 
 /datum/chemical_reaction/blackpowder_explosion/on_reaction(var/datum/reagents/holder, var/created_volume)
 	sleep(rand(50,100))
@@ -109,7 +109,7 @@
 /datum/chemical_reaction/clf3/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/turf/T = get_turf(holder.my_atom)
 	for(var/turf/turf in range(1,T))
-		new /obj/effect/hotspot(turf)
+		PoolOrNew(/obj/effect/hotspot, turf)
 	holder.chem_temp = 1000 // hot as shit
 
 /datum/chemical_reaction/sorium
@@ -190,6 +190,7 @@
 	id = "flash_powder_flash"
 	result = null
 	required_reagents = list("flash_powder" = 1)
+	result_amount = 1
 	required_temp = 374
 
 /datum/chemical_reaction/flash_powder_flash/on_reaction(var/datum/reagents/holder, var/created_volume)
@@ -215,19 +216,16 @@
 	if(holder.has_reagent("stabilizing_agent"))
 		return
 	holder.remove_reagent("smoke_powder", created_volume)
+	var/smoke_amount = round(Clamp(created_volume/5, 1, 20),1)
 	var/location = get_turf(holder.my_atom)
-	var/datum/effect/effect/system/chem_smoke_spread/S = new /datum/effect/effect/system/chem_smoke_spread
+	var/datum/effect/effect/system/smoke_spread/chem/S = new
 	S.attach(location)
 	playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
-	spawn(0)
-		if(S)
-			S.set_up(holder, 10, 0, location)
-			S.start()
-			sleep(10)
-			S.start()
-		if(holder && holder.my_atom)
-			holder.clear_reagents()
-	return
+	if(S)
+		S.set_up(holder, smoke_amount, 0, location)
+		S.start()
+	if(holder && holder.my_atom)
+		holder.clear_reagents()
 
 /datum/chemical_reaction/smoke_powder_smoke
 	name = "smoke_powder_smoke"
@@ -235,23 +233,22 @@
 	result = null
 	required_reagents = list("smoke_powder" = 1)
 	required_temp = 374
+	result_amount = 1
 	secondary = 1
 	mob_react = 1
 
 /datum/chemical_reaction/smoke_powder_smoke/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
-	var/datum/effect/effect/system/chem_smoke_spread/S = new /datum/effect/effect/system/chem_smoke_spread
+	var/smoke_amount = round(Clamp(created_volume/5, 1, 20),1)
+	var/datum/effect/effect/system/smoke_spread/chem/S = new
 	S.attach(location)
 	playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
-	spawn(0)
-		if(S)
-			S.set_up(holder, 10, 0, location)
-			S.start()
-			sleep(10)
-			S.start()
-		if(holder && holder.my_atom)
-			holder.clear_reagents()
-	return
+	if(S)
+		S.set_up(holder, smoke_amount, 0, location)
+		S.start()
+	if(holder && holder.my_atom)
+		holder.clear_reagents()
+
 
 
 /datum/chemical_reaction/sonic_powder
@@ -285,6 +282,7 @@
 	result = null
 	required_reagents = list("sonic_powder" = 1)
 	required_temp = 374
+	result_amount = 1
 
 /datum/chemical_reaction/sonic_powder_deafen/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
@@ -315,6 +313,7 @@
 	var/turf/simulated/T = get_turf(holder.my_atom)
 	if(istype(T))
 		T.atmos_spawn_air(SPAWN_HEAT | SPAWN_TOXINS, created_volume)
+	holder.clear_reagents()
 	return
 
 
@@ -322,7 +321,7 @@
 	name = "Napalm"
 	id = "napalm"
 	result = "napalm"
-	required_reagents = list("sugar" = 1, "fuel" = 1, "ethanol" = 1 )
+	required_reagents = list("sugar" = 1, "welding_fuel" = 1, "ethanol" = 1 )
 	result_amount = 3
 
 

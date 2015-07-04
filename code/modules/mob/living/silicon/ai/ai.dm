@@ -30,11 +30,13 @@ var/list/ai_list = list()
 	var/alarms = list("Motion"=list(), "Fire"=list(), "Atmosphere"=list(), "Power"=list(), "Camera"=list(), "Burglar"=list())
 	var/viewalerts = 0
 	var/icon/holo_icon//Default is assigned when AI is created.
+	var/obj/mecha/controlled_mech //For controlled_mech a mech, to determine whether to relaymove or use the AI eye.
 	var/radio_enabled = 1 //Determins if a carded AI can speak with its built in radio or not.
 	radiomod = ";" //AIs will, by default, state their laws on the internal radio.
 	var/obj/item/device/pda/ai/aiPDA = null
 	var/obj/item/device/multitool/aiMulti = null
 	var/obj/machinery/bot/Bot
+	var/tracking = 0 //this is 1 if the AI is currently tracking somebody, but the track has not yet been completed.
 
 	var/obj/item/device/camera_bug/ai/aibug = null
 
@@ -43,6 +45,7 @@ var/list/ai_list = list()
 	var/processing_time = 100
 	var/list/datum/AI_Module/current_modules = list()
 	var/fire_res_on_core = 0
+	var/can_dominate_mechs = 0
 
 	var/control_disabled = 0 // Set to 1 to stop AI from interacting via Click()
 	var/malfhacking = 0 // More or less a copy of the above var, so that malf AIs can hack and still get new cyborgs -- NeoFite
@@ -64,18 +67,15 @@ var/list/ai_list = list()
 	var/waypoint_mode = 0 //Waypoint mode is for selecting a turf via clicking.
 	var/apc_override = 0 //hack for letting the AI use its APC even when visionless
 
+	var/mob/camera/aiEye/eyeobj = new()
+	var/sprint = 10
+	var/cooldown = 0
+	var/acceleration = 1
+
+	var/obj/machinery/camera/portable/builtInCamera
+
 /mob/living/silicon/ai/New(loc, var/datum/ai_laws/L, var/obj/item/device/mmi/B, var/safety = 0)
-	var/list/possibleNames = ai_names
-
-	var/pickedName = null
-	while(!pickedName)
-		pickedName = pick(ai_names)
-		for (var/mob/living/silicon/ai/A in mob_list)
-			if (A.real_name == pickedName && possibleNames.len > 1) //fixing the theoretically possible infinite loop
-				possibleNames -= pickedName
-				pickedName = null
-
-	real_name = pickedName
+	rename_self("ai", 1)
 	name = real_name
 	anchored = 1
 	canmove = 0
@@ -131,6 +131,13 @@ var/list/ai_list = list()
 			job = "AI"
 	ai_list += src
 	shuttle_caller_list += src
+
+	eyeobj.ai = src
+	eyeobj.name = "[src.name] (AI Eye)" // Give it a name
+	eyeobj.loc = src.loc
+
+	builtInCamera = new /obj/machinery/camera/portable(src)
+	builtInCamera.network = list("SS13")
 	..()
 	return
 
@@ -138,6 +145,7 @@ var/list/ai_list = list()
 	ai_list -= src
 	shuttle_caller_list -= src
 	SSshuttle.autoEvac()
+	qdel(eyeobj) // No AI, no Eye
 	..()
 
 
@@ -231,9 +239,14 @@ var/list/ai_list = list()
 			var/area/borg_area
 			for(var/mob/living/silicon/robot/R in connected_robots)
 				borg_area = get_area(R)
+				var/robot_status = "Nominal"
+				if(R.stat || !R.client)
+					robot_status = "OFFLINE"
+				else if(!R.cell || R.cell.charge <= 0)
+					robot_status = "DEPOWERED"
 				//Name, Health, Battery, Module, Area, and Status! Everything an AI wants to know about its borgies!
 				stat(null, text("[R.name] | S.Integrity: [R.health]% | Cell: [R.cell ? "[R.cell.charge]/[R.cell.maxcharge]" : "Empty"] | \
- Module: [R.designation] | Loc: [borg_area.name] | Status: [R.stat || !R.client ? "OFFLINE" : "Normal"]"))
+ 				Module: [R.designation] | Loc: [borg_area.name] | Status: [robot_status]"))
 		else
 			stat(null, text("Systems nonfunctional"))
 
@@ -378,7 +391,6 @@ var/list/ai_list = list()
 
 	return
 
-
 /mob/living/silicon/ai/Topic(href, href_list)
 	if(usr != src)
 		return
@@ -402,55 +414,53 @@ var/list/ai_list = list()
 		if(last_paper_seen)
 			src << browse(last_paper_seen, "window=show_paper")
 	//Carn: holopad requests
-	if (href_list["jumptoholopad"])
+	if(href_list["jumptoholopad"])
 		var/obj/machinery/hologram/holopad/H = locate(href_list["jumptoholopad"])
 		if(stat == CONSCIOUS)
 			if(H)
 				H.attack_ai(src) //may as well recycle
 			else
 				src << "<span class='notice'>Unable to locate the holopad.</span>"
-	if (href_list["track"])
-		var/mob/target = locate(href_list["track"]) in mob_list
-		var/mob/living/silicon/ai/A = locate(href_list["track2"]) in mob_list
-		if(A && target)
-			A.ai_actual_track(target)
+	if(href_list["track"])
+		var/string = href_list["track"]
+		trackable_mobs()
+		var/list/trackeable = list()
+		trackeable += track.humans + track.others
+		var/list/target = list()
+		for(var/I in trackeable)
+			var/mob/M = trackeable[I]
+			if(M.name == string)
+				target += M
+		if(name == string)
+			target += src
+		if(target.len)
+			ai_actual_track(pick(target))
+		else
+			src << "Target is not on or near any active cameras on the station."
 		return
-
-	if (href_list["callbot"]) //Command a bot to move to a selected location.
+	if(href_list["callbot"]) //Command a bot to move to a selected location.
 		Bot = locate(href_list["callbot"]) in SSbot.processing
 		if(!Bot || Bot.remote_disabled || src.control_disabled)
 			return //True if there is no bot found, the bot is manually emagged, or the AI is carded with wireless off.
 		waypoint_mode = 1
 		src << "<span class='notice'>Set your waypoint by clicking on a valid location free of obstructions.</span>"
 		return
-
-	if (href_list["interface"]) //Remotely connect to a bot!
+	if(href_list["interface"]) //Remotely connect to a bot!
 		Bot = locate(href_list["interface"]) in SSbot.processing
 		if(!Bot || Bot.remote_disabled || src.control_disabled)
 			return
 		Bot.attack_ai(src)
-
-	if (href_list["botrefresh"]) //Refreshes the bot control panel.
+	if(href_list["botrefresh"]) //Refreshes the bot control panel.
 		botcall()
 		return
 
-	else if (href_list["faketrack"])
-		var/mob/target = locate(href_list["track"]) in mob_list
-		var/mob/living/silicon/ai/A = locate(href_list["track2"]) in mob_list
-		if(A && target)
-
-			A.cameraFollow = target
-			A << "Now tracking [target.name] on camera."
-			if (usr.machine == null)
-				usr.machine = usr
-
-			while (src.cameraFollow == target)
-				usr << "Target is not on or near any active cameras on the station. We'll check again in 5 seconds (unless you use the cancel-camera verb)."
-				sleep(40)
-				continue
-		return
-	return
-
+	if (href_list["ai_take_control"]) //Mech domination
+		var/obj/mecha/M = locate(href_list["ai_take_control"])
+		if(controlled_mech)
+			src << "You are already loaded into an onboard computer!"
+			return
+		if(M)
+			M.transfer_ai(AI_MECH_HACK,src, usr) //Called om the mech itself.
 
 /mob/living/silicon/ai/bullet_act(var/obj/item/projectile/Proj)
 	..(Proj)
@@ -475,7 +485,8 @@ var/list/ai_list = list()
 
 /mob/living/silicon/ai/proc/switchCamera(var/obj/machinery/camera/C)
 
-	src.cameraFollow = null
+	if(!tracking)
+		cameraFollow = null
 
 	if (!C || stat == 2) //C.can_use())
 		return 0
@@ -510,9 +521,9 @@ var/list/ai_list = list()
 	for (Bot in SSbot.processing)
 		if(Bot.z == ai_Zlevel && !Bot.remote_disabled) //Only non-emagged bots on the same Z-level are detected!
 			bot_area = get_area(Bot)
-			d += "<tr><td width='30%'>[Bot.hacked ? "<span class='bad'>(!) </span>[Bot.name]" : Bot.name]</td>"
+			d += "<tr><td width='30%'>[Bot.hacked ? "<span class='bad'>(!)</span>" : ""] [Bot.name] ([Bot.model])</td>"
 			//If the bot is on, it will display the bot's current mode status. If the bot is not mode, it will just report "Idle". "Inactive if it is not on at all.
-			d += "<td width='30%'>[Bot.on ? "[Bot.mode ? "<span class='average'>[ Bot.mode_name[Bot.mode] ]</span>": "<span class='good'>Idle</span>"]" : "<span class='bad'>Inactive</span>"]</td>"
+			d += "<td width='30%'>[Bot.on ? "[Bot.mode ? "<span class='average'>[ Bot.get_mode() ]</span>": "<span class='good'>Idle</span>"]" : "<span class='bad'>Inactive</span>"]</td>"
 			d += "<td width='30%'>[bot_area.name]</td>"
 			d += "<td width='10%'><A HREF=?src=\ref[src];interface=\ref[Bot]>Interface</A></td>"
 			d += "<td width='10%'><A HREF=?src=\ref[src];callbot=\ref[Bot]>Call</A></td>"
@@ -607,7 +618,7 @@ var/list/ai_list = list()
 	set category = "AI Commands"
 	set name = "Jump To Network"
 	unset_machine()
-	src.cameraFollow = null
+	cameraFollow = null
 	var/cameralist[0]
 
 	if(usr.stat == 2)
@@ -792,3 +803,20 @@ var/list/ai_list = list()
 /mob/living/silicon/ai/attack_slime(mob/living/simple_animal/slime/user)
 	return
 
+/mob/living/silicon/ai/transfer_ai(var/interaction, var/mob/user, var/mob/living/silicon/ai/AI, var/obj/item/device/aicard/card)
+	if(!..())
+		return
+	if(interaction == AI_TRANS_TO_CARD)//The only possible interaction. Upload AI mob to a card.
+		if(!mind)
+			user << "<span class='warning'>No intelligence patterns detected.</span>"    //No more magical carding of empty cores, AI RETURN TO BODY!!!11
+			return
+		if (mind.special_role == "malfunction") //AI MALF!!
+			user << "<span class='boldannounce'>ERROR</span>: Remote transfer interface disabled."//Do ho ho ho~
+			return
+		new /obj/structure/AIcore/deactivated(loc)//Spawns a deactivated terminal at AI location.
+		aiRestorePowerRoutine = 0//So the AI initially has power.
+		control_disabled = 1//Can't control things remotely if you're stuck in a card!
+		radio_enabled = 0 	//No talking on the built-in radio for you either!
+		loc = card//Throw AI into the card.
+		src << "You have been downloaded to a mobile storage device. Remote device connection severed."
+		user << "<span class='boldnotice'>Transfer successful</span>: [name] ([rand(1000,9999)].exe) removed from host terminal and stored within local memory."

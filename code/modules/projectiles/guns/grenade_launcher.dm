@@ -14,13 +14,14 @@
 
 /obj/item/weapon/gun/grenadelauncher/examine(mob/user)
 	..()
-	user << "[grenades] / [max_grenades] grenades loaded."
+	user << "[grenades.len] / [max_grenades] grenades loaded."
 
 /obj/item/weapon/gun/grenadelauncher/attackby(obj/item/I as obj, mob/user as mob, params)
 
 	if((istype(I, /obj/item/weapon/grenade)))
 		if(grenades.len < max_grenades)
-			user.drop_item()
+			if(!user.unEquip(I))
+				return
 			I.loc = src
 			grenades += I
 			user << "<span class='notice'>You put the grenade in the grenade launcher.</span>"

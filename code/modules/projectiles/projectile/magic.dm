@@ -83,7 +83,7 @@
 		if(!stuff.anchored && stuff.loc)
 			teleammount++
 			do_teleport(stuff, stuff, 10)
-			var/datum/effect/effect/system/harmless_smoke_spread/smoke = new /datum/effect/effect/system/harmless_smoke_spread()
+			var/datum/effect/effect/system/smoke_spread/smoke = new
 			smoke.set_up(max(round(10 - teleammount),1), 0, stuff.loc) //Smoke drops off if a lot of stuff is moved for the sake of sanity
 			smoke.start()
 
@@ -105,10 +105,7 @@
 
 /obj/item/projectile/magic/door/proc/CreateDoor(var/turf/T)
 	new /obj/structure/mineral_door/wood(T)
-	if(istype(T,/turf/simulated/shuttle/wall))
-		T.ChangeTurf(/turf/simulated/shuttle/plating)
-	else
-		T.ChangeTurf(/turf/simulated/floor/plating)
+	T.ChangeTurf(/turf/simulated/floor/plating)
 
 
 /obj/item/projectile/magic/change
@@ -123,7 +120,7 @@
 	. = ..()
 	wabbajack(change)
 
-proc/wabbajack(mob/living/M)
+/proc/wabbajack(mob/living/M)
 	if(istype(M))
 		if(istype(M, /mob/living) && M.stat != DEAD)
 			if(M.notransform)	return
@@ -229,8 +226,12 @@ proc/wabbajack(mob/living/M)
 					var/mob/living/carbon/human/H = new_mob
 					ready_dna(H)
 					if(H.dna && prob(50))
-						var/new_species = pick(typesof(/datum/species) - /datum/species)
-						H.dna.species = new new_species()
+						var/list/all_species = list()
+						for(var/speciestype in typesof(/datum/species) - /datum/species)
+							var/datum/species/S = new speciestype()
+							if(!S.dangerous_existence)
+								all_species += speciestype
+						hardset_dna(H, null, null, null, null, pick(all_species))
 					H.update_icons()
 				else
 					return
@@ -268,7 +269,7 @@ proc/wabbajack(mob/living/M)
 				S.icon = change.icon
 				if(H.mind)
 					H.mind.transfer_to(S)
-					S << "You are an animate statue. You cannot move when monitored, but are nearly invincible and deadly when unobserved! Do not harm [firer.name], your creator."
+					S << "<span class='userdanger'>You are an animate statue. You cannot move when monitored, but are nearly invincible and deadly when unobserved! Do not harm [firer.name], your creator.</span>"
 				H = change
 				H.loc = S
 				qdel(src)

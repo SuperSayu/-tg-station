@@ -17,8 +17,6 @@
 
 
 	var/hallucination = 0 //Directly affects how long a mob will hallucinate for
-	var/list/atom/hallucinations = list() //A list of hallucinated people that try to attack the mob. See /obj/effect/fake_attacker in hallucinations.dm
-
 
 	var/last_special = 0 //Used by the resist verb, likely used to prevent players from bypassing next_move by logging in/out.
 
@@ -43,3 +41,8 @@
 	var/list/image/staticOverlays = list()
 	var/has_limbs = 0 //does the mob have distinct limbs?(arms,legs, chest,head)
 	var/list/datum/action/actions = list()
+
+	var/list/pipes_shown = list()
+	var/last_played_vent
+
+	var/smoke_delay = 0 //used to prevent spam with smoke reagent reaction on mob.

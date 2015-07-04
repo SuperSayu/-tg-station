@@ -1,93 +1,13 @@
-//
-// Decay: causes special-effects style station destruction.
-// Panels are ripped off the walls and floor, floor sections are ripped up,
-//
-//
-
-// Called when the singularity attempts to destroy a turf
-
-/*
-
-/turf/proc/gravity_decay()
-	if(prob(65)) return
-	for(var/obj/O in contents)
-		O.anchored = 0
-	return
-
-/turf/simulated/proc/disintegrate()
-	return
-
-/turf/simulated/gravity_decay()
-	if(prob(25)) return
-	var/counter = 0
-	for(var/d in cardinal)
-		var/turf/simulated/TS = get_step(src,d)
-		if(istype(TS))
-			counter++
-
-	if(prob(100 - (29 * counter)))
-		new /obj/structure/faketurf(src,counter)
-	else if(prob(11))
-		disintegrate()
-	return
-
-
-
-/turf/simulated/floor/disintegrate()
-	// rip off tile, if present
-	for(var/obj/O in contents)
-		O.anchored = 0
-		if(istype(O,/obj/machinery))
-			O:stat |= pick(NOPOWER,BROKEN,MAINT,EMPED)
-			O.update_icon()
-	if(floor_tile)
-		floor_tile.loc = src
-		floor_tile = null
-		intact = 0
-		SetLuminosity(0)
-		if(prob(33))
-			break_tile()
-		else
-			update_icon()
-			levelupdate()
-		return
-	else if(prob(27))
-		new /obj/structure/faketurf(loc)
-	else if(prob(33))
-		break_tile()
-
-/turf/simulated/floor/engine/disintegrate()
-	if(prob(80))
-		return
-	..()
-/turf/simulated/wall/disintegrate()
-	if(prob(10))
-		dismantle_wall(1,0)
-		return
-	if(prob(60))
-		dismantle_wall(0,0)
-	return
-
-/turf/simulated/wall/r_wall/disintegrate()
-	if(prob(75))
-		return
-	if(prob(30))
-		dismantle_wall(1,0) // catastrophic
-		return
-	if(prob(40))
-		dismantle_wall(0,0)
-	return
-
-*/
-
 // Created when the singularity pulls a floor or wall out
 /obj/structure/faketurf
 	var/last_movement
 	var/original_type
 	var/list/anchored_objects = null
+	anchored = 0
+	layer = TURF_LAYER + 0.1
 
-	New(var/atom/newloc,var/counter=0)
-		if(!istype(newloc,/turf/simulated))
+	New(var/turf/simulated/newloc,var/counter=0)
+		if(!istype(newloc) || newloc.baseturf == newloc.type)
 			del src
 			return
 		if(istype(newloc,/turf/simulated/wall/r_wall) || istype(newloc,/turf/simulated/floor/engine))
@@ -108,18 +28,20 @@
 		anchored_objects = list()
 		for(var/obj/O in loc.contents)
 			if(O.anchored)
+				if(istype(O,/obj/effect/meteor))
+					continue
 				anchored_objects += O
 			if(istype(O,/obj/machinery))
 				var/obj/machinery/OM = O
 				OM.stat |= NOPOWER
 				OM.update_icon()
-
+		var/turf/T = loc
 		if(prob(33)) // doing this immediately affects the chances of other turfs coming off
-			loc:ChangeTurf(/turf/space)
+			T.ChangeTurf(T.baseturf)
 		else
 			spawn(1)
 				if(loc)
-					loc:ChangeTurf(/turf/space)
+					T.ChangeTurf(T.baseturf)
 		SSobj.processing |= src
 
 		spawn(rand(2,8))
@@ -146,7 +68,7 @@
 /obj/structure/faketurf/Move()
 	..()
 	for(var/obj/O in anchored_objects)
-		if(!O || !O.anchored)
+		if(!O || !O.anchored || O.loc != loc)
 			anchored_objects -= O
 			continue
 		if(prob(10))
@@ -165,7 +87,21 @@
 		return 0
 	return ..(mover,target,height,air_group)
 
+/obj/structure/lattice/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
+	if(istype(mover,/obj/structure/faketurf))
+		return 0
+	return ..(mover,target,height,air_group)
+
 /obj/structure/faketurf/ex_act()
 	return
 // There is also an exception in turf/simulated/Enter() to prevent this from entering one of those tiles, ever.
 
+/obj/structure/faketurf/singularity_pull(S,current_size)
+	if(prob(current_size * 5))
+		step_to(src,S)
+
+//Disable these
+/obj/structure/faketurf/throw_at()
+	return
+/obj/structure/faketurf/SpinAnimation()
+	return

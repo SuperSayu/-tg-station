@@ -21,7 +21,7 @@
 	var/uiname = "Chem Dispenser 5000"
 	var/list/dispensable_reagents = list("hydrogen","lithium","carbon","nitrogen","oxygen","fluorine",
 	"sodium","aluminium","silicon","phosphorus","sulfur","chlorine","potassium","iron",
-	"copper","mercury","radium","water","ethanol","sugar","sacid","fuel","silver","iodine","bromine","stable_plasma")
+	"copper","mercury","radium","water","ethanol","sugar","sacid","welding_fuel","silver","iodine","bromine","stable_plasma")
 
 /obj/machinery/chem_dispenser/proc/recharge()
 	if(stat & (BROKEN|NOPOWER)) return
@@ -75,8 +75,10 @@
 	if(stat & (BROKEN)) return
 	if(user.stat || user.restrained()) return
 
-	// this is the data which will be sent to the ui
-	var/data[0]
+	ui = SSnano.push_open_or_new_ui(user, src, ui_key, ui, "chem_dispenser.tmpl", "[uiname]", 490, 710, 0)
+
+/obj/machinery/chem_dispenser/get_ui_data()
+	var/data = list()
 	data["amount"] = amount
 	data["energy"] = energy
 	data["maxEnergy"] = max_energy
@@ -103,17 +105,7 @@
 		if(temp)
 			chemicals.Add(list(list("title" = temp.name, "id" = temp.id, "commands" = list("dispense" = temp.id)))) // list in a list because Byond merges the first list...
 	data["chemicals"] = chemicals
-
-	// update the ui if it exists, returns null if no ui is passed/found
-	ui = SSnano.try_update_ui(user, src, ui_key, ui, data)
-	if (!ui)
-		// the ui does not exist, so we'll create a new() one
-        // for a list of parameters and their descriptions see the code docs in \code\modules\nano\nanoui.dm
-		ui = new(user, src, ui_key, "chem_dispenser.tmpl", "[uiname]", 490, 710)
-		// when the ui is first opened this is the data it will use
-		ui.set_initial_data(data)
-		// open the new ui window
-		ui.open()
+	return data
 
 /obj/machinery/chem_dispenser/Topic(href, href_list)
 	if(stat & (BROKEN))
@@ -153,13 +145,14 @@
 		return
 
 	if(src.beaker)
-		user << "A beaker is already loaded into the machine."
+		user << "<span class='warning'>A beaker is already loaded into the machine!</span>"
+		return
+	if(!user.drop_item())
 		return
 
 	src.beaker =  B
-	user.drop_item()
 	B.loc = src
-	user << "You add the beaker to the machine!"
+	user << "<span class='notice'>You add the beaker to the machine.</span>"
 	SSnano.update_uis(src) // update all UIs attached to src
 
 	if(!icon_beaker)
@@ -192,7 +185,8 @@
 	dispensable_reagents = list()
 	var/list/special_reagents = list(list("hydrogen", "oxygen", "silicon", "phosphorus", "sulfur", "carbon", "nitrogen", "water"),
 						 		list("lithium", "sugar", "sacid", "copper", "mercury", "sodium","iodine","bromine"),
-								list("ethanol", "chlorine", "potassium", "aluminium", "radium", "fluorine", "iron", "fuel","silver","stable_plasma"))
+								list("ethanol", "chlorine", "potassium", "aluminium", "radium", "fluorine", "iron", "welding_fuel","silver","stable_plasma"),
+								list("oil", "ash", "acetone", "saltpetre", "ammonia", "diethylamine"))
 
 /obj/machinery/chem_dispenser/constructable/New()
 	..()
@@ -280,29 +274,34 @@
 
 
 /obj/machinery/chem_master/attackby(var/obj/item/B as obj, var/mob/user as mob, params)
-
 	if(default_unfasten_wrench(user, B))
 		return
 
 	if(istype(B, /obj/item/weapon/reagent_containers/glass))
-		if(src.beaker)
-			user << "<span class='alert'>A beaker is already loaded into the machine.</span>"
+		if(isrobot(user))
 			return
+		if(src.beaker)
+			user << "<span class='warning'>A beaker is already loaded into the machine!</span>"
+			return
+		if(!user.drop_item())
+			return
+
 		src.beaker = B
-		user.drop_item()
 		B.loc = src
-		user << "You add the beaker to the machine!"
+		user << "<span class='notice'>You add the beaker to the machine.</span>"
 		src.updateUsrDialog()
 		icon_state = "mixer1"
 
 	else if(!condi && istype(B, /obj/item/weapon/storage/pill_bottle))
 		if(src.loaded_pill_bottle)
-			user << "<span class='alert'>A pill bottle is already loaded into the machine.</span>"
+			user << "<span class='warning'>A pill bottle is already loaded into the machine!</span>"
 			return
+		if(!user.drop_item())
+			return
+
 		src.loaded_pill_bottle = B
-		user.drop_item()
 		B.loc = src
-		user << "You add the pill bottle into the dispenser slot!"
+		user << "<span class='notice'>You add the pill bottle into the dispenser slot.</span>"
 		src.updateUsrDialog()
 
 	return
@@ -327,18 +326,18 @@
 		mode = !mode
 
 	else if(href_list["createbottle"])
-		if(!condi)
-			var/name = stripped_input(usr, "Name:","Name your bottle!", (reagents.total_volume ? reagents.get_master_reagent_name() : " "), MAX_NAME_LEN)
-			if(!name)
-				return
-			var/obj/item/weapon/reagent_containers/glass/bottle/P = new/obj/item/weapon/reagent_containers/glass/bottle(src.loc)
-			P.name = trim("[name] bottle")
+		var/name = stripped_input(usr, "Name:","Name your bottle!", (reagents.total_volume ? reagents.get_master_reagent_name() : " "), MAX_NAME_LEN)
+		if(!name)
+			return
+		var/obj/item/weapon/reagent_containers/P
+		if(condi)
+			P = new/obj/item/weapon/reagent_containers/food/condiment(src.loc)
+		else
+			P = new/obj/item/weapon/reagent_containers/glass/bottle(src.loc)
 			P.pixel_x = rand(-7, 7) //random position
 			P.pixel_y = rand(-7, 7)
-			reagents.trans_to(P, 30)
-		else
-			var/obj/item/weapon/reagent_containers/food/condiment/P = new/obj/item/weapon/reagent_containers/food/condiment(src.loc)
-			reagents.trans_to(P, 50)
+		P.name = trim("[name] bottle")
+		reagents.trans_to(P, P.volume)
 
 	if(beaker)
 
@@ -592,7 +591,7 @@
 
 /obj/machinery/chem_master/constructable/attackby(var/obj/item/B as obj, var/mob/user as mob, params)
 
-	if(default_deconstruction_screwdriver(user, "mixer0_nopower", "mixer0_", B))
+	if(default_deconstruction_screwdriver(user, "mixer0_nopower", "mixer0", B))
 		if(beaker)
 			beaker.loc = src.loc
 			beaker = null
@@ -610,28 +609,32 @@
 			default_deconstruction_crowbar(B)
 			return 1
 		else
-			user << "<span class='warning'>You can't use the [src.name] while it's panel is opened.</span>"
+			user << "<span class='warning'>You can't use the [src.name] while it's panel is opened!</span>"
 			return 1
 
 	if(istype(B, /obj/item/weapon/reagent_containers/glass))
 		if(src.beaker)
-			user << "<span class='alert'>A beaker is already loaded into the machine.</span>"
+			user << "<span class='warning'>A beaker is already loaded into the machine!</span>"
 			return
+		if(!user.drop_item())
+			return
+
 		src.beaker = B
-		user.drop_item()
 		B.loc = src
-		user << "You add the beaker to the machine!"
+		user << "<span class='notice'>You add the beaker to the machine.</span>"
 		src.updateUsrDialog()
 		icon_state = "mixer1"
 
 	else if(!condi && istype(B, /obj/item/weapon/storage/pill_bottle))
 		if(src.loaded_pill_bottle)
-			user << "<span class='alert'>A pill bottle is already loaded into the machine.</span>"
+			user << "<span class='warning'>A pill bottle is already loaded into the machine!</span>"
 			return
+		if(!user.drop_item())
+			return
+
 		src.loaded_pill_bottle = B
-		user.drop_item()
 		B.loc = src
-		user << "You add the pill bottle into the dispenser slot!"
+		user << "<span class='notice'>You add the pill bottle into the dispenser slot.</span>"
 		src.updateUsrDialog()
 
 	return
@@ -653,7 +656,7 @@
 	var/wait = null
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 
-obj/machinery/computer/pandemic/New()
+/obj/machinery/computer/pandemic/New()
 	..()
 	update_icon()
 
@@ -688,7 +691,7 @@ obj/machinery/computer/pandemic/New()
 		return D.GetDiseaseID()
 	return null
 
-obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
+/obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 	wait = 1
 	update_icon()
 	spawn(waittime)
@@ -760,7 +763,7 @@ obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 			if(!D)
 				return
 			var/name = stripped_input(usr,"Name:","Name the culture",D.name,MAX_NAME_LEN)
-			if(name == null)
+			if(name == null || wait)
 				return
 			var/obj/item/weapon/reagent_containers/glass/bottle/B = new/obj/item/weapon/reagent_containers/glass/bottle(src.loc)
 			B.icon_state = "bottle3"
@@ -915,13 +918,14 @@ obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 	if(istype(I, /obj/item/weapon/reagent_containers/glass))
 		if(stat & (NOPOWER|BROKEN)) return
 		if(src.beaker)
-			user << "A beaker is already loaded into the machine."
+			user << "<span class='warning'>A beaker is already loaded into the machine!</span>"
+			return
+		if(!user.drop_item())
 			return
 
 		src.beaker =  I
-		user.drop_item()
 		I.loc = src
-		user << "You add the beaker to the machine!"
+		user << "<span class='notice'>You add the beaker to the machine.</span>"
 		src.updateUsrDialog()
 		icon_state = "mixer1"
 
@@ -1051,8 +1055,9 @@ obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 				if (beaker)
 						return 1
 				else
+						if(!user.drop_item())
+								return 1
 						src.beaker =  O
-						user.drop_item()
 						O.loc = src
 						update_icon()
 						src.updateUsrDialog()
@@ -1062,7 +1067,7 @@ obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 				if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
 						var/obj/item/weapon/reagent_containers/food/snacks/grown/G = O
 						if(!G.dry)
-								user << "<span class='notice'>You must dry that first!</span>"
+								user << "<span class='warning'>You must dry that first!</span>"
 								return 1
 
 		if(holdingitems && holdingitems.len >= limit)
@@ -1077,17 +1082,17 @@ obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 						B.remove_from_storage(G, src)
 						holdingitems += G
 						if(holdingitems && holdingitems.len >= limit) //Sanity checking so the blender doesn't overfill
-								user << "You fill the All-In-One grinder to the brim."
+								user << "<span class='notice'>You fill the All-In-One grinder to the brim.</span>"
 								break
 
 				if(!O.contents.len)
-						user << "You empty the plant bag into the All-In-One grinder."
+						user << "<span class='notice'>You empty the plant bag into the All-In-One grinder.</span>"
 
 				src.updateUsrDialog()
 				return 0
 
 		if (!is_type_in_list(O, blend_items) && !is_type_in_list(O, juice_items))
-				user << "Cannot refine into a reagent."
+				user << "<span class='warning'>Cannot refine into a reagent!</span>"
 				return 1
 
 		user.unEquip(O)
@@ -1243,9 +1248,12 @@ obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 		if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
 				return
 		playsound(src.loc, 'sound/machines/juicer.ogg', 20, 1)
+		var/offset = prob(50) ? -2 : 2
+		animate(src, pixel_x = pixel_x + offset, time = 0.2, loop = 250) //start shaking
 		operating = 1
 		updateUsrDialog()
 		spawn(50)
+				pixel_x = initial(pixel_x) //return to its spot after shaking
 				operating = 0
 				updateUsrDialog()
 
@@ -1278,9 +1286,12 @@ obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 		if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
 				return
 		playsound(src.loc, 'sound/machines/blender.ogg', 50, 1)
+		var/offset = prob(50) ? -2 : 2
+		animate(src, pixel_x = pixel_x + offset, time = 0.2, loop = 250) //start shaking
 		operating = 1
 		updateUsrDialog()
 		spawn(60)
+				pixel_x = initial(pixel_x) //return to its spot after shaking
 				operating = 0
 				updateUsrDialog()
 
@@ -1441,13 +1452,13 @@ obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 
 	if(istype(I, /obj/item/weapon/reagent_containers/glass))
 		if(beaker)
-			user << "<span class='notice'>A beaker is already loaded into the machine.</span>"
+			user << "<span class='warning'>A beaker is already loaded into the machine!</span>"
 			return
 
 		if(user.drop_item())
 			beaker = I
 			I.loc = src
-			user << "<span class='notice'>You add the beaker to the machine!</span>"
+			user << "<span class='notice'>You add the beaker to the machine.</span>"
 			icon_state = "mixer1b"
 			SSnano.update_uis(src)
 
@@ -1491,7 +1502,10 @@ obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 /obj/machinery/chem_heater/ui_interact(var/mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	if(user.stat || user.restrained()) return
 
-	var/data[0]
+	ui = SSnano.push_open_or_new_ui(user, src, ui_key, ui, "chem_heater.tmpl", "ChemHeater", 350, 270, 0)
+
+/obj/machinery/chem_heater/get_ui_data()
+	var/data = list()
 	data["targetTemp"] = desired_temp
 	data["isActive"] = on
 	data["isBeakerLoaded"] = beaker ? 1 : 0
@@ -1506,13 +1520,7 @@ obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 		for(var/datum/reagent/R in beaker.reagents.reagent_list)
 			beakerContents.Add(list(list("name" = R.name, "volume" = R.volume))) // list in a list because Byond merges the first list...
 	data["beakerContents"] = beakerContents
-
-	// update the ui if it exists, returns null if no ui is passed/found
-	ui = SSnano.try_update_ui(user, src, ui_key, ui, data)
-	if (!ui)
-		ui = new(user, src, ui_key, "chem_heater.tmpl", "ChemHeater", 350, 270)
-		ui.set_initial_data(data)
-		ui.open()
+	return data
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -1540,8 +1548,9 @@ obj/machinery/computer/pandemic/proc/replicator_cooldown(var/waittime)
 				if (beaker)
 						return 1
 				else
+						if(!user.drop_item())
+								return 1
 						src.beaker =  O
-						user.drop_item()
 						O.loc = src
 						update_icon()
 						src.updateUsrDialog()

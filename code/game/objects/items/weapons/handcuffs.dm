@@ -23,6 +23,8 @@
 	var/trashtype = null //for disposable cuffs
 
 /obj/item/weapon/restraints/handcuffs/attack(mob/living/carbon/C, mob/living/carbon/human/user)
+	if(!istype(C))
+		return
 	if(user.disabilities & CLUMSY && prob(50))
 		user << "<span class='warning'>Uh... how do those things work?!</span>"
 		apply_cuffs(user,user)
@@ -43,11 +45,12 @@
 
 			add_logs(user, C, "handcuffed")
 		else
-			user << "<span class='warning'>You fail to handcuff [C].</span>"
+			user << "<span class='warning'>You fail to handcuff [C]!</span>"
 
 /obj/item/weapon/restraints/handcuffs/proc/apply_cuffs(mob/living/carbon/target, mob/user)
 	if(!target.handcuffed)
-		user.drop_item()
+		if(!user.drop_item())
+			return
 		//target.throw_alert("handcuffed", src) // Can't do this because escaping cuffs isn't standardized. Also zipties.
 		if(trashtype)
 			target.handcuffed = new trashtype(target)
@@ -95,12 +98,13 @@
 		var/obj/item/stack/rods/R = I
 		if (R.use(1))
 			var/obj/item/weapon/wirerod/W = new /obj/item/weapon/wirerod
-			user.unEquip(src)
+			if(!remove_item_from_storage(user))
+				user.unEquip(src)
 			user.put_in_hands(W)
 			user << "<span class='notice'>You wrap the cable restraint around the top of the rod.</span>"
 			qdel(src)
 		else
-			user << "<span class='warning'>You need one rod to make a wired rod.</span>"
+			user << "<span class='warning'>You need one rod to make a wired rod!</span>"
 			return
 
 /obj/item/weapon/restraints/handcuffs/cable/zipties/cyborg/attack(mob/living/carbon/C, mob/user)
@@ -116,7 +120,7 @@
 					user << "<span class='notice'>You handcuff [C].</span>"
 					add_logs(user, C, "handcuffed")
 			else
-				user << "<span class='warning'>You fail to handcuff [C].</span>"
+				user << "<span class='warning'>You fail to handcuff [C]!</span>"
 
 /obj/item/weapon/restraints/handcuffs/cable/zipties
 	name = "zipties"
@@ -152,9 +156,14 @@
 	name = "bear trap"
 	throw_speed = 1
 	throw_range = 1
-	icon_state = "beartrap0"
+	icon_state = "beartrap"
 	desc = "A trap used to catch bears and other legged creatures."
 	var/armed = 0
+	var/trap_damage = 20
+
+/obj/item/weapon/restraints/legcuffs/beartrap/New()
+	..()
+	icon_state = "[initial(icon_state)][armed]"
 
 /obj/item/weapon/restraints/legcuffs/beartrap/suicide_act(mob/user)
 	user.visible_message("<span class='suicide'>[user] is sticking \his head in the [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -165,9 +174,8 @@
 	..()
 	if(ishuman(user) && !user.stat && !user.restrained())
 		armed = !armed
-		icon_state = "beartrap[armed]"
+		icon_state = "[initial(icon_state)][armed]"
 		user << "<span class='notice'>[src] is now [armed ? "armed" : "disarmed"]</span>"
-
 
 /obj/item/weapon/restraints/legcuffs/beartrap/Crossed(AM as mob|obj)
 	if(armed && isturf(src.loc))
@@ -191,9 +199,32 @@
 					snap = 1
 			if(snap)
 				armed = 0
-				icon_state = "beartrap0"
+				icon_state = "[initial(icon_state)][armed]"
 				playsound(src.loc, 'sound/effects/snap.ogg', 50, 1)
 				L.visible_message("<span class='danger'>[L] triggers \the [src].</span>", \
 						"<span class='userdanger'>You trigger \the [src]!</span>")
-				L.apply_damage(20,BRUTE, def_zone)
+
+				L.apply_damage(trap_damage,BRUTE, def_zone)
 	..()
+
+/obj/item/weapon/restraints/legcuffs/beartrap/energy
+	name = "energy snare"
+	armed = 1
+	icon_state = "e_snare"
+	trap_damage = 0
+
+/obj/item/weapon/restraints/legcuffs/beartrap/energy/New()
+	..()
+	spawn(100)
+		if(!istype(loc, /mob))
+			var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread
+			sparks.set_up(1, 1, src)
+			sparks.start()
+			qdel(src)
+
+/obj/item/weapon/restraints/legcuffs/beartrap/energy/dropped()
+	..()
+	qdel(src)
+
+/obj/item/weapon/restraints/legcuffs/beartrap/energy/attack_hand(mob/user)
+	Crossed(user) //honk

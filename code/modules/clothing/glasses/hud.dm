@@ -4,7 +4,6 @@
 	flags = null //doesn't protect eyes because it's a monocle, duh
 	origin_tech = "magnets=3;biotech=2"
 	var/hud_type = null
-	lenses = 1
 
 /obj/item/clothing/glasses/hud/equipped(mob/living/carbon/human/user, slot)
 	if(hud_type && slot == slot_glasses)
@@ -19,6 +18,12 @@
 /obj/item/clothing/glasses/hud/emp_act(severity)
 	if(emagged == 0)
 		emagged = 1
+		desc = desc + " The display flickers slightly."
+
+/obj/item/clothing/glasses/hud/emag_act(mob/user)
+	if(emagged == 0)
+		emagged = 1
+		user << "<span class='warning'>PZZTTPFFFT</span>"
 		desc = desc + " The display flickers slightly."
 
 /obj/item/clothing/glasses/hud/health
@@ -53,7 +58,6 @@
 	darkness_view = 1
 	flash_protect = 1
 	tint = 1
-	lenses = 2
 
 /obj/item/clothing/glasses/hud/security/night
 	name = "Night Vision Security HUD"
@@ -61,11 +65,6 @@
 	icon_state = "securityhudnight"
 	darkness_view = 8
 	invis_view = SEE_INVISIBLE_MINIMUM
-
-/obj/item/clothing/glasses/hud/security/sunglasses/emp_act(severity)
-	if(emagged == 0)
-		emagged = 1
-		desc = desc + " The display flickers slightly."
 
 /obj/item/clothing/glasses/hud/security/sunglasses/gars
 	name = "HUD gar glasses"

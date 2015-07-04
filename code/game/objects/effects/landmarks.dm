@@ -57,10 +57,6 @@ var/global/xartnum = 0 // Extra artifact number. Used to prevent too many extra 
 			secequipment += loc
 			qdel(src)
 			return
-		if("Deathsquad")
-			deathsquadspawn += loc
-			qdel(src)
-			return
 		if("Emergencyresponseteam")
 			emergencyresponseteamspawn += loc
 			qdel(src)
@@ -89,6 +85,9 @@ var/global/xartnum = 0 // Extra artifact number. Used to prevent too many extra 
 	start_landmarks_list += src
 
 	return 1
+/obj/effect/landmark/start/Destroy()
+	..()
+	start_landmarks_list -= src
 
 /obj/effect/landmark/artifact/New()
 	..()
@@ -250,3 +249,24 @@ var/global/xartnum = 0 // Extra artifact number. Used to prevent too many extra 
 	new /obj/item/clothing/suit/xenos(src.loc)
 	new /obj/item/clothing/head/xenos(src.loc)
 	del(src)
+
+//Department Security spawns
+
+/obj/effect/landmark/start/depsec
+	name = "department_sec"
+
+/obj/effect/landmark/start/depsec/New()
+	..()
+	department_security_spawns |= src
+
+/obj/effect/landmark/start/depsec/supply
+	name = "supply_sec"
+
+/obj/effect/landmark/start/depsec/medical
+	name = "medical_sec"
+
+/obj/effect/landmark/start/depsec/engineering
+	name = "engineering_sec"
+
+/obj/effect/landmark/start/depsec/science
+	name = "science_sec"

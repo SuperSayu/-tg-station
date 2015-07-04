@@ -16,6 +16,7 @@
 	icon_state = "black"
 	item_state = "bl_suit"
 	item_color = "black"
+	burn_state = -1 //Won't burn in fires
 
 /obj/item/clothing/under/color/grey
 	name = "grey jumpsuit"
@@ -139,3 +140,11 @@
 	icon_state = "maroon"
 	item_state = "r_suit"
 	item_color = "maroon"
+
+/obj/item/clothing/under/color/rainbow
+	name = "rainbow jumpsuit"
+	desc = "A multi-colored jumpsuit!"
+	icon_state = "rainbow"
+	item_state = "rainbow"
+	item_color = "rainbow"
+	can_adjust = 0

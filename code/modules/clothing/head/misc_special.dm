@@ -5,6 +5,7 @@
  *		Ushanka
  *		Pumpkin head
  *		Kitty ears
+ *		Wig
  *
  */
 
@@ -15,7 +16,7 @@
 	name = "welding helmet"
 	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye."
 	icon_state = "welding"
-	flags = HEADCOVERSEYES | HEADCOVERSMOUTH
+	flags_cover = HEADCOVERSEYES | HEADCOVERSMOUTH
 	item_state = "welding"
 	m_amt = 1750
 	g_amt = 400
@@ -25,8 +26,8 @@
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
 	action_button_name = "Toggle Welding Helmet"
-	visor_flags = HEADCOVERSEYES | HEADCOVERSMOUTH
 	visor_flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
+	burn_state = -1 //Won't burn in fires
 
 /obj/item/clothing/head/welding/attack_self()
 	toggle()
@@ -47,7 +48,7 @@
 	name = "cake-hat"
 	desc = "It's tasty looking!"
 	icon_state = "cake0"
-	flags = HEADCOVERSEYES
+	flags_cover = HEADCOVERSEYES
 	var/onfire = 0.0
 	var/status = 0
 	var/fire_resist = T0C+1300	//this is the max temp it can stand before you start to cook. although it might not burn away, you take damage
@@ -100,12 +101,12 @@
 		src.icon_state = "ushankaup"
 		src.item_state = "ushankaup"
 		earflaps = 0
-		user << "You raise the ear flaps on the ushanka."
+		user << "<span class='notice'>You raise the ear flaps on the ushanka.</span>"
 	else
 		src.icon_state = "ushankadown"
 		src.item_state = "ushankadown"
 		earflaps = 1
-		user << "You lower the ear flaps on the ushanka."
+		user << "<span class='notice'>You lower the ear flaps on the ushanka.</span>"
 
 /*
  * Pumpkin head
@@ -116,11 +117,12 @@
 	icon_state = "hardhat0_pumpkin"
 	item_state = "hardhat0_pumpkin"
 	item_color = "pumpkin"
-	flags = HEADCOVERSEYES | BLOCKHAIR
+	flags = BLOCKHAIR
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
 	action_button_name = "Toggle Pumpkin Light"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	brightness_on = 2 //luminosity when on
+	flags_cover = HEADCOVERSEYES
 
 /*
  * Kitty ears
@@ -151,3 +153,40 @@
 	action_button_name = "Toggle Nose Light"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	brightness_on = 1 //luminosity when on
+
+/*
+ * Wig (added by Collen)
+ */
+
+/obj/item/clothing/head/wig
+	name = "wig"
+	desc = "You can finally cover up that ugly bald spot."
+	icon = 'icons/mob/human_face.dmi'
+	icon_state = "hair_bigafro_s"
+	alternate_worn_icon = 'icons/mob/human_face.dmi'
+	//flags = BLOCKHAIR -- causes facial hair to disappear, keep this commented out
+
+/obj/item/clothing/head/wig/New()
+	..()
+	var/rand_hair = pick(hair_styles_list)
+	if(rand_hair != "bald")
+		var/datum/sprite_accessory/S = hair_styles_list[rand_hair]
+		icon_state = "[S.icon_state]_s"
+	var/hex = random_string(3, hex_characters)
+	color = "#[hex]"
+
+/obj/item/clothing/head/wig/attack_self(mob/user as mob)
+	if(ishuman(user))
+		//var/mob/living/carbon/human/H = user
+		var/new_style = input(user, "Select a hair style", "Wig")  as null|anything in hair_styles_list
+		if(new_style)
+			var/datum/sprite_accessory/S = hair_styles_list[new_style]
+			if(S != null)
+				icon_state = "[S.icon_state]_s"
+
+/obj/item/clothing/head/wig/AltClick()
+	if(ishuman(usr))
+		var/new_color = input(usr, "Choose the wig's new color:", "Wig") as null|color
+		if(new_color)
+			var/hex = sanitize_hexcolor(new_color)
+			color = "#[hex]"

@@ -237,6 +237,7 @@
 
 
 	body += "<option value='?_src_=vars;mark_object=\ref[D]'>Mark Object</option>"
+	body += "<option value='?_src_=vars;proc_call=\ref[D]'>Call Proc</option>"
 	if(ismob(D))
 		body += "<option value='?_src_=vars;mob_player_panel=\ref[D]'>Show player panel</option>"
 
@@ -442,6 +443,14 @@ body
 
 		src.holder.marked_datum = D
 		href_list["datumrefresh"] = href_list["mark_object"]
+
+	else if(href_list["proc_call"])
+		if(!check_rights(0))	return
+
+		var/T = locate(href_list["proc_call"])
+
+		if(T)
+			callproc_datum(T)
 
 	else if(href_list["regenerateicons"])
 		if(!check_rights(0))	return
@@ -790,7 +799,7 @@ body
 
 			if(result)
 				var/newtype = species_list[result]
-				H.dna.species = new newtype()
+				hardset_dna(H, null, null, null, null, newtype)
 				H.regenerate_icons()
 
 		else if(href_list["adjustDamage"] && href_list["mobToDamage"])

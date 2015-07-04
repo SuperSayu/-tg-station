@@ -34,14 +34,14 @@
 /obj/item/weapon/storage/secure/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	if(locked)
 		if (istype(W, /obj/item/weapon/screwdriver))
-			if (do_after(user, 20))
+			if (do_after(user, 20, target = src))
 				src.open =! src.open
 				user.show_message(text("<span class='notice'>You [] the service panel.</span>", (src.open ? "open" : "close")))
 			return
 		if ((istype(W, /obj/item/device/multitool)) && (src.open == 1)&& (!src.l_hacking))
 			user.show_message(text("<span class='danger'>Now attempting to reset internal memory, please hold.</span>"), 1)
 			src.l_hacking = 1
-			if (do_after(usr, 100))
+			if (do_after(usr, 100, target = src))
 				if (prob(40))
 					src.l_setshort = 1
 					src.l_set = 0
@@ -70,14 +70,14 @@
 			src.overlays = null
 			overlays += image('icons/obj/storage.dmi', icon_locking)
 			locked = 0
-			user << "You short out the lock on [src]."
+			user << "<span class='notice'>You short out the lock on [src].</span>"
 
 /obj/item/weapon/storage/secure/MouseDrop(over_object, src_location, over_location)
 	if (locked)
 		src.add_fingerprint(usr)
-		return
+		usr << "<span class='warning'>It's locked!</span>"
+		return 0
 	..()
-
 
 /obj/item/weapon/storage/secure/attack_self(mob/user as mob)
 	user.set_machine(src)
@@ -128,6 +128,12 @@
 			return
 	return
 
+/obj/item/weapon/storage/secure/storage_contents_dump_act(obj/item/weapon/storage/src_object, mob/user)
+	if(locked)
+		user << "<span class='warning'>It's locked!</span>"
+		return 0
+	return ..()
+
 /obj/item/weapon/storage/secure/can_be_inserted(obj/item/W, stop_messages = 0)
 	if(locked)
 		return 0
@@ -160,7 +166,7 @@
 
 /obj/item/weapon/storage/secure/briefcase/attack_hand(mob/user as mob)
 	if ((src.loc == user) && (src.locked == 1))
-		usr << "<span class='danger'>[src] is locked and cannot be opened!</span>"
+		usr << "<span class='warning'>[src] is locked and cannot be opened!</span>"
 	else if ((src.loc == user) && (!src.locked))
 		playsound(src.loc, "rustle", 50, 1, -5)
 		if (user.s_active)

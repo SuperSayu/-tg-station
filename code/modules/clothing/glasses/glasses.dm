@@ -46,14 +46,12 @@
 	desc = "Yarr."
 	icon_state = "eyepatch"
 	item_state = "eyepatch"
-	lenses = 0
 
 /obj/item/clothing/glasses/monocle
 	name = "monocle"
 	desc = "Such a dapper eyepiece!"
 	icon_state = "monocle"
 	item_state = "headset" // lol
-	lenses = 1
 
 /obj/item/clothing/glasses/material
 	name = "Optical Material Scanner"
@@ -137,7 +135,7 @@
 	action_button_name = "Toggle Welding Goggles"
 	flash_protect = 2
 	tint = 2
-	visor_flags = GLASSESCOVERSEYES
+	flags_cover = GLASSESCOVERSEYES
 	visor_flags_inv = HIDEEYES
 
 
@@ -161,7 +159,6 @@
 //	vision_flags = BLIND	//handled in life.dm/handle_regular_hud_updates()
 	flash_protect = 2
 	tint = 3			// to make them blind
-	lenses = 0
 
 /obj/item/clothing/glasses/sunglasses/big
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Larger than average enhanced shielding blocks many flashes."
@@ -203,14 +200,12 @@
 	desc = "A monocle thermal."
 	icon_state = "thermoncle"
 	flags = null //doesn't protect eyes because it's a monocle, duh
-	lenses = 1
 
 /obj/item/clothing/glasses/thermal/eyepatch
 	name = "Optical Thermal Eyepatch"
 	desc = "An eyepatch with built-in thermal optics."
 	icon_state = "eyepatch"
 	item_state = "eyepatch"
-	lenses = 0
 
 /obj/item/clothing/glasses/cold
 	name = "cold goggles"
@@ -218,19 +213,19 @@
 	icon_state = "cold"
 	item_state = "cold"
 
-obj/item/clothing/glasses/heat
+/obj/item/clothing/glasses/heat
 	name = "heat goggles"
 	desc = "A pair of goggles meant for high temperatures."
 	icon_state = "heat"
 	item_state = "heat"
 
-obj/item/clothing/glasses/orange
+/obj/item/clothing/glasses/orange
 	name = "orange glasses"
 	desc = "A sweet pair of orange shades."
 	icon_state = "orangeglasses"
 	item_state = "orangeglasses"
 
-obj/item/clothing/glasses/red
+/obj/item/clothing/glasses/red
 	name = "red glasses"
 	desc = "A sweet pair of red shades."
 	icon_state = "redglasses"

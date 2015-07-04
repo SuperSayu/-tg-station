@@ -3,7 +3,7 @@ var/list/icons_to_ignore_at_floor_init = list("damaged1","damaged2","damaged3","
 				"damaged5","panelscorched","floorscorched1","floorscorched2","platingdmg1","platingdmg2",
 				"platingdmg3","plating","light_on","light_on_flicker1","light_on_flicker2",
 				"light_on_clicker3","light_on_clicker4","light_on_clicker5","light_broken",
-				"light_on_broken","light_off","wall_thermite","grass1","grass2","grass3","grass4",
+				"light_on_broken","light_off","wall_thermite","grass", "sand",
 				"asteroid","asteroid_dug",
 				"asteroid0","asteroid1","asteroid2","asteroid3","asteroid4",
 				"asteroid5","asteroid6","asteroid7","asteroid8","asteroid9","asteroid10","asteroid11","asteroid12",
@@ -47,17 +47,20 @@ var/list/icons_to_ignore_at_floor_init = list("damaged1","damaged2","damaged3","
 /turf/simulated/floor/ex_act(severity, target)
 	..()
 	if(target == src)
-		src.ChangeTurf(/turf/space)
+		src.ChangeTurf(src.baseturf)
 	if(target != null)
 		ex_act(3)
 		return
 	switch(severity)
 		if(1.0)
+/*
 			if(prob(80))
 				src.ChangeTurf(/turf/space)
 			else
 				src.break_tile_to_plating()
 				new /obj/structure/faketurf(src)
+*/
+			src.ChangeTurf(src.baseturf)
 		if(2.0)
 			switch(pick(1,2;75,3))
 				if(1)
@@ -67,7 +70,7 @@ var/list/icons_to_ignore_at_floor_init = list("damaged1","damaged2","damaged3","
 					else
 						new /obj/structure/faketurf(src)
 				if(2)
-					src.ChangeTurf(/turf/space)
+					src.ChangeTurf(src.baseturf)
 				if(3)
 					if(prob(80))
 						src.break_tile_to_plating()
@@ -151,28 +154,27 @@ var/list/icons_to_ignore_at_floor_init = list("damaged1","damaged2","damaged3","
 		return 1
 	return 0
 
-/turf/simulated/floor/singularity_pull(S, current_size)
-	if(current_size == STAGE_THREE)
-		if(prob(30))
-			if(builtin_tile)
-				builtin_tile.loc = src
-				make_plating()
-	else if(current_size == STAGE_FOUR)
-		if(prob(50))
-			if(builtin_tile)
-				builtin_tile.loc = src
-				make_plating()
-	else if(current_size >= STAGE_FIVE)
-		if(builtin_tile)
-			if(prob(70))
-				builtin_tile.loc = src
-				make_plating()
-		else if(prob(50))
-			ReplaceWithLattice()
+/turf/simulated/floor/decay(var/obj/singularity/S, current_size, dist, counter)
+	if(prob(90 - counter * 20 - dist * 5))
+		new /obj/structure/faketurf(src,counter)
+		return
+	if(prob(dist * 10)) return
+	for(var/obj/O in contents)
+		O.anchored = 0
+		if(istype(O,/obj/machinery))
+			O:stat |= pick(NOPOWER,BROKEN,MAINT,EMPED)
+			O.update_icon()
+	if(builtin_tile)
+		builtin_tile.loc = src
+		make_plating()
+		if(prob(33))
+			break_tile()
+	else
+		ReplaceWithLattice()
 
 /turf/simulated/floor/narsie_act()
 	if(prob(20))
-		ChangeTurf(/turf/simulated/floor/engine/cult)
+		ChangeTurf(/turf/simulated/floor/plasteel/cult)
 
 /turf/simulated/floor/Entered(atom/A, atom/OL)
 	..()

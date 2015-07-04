@@ -102,8 +102,6 @@
 	emag.reagents.add_reagent("facid", 250)
 	emag.name = "Fluacid spray"
 
-	var/obj/item/weapon/reagent_containers/spray/S = emag
-	S.banned_reagents = list()
 
 	var/datum/robot_energy_storage/gauze/gauzestore = new /datum/robot_energy_storage/gauze(src)
 
@@ -158,7 +156,7 @@
 	R.source = metstore
 	modules += R
 
-	var/obj/item/stack/cable_coil/cyborg/W = new /obj/item/stack/cable_coil/cyborg(src)
+	var/obj/item/stack/cable_coil/cyborg/W = new /obj/item/stack/cable_coil/cyborg(src,MAXCOIL,pick("red","yellow","green","blue","pink","orange","cyan","white"))
 	W.source = wirestore
 	modules += W
 
@@ -219,7 +217,8 @@
 	modules += new /obj/item/weapon/reagent_containers/food/condiment/enzyme(src)
 	modules += new /obj/item/weapon/pen(src)
 	modules += new /obj/item/weapon/razor(src)
-	modules += new /obj/item/device/violin(src)
+	modules += new /obj/item/device/instrument/violin(src)
+	modules += new /obj/item/device/instrument/guitar(src)
 
 	var/obj/item/weapon/rsf/M = new /obj/item/weapon/rsf(src)
 	M.matter = 30
@@ -227,7 +226,7 @@
 
 	modules += new /obj/item/weapon/reagent_containers/dropper(src)
 
-	var/obj/item/weapon/lighter/zippo/L = new /obj/item/weapon/lighter/zippo(src)
+	var/obj/item/weapon/lighter/L = new /obj/item/weapon/lighter(src)
 	L.lit = 1
 	modules += L
 

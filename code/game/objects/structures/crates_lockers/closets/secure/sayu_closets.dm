@@ -119,7 +119,7 @@
 	if(!broken)
 		playsound(src.loc, 'sound/machines/warning-buzzer.ogg', 150, 1)
 		user << "<span class='danger'>You begin hacking the locker open. (This action will take 20 seconds to complete.)</span>"
-		if(do_after(user,200) && hacking_panel_uncovered) // makes sure that the user stays in place and does not close the panel
+		if(do_after(user,200, target = src) && hacking_panel_uncovered) // makes sure that the user stays in place and does not close the panel
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(5, 1, src)
 			s.start()
@@ -131,7 +131,7 @@
 	else
 		playsound(src.loc, 'sound/machines/twobeep.ogg', 150, 1)
 		user << "<span class='danger'>You begin repairing the broken locker. (This action will take 30 seconds to complete.)</span>"
-		if(do_after(user,300) && hacking_panel_uncovered) // longer than hacking it open for reasons
+		if(do_after(user,300, target = src) && hacking_panel_uncovered) // longer than hacking it open for reasons
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(5, 1, src)
 			s.start()

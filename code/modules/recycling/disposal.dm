@@ -10,7 +10,7 @@
 /obj/machinery/disposal
 	name = "disposal unit"
 	desc = "A pneumatic waste disposal unit."
-	icon = 'icons/obj/pipes/disposal.dmi'
+	icon = 'icons/obj/atmospherics/pipes/disposal.dmi'
 	icon_state = "disposal"
 	anchored = 1
 	density = 1
@@ -75,8 +75,6 @@
 	if(stat & BROKEN || !I || !user)
 		return
 
-	if(isrobot(user) && !istype(I, /obj/item/weapon/storage/bag/trash))
-		return
 	src.add_fingerprint(user)
 	if(mode<=0) // It's off
 		if(istype(I, /obj/item/weapon/screwdriver))
@@ -100,11 +98,11 @@
 			var/obj/item/weapon/weldingtool/W = I
 			if(W.remove_fuel(0,user))
 				playsound(src.loc, 'sound/items/Welder2.ogg', 100, 1)
-				user << "<span class='notice'>You start slicing the floorweld off \the [src].</span>"
+				user << "<span class='notice'>You start slicing the floorweld off \the [src]...</span>"
 
-				if(do_after(user,20))
+				if(do_after(user,20, target = src))
 					if(!src || !W.isOn()) return
-					user << "<span class='notice'>You've sliced the floorweld off \the [src].</span>"
+					user << "<span class='notice'>You slice the floorweld off \the [src].</span>"
 					Deconstruct()
 				return
 			else
@@ -112,7 +110,7 @@
 
 	if(istype(I, /obj/item/weapon/storage/bag/trash))
 		var/obj/item/weapon/storage/bag/trash/T = I
-		user << "<span class='warning'> You empty the bag.</span>"
+		user << "<span class='warning'>You empty the bag.</span>"
 		for(var/obj/item/O in T.contents)
 			T.remove_from_storage(O,src)
 		T.update_icon()
@@ -125,11 +123,11 @@
 			stuff_mob_in(G.affecting, user)
 		return
 
-	if(!I)	return
+	if(!user.drop_item())
+		return
 
-	user.drop_item()
 	I.loc = src
-	user.visible_message("<span class='notice'>[user.name] places \the [I] into \the [src].</span>", \
+	user.visible_message("[user.name] places \the [I] into \the [src].", \
 						"<span class='notice'>You place \the [I] into \the [src].</span>")
 
 	update()
@@ -144,23 +142,23 @@
 	if(!iscarbon(user) && !user.ventcrawler) //only carbon and ventcrawlers can climb into disposal by themselves.
 		return
 	if(target.mob_size > MOB_SIZE_HUMAN)
-		user << "<span class='warning'>[target] doesn't fit inside [src].</span>"
+		user << "<span class='warning'>[target] doesn't fit inside [src]!</span>"
 		return
 	src.add_fingerprint(user)
 	if(user == target)
-		user.visible_message("<span class='warning'>[user] starts climbing into [src].</span>", \
-								"<span class='notice'>[user] starts climbing into [src].</span>")
+		user.visible_message("[user] starts climbing into [src].", \
+								"<span class='notice'>You start climbing into [src]...</span>")
 	else
 		target.visible_message("<span class='danger'>[user] starts putting [target] into [src].</span>", \
-								"<span class='userdanger'>[user] starts putting [target] into [src]!</span>")
+								"<span class='userdanger'>[user] starts putting you into [src]!</span>")
 	if(do_mob(user, target, 20))
 		if (target.client)
 			target.client.perspective = EYE_PERSPECTIVE
 			target.client.eye = src
 		target.loc = src
 		if(user == target)
-			user.visible_message("<span class='warning'>[user] climbs into [src].</span>", \
-									"<span class='notice'>[user] climbs into [src].</span>")
+			user.visible_message("[user] climbs into [src].", \
+									"<span class='notice'>You climb into [src].</span>")
 		else
 			target.visible_message("<span class='danger'>[user] has placed [target] in [src].</span>", \
 									"<span class='userdanger'>[user] has placed [target] in [src].</span>")
@@ -209,7 +207,7 @@
 // human interact with machine
 /obj/machinery/disposal/attack_hand(mob/user as mob)
 	if(user && user.loc == src)
-		usr << "<span class='danger'>You cannot reach the controls from inside.</span>"
+		usr << "<span class='warning'>You cannot reach the controls from inside!</span>"
 		return
 	/*
 	if(mode==-1)
@@ -266,7 +264,7 @@
 	if(..())
 		return
 	if(usr.loc == src)
-		usr << "<span class='danger'>You cannot reach the controls from inside.</span>"
+		usr << "<span class='warning'>You cannot reach the controls from inside!</span>"
 		return
 
 	if(mode==-1 && !href_list["eject"]) // only allow ejecting if mode is -1
@@ -313,7 +311,7 @@
 
 	// flush handle
 	if(flush)
-		overlays += image('icons/obj/pipes/disposal.dmi', "dispover-handle")
+		overlays += image('icons/obj/atmospherics/pipes/disposal.dmi', "dispover-handle")
 
 	// only handle is shown if no power
 	if(stat & NOPOWER || mode == -1)
@@ -321,13 +319,13 @@
 
 	// 	check for items in disposal - occupied light
 	if(contents.len > 0)
-		overlays += image('icons/obj/pipes/disposal.dmi', "dispover-full")
+		overlays += image('icons/obj/atmospherics/pipes/disposal.dmi', "dispover-full")
 
 	// charging and ready light
 	if(mode == 1)
-		overlays += image('icons/obj/pipes/disposal.dmi', "dispover-charge")
+		overlays += image('icons/obj/atmospherics/pipes/disposal.dmi', "dispover-charge")
 	else if(mode == 2)
-		overlays += image('icons/obj/pipes/disposal.dmi', "dispover-ready")
+		overlays += image('icons/obj/atmospherics/pipes/disposal.dmi', "dispover-ready")
 
 // timed process
 // charge the gas reservoir and perform flush if ready
@@ -347,7 +345,8 @@
 	src.updateDialog()
 
 	if(flush && air_contents.return_pressure() >= SEND_PRESSURE )	// flush can happen even without power
-		flush()
+		spawn(0)
+			flush()
 
 	if(stat & NOPOWER)			// won't charge if no power
 		return
@@ -380,39 +379,32 @@
 		update()
 	return
 
-// perform a flush
 /obj/machinery/disposal/proc/flush()
-
 	flushing = 1
-	flick("[icon_state]-flush", src)
-
-	var/wrapcheck = 0
-	var/obj/structure/disposalholder/H = new()	// virtual holder object which actually
-										// travels through the pipes.
-	for(var/obj/item/smallDelivery/O in src)
-		wrapcheck = 1
-
-	if(wrapcheck == 1)
-		H.tomail = 1
-
+	flushAnimation()
+	var/obj/structure/disposalholder/H = new()
+	newHolderDestination(H)
 	sleep(10)
 	if(last_sound < world.time + 1)
 		playsound(src, 'sound/machines/disposalflush.ogg', 50, 0, 0)
 		last_sound = world.time
-	sleep(5) // wait for animation to finish
-
-	H.init(src)	// copy the contents of disposer to holder
-	air_contents = new()		// new empty gas resv.
-
-	H.start(src) // start the holder processing movement
+	sleep(5)
+	H.init(src)
+	air_contents = new()
+	H.start(src)
 	flushing = 0
-	// now reset disposal state
 	flush = 0
-	if(mode == 2)	// if was ready,
-		mode = 1	// switch to charging
+	if(mode == 2)
+		mode = 1
 	update()
-	return
 
+/obj/machinery/disposal/proc/newHolderDestination(obj/structure/disposalholder/H)
+	for(var/obj/item/smallDelivery/O in src)
+		H.tomail = 1
+		return
+
+/obj/machinery/disposal/proc/flushAnimation()
+	flick("[icon_state]-flush", src)
 
 // called when area power changes
 /obj/machinery/disposal/power_change()
@@ -464,6 +456,13 @@
 		stored.density = 1
 		stored.update()
 	..()
+
+//How disposal handles getting a storage dump from a storage object
+/obj/machinery/disposal/storage_contents_dump_act(obj/item/weapon/storage/src_object, mob/user)
+	for(var/obj/item/I in src_object)
+		src_object.remove_from_storage(I, src)
+	return 1
+
 // virtual disposal object
 // travels through pipes in lieu of actual items
 // contents will be items flushed by the disposal
@@ -492,6 +491,8 @@
 	//hasmob effects whether the package goes to cargo or its tagged destination.
 	for(var/mob/living/M in D)
 		if(M && M.stat != DEAD)
+			if(M.client)
+				M.client.eye = src
 			hasmob = 1
 
 	//Checks 1 contents level deep. This means that players can be sent through disposals...
@@ -500,6 +501,8 @@
 		if(O.contents)
 			for(var/mob/living/M in O.contents)
 				if(M && M.stat != DEAD)
+					if(M.client)
+						M.client.eye = src
 					hasmob = 1
 
 	// now everything inside the disposal gets put into the holder
@@ -546,8 +549,6 @@
 			active = 0
 	return
 
-
-
 // find the turf which should contain the next pipe
 /obj/structure/disposalholder/proc/nextloc()
 	return get_step(loc,dir)
@@ -593,10 +594,13 @@
 	air_update_turf()
 	return
 
+/obj/structure/disposalholder/allow_drop()
+	return 1
+
 // Disposal pipes
 
 /obj/structure/disposalpipe
-	icon = 'icons/obj/pipes/disposal.dmi'
+	icon = 'icons/obj/atmospherics/pipes/disposal.dmi'
 	name = "disposal pipe"
 	desc = "An underfloor disposal pipe."
 	anchored = 1
@@ -843,12 +847,12 @@
 
 		if(W.remove_fuel(0,user))
 			playsound(src.loc, 'sound/items/Welder2.ogg', 100, 1)
-			user << "<span class='notice'>You start slicing the disposal pipe.</span>"
+			user << "<span class='notice'>You start slicing the disposal pipe...</span>"
 			// check if anything changed over 2 seconds
-			if(do_after(user,30))
+			if(do_after(user,30, target = src))
 				if(!src || !W.isOn()) return
 				Deconstruct()
-				user << "<span class='notice'>You've sliced the disposal pipe.</span>"
+				user << "<span class='notice'>You slice the disposal pipe.</span>"
 		else
 			return
 
@@ -980,7 +984,7 @@
 			sortType = O.currTag
 			playsound(src.loc, 'sound/machines/twobeep.ogg', 100, 1)
 			var/tag = uppertext(TAGGERLOCATIONS[O.currTag])
-			user << "<span class='warning'> Changed filter to [tag].</span>"
+			user << "<span class='warning'>Changed filter to [tag].</span>"
 			updatedesc()
 
 
@@ -1143,16 +1147,16 @@
 		var/obj/item/weapon/weldingtool/W = I
 
 		if(linked)
-			user << "<span class='notice'>You need to deconstruct disposal machinery above this pipe.</span>"
+			user << "<span class='warning'>You need to deconstruct disposal machinery above this pipe!</span>"
 			return
 
 		if(W.remove_fuel(0,user))
 			playsound(src.loc, 'sound/items/Welder2.ogg', 100, 1)
-			user << "<span class='notice'>You start slicing the disposal pipe.</span>"
-			if(do_after(user,30))
+			user << "<span class='notice'>You start slicing the disposal pipe...</span>"
+			if(do_after(user,30, target = src))
 				if(!src || !W.isOn()) return
 				Deconstruct()
-				user << "<span class='notice'>You've sliced the disposal pipe.</span>"
+				user << "<span class='notice'>You slice the disposal pipe.</span>"
 		else
 			return
 
@@ -1206,7 +1210,7 @@
 /obj/structure/disposaloutlet
 	name = "disposal outlet"
 	desc = "An outlet for the pneumatic disposal system."
-	icon = 'icons/obj/pipes/disposal.dmi'
+	icon = 'icons/obj/atmospherics/pipes/disposal.dmi'
 	icon_state = "outlet"
 	density = 1
 	anchored = 1
@@ -1282,10 +1286,10 @@
 		var/obj/item/weapon/weldingtool/W = I
 		if(W.remove_fuel(0,user))
 			playsound(src.loc, 'sound/items/Welder2.ogg', 100, 1)
-			user << "<span class='notice'>You start slicing the floorweld off \the [src].</span>"
-			if(do_after(user,20))
+			user << "<span class='notice'>You start slicing the floorweld off \the [src]...</span>"
+			if(do_after(user,20, target = src))
 				if(!src || !W.isOn()) return
-				user << "<span class='notice'>You've sliced the floorweld off \the [src].</span>"
+				user << "<span class='notice'>You slice the floorweld off \the [src].</span>"
 				stored.loc = loc
 				src.transfer_fingerprints_to(stored)
 				stored.update()

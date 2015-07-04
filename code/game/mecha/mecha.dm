@@ -96,7 +96,10 @@
 /obj/mecha/Destroy()
 	go_out()
 	for(var/mob/M in src) //Let's just be ultra sure
-		M.Move(loc)
+		if(isAI(M))
+			M.gib() //AIs are loaded into the mech computer itself. When the mech dies, so does the AI. Forever.
+		else
+			M.Move(loc)
 
 	if(prob(30))
 		explosion(get_turf(loc), 0, 0, 1, 3)
@@ -204,7 +207,7 @@
 
 	return 1
 
-obj/mecha/proc/can_use(mob/user)
+/obj/mecha/proc/can_use(mob/user)
 	if(user != src.occupant)
 		return 0
 	if(user && ismob(user))
@@ -348,15 +351,15 @@ obj/mecha/proc/can_use(mob/user)
 		return
 	if(user != src.occupant) //While not "realistic", this piece is player friendly.
 		user.forceMove(get_turf(src))
-		user << "You climb out from [src]"
+		user << "<span class='notice'>You climb out from [src].</span>"
 		return 0
 	if(connected_port)
 		if(world.time - last_message > 20)
-			src.occupant_message("Unable to move while connected to the air system port")
+			src.occupant_message("<span class='warning'>Unable to move while connected to the air system port!</span>")
 			last_message = world.time
 		return 0
 	if(state)
-		occupant_message("<span class='danger'>Maintenance protocols in effect</span>")
+		occupant_message("<span class='danger'>Maintenance protocols in effect.</span>")
 		return
 	return domove(direction)
 
@@ -666,20 +669,21 @@ obj/mecha/proc/can_use(mob/user)
 
 	if(istype(W, /obj/item/device/mmi))
 		if(mmi_move_inside(W,user))
-			user << "[src]-MMI interface initialized successfuly"
+			user << "[src]-[W] interface initialized successfuly"
 		else
-			user << "[src]-MMI interface initialization failed."
+			user << "[src]-[W] interface initialization failed."
 		return
 
 	if(istype(W, /obj/item/mecha_parts/mecha_equipment))
 		var/obj/item/mecha_parts/mecha_equipment/E = W
 		spawn()
 			if(E.can_attach(src))
-				user.drop_item()
+				if(!user.drop_item())
+					return
 				E.attach(src)
-				user.visible_message("[user] attaches [W] to [src]", "You attach [W] to [src]")
+				user.visible_message("[user] attaches [W] to [src].", "<span class='notice'>You attach [W] to [src].</span>")
 			else
-				user << "You were unable to attach [W] to [src]"
+				user << "<span class='warning'>You were unable to attach [W] to [src]!</span>"
 		return
 	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if(add_req_access || maint_access)
@@ -699,18 +703,18 @@ obj/mecha/proc/can_use(mob/user)
 	else if(istype(W, /obj/item/weapon/wrench))
 		if(state==1)
 			state = 2
-			user << "You undo the securing bolts."
+			user << "<span class='notice'>You undo the securing bolts.</span>"
 		else if(state==2)
 			state = 1
-			user << "You tighten the securing bolts."
+			user << "<span class='notice'>You tighten the securing bolts.</span>"
 		return
 	else if(istype(W, /obj/item/weapon/crowbar))
 		if(state==2)
 			state = 3
-			user << "You open the hatch to the power unit"
+			user << "<span class='notice'>You open the hatch to the power unit.</span>"
 		else if(state==3)
 			state=2
-			user << "You close the hatch to the power unit"
+			user << "<span class='notice'>You close the hatch to the power unit.</span>"
 		return
 	else if(istype(W, /obj/item/stack/cable_coil))
 		if(state == 3 && hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
@@ -719,35 +723,36 @@ obj/mecha/proc/can_use(mob/user)
 				clearInternalDamage(MECHA_INT_SHORT_CIRCUIT)
 				user << "<span class='notice'>You replace the fused wires.</span>"
 			else
-				user << "<span class='warning'>You need two lengths of cable to fix this mecha.</span>"
+				user << "<span class='warning'>You need two lengths of cable to fix this mech!</span>"
 		return
 	else if(istype(W, /obj/item/weapon/screwdriver))
 		if(hasInternalDamage(MECHA_INT_TEMP_CONTROL))
 			clearInternalDamage(MECHA_INT_TEMP_CONTROL)
-			user << "You repair the damaged temperature controller."
+			user << "<span class='notice'>You repair the damaged temperature controller.</span>"
 		else if(state==3 && src.cell)
 			src.cell.forceMove(src.loc)
 			src.cell = null
 			state = 4
-			user << "You unscrew and pry out the powercell."
+			user << "<span class='notice'>You unscrew and pry out the powercell.</span>"
 			src.log_message("Powercell removed")
 		else if(state==4 && src.cell)
 			state=3
-			user << "You screw the cell in place"
+			user << "<span class='notice'>You screw the cell in place.</span>"
 		return
 
 	else if(istype(W, /obj/item/weapon/stock_parts/cell))
 		if(state==4)
 			if(!src.cell)
+				if(!user.drop_item())
+					return
 				var/obj/item/weapon/stock_parts/cell/C = W
-				user << "You install the powercell"
-				user.drop_item()
+				user << "<span class='notice'>You install the powercell.</span>"
 				C.forceMove(src)
 				C.use(C.charge * 0.8)
 				src.cell = C
 				src.log_message("Powercell installed")
 			else
-				user << "There's already a powercell installed."
+				user << "<span class='notice'>There's already a powercell installed.</span>"
 		return
 
 	else if(istype(W, /obj/item/weapon/weldingtool) && user.a_intent != "harm")
@@ -762,35 +767,110 @@ obj/mecha/proc/can_use(mob/user)
 					user.visible_message("<span class='notice'>[user] repairs some damage to [src.name].</span>")
 					src.health += min(10, initial(src.health)-src.health)
 			else
-				user << "<span class='warning'>The welder must be on for this task.</span>"
+				user << "<span class='warning'>The welder must be on for this task!</span>"
 				return 1
 		else
-			user << "<span class='warning'>The [src.name] is at full integrity.</span>"
+			user << "<span class='warning'>The [src.name] is at full integrity!</span>"
 		return 1
 
 	else if(istype(W, /obj/item/mecha_parts/mecha_tracking))
 		if(!user.unEquip(W))
-			user << "<span class='notice'>\the [W] is stuck to your hand, you cannot put it in \the [src]</span>"
+			user << "<span class='warning'>\the [W] is stuck to your hand, you cannot put it in \the [src]!</span>"
 			return
 		W.forceMove(src)
-		user.visible_message("[user] attaches [W] to [src].", "You attach [W] to [src]")
+		user.visible_message("[user] attaches [W] to [src].", "<span class='notice'>You attach [W] to [src].</span>")
 		return
 
 	else if(!(W.flags&NOBLUDGEON))
 		call((proc_res["dynattackby"]||src), "dynattackby")(W,user)
 	return
 
-/*
-/obj/mecha/attack_ai(var/mob/living/silicon/ai/user as mob)
-	if(!istype(user, /mob/living/silicon/ai))
-		return
-	var/output = {"<b>Assume direct control over [src]?</b>
-						<a href='?src=\ref[src];ai_take_control=\ref[user];duration=3000'>Yes</a><br>
-						"}
-	user << browse(output, "window=mecha_attack_ai")
-	return
-*/
+/////////////////////////////////////
+//////////// AI piloting ////////////
+/////////////////////////////////////
 
+/obj/mecha/attack_ai(var/mob/living/silicon/ai/user as mob)
+	if(!isAI(user))
+		return
+	//Allows the Malf to scan a mech's status and loadout, helping it to decide if it is a worthy chariot.
+	if(user.can_dominate_mechs)
+		examine(user) //Get diagnostic information!
+		var/obj/item/mecha_parts/mecha_tracking/B = locate(/obj/item/mecha_parts/mecha_tracking) in src
+		if(B) //Beacons give the AI more detailed mech information.
+			user << "<span class='danger'>Warning: Tracking Beacon detected. Enter at your own risk. Beacon Data:"
+			user << "[B.get_mecha_info()]"
+		//Nothing like a big, red link to make the player feel powerful!
+		user << "<a href='?src=\ref[user];ai_take_control=\ref[src]'><span class='userdanger'>ASSUME DIRECT CONTROL?</span></a><br>"
+
+/obj/mecha/transfer_ai(var/interaction, mob/user, var/mob/living/silicon/ai/AI, var/obj/item/device/aicard/card)
+	if(!..())
+		return
+
+ //Transfer from core or card to mech. Proc is called by mech.
+	switch(interaction)
+		if(AI_TRANS_TO_CARD) //Upload AI from mech to AI card.
+			if(!state) //Mech must be in maint mode to allow carding.
+				user << "<span class='warning'>[name] must have maintenance protocols active in order to allow a transfer.</span>"
+				return
+			AI = occupant
+			if(!AI || !isAI(occupant)) //Mech does not have an AI for a pilot
+				user << "<span class='warning'>No AI detected in the [name] onboard computer.</span>"
+				return
+			if (AI.mind.special_role == "malfunction") //Malf AIs cannot leave mechs. Except through death.
+				user << "<span class='boldannounce'>ACCESS DENIED.</span>"
+				return
+			AI.aiRestorePowerRoutine = 0//So the AI initially has power.
+			AI.control_disabled = 1
+			AI.radio_enabled = 0
+			AI.loc = card
+			occupant = null
+			AI.controlled_mech = null
+			AI.remote_control = null
+			icon_state = initial(icon_state)+"-open"
+			AI << "You have been downloaded to a mobile storage device. Wireless connection offline."
+			user << "<span class='boldnotice'>Transfer successful</span>: [AI.name] ([rand(1000,9999)].exe) removed from [name] and stored within local memory."
+
+		if(AI_MECH_HACK) //Called by Malf AI mob on the mech.
+			new /obj/structure/AIcore/deactivated(AI.loc)
+			if(occupant) //Oh, I am sorry, were you using that?
+				AI << "<span class='warning'>Pilot detected! Forced ejection initiated!"
+				occupant << "<span class='danger'>You have been forcibly ejected!</span>"
+				go_out(1) //IT IS MINE, NOW. SUCK IT, RD!
+			ai_enter_mech(AI, interaction)
+
+		if(AI_TRANS_FROM_CARD) //Using an AI card to upload to a mech.
+			AI = locate(/mob/living/silicon/ai) in card
+			if(!AI)
+				user << "<span class='warning'>There is no AI currently installed on this device.</span>"
+				return
+			else if(AI.stat || !AI.client)
+				user << "<span class='warning'>[AI.name] is currently unresponsive, and cannot be uploaded.</span>"
+				return
+			else if(occupant || dna) //Normal AIs cannot steal mechs!
+				user << "<span class='warning'>Access denied. [name] is [occupant ? "currently occupied" : "secured with a DNA lock"]."
+				return
+			AI.control_disabled = 0
+			AI.radio_enabled = 1
+			user << "<span class='boldnotice'>Transfer successful</span>: [AI.name] ([rand(1000,9999)].exe) installed and executed successfully. Local copy has been removed."
+			ai_enter_mech(AI, interaction)
+
+//Hack and From Card interactions share some code, so leave that here for both to use.
+/obj/mecha/proc/ai_enter_mech(var/mob/living/silicon/ai/AI, var/interaction)
+	AI.aiRestorePowerRoutine = 0
+	AI.loc = src
+	occupant = AI
+	icon_state = initial(icon_state)
+	playsound(src, 'sound/machines/windowdoor.ogg', 50, 1)
+	if(!hasInternalDamage())
+		occupant << sound('sound/mecha/nominal.ogg',volume=50)
+	AI.cancel_camera()
+	AI.controlled_mech = src
+	AI.remote_control = src
+	AI.canmove = 1 //Much easier than adding AI checks! Be sure to set this back to 0 if you decide to allow an AI to leave a mech somehow.
+	AI.can_shunt = 0 //ONE AI ENTERS. NO AI LEAVES.
+	AI << "[interaction == AI_MECH_HACK ? "<span class='announce'>Takeover of [name] complete! You are now permanently loaded onto the onboard computer. Do not attempt to leave the station sector!</span>" \
+	: "<span class='notice'>You have been uploaded to a mech's onboard computer."]"
+	AI << "<span class='boldnotice'>Use Middle-Mouse to activate mech functions and equipment. Click normally for AI interactions.</span>"
 
 
 /////////////////////////////////////
@@ -949,20 +1029,20 @@ obj/mecha/proc/can_use(mob/user)
 		return
 	for(var/mob/living/simple_animal/slime/S in range(1,user))
 		if(S.Victim == user)
-			user << "You're too busy getting your life sucked out of you."
+			user << "<span class='warning'>You're too busy getting your life sucked out of you!</span>"
 			return
 
-	visible_message("<span class='notice'>[user] starts to climb into [src.name]")
+	visible_message("[user] starts to climb into [src.name].")
 
 	if(enter_after(40,user))
 		if(src.health <= 0)
-			user << "You cannot get in the [src.name], it has been destroyed."
+			user << "<span class='warning'>You cannot get in the [src.name], it has been destroyed!</span>"
 		else if(!src.occupant)
 			moved_inside(user)
 		else if(src.occupant!=user)
-			user << "[src.occupant] was faster. Try better next time, loser."
+			user << "<span class='danger'>[src.occupant] was faster! Try better next time, loser.</span>"
 	else
-		user << "You stop entering the exosuit."
+		user << "<span class='warning'>You stop entering the exosuit!</span>"
 	return
 
 /obj/mecha/proc/moved_inside(var/mob/living/carbon/human/H as mob)
@@ -993,41 +1073,41 @@ obj/mecha/proc/can_use(mob/user)
 
 /obj/mecha/proc/mmi_move_inside(var/obj/item/device/mmi/mmi_as_oc as obj,mob/user as mob)
 	if(!mmi_as_oc.brainmob || !mmi_as_oc.brainmob.client)
-		user << "Consciousness matrix not detected."
+		user << "<span class='warning'>Consciousness matrix not detected!</span>"
 		return 0
 	else if(mmi_as_oc.brainmob.stat)
-		user << "Beta-rhythm below acceptable level."
+		user << "<span class='warning'>Beta-rhythm below acceptable level!</span>"
 		return 0
 	else if(occupant)
-		user << "Occupant detected."
+		user << "<span class='warning'>Occupant detected!</span>"
 		return 0
 	else if(dna && dna!=mmi_as_oc.brainmob.dna.unique_enzymes)
-		user << "Stop it!"
+		user << "<span class='warning'>Stop it!</span>"
 		return 0
 	//Added a message here since people assume their first click failed or something./N
 //	user << "Installing MMI, please stand by."
 
-	visible_message("<span class='notice'>[user] starts to insert an MMI into [src.name]</span>")
+	visible_message("<span class='notice'>[user] starts to insert an MMI into [src.name].</span>")
 
 	if(enter_after(40,user))
 		if(!occupant)
 			return mmi_moved_inside(mmi_as_oc,user)
 		else
-			user << "Occupant detected."
+			user << "<span class='warning'>Occupant detected!</span>"
 	else
-		user << "You stop inserting the MMI."
+		user << "<span class='notice'>You stop inserting the MMI.</span>"
 	return 0
 
 /obj/mecha/proc/mmi_moved_inside(var/obj/item/device/mmi/mmi_as_oc as obj,mob/user as mob)
 	if(mmi_as_oc && user in range(1))
 		if(!mmi_as_oc.brainmob || !mmi_as_oc.brainmob.client)
-			user << "Consciousness matrix not detected."
+			user << "<span class='notice'>Consciousness matrix not detected!</span>"
 			return 0
 		else if(mmi_as_oc.brainmob.stat)
-			user << "Beta-rhythm below acceptable level."
+			user << "<span class='warning'>Beta-rhythm below acceptable level!</span>"
 			return 0
 		if(!user.unEquip(mmi_as_oc))
-			user << "<span class='notice'>\the [mmi_as_oc] is stuck to your hand, you cannot put it in \the [src]</span>"
+			user << "<span class='warning'>\the [mmi_as_oc] is stuck to your hand, you cannot put it in \the [src]!</span>"
 			return
 		var/mob/brainmob = mmi_as_oc.brainmob
 		brainmob.reset_view(src)
@@ -1088,7 +1168,7 @@ obj/mecha/proc/can_use(mob/user)
 	go_out()
 
 
-/obj/mecha/proc/go_out()
+/obj/mecha/proc/go_out(var/forced)
 	if(!src.occupant) return
 	var/atom/movable/mob_container
 	if(ishuman(occupant))
@@ -1098,6 +1178,10 @@ obj/mecha/proc/can_use(mob/user)
 	else if(istype(occupant, /mob/living/carbon/brain))
 		var/mob/living/carbon/brain/brain = occupant
 		mob_container = brain.container
+	else if(isAI(occupant) && forced) //This should only happen if there are multiple AIs in a round, and at least one is Malf.
+		occupant.gib()  //If one Malf decides to steal a mech from another AI (even other Malfs!), they are destroyed, as they have nowhere to go when replaced.
+		occupant = null
+		return
 	else
 		return
 	if(mob_container.forceMove(src.loc))//ejecting mob container
@@ -1137,6 +1221,7 @@ obj/mecha/proc/can_use(mob/user)
 			if(mmi.brainmob)
 				occupant.loc = mmi
 			mmi.mecha = null
+			mmi.update_icon()
 			src.occupant.canmove = 0
 			src.verbs += /obj/mecha/verb/eject
 		src.occupant = null
@@ -1517,17 +1602,20 @@ var/year_integer = text2num(year) // = 2013???
 		user << browse(null,"window=exosuit_add_access")
 		return
 	if(href_list["dna_lock"])
-		if(usr != src.occupant)	return
-		if(src.occupant)
-			src.dna = src.occupant.dna.unique_enzymes
-			src.occupant_message("You feel a prick as the needle takes your DNA sample.")
+		if(usr != src.occupant)
+			return
+		if(src.occupant && !iscarbon(src.occupant))
+			src.occupant << "<span class='danger'> You do not have any DNA!</span>"
+			return
+		src.dna = src.occupant.dna.unique_enzymes
+		src.occupant_message("You feel a prick as the needle takes your DNA sample.")
 		return
 	if(href_list["reset_dna"])
 		if(usr != src.occupant)	return
 		src.dna = null
 	if(href_list["repair_int_control_lost"])
 		if(usr != src.occupant)	return
-		src.occupant_message("Recalibrating coordination system.")
+		src.occupant_message("Recalibrating coordination system...")
 		src.log_message("Recalibration of coordination system started.")
 		var/T = src.loc
 		if(do_after(100))
@@ -1536,7 +1624,7 @@ var/year_integer = text2num(year) // = 2013???
 				src.occupant_message("<span class='notice'>Recalibration successful.</span>")
 				src.log_message("Recalibration of coordination system finished with 0 errors.")
 			else
-				src.occupant_message("<span class='danger'>Recalibration failed.</span>")
+				src.occupant_message("<span class='warning'>Recalibration failed!</span>")
 				src.log_message("Recalibration of coordination system failed with 1 error.",1)
 
 	//debug
@@ -1549,54 +1637,6 @@ var/year_integer = text2num(year) // = 2013???
 		return
 	*/
 
-
-
-/*
-
-	if (href_list["ai_take_control"])
-		var/mob/living/silicon/ai/AI = locate(href_list["ai_take_control"])
-		var/duration = text2num(href_list["duration"])
-		var/mob/living/silicon/ai/O = new /mob/living/silicon/ai(src)
-		var/cur_occupant = src.occupant
-		O.invisibility = 0
-		O.canmove = 1
-		O.name = AI.name
-		O.real_name = AI.real_name
-		O.anchored = 1
-		O.aiRestorePowerRoutine = 0
-		O.control_disabled = 1 // Can't control things remotely if you're stuck in a card!
-		O.laws = AI.laws
-		O.stat = AI.stat
-		O.oxyloss = AI.getOxyLoss()
-		O.fireloss = AI.getFireLoss()
-		O.bruteloss = AI.getBruteLoss()
-		O.toxloss = AI.toxloss
-		O.updatehealth()
-		src.occupant = O
-		if(AI.mind)
-			AI.mind.transfer_to(O)
-		AI.name = "Inactive AI"
-		AI.real_name = "Inactive AI"
-		AI.icon_state = "ai-empty"
-		spawn(duration)
-			AI.name = O.name
-			AI.real_name = O.real_name
-			if(O.mind)
-				O.mind.transfer_to(AI)
-			AI.control_disabled = 0
-			AI.laws = O.laws
-			AI.oxyloss = O.getOxyLoss()
-			AI.fireloss = O.getFireLoss()
-			AI.bruteloss = O.getBruteLoss()
-			AI.toxloss = O.toxloss
-			AI.updatehealth()
-			qdel(O)
-			if (!AI.stat)
-				AI.icon_state = "ai"
-			else
-				AI.icon_state = "ai-crash"
-			src.occupant = cur_occupant
-*/
 	return
 
 ///////////////////////
@@ -1626,6 +1666,9 @@ var/year_integer = text2num(year) // = 2013???
 	if(!isnull(get_charge()))
 		cell.give(amount)
 		return 1
+	return 0
+
+/obj/mecha/allow_drop()
 	return 0
 
 

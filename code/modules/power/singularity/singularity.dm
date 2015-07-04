@@ -13,6 +13,7 @@
 	var/current_size = 1
 	var/allowed_size = 1
 	var/contained = 1 //Are we going to move around?
+	var/containment = 0 // per-tick check for containment
 	var/energy = 100 //How strong are we?
 	var/dissipate = 1 //Do we lose energy over time?
 	var/dissipate_delay = 10
@@ -20,13 +21,14 @@
 	var/dissipate_strength = 1 //How much energy do we lose?
 	var/move_self = 1 //Do we move on our own?
 	var/grav_pull = 4 //How many tiles out do we pull?
+	var/decay_range = 0 // Maximum distance to do turf decay checks
 	var/consume_range = 0 //How many tiles out do we eat
-	var/decay_range = 0
 	var/event_chance = 15 //Prob for event each tick
 	var/target = null //its target. moves towards the target if it has one
 	var/last_failed_movement = 0//Will not move in the same dir if it couldnt before, will help with the getting stuck on fields thing
 	var/last_warning
 	var/force_contained = 0
+	var/consumedSupermatter = 0 //If the singularity has eaten a supermatter shard and can go to stage six
 	allow_spin = 0
 
 /obj/singularity/New(loc, var/starting_energy = 50, var/temp = 0)
@@ -59,8 +61,8 @@
 	consume(user)
 	return 1
 
-/obj/singularity/Process_Spacemove() //The singularity stops drifting for no man!
-	return 0
+/obj/singularity/Process_Spacemove()
+	return pick(0,1)
 
 /obj/singularity/blob_act(severity)
 	return
@@ -101,10 +103,13 @@
 		pulse()
 		if(prob(event_chance))//Chance for it to run a special event TODO:Come up with one or two more that fit
 			event()
+	else
+		contained = 1
 	eat()
 	dissipate()
 	check_energy()
-
+	contained = force_contained || (containment >= 4) // containment: prevents turf pulling.  Enforced by fields and shields.
+	containment = 0
 	return
 
 
@@ -131,59 +136,78 @@
 	var/temp_allowed_size = src.allowed_size
 	if(force_size)
 		temp_allowed_size = force_size
+	if(temp_allowed_size >= STAGE_SIX && !consumedSupermatter)
+		temp_allowed_size = STAGE_FIVE
 	switch(temp_allowed_size)
 		if(STAGE_ONE)
 			current_size = STAGE_ONE
 			icon = 'icons/obj/singularity.dmi'
 			icon_state = "singularity_s1"
 			grav_pull = 4
-			consume_range = 0
 			decay_range = 0
+			consume_range = 0
 			dissipate_delay = 10
 			dissipate_track = 0
 			dissipate_strength = 1
+			pixel_x = 0
+			pixel_y = 0
 		if(STAGE_TWO)//1 to 3 does not check for the turfs if you put the gens right next to a 1x1 then its going to eat them
 			current_size = STAGE_TWO
 			icon = 'icons/effects/96x96.dmi'
 			icon_state = "singularity_s3"
 			grav_pull = 6
+			decay_range = 2
 			consume_range = 1
-			decay_range = 1
 			dissipate_delay = 5
 			dissipate_track = 0
 			dissipate_strength = 5
+			pixel_x = -32
+			pixel_y = -32
 		if(STAGE_THREE)
 			if((check_turfs_in(1,2))&&(check_turfs_in(2,2))&&(check_turfs_in(4,2))&&(check_turfs_in(8,2)))
 				current_size = STAGE_THREE
 				icon = 'icons/effects/160x160.dmi'
 				icon_state = "singularity_s5"
 				grav_pull = 8
+				decay_range = 4
 				consume_range = 2
-				decay_range = 3 // note that contained singulos are safe
 				dissipate_delay = 4
 				dissipate_track = 0
 				dissipate_strength = 20
+				pixel_x = -64
+				pixel_y = -64
 		if(STAGE_FOUR)
 			if((check_turfs_in(1,3))&&(check_turfs_in(2,3))&&(check_turfs_in(4,3))&&(check_turfs_in(8,3)))
 				current_size = STAGE_FOUR
 				icon = 'icons/effects/224x224.dmi'
 				icon_state = "singularity_s7"
 				grav_pull = 10
+				decay_range = 6
 				consume_range = 3
-				decay_range = 5
 				dissipate_delay = 10
 				dissipate_track = 0
 				dissipate_strength = 10
+				pixel_x = -96
+				pixel_y = -96
 		if(STAGE_FIVE)//this one also lacks a check for gens because it eats everything
 			current_size = STAGE_FIVE
 			icon = 'icons/effects/288x288.dmi'
 			icon_state = "singularity_s9"
 			grav_pull = 10
+			decay_range = 8
 			consume_range = 4
-			decay_range = 7
 			dissipate = 0 //It cant go smaller due to e loss
 			pixel_x = -128
 			pixel_y = -128
+		if(STAGE_SIX) //This only happens if a stage 5 singulo consumes a supermatter shard.
+			current_size = STAGE_SIX
+			icon = 'icons/effects/352x352.dmi'
+			icon_state = "singularity_s11"
+			pixel_x = -160
+			pixel_y = -160
+			grav_pull = 15
+			consume_range = 5
+			dissipate = 0
 	if(current_size == allowed_size)
 		investigate_log("<font color='red'>grew to size [current_size]</font>","singulo")
 		return 1
@@ -198,6 +222,8 @@
 		investigate_log("collapsed.","singulo")
 		qdel(src)
 		return 0
+	if(energy > 2999 && !consumedSupermatter)
+		energy = 2000
 	switch(energy)//Some of these numbers might need to be changed up later -Mport
 		if(1 to 199)
 			allowed_size = STAGE_ONE
@@ -207,8 +233,10 @@
 			allowed_size = STAGE_THREE
 		if(1000 to 1999)
 			allowed_size = STAGE_FOUR
-		if(2000 to INFINITY)
+		if(2000 to 2999)
 			allowed_size = STAGE_FIVE
+		if(3000 to INFINITY)
+			allowed_size = STAGE_SIX
 	if(current_size != allowed_size)
 		expand()
 	return 1
@@ -218,17 +246,24 @@
 	set background = BACKGROUND_ENABLED
 	for(var/atom/X in orange(grav_pull,src))
 		var/dist = get_dist(X, src)
-		var/obj/singularity/S = src
-		if(dist > consume_range)
-			X.singularity_pull(S, current_size)
-		else if(dist <= consume_range)
+		if(dist <= consume_range)
 			consume(X)
+		else
+			if(dist <= decay_range && !contained)
+				X.singularity_decay(src, current_size, dist)
+			else
+				X.singularity_pull(src,current_size, dist)
 	return
 
 
 /obj/singularity/proc/consume(var/atom/A)
 	var/gain = A.singularity_act(current_size)
 	src.energy += gain
+	if(istype(A, /obj/machinery/power/supermatter_shard) && !consumedSupermatter)
+		desc = "[initial(desc)] It glows fiercely with inner fire."
+		name = "supermatter-charged [initial(name)]"
+		consumedSupermatter = 1
+		luminosity = 10
 	return
 
 
@@ -320,6 +355,10 @@
 			toxmob()
 		if(4)//Stun mobs who lack optic scanners
 			mezzer()
+		if(5,6) //Sets all nearby mobs on fire
+			if(current_size < STAGE_SIX)
+				return 0
+			combust_mobs()
 		else
 			return 0
 	return 1
@@ -327,17 +366,21 @@
 
 /obj/singularity/proc/toxmob()
 	var/toxrange = 10
-	var/toxdamage = 4
 	var/radiation = 15
 	var/radiationmin = 3
-	if (src.energy>200)
-		toxdamage = round(((src.energy-150)/50)*4,1)
-		radiation = round(((src.energy-150)/50)*5,1)
-		radiationmin = round((radiation/5),1)//
+	if (energy>200)
+		radiation += round((energy-150)/10,1)
+		radiationmin = round((radiation/5),1)
 	for(var/mob/living/M in view(toxrange, src.loc))
 		M.irradiate(rand(radiationmin,radiation))
-		toxdamage = (toxdamage - (toxdamage*M.getarmor(null, "rad")))
-		M.apply_effect(toxdamage, TOX)
+
+
+/obj/singularity/proc/combust_mobs()
+	for(var/mob/living/carbon/C in orange(20, src))
+		C.visible_message("<span class='warning'>[C]'s skin bursts into flame!</span>", \
+						  "<span class='boldannounce'>You feel an inner fire as your skin is suddenly covered in fire!</span>")
+		C.adjust_fire_stacks(5)
+		C.IgniteMob()
 	return
 
 
@@ -381,3 +424,11 @@
 	explosion(src.loc,(dist),(dist*2),(dist*4))
 	qdel(src)
 	return(gain)
+
+
+/obj/machinery/field/containment/singularity_pull(var/obj/singularity/S, current_size)
+	if(current_size < STAGE_FIVE)
+		S.containment++
+/obj/machinery/shieldwall/singularity_pull(var/obj/singularity/S, current_size)
+	if(current_size < STAGE_FOUR)
+		S.containment++

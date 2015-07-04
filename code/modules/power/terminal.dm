@@ -52,15 +52,15 @@
 	if(istype(loc, /turf/simulated))
 		var/turf/simulated/T = loc
 		if(T.intact)
-			user << "<span class='alert'>You must first expose the power terminal!</span>"
+			user << "<span class='warning'>You must first expose the power terminal!</span>"
 			return
 
 		if(master && master.can_terminal_dismantle())
-			user.visible_message("<span class='warning'>[user.name] dismantles the power terminal from [master].</span>", \
-								"You begin to cut the cables...")
+			user.visible_message("[user.name] dismantles the power terminal from [master].", \
+								"<span class='notice'>You begin to cut the cables...</span>")
 
 			playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
-			if(do_after(user, 50))
+			if(do_after(user, 50, target = src))
 				if(master && master.can_terminal_dismantle())
 					if(prob(50) && electrocute_mob(user, powernet, src))
 						var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread

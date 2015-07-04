@@ -69,7 +69,7 @@
 		stat("Game Mode:", (ticker.hide_mode) ? "Secret" : "[master_mode]")
 
 		if(ticker.current_state == GAME_STATE_PREGAME)
-			stat("Time To Start:", (ticker.can_fire) ? "[round(ticker.timeLeft / 10)]s" : "DELAYED")
+			stat("Time To Start:", (ticker.timeLeft >= 0) ? "[round(ticker.timeLeft / 10)]s" : "DELAYED")
 
 			stat("Players:", "[ticker.totalPlayers]")
 			if(client.holder)
@@ -102,7 +102,6 @@
 			var/mob/dead/observer/observer = new()
 
 			spawning = 1
-			src << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1) // MAD JAMS cant last forever yo
 
 			observer.started_as_observer = 1
 			close_spawn_windows()
@@ -116,6 +115,7 @@
 			observer.real_name = client.prefs.real_name
 			observer.name = observer.real_name
 			observer.key = key
+			observer.stopLobbySound()
 			qdel(mind)
 
 			qdel(src)
@@ -275,7 +275,21 @@
 
 	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
 	SSjob.EquipRank(character, rank, 1)					//equips the human
-	character.loc = pick(latejoin)
+
+	var/D = pick(latejoin)
+	if(!D)
+		for(var/turf/T in get_area_turfs(/area/shuttle/arrival))
+			if(!T.density)
+				var/clear = 1
+				for(var/obj/O in T)
+					if(O.density)
+						clear = 0
+						break
+				if(clear)
+					D = T
+					continue
+
+	character.loc = D
 	character.lastarea = get_area(loc)
 
 	if(character.mind.assigned_role != "Cyborg")
@@ -304,7 +318,7 @@
 		if (ailist.len)
 			var/mob/living/silicon/ai/announcer = pick(ailist)
 			if(character.mind)
-				if((character.mind.assigned_role != "Cyborg") && (character.mind.special_role != "MODE"))
+				if((character.mind.assigned_role != "Cyborg") && (character.mind.assigned_role != character.mind.special_role))
 					announcer.say("[announcer.radiomod] [character.real_name] has signed up as [rank].")
 
 /mob/new_player/proc/LateChoices()
@@ -370,8 +384,6 @@
 		client.prefs.real_name = random_name(gender)
 	client.prefs.copy_to(new_character)
 
-	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1) // MAD JAMS cant last forever yo
-
 	if(mind)
 		mind.active = 0					//we wish to transfer the key manually
 		mind.transfer_to(new_character)					//won't transfer key since the mind is not active
@@ -381,6 +393,7 @@
 	ready_dna(new_character, client.prefs.blood_type)
 
 	new_character.key = key		//Manually transfer the key to log them in
+	new_character.stopLobbySound()
 
 	return new_character
 

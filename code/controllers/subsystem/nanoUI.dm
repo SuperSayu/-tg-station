@@ -3,7 +3,7 @@ var/datum/subsystem/nano/SSnano
 /datum/subsystem/nano
 	name = "NanoUI"
 	can_fire = 1
-	wait = 5
+	wait = 10
 	priority = 16
 
 	var/list/open_uis = list()			//a list of current open /nanoui UIs, grouped by src_object and ui_key
@@ -34,7 +34,7 @@ var/datum/subsystem/nano/SSnano
 
 
 /datum/subsystem/nano/stat_entry()
-	stat(name, "[round(cost,0.001)]ds (CPU:[round(cpu,1)]%) [processing_uis.len]")
+	..("P:[processing_uis.len]")
 
 
 /datum/subsystem/nano/fire()

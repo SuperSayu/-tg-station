@@ -16,6 +16,7 @@
 /mob/living/carbon/human/death(gibbed)
 	if(stat == DEAD)	return
 
+/*
 	// Ankh artifact
 	if(back)
 		if(istype(back,/obj/item/artifact))
@@ -68,7 +69,7 @@
 			A.name = "wing remains"
 			A.desc = "<i>Ad majorem Deo gloriam.</i>"
 			qdel(W)
-
+*/
 
 	if(healths)		healths.icon_state = "dead"
 	stat = DEAD
@@ -100,7 +101,7 @@
 /mob/living/carbon/human/proc/makeSkeleton()
 	if(!check_dna_integrity(src))	return
 	status_flags |= DISFIGURED
-	dna.species = new /datum/species/skeleton(src)
+	hardset_dna(src, null, null, null, null, /datum/species/skeleton)
 	return 1
 
 /mob/living/carbon/proc/ChangeToHusk()

@@ -24,6 +24,7 @@
 	desc = "It's just an ordinary box."
 	icon_state = "box"
 	item_state = "syringe_kit"
+	burn_state = 0 //Burnable
 	var/foldable = /obj/item/stack/sheet/cardboard
 
 
@@ -31,7 +32,7 @@
 	..(user)
 
 	if(contents.len)
-		user << "<span class='notice'>You can't fold this box with items still inside.</span>"
+		user << "<span class='warning'>You can't fold this box with items still inside!</span>"
 		return
 	if(!ispath(foldable))
 		return

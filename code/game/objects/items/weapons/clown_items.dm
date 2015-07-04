@@ -57,12 +57,12 @@
 			qdel(src)
 
 /obj/item/weapon/soap/afterattack(atom/target, mob/user as mob, proximity)
-	if(!proximity)
+	if(!proximity || !check_allowed_items(target))
 		return
 	//I couldn't feasibly  fix the overlay bugs caused by cleaning items we are wearing.
 	//So this is a workaround. This also makes more sense from an IC standpoint. ~Carn
 	if(user.client && (target in user.client.screen))
-		user << "<span class='notice'>You need to take that [target.name] off before cleaning it.</span>"
+		user << "<span class='warning'>You need to take that [target.name] off before cleaning it!</span>"
 	else if(istype(target,/turf))
 		var/cleaned = 0
 		for(var/obj/effect/decal/cleanable/C in target)
@@ -74,18 +74,18 @@
 			usr << "<span class='notice'>You clean \the [target.name].</span>"
 			checkUses(user)
 	else if(istype(target,/obj/effect/decal/cleanable))
-		user.visible_message("<span class='warning'>[user] begins to scrub \the [target.name] out with [src].</span>")
-		if(do_after(user, src.cleanspeed))
+		user.visible_message("[user] begins to scrub \the [target.name] out with [src].", "<span class='warning'>You begin to scrub \the [target.name] out with [src]...</span>")
+		if(do_after(user, src.cleanspeed, target = target))
 			user << "<span class='notice'>You scrub \the [target.name] out.</span>"
 			uses-=usesize
 			qdel(target)
 			checkUses(user)
 	else if(ishuman(target) && user.zone_sel && user.zone_sel.selecting == "mouth")
-		user.visible_message("<span class='warning'>\the [user] washes \the [target]'s mouth out with [src.name]!</span>") //washes mouth out with soap sounds better than 'the soap' here
+		user.visible_message("<span class='warning'>\the [user] washes \the [target]'s mouth out with [src.name]!</span>", "<span class='notice'>You wash \the [target]'s mouth out with [src.name]!</span>") //washes mouth out with soap sounds better than 'the soap' here
 		return
 	else
-		user.visible_message("<span class='warning'>[user] begins to clean \the [target.name] with [src].</span>")
-		if(do_after(user, src.cleanspeed))
+		user.visible_message("[user] begins to clean \the [target.name] with [src]...", "<span class='notice'>You begin to clean \the [target.name] with [src]...</span>")
+		if(do_after(user, src.cleanspeed, target = target))
 			user << "<span class='notice'>You clean \the [target.name].</span>"
 			var/obj/effect/decal/cleanable/C = locate() in target
 			qdel(C)

@@ -320,11 +320,11 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 		if(!target) return
 
 		if(!badsmoke)
-			var/datum/effect/effect/system/harmless_smoke_spread/smoke = new
+			var/datum/effect/effect/system/smoke_spread/smoke = new
 			smoke.set_up(smoke_amt, 0, target)
 			smoke.start()
 		else
-			var/datum/effect/effect/system/bad_smoke_spread/smoke = new
+			var/datum/effect/effect/system/smoke_spread/bad/smoke = new
 			smoke.set_up(smoke_amt, 0, target)
 			smoke.start()
 

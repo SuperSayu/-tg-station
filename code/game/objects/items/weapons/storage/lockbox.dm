@@ -41,6 +41,13 @@
 		user << "<span class='danger'>It's locked!</span>"
 	return
 
+/obj/item/weapon/storage/lockbox/MouseDrop(over_object, src_location, over_location)
+	if (locked)
+		src.add_fingerprint(usr)
+		usr << "<span class='warning'>It's locked!</span>"
+		return 0
+	..()
+
 /obj/item/weapon/storage/lockbox/emag_act(mob/user as mob)
 	if(!broken)
 		broken = 1
@@ -48,14 +55,21 @@
 		desc += "It appears to be broken."
 		icon_state = src.icon_broken
 		for(var/mob/O in viewers(user, 3))
-			O.show_message(text("<span class='notice'>\The [src] has been broken by [] with an electromagnetic card!</span>", user), 1, text("You hear a faint electrical spark."), 2)
+			O.show_message(text("\The [src] has been broken by [] with an electromagnetic card!", user), 1, text("<span class='italics'>You hear a faint electrical spark.</span>"), 2)
 			return
 /obj/item/weapon/storage/lockbox/show_to(mob/user as mob)
-	if(locked && !istype(user,/mob/dead))
-		user << "<span class='danger'>It's locked!</span>"
+	if(locked)
+		user << "<span class='warning'>It's locked!</span>"
 	else
 		..()
 	return
+
+//Check the destination item type for contentto.
+/obj/item/weapon/storage/lockbox/storage_contents_dump_act(obj/item/weapon/storage/src_object, mob/user)
+	if(locked)
+		user << "<span class='warning'>It's locked!</span>"
+		return 0
+	return ..()
 
 /obj/item/weapon/storage/lockbox/can_be_inserted(obj/item/W, stop_messages = 0)
 	if(locked)

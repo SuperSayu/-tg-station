@@ -62,7 +62,7 @@ emp_act
 
 			return -1 // complete projectile permutation
 
-	if(check_shields(P.damage, "the [P.name]"))
+	if(check_shields(P.damage, "the [P.name]", P))
 		P.on_hit(src, 100, def_zone)
 		return 2
 	return (..(P , def_zone))
@@ -85,7 +85,10 @@ emp_act
 
 //End Here
 
-/mob/living/carbon/human/proc/check_shields(var/damage = 0, var/attack_text = "the attack")
+/mob/living/carbon/human/proc/check_shields(var/damage = 0, var/attack_text = "the attack", var/obj/item/O)
+	if(O)
+		if(O.flags & NOSHIELD) //weapon ignores shields altogether
+			return 0
 	if(l_hand && istype(l_hand, /obj/item/weapon))//Current base is the prob(50-d/3)
 		var/obj/item/weapon/I = l_hand
 		if(I.IsShield() && (prob(50 - round(damage / 3))))
@@ -127,6 +130,8 @@ emp_act
 	var/obj/item/organ/limb/affecting = get_organ(ran_zone(user.zone_sel.selecting))
 	var/hit_area = parse_zone(affecting.name)
 	var/target_area = parse_zone(target_limb.name)
+	feedback_add_details("item_used_for_combat","[I.name]|[I.force]")
+	feedback_add_details("zone_targeted","[def_zone]")
 
 	if(ishuman(user)) // interacting with broken bones hurts
 		var/mob/living/carbon/human/Huser = user
@@ -139,7 +144,7 @@ emp_act
 	else
 		if(user != src)
 			user.do_attack_animation(src)
-			if(check_shields(I.force, "the [I.name]"))
+			if(check_shields(I.force, "the [I.name]", I))
 				return 0
 
 		if(I.attack_verb && I.attack_verb.len)
@@ -151,12 +156,12 @@ emp_act
 		else
 			return 0
 
-		var/armor = run_armor_check(affecting, "melee", "<span class='warning'>Your armor has protected your [hit_area].</span>", "<span class='warning'>Your armor has softened a hit to your [hit_area].</span>")
-		if(armor >= 100)	return 0
+		var/armor = run_armor_check(affecting, "melee", "<span class='notice'>Your armor has protected your [hit_area].</span>", "<span class='notice'>Your armor has softened a hit to your [hit_area].</span>", I.armour_penetration)
+		armor = min(90,armor) //cap damage reduction at 90%
+
 		var/Iforce = I.force //to avoid runtimes on the forcesay checks at the bottom. Some items might delete themselves if you drop them. (stunning yourself, ninja swords)
 
 		apply_damage(I.force, I.damtype, affecting, armor , I)
-
 		var/bloody = 0
 		if(((I.damtype == BRUTE) && I.force && prob(25 + (I.force * 2))))
 			if(affecting.status == ORGAN_ORGANIC)
@@ -189,7 +194,7 @@ emp_act
 							visible_message("<span class='danger'>[src] has been knocked unconscious!</span>", \
 											"<span class='userdanger'>[src] has been knocked unconscious!</span>")
 							apply_effect(20, PARALYZE, armor)
-						if(prob(I.force + ((100 - src.health)/2)) && src != user && I.damtype == BRUTE)
+						if(prob(I.force + min(100,100 - src.health)) && src != user && I.damtype == BRUTE)
 							ticker.mode.remove_revolutionary(mind)
 							ticker.mode.remove_gangster(mind, exclude_bosses=1)
 					if(bloody)	//Apply blood
@@ -226,7 +231,7 @@ emp_act
 	for(var/obj/item/organ/limb/L in src.organs)
 		if(L.status == ORGAN_ROBOTIC)
 			if(!informed)
-				src << "<span class='danger'>You feel a sharp pain as your robotic limbs overload.</span>"
+				src << "<span class='userdanger'>You feel a sharp pain as your robotic limbs overload.</span>"
 				informed = 1
 			switch(severity)
 				if(1)
@@ -240,6 +245,9 @@ emp_act
 /mob/living/carbon/human/acid_act(var/acidpwr, var/toxpwr, var/acid_volume)
 	var/list/damaged = list()
 	var/list/inventory_items_to_kill = list()
+	var/acidity = min(acidpwr*acid_volume/200, toxpwr)
+	var/acid_volume_left = acid_volume
+	var/acid_decay = 100/acidpwr // how much volume we lose per item we try to melt. 5 for fluoro, 10 for sulphuric
 
 	//HEAD//
 	var/obj/item/clothing/head_clothes = null
@@ -251,12 +259,13 @@ emp_act
 		head_clothes = head
 	if(head_clothes)
 		if(!head_clothes.unacidable)
-			head_clothes.acid_act(acidpwr)
+			head_clothes.acid_act(acidpwr, acid_volume_left)
+			acid_volume_left = max(acid_volume_left - acid_decay, 0) //We remove some of the acid volume.
 			update_inv_glasses()
 			update_inv_wear_mask()
 			update_inv_head()
 		else
-			src << "<span class='warning'>Your [head_clothes.name] protects your head and face from the acid!</span>"
+			src << "<span class='notice'>Your [head_clothes.name] protects your head and face from the acid!</span>"
 	else
 		. = get_organ("head")
 		if(.)
@@ -272,11 +281,12 @@ emp_act
 		chest_clothes = wear_suit
 	if(chest_clothes)
 		if(!chest_clothes.unacidable)
-			chest_clothes.acid_act(acidpwr)
+			chest_clothes.acid_act(acidpwr, acid_volume_left)
+			acid_volume_left = max(acid_volume_left - acid_decay, 0)
 			update_inv_w_uniform()
 			update_inv_wear_suit()
 		else
-			src << "<span class='warning'>Your [chest_clothes.name] protects your body from the acid!</span>"
+			src << "<span class='notice'>Your [chest_clothes.name] protects your body from the acid!</span>"
 	else
 		. = get_organ("chest")
 		if(.)
@@ -301,12 +311,13 @@ emp_act
 		arm_clothes = wear_suit
 	if(arm_clothes)
 		if(!arm_clothes.unacidable)
-			arm_clothes.acid_act(acidpwr)
+			arm_clothes.acid_act(acidpwr, acid_volume_left)
+			acid_volume_left = max(acid_volume_left - acid_decay, 0)
 			update_inv_gloves()
 			update_inv_w_uniform()
 			update_inv_wear_suit()
 		else
-			src << "<span class='warning'>Your [arm_clothes.name] protects your arms and hands from the acid!</span>"
+			src << "<span class='notice'>Your [arm_clothes.name] protects your arms and hands from the acid!</span>"
 	else
 		. = get_organ("r_arm")
 		if(.)
@@ -326,12 +337,13 @@ emp_act
 		leg_clothes = wear_suit
 	if(leg_clothes)
 		if(!leg_clothes.unacidable)
-			leg_clothes.acid_act(acidpwr)
+			leg_clothes.acid_act(acidpwr, acid_volume_left)
+			acid_volume_left = max(acid_volume_left - acid_decay, 0)
 			update_inv_shoes()
 			update_inv_w_uniform()
 			update_inv_wear_suit()
 		else
-			src << "<span class='warning'>Your [leg_clothes.name] protects your legs and feet from the acid!</span>"
+			src << "<span class='notice'>Your [leg_clothes.name] protects your legs and feet from the acid!</span>"
 	else
 		. = get_organ("r_leg")
 		if(.)
@@ -343,11 +355,11 @@ emp_act
 
 	//DAMAGE//
 	for(var/obj/item/organ/limb/affecting in damaged)
-		affecting.take_damage(2*toxpwr, toxpwr)
+		affecting.take_damage(acidity, 2*acidity)
 
 		if(affecting.name == "head")
-			affecting.take_damage(2*toxpwr, toxpwr)
-			if(prob(2*acidpwr)) //Applies disfigurement
+			if(prob(min(acidpwr*acid_volume/10, 90))) //Applies disfigurement
+				affecting.take_damage(acidity, 2*acidity)
 				emote("scream")
 				facial_hair_style = "Shaved"
 				hair_style = "Bald"
@@ -368,7 +380,8 @@ emp_act
 		inventory_items_to_kill += l_hand
 
 	for(var/obj/item/I in inventory_items_to_kill)
-		I.acid_act(acidpwr)
+		I.acid_act(acidpwr, acid_volume_left)
+		acid_volume_left = max(acid_volume_left - acid_decay, 0)
 
 /mob/living/carbon/human/grabbedby(mob/living/user)
 	if(w_uniform)
@@ -386,8 +399,6 @@ emp_act
 		var/armor = run_armor_check(affecting, "melee")
 		apply_damage(damage, BRUTE, affecting, armor)
 		updatehealth()
-/*		if(armor >= 2) //why is this here?
-		return */
 
 
 /mob/living/carbon/human/attack_larva(mob/living/carbon/alien/larva/L as mob)

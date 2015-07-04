@@ -11,7 +11,7 @@ var/global/list/special_roles = list( //keep synced with the defines BE_* in set
 	"malf AI" = /datum/game_mode/malfunction,		//4
 	"revolutionary" = /datum/game_mode/revolution,	//5
 	"alien",										//6
-	"pAI",											//7
+	"pAI/posibrain",								//7
 	"cultist" = /datum/game_mode/cult,				//8
 	"blob" = /datum/game_mode/blob,					//9
 	"ninja",										//10
@@ -22,7 +22,7 @@ var/global/list/special_roles = list( //keep synced with the defines BE_* in set
 )
 
 
-datum/preferences
+/datum/preferences
 	//doohickeys for savefiles
 	var/path
 	var/default_slot = 1				//Holder so it doesn't default to slot 1, rather the last one used
@@ -35,7 +35,7 @@ datum/preferences
 
 	//game-preferences
 	var/lastchangelog = ""				//Saved changlog filesize to detect if there was a change
-	var/ooccolor = "#002eb8"
+	var/ooccolor = null
 	var/be_special = 0					//Special role selection
 	var/UI_style = "Midnight"
 	var/toggles = TOGGLES_DEFAULT
@@ -61,8 +61,8 @@ datum/preferences
 	var/skin_tone = "caucasian1"		//Skin color
 	var/eye_color = "000"				//Eye color
 	var/datum/species/pref_species = new /datum/species/human()	//Mutant race
-	var/mutant_color = "FFF"			//Mutant race skin color
-	var/spec_hair = "None"				// species-specific "hair" (ex. horns for lizards)
+	var/list/features = list("mcolor" = "FFF", "tail" = "Smooth", "snout" = "Round", "horns" = "None", "frills" = "None", "spines" = "None", "body_markings" = "None")
+	var/list/custom_names = list("clown", "mime", "ai", "cyborg", "religion", "deity")
 
 		//Mob preview
 	var/icon/preview_icon_front = null
@@ -94,7 +94,10 @@ datum/preferences
 
 /datum/preferences/New(client/C)
 	blood_type = random_blood_type()
-	ooccolor = normal_ooc_colour
+	custom_names["ai"] = pick(ai_names)
+	custom_names["cyborg"] = pick(ai_names)
+	custom_names["clown"] = pick(clown_names)
+	custom_names["mime"] = pick(mime_names)
 	if(istype(C))
 		if(!IsGuestKey(C.key))
 			load_path(C.ckey)
@@ -167,7 +170,16 @@ datum/preferences
 					dat += "<b>Species:</b> Human<BR>"
 				dat += "[pref_species.desc]"
 
-				dat += "</td><td valign='center'>"
+				dat += "<b>Special Names:</b><BR>"
+				dat += "<a href ='?_src_=prefs;preference=clown_name;task=input'><b>Clown:</b> [custom_names["clown"]]</a> "
+				dat += "<a href ='?_src_=prefs;preference=mime_name;task=input'><b>Mime:</b>[custom_names["mime"]]</a><BR>"
+				dat += "<a href ='?_src_=prefs;preference=ai_name;task=input'><b>AI:</b> [custom_names["ai"]]</a> "
+				dat += "<a href ='?_src_=prefs;preference=cyborg_name;task=input'><b>Cyborg:</b> [custom_names["cyborg"]]</a><BR>"
+				dat += "<a href ='?_src_=prefs;preference=religion_name;task=input'><b>Chaplain religion:</b> [custom_names["religion"]] </a>"
+				dat += "<a href ='?_src_=prefs;preference=deity_name;task=input'><b>Chaplain deity:</b> [custom_names["deity"]]</a><BR></td>"
+
+
+				dat += "<td valign='center'>"
 
 				dat += "<div class='statusDisplay'><center><img src=previewicon.png height=32 width=32><img src=previewicon2.png height=32 width=32></center></div>"
 				dat += "<div class='statusDisplay'><center><img src=previewicon.png height=64 width=64><img src=previewicon2.png height=64 width=64></center></div>"
@@ -184,11 +196,11 @@ datum/preferences
 				dat += "<b>Underwear:</b><BR><a href ='?_src_=prefs;preference=underwear;task=input'>[underwear]</a><BR>"
 				dat += "<b>Undershirt:</b><BR><a href ='?_src_=prefs;preference=undershirt;task=input'>[undershirt]</a><BR>"
 				dat += "<b>Socks:</b><BR><a href ='?_src_=prefs;preference=socks;task=input'>[socks]</a><BR>"
-				dat += "<b>Backpack:</b><BR><a href ='?_src_=prefs;preference=bag;task=input'>[backbaglist[backbag]]</a><BR>"
+				dat += "<b>Backpack:</b><BR><a href ='?_src_=prefs;preference=bag;task=input'>[backbaglist[backbag]]</a><BR></td>"
 
 				if(pref_species.use_skintones)
+					dat += "<td valign='top' width='21%'>"
 
-					dat += "</td><td valign='top' width='21%'>"
 					dat += "<h3>Skin Tone</h3>"
 
 					dat += "<a href='?_src_=prefs;preference=s_tone;task=input'>[skin_tone]</a><BR>"
@@ -202,30 +214,22 @@ datum/preferences
 
 					dat += "<td valign='top' width='21%'>"
 
-					if(pref_species.spec_hair == 1)
-						dat += "<h3>Species Accessory</h3>"
+					dat += "<h3>Hair Style</h3>"
 
-						dat += "<a href='?_src_=prefs;preference=spec_hair;task=input'>[spec_hair]</a><BR>"
-						dat += "<a href='?_src_=prefs;preference=previous_spec_hair_style;task=input'>&lt;</a> <a href='?_src_=prefs;preference=next_spec_hair_style;task=input'>&gt;</a><BR>"
-						dat += "</td>"
-
-					else
-						dat += "<h3>Hair Style</h3>"
-
-						dat += "<a href='?_src_=prefs;preference=hair_style;task=input'>[hair_style]</a><BR>"
-						dat += "<a href='?_src_=prefs;preference=previous_hair_style;task=input'>&lt;</a> <a href='?_src_=prefs;preference=next_hair_style;task=input'>&gt;</a><BR>"
-						dat += "<span style='border:1px solid #161616; background-color: #[hair_color];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=hair;task=input'>Change</a><BR>"
+					dat += "<a href='?_src_=prefs;preference=hair_style;task=input'>[hair_style]</a><BR>"
+					dat += "<a href='?_src_=prefs;preference=previous_hair_style;task=input'>&lt;</a> <a href='?_src_=prefs;preference=next_hair_style;task=input'>&gt;</a><BR>"
+					dat += "<span style='border:1px solid #161616; background-color: #[hair_color];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=hair;task=input'>Change</a><BR>"
 
 
-						dat += "</td><td valign='top' width='21%'>"
+					dat += "</td><td valign='top' width='21%'>"
 
-						dat += "<h3>Facial Hair Style</h3>"
+					dat += "<h3>Facial Hair Style</h3>"
 
-						dat += "<a href='?_src_=prefs;preference=facial_hair_style;task=input'>[facial_hair_style]</a><BR>"
-						dat += "<a href='?_src_=prefs;preference=previous_facehair_style;task=input'>&lt;</a> <a href='?_src_=prefs;preference=next_facehair_style;task=input'>&gt;</a><BR>"
-						dat += "<span style='border: 1px solid #161616; background-color: #[facial_hair_color];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=facial;task=input'>Change</a><BR>"
+					dat += "<a href='?_src_=prefs;preference=facial_hair_style;task=input'>[facial_hair_style]</a><BR>"
+					dat += "<a href='?_src_=prefs;preference=previous_facehair_style;task=input'>&lt;</a> <a href='?_src_=prefs;preference=next_facehair_style;task=input'>&gt;</a><BR>"
+					dat += "<span style='border: 1px solid #161616; background-color: #[facial_hair_color];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=facial;task=input'>Change</a><BR>"
 
-						dat += "</td>"
+					dat += "</td>"
 
 				if(EYECOLOR in pref_species.specflags)
 
@@ -243,7 +247,61 @@ datum/preferences
 
 					dat += "<h3>Alien Color</h3>"
 
-					dat += "<span style='border: 1px solid #161616; background-color: #[mutant_color];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=mutant_color;task=input'>Change</a><BR>"
+					dat += "<span style='border: 1px solid #161616; background-color: #[features["mcolor"]];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=mutant_color;task=input'>Change</a><BR>"
+
+					dat += "</td>"
+
+				if("tail" in pref_species.mutant_bodyparts)
+					dat += "<td valign='top' width='7%'>"
+
+					dat += "<h3>Tail</h3>"
+
+					dat += "<a href='?_src_=prefs;preference=tail;task=input'>[features["tail"]]</a><BR>"
+
+					dat += "</td>"
+
+				if("snout" in pref_species.mutant_bodyparts)
+					dat += "<td valign='top' width='7%'>"
+
+					dat += "<h3>Snout</h3>"
+
+					dat += "<a href='?_src_=prefs;preference=snout;task=input'>[features["snout"]]</a><BR>"
+
+					dat += "</td>"
+
+				if("horns" in pref_species.mutant_bodyparts)
+					dat += "<td valign='top' width='7%'>"
+
+					dat += "<h3>Horns</h3>"
+
+					dat += "<a href='?_src_=prefs;preference=horns;task=input'>[features["horns"]]</a><BR>"
+
+					dat += "</td>"
+
+				if("frills" in pref_species.mutant_bodyparts)
+					dat += "<td valign='top' width='7%'>"
+
+					dat += "<h3>Frills</h3>"
+
+					dat += "<a href='?_src_=prefs;preference=frills;task=input'>[features["frills"]]</a><BR>"
+
+					dat += "</td>"
+
+				if("spines" in pref_species.mutant_bodyparts)
+					dat += "<td valign='top' width='7%'>"
+
+					dat += "<h3>Spines</h3>"
+
+					dat += "<a href='?_src_=prefs;preference=spines;task=input'>[features["spines"]]</a><BR>"
+
+					dat += "</td>"
+
+				if("body_markings" in pref_species.mutant_bodyparts)
+					dat += "<td valign='top' width='7%'>"
+
+					dat += "<h3>Body Markings</h3>"
+
+					dat += "<a href='?_src_=prefs;preference=body_markings;task=input'>[features["body_markings"]]</a><BR>"
 
 					dat += "</td>"
 
@@ -263,7 +321,7 @@ datum/preferences
 				dat += "<b>Pull requests:</b> <a href='?_src_=prefs;preference=pull_requests'>[(chat_toggles & CHAT_PULLR) ? "Yes" : "No"]</a><br>"
 				dat += "<b>Midround Antagonist:</b> <a href='?_src_=prefs;preference=allow_midround_antag'>[(toggles & MIDROUND_ANTAG) ? "Yes" : "No"]</a><br>"
 				if(config.allow_Metadata)
-					dat += "<b>OOC Notes:</b> <a href='?_src_=prefs;preference=metadata;task=input'> Edit </a><br>"
+					dat += "<b>OOC Notes:</b> <a href='?_src_=prefs;preference=metadata;task=input'>Edit </a><br>"
 
 				if(user.client)
 					if(user.client.holder)
@@ -271,7 +329,7 @@ datum/preferences
 						dat += "<a href='?_src_=prefs;preference=hear_adminhelps'>[(toggles & SOUND_ADMINHELP)?"On":"Off"]</a><br>"
 
 					if(unlock_content || check_rights_for(user.client, R_ADMIN))
-						dat += "<b>OOC:</b> <span style='border: 1px solid #161616; background-color: [ooccolor];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=ooccolor;task=input'>Change</a><br>"
+						dat += "<b>OOC:</b> <span style='border: 1px solid #161616; background-color: [ooccolor ? ooccolor : normal_ooc_colour];'>&nbsp;&nbsp;&nbsp;</span> <a href='?_src_=prefs;preference=ooccolor;task=input'>Change</a><br>"
 
 					if(unlock_content)
 						dat += "<b>BYOND Membership Publicity:</b> <a href='?_src_=prefs;preference=publicity'>[(toggles & MEMBER_PUBLIC) ? "Public" : "Hidden"]</a><br>"
@@ -315,7 +373,7 @@ datum/preferences
 		dat += "</center>"
 
 		//user << browse(dat, "window=preferences;size=560x560")
-		var/datum/browser/popup = new(user, "preferences", "<div align='center'>Character Setup</div>", 640, 700)
+		var/datum/browser/popup = new(user, "preferences", "<div align='center'>Character Setup</div>", 640, 750)
 		popup.set_content(dat)
 		popup.open(0)
 
@@ -655,37 +713,6 @@ datum/preferences
 						if(new_hair_style)
 							hair_style = new_hair_style
 
-					if("spec_hair")
-						var/new_spec_hair
-						switch(pref_species.id)
-							if("lizard")
-								new_spec_hair = input(user, "Choose your character's species accessory:", "Character Preference")  as null|anything in spec_hair_lizard_list
-							if("bird")
-								new_spec_hair = input(user, "Choose your character's species accessory:", "Character Preference")  as null|anything in spec_hair_bird_list
-						if(new_spec_hair)
-							spec_hair = new_spec_hair
-
-					if("next_spec_hair_style")
-						var/new_spec_hair
-						switch(pref_species.id)
-							if("lizard")
-								new_spec_hair = next_list_item(spec_hair, spec_hair_lizard_list)
-							if("bird")
-								new_spec_hair = next_list_item(spec_hair, spec_hair_bird_list)
-						if(new_spec_hair)
-							spec_hair = new_spec_hair
-
-					if("previous_spec_hair_style")
-						var/new_spec_hair
-						switch(pref_species.id)
-							if("lizard")
-								new_spec_hair = previous_list_item(spec_hair, spec_hair_lizard_list)
-							if("bird")
-								new_spec_hair = previous_list_item(spec_hair, spec_hair_bird_list)
-						if(new_spec_hair)
-							spec_hair = new_spec_hair
-
-
 					if("next_hair_style")
 						if (gender == MALE)
 							hair_style = next_list_item(hair_style, hair_styles_male_list)
@@ -763,19 +790,54 @@ datum/preferences
 						if(result)
 							var/newtype = roundstart_species[result]
 							pref_species = new newtype()
-							if(mutant_color == "#000")
-								mutant_color = pref_species.default_color
+							if(features["mcolor"] == "#000")
+								features["mcolor"] = pref_species.default_color
 
 					if("mutant_color")
 						var/new_mutantcolor = input(user, "Choose your character's alien skin color:", "Character Preference") as color|null
 						if(new_mutantcolor)
 							var/temp_hsv = RGBtoHSV(new_mutantcolor)
 							if(new_mutantcolor == "#000000")
-								mutant_color = pref_species.default_color
+								features["mcolor"] = pref_species.default_color
 							else if(ReadHSV(temp_hsv)[3] >= ReadHSV("#7F7F7F")[3]) // mutantcolors must be bright
-								mutant_color = sanitize_hexcolor(new_mutantcolor)
+								features["mcolor"] = sanitize_hexcolor(new_mutantcolor)
 							else
 								user << "<span class='danger'>Invalid color. Your color is not bright enough.</span>"
+					if("tail")
+						var/new_tail
+						new_tail = input(user, "Choose your character's tail:", "Character Preference") as null|anything in tails_list
+						if(new_tail)
+							features["tail"] = new_tail
+
+					if("snout")
+						var/new_snout
+						new_snout = input(user, "Choose your character's snout:", "Character Preference") as null|anything in snouts_list
+						if(new_snout)
+							features["snout"] = new_snout
+
+					if("horns")
+						var/new_horns
+						new_horns = input(user, "Choose your character's horns:", "Character Preference") as null|anything in horns_list
+						if(new_horns)
+							features["horns"] = new_horns
+
+					if("frills")
+						var/new_frills
+						new_frills = input(user, "Choose your character's frills:", "Character Preference") as null|anything in frills_list
+						if(new_frills)
+							features["frills"] = new_frills
+
+					if("spines")
+						var/new_spines
+						new_spines = input(user, "Choose your character's spines:", "Character Preference") as null|anything in spines_list
+						if(new_spines)
+							features["spines"] = new_spines
+
+					if("body_markings")
+						var/new_body_markings
+						new_body_markings = input(user, "Choose your character's body markings:", "Character Preference") as null|anything in body_markings_list
+						if(new_body_markings)
+							features["body_markings"] = new_body_markings
 
 					if("s_tone")
 						var/new_s_tone = input(user, "Choose your character's skin-tone:", "Character Preference")  as null|anything in skin_tones
@@ -791,6 +853,50 @@ datum/preferences
 						var/new_backbag = input(user, "Choose your character's style of bag:", "Character Preference")  as null|anything in backbaglist
 						if(new_backbag)
 							backbag = backbaglist.Find(new_backbag)
+
+					if("clown_name")
+						var/new_clown_name = reject_bad_name( input(user, "Choose your character's clown name:", "Character Preference")  as text|null )
+						if(new_clown_name)
+							custom_names["clown"] = new_clown_name
+						else
+							user << "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>"
+
+					if("mime_name")
+						var/new_mime_name = reject_bad_name( input(user, "Choose your character's mime name:", "Character Preference")  as text|null )
+						if(new_mime_name)
+							custom_names["mime"] = new_mime_name
+						else
+							user << "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>"
+
+					if("ai_name")
+						var/new_ai_name = reject_bad_name( input(user, "Choose your character's AI name:", "Character Preference")  as text|null, 1 )
+						if(new_ai_name)
+							custom_names["ai"] = new_ai_name
+						else
+							user << "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, 0-9, -, ' and .</font>"
+
+					if("cyborg_name")
+						var/new_cyborg_name = reject_bad_name( input(user, "Choose your character's cyborg name:", "Character Preference")  as text|null, 1 )
+						if(new_cyborg_name)
+							custom_names["cyborg"] = new_cyborg_name
+						else
+							user << "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, 0-9, -, ' and .</font>"
+
+					if("religion_name")
+						var/new_religion_name = reject_bad_name( input(user, "Choose your character's religion:", "Character Preference")  as text|null )
+						if(new_religion_name)
+							custom_names["religion"] = new_religion_name
+						else
+							user << "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>"
+
+					if("deity_name")
+						var/new_deity_name = reject_bad_name( input(user, "Choose your character's deity:", "Character Preference")  as text|null )
+						if(new_deity_name)
+							custom_names["deity"] = new_deity_name
+						else
+							user << "<font color='red'>Invalid name. Your name should be at least 2 and at most [MAX_NAME_LEN] characters long. It may only contain the characters A-Z, a-z, -, ' and .</font>"
+
+
 			else
 				switch(href_list["preference"])
 					if("publicity")
@@ -837,7 +943,7 @@ datum/preferences
 						if(toggles & SOUND_LOBBY)
 							user << sound(ticker.login_music, repeat = 0, wait = 0, volume = 85, channel = 1)
 						else
-							user << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1)
+							user.stopLobbySound()
 
 					if("ghost_ears")
 						chat_toggles ^= CHAT_GHOSTEARS
@@ -902,10 +1008,9 @@ datum/preferences
 		if(character.dna)
 			character.dna.real_name = character.real_name
 			if(pref_species != /datum/species/human && config.mutant_races)
-				character.dna.species = new pref_species.type()
+				hardset_dna(character, null, null, null, null, pref_species.type, features)
 			else
-				character.dna.species = new /datum/species/human()
-			character.dna.mutant_color = mutant_color
+				hardset_dna(character, null, null, null, null, /datum/species/human, features)
 			character.update_mutcolor()
 
 		character.gender = gender
@@ -918,11 +1023,12 @@ datum/preferences
 
 		character.skin_tone = skin_tone
 		character.hair_style = hair_style
-		character.spec_hair = spec_hair
 		character.facial_hair_style = facial_hair_style
 		character.underwear = underwear
 		character.undershirt = undershirt
 		character.socks = socks
+
+		character.features = features
 
 		if(backbag > 3 || backbag < 1)
 			backbag = 1 //Same as above

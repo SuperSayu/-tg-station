@@ -27,7 +27,7 @@
 	if(iscarbon(user))
 		var/mob/living/carbon/C = user
 		if(src == C.back)
-			user << "<span class='notice'>You need help taking this off!</span>"
+			user << "<span class='warning'>You need help taking this off!</span>"
 			return
 	..()
 
@@ -38,7 +38,7 @@
 		A.icon = 'icons/obj/assemblies.dmi'
 
 		if(!user.unEquip(W))
-			user << "<span class='notice'>\the [W] is stuck to your hand, you cannot attach it to \the [src]!</span>"
+			user << "<span class='warning'>\the [W] is stuck to your hand, you cannot attach it to \the [src]!</span>"
 			return
 		W.loc = A
 		W.master = A
@@ -56,7 +56,8 @@
 
 /obj/item/device/electropack/Topic(href, href_list)
 	//..()
-	if(usr.stat || usr.restrained())
+	var/mob/living/carbon/C = usr
+	if(usr.stat || usr.restrained() || C.back == src)
 		return
 	if(((istype(usr, /mob/living/carbon/human) && ((!( ticker ) || (ticker && ticker.mode != "monkey")) && usr.contents.Find(src))) || (usr.contents.Find(master) || (in_range(src, usr) && istype(loc, /turf)))))
 		usr.set_machine(src)

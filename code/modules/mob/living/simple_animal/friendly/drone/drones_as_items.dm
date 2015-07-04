@@ -16,7 +16,7 @@
 	var/drone_type = /mob/living/simple_animal/drone //Type of drone that will be spawned
 
 /obj/item/drone_shell/attack_ghost(mob/user)
-	if(jobban_isbanned(user,"pAI"))
+	if(jobban_isbanned(user,"drone"))
 		return
 
 	var/be_drone = alert("Become a drone? (Warning, You can no longer be cloned!)",,"Yes","No")
@@ -42,7 +42,7 @@
 	if(istype(loc, /mob/living))
 		var/mob/living/L = loc
 		L.show_message("<span class='notice'>[drone] is trying to escape!</span>")
-		if(!do_after(L, 50) || loc != L)
+		if(!do_after(L, 50, target = L) || loc != L)
 			return
 		L.unEquip(src)
 

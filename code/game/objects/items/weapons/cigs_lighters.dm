@@ -24,7 +24,6 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	var/smoketime = 5
 	w_class = 1.0
 	origin_tech = "materials=1"
-	attack_verb = null
 
 /obj/item/weapon/match/process()
 	var/turf/location = get_turf(src)
@@ -101,7 +100,6 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	item_state = "cigoff"
 	w_class = 1
 	body_parts_covered = null
-	attack_verb = null
 	var/lit = 0
 	var/icon_on = "cigon"  //Note - these are in masks.dmi not in cigarette.dmi
 	var/icon_off = "cigoff"
@@ -134,21 +132,11 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	..()
-	var/lighting_text = "<span class='notice'>[user] lights their [name] with [W].</span>"
-	if(istype(W, /obj/item/weapon/weldingtool))
-		lighting_text = "<span class='notice'>[user] casually lights the [name] with [W], what a badass.</span>"
-	else if(istype(W, /obj/item/weapon/lighter/zippo))
-		lighting_text = "<span class='rose'>With a single flick of their wrist, [user] smoothly lights their [name] with [W]. Damn they're cool.</span>"
-	else if(istype(W, /obj/item/weapon/lighter))
-		lighting_text = "<span class='notice'>After some fiddling, [user] manages to light their [name] with [W].</span>"
-	else if(istype(W, /obj/item/weapon/melee/energy))
-		lighting_text = "<span class='warning'>[user] swings their [W], barely missing their nose. They light their [name] in the process.</span>"
-	else if(istype(W, /obj/item/device/assembly/igniter))
-		lighting_text = "<span class='notice'>[user] fiddles with [W], and manages to light their [name].</span>"
-	else if(istype(W, /obj/item/device/flashlight/flare))
-		lighting_text = "<span class='notice'>[user] lights their [name] with [W] like a real badass.</span>"
-	if(is_hot(W))
-		light(lighting_text)
+	if(!lit && smoketime > 0)
+		var/lighting_text = is_lighter(W,user)
+		if(lighting_text)
+			light(lighting_text)
+			return
 	return
 
 /obj/item/clothing/mask/cigarette/afterattack(obj/item/weapon/reagent_containers/glass/glass, mob/user as mob, proximity)
@@ -163,6 +151,23 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 			else
 				user << "<span class='notice'>[src] is full.</span>"
 
+/obj/item/clothing/mask/cigarette/proc/is_lighter(obj/O, mob/user)
+	var/lighting_text = null
+	if(istype(O, /obj/item/weapon/weldingtool))
+		lighting_text = "<span class='notice'>[user] casually lights the [name] with [O], what a badass.</span>"
+	else if(istype(O, /obj/item/weapon/lighter))
+		lighting_text = "<span class='rose'>With a single flick of their wrist, [user] smoothly lights their [name] with [O]. Damn they're cool.</span>"
+	else if(istype(O, /obj/item/weapon/lighter/greyscale))
+		lighting_text = "<span class='notice'>After some fiddling, [user] manages to light their [name] with [O].</span>"
+	else if(istype(O, /obj/item/weapon/melee/energy))
+		lighting_text = "<span class='warning'>[user] swings their [O], barely missing their nose. They light their [name] in the process.</span>"
+	else if(istype(O, /obj/item/device/assembly/igniter))
+		lighting_text = "<span class='notice'>[user] fiddles with [O], and manages to light their [name].</span>"
+	else if(istype(O, /obj/item/device/flashlight/flare))
+		lighting_text = "<span class='notice'>[user] lights their [name] with [O] like a real badass.</span>"
+	else if(is_hot(O))
+		lighting_text = "<span class='notice'>[user] lights their [name] with [O].</span>"
+	return lighting_text
 
 /obj/item/clothing/mask/cigarette/proc/light(var/flavor_text = null)
 	if(!src.lit)
@@ -181,9 +186,9 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 				M.unEquip(src, 1)
 			qdel(src)
 			return
-		if(reagents.get_reagent_amount("fuel")) // the fuel explodes, too, but much less violently
+		if(reagents.get_reagent_amount("welding_fuel")) // the fuel explodes, too, but much less violently
 			var/datum/effect/effect/system/reagents_explosion/e = new()
-			e.set_up(round(reagents.get_reagent_amount("fuel") / 5, 1), get_turf(src), 0, 0)
+			e.set_up(round(reagents.get_reagent_amount("welding_fuel") / 5, 1), get_turf(src), 0, 0)
 			e.start()
 			if(ismob(loc))
 				var/mob/M = loc
@@ -208,14 +213,16 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 
 
 /obj/item/clothing/mask/cigarette/proc/handle_reagents()
-	if(iscarbon(loc))
-		var/mob/living/carbon/C = loc
-		if (src == C.wear_mask) // if it's in the human/monkey mouth, transfer reagents to the mob
-			if(prob(15)) // so it's not an instarape in case of acid
-				reagents.reaction(C, INGEST)
-			reagents.trans_to(C, REAGENTS_METABOLISM)
-			return
-	reagents.remove_any(REAGENTS_METABOLISM)
+	if(reagents.total_volume)
+		if(iscarbon(loc))
+			var/mob/living/carbon/C = loc
+			if (src == C.wear_mask) // if it's in the human/monkey mouth, transfer reagents to the mob
+				if(prob(15)) // so it's not an instarape in case of acid
+					var/fraction = min(REAGENTS_METABOLISM/reagents.total_volume, 1)
+					reagents.reaction(C, INGEST, fraction)
+				reagents.trans_to(C, REAGENTS_METABOLISM)
+				return
+		reagents.remove_any(REAGENTS_METABOLISM)
 
 
 /obj/item/clothing/mask/cigarette/process()
@@ -242,9 +249,8 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 /obj/item/clothing/mask/cigarette/attack_self(mob/user as mob)
 	if(lit == 1)
 		user.visible_message("<span class='notice'>[user] calmly drops and treads on \the [src], putting it out instantly.</span>")
-		var/turf/T = get_turf(src)
-		new type_butt(T)
-		new /obj/effect/decal/cleanable/ash(T)
+		new type_butt(user.loc)
+		new /obj/effect/decal/cleanable/ash(user.loc)
 		SSobj.processing.Remove(src)
 		qdel(src)
 	return ..()
@@ -385,7 +391,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		var/obj/item/weapon/reagent_containers/food/snacks/grown/G = O
 		if(!packeditem)
 			if(G.dry == 1)
-				user << "You stuff [O] into [src]."
+				user << "<span class='notice'>You stuff [O] into [src].</span>"
 				smoketime = 400
 				packeditem = 1
 				name = "[O.name]-packed [initial(name)]"
@@ -393,18 +399,25 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 					O.reagents.trans_to(src, O.reagents.total_volume)
 				qdel(O)
 			else
-				user << "<span class='warning'>It has to be dried first.</span>"
+				user << "<span class='warning'>It has to be dried first!</span>"
 		else
-			user << "<span class='warning'>It is already packed.</span>"
+			user << "<span class='warning'>It is already packed!</span>"
 	else
-		user << "<span class='warning'>You can't put that in the pipe.</span>"
+		var/lighting_text = is_lighter(O,user)
+		if(lighting_text)
+			if(smoketime > 0)
+				light(lighting_text)
+			else
+				user << "<span class='warning'>There is nothing to smoke!</span>"
+		else
+			user << "<span class='warning'>You can't put that in the pipe!</span>"
 	..()
 
 
 /obj/item/clothing/mask/cigarette/pipe/attack_self(mob/user as mob)
 	var/turf/location = get_turf(user)
 	if(lit)
-		user.visible_message("<span class='notice'>[user] puts out [src].</span>")
+		user.visible_message("<span class='notice'>[user] puts out [src].</span>", "<span class='notice'>You put out [src].</span>")
 		lit = 0
 		icon_state = icon_off
 		item_state = icon_off
@@ -437,51 +450,28 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 //ZIPPO//
 /////////
 /obj/item/weapon/lighter
-	name = "cheap lighter"
-	desc = "A cheap-as-free lighter."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "lighter-g"
-	item_state = "lighter-g"
-	var/icon_on = "lighter-g-on"
-	var/icon_off = "lighter-g"
-	w_class = 1
-	throwforce = 0
-	flags = CONDUCT
-	slot_flags = SLOT_BELT
-	attack_verb = null
-	var/lit = 0
-
-/obj/item/weapon/lighter/grayscale
-	name = "cheap lighter"
-	desc ="A cheap-as-free lighter."
-	icon = 'icons/obj/cigarettes.dmi'
-	icon_state = "lighter-off"
-	item_state = "lighter-off"
-	icon_on = "lighter-on"
-	icon_off = "lighter-off"
-
-/obj/item/weapon/lighter/grayscale/New()
-	var/icon/overlay = new /icon('icons/obj/cigarettes.dmi',"lighter-overlay")
-	overlay.ColorTone(color2hex(randomColor(1)))
-	overlays += overlay
-
-/obj/item/weapon/lighter/zippo
 	name = "\improper Zippo lighter"
 	desc = "The zippo."
+	icon = 'icons/obj/cigarettes.dmi'
 	icon_state = "zippo"
 	item_state = "zippo"
-	icon_on = "zippoon"
-	icon_off = "zippo"
+	w_class = 1
+	flags = CONDUCT
+	slot_flags = SLOT_BELT
+	var/lit = 0
+
+/obj/item/weapon/lighter/greyscale
+	name = "cheap lighter"
+	desc = "A cheap-as-free lighter."
+	icon_state = "lighter"
+
+/obj/item/weapon/lighter/greyscale/New()
+	var/image/I = image(icon,"lighter-overlay")
+	I.color = color2hex(randomColor(1))
+	overlays += I
 
 /obj/item/weapon/lighter/update_icon()
-	icon_state = lit ? icon_on : icon_off
-
-/obj/item/weapon/lighter/random
-	New()
-		var/color = pick("r","c","y","g")
-		icon_on = "lighter-[color]-on"
-		icon_off = "lighter-[color]"
-		icon_state = icon_off
+	icon_state = lit ? "[icon_state]_on" : "[initial(icon_state)]"
 
 /obj/item/weapon/lighter/attack_self(mob/living/user)
 	if(user.r_hand == src || user.l_hand == src)
@@ -492,15 +482,14 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 			damtype = "fire"
 			hitsound = 'sound/items/welder.ogg'
 			attack_verb = list("burnt", "singed")
-			if(istype(src, /obj/item/weapon/lighter/zippo) )
-				user.visible_message("<span class='rose'>Without even breaking stride, [user] flips open and lights [src] in one smooth movement.</span>")
+			if(!istype(src, /obj/item/weapon/lighter/greyscale))
+				user.visible_message("Without even breaking stride, [user] flips open and lights [src] in one smooth movement.", "<span class='notice'>Without even breaking stride, you flip open and lights [src] in one smooth movement.</span>")
 			else
 				if(prob(75))
-					user.visible_message("<span class='notice'>After a few attempts, [user] manages to light [src].</span>")
+					user.visible_message("After a few attempts, [user] manages to light [src].", "<span class='notice'>After a few attempts, you manage to light [src].</span>")
 				else
-					user << "<span class='warning'>You burn yourself while lighting the lighter.</span>"
 					user.adjustFireLoss(5)
-					user.visible_message("<span class='notice'>After a few attempts, [user] manages to light [src], they however burn their finger in the process.</span>")
+					user.visible_message("<span class='warning'>After a few attempts, [user] manages to light [src] - they however burn their finger in the process.</span>", "<span class='warning'>You burn yourself while lighting the lighter!</span>")
 
 			user.AddLuminosity(1)
 			SSobj.processing |= src
@@ -510,11 +499,10 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 			hitsound = "swing_hit"
 			force = 0
 			attack_verb = null //human_defense.dm takes care of it
-			if(istype(src, /obj/item/weapon/lighter/zippo) )
-				user.visible_message("<span class='rose'>You hear a quiet click, as [user] shuts off [src] without even looking at what they're doing. Wow.")
+			if(!istype(src, /obj/item/weapon/lighter/greyscale))
+				user.visible_message("You hear a quiet click, as [user] shuts off [src] without even looking at what they're doing. Wow.", "<span class='notice'>You quietly shut off [src] without even looking at what you're doing. Wow.</span>")
 			else
-				user.visible_message("<span class='notice'>[user] quietly shuts off [src].")
-
+				user.visible_message("[user] quietly shuts off [src].", "<span class='notice'>You quietly shut off [src].")
 			user.AddLuminosity(-1)
 			SSobj.processing.Remove(src)
 	else
@@ -530,7 +518,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		if(M == user)
 			cig.attackby(src, user)
 		else
-			if(istype(src, /obj/item/weapon/lighter/zippo))
+			if(!istype(src, /obj/item/weapon/lighter/greyscale))
 				cig.light("<span class='rose'>[user] whips the [name] out and holds it for [M]. Their arm is as steady as the unflickering flame they light \the [cig] with.</span>")
 			else
 				cig.light("<span class='notice'>[user] holds the [name] out for [M], and lights the [cig.name].</span>")
@@ -552,7 +540,8 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 
 /obj/item/weapon/lighter/dropped(mob/user)
 	if(lit)
-		user.AddLuminosity(-1)
+		if(user)
+			user.AddLuminosity(-1)
 		SetLuminosity(1)
 	return
 
@@ -584,6 +573,6 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 			qdel(target)
 			qdel(src)
 		else
-			user << "<span class='warning'>You need to dry this first.</span>"
+			user << "<span class='warning'>You need to dry this first!</span>"
 	else
 		..()

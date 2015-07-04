@@ -35,6 +35,7 @@
 	var/shoot_sound = 'sound/weapons/Taser.ogg'
 	radio_frequency = SEC_FREQ
 	bot_type = SEC_BOT
+	model = "ED-209"
 
 
 /obj/item/weapon/ed209_assembly
@@ -58,7 +59,7 @@
 	set_weapon() //giving it the right projectile and firing sound.
 	spawn(3)
 		var/datum/job/detective/J = new/datum/job/detective
-		botcard.access = J.get_access()
+		botcard.access += J.get_access()
 		prev_access = botcard.access
 
 		if(lasercolor)
@@ -268,7 +269,7 @@ Auto Patrol[]"},
 						var/area/location = get_area(src)
 						speak("[arrest_type ? "Detaining" : "Arresting"] level [threatlevel] scumbag <b>[target]</b> in [location].", radio_frequency)
 					target.visible_message("<span class='danger'>[src] has stunned [target]!</span>",\
-											"<span class='userdanger'>[src] has stunned [target]!</span></span>")
+											"<span class='userdanger'>[src] has stunned you!</span>")
 
 					mode = BOT_PREP_ARREST
 					anchored = 1
@@ -298,7 +299,7 @@ Auto Patrol[]"},
 						mode = BOT_ARREST
 						playsound(loc, 'sound/weapons/cablecuff.ogg', 30, 1, -2)
 						target.visible_message("<span class='danger'>[src] is trying to put zipties on [target]!</span>",\
-											"<span class='userdanger'>[src] is trying to put zipties on [target]!</span>")
+											"<span class='userdanger'>[src] is trying to put zipties on you!</span>")
 
 						spawn(60)
 							if( !Adjacent(target) || !isturf(target.loc) ) //if he's in a closet or not adjacent, we cancel cuffing.
@@ -554,7 +555,8 @@ Auto Patrol[]"},
 	switch(build_step)
 		if(0,1)
 			if(istype(W, /obj/item/robot_parts/l_leg) || istype(W, /obj/item/robot_parts/r_leg))
-				user.drop_item()
+				if(!user.unEquip(W))
+					return
 				qdel(W)
 				build_step++
 				user << "<span class='notice'>You add the robot leg to [src].</span>"
@@ -567,12 +569,15 @@ Auto Patrol[]"},
 					icon_state = "ed209_legs"
 
 		if(2)
+			var/newcolor = ""
 			if(istype(W, /obj/item/clothing/suit/redtag))
-				lasercolor = "r"
+				newcolor = "r"
 			else if(istype(W, /obj/item/clothing/suit/bluetag))
-				lasercolor = "b"
-			if(lasercolor || istype(W, /obj/item/clothing/suit/armor/vest))
-				user.drop_item()
+				newcolor = "b"
+			if(newcolor || istype(W, /obj/item/clothing/suit/armor/vest))
+				if(!user.unEquip(W))
+					return
+				lasercolor = newcolor
 				qdel(W)
 				build_step++
 				user << "<span class='notice'>You add the armor to [src].</span>"
@@ -586,7 +591,7 @@ Auto Patrol[]"},
 				if(WT.remove_fuel(0,user))
 					build_step++
 					name = "shielded frame assembly"
-					user << "<span class='notice'>You welded the vest to [src].</span>"
+					user << "<span class='notice'>You weld the vest to [src].</span>"
 		if(4)
 			switch(lasercolor)
 				if("b")
@@ -601,7 +606,8 @@ Auto Patrol[]"},
 					if(!istype(W, /obj/item/clothing/head/helmet))
 						return
 
-			user.drop_item()
+			if(!user.unEquip(W))
+				return
 			qdel(W)
 			build_step++
 			user << "<span class='notice'>You add the helmet to [src].</span>"
@@ -611,7 +617,8 @@ Auto Patrol[]"},
 
 		if(5)
 			if(isprox(W))
-				user.drop_item()
+				if(!user.unEquip(W))
+					return
 				qdel(W)
 				build_step++
 				user << "<span class='notice'>You add the prox sensor to [src].</span>"
@@ -623,10 +630,10 @@ Auto Patrol[]"},
 			if(istype(W, /obj/item/stack/cable_coil))
 				var/obj/item/stack/cable_coil/coil = W
 				if (coil.get_amount() < 1)
-					user << "<span class='warning'>You need one length of cable to wire the ED-209.</span>"
+					user << "<span class='warning'>You need one length of cable to wire the ED-209!</span>"
 					return
 				user << "<span class='notice'>You start to wire [src]...</span>"
-				if (do_after(user, 40))
+				if (do_after(user, 40, target = src))
 					if (coil.get_amount() >= 1 && build_step == 6)
 						coil.use(1)
 						build_step = 7
@@ -634,33 +641,36 @@ Auto Patrol[]"},
 						name = "wired ED-209 assembly"
 
 		if(7)
+			var/newname = ""
 			switch(lasercolor)
 				if("b")
 					if(!istype(W, /obj/item/weapon/gun/energy/laser/bluetag))
 						return
-					name = "bluetag ED-209 assembly"
+					newname = "bluetag ED-209 assembly"
 				if("r")
 					if(!istype(W, /obj/item/weapon/gun/energy/laser/redtag))
 						return
-					name = "redtag ED-209 assembly"
+					newname = "redtag ED-209 assembly"
 				if("")
 					if(!istype(W, /obj/item/weapon/gun/energy/gun/advtaser))
 						return
-					name = "taser ED-209 assembly"
+					newname = "taser ED-209 assembly"
 				else
 					return
+			if(!user.unEquip(W))
+				return
+			name = newname
 			build_step++
 			user << "<span class='notice'>You add [W] to [src].</span>"
 			item_state = "[lasercolor]ed209_taser"
 			icon_state = "[lasercolor]ed209_taser"
-			user.drop_item()
 			qdel(W)
 
 		if(8)
 			if(istype(W, /obj/item/weapon/screwdriver))
 				playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
 				var/turf/T = get_turf(user)
-				user << "<span class='notice'>Now attaching the gun to the frame...</span>"
+				user << "<span class='notice'>You start attaching the gun to the frame...</span>"
 				sleep(40)
 				if(get_turf(user) == T)
 					build_step++
@@ -669,11 +679,12 @@ Auto Patrol[]"},
 
 		if(9)
 			if(istype(W, /obj/item/weapon/stock_parts/cell))
+				if(!user.unEquip(W))
+					return
 				build_step++
 				user << "<span class='notice'>You complete the ED-209.</span>"
 				var/turf/T = get_turf(src)
 				new /obj/machinery/bot/ed209(T,created_name,lasercolor)
-				user.drop_item()
 				qdel(W)
 				user.unEquip(src, 1)
 				qdel(src)

@@ -230,7 +230,7 @@
 	user.changeNext_move(CLICK_CD_MELEE)
 	if(tableclimber && tableclimber != user)
 		tableclimber.Weaken(2)
-		tableclimber.visible_message("<span class='warning'>[tableclimber.name] has been knocked off the table", "You've been knocked off the table", "You see [tableclimber.name] get knocked off the table</span>")
+		tableclimber.visible_message("<span class='warning'>[tableclimber.name] has been knocked off the table", "You're knocked off the table!", "You see [tableclimber.name] get knocked off the table</span>")
 
 
 /obj/structure/table/attack_tk() // no telehulk sorry
@@ -315,7 +315,7 @@
 			for(var/obj/item/C in oldContents)
 				C.loc = src.loc
 
-			user.visible_message("<span class='notice'>[user] empties [I] on [src].</span>")
+			user.visible_message("[user] empties [I] on [src].")
 			return
 		// If the tray IS empty, continue on (tray will be placed on the table like other items)
 
@@ -353,9 +353,9 @@
 		return
 
 	if(destroy_type == TBL_DISASSEMBLE)
-		user << "<span class='notice'>Now disassembling [src].</span>"
+		user << "<span class='notice'>You start disassembling [src]...</span>"
 		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-		if(do_after(user, 20))
+		if(do_after(user, 20, target = src))
 			new frame(src.loc)
 			for(var/i = 1, i <= buildstackamount, i++)
 				new buildstack(get_turf(src))
@@ -363,9 +363,9 @@
 			return
 
 	if(destroy_type == TBL_DECONSTRUCT)
-		user << "<span class='notice'>Now deconstructing [src].</span>"
+		user << "<span class='notice'>You start deconstructing [src]...</span>"
 		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-		if(do_after(user, 40))
+		if(do_after(user, 40, target = src))
 			for(var/i = 1, i <= framestackamount, i++)
 				new framestack(get_turf(src))
 			for(var/i = 1, i <= buildstackamount, i++)
@@ -382,7 +382,7 @@
 /obj/structure/table/proc/climb_table(mob/user)
 	src.add_fingerprint(user)
 	user.visible_message("<span class='warning'>[user] starts climbing onto [src].</span>", \
-								"<span class='notice'>You start climbing onto [src].</span>")
+								"<span class='notice'>You start climbing onto [src]...</span>")
 	var/climb_time = 20
 	if(user.restrained()) //Table climbing takes twice as long when restrained.
 		climb_time *= 2
@@ -440,6 +440,8 @@
 	frame = /obj/structure/table_frame/wood
 	framestack = /obj/item/stack/sheet/mineral/wood
 	buildstack = /obj/item/stack/sheet/mineral/wood
+	burn_state = 0 //Burnable
+	burntime = 20
 
 /obj/structure/table/wood/poker //No specialties, Just a mapping object.
 	name = "gambling table"
@@ -462,18 +464,18 @@
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			if(src.status == 2)
-				user << "<span class='notice'>Now weakening the reinforced table</span>"
+				user << "<span class='notice'>You start weakening the reinforced table...</span>"
 				playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
-				if (do_after(user, 50))
+				if (do_after(user, 50, target = src))
 					if(!src || !WT.isOn()) return
-					user << "<span class='notice'>Table weakened</span>"
+					user << "<span class='notice'>You weaken the table.</span>"
 					src.status = 1
 			else
-				user << "<span class='notice'>Now strengthening the reinforced table</span>"
+				user << "<span class='notice'>You start strengthening the reinforced table...</span>"
 				playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
-				if (do_after(user, 50))
+				if (do_after(user, 50, target = src))
 					if(!src || !WT.isOn()) return
-					user << "<span class='notice'>Table strengthened</span>"
+					user << "<span class='notice'>You strengthen the table.</span>"
 					src.status = 2
 			return
 	..()
@@ -551,7 +553,7 @@
 	if(isrobot(user))
 		return
 	if(!user.drop_item())
-		user << "<span class='notice'>\The [O] is stuck to your hand, you cannot put it in the rack!</span>"
+		user << "<span class='warning'>\The [O] is stuck to your hand, you cannot put it in the rack!</span>"
 		return
 	if (O.loc != src.loc)
 		step(O, get_dir(O, src))
@@ -566,7 +568,7 @@
 	if(isrobot(user))
 		return
 	if(!user.drop_item())
-		user << "<span class='notice'>\The [W] is stuck to your hand, you cannot put it in the rack!</span>"
+		user << "<span class='warning'>\The [W] is stuck to your hand, you cannot put it in the rack!</span>"
 		return
 	W.Move(loc)
 	return 1
@@ -585,20 +587,20 @@
 	user.do_attack_animation(src)
 	playsound(loc, 'sound/items/dodgeball.ogg', 80, 1)
 	user.visible_message("<span class='warning'>[user] kicks [src].</span>", \
-						 "<span class='warning'>You kick [src].</span>")
+						 "<span class='danger'>You kick [src].</span>")
 	health -= rand(1,2)
 	healthcheck()
 
 /obj/structure/rack/attack_alien(mob/living/user)
 	user.do_attack_animation(src)
-	visible_message("<span class='danger'>[user] slices [src] apart!</span>")
+	visible_message("<span class='warning'>[user] slices [src] apart.</span>")
 	rack_destroy()
 
 
 /obj/structure/rack/attack_animal(mob/living/simple_animal/user)
 	if(user.environment_smash)
 		user.do_attack_animation(src)
-		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")
+		visible_message("<span class='warning'>[user] smashes [src] apart.</span>")
 		rack_destroy()
 /obj/structure/rack/attack_tk() // no telehulk sorry
 	return
@@ -623,6 +625,14 @@
  * Rack Parts
  */
 
+/obj/item/weapon/rack_parts
+	name = "rack parts"
+	desc = "Parts of a rack."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "rack_parts"
+	flags = CONDUCT
+	m_amt = 3750
+
 /obj/item/weapon/rack_parts/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	..()
 	if (istype(W, /obj/item/weapon/wrench))
@@ -632,10 +642,11 @@
 	return
 
 /obj/item/weapon/rack_parts/attack_self(mob/user as mob)
-	user << "<span class='notice'>Constructing rack...</span>"
-	if (do_after(user, 50))
+	user << "<span class='notice'>You start constructing rack...</span>"
+	if (do_after(user, 50, target = src))
+		if(!user.drop_item())
+			return
 		var/obj/structure/rack/R = new /obj/structure/rack( user.loc )
 		R.add_fingerprint(user)
-		user.drop_item()
 		qdel(src)
 		return

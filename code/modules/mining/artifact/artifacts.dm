@@ -8,6 +8,7 @@ var/global/ankh = 0 // only one can spawn
 	icon_state = "artifact0"
 	unacidable = 1
 	layer = 3.1
+	burn_state = -1 //Won't burn in fires
 	var/title = "artifact"
 	var/prefix = "ancient"
 	var/integrity = 100
@@ -330,6 +331,7 @@ var/global/ankh = 0 // only one can spawn
 			power = pick(A_REFLECT,A_EMPS,A_ELECTRICS,A_IRRADIATE,A_SHIELD)
 			usetype = A_RETALIATE
 			item_state = "armor_reflec"
+			alternate_worn_icon = 'icons/mob/sayu_onmob.dmi'
 			body_parts_covered = CHEST
 			slot_flags = SLOT_OCLOTHING
 		if(A_HAMMER)
@@ -462,9 +464,11 @@ var/global/ankh = 0 // only one can spawn
 	prefix = "protective"
 	activated = 1
 	on = 1
+	alternate_worn_icon = 'icons/mob/sayu_onmob.dmi'
 
 /obj/item/artifact/ankh/New()
 	..()
 	item_state = "ankh1"
 	slot_flags = SLOT_BACK
+	alternate_worn_icon = 'icons/mob/sayu_onmob.dmi'
 	update_icons()

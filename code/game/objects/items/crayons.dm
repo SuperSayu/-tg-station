@@ -38,7 +38,7 @@
 	desc = "A very sad-looking crayon."
 	colour = "#FFFFFF"
 	colourName = "mime"
-	uses = 0
+	uses = -1
 
 /obj/item/toy/crayon/mime/attack_self(mob/living/user as mob)
 	update_window(user)
@@ -63,7 +63,7 @@
 	icon_state = "crayonrainbow"
 	colour = "#FFF000"
 	colourName = "rainbow"
-	uses = 0
+	uses = -1
 
 /obj/item/toy/crayon/rainbow/attack_self(mob/living/user as mob)
 	update_window(user)
@@ -82,11 +82,51 @@
 	else
 		..()
 
+/*
+ * Crayon Box
+ */
+/obj/item/weapon/storage/crayons
+	name = "box of crayons"
+	desc = "A box of crayons for all your rune drawing needs."
+	icon = 'icons/obj/crayons.dmi'
+	icon_state = "crayonbox"
+	w_class = 2.0
+	storage_slots = 6
+	can_hold = list(
+		/obj/item/toy/crayon
+	)
+
+/obj/item/weapon/storage/crayons/New()
+	..()
+	new /obj/item/toy/crayon/red(src)
+	new /obj/item/toy/crayon/orange(src)
+	new /obj/item/toy/crayon/yellow(src)
+	new /obj/item/toy/crayon/green(src)
+	new /obj/item/toy/crayon/blue(src)
+	new /obj/item/toy/crayon/purple(src)
+	update_icon()
+
+/obj/item/weapon/storage/crayons/update_icon()
+	overlays.Cut()
+	for(var/obj/item/toy/crayon/crayon in contents)
+		overlays += image('icons/obj/crayons.dmi',crayon.colourName)
+
+/obj/item/weapon/storage/crayons/attackby(obj/item/W as obj, mob/user as mob, params)
+	if(istype(W,/obj/item/toy/crayon))
+		switch(W:colourName)
+			if("mime")
+				usr << "This crayon is too sad to be contained in this box."
+				return
+			if("rainbow")
+				usr << "This crayon is too powerful to be contained in this box."
+				return
+	..()
 
 //Spraycan stuff
 
 /obj/item/toy/crayon/spraycan
 	icon_state = "spraycan_cap"
+	item_state = "spraycan"
 	desc = "A metallic container containing tasty paint."
 	var/capped = 1
 	instant = 1
@@ -95,10 +135,7 @@
 
 /obj/item/toy/crayon/spraycan/New()
 	..()
-	if(gang)
-		name = "Modified Paint Applicator"
-	else
-		name = "NanoTrasen-brand Rapid Paint Applicator"
+	name = "spray can"
 	update_icon()
 
 /obj/item/toy/crayon/spraycan/examine(mob/user)
@@ -109,12 +146,12 @@
 		user << "It is empty."
 
 /obj/item/toy/crayon/spraycan/attack_self(mob/living/user as mob)
-	var/choice = input(user,"Spraycan options") in list("Toggle Cap","Change Drawing","Change Color","Cancel")
+	var/choice = input(user,"Spraycan options") as null|anything in list("Toggle Cap","Change Drawing","Change Color")
 	switch(choice)
 		if("Toggle Cap")
 			user << "<span class='notice'>You [capped ? "Remove" : "Replace"] the cap of the [src]</span>"
 			capped = capped ? 0 : 1
-			icon_state = "spraycan[gang ? "_gang" : ""][capped ? "_cap" : ""]"
+			icon_state = "spraycan[capped ? "_cap" : ""]"
 			update_icon()
 		if("Change Drawing")
 			..()
@@ -126,14 +163,15 @@
 	if(!proximity)
 		return
 	if(capped)
+		user << "<span class='warning'>Take the cap off first!</span>"
 		return
 	else
 		if(iscarbon(target))
 			if(uses)
 				playsound(user.loc, 'sound/effects/spray.ogg', 5, 1, 5)
-				uses = max(0,uses-10)
 				var/mob/living/carbon/human/C = target
-				user.visible_message("<span class='danger'> [user] sprays [src] into the face of [target]!</span>")
+				user.visible_message("<span class='danger'>[user] sprays [src] into the face of [target]!</span>")
+				target << "<span class='userdanger'>[user] sprays [src] into your face!</span>"
 				if(C.client)
 					C.eye_blurry = max(C.eye_blurry, 3)
 					C.eye_blind = max(C.eye_blind, 1)
@@ -143,6 +181,7 @@
 				C.lip_style = "spray_face"
 				C.lip_color = colour
 				C.update_body()
+				uses = max(0,uses-10)
 		..()
 
 /obj/item/toy/crayon/spraycan/update_icon()
@@ -152,7 +191,7 @@
 	overlays += I
 
 /obj/item/toy/crayon/spraycan/gang
-	desc = "A suspicious-looking spraycan modified to use special paint used by gangsters to mark territory."
-	icon_state = "spraycan_gang_cap"
+	desc = "A modified container containing suspicious paint."
 	gang = 1
+	uses = 20
 	instant = -1
