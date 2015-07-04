@@ -480,8 +480,7 @@ var/global/list/datum/stack_recipe/cable_coil_recipes = list ( \
 	w_class = 2.0
 	throw_speed = 3
 	throw_range = 5
-	m_amt = 50
-	g_amt = 20
+	materials = list(MAT_METAL=50, MAT_GLASS=20)
 	flags = CONDUCT
 	slot_flags = SLOT_BELT
 	item_state = "coil_red"
@@ -490,8 +489,7 @@ var/global/list/datum/stack_recipe/cable_coil_recipes = list ( \
 
 /obj/item/stack/cable_coil/cyborg
 	is_cyborg = 1
-	m_amt = 0
-	g_amt = 0
+	materials = list()
 	cost = 1
 
 /obj/item/stack/cable_coil/cyborg/attack_self(mob/user)
