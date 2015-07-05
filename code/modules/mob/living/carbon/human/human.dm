@@ -114,22 +114,21 @@
 	switch (severity)
 		if (1.0)
 			b_loss += 500
-			if (!prob(getarmor(null, "bomb")))
-				gib()
-				return
-			else
-				break_chance += 20
 
+			if (prob(getarmor(null, "bomb")))
+				break_chance += 20
 				shred_clothing(1,150)
 				var/atom/target = get_edge_target_turf(src, get_dir(src, get_step_away(src, src)))
 				throw_at(target, 200, 4)
+			else
+				gib()
+				return
 
 		if (2.0)
 			break_chance += 15
 			b_loss += 60
 
 			f_loss += 60
-
 			if (prob(getarmor(null, "bomb")))
 				b_loss = b_loss/1.5
 				f_loss = f_loss/1.5
