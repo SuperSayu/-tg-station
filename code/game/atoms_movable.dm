@@ -190,7 +190,7 @@
 					if(A.flags&ON_BORDER)
 						if(!(A.dir&src.dir) && !(A.dir&turn(src.dir,180)))
 							continue
-					src.throw_impact(A)
+					src.throw_impact(A,thrower)
 					src.throwing = 0
 
 /atom/movable/proc/throw_at(atom/target, range, speed, mob/thrower)
@@ -239,7 +239,7 @@
 	//done throwing, either because it hit something or it finished moving
 	src.throwing = 0
 	if(isobj(src))
-		src.throw_impact(get_turf(src))
+		src.throw_impact(get_turf(src),thrower)
 
 	return 1
 

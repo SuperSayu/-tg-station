@@ -4,6 +4,7 @@
 	possible_transfer_amounts = list(5, 10, 15, 25, 30, 50)
 	volume = 50
 	flags = OPENCONTAINER
+	spillable = 1
 
 	can_be_placed_into = list(
 		/obj/machinery/chem_master/,
@@ -210,7 +211,7 @@
 */
 
 /obj/item/weapon/reagent_containers/glass/afterattack(obj/target, mob/user, proximity)
-	if((!proximity) || !check_allowed_items(target,1)) return
+	if((!proximity) || !check_allowed_items(target,target_self=1)) return
 
 	if(istype(target,/mob/living/simple_animal/pet/corgi/puppy/smart) && user.a_intent == "help")
 		return //sgt. pepper can do a sniff test on reagent containers
