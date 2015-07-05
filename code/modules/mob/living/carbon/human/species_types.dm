@@ -7,9 +7,32 @@
 	id = "human"
 	desc = "Beings of flesh and bone who have colonized the majority of Nanotrasen-owned space. \
 	Surprisingly versatile."
+	default_color = "FFFFFF"
 	roundstart = 1
 	specflags = list(EYECOLOR,HAIR,FACEHAIR,LIPS)
+	mutant_bodyparts = list("tail_human", "ears")
+	default_features = list("mcolor" = "FFF", "tail_human" = "None", "ears" = "None")
 	use_skintones = 1
+
+/datum/species/human/qualifies_for_rank(var/rank, var/list/features)
+	if(features["tail_human"] == "None" && features["ears"] == "None")
+		return 1	//Pure humans are always allowed in all roles.
+
+	//Mutants are not allowed in most roles.
+	if(rank in command_positions)
+		return 0
+	if(rank in security_positions) //This list does not include lawyers.
+		return 0
+	if(rank in science_positions)
+		return 0
+	if(rank in medical_positions)
+		return 0
+	if(rank in engineering_positions)
+		return 0
+	if(rank == "Quartermaster") //QM is not contained in command_positions but we still want to bar mutants from it.
+		return 0
+	return 1
+
 
 /datum/species/human/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
 	if(chem.id == "mutationtoxin")
@@ -19,6 +42,11 @@
 		H.reagents.del_reagent(chem.type)
 		H.faction |= "slime"
 		return 1
+
+//Curiosity killed the cat's wagging tail.
+datum/species/human/spec_death(var/gibbed, var/mob/living/carbon/human/H)
+	if(H)
+		H.endTailWag()
 
 /*
  LIZARDPEOPLE
@@ -33,7 +61,8 @@
 	default_color = "00FF00"
 	roundstart = 1
 	specflags = list(MUTCOLORS,EYECOLOR,LIPS)
-	mutant_bodyparts = list("tail", "snout", "spines", "horns", "frills", "body_markings")
+	mutant_bodyparts = list("tail_lizard", "snout", "spines", "horns", "frills", "body_markings")
+	default_features = list("mcolor" = "0F0", "tail" = "Smooth", "snout" = "Round", "horns" = "None", "frills" = "None", "spines" = "None", "body_markings" = "None")
 	attack_verb = "slash"
 	attack_sound = 'sound/weapons/slash.ogg'
 	miss_sound = 'sound/weapons/slashmiss.ogg'
@@ -41,13 +70,16 @@
 	species_temp_offset = -20
 	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/lizard
 
-//NOPE
+/datum/species/lizard/qualifies_for_rank(var/rank, var/list/features)
+	if(rank in command_positions)
+		return 0
+	return 1
+
 /*
-	/datum/species/lizard/handle_speech(message)
-
-		if(copytext(message, 1, 2) != "*")
-			message = replacetext(message, "s", stutter("ss"))
-
+/datum/species/lizard/handle_speech(message)
+	// jesus christ why
+	if(copytext(message, 1, 2) != "*")
+		message = replacetext(message, "s", "sss")
 		return message
 */
 
@@ -68,7 +100,6 @@
 	default_color = "59CE00"
 	roundstart = 1
 	specflags = list(MUTCOLORS,HAIR,FACEHAIR,EYECOLOR,NOPIXREMOVE)
-	hair_color = "mutcolor"
 	hair_luminosity = -115
 	attack_verb = "slash"
 	attack_sound = 'sound/weapons/slice.ogg'
@@ -173,7 +204,6 @@
 	darksight = 3
 	invis_sight = SEE_INVISIBLE_LEVEL_ONE
 	specflags = list(MUTCOLORS,EYECOLOR,HAIR,FACEHAIR,NOBLOOD)
-	hair_color = "mutcolor"
 	hair_alpha = 165
 	hair_luminosity = -75
 	ignored_by = list(/mob/living/simple_animal/slime)
