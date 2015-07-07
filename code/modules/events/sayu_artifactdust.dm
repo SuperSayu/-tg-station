@@ -3,7 +3,7 @@
 /datum/round_event_control/meteor_wave/artifact
 	name = "Artifact Meteor"
 	typepath = /datum/round_event/meteor_wave/artifact
-	weight = 50 // This value needs some tweaking, not really sure what to put it at.
+	weight = 20 // This value needs some tweaking, not really sure what to put it at.
 	max_occurrences = 5
 	earliest_start = 0
 	alertadmins = 1
