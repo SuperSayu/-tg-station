@@ -48,13 +48,6 @@
 	excludefromjob = list("Captain")
 	antag_types = list("traitor","Changeling","Wizard")
 
-/datum/objective_item/steal/rcd
-	name = "a rapid-construction-device"
-	targetitem = /obj/item/weapon/rcd
-	difficulty = 3
-	excludefromjob = list("Quartermaster","Cargo Technician")
-	antag_types = list("traitor","Changeling","Space Ninja")
-
 /datum/objective_item/steal/jetpack
 	name = "a jetpack"
 	targetitem = /obj/item/weapon/tank/jetpack
