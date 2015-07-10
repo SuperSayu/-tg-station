@@ -53,7 +53,7 @@
 "aba" = (/obj/machinery/computer/libraryconsole/bookmanagement{pixel_y = 0},/obj/structure/table,/turf/simulated/floor/plasteel{icon_state = "floorgrime"},/area/security/prison)
 "abb" = (/obj/structure/stool,/turf/simulated/floor/plasteel{icon_state = "floorgrime"},/area/security/prison)
 "abc" = (/obj/structure/table,/obj/item/weapon/storage/pill_bottle/dice,/turf/simulated/floor/plasteel,/area/security/prison)
-"abd" = (/obj/structure/table,/obj/item/weapon/pen,/turf/simulated/floor/plasteel,/area/security/prison)
+"abd" = (/obj/structure/table,/obj/item/weapon/pen,/obj/item/weapon/storage/box/hug,/turf/simulated/floor/plasteel,/area/security/prison)
 "abe" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plasteel{icon_state = "barber"},/area/security/prison)
 "abf" = (/obj/structure/table,/obj/structure/bedsheetbin,/turf/simulated/floor/plasteel{icon_state = "barber"},/area/security/prison)
 "abg" = (/obj/structure/lattice,/obj/structure/sign/securearea{pixel_y = -32},/turf/space,/area/space)
