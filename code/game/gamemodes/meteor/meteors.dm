@@ -15,6 +15,8 @@
 
 /var/list/meteorsC = list(/obj/effect/meteor/dust) //for space dust event
 
+/var/list/artifactMeteor = list(/obj/effect/meteor/artifact) // for artifact meteor event
+
 ///////////////////////////////
 //Meteor spawning global procs
 ///////////////////////////////
@@ -293,6 +295,24 @@
 	..()
 	if(prob(20))
 		explosion(src.loc,2,4,6,8)
+
+//Artifact Meteor
+/obj/effect/meteor/artifact
+	name = "ancient meteor"
+	icon = 'icons/obj/sayumeteor.dmi'
+	icon_state = "artifact"
+	desc = "Contains ancient alien technology."
+	dropamt = 1
+	hits = 1
+	heavy = 1
+	meteorsound = 'sound/effects/EMPulse.ogg'
+	meteordrop = /obj/item/artifact
+
+
+/obj/effect/meteor/medium/meteor_effect()
+	..(heavy)
+	//world << "Artifact meteor hit [x],[y],[z]"
+	explosion(src.loc, 0, 1, 2, 3, 0)
 
 //////////////////////////
 //Spookoween meteors

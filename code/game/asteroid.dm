@@ -1,6 +1,7 @@
 var/global/list/possiblethemes = list("organharvest","cult","wizden","cavein","xenoden","hitech","speakeasy","plantlab", "deadradio", "bluespa", "carpcave", "witch")
 
 var/global/max_secret_rooms = 6
+var/global/max_monoliths = 6 // Actually 5 monoliths, the one that appears under the mining station without an artifact counts as one
 
 var/global/list/spawned_surprises = list()
 

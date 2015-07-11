@@ -54,11 +54,12 @@ calculate the longest number of ticks the MC can wait between each cycle without
 
 	createRandomZlevel()	//gate system
 	setup_map_transitions()
-	for(var/i=0, i<max_secret_rooms, i++)
-		make_mining_asteroid_secret()
 
 	for(var/m=0, m<max_monoliths, m++)
 		make_mining_asteroid_secret(1)
+
+	for(var/i=0, i<max_secret_rooms, i++)
+		make_mining_asteroid_secret(0)
 
 	//Eventually all this other setup stuff should be contained in subsystems and done in subsystem.Initialize()
 	for(var/datum/subsystem/S in subsystems)

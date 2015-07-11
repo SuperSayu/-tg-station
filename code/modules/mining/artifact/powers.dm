@@ -925,10 +925,11 @@
 			user.visible_message("<span class='danger'>[user] fires [src]!</span>", "<span class='danger'>You fire [src]!</span>", "You hear a burst of energy!")*/
 		//if(A_MAGICPROJ) -- TODO
 		if(A_TRAVEL)
-			var/list/pos_levels = list(1,1,1,3,4,5,6) // Travels to the station the majority of the time.
-			for(var/num in pos_levels) // Don't travel to the same z-level
-				if(target.z == num)
-					pos_levels -= num
+			var/list/pos_levels = list()
+			if(user.z == 1)
+				pos_levels = list(ZLEVEL_ABANDONNEDTSAT,4,ZLEVEL_MINING,6,ZLEVEL_SPACEMAX)
+			else
+				pos_levels = list(1)
 			var/new_z = pick(pos_levels)
 			var/turf/destination = locate(target.x,target.y,new_z)
 			do_teleport(target,destination)

@@ -1,6 +1,5 @@
 var/global/list/monolith_names = list("Alpha","Beta","Gamma","Delta","Epsilon","Iota","Sigma","Phi","Omega")
 var/global/list/monoliths = list()
-var/global/max_monoliths = rand(3,5)
 
 /obj/structure/monolith
 	name = "Monolith"
@@ -22,13 +21,15 @@ var/global/max_monoliths = rand(3,5)
 	for(var/turf/simulated/wall/W in range(1,src))
 		new /turf/simulated/floor/plasteel/cult(W)
 	for(var/turf/simulated/mineral/M in range(1,src))
-		new /turf/simulated/floor/plasteel/cult(M)
+		new /turf/simulated/floor/engine/cult(M)
+	SetLuminosity(2)
 
 /obj/structure/monolith/proc/make_artifact()
 	var/turf/artloc = get_turf(src)
 	var/obj/item/artifact/art = new /obj/item/artifact(artloc)
 	art.x += pick(-1,1)
 	art.y += pick(-1,1)
+	//world << "<b>[name] SPAWNED [x],[y],[z]</b>"
 
 /obj/structure/monolith/attackby(obj/item/I, mob/user as mob)
 	if(istype(I, /obj/item/device/mining_scanner) ||istype(I,/obj/item/device/t_scanner/adv_mining_scanner) || istype(I,/obj/item/device/analyzer))
@@ -39,6 +40,7 @@ var/global/max_monoliths = rand(3,5)
 			playsound(get_turf(src), 'sound/effects/phasein.ogg', 100, 1)
 			for(var/mob/living/carbon/human/H in viewers(src, null))
 				H.flash_eyes()
+			SetLuminosity(4)
 		else
 			var/list/selection = list()
 			for(var/obj/structure/monolith/M in monoliths)
