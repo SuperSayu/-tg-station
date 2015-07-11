@@ -119,6 +119,7 @@
 	new /obj/item/weapon/storage/belt/security/full(src)
 	new /obj/item/clothing/glasses/hud/security/sunglasses(src)
 	new /obj/item/clothing/glasses/hud/security/sunglasses/sunglasses3(src)
+	new /obj/item/clothing/head/helmet/sec(src)
 
 /obj/structure/closet/secure_closet/security/sec
 

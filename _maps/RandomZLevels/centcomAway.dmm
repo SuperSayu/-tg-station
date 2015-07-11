@@ -100,10 +100,10 @@
 "bV" = (/turf/simulated/floor/plating,/turf/simulated/wall/shuttle/interior{icon_state = "swall_f6"},/area/awaymission/centcomAway/hangar)
 "bW" = (/turf/simulated/floor/plating,/turf/simulated/wall/shuttle/interior{icon_state = "swall_f9"},/area/awaymission/centcomAway/hangar)
 "bX" = (/obj/structure/closet/emcloset,/turf/simulated/floor/plasteel/shuttle,/area/awaymission/centcomAway/hangar)
-"bY" = (/turf/simulated/floor/plasteel/shuttle{icon_state = "floor2"},/area/awaymission/centcomAway/hangar)
-"bZ" = (/obj/structure/table,/obj/item/weapon/storage/firstaid/toxin{pixel_x = -2; pixel_y = 4},/obj/item/weapon/storage/firstaid/toxin,/turf/space,/area/awaymission/centcomAway/hangar)
-"ca" = (/obj/structure/table,/obj/item/weapon/storage/firstaid/fire,/obj/item/weapon/storage/firstaid/fire{pixel_x = -2; pixel_y = 4},/turf/space,/area/awaymission/centcomAway/hangar)
-"cb" = (/obj/structure/table,/obj/item/weapon/storage/firstaid/regular{pixel_x = 2; pixel_y = 0},/obj/item/weapon/storage/firstaid/regular{pixel_x = -2; pixel_y = 4},/turf/space,/area/awaymission/centcomAway/hangar)
+"bY" = (/turf/simulated/floor/plasteel/shuttle{icon_state = "shuttlefloor2"},/area/awaymission/centcomAway/hangar)
+"bZ" = (/obj/structure/table,/obj/item/weapon/storage/firstaid/toxin{pixel_x = -2; pixel_y = 4},/obj/item/weapon/storage/firstaid/toxin,/turf/simulated/floor/plasteel/shuttle{icon_state = "shuttlefloor2"},/area/awaymission/centcomAway/hangar)
+"ca" = (/obj/structure/table,/obj/item/weapon/storage/firstaid/fire,/obj/item/weapon/storage/firstaid/fire{pixel_x = -2; pixel_y = 4},/turf/simulated/floor/plasteel/shuttle{icon_state = "shuttlefloor2"},/area/awaymission/centcomAway/hangar)
+"cb" = (/obj/structure/table,/obj/item/weapon/storage/firstaid/regular{pixel_x = 2; pixel_y = 0},/obj/item/weapon/storage/firstaid/regular{pixel_x = -2; pixel_y = 4},/turf/simulated/floor/plasteel/shuttle{icon_state = "shuttlefloor2"},/area/awaymission/centcomAway/hangar)
 "cc" = (/turf/simulated/floor/plating,/turf/simulated/wall/shuttle/interior{icon_state = "swall_f5"},/area/awaymission/centcomAway/hangar)
 "cd" = (/turf/simulated/floor/plating,/turf/simulated/wall/shuttle/interior{icon_state = "swall_f10"},/area/awaymission/centcomAway/hangar)
 "ce" = (/obj/item/weapon/paper_bin,/obj/structure/table,/turf/simulated/floor/plasteel{tag = "icon-redyellowfull"; icon_state = "redyellowfull"},/area/awaymission/centcomAway/cafe)
@@ -139,10 +139,10 @@
 "cI" = (/obj/machinery/vending/refillable/hydronutrients,/turf/simulated/floor/plasteel{icon_state = "hydrofloor"},/area/awaymission/centcomAway/cafe)
 "cJ" = (/obj/machinery/biogenerator,/turf/simulated/floor/plasteel{icon_state = "hydrofloor"},/area/awaymission/centcomAway/cafe)
 "cK" = (/turf/simulated/wall/shuttle{icon_state = "swallc1"; dir = 2},/area/awaymission/centcomAway/hangar)
-"cL" = (/obj/structure/table/reinforced,/obj/item/weapon/paper_bin,/turf/simulated/floor/plasteel/shuttle{icon_state = "floor2"},/area/awaymission/centcomAway/hangar)
-"cM" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/fancy/donut_box,/turf/simulated/floor/plasteel/shuttle{icon_state = "floor2"},/area/awaymission/centcomAway/hangar)
-"cN" = (/obj/structure/table/reinforced,/obj/item/weapon/pen,/turf/simulated/floor/plasteel/shuttle{icon_state = "floor2"},/area/awaymission/centcomAway/hangar)
-"cO" = (/obj/structure/table/reinforced,/turf/simulated/floor/plasteel/shuttle{icon_state = "floor2"},/area/awaymission/centcomAway/hangar)
+"cL" = (/obj/structure/table/reinforced,/obj/item/weapon/paper_bin,/turf/simulated/floor/plasteel/shuttle{icon_state = "shuttlefloor2"},/area/awaymission/centcomAway/hangar)
+"cM" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/fancy/donut_box,/turf/simulated/floor/plasteel/shuttle{icon_state = "shuttlefloor2"},/area/awaymission/centcomAway/hangar)
+"cN" = (/obj/structure/table/reinforced,/obj/item/weapon/pen,/turf/simulated/floor/plasteel/shuttle{icon_state = "shuttlefloor2"},/area/awaymission/centcomAway/hangar)
+"cO" = (/obj/structure/table/reinforced,/turf/simulated/floor/plasteel/shuttle{icon_state = "shuttlefloor2"},/area/awaymission/centcomAway/hangar)
 "cP" = (/obj/machinery/sleeper{icon_state = "sleeper-open"; dir = 8},/turf/simulated/floor/plasteel/shuttle,/area/awaymission/centcomAway/hangar)
 "cQ" = (/obj/machinery/sleep_console{icon_state = "console"; dir = 8},/turf/simulated/floor/plasteel/shuttle,/area/awaymission/centcomAway/hangar)
 "cR" = (/obj/structure/stool/bed/chair{dir = 8},/turf/simulated/floor/plasteel/shuttle,/area/awaymission/centcomAway/hangar)
@@ -153,7 +153,7 @@
 "cW" = (/obj/machinery/computer/secure_data,/turf/simulated/floor/plasteel/shuttle,/area/awaymission/centcomAway/hangar)
 "cX" = (/obj/structure/stool/bed/chair{dir = 1},/turf/simulated/floor/plasteel/shuttle,/area/awaymission/centcomAway/hangar)
 "cY" = (/obj/structure/stool/bed/chair{dir = 4},/turf/simulated/floor/plasteel/shuttle,/area/awaymission/centcomAway/hangar)
-"cZ" = (/obj/structure/table/reinforced,/obj/item/weapon/clipboard,/obj/item/weapon/stamp,/turf/simulated/floor/plasteel/shuttle,/area/awaymission/centcomAway/hangar)
+"cZ" = (/obj/structure/table/reinforced,/obj/item/weapon/clipboard,/obj/item/weapon/stamp,/turf/simulated/floor/plasteel/shuttle{icon_state = "shuttlefloor2"},/area/awaymission/centcomAway/hangar)
 "da" = (/obj/structure/disposalpipe/segment,/obj/machinery/door/window/northright,/turf/simulated/floor/plasteel{tag = "icon-redfull"; icon_state = "redfull"},/area/awaymission/centcomAway/cafe)
 "db" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/awaymission/centcomAway/maint)
 "dc" = (/obj/structure/table,/obj/item/device/flash,/turf/simulated/floor/plasteel/shuttle,/area/awaymission/centcomAway/hangar)
@@ -191,7 +191,7 @@
 "dI" = (/obj/structure/reagent_dispensers/watertank,/turf/simulated/floor/plating{tag = "icon-warnplate (NORTHWEST)"; icon_state = "warnplate"; dir = 9},/area/awaymission/centcomAway/cafe)
 "dJ" = (/obj/machinery/shieldgen,/turf/simulated/floor/plating{tag = "icon-warnplate (NORTH)"; icon_state = "warnplate"; dir = 1},/area/awaymission/centcomAway/cafe)
 "dK" = (/turf/simulated/floor/plating{tag = "icon-warnplate (NORTHEAST)"; icon_state = "warnplate"; dir = 5},/area/awaymission/centcomAway/cafe)
-"dL" = (/obj/machinery/door/airlock/hatch{name = "Rest Room"; req_access_txt = "0"},/turf/simulated/floor/plasteel/shuttle{icon_state = "floor2"},/area/awaymission/centcomAway/hangar)
+"dL" = (/obj/machinery/door/airlock/hatch{name = "Rest Room"; req_access_txt = "0"},/turf/simulated/floor/plasteel/shuttle{icon_state = "shuttlefloor2"},/area/awaymission/centcomAway/hangar)
 "dM" = (/obj/structure/largecrate,/turf/simulated/floor/plating{tag = "icon-warnplate (SOUTHWEST)"; icon_state = "warnplate"; dir = 10},/area/awaymission/centcomAway/hangar)
 "dN" = (/obj/structure/closet/crate,/turf/simulated/floor/plating{dir = 2; icon_state = "warnplate"; tag = "icon-warnplate (NORTH)"},/area/awaymission/centcomAway/hangar)
 "dO" = (/turf/simulated/floor/plating{tag = "icon-warnplate (SOUTHEAST)"; icon_state = "warnplate"; dir = 6},/area/awaymission/centcomAway/hangar)
@@ -230,7 +230,7 @@
 "ev" = (/turf/simulated/floor/plating,/turf/simulated/wall/shuttle{icon_state = "swall_f5"; dir = 2},/area/awaymission/centcomAway/hangar)
 "ew" = (/turf/simulated/wall/shuttle{icon_state = "swall14"; dir = 2},/area/awaymission/centcomAway/hangar)
 "ex" = (/turf/simulated/wall/shuttle{icon_state = "swallc4"; dir = 2},/area/awaymission/centcomAway/hangar)
-"ey" = (/obj/machinery/door/airlock/hatch{name = "Cockpit"; req_access_txt = "109"},/turf/simulated/floor/plasteel/shuttle{icon_state = "floor2"},/area/awaymission/centcomAway/hangar)
+"ey" = (/obj/machinery/door/airlock/hatch{name = "Cockpit"; req_access_txt = "109"},/turf/simulated/floor/plasteel/shuttle{icon_state = "shuttlefloor2"},/area/awaymission/centcomAway/hangar)
 "ez" = (/turf/simulated/wall/r_wall,/area/awaymission/centcomAway/general)
 "eA" = (/turf/simulated/floor/plasteel{tag = "icon-vault (NORTHEAST)"; icon_state = "vault"; dir = 5},/area/awaymission/centcomAway/general)
 "eB" = (/obj/machinery/space_heater,/turf/simulated/floor/plating,/area/awaymission/centcomAway/maint)
@@ -376,17 +376,17 @@
 "hl" = (/obj/machinery/door/airlock/centcom,/turf/simulated/floor/fancy/carpet,/area/awaymission/centcomAway/courtroom)
 "hm" = (/obj/effect/decal/cleanable/oil,/turf/simulated/floor/plasteel{icon_state = "dark"},/area/awaymission/centcomAway/hangar)
 "hn" = (/turf/simulated/floor/plating,/obj/structure/shuttle/engine/propulsion/burst{dir = 4},/turf/simulated/wall/shuttle{icon_state = "swall_f6"; dir = 2},/area/awaymission/centcomAway/hangar)
-"ho" = (/obj/structure/table,/obj/item/weapon/paper/ccaMemo,/turf/simulated/floor/plating,/area/awaymission/centcomAway/hangar)
-"hp" = (/obj/item/xenos_claw,/turf/simulated/floor/plasteel{icon_state = "engine"},/area/awaymission/centcomAway/general)
-"hq" = (/obj/machinery/door/airlock/centcom{name = "Special Operations"; opacity = 1; req_access_txt = "103"},/turf/simulated/floor/plasteel{icon_state = "dark"},/area/awaymission/centcomAway/general)
-"hr" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/awaymission/centcomAway/general)
-"hs" = (/obj/machinery/computer/card,/turf/simulated/floor/plasteel{icon_state = "floor"},/area/awaymission/centcomAway/general)
-"ht" = (/obj/structure/stool/bed/chair/office/dark,/turf/simulated/floor/plasteel{icon_state = "floor"},/area/awaymission/centcomAway/general)
-"hu" = (/obj/machinery/computer/crew,/turf/simulated/floor/plasteel{icon_state = "floor"},/area/awaymission/centcomAway/general)
-"hv" = (/obj/machinery/vending/cigarette,/turf/simulated/floor/plasteel{icon_state = "dark"},/area/awaymission/centcomAway/courtroom)
-"hw" = (/obj/machinery/door/unpowered/shuttle,/turf/space,/area/awaymission/centcomAway/hangar)
-"hx" = (/obj/structure/stool/bed/chair{dir = 4},/obj/item/device/radio/intercom{pixel_y = 25},/turf/space,/area/awaymission/centcomAway/hangar)
-"hy" = (/obj/structure/stool/bed/chair{dir = 4},/turf/space,/area/awaymission/centcomAway/hangar)
+"ho" = (/turf/simulated/floor/plasteel{icon_state = "dark"},/turf/simulated/wall/shuttle{dir = 3; icon_state = "swall_f10"; layer = 2; tag = "icon-swall_f10"},/area/awaymission/centcomAway/hangar)
+"hp" = (/obj/structure/table,/obj/item/weapon/paper/ccaMemo,/turf/simulated/floor/plating,/area/awaymission/centcomAway/hangar)
+"hq" = (/obj/item/xenos_claw,/turf/simulated/floor/plasteel{icon_state = "engine"},/area/awaymission/centcomAway/general)
+"hr" = (/obj/machinery/door/airlock/centcom{name = "Special Operations"; opacity = 1; req_access_txt = "103"},/turf/simulated/floor/plasteel{icon_state = "dark"},/area/awaymission/centcomAway/general)
+"hs" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/awaymission/centcomAway/general)
+"ht" = (/obj/machinery/computer/card,/turf/simulated/floor/plasteel{icon_state = "floor"},/area/awaymission/centcomAway/general)
+"hu" = (/obj/structure/stool/bed/chair/office/dark,/turf/simulated/floor/plasteel{icon_state = "floor"},/area/awaymission/centcomAway/general)
+"hv" = (/obj/machinery/computer/crew,/turf/simulated/floor/plasteel{icon_state = "floor"},/area/awaymission/centcomAway/general)
+"hw" = (/obj/machinery/vending/cigarette,/turf/simulated/floor/plasteel{icon_state = "dark"},/area/awaymission/centcomAway/courtroom)
+"hx" = (/obj/machinery/door/unpowered/shuttle,/turf/space,/area/awaymission/centcomAway/hangar)
+"hy" = (/obj/structure/stool/bed/chair{dir = 4},/obj/item/device/radio/intercom{pixel_y = 25},/turf/simulated/floor/plasteel/shuttle,/area/awaymission/centcomAway/hangar)
 "hz" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/plating,/area/awaymission/centcomAway/hangar)
 "hA" = (/obj/structure/reagent_dispensers/fueltank,/turf/simulated/floor/plating,/area/awaymission/centcomAway/hangar)
 "hB" = (/obj/structure/table,/obj/item/stack/cable_coil,/turf/simulated/floor/plating,/area/awaymission/centcomAway/hangar)
@@ -486,7 +486,7 @@
 "jr" = (/obj/structure/closet/secure_closet/security,/turf/simulated/floor/plasteel{tag = "icon-vault (EAST)"; icon_state = "vault"; dir = 4},/area/awaymission/centcomAway/general)
 "js" = (/turf/simulated/floor/plasteel{tag = "icon-ironsand9 (WEST)"; icon_state = "ironsand9"; dir = 8; heat_capacity = 1},/area/awaymission/centcomAway/general)
 "jt" = (/obj/structure/table/wood{dir = 9},/obj/item/clothing/mask/cigarette/cigar/havana,/obj/item/weapon/reagent_containers/food/drinks/sillycup,/turf/simulated/floor/plasteel{icon_state = "grimy"},/area/awaymission/centcomAway/general)
-"ju" = (/obj/structure/table/wood{dir = 5},/obj/item/weapon/lighter/zippo,/turf/simulated/floor/plasteel{icon_state = "grimy"},/area/awaymission/centcomAway/general)
+"ju" = (/obj/structure/table/wood{dir = 5},/obj/item/weapon/lighter,/turf/simulated/floor/plasteel{icon_state = "grimy"},/area/awaymission/centcomAway/general)
 "jv" = (/obj/structure/table/wood{dir = 5},/obj/item/weapon/storage/backpack/satchel,/turf/simulated/floor/plasteel{icon_state = "grimy"},/area/awaymission/centcomAway/general)
 "jw" = (/obj/machinery/computer/card/centcom,/obj/item/weapon/card/id/centcom,/turf/simulated/floor/plasteel{icon_state = "grimy"},/area/awaymission/centcomAway/general)
 "jx" = (/obj/structure/table/reinforced,/obj/item/weapon/folder/red,/turf/simulated/floor/plasteel{icon_state = "dark"},/area/awaymission/centcomAway/general)
@@ -753,9 +753,9 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabnbobfbfbfbfbfbfbfbf
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabnbogzgzgzgzgzgzgzgzgzgzgzgzgzgAdodododogBaWdybleBageDaggCgCezeIeIgDgEgFgGgHgIgJgKgLgEgMeIeIgNgNgNgNgNgNgNgOfdgPgwgxfdfsfsfsfdgQgQgwgQgQgfggggfdagaEabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabnbogRgRgRgRgRgRgRgRgRgRgRgRgzbebUbUbUbUgSaWezezezezezezezezezeIeIeIgTeIeIeIgUeIeIeIgTeIeIeIgNfOfOfOfOfOgNgNgNgNfLgNgNgNgVgNgNgwgwgwgwgwgfggggfdaggWabaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabnbogRgRgRgRgRgRgRgRgRgRgRgRgzbebUbUbUbUgSaWgXgYgZgZezhahbhcezhdeIghhehfhgeIeIeIhhhihegjeIhjgNfsfsfsfsfsfsfMfsfsfsfsfsfsfsfsfMgwhkhkhkgwfdfdhlfdcDfdgNgNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabnbogRgRgRgRgRhmgRhnbJbJgRgRgzbebUbUbUbUhoaWgZhpgZgZhqeAeAeAeZeIeIgohrhseIhteIhteIhuhrgueIeIfMfsfsfsfsfsfsfMfsfsfsfsfsfsfsfsfMgwhkhkhkgwfdfsfsfsfsfshvgNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabnbogRhnbJbJgRgRgRhwhxhyhzgRgzbebUbUbUhAhBaWhCgZgZhDhEhaeAhaezfneIgogEhFhGhHhIhJhKhLgEgueIfogNgNgNgNhMhNgNgNgNgNhOgNgNgNfLgNgNgwhkhkhkgwfdfsfshPhPfsfshQaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabnbogRhwhxhyhzgRgRhRbJbJhSgRgzbebUbUbUbUhTaWhCgZgZhDhUhaeAhaezeIeIgoezfAfBfBfBfBfBfDezgueIeIhVhWeOezaaaaaaaagNhXhYgNfKfKfKfKgNgwfKfKfKgwfdfshZfNfNiafsibaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabnbogRgRgRgRgRhmgRhnbJbJhogRgzbebUbUbUbUhpaWgZhqgZgZhreAeAeAeZeIeIgohshteIhueIhueIhvhsgueIeIfMfsfsfsfsfsfsfMfsfsfsfsfsfsfsfsfMgwhkhkhkgwfdfsfsfsfsfshwgNaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabnbogRhnbJbJhogRgRhxhycYhzgRgzbebUbUbUhAhBaWhCgZgZhDhEhaeAhaezfneIgogEhFhGhHhIhJhKhLgEgueIfogNgNgNgNhMhNgNgNgNgNhOgNgNgNfLgNgNgwhkhkhkgwfdfsfshPhPfsfshQaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabnbogRhxhycYhzgRgRhRbJbJhSgRgzbebUbUbUbUhTaWhCgZgZhDhUhaeAhaezeIeIgoezfAfBfBfBfBfBfDezgueIeIhVhWeOezaaaaaaaagNhXhYgNfKfKfKfKgNgwfKfKfKgwfdfshZfNfNiafsibaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabnbogRhRbJbJhSgRgRgRgRgRgRgRgzbebUbUbUbUicaWhCgZgZidezhaeAhaezeIeIgDieieieieieieieieiegMeIeIifeOigezaaaaaaaagNhXhYgNfKfOfKfKgNgNgNgNgNgNgNfshZfNfNiafsibaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWihgRgRgRgRgRgRgRgRgRgRgRiigzijikiliminicaWezezezezezezeZezezeIeIeIeIeIioipeIipiqeIhjeIhdeIhVeOeOezaaaaaaaagNirhYgNisgygygwgNaaaaaaaaaahQfshZfNfNiafsibaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaWitaWaWaWaWaWaWaWaWaWiuaWaWaWaWaWaWaWaWaWaWiveAeAeAivezeAezezezezezezezezeziwezezezezixezezezezezezaaaaaaaagNiyizgNgPgQgwgwgNaaaaaaaaaaiAiBfsiCiCfsiDiAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -785,9 +785,9 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabmbmezjrjmhajljlixljlklkllkliogigijHixjzjzjllmezaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabmezezezezezezezezezezlnhVloezezezezezezezezezaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabmlplqheeAeAeAhelrlpbmaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabmhrlshreAeAeAhrlshrbmaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabmkllshreAeAeAhrltklbmaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabmezezhrlulpluhrezezbmaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabmhslshseAeAeAhslshsbmaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabmkllshseAeAeAhsltklbmaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabmezezhslulpluhsezezbmaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaalvlvlvlvlvlwlxlylvaaaaaaaaklfxklfxklaaaaaaaalvlwlxlylvlvlvlvlvaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaalvlvlzlAlAlvlvlvlvlvlvlvlvlvlvlBlvlBlvlvlvlvlvlvlvlvlvlvlClDlElvlvaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaalvlvlFlFlFlFlFlFlFlFlFlFlFlFlFlvlFlFlFlvlFlFlFlFlFlFlFlFlFlFlFlFlFlvlvaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

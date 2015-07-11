@@ -2,8 +2,7 @@
 	name = "voice analyzer"
 	desc = "A small electronic device able to record a voice sample, and send a signal when that sample is repeated."
 	icon_state = "voice"
-	m_amt = 500
-	g_amt = 50
+	materials = list(MAT_METAL=500, MAT_GLASS=50)
 	origin_tech = "magnets=1"
 	flags = HEAR
 	attachable = 1
@@ -12,6 +11,7 @@
 	verb_exclaim = "beeps"
 	var/listening = 0
 	var/recorded = "" //the activation message
+
 	bomb_name = "voice-activated bomb"
 
 /obj/item/device/assembly/voice/Hear(message, atom/movable/speaker, message_langs, raw_message, radio_freq, list/spans)

@@ -447,12 +447,12 @@
 	return
 	// HOLOFLOOR DOES NOT GIVE A FUCK
 
-/turf/simulated/floor/fancy/grass/holo
+/turf/simulated/floor/grass/holo
 	thermal_conductivity = 0
 	gender = PLURAL
 	name = "lush grass"
 
-/turf/simulated/floor/fancy/grass/holo/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
+/turf/simulated/floor/grass/holo/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
 	return
 
 /turf/simulated/floor/holofloor/asteroid
