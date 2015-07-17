@@ -25,7 +25,7 @@
 	..()
 	underlays += image('icons/turf/space.dmi',icon_state = "[((x + y) ^ ~(x * y) + z) % 25]")
 
-/turf/simulated/floor/engine/cult/airless
+/turf/simulated/floor/plasteel/cult/airless
 	oxygen = 0
 	nitrogen = 0
 	temperature = TCMB

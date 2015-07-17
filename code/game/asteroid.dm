@@ -167,7 +167,7 @@ var/global/list/spawned_surprises = list()
 		if("monolith")
 			theme = "monolith"
 			walltypes = list(/turf/simulated/wall/cult=3,/turf/simulated/mineral/random/high_chance=1)
-			floortypes = list(/turf/simulated/floor/plasteel/cult)
+			floortypes = list(/turf/simulated/floor/plasteel/cult/airless)
 			treasureitems = list(/obj/structure/monolith=1)
 			fluffitems = list(/obj/effect/decal/remains/xeno=1,/obj/effect/decal/cleanable/xenoblood=3)
 			x_size = 5
