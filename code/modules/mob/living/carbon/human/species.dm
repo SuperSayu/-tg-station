@@ -1028,8 +1028,8 @@
 
 	var/bloody = 0
 
-	if(I.force > 1 && I.damtype == BRUTE)
-		var/breakchance = ( I.force / 4 ) * I.w_class
+	if(I.force > 1 && I.damtype == BRUTE && !is_sharp(I))
+		var/breakchance = ( I.force / 3 ) * I.w_class
 		if(armor > 0)
 			breakchance *= (100 / armor)
 
