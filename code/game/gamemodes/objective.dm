@@ -186,7 +186,7 @@
 
 
 /datum/objective/hijack
-	explanation_text = "Hijack the emergency shuttle by escaping alone."
+	explanation_text = "Hijack the emergency shuttle by ensuring that only non-Nanotrasen entities escape alive, aboard, and not in the shuttle brig."
 	dangerrating = 25
 	martyr_compatible = 0 //Technically you won't get both anyway.
 

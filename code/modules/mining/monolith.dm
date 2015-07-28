@@ -19,9 +19,9 @@ var/global/list/monoliths = list()
 	name += " [letter]"
 	monoliths += src
 	for(var/turf/simulated/wall/W in range(1,src))
-		new /turf/simulated/floor/plasteel/cult(W)
+		new /turf/simulated/floor/plasteel/cult/airless(W)
 	for(var/turf/simulated/mineral/M in range(1,src))
-		new /turf/simulated/floor/engine/cult(M)
+		new /turf/simulated/floor/plasteel/cult/airless(M)
 	SetLuminosity(2)
 
 /obj/structure/monolith/proc/make_artifact()
