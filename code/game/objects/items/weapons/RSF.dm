@@ -26,7 +26,7 @@ RSF
 	matter = matter_max
 	return
 
-/obj/item/weapon/rsf/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
+/obj/item/weapon/rsf/attackby(obj/item/weapon/W, mob/user, params)
 	..()
 	if (istype(W, /obj/item/weapon/rcd_ammo))
 		if ((matter + 10) > 30)
@@ -38,14 +38,14 @@ RSF
 		user << "The RSF now holds [matter]/[matter_max] fabrication-units."
 		return
 
-/obj/item/weapon/rsf/attack_self(mob/user as mob)
+/obj/item/weapon/rsf/attack_self(mob/user)
 	playsound(src.loc, 'sound/effects/pop.ogg', 50, 0)
 	mode++
 	if(mode > mode_names.len)
 		mode = 1
 	user << "\blue Changing dispensing mode to '[mode_names[mode]]'."
 
-/obj/item/weapon/rsf/afterattack(atom/A, mob/user as mob, proximity)
+/obj/item/weapon/rsf/afterattack(atom/A, mob/user, proximity)
 	if(!proximity) return
 	if (!(istype(A, /obj/structure/table) || istype(A, /turf/simulated/floor)))
 		return

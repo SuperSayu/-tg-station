@@ -57,7 +57,7 @@
 		return 0
 
 
-/obj/singularity/attack_hand(mob/user as mob)
+/obj/singularity/attack_hand(mob/user)
 	consume(user)
 	return 1
 
@@ -132,7 +132,8 @@
 	else
 		dissipate_track++
 
-/obj/singularity/proc/expand(var/force_size = 0)
+
+/obj/singularity/proc/expand(force_size = 0)
 	var/temp_allowed_size = src.allowed_size
 	if(force_size)
 		temp_allowed_size = force_size
@@ -256,7 +257,7 @@
 	return
 
 
-/obj/singularity/proc/consume(var/atom/A)
+/obj/singularity/proc/consume(atom/A)
 	var/gain = A.singularity_act(current_size)
 	src.energy += gain
 	if(istype(A, /obj/machinery/power/supermatter_shard) && !consumedSupermatter)
@@ -267,7 +268,7 @@
 	return
 
 
-/obj/singularity/proc/move(var/force_move = 0)
+/obj/singularity/proc/move(force_move = 0)
 	if(!move_self)
 		return 0
 
@@ -282,7 +283,7 @@
 	step(src, movement_dir)
 
 
-/obj/singularity/proc/check_turfs_in(var/direction = 0, var/step = 0)
+/obj/singularity/proc/check_turfs_in(direction = 0, step = 0)
 	if(!direction)
 		return 0
 	var/steps = 0
@@ -330,7 +331,8 @@
 			return 0
 	return 1
 
-/obj/singularity/proc/can_move(var/turf/T)
+
+/obj/singularity/proc/can_move(turf/T)
 	if(!T)
 		return 0
 	if((locate(/obj/machinery/field/containment) in T)||(locate(/obj/machinery/shieldwall) in T))

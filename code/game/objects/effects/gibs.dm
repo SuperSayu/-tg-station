@@ -1,13 +1,13 @@
-/proc/gibs(atom/location, var/list/viruses, var/datum/dna/MobDNA)
+/proc/gibs(atom/location, list/viruses, datum/dna/MobDNA)
 	new /obj/effect/gibspawner/generic(location,viruses,MobDNA)
 
-/proc/hgibs(atom/location, var/list/viruses, var/datum/dna/MobDNA, var/list/organs)
+/proc/hgibs(atom/location, list/viruses, datum/dna/MobDNA, list/organs)
 	new /obj/effect/gibspawner/human(location,viruses,MobDNA, organs)
 
-/proc/xgibs(atom/location, var/list/viruses)
+/proc/xgibs(atom/location, list/viruses)
 	new /obj/effect/gibspawner/xeno(location,viruses)
 
-/proc/robogibs(atom/location, var/list/viruses)
+/proc/robogibs(atom/location, list/viruses)
 	new /obj/effect/gibspawner/robot(location,viruses)
 
 /obj/effect/gibspawner
@@ -22,7 +22,7 @@
 
 	Gib(loc,viruses,MobDNA,eviscera)
 
-/obj/effect/gibspawner/proc/Gib(atom/location, var/list/viruses = list(), var/datum/dna/MobDNA = null, var/list/eviscera)
+/obj/effect/gibspawner/proc/Gib(atom/location, list/viruses = list(), datum/dna/MobDNA = null, list/eviscera)
 	if(gibtypes.len != gibamounts.len || gibamounts.len != gibdirections.len)
 		world << "<span class='danger'>Gib list length mismatch!</span>"
 		return

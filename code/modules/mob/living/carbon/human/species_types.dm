@@ -14,7 +14,7 @@
 	default_features = list("mcolor" = "FFF", "tail_human" = "None", "ears" = "None")
 	use_skintones = 1
 
-/datum/species/human/qualifies_for_rank(var/rank, var/list/features)
+/datum/species/human/qualifies_for_rank(rank, list/features)
 	if(!config.mutant_humans) //No mutie scum here
 		return 1
 
@@ -47,7 +47,7 @@
 		return 1
 
 //Curiosity killed the cat's wagging tail.
-datum/species/human/spec_death(var/gibbed, var/mob/living/carbon/human/H)
+datum/species/human/spec_death(gibbed, mob/living/carbon/human/H)
 	if(H)
 		H.endTailWag()
 
@@ -84,7 +84,7 @@ datum/species/human/spec_death(var/gibbed, var/mob/living/carbon/human/H)
 
 	return randname
 
-/datum/species/lizard/qualifies_for_rank(var/rank, var/list/features)
+/datum/species/lizard/qualifies_for_rank(rank, list/features)
 	if(rank in command_positions)
 		return 0
 	return 1
@@ -98,7 +98,7 @@ datum/species/human/spec_death(var/gibbed, var/mob/living/carbon/human/H)
 */
 
 //I wag in death
-/datum/species/lizard/spec_death(var/gibbed, var/mob/living/carbon/human/H)
+/datum/species/lizard/spec_death(gibbed, mob/living/carbon/human/H)
 	if(H)
 		H.endTailWag()
 
@@ -482,13 +482,13 @@ var/global/image/plasmaman_on_fire = image("icon"='icons/mob/OnFire.dmi', "icon_
 	name = "Skinbone"
 	skin = 1
 
-/datum/species/plasmaman/update_base_icon_state(var/mob/living/carbon/human/H)
+/datum/species/plasmaman/update_base_icon_state(mob/living/carbon/human/H)
 	var/base = ..()
 	if(base == id)
 		base = "[base][skin]"
 	return base
 
-/datum/species/plasmaman/spec_life(var/mob/living/carbon/human/H)
+/datum/species/plasmaman/spec_life(mob/living/carbon/human/H)
 	var/datum/gas_mixture/environment = H.loc.return_air()
 
 	if(!istype(H.wear_suit, /obj/item/clothing/suit/space/eva/plasmaman) || !istype(H.head, /obj/item/clothing/head/helmet/space/hardsuit/plasmaman))

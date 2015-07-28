@@ -201,7 +201,7 @@
 #define TBL_DISASSEMBLE 2
 #define TBL_DECONSTRUCT 3
 
-/obj/structure/table/proc/table_destroy(var/destroy_type, var/mob/user)
+/obj/structure/table/proc/table_destroy(destroy_type, mob/user)
 
 	if(destroy_type == TBL_DESTROY)
 		for(var/i = 1, i <= framestackamount, i++)
@@ -326,7 +326,7 @@
 	buildstack = /obj/item/stack/sheet/plasteel
 	canSmoothWith = list(/obj/structure/table/reinforced, /obj/structure/table)
 
-/obj/structure/table/reinforced/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
+/obj/structure/table/reinforced/attackby(obj/item/weapon/W, mob/user, params)
 	if (istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
@@ -414,7 +414,7 @@
 	else
 		return 0
 
-/obj/structure/rack/MouseDrop_T(obj/O as obj, mob/user as mob)
+/obj/structure/rack/MouseDrop_T(obj/O, mob/user)
 	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
 		return
 	if(isrobot(user))
@@ -426,7 +426,7 @@
 		step(O, get_dir(O, src))
 	return
 
-/obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
+/obj/structure/rack/attackby(obj/item/weapon/W, mob/user, params)
 	if (istype(W, /obj/item/weapon/wrench))
 		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 		rack_destroy()
@@ -500,7 +500,7 @@
 	flags = CONDUCT
 	materials = list(MAT_METAL=3750)
 
-/obj/item/weapon/rack_parts/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
+/obj/item/weapon/rack_parts/attackby(obj/item/weapon/W, mob/user, params)
 	..()
 	if (istype(W, /obj/item/weapon/wrench))
 		new /obj/item/stack/sheet/metal( user.loc )
@@ -508,7 +508,7 @@
 		return
 	return
 
-/obj/item/weapon/rack_parts/attack_self(mob/user as mob)
+/obj/item/weapon/rack_parts/attack_self(mob/user)
 	user << "<span class='notice'>You start constructing rack...</span>"
 	if (do_after(user, 50, target = src))
 		if(!user.drop_item())

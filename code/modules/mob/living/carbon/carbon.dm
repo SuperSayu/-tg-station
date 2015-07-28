@@ -75,7 +75,7 @@
 	if(legcuffed)
 		. += legcuffed.slowdown
 
-/mob/living/carbon/relaymove(var/mob/user, direction)
+/mob/living/carbon/relaymove(mob/user, direction)
 	if(user in src.stomach_contents)
 		if(prob(40))
 			if(prob(25))
@@ -105,7 +105,7 @@
 						stomach_contents.Remove(A)
 					src.gib()
 
-/mob/living/carbon/gib(var/animation = 1)
+/mob/living/carbon/gib(animation = 1)
 	for(var/mob/M in src)
 		if(M in stomach_contents)
 			stomach_contents.Remove(M)
@@ -114,7 +114,7 @@
 	. = ..()
 
 
-/mob/living/carbon/electrocute_act(var/shock_damage, var/obj/source, var/siemens_coeff = 1.0)
+/mob/living/carbon/electrocute_act(shock_damage, obj/source, siemens_coeff = 1.0)
 	shock_damage *= siemens_coeff
 	if (shock_damage<1)
 		return 0
@@ -159,7 +159,7 @@
 		src.hands.dir = SOUTH*/
 	return
 
-/mob/living/carbon/activate_hand(var/selhand) //0 or "r" or "right" for right hand; 1 or "l" or "left" for left hand.
+/mob/living/carbon/activate_hand(selhand) //0 or "r" or "right" for right hand; 1 or "l" or "left" for left hand.
 
 	if(istext(selhand))
 		selhand = lowertext(selhand)
@@ -407,10 +407,10 @@ var/const/NO_SLIP_WHEN_WALKING = 1
 var/const/STEP = 2
 var/const/SLIDE = 4
 var/const/GALOSHES_DONT_HELP = 8
-/mob/living/carbon/slip(var/s_amount, var/w_amount, var/obj/O, var/lube)
+/mob/living/carbon/slip(s_amount, w_amount, obj/O, lube)
 	loc.handle_slip(src, s_amount, w_amount, O, lube)
 
-/mob/living/carbon/fall(var/forced)
+/mob/living/carbon/fall(forced)
     loc.handle_fall(src, forced)//it's loc so it doesn't call the mob's handle_fall which does nothing
 
 /mob/living/carbon/is_muzzled()
@@ -482,7 +482,7 @@ var/const/GALOSHES_DONT_HELP = 8
 		cuff_resist(I)
 
 
-/mob/living/carbon/proc/cuff_resist(obj/item/I, var/breakouttime = 600, cuff_break = 0)
+/mob/living/carbon/proc/cuff_resist(obj/item/I, breakouttime = 600, cuff_break = 0)
 	if(istype(I, /obj/item/weapon/restraints))
 		var/obj/item/weapon/restraints/R = I
 		breakouttime = R.breakouttime
@@ -573,7 +573,7 @@ var/const/GALOSHES_DONT_HELP = 8
 	if(head && (head.flags & HEADBANGPROTECT))
 		return 1
 
-/mob/living/carbon/proc/accident(var/obj/item/I)
+/mob/living/carbon/proc/accident(obj/item/I)
 	if(!I || (I.flags & NODROP))
 		return
 

@@ -49,14 +49,14 @@ var/list/uplink_items = list()
 	var/list/excludefrom = list() //Empty list does nothing. Place the name of gamemode you don't want this item to be available in here. This is so you dont have to list EVERY mode to exclude something.
 	var/surplus = 100 //Chance of being included in the surplus crate (when pick() selects it)
 
-/datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U)
+/datum/uplink_item/proc/spawn_item(turf/loc, obj/item/device/uplink/U)
 	if(item)
 		U.uses -= max(cost, 0)
 		U.used_TC += cost
 		feedback_add_details("traitor_uplink_items_bought", "[item]")
 		return new item(loc)
 
-/datum/uplink_item/proc/buy(var/obj/item/device/uplink/U, var/mob/user)
+/datum/uplink_item/proc/buy(obj/item/device/uplink/U, mob/user)
 
 	..()
 	if(!istype(U))
@@ -550,14 +550,14 @@ var/list/uplink_items = list()
 	name = "Binary Translator Key"
 	desc = "A key, that when inserted into a radio headset, allows you to listen to and talk with artificial intelligences and cybernetic organisms in binary. "
 	item = /obj/item/device/encryptionkey/binary
-	cost = 2 //Nowhere near as useful as the Binary Key!
+	cost = 5
 	surplus = 75
 
 /datum/uplink_item/device_tools/encryptionkey
 	name = "Syndicate Encryption Key"
 	desc = "A key, that when inserted into a radio headset, allows you to listen to all station department channels as well as talk on an encrypted Syndicate channel."
 	item = /obj/item/device/encryptionkey/syndicate
-	cost = 5
+	cost = 2 //Nowhere near as useful as the Binary Key!
 	surplus = 75
 
 /datum/uplink_item/device_tools/ai_detector
@@ -775,7 +775,7 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 0
 
-/datum/uplink_item/badass/random/spawn_item(var/turf/loc, var/obj/item/device/uplink/U)
+/datum/uplink_item/badass/random/spawn_item(turf/loc, obj/item/device/uplink/U)
 
 	var/list/buyable_items = get_uplink_items()
 	var/list/possible_items = list()

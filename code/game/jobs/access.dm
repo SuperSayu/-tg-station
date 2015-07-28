@@ -115,11 +115,12 @@
 /obj/item/proc/GetID()
 	return null
 
-/obj/proc/check_access(var/obj/item/I)
+/obj/proc/check_access(obj/item/I)
 	if(!istype(I))
 		return check_access_list(null)
 	return check_access_list(I.GetAccess())
-/obj/proc/check_access_list(var/list/L)
+
+/obj/proc/check_access_list(list/L)
 	//These generations have been moved out of /obj/New() because they were slowing down the creation of objects that never even used the access system.
 	if(!src.req_access)
 		src.req_access = list()
@@ -157,7 +158,14 @@
 			return 1
 		return 0
 	return 1
+
 /*
+/obj/proc/check_access_list(list/L)
+	if(!src.req_access  && !src.req_one_access)	return 1
+	if(!istype(src.req_access, /list))	return 1
+	if(!src.req_access.len && (!src.req_one_access || !src.req_one_access.len))	return 1
+	if(!L)	return 0
+	if(!istype(L, /list))	return 0
 	for(var/req in src.req_access)
 		if(!(req in L)) //doesn't have this access
 			return 0
@@ -217,7 +225,7 @@
 /proc/get_all_centcom_access()
 	return list(access_cent_general, access_cent_thunder, access_cent_specops, access_cent_medical, access_cent_living, access_cent_storage, access_cent_teleporter, access_cent_captain)
 
-/proc/get_ert_access(var/class)
+/proc/get_ert_access(class)
 	switch(class)
 		if("commander")
 			return get_all_centcom_access()
@@ -231,7 +239,7 @@
 /proc/get_all_syndicate_access()
 	return list(access_syndicate, access_syndicate)
 
-/proc/get_region_accesses(var/code)
+/proc/get_region_accesses(code)
 	switch(code)
 		if(0)
 			return get_all_accesses()
@@ -250,7 +258,7 @@
 		if(7) //command
 			return list(access_heads, access_RC_announce, access_keycard_auth, access_change_ids, access_ai_upload, access_teleporter, access_eva, access_gateway, access_all_personal_lockers, access_heads_vault, access_hop, access_captain)
 
-/proc/get_region_accesses_name(var/code)
+/proc/get_region_accesses_name(code)
 	switch(code)
 		if(0)
 			return "All"

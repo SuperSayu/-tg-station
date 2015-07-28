@@ -5,7 +5,7 @@ var/global/max_monoliths = 6 // Actually 5 monoliths, the one that appears under
 
 var/global/list/spawned_surprises = list()
 
-/proc/spawn_room(var/atom/start_loc, var/x_size, var/y_size, var/list/walltypes, var/floor, var/name)
+/proc/spawn_room(atom/start_loc, x_size, y_size, list/walltypes, floor, name)
 	var/list/room_turfs = list("walls"=list(),"floors"=list())
 
 	for(var/x = 0, x < x_size, x++)		//sets the size of the room on the x axis

@@ -80,7 +80,7 @@
 		ready = 1
 
 
-/obj/machinery/gateway/centerstation/proc/toggleon(mob/user as mob)
+/obj/machinery/gateway/centerstation/proc/toggleon(mob/user)
 	if(!ready)			return
 	if(linked.len != 8)	return
 	if(!powered())		return
@@ -109,7 +109,7 @@
 	update_icon()
 
 
-/obj/machinery/gateway/centerstation/attack_hand(mob/user as mob)
+/obj/machinery/gateway/centerstation/attack_hand(mob/user)
 	if(!ready)
 		detect()
 		return
@@ -138,7 +138,7 @@
 		return
 
 
-/obj/machinery/gateway/centerstation/attackby(obj/item/device/W as obj, mob/user as mob, params)
+/obj/machinery/gateway/centerstation/attackby(obj/item/device/W, mob/user, params)
 	if(istype(W,/obj/item/device/multitool))
 		user << "\black The gate is already calibrated, there is no work for you to do here."
 		return
@@ -190,7 +190,7 @@
 		ready = 1
 
 
-/obj/machinery/gateway/centeraway/proc/toggleon(mob/user as mob)
+/obj/machinery/gateway/centeraway/proc/toggleon(mob/user)
 	if(!ready)			return
 	if(linked.len != 8)	return
 	if(!stationgate)
@@ -215,7 +215,7 @@
 	update_icon()
 
 
-/obj/machinery/gateway/centeraway/attack_hand(mob/user as mob)
+/obj/machinery/gateway/centeraway/attack_hand(mob/user)
 	if(!ready)
 		detect()
 		return
@@ -237,7 +237,7 @@
 	M.dir = SOUTH
 
 
-/obj/machinery/gateway/centeraway/attackby(obj/item/device/W as obj, mob/user as mob, params)
+/obj/machinery/gateway/centeraway/attackby(obj/item/device/W, mob/user, params)
 	if(istype(W,/obj/item/device/multitool))
 		if(calibrated)
 			user << "\black The gate is already calibrated, there is no work for you to do here."
