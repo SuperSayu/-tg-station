@@ -43,6 +43,9 @@
 	if(config.protect_assistant_from_antagonist)
 		restricted_jobs += "Assistant"
 
+	if(config.protect_hop_from_antagonist)
+		restricted_jobs += "Head of Personnel"
+
 	var/num_traitors = 1
 
 	if(config.traitor_scaling_coeff)

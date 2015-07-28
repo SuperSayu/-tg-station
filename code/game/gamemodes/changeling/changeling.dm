@@ -45,6 +45,9 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	else if(config.protect_captain_from_antagonist)
 		restricted_jobs += "Captain"
 
+	if(config.protect_hop_from_antagonist)
+		restricted_jobs += "Head of Personnel"
+
 	if(config.protect_assistant_from_antagonist)
 		restricted_jobs += "Assistant"
 
