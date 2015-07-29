@@ -217,6 +217,9 @@
 	if(istype(target,/mob/living/simple_animal/pet/corgi/puppy/smart) && user.a_intent == "help")
 		return //sgt. pepper can do a sniff test on reagent containers
 
+	if(!spillable)
+		return
+
 	if(!reagents || !reagents.total_volume)
 		user << "<span class='warning'>[src] is empty!</span>"
 		return
