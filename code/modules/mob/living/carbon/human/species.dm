@@ -1396,8 +1396,8 @@
 					H.apply_damage(HEAT_DAMAGE_LEVEL_2*heatmod, BURN)
 
 	else if(H.bodytemperature < BODYTEMP_COLD_DAMAGE_LIMIT && !(mutations_list[COLDRES] in H.dna.mutations))
-		if(!istype(H.loc, /obj/machinery/atmospherics/unary/cryo_cell))
-			switch((H.bodytemperature + species_temp_offset))
+		if(!istype(H.loc, /obj/machinery/atmospherics/components/unary/cryo_cell))
+			switch(H.bodytemperature + species_temp_offset)
 				if(200 to 260)
 					H.throw_alert("temp","cold",1)
 					H.apply_damage(COLD_DAMAGE_LEVEL_1*coldmod, BURN)
