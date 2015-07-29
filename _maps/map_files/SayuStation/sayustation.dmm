@@ -3784,7 +3784,7 @@
 "buN" = (/obj/structure/stool/bed/chair/office/light,/obj/effect/landmark/start{name = "Scientist"},/turf/simulated/floor/plasteel{icon_state = "white"},/area/toxins/explab)
 "buO" = (/obj/structure/extinguisher_cabinet{pixel_x = 5; pixel_y = -32},/obj/machinery/atmospherics/components/unary/vent_scrubber{dir = 1; on = 1; scrub_N2O = 0; scrub_Toxins = 0},/turf/simulated/floor/plasteel{icon_state = "white"},/area/toxins/explab)
 "buP" = (/obj/machinery/atmospherics/pipe/manifold/general/visible{dir = 8},/turf/simulated/floor/plating,/area/maintenance/asmaint2)
-"buQ" = (/obj/machinery/atmospherics/components/unary/cold_sink/freezer,/turf/simulated/floor/plating,/area/maintenance/asmaint2)
+"buQ" = (/obj/machinery/atmospherics/components/unary/cold_sink/freezer{dir = 8},/turf/simulated/floor/plating{dir = 8},/area/maintenance/asmaint2)
 "buR" = (/obj/machinery/conveyor{dir = 4; id = "QMLoad"},/obj/machinery/door/poddoor{id = "QMLoaddoor"; name = "supply dock loading door"},/turf/simulated/floor/plating,/area/quartermaster/storage)
 "buS" = (/obj/structure/plasticflaps,/obj/machinery/conveyor{dir = 4; id = "QMLoad"},/turf/simulated/floor/plating,/area/quartermaster/storage)
 "buT" = (/obj/machinery/conveyor{dir = 4; id = "QMLoad"},/turf/simulated/floor/plating{icon_state = "warnplate"; dir = 1},/area/quartermaster/storage)
