@@ -415,7 +415,7 @@
 		overlays += crack_overlay
 
 /obj/structure/window/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(exposed_temperature > T0C + 800)
+	if(exposed_temperature > T0C + (reinf ? 1600 : 800))
 		hit(round(exposed_volume / 100), 0)
 	..()
 
@@ -427,6 +427,7 @@
 	icon_state = "rwindow"
 	reinf = 1
 	maxhealth = 50
+	explosion_block = 1
 
 /obj/structure/window/reinforced/tinted
 	name = "tinted window"
@@ -477,3 +478,4 @@
 	reinf = 1
 	smooth = 1
 	canSmoothWith = null
+	explosion_block = 1
