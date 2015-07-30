@@ -13,15 +13,15 @@
 	lefthand_file = 'icons/mob/inhands/sayu_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/sayu_righthand.dmi'
 
-	New()
-		..()
-		update_icon()
-		return
-
+/obj/item/weapon/gun/projectile/automatic/clown/New()
+	..()
 	update_icon()
-		..()
-		if(magazine)
-			icon_state = "clown-[round(get_ammo(0),4)]"
-		else
-			icon_state = "clown"
-		return
+	return
+
+/obj/item/weapon/gun/projectile/automatic/clown/update_icon()
+	..()
+	if(magazine)
+		icon_state = "clown-[round(get_ammo(0),4)]"
+	else
+		icon_state = "clown"
+	return

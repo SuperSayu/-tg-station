@@ -6,7 +6,7 @@
 	var/list/inserted = list()
 
 /obj/machinery/vending/refillable/attackby(var/obj/item/W as obj, var/mob/user as mob)
-	if(istype(W,/obj/item/weapon/grab) || istype(W,/obj/item/tk_grab) || istype(W,/obj/item/weapon/crowbar))
+	if(istype(W,/obj/item/weapon/grab) || istype(W,/obj/item/tk_grab) || istype(W,/obj/item/weapon/crowbar) || istype(W,/obj/item/weapon/screwdriver) || istype(W,/obj/item/weapon/coin) || istype(W, /obj/item/device/multitool)||istype(W, /obj/item/weapon/wirecutters))
 		return ..(W,user)
 	if(panel_open)
 		if(istype(W,refill_canister))
@@ -19,30 +19,11 @@
 					user << "You label [src]."
 					return 1
 				return 0 // no labels message
-
-		else if(istype(W, /obj/item/device/multitool)||istype(W, /obj/item/weapon/wirecutters))
-			attack_hand(user)
-			return 0
-
-	else if(istype(W, /obj/item/weapon/screwdriver))
-		panel_open = !panel_open
-		user << "You [panel_open ? "open" : "close"] the maintenance panel."
-		overlays.Cut()
-		if(panel_open)
-			overlays += image(icon, "[initial(icon_state)]-panel")
-		updateUsrDialog()
-		return 0
-	else if(istype(W, /obj/item/weapon/coin) && premium.len > 0)
-		user.drop_item()
-		W.loc = src
-		coin = W
-		user << "<span class='notice'>You insert [W] into [src].</span>"
-		return 1
 	else
 		if(allow_insert(W, user))
-			insert(W, user)
+			var/result = insert(W, user)
 			updateUsrDialog()
-			return 1
+			return result
 		else
 			..()
 			return 0
@@ -53,9 +34,17 @@
 	var/searchlist = products
 	if(extended_inventory)
 		searchlist += contraband
+
 	return (I.type in searchlist)
 
 /obj/machinery/vending/refillable/proc/insert(var/obj/item/I, var/mob/user)
+
+	if(user)
+		if(!user.drop_item())
+			user << "<span class='notice'> The [I] is stuck to your hand!</span>"
+			return 0
+
+
 	var/datum/data/vending_product/target_vend = null
 	for(var/datum/data/vending_product/VP in product_records + hidden_records)
 		if(VP.product_path == I.type)
@@ -70,8 +59,6 @@
 	target_vend.amount++
 
 	if(user)
-		user.drop_item()
-
 		if((target_vend in hidden_records) && !extended_inventory)	// This won't usually come up
 			user << "<span class='notice'> You insert [I] into [src], but it doesn't show up on the list.</span>"
 		else
@@ -94,10 +81,12 @@
 /obj/machinery/vending/refillable/generic
 	name = "do-it-yourself vend-o-mat"
 	desc = "Filled with dreams--YOUR dreams.  Which is to say, empty."
-	allow_insert(var/obj/item/I)
-		if(istype(I) && !(I.flags&ABSTRACT))
-			return 1
-		return 0
+
+
+/obj/machinery/vending/refillable/generic/allow_insert(var/obj/item/I)
+	if(istype(I) && !(I.flags&ABSTRACT))
+		return 1
+	return 0
 
 /obj/machinery/vending/refillable/New()
 	..()
@@ -109,7 +98,7 @@
 	name = "mixed drink vender"
 	desc = "Full of the bartender's leftovers."
 
-/obj/machinery/vending/refillable/allow_insert(var/obj/item/weapon/reagent_containers/W as obj, var/mob/user as mob)
+/obj/machinery/vending/refillable/drink/allow_insert(var/obj/item/weapon/reagent_containers/W as obj, var/mob/user as mob)
 	if(!istype(W,/obj/item/weapon/reagent_containers/food/drinks) || !W.reagents)
 		return 0
 	if(istype(W,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass) && W.reagents.reagent_list.len) // no full glasses
@@ -205,27 +194,27 @@
 	scan_id_insert = 1 // inserting
 	req_access_txt = "28" // kitchen
 
-	allow_insert(var/obj/item/W, var/mob/user)
-		if(!istype(W,/obj/item/weapon/reagent_containers/food/snacks))
-			return 0
+/obj/machinery/vending/refillable/food/allow_insert(var/obj/item/W, var/mob/user)
+	if(!istype(W,/obj/item/weapon/reagent_containers/food/snacks))
+		return 0
 
-		return emagged || !scan_id_insert || allowed(user)
+	return emagged || !scan_id_insert || allowed(user)
 
-	attackby(var/obj/item/W as obj, var/mob/user as mob)
-		if(istype(W,/obj/item/weapon/storage/bag))
-			var/obj/item/weapon/storage/SB = W
-			var/loaded = 0
-			for(var/obj/item/snack in SB)
-				if(allow_insert(snack,user))
-					SB.remove_from_storage(snack,loc)
-					insert(snack,null) // prevent messages
-					loaded = 1
-			if(loaded)
-				user << "You load [src] from [W]."
-			else
-				user << "There's nothing in [W] to put in [src]!"
-			return
-		..()
+/obj/machinery/vending/refillable/food/attackby(var/obj/item/W as obj, var/mob/user as mob)
+	if(istype(W,/obj/item/weapon/storage/bag))
+		var/obj/item/weapon/storage/SB = W
+		var/loaded = 0
+		for(var/obj/item/snack in SB)
+			if(allow_insert(snack,user))
+				SB.remove_from_storage(snack,loc)
+				insert(snack,null) // prevent messages
+				loaded = 1
+		if(loaded)
+			user << "You load [src] from [W]."
+		else
+			user << "There's nothing in [W] to put in [src]!"
+		return
+	..()
 
 /obj/machinery/vending/refillable/chemistry
 	name = "chemistry supplies"
@@ -238,31 +227,31 @@
 	contraband = list(/obj/item/weapon/grenade/chem_grenade = 10, /obj/item/device/assembly/igniter = 4, /obj/item/device/assembly/timer = 6)
 	req_one_access_txt = "33;39"
 
-	allow_insert(var/obj/item/W as obj, var/mob/user as mob)
-		if(!emagged && scan_id_insert && !allowed(user))
-			return 0
-		// things it doesn't start with
-		if(istype(W,/obj/item/device/assembly) && extended_inventory)
-			return 1
-		if(istype(W,/obj/item/device/healthanalyzer) || istype(W,/obj/item/clothing/glasses/hud/health))
-			return 1
-		// otherwise
-		if(!..(W,user))
-			user << "\red [src] refuses [W]."
-			return 0
-		if(W.reagents && W.reagents.reagent_list.len) // nothing full of reagents
-			user << "\red [src] refuses [W]."
-			return 0
-		if(istype(W,/obj/item/weapon/grenade/chem_grenade))
-			var/obj/item/weapon/grenade/chem_grenade/CG = W
-			if(CG.beakers.len || CG.stage)
-				user << "\red [src] refuses [W]."
-				return 0
-			return 1
-		if(istype(W,/obj/item/weapon/storage) && W.contents.len)
+/obj/machinery/vending/refillable/chemistry/allow_insert(var/obj/item/W as obj, var/mob/user as mob)
+	if(!emagged && scan_id_insert && !allowed(user))
+		return 0
+	// things it doesn't start with
+	if(istype(W,/obj/item/device/assembly) && extended_inventory)
+		return 1
+	if(istype(W,/obj/item/device/healthanalyzer) || istype(W,/obj/item/clothing/glasses/hud/health))
+		return 1
+	// otherwise
+	if(!..(W,user))
+		user << "\red [src] refuses [W]."
+		return 0
+	if(W.reagents && W.reagents.reagent_list.len) // nothing full of reagents
+		user << "\red [src] refuses [W]."
+		return 0
+	if(istype(W,/obj/item/weapon/grenade/chem_grenade))
+		var/obj/item/weapon/grenade/chem_grenade/CG = W
+		if(CG.beakers.len || CG.stage)
 			user << "\red [src] refuses [W]."
 			return 0
 		return 1
+	if(istype(W,/obj/item/weapon/storage) && W.contents.len)
+		user << "\red [src] refuses [W]."
+		return 0
+	return 1
 
 /obj/machinery/vending/refillable/food/plant
 	name = "farmer's market"
@@ -270,7 +259,7 @@
 	product_slogans = "Eat fresh!;You didn't really want meat anyway.;Caution: May contain essential vitamins and nutrients."
 	req_access_txt = "0"
 
-	allow_insert(var/obj/item/W, var/mob/user)
-		if(!istype(W,/obj/item/weapon/grown) && !istype(W,/obj/item/weapon/reagent_containers/food/snacks/grown) && !istype(W,/obj/item/stack/sheet/mineral/wood))
-			return 0
-		return emagged || !scan_id_insert || allowed(user)
+/obj/machinery/vending/refillable/food/plant/allow_insert(var/obj/item/W, var/mob/user)
+	if(!istype(W,/obj/item/weapon/grown) && !istype(W,/obj/item/weapon/reagent_containers/food/snacks/grown) && !istype(W,/obj/item/stack/sheet/mineral/wood))
+		return 0
+	return emagged || !scan_id_insert || allowed(user)

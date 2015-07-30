@@ -331,8 +331,7 @@
 	throwforce = 0
 	throw_speed = 3
 	throw_range = 7
-	m_amt = 30
-	g_amt = 20
+	materials = list(MAT_METAL=500,MAT_GLASS=500)
 	origin_tech = "magnets=1;engineering=1"
 
 ///////////////

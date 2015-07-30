@@ -550,7 +550,7 @@ var/list/uplink_items = list()
 	name = "Binary Translator Key"
 	desc = "A key, that when inserted into a radio headset, allows you to listen to and talk with artificial intelligences and cybernetic organisms in binary. "
 	item = /obj/item/device/encryptionkey/binary
-	cost = 5
+	cost = 2 //Nowhere near as useful as the Binary Key!
 	surplus = 75
 
 /datum/uplink_item/device_tools/encryptionkey
@@ -659,7 +659,7 @@ var/list/uplink_items = list()
 	desc = "An implant injected into the body, and later activated using a bodily gesture to open an uplink with 10 telecrystals. \
 	The ability for an agent to open an uplink after their posessions have been stripped from them makes this implant excellent for escaping confinement."
 	item = /obj/item/weapon/storage/box/syndie_kit/imp_uplink
-	cost = 20
+	cost = 14
 	surplus = 0
 
 /datum/uplink_item/implants/adrenal
@@ -735,7 +735,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/badass/bundle
 	name = "Syndicate Bundle"
-	desc = "Syndicate Bundles are specialised groups of items that arrive in a plain box. These items are collectively worth more than 10 telecrystals, but you do not know which specialisation you will receive."
+	desc = "Syndicate Bundles are specialised groups of items that arrive in a plain box. These items are collectively worth more than 20 telecrystals, but you do not know which specialisation you will receive."
 	item = /obj/item/weapon/storage/box/syndicate
 	cost = 20
 	excludefrom = list(/datum/game_mode/nuclear,/datum/game_mode/gang)

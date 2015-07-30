@@ -12,6 +12,8 @@
 /turf/simulated/New()
 	..()
 	levelupdate()
+	if(smooth)
+		smooth_icon(src)
 
 /turf/simulated/proc/burn_tile()
 
@@ -69,3 +71,7 @@
 		if(istype(TS))
 			counter++
 	decay(S,current_size, dist, counter)
+
+/turf/simulated/ChangeTurf(var/path)
+	. = ..()
+	smooth_icon_neighbors(src)

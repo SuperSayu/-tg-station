@@ -20,13 +20,8 @@
 		return // not really a peel if it's full
 	if (istype(AM, /mob/living/carbon))
 		var/mob/M =	AM
-		if (istype(M, /mob/living/carbon/human) && (isobj(M:shoes) && M:shoes.flags&NOSLIP))
-			return
 
-		M.stop_pulling()
-		M << "\blue You slipped on the [name]!"
-		playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
-		M.Stun(1)
-		M.Weaken(1)
+		M.slip(1, 1, src)
+
 		if(prob(20))
 			step_rand(src)

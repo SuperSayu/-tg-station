@@ -91,6 +91,8 @@ Sorry Giacom. Please don't be mad :(
 	//switch our position with M
 	//BubbleWrap: people in handcuffs are always switched around as if they were on 'help' intent to prevent a person being pulled from being seperated from their puller
 	if((M.a_intent == "help" || M.restrained()) && (a_intent == "help" || restrained()) && M.canmove && canmove) // mutual brohugs all around!
+		if(loc && !loc.Adjacent(M.loc))
+			return 1
 		now_pushing = 1
 		//TODO: Make this use Move(). we're pretty much recreating it here.
 		//it could be done by setting one of the locs to null to make Move() work, then setting it back and Move() the other mob
@@ -712,7 +714,7 @@ Sorry Giacom. Please don't be mad :(
 					"<span class='userdanger'>[src] tries to remove [who]'s [what.name].</span>")
 	what.add_fingerprint(src)
 	if(do_mob(src, who, what.strip_delay))
-		if(what && Adjacent(who))
+		if(what && what == who.get_item_by_slot(where) && Adjacent(who))
 			who.unEquip(what)
 			add_logs(src, who, "stripped", addition="of [what]")
 
@@ -723,13 +725,16 @@ Sorry Giacom. Please don't be mad :(
 	if(what && (what.flags & NODROP))
 		src << "<span class='warning'>You can't put \the [what.name] on [who], it's stuck to your hand!</span>"
 		return
-	if(what && what.mob_can_equip(who, where, 1))
+	if(what)
+		if(!what.mob_can_equip(who, where, 1))
+			src << "<span class='warning'>\The [what.name] doesn't fit in that place!</span>"
+			return
 		visible_message("<span class='notice'>[src] tries to put [what] on [who].</span>")
 		if(do_mob(src, who, what.put_on_delay))
 			if(what && Adjacent(who))
-				src.unEquip(what)
+				unEquip(what)
 				who.equip_to_slot_if_possible(what, where, 0, 1)
-				add_logs(src, who, "equipped", object=what)
+				add_logs(src, who, "equipped", what)
 
 /mob/living/singularity_act()
 	var/gain = 20
@@ -786,6 +791,23 @@ Sorry Giacom. Please don't be mad :(
 	..(A, final_pixel_y)
 	floating = 0 // If we were without gravity, the bouncing animation got stopped, so we make sure to restart it in next life().
 
+	//Show an image of the wielded weapon over the person who got dunked.
+	var/image/I
+	if(hand)
+		if(l_hand)
+			I = image(l_hand.icon,A,l_hand.icon_state,A.layer+1)
+	else
+		if(r_hand)
+			I = image(r_hand.icon,A,r_hand.icon_state,A.layer+1)
+	if(I)
+		var/list/viewing = list()
+		for(var/mob/M in viewers(A))
+			if(M.client)
+				viewing |= M.client
+		flick_overlay(I,viewing,5)
+		I.pixel_z = 16 //lift it up...
+		animate(I, pixel_z = 0, alpha = 125, time = 3) //smash it down into them!
+
 /mob/living/proc/do_jitter_animation(jitteriness)
 	var/amplitude = min(4, (jitteriness/100) + 1)
 	var/pixel_x_diff = rand(-amplitude, amplitude)
@@ -833,12 +855,9 @@ Sorry Giacom. Please don't be mad :(
 	if(statpanel("Status"))
 		if(ticker)
 			if(ticker.mode)
-				if(istype(ticker.mode, /datum/game_mode/gang))
-					var/datum/game_mode/gang/mode = ticker.mode
-					if(isnum(mode.A_timer))
-						stat(null, "[gang_name("A")] Gang Takeover: [max(mode.A_timer, 0)]")
-					if(isnum(mode.B_timer))
-						stat(null, "[gang_name("B")] Gang Takeover: [max(mode.B_timer, 0)]")
+				for(var/datum/gang/G in ticker.mode.gangs)
+					if(isnum(G.dom_timer))
+						stat(null, "[G.name] Gang Takeover: [max(G.dom_timer, 0)]")
 
 /mob/living/cancel_camera()
 	..()
@@ -853,7 +872,7 @@ Sorry Giacom. Please don't be mad :(
 		return 0
 	if(T.z >= ZLEVEL_SPACEMAX)
 		return 0
-	if(src == user)
+	if(user != null && src == user)
 		return 0
 	if(invisibility || alpha == 0)//cloaked
 		return 0
