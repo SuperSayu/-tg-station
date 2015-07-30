@@ -6,7 +6,6 @@
 	anchored = 0
 	density = 1
 	flags = OPENCONTAINER
-	throwpass = 1 // allows you to move it when trapped, drag it and click to one side of it
 	//copypaste sorry
 	var/amount_per_transfer_from_this = 5 //shit I dunno, adding this so syringes stop runtime erroring. --NeoFite
 	var/obj/item/weapon/storage/bag/trash/mybag	= null

@@ -10,7 +10,6 @@
 	var/destroyed = 0
 
 	var/maximum_pressure = 90*ONE_ATMOSPHERE
-	throwpass = 1 // allows you to reach corners when trapped by them, for moving them left/right
 	var/lastupdate = 0
 
 /obj/machinery/portable_atmospherics/New()
