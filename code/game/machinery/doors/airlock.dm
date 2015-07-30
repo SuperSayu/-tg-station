@@ -1111,7 +1111,7 @@ About the new airlock wires panel:
 		spawn(150)
 			autoclose()
 	else if(autoclose && !normalspeed)
-		spawn(5)
+		spawn(11)
 			autoclose()
 
 	return ..()
@@ -1166,8 +1166,9 @@ About the new airlock wires panel:
 	operating = 0
 	air_update_turf(1)
 	update_freelook_sight()
-	if(locate(/mob/living) in get_turf(src))
-		open()
+	if(safe)
+		if(locate(/mob/living) in get_turf(src))
+			open()
 	return 1
 
 /obj/machinery/door/airlock/New()
