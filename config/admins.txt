@@ -65,3 +65,4 @@ argoneus = Game Master
 
 Plizzard = Game Master
 Becquerel = Game Master
+Collen = Game Master

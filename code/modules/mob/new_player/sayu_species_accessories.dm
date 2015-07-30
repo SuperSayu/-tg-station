@@ -2,75 +2,49 @@
 // Species accessories //
 /////////////////////////
 
-/datum/sprite_accessory/species
+/datum/sprite_accessory/horns/sayu
 	icon = 'icons/mob/spec_accessory.dmi'
-	gender = NEUTER
-	var/id = null // species id must match accessory id for it to be usable.
 
-/////////////
-// LIZARDS //
-/////////////
-
-/datum/sprite_accessory/species/lizard
-	id = "lizard"
-
-/datum/sprite_accessory/species/lizard/none
-	name = "None"
-	icon_state = null
-
-/datum/sprite_accessory/species/lizard/spike_small
+/datum/sprite_accessory/horns/sayu/spike_small
 	name = "Small Spikes"
-	icon_state = "liz_spike_small"
+	icon_state = "smallspike"
 
-/datum/sprite_accessory/species/lizard/spike_tall
+/datum/sprite_accessory/horns/sayu/spike_tall
 	name = "Tall Spikes"
-	icon_state = "liz_spike_tall"
+	icon_state = "tallspike"
 
-/datum/sprite_accessory/species/lizard/twinspikes
+/datum/sprite_accessory/horns/sayu/twinspikes
 	name = "Twin Spikes"
-	icon_state = "liz_twinspikes"
+	icon_state = "twinspikes"
 
-/datum/sprite_accessory/species/lizard/point
+/datum/sprite_accessory/horns/sayu/point
 	name = "Point"
-	icon_state = "liz_point"
+	icon_state = "point"
 
-/datum/sprite_accessory/species/lizard/tripoint
+/datum/sprite_accessory/horns/sayu/tripoint
 	name = "Triple Points"
-	icon_state = "liz_tripoint"
+	icon_state = "tripoint"
 
-/datum/sprite_accessory/species/lizard/crown
+/datum/sprite_accessory/horns/sayu/crown
 	name = "Crown"
-	icon_state = "liz_crown"
+	icon_state = "crown"
 
-/datum/sprite_accessory/species/lizard/flaps
+/datum/sprite_accessory/horns/sayu/flaps
 	name = "Flaps"
-	icon_state = "liz_flaps"
+	icon_state = "flaps"
 
-/datum/sprite_accessory/species/lizard/flaps_alt
+/datum/sprite_accessory/horns/sayu/flaps_alt
 	name = "Flaps Alt"
-	icon_state = "liz_flaps_alt"
+	icon_state = "altflaps"
 
-/datum/sprite_accessory/species/lizard/nubs
+/datum/sprite_accessory/horns/sayu/nubs
 	name = "Nubs"
-	icon_state = "liz_nubs"
+	icon_state = "nubs"
 
-/datum/sprite_accessory/species/lizard/side
+/datum/sprite_accessory/horns/sayu/side
 	name = "Side"
-	icon_state = "liz_side"
+	icon_state = "side"
 
-/datum/sprite_accessory/species/lizard/butterfly
+/datum/sprite_accessory/horns/sayu/butterfly
 	name = "Butterfly"
-	icon_state = "liz_butterfly"
-
-///////////
-// BIRDS //
-///////////
-
-// Todo: add stuff here
-
-/datum/sprite_accessory/species/bird
-	id = "bird"
-
-/datum/sprite_accessory/species/bird/none
-	name = "None"
-	icon_state = null
+	icon_state = "butterfly"

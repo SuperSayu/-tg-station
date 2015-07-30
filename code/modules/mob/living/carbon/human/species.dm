@@ -164,14 +164,7 @@
 		return
 
 	else if(H.hair_style && HAIR in specflags)
-		if(spec_hair == 1)
-			switch(id)
-				if("lizard")
-					S = spec_hair_lizard_list[H.spec_hair]
-				if("bird")
-					S = spec_hair_bird_list[H.spec_hair]
-		else
-			S = hair_styles_list[H.hair_style]
+		S = hair_styles_list[H.hair_style]
 
 		if(S)
 			var/image/img_hair_s = image("icon" = S.icon, "icon_state" = "[S.icon_state]_s", "layer" = -HAIR_LAYER)
@@ -256,7 +249,6 @@
 		if(H.wear_suit && (H.wear_suit.flags_inv & HIDEJUMPSUIT))
 			bodyparts_to_add -= "tail"
 
-
 	if("waggingtail" in mutant_bodyparts)
 		if(H.wear_suit && (H.wear_suit.flags_inv & HIDEJUMPSUIT))
 			bodyparts_to_add -= "waggingtail"
@@ -321,7 +313,7 @@
 			else
 				icon_string = "[id]_m_[bodypart]_[S.icon_state]_[layer]"
 
-			I = image("icon" = 'icons/mob/mutant_bodyparts.dmi', "icon_state" = icon_string, "layer" =- layer)
+			I = image("icon" = S.icon, "icon_state" = icon_string, "layer" =- layer)
 
 			if(!(H.disabilities & HUSK))
 				I.color = "#[H.dna.features["mcolor"]]"

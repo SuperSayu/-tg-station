@@ -96,6 +96,8 @@
 					S = horns_list[features["horns"]]
 				if("body_markings")
 					S = body_markings_list[features["body_markings"]]
+				if("skin")
+					S = skin_list[features["skin"]]
 
 			if(!S || S.icon_state == "none")
 				continue
@@ -104,7 +106,8 @@
 				icon_string = "[pref_species.id]_[g]_[bodypart]_[S.icon_state]_[layer]"
 			else
 				icon_string = "[pref_species.id]_m_[bodypart]_[S.icon_state]_[layer]"
-			var/icon/part = new/icon("icon" = 'icons/mob/mutant_bodyparts.dmi', "icon_state" = icon_string)
+
+			var/icon/part = new/icon("icon" = S.icon, "icon_state" = icon_string)
 
 			part.Blend("#[features["mcolor"]]", ICON_MULTIPLY)
 			preview_icon.Blend(part, ICON_OVERLAY)
