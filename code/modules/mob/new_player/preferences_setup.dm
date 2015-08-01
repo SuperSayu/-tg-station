@@ -100,8 +100,6 @@
 					S = ears_list[features["ears"]]
 				if("body_markings")
 					S = body_markings_list[features["body_markings"]]
-				if("skin")
-					S = skin_list[features["skin"]]
 
 			if(!S || S.icon_state == "none")
 				continue

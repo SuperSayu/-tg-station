@@ -4,8 +4,6 @@
 
 /datum/sprite_accessory/horns/sayu
 	icon = 'icons/mob/spec_accessory.dmi'
-
-/datum/sprite_accessory/horns/sayu/spike_small
 	name = "Small Spikes"
 	icon_state = "smallspike"
 
