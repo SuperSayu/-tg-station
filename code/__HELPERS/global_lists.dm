@@ -26,10 +26,9 @@
 	init_sprite_accessory_subtypes(/datum/sprite_accessory/spines, spines_list)
 	init_sprite_accessory_subtypes(/datum/sprite_accessory/spines_animated, animated_spines_list)
 
-
 	//spec hair
-	init_species_accessory_subtypes(/datum/sprite_accessory/species/lizard, spec_hair_lizard_list)
-	init_species_accessory_subtypes(/datum/sprite_accessory/species/bird, spec_hair_bird_list)
+	//init_species_accessory_subtypes(/datum/sprite_accessory/species/lizard, spec_hair_lizard_list)
+	//init_species_accessory_subtypes(/datum/sprite_accessory/species/bird, spec_hair_bird_list)
 
 	//Species
 	for(var/spath in typesof(/datum/species))

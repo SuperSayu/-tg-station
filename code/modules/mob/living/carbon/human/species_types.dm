@@ -108,7 +108,7 @@ datum/species/human/spec_death(var/gibbed, var/mob/living/carbon/human/H)
 
 /datum/species/plant
 	// Creatures made of leaves and plant matter.
-	name = "Chlorophyte" // WIP name
+	name = "Chlorophyte"
 	id = "plant"
 	desc = "Made entirely of plant matter, the Chlorophytes are naturally free spirits, and do not care much for conformity."
 	default_color = "59CE00"
@@ -256,7 +256,7 @@ datum/species/human/spec_death(var/gibbed, var/mob/living/carbon/human/H)
 
 /datum/species/jelly
 	// Entirely alien beings that seem to be made entirely out of gel. They have three eyes and a skeleton visible within them.
-	name = "Xenoid" // WIP name
+	name = "Xenoid"
 	id = "jelly"
 	desc = "The three-eyed Xenoids hail from the outer reaches of the galaxy. They are vulnerable to freezing, but are also resistant to cellular damage."
 	default_color = "00FF90"
