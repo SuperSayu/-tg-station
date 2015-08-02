@@ -1138,6 +1138,7 @@
 // Attack self
 /obj/item/toy/carpplushie/attack_self(mob/user)
 	playsound(src.loc, bitesound, 20, 1)
+	user << "<span class='notice'>You pet [src]. D'awww.</span>"
 	return ..()
 
 /*

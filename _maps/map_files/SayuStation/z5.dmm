@@ -461,7 +461,7 @@
 "iS" = (/obj/structure/disposalpipe/segment,/turf/simulated/floor/plasteel,/area/mine/west_outpost)
 "iT" = (/obj/structure/closet/emcloset,/turf/simulated/floor/plasteel,/area/mine/west_outpost)
 "iU" = (/obj/structure/ore_box,/turf/simulated/floor/plasteel{dir = 4; icon_state = "warning"},/area/mine/west_outpost)
-"iV" = (/obj/structure/table,/obj/item/weapon/storage/box/donkpockets,/turf/simulated/floor/plasteel{icon_state = "bar"},/area/mine/living_quarters)
+"iV" = (/obj/structure/table,/obj/item/weapon/storage/box/donkpockets,/obj/machinery/reagentgrinder,/turf/simulated/floor/plasteel{icon_state = "bar"},/area/mine/living_quarters)
 "iW" = (/obj/machinery/camera{c_tag = "Crew Area"; dir = 1; network = list("MINE")},/turf/simulated/floor/plasteel{icon_state = "bar"},/area/mine/living_quarters)
 "iX" = (/obj/item/weapon/cigbutt,/turf/simulated/floor/plasteel{icon_state = "bar"},/area/mine/living_quarters)
 "iY" = (/obj/machinery/alarm{pixel_y = 24},/turf/simulated/floor/plasteel,/area/mine/living_quarters)
