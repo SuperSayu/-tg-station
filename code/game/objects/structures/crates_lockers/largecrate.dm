@@ -64,19 +64,19 @@
 /obj/structure/largecrate/lisa/attackby(obj/item/weapon/W as obj, mob/user as mob)	//ugly but oh well
 	if(istype(W, /obj/item/weapon/crowbar))
 		if(lisa)
-			new /mob/living/simple_animal/pet/corgi/Lisa(loc)
+			new /mob/living/simple_animal/pet/dog/corgi/Lisa(loc)
 			lisa = 0
 		else
 			if(prob(50)) // 50% adult corgi
 				if(prob(80)) // net 40% renamable gender-ambiguous woofers
-					new /mob/living/simple_animal/pet/corgi(loc)
+					new /mob/living/simple_animal/pet/dog/corgi(loc)
 				else // net 10% dainty bow dog
-					new /mob/living/simple_animal/pet/corgi/Lisa(loc)
+					new /mob/living/simple_animal/pet/dog/corgi/Lisa(loc)
 			else	// 50% child corgi
 				if(prob(80)) // net 40% normal puppy
-					new /mob/living/simple_animal/pet/corgi/puppy(loc)
+					new /mob/living/simple_animal/pet/dog/corgi/puppy(loc)
 				else	// net 10% smart girl
-					new /mob/living/simple_animal/pet/corgi/puppy/smart(loc)
+					new /mob/living/simple_animal/pet/dog/corgi/puppy/smart(loc)
 	..()
 
 /obj/structure/largecrate/pug
@@ -84,7 +84,7 @@
 
 /obj/structure/largecrate/pug/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/crowbar))
-		new /mob/living/simple_animal/pet/pug(loc)
+		new /mob/living/simple_animal/pet/dog/pug(loc)
 	..()
 
 /obj/structure/largecrate/cow

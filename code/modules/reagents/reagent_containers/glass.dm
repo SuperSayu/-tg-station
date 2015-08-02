@@ -214,7 +214,7 @@
 	if(!canconsume(M, user))
 		return
 
-	if(istype(target,/mob/living/simple_animal/pet/corgi/puppy/smart) && user.a_intent == "help")
+	if(istype(target,/mob/living/simple_animal/pet/dog/corgi/puppy/smart) && user.a_intent == "help")
 		return //sgt. pepper can do a sniff test on reagent containers
 
 	if(!spillable)

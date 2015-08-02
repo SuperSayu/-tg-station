@@ -328,7 +328,7 @@
 /obj/machinery/computer/HolodeckControl/proc/petspawn(turf/T)
 	switch(pettype)
 		if("dogs")
-			var/dogtype = pick(/mob/living/simple_animal/pet/corgi,/mob/living/simple_animal/pet/corgi/Lisa,/mob/living/simple_animal/pet/corgi/puppy,/mob/living/simple_animal/pet/pug)
+			var/dogtype = pick(/mob/living/simple_animal/pet/dog/corgi,/mob/living/simple_animal/pet/dog/corgi/Lisa,/mob/living/simple_animal/pet/dog/corgi/puppy,/mob/living/simple_animal/pet/dog/pug)
 			holographic_items += new dogtype(T)
 		if("cats")
 			var/cattype = pick(/mob/living/simple_animal/pet/cat,/mob/living/simple_animal/pet/cat/Proc,/mob/living/simple_animal/pet/cat/kitten)
