@@ -160,7 +160,7 @@
 "add" = (/obj/structure/table/wood,/obj/item/weapon/book/manual/wiki/security_space_law,/turf/simulated/floor/carpet,/area/security/hos)
 "ade" = (/obj/machinery/light{dir = 4; icon_state = "tube1"},/obj/structure/table/wood,/obj/item/weapon/storage/box/seccarts{pixel_x = 3; pixel_y = 2},/obj/item/weapon/storage/box/deputy,/turf/simulated/floor/carpet,/area/security/hos)
 "adf" = (/turf/simulated/wall,/area/maintenance/fsmaint)
-"adg" = (/obj/machinery/door/airlock/external{name = "Security External Airlock"; req_access_txt = "63; 13"},/turf/simulated/floor/plating,/area/maintenance/fsmaint)
+"adg" = (/obj/machinery/door/airlock/external{name = "Security External Airlock"; req_access_txt = "63"},/turf/simulated/floor/plating,/area/maintenance/fsmaint)
 "adh" = (/obj/structure/cable{icon_state = "0-2"; d2 = 2},/obj/machinery/power/solar{id = "auxsolareast"; name = "Port Auxiliary Solar Array"},/turf/simulated/floor/plasteel/airless{icon_state = "solarpanel"},/area/solar/auxport)
 "adi" = (/obj/structure/cable,/obj/structure/lattice/catwalk,/turf/space,/area/solar/auxport)
 "adj" = (/obj/structure/table,/obj/item/stack/sheet/metal{amount = 1},/obj/item/weapon/storage/box/bodybags,/obj/item/weapon/pen,/obj/machinery/firealarm{dir = 1; pixel_y = -24},/turf/simulated/floor/plasteel{icon_state = "dark"},/area/security/transfer)
