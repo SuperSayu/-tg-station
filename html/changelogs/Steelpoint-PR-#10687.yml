@@ -22,7 +22,7 @@
 #################################
 
 # Your name.  
-author: Dorsisdwarf
+author: Steelpoint
 
 # Optional: Remove this file after generating master changelog.  Useful for PR changelogs that won't get used again.
 delete-after: True
@@ -33,5 +33,4 @@ delete-after: True
 # Also, this gets changed to [] after reading.  Just remove the brackets when you add new shit.
 # Please surround your changes in  double quotes ("). It works without them, but if you use certain characters it screws up compiling. The quotes will not show up in the changelog.
 changes: 
-  - tweak: "Due to a fire sale at Syndicate HQ, many of the more interesting traitor gadgets have been cut in price dramatically. Please take this opportunity to make full use, as we cannot guarantee that the sale will last!"
-
+  - rscadd: "Security Officers now spawn with a security breathmask in their internals box."
