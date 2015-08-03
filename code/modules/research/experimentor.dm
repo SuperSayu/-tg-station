@@ -512,7 +512,7 @@
 				trackedIan.loc = src.loc
 				investigate_log("Experimentor has stolen Ian!", "experimentor") //...if anyone ever fixes it...
 			else
-				new /mob/living/simple_animal/pet/corgi(src.loc)
+				new /mob/living/simple_animal/pet/dog/corgi(src.loc)
 				investigate_log("Experimentor has spawned a new corgi.", "experimentor")
 			ejectItem(TRUE)
 		if(globalMalf > 36 && globalMalf < 50)
@@ -658,7 +658,7 @@
 
 /obj/item/weapon/relic/proc/corgicannon(mob/user)
 	playsound(src.loc, "sparks", rand(25,50), 1)
-	var/mob/living/simple_animal/pet/dog/corgi/C = new/mob/living/simple_animal/pet/corgi(get_turf(user))
+	var/mob/living/simple_animal/pet/dog/corgi/C = new/mob/living/simple_animal/pet/dog/corgi(get_turf(user))
 	C.throw_at(pick(oview(10,user)),10,rand(3,8))
 	throwSmoke(get_turf(C))
 	warn_admins(user, "Corgi Cannon", 0)
