@@ -270,7 +270,7 @@
 	return 0
 
 /turf/proc/can_have_cabling()
-	return !density
+	return 1
 
 /turf/proc/can_lay_cable()
 	return can_have_cabling() & !intact
