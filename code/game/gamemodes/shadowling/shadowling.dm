@@ -81,6 +81,11 @@ Made by Xhuis
 /datum/game_mode/shadowling/pre_setup()
 	if(config.protect_roles_from_antagonist)
 		restricted_jobs += protected_jobs
+	else if(config.protect_captain_from_antagonist)
+		restricted_jobs += "Captain"
+
+	if(config.protect_hop_from_antagonist)
+		restricted_jobs += "Head of Personnel"
 
 	if(config.protect_assistant_from_antagonist)
 		restricted_jobs += "Assistant"

@@ -170,6 +170,10 @@ TRAITOR_OBJECTIVES_AMOUNT 2
 ## being most antagonists.
 #PROTECT_CAPTAIN_FROM_ANTAGONIST
 
+# Uncomment to prohibit the head of personnel from
+## being most antagonists.
+#PROTECT_HOP_FROM_ANTAGONIST
+
 
 
 ## Uncomment to prohibit assistants from becoming most antagonists.
