@@ -1,4 +1,4 @@
-/proc/seedify(var/obj/item/O as obj, var/t_max, var/obj/machinery/seed_extractor/extractor)
+/proc/seedify(obj/item/O, t_max, obj/machinery/seed_extractor/extractor)
 	var/t_amount = 0
 	if(t_max == -1)
 		if(extractor)
@@ -71,7 +71,7 @@
 	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
 		seed_multiplier = M.rating
 
-/obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
+/obj/machinery/seed_extractor/attackby(obj/item/O, mob/user, params)
 
 	if(default_deconstruction_screwdriver(user, "sextractor_open", "sextractor", O))
 		return
@@ -169,11 +169,11 @@
 	var/obj/item/seeds/O = P.template
 	return "<i>[O.plantname] L([O.lifespan]) E([O.endurance]) M([O.maturation]) Po([O.potency]) Pr([O.production]) Y([O.yield])</i>"
 
-/obj/machinery/seed_extractor/attack_hand(mob/user as mob)
+/obj/machinery/seed_extractor/attack_hand(mob/user)
 	user.set_machine(src)
 	interact(user)
 
-/obj/machinery/seed_extractor/interact(mob/user as mob)
+/obj/machinery/seed_extractor/interact(mob/user)
 	if (stat)
 		return 0
 
@@ -220,7 +220,7 @@
 	src.updateUsrDialog()
 	return
 
-/obj/machinery/seed_extractor/proc/add(var/obj/item/seeds/O as obj)
+/obj/machinery/seed_extractor/proc/add(obj/item/seeds/O)
 	if(contents.len >= 999)
 		usr << "<span class='notice'>\The [src] is full.</span>"
 		return 0

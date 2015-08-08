@@ -21,6 +21,14 @@
 /obj/machinery/doorButtons/initialize()
 	findObjsByTag()
 
+/obj/machinery/doorButtons/emag_act(mob/user)
+	if(!emagged)
+		emagged = 1
+		req_access = list()
+		req_one_access = list()
+		playsound(src.loc, "sparks", 100, 1)
+		user << "<span class='warning'>You short out the access controller.</span>"
+
 /obj/machinery/doorButtons/proc/removeMe()
 
 
@@ -203,7 +211,7 @@
 				A.bolt()
 		goIdle(1)
 
-/obj/machinery/doorButtons/airlock_controller/proc/goIdle(var/update)
+/obj/machinery/doorButtons/airlock_controller/proc/goIdle(update)
 	lostPower = 0
 	busy = 0
 	if(update)

@@ -6,7 +6,6 @@
 	anchored = 0
 	density = 1
 	flags = OPENCONTAINER
-	throwpass = 1 // allows you to move it when trapped, drag it and click to one side of it
 	//copypaste sorry
 	var/amount_per_transfer_from_this = 5 //shit I dunno, adding this so syringes stop runtime erroring. --NeoFite
 	var/obj/item/weapon/storage/bag/trash/mybag	= null
@@ -234,7 +233,7 @@
 	if(user.stat || user.stunned || user.weakened || user.paralysis)
 		unbuckle_mob()
 	if(istype(user.l_hand, keytype) || istype(user.r_hand, keytype))
-		if(!Process_Spacemove(direction) || !has_gravity(src.loc) || move_delay)
+		if(!Process_Spacemove(direction) || !has_gravity(src.loc) || move_delay || !isturf(loc))
 			return
 		step(src, direction)
 		update_mob()
@@ -302,7 +301,7 @@
 				buckled_mob.pixel_y = 7
 
 
-/obj/structure/stool/bed/chair/janicart/bullet_act(var/obj/item/projectile/Proj)
+/obj/structure/stool/bed/chair/janicart/bullet_act(obj/item/projectile/Proj)
 	if(buckled_mob)
 		buckled_mob.bullet_act(Proj)
 

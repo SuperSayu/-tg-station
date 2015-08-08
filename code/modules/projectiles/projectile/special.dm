@@ -99,7 +99,6 @@
 	name ="explosive bolt"
 	icon_state= "bolter"
 	damage = 50
-	flag = "bullet"
 
 /obj/item/projectile/bullet/gyro/on_hit(atom/target, blocked = 0)
 	..()
@@ -111,7 +110,6 @@
 	desc = "USE A WEEL GUN"
 	icon_state= "bolter"
 	damage = 60
-	flag = "bullet"
 
 /obj/item/projectile/bullet/a40mm/on_hit(atom/target, blocked = 0)
 	..()
@@ -251,7 +249,7 @@ obj/item/projectile/kinetic/New()
 /obj/item/ammo_casing/energy/wormhole/New(var/obj/item/weapon/gun/energy/wormhole_projector/wh)
 	gun = wh
 
-/obj/item/projectile/beam/wormhole/on_hit(var/atom/target)
+/obj/item/projectile/beam/wormhole/on_hit(atom/target)
 	if(ismob(target))
 		return ..()
 	if(!gun)
@@ -294,7 +292,7 @@ obj/item/projectile/kinetic/New()
 		range += 3
 	..()
 
-/obj/item/projectile/plasma/on_hit(var/atom/target)
+/obj/item/projectile/plasma/on_hit(atom/target)
 	if(istype(target, /turf/simulated/mineral))
 		var/turf/simulated/mineral/M = target
 		M.gets_drilled(firer)

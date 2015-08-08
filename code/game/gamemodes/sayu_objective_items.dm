@@ -78,9 +78,9 @@
 			check_reagent(R)
 	return (found >= target_amount)
 
-/datum/objective_item/steal/reagent/proc/check_reagent(var/datum/reagent/R)
+/datum/objective_item/steal/reagent/proc/check_reagent(datum/reagent/R)
 	found += R.volume
-/datum/objective_item/steal/reagent/compare_to(var/datum/objective_item/i)
+/datum/objective_item/steal/reagent/compare_to(datum/objective_item/i)
 	return i.type == type
 
 /datum/objective_item/steal/reagent/unique
@@ -94,7 +94,7 @@
 	..()
 	return samples.len >= target_amount
 
-/datum/objective_item/steal/reagent/unique/check_reagent(var/datum/reagent/R)
+/datum/objective_item/steal/reagent/unique/check_reagent(datum/reagent/R)
 	// We already know it's blood.
 	if(R.data["blood_DNA"])
 		samples |= R.data["blood_DNA"]
@@ -106,7 +106,7 @@
 	excludefromjob = list("Bartender", "Chef","Botanist")
 	antag_types = list("Wizard","Space Ninja") // all factions respect the booze run
 
-/datum/objective_item/steal/reagent/unique/booze/check_reagent(var/datum/reagent/R)
+/datum/objective_item/steal/reagent/unique/booze/check_reagent(datum/reagent/R)
 	var/static/list/other_alcohols = list(/datum/reagent/consumable/atomicbomb,/datum/reagent/consumable/gargle_blaster,/datum/reagent/consumable/neurotoxin,/datum/reagent/consumable/hippies_delight)
 
 	if(R.volume < 1) return

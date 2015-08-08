@@ -4,7 +4,6 @@
 	icon = 'icons/obj/cult.dmi'
 	icon_state = "forge"
 	density = 1
-	throwpass = 1
 	anchored = 1
 
 	var/obj/item/weapon/magic/blank = null

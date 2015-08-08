@@ -24,7 +24,6 @@
 	icon = 'icons/obj/cult.dmi'
 	icon_state = "tomealtar"
 	density = 1
-	throwpass = 1
 	anchored = 1
 
 	var/decay = 0

@@ -43,14 +43,15 @@
 	new /obj/item/weapon/reagent_containers/pill/antihol(src)
 
 /obj/structure/closet/crate/hydroponics/mystery
-	New()
-		..()
-		var/list/mysteryseeds = typesof(/obj/item/seeds)
-		var/list/boringseeds = list(/obj/item/seeds,/obj/item/seeds/weeds, /obj/item/seeds/cornseed, /obj/item/seeds/kudzuseed, /obj/item/seeds/plumpmycelium, /obj/item/seeds/poisonedappleseed, /obj/item/seeds/deathnettleseed, /obj/item/seeds/deathberryseed)
-		mysteryseeds -= boringseeds
-		for(var/i in 1 to 4)
-			var/typekey = pick_n_take(mysteryseeds)
-			new typekey(src)
+
+/obj/structure/closet/crate/hydroponics/mystery/New()
+	..()
+	var/list/mysteryseeds = typesof(/obj/item/seeds)
+	var/list/boringseeds = list(/obj/item/seeds,/obj/item/seeds/weeds, /obj/item/seeds/cornseed, /obj/item/seeds/kudzuseed, /obj/item/seeds/plumpmycelium, /obj/item/seeds/poisonedappleseed, /obj/item/seeds/deathnettleseed, /obj/item/seeds/deathberryseed)
+	mysteryseeds -= boringseeds
+	for(var/i in 1 to 4)
+		var/typekey = pick_n_take(mysteryseeds)
+		new typekey(src)
 
 //RCS sending code
 /obj/structure/closet/proc/use_rcs(var/obj/item/weapon/rcs/E, mob/user as mob)

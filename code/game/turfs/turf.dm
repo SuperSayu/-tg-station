@@ -43,8 +43,7 @@
 				SSair.add_to_active(T)
 	..()
 
-/turf/attack_hand(mob/user as mob)
-	user.changeNext_move(5)
+/turf/attack_hand(mob/user)
 	user.Move_Pulled(src)
 
 /turf/attackby(obj/item/C, mob/user, params)
@@ -127,7 +126,7 @@
 		qdel(L)
 
 //Creates a new turf
-/turf/proc/ChangeTurf(var/path)
+/turf/proc/ChangeTurf(path)
 	if(!path)			return
 	if(path == type)	return src
 
@@ -139,6 +138,10 @@
 		W.RemoveLattice()
 	W.levelupdate()
 	W.CalculateAdjacentTurfs()
+
+	if(!can_have_cabling())
+		for(var/obj/structure/cable/C in contents)
+			C.Deconstruct()
 	return W
 
 //////Assimilate Air//////
@@ -267,7 +270,7 @@
 	return 0
 
 /turf/proc/can_have_cabling()
-	return !density
+	return 1
 
 /turf/proc/can_lay_cable()
 	return can_have_cabling() & !intact

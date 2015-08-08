@@ -24,8 +24,3 @@
 /turf/simulated/floor/plating/airless/glass/New()
 	..()
 	underlays += image('icons/turf/space.dmi',icon_state = "[((x + y) ^ ~(x * y) + z) % 25]")
-
-/turf/simulated/floor/plasteel/cult/airless
-	oxygen = 0
-	nitrogen = 0
-	temperature = TCMB

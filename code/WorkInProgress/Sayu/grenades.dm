@@ -368,7 +368,7 @@
 /obj/item/weapon/grenade/clusterbuster/fluffy
 	name = "Fluffy Love Bomb"
 	desc = "Exactly as snuggly as it sounds."
-	payload = /mob/living/simple_animal/corgi/puppy
+	payload = /mob/living/simple_animal/pet/dog/corgi/puppy
 
 
 // Grenades that should never see the light of day

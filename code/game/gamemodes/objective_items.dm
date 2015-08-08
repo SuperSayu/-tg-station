@@ -15,9 +15,9 @@
 /datum/objective_item/proc/add_objective()
 	return src // some objectives need to be their own copy, some do not
 // see if the objectives are the same, usually true
-/datum/objective_item/proc/compare_to(var/datum/objective_item/i)
+/datum/objective_item/proc/compare_to(datum/objective_item/i)
 	return 1
-/datum/objective_item/proc/find_duplicate(var/datum/mind/M)
+/datum/objective_item/proc/find_duplicate(datum/mind/M)
 	for(var/datum/objective/steal/s in M.objectives)
 		if(s.targetinfo.targetitem == targetitem && compare_to(s.targetinfo))
 			return s
@@ -122,7 +122,7 @@
 	excludefromjob = list("Chief Engineer","Research Director","Station Engineer","Scientist","Atmospheric Technician")
 	antag_types = list("traitor","Changeling","Space Ninja")
 
-/datum/objective_item/steal/plasma/check_special_completion(var/obj/item/weapon/tank/T)
+/datum/objective_item/steal/plasma/check_special_completion(obj/item/weapon/tank/T)
 	var/target_amount = text2num(name)
 	var/found_amount = 0
 	found_amount += T.air_contents.toxins
@@ -135,7 +135,7 @@
 	difficulty = 30 //beyond the impossible
 	antag_types = list("traitor","Changeling","Wizard")
 
-/datum/objective_item/steal/functionalai/check_special_completion(var/obj/item/device/aicard/C)
+/datum/objective_item/steal/functionalai/check_special_completion(obj/item/device/aicard/C)
 	for(var/mob/living/silicon/ai/A in C)
 		if(istype(A, /mob/living/silicon/ai) && A.stat != 2) //See if any AI's are alive inside that card.
 			return 1
@@ -149,7 +149,7 @@
 	antag_types = list("traitor","Changeling","Space Ninja")
 	altitems = list(/obj/item/weapon/photo)
 
-/datum/objective_item/steal/blueprints/check_special_completion(var/obj/item/I)
+/datum/objective_item/steal/blueprints/check_special_completion(obj/item/I)
 	if(istype(I, /obj/item/areaeditor/blueprints))
 		return 1
 	if(istype(I, /obj/item/weapon/photo))
@@ -165,7 +165,7 @@
 	excludefromjob = list("Research Director","Scientist")
 	antag_types = list("traitor","Changeling","Wizard","Space Ninja")
 
-/datum/objective_item/steal/slime/check_special_completion(var/obj/item/slime_extract/E)
+/datum/objective_item/steal/slime/check_special_completion(obj/item/slime_extract/E)
 	if(E.Uses > 0)
 		return 1
 	return 0
@@ -237,7 +237,7 @@
 	difficulty = 9001
 	antag_types = list()
 
-/datum/objective_item/stack/check_special_completion(var/obj/item/stack/S)
+/datum/objective_item/stack/check_special_completion(obj/item/stack/S)
 	var/target_amount = text2num(name)
 	var/found_amount = 0
 

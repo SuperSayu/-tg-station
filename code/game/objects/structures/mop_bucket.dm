@@ -6,7 +6,6 @@
 	density = 1
 	flags = OPENCONTAINER
 	var/amount_per_transfer_from_this = 5	//shit I dunno, adding this so syringes stop runtime erroring. --NeoFite
-	throwpass = 1
 
 
 /obj/structure/mopbucket/New()
