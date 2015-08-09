@@ -117,7 +117,8 @@
 				icon_string = "[pref_species.id]_[g]_[bodypart]_[S.icon_state]_[layer]"
 			else
 				icon_string = "[pref_species.id]_m_[bodypart]_[S.icon_state]_[layer]"
-			var/icon/part = new/icon("icon" = 'icons/mob/mutant_bodyparts.dmi', "icon_state" = icon_string)
+
+			var/icon/part = new/icon("icon" = S.icon, "icon_state" = icon_string)
 
 			switch(S.color_src)
 				if(MUTCOLORS)

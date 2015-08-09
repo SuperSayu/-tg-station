@@ -36,19 +36,6 @@
 				female += D.name
 	return L
 
-/proc/init_species_accessory_subtypes(prototype, list/L)
-	if(!istype(L))
-		L = list()
-
-	for(var/path in typesof(prototype))
-		if(path == prototype)	continue
-		var/datum/sprite_accessory/species/D = new path()
-
-		if(D.icon_state)	L[D.name] = D
-		else				L += D.name
-
-	return L
-
 /datum/sprite_accessory
 	var/icon			//the icon file the accessory is located in
 	var/icon_state		//the icon_state of the accessory
