@@ -15,5 +15,5 @@
 			continue
 
 		var/datum/disease/D = new /datum/disease/appendicitis
-		H.AddDisease(D)
+		H.ForceContractDisease(D)
 		break

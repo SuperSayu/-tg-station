@@ -54,6 +54,7 @@
 					overlays += "unlocked"
 			else
 				overlays += "off"
+
 	else
 		if(icon_door_override)
 			overlays += "[icon_door]_open"
