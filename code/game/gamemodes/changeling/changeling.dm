@@ -270,7 +270,7 @@ var/list/slot2type = list("head" = /obj/item/clothing/head/changeling, "wear_mas
 	//var/list/absorbed_dna = list()
 	//var/list/protected_dna = list() //dna that is not lost when capacity is otherwise full
 	var/dna_max = 6 //How many extra DNA strands the changeling can store for transformation.
-	var/absorbedcount = 1 //We would require at least 1 sample of compatible DNA to have taken on the form of a human.
+	var/absorbedcount = 0
 	var/chem_charges = 20
 	var/chem_storage = 75
 	var/chem_recharge_rate = 1
@@ -354,7 +354,7 @@ var/list/slot2type = list("head" = /obj/item/clothing/head/changeling, "wear_mas
 	prof.dna = new_dna
 	prof.name = H.real_name
 	prof.protected = protect
-	
+
 	var/list/slots = list("head", "wear_mask", "back", "wear_suit", "w_uniform", "shoes", "belt", "gloves", "glasses", "ears", "wear_id", "s_store")
 	for(var/slot in slots)
 		var/obj/item/I = H.vars[slot]
@@ -368,6 +368,7 @@ var/list/slot2type = list("head" = /obj/item/clothing/head/changeling, "wear_mas
 		prof.exists_list[slot] = 1
 
 	stored_profiles += prof
+	absorbedcount++
 
 	return prof
 
@@ -430,7 +431,7 @@ var/list/slot2type = list("head" = /obj/item/clothing/head/changeling, "wear_mas
 
 /datum/changelingprofile
 	var/name = "a bug"
-	
+
 	var/protected = 0
 
 	var/datum/dna/dna = null
@@ -440,6 +441,6 @@ var/list/slot2type = list("head" = /obj/item/clothing/head/changeling, "wear_mas
 	var/list/exists_list = list()
 	var/list/item_color_list = list()
 	var/list/item_state_list = list()
-	
+
 /datum/changelingprofile/Destroy()
 	qdel(dna)
