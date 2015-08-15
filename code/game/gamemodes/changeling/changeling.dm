@@ -86,8 +86,10 @@ var/list/slot2type = list("head" = /obj/item/clothing/head/changeling, "wear_mas
 	//And then set it up to be handed out in forge_changeling_objectives
 	var/list/team_objectives = typesof(/datum/objective/changeling_team_objective) - /datum/objective/changeling_team_objective
 	var/list/possible_team_objectives = list()
-	for(var/datum/objective/changeling_team_objective/T in team_objectives)
-		if(changelings.len >= initial(T.min_lings))
+	for(var/T in team_objectives)
+		var/datum/objective/changeling_team_objective/CTO = T
+
+		if(changelings.len >= initial(CTO.min_lings))
 			possible_team_objectives += T
 
 	if(possible_team_objectives.len && prob(20*changelings.len))
@@ -118,6 +120,14 @@ var/list/slot2type = list("head" = /obj/item/clothing/head/changeling, "wear_mas
 	//OBJECTIVES - random traitor objectives. Unique objectives "steal brain" and "identity theft".
 	//No escape alone because changelings aren't suited for it and it'd probably just lead to rampant robusting
 	//If it seems like they'd be able to do it in play, add a 10% chance to have to escape alone
+
+	var/escape_objective_possible = TRUE
+
+	//if there's a team objective, check if it's compatible with escape objectives
+	for(var/datum/objective/changeling_team_objective/CTO in changeling.objectives)
+		if(!CTO.escape_objective_compatible)
+			escape_objective_possible = FALSE
+			break
 
 	var/datum/objective/absorb/absorb_objective = new
 	absorb_objective.owner = changeling
@@ -154,14 +164,15 @@ var/list/slot2type = list("head" = /obj/item/clothing/head/changeling, "wear_mas
 				maroon_objective.find_target()
 			changeling.objectives += maroon_objective
 
-			if (!(locate(/datum/objective/escape) in changeling.objectives))
+			if (!(locate(/datum/objective/escape) in changeling.objectives) && escape_objective_possible)
 				var/datum/objective/escape/escape_with_identity/identity_theft = new
 				identity_theft.owner = changeling
 				identity_theft.target = maroon_objective.target
 				identity_theft.update_explanation_text()
 				changeling.objectives += identity_theft
+				escape_objective_possible = FALSE
 
-	if (!(locate(/datum/objective/escape) in changeling.objectives))
+	if (!(locate(/datum/objective/escape) in changeling.objectives) && escape_objective_possible)
 		if(prob(50))
 			var/datum/objective/escape/escape_objective = new
 			escape_objective.owner = changeling
@@ -169,8 +180,12 @@ var/list/slot2type = list("head" = /obj/item/clothing/head/changeling, "wear_mas
 		else
 			var/datum/objective/escape/escape_with_identity/identity_theft = new
 			identity_theft.owner = changeling
-			identity_theft.find_target()
+			if(team_mode)
+				identity_theft.find_target_by_role(role = "Changeling", role_type = 1, invert = 1)
+			else
+				identity_theft.find_target()
 			changeling.objectives += identity_theft
+		escape_objective_possible = FALSE
 
 
 
