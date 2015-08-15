@@ -1,11 +1,3 @@
-/datum/objective_item/steal/corgimeat
-	name = "a piece of corgi meat"
-	targetitem = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/corgi
-	difficulty = 5
-	excludefromjob = list("Quartermaster","Cargo Technician","Head of Personnel") //>hurting your little buddy ever
-	antag_types = list("traitor","Changeling","Wizard")
-
-
 /datum/objective_item/steal/redphone
 	name = "a red telephone"
 	targetitem = /obj/item/weapon/phone
