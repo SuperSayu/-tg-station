@@ -144,16 +144,12 @@
 		qdel(src)
 	return 2
 
-/obj/singularity_pull(var/obj/singularity/S, current_size, dist)
-	if(!anchored)
+/obj/singularity_pull(S, current_size)
+	if(!anchored || current_size >= STAGE_FIVE)
 		step_towards(src,S)
 
 /obj/singularity_decay(var/obj/singularity/S, size, dist)
-	if(anchored && prob(size*10 - dist*5))
-		anchored = 0
-		step_towards(src,S)
-	else
-		singularity_pull(S, size, dist)
+	singularity_pull(S, size, dist)
 
 /obj/proc/Deconstruct()
 	qdel(src)
