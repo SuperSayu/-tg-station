@@ -144,8 +144,8 @@
 		qdel(src)
 	return 2
 
-/obj/singularity_pull(S, current_size)
-	if(!anchored || current_size >= STAGE_FIVE)
+/obj/singularity_pull(S, current_size, dist)
+	if(!anchored || current_size >= STAGE_FIVE || prob(current_size*10 - dist*5))
 		step_towards(src,S)
 
 /obj/singularity_decay(var/obj/singularity/S, size, dist)
