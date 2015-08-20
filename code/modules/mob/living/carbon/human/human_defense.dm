@@ -129,8 +129,8 @@ emp_act
 	var/obj/item/organ/limb/affecting = get_organ(ran_zone(user.zone_sel.selecting))
 	var/hit_area = parse_zone(affecting.name)
 	var/target_area = parse_zone(target_limb.name)
-	feedback_add_details("item_used_for_combat","[I.name]|[I.force]")
-	feedback_add_details("zone_targeted","[def_zone]")
+	feedback_add_details("item_used_for_combat","[I.type]|[I.force]")
+	feedback_add_details("zone_targeted","[target_area]")
 
 	if(ishuman(user)) // interacting with broken bones hurts
 		var/mob/living/carbon/human/Huser = user
