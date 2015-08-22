@@ -251,7 +251,7 @@
 	return copytext(sanitize(t),1,MAX_MESSAGE_LEN)
 
 /proc/derpspeech(message, stuttering)
-	message = replacetext(message, " am ", " ")
+	/*message = replacetext(message, " am ", " ")
 	message = replacetext(message, " is ", " ")
 	message = replacetext(message, " are ", " ")
 	message = replacetext(message, "you", "u")
@@ -264,7 +264,7 @@
 		message = uppertext(message)
 		message += "[stutter(pick("!", "!!", "!!!"))]"
 	if(!stuttering && prob(15))
-		message = stutter(message)
+		message = stutter(message)*/
 	return message
 
 
