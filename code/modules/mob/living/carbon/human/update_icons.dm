@@ -53,7 +53,6 @@ Please contact me on #coderbus IRC. ~Carnie x
 */
 
 /mob/living/carbon/human/proc/update_base_icon_state()
-	//var/race = dna ? dna.mutantrace : null
 	if(dna)
 		base_icon_state = dna.species.update_base_icon_state(src)
 	else
@@ -67,7 +66,6 @@ Please contact me on #coderbus IRC. ~Carnie x
 //UPDATES OVERLAYS FROM OVERLAYS_STANDING
 //TODO: Remove all instances where this proc is called. It used to be the fastest way to swap between standing/lying.
 /mob/living/carbon/human/update_icons()
-
 	update_hud()		//TODO: remove the need for this
 
 	var/stealth = 0
@@ -89,7 +87,6 @@ Please contact me on #coderbus IRC. ~Carnie x
 			animate(src,alpha=255,time=12,loop=0,easing=CUBIC_EASING)
 
 	update_transform()
-
 
 //DAMAGE OVERLAYS
 //constructs damage icon for each organ from mask * damage field and saves it in our overlays_ lists
@@ -134,14 +131,9 @@ Please contact me on #coderbus IRC. ~Carnie x
 /mob/living/carbon/human/proc/update_body()
 	remove_overlay(BODY_LAYER)
 
+	update_base_icon_state()
+
 	if(dna)
-		base_icon_state = dna.species.update_base_icon_state(src)
-	else
-		update_base_icon_state()
-
-	icon_state = "[base_icon_state]_s"
-
-	if(dna)	// didn't want to have a duplicate if(dna) here, but due to the ordering of the code this was the only way
 		dna.species.handle_body(src)
 
 /mob/living/carbon/human/update_fire()
