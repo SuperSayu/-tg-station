@@ -45,7 +45,8 @@
 	if(button)
 		if(T.client)
 			T.client.screen -= button
-		del(button)
+		qdel(button)
+		button = null
 	T.actions.Remove(src)
 	T.update_action_buttons()
 	owner = null
@@ -135,7 +136,10 @@
 	var/image/img
 	if(owner.action_type == AB_ITEM && owner.target)
 		var/obj/item/I = owner.target
-		overlays += I.appearance
+		var/old = I.layer
+		I.layer = FLOAT_LAYER //AAAH
+		overlays += I
+		I.layer = old
 	else if(owner.button_icon && owner.button_icon_state)
 		img = image(owner.button_icon,src,owner.button_icon_state)
 		img.pixel_x = 0

@@ -27,7 +27,7 @@
 
 
 	proc/accept(var/mob/M, var/mob/caster)
-		if(istype(M,/obj/item/organ/brain) || istype(M,/obj/item/device/soulstone))
+		if(istype(M,/obj/item/organ/internal/brain) || istype(M,/obj/item/device/soulstone))
 			M = locate(/mob/living) in M
 		if(!ismob(M)) return 0
 		if(!M.client && !pick_clientless)	// 1: No client
@@ -191,7 +191,7 @@
 	cast(mob/caster, mob/target)
 		if(istype(target))
 			if(ishuman(target) || ismonkey(target))
-				var/obj/item/organ/brain/B = target.getorgan(/obj/item/organ/brain)
+				var/obj/item/organ/internal/brain/B = target.getorgan(/obj/item/organ/internal/brain)
 				if(B)
 					B.loc = get_turf(target)
 					B.transfer_identity(target)
@@ -625,7 +625,7 @@
 
 	before_cast(var/mob/caster, var/mob/living/carbon/human/target)
 		if(!istype(target)) return 0
-		if(target.hair_style && target.hair_style != "shaved" && target.get_organ(/obj/item/organ/brain)) // debrained = no hair
+		if(target.hair_style && target.hair_style != "shaved" && target.get_organ(/obj/item/organ/internal/brain)) // debrained = no hair
 			return 1
 		if(target.facial_hair_style && target.facial_hair_style != "shaved")
 			return 1

@@ -11,7 +11,6 @@
 	verb_exclaim = "beeps"
 	var/listening = 0
 	var/recorded = "" //the activation message
-
 	bomb_name = "voice-activated bomb"
 
 /obj/item/device/assembly/voice/Hear(message, atom/movable/speaker, message_langs, raw_message, radio_freq, list/spans)
@@ -24,7 +23,8 @@
 		say("Activation message is '[recorded]'.")
 	else
 		if(findtext(raw_message, recorded))
-			pulse(0)
+			spawn(10)
+				pulse(0)
 
 /obj/item/device/assembly/voice/activate()
 	if(secured)

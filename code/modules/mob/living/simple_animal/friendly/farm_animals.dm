@@ -106,6 +106,7 @@
 	attack_sound = 'sound/weapons/punch1.ogg'
 	health = 50
 	var/datum/reagents/udder = null
+	gold_core_spawnable = 2
 
 	var/list/tip_responses = list(	"looks at you imploringly.",
 											"looks at you pleadingly",
@@ -182,6 +183,7 @@
 	var/never_grow = 0
 	pass_flags = PASSTABLE | PASSGRILLE | PASSMOB
 	mob_size = MOB_SIZE_TINY
+	gold_core_spawnable = 2
 
 /mob/living/simple_animal/chick/New()
 	..()
@@ -232,6 +234,7 @@ var/global/chicken_count = 0
 	var/list/feedMessages = list("It clucks happily.","It clucks happily.")
 	var/list/layMessage = list("lays an egg.","squats down and croons.","begins making a huge racket.","begins clucking raucously.")
 	var/list/validColors = list("brown","black","white")
+	gold_core_spawnable = 2
 
 /mob/living/simple_animal/chicken/New()
 	..()
