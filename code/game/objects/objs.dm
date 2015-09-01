@@ -145,15 +145,14 @@
 	return 2
 
 /obj/singularity_pull(var/obj/singularity/S, current_size, dist)
-	if(!anchored)
-		step_towards(src,S)
+    if(!anchored)
+        step_towards(src,S)
 
 /obj/singularity_decay(var/obj/singularity/S, size, dist)
-	if(anchored && prob(size*10 - dist*5))
-		anchored = 0
-		step_towards(src,S)
-	else
-		singularity_pull(S, size, dist)
+    if(anchored && prob(size*10 - dist*5))
+        step_towards(src,S)
+    else
+        singularity_pull(S, size, dist)
 
 /obj/proc/Deconstruct()
 	qdel(src)
@@ -180,6 +179,7 @@
 		Item.fire_act() //Set them on fire, too
 	var/obj/effect/decal/cleanable/ash/A = new(src.loc)
 	A.desc = "Looks like this used to be a [name] some time ago."
+	SSobj.burning -= src
 	qdel(src)
 
 /obj/proc/extinguish()
