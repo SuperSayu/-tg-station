@@ -17,7 +17,7 @@
 	var/start_active = 0 //If it ignores the random chance to start broken on round start
 	var/invuln = null
 	var/obj/item/device/camera_bug/bug = null
-	var/obj/item/weapon/camera_assembly/assembly = null
+	var/obj/machinery/camera_assembly/assembly = null
 	var/cam_luminosity = 2
 
 	//OTHER
@@ -33,8 +33,6 @@
 /obj/machinery/camera/New()
 	assembly = new(src)
 	assembly.state = 4
-	assembly.anchored = 1
-	assembly.update_icon()
 	if(prob(25)) cam_luminosity += pick(1,1,0,-1)
 
 	/* // Use this to look for cameras that have the same c_tag.
@@ -161,7 +159,6 @@
 				assembly.loc = src.loc
 				assembly.state = 1
 				assembly.dir = src.dir
-				assembly.update_icon()
 				assembly = null
 				qdel(src)
 				return
