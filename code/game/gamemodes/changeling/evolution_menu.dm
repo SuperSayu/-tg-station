@@ -389,6 +389,7 @@ var/list/sting_paths
 	if(ishuman(src) || ismonkey(src))
 		if(mind && mind.changeling)
 			digitalcamo = 0
+			digitalinvis = 0
 			mind.changeling.changeling_speak = 0
 			mind.changeling.reset()
 			mind.changeling.reset()

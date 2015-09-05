@@ -5524,7 +5524,7 @@ abababababababababababababababababababababababababababababababababababababababab
 /area/wizard_station)
 "mR" = (
 /obj/machinery/door/airlock{
-	icon = 'icons/obj/doors/Dooruranium.dmi';
+	icon = 'icons/obj/doors/airlocks/station/uranium.dmi';
 	 name = "Break Room"
 	},
 /turf/simulated/floor/plasteel/cult,
@@ -6209,7 +6209,7 @@ abababababababababababababababababababababababababababababababababababababababab
 /area/wizard_station)
 "oC" = (
 /obj/machinery/door/airlock{
-	icon = 'icons/obj/doors/Dooruranium.dmi';
+	icon = 'icons/obj/doors/airlocks/station/uranium.dmi';
 	 name = "Corridor A"
 	},
 /turf/simulated/floor/plasteel/cult,
@@ -6400,7 +6400,7 @@ abababababababababababababababababababababababababababababababababababababababab
 /area/tdome/tdomeadmin)
 "pf" = (
 /obj/machinery/door/airlock{
-	icon = 'icons/obj/doors/Dooruranium.dmi';
+	icon = 'icons/obj/doors/airlocks/station/uranium.dmi';
 	 name = "Personal Quarters"
 	},
 /turf/simulated/floor/plasteel/cult,
@@ -6631,7 +6631,7 @@ abababababababababababababababababababababababababababababababababababababababab
 /area/centcom/holding)
 "pR" = (
 /obj/machinery/door/airlock{
-	icon = 'icons/obj/doors/Dooruranium.dmi';
+	icon = 'icons/obj/doors/airlocks/station/uranium.dmi';
 	 name = "Engine Room B"
 	},
 /turf/space,

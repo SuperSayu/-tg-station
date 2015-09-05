@@ -70,7 +70,7 @@
 			if(mecha.occupant && (src.allowed(mecha.occupant) || src.check_access_list(mecha.operation_req_access) || emergency == 1))
 				open()
 			else
-				flick("door_deny", src)
+				do_animate("deny")
 		return
 	return
 
@@ -102,7 +102,7 @@
 		if(allowed(user) || src.emergency == 1)
 			open()
 		else
-			flick("door_deny", src)
+			do_animate("deny")
 	return
 
 
@@ -140,23 +140,8 @@
 			close()
 		return
 	if(src.density)
-		flick("door_deny", src)
+		do_animate("deny")
 	return
-
-/obj/machinery/door/emag_act(mob/user)
-	if(density && hasPower() && !emagged)
-		flick("door_spark", src)
-		sleep(6)
-		open()
-		emagged = 1
-		desc = "<span class='warning'>Its access panel is smoking slightly.</span>"
-		if(istype(src, /obj/machinery/door/airlock))
-			var/obj/machinery/door/airlock/A = src
-			A.lights = 0
-			A.locked = 1
-			A.loseMainPower()
-			A.loseBackupPower()
-			A.update_icon()
 
 /obj/machinery/door/blob_act()
 	if(prob(40))
