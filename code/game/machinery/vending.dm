@@ -98,7 +98,7 @@
 	wires = null
 	qdel(coin)
 	coin = null
-	..()
+	return ..()
 
 /obj/machinery/vending/snack/Destroy()
 	for(var/obj/item/weapon/reagent_containers/food/snacks/S in contents)

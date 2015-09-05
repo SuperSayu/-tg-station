@@ -338,7 +338,7 @@
 	SetOpacity(0)
 	if(buckled_mob)
 		unbuckle_mob()
-	..()
+	return ..()
 
 /obj/effect/spacevine/proc/on_chem_effect(datum/reagent/R)
 	var/override = 0
@@ -438,7 +438,7 @@
 
 /obj/effect/spacevine_controller/Destroy()
 	SSobj.processing.Remove(src)
-	..()
+	return ..()
 
 /obj/effect/spacevine_controller/proc/spawn_spacevine_piece(turf/location, obj/effect/spacevine/parent, list/muts)
 	var/obj/effect/spacevine/SV = new(location)

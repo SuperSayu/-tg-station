@@ -98,7 +98,7 @@
 	bugged_cameras = list()
 	if(tracking)
 		tracking = null
-	..()
+	return ..()
 
 
 /obj/item/device/camera_bug/interact(mob/user = usr)

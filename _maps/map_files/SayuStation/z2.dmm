@@ -411,7 +411,7 @@
 "hU" = (/obj/structure/showcase{icon = 'icons/mob/AI.dmi'; icon_state = "ai-static"; name = "Damaged AI Core"},/turf/simulated/floor/plasteel/airless{icon_state = "dark"},/area/space)
 "hV" = (/turf/indestructible/fakeglass{icon_state = "fakewindows"; dir = 8},/area/space)
 "hW" = (/turf/indestructible/fakeglass{icon_state = "fakewindows"; dir = 4},/area/wizard_station)
-"hX" = (/turf/indestructible/fakedoor{icon = 'icons/obj/doors/Doorcomglass.dmi'; icon_state = "door_trashed"; name = "Bridge"; opacity = 0},/area/wizard_station)
+"hX" = (/turf/indestructible/fakedoor{icon = 'icons/obj/doors/sayu_doors.dmi'; icon_state = "door_trashed"; name = "Bridge"; opacity = 0},/area/wizard_station)
 "hY" = (/obj/structure/wizard/spellbook/travel,/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor/plasteel{dir = 8; icon_state = "wood"},/area/wizard_station)
 "hZ" = (/turf/simulated/floor/plasteel{dir = 8; icon_state = "wood"},/area/wizard_station)
 "ia" = (/obj/structure/wizard/spellbook/subterfuge,/turf/simulated/floor/plasteel{dir = 8; icon_state = "wood"},/area/wizard_station)
