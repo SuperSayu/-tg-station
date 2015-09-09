@@ -19,7 +19,7 @@
 	new /obj/item/weapon/tank/internals/air(src)
 	new /obj/item/clothing/mask/gas(src)
 	new /obj/item/clothing/suit/armor/reactive(src)
-	new /obj/item/device/flash/handheld(src)
+	new /obj/item/device/assembly/flash/handheld(src)
 	new /obj/item/device/laser_pointer(src)
 	new /obj/item/clothing/gloves/ring/plasma(src)
 	new /obj/item/clothing/glasses/science(src)

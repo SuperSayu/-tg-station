@@ -193,10 +193,17 @@
 "dK" = (/turf/indestructible/riveted,/area/tdome/tdomeadmin)
 "dL" = (/obj/machinery/computer/security/telescreen{pixel_y = -32},/turf/simulated/floor/plasteel/redyellow,/area/tdome/tdomeadmin)
 "dM" = (/turf/simulated/floor/plasteel,/area/tdome/tdomeadmin)
+<<<<<<< HEAD
 "dN" = (/obj/machinery/computer/secure_data,/turf/simulated/floor/plasteel/shuttle{icon_state = "floor4"},/area/centcom/evac)
 "dO" = (/obj/structure/stool/bed/chair{dir = 1},/turf/simulated/floor/plasteel/shuttle{icon_state = "floor4"},/area/centcom/evac)
 "dP" = (/obj/structure/stool/bed/chair{dir = 4},/turf/simulated/floor/plasteel/shuttle{icon_state = "floor4"},/area/centcom/evac)
 "dQ" = (/obj/structure/table/reinforced,/obj/item/weapon/clipboard,/obj/item/weapon/stamp,/turf/simulated/floor/plasteel/shuttle{icon_state = "floor4"},/area/centcom/evac)
+=======
+"dN" = (/obj/structure/stool/bed/chair{dir = 1},/turf/simulated/floor/plasteel/shuttle,/area/centcom/evac)
+"dO" = (/obj/machinery/computer/secure_data,/turf/simulated/floor/plasteel/shuttle,/area/centcom/evac)
+"dP" = (/obj/structure/table/reinforced,/obj/item/weapon/clipboard,/obj/item/weapon/stamp,/turf/simulated/floor/plasteel/shuttle,/area/centcom/evac)
+"dQ" = (/obj/structure/table,/obj/item/device/assembly/flash/handheld,/turf/simulated/floor/plasteel/shuttle,/area/centcom/evac)
+>>>>>>> 7043de4... Merge pull request #11527 from Core0verload/assembly
 "dR" = (/turf/indestructible/fakedoor{name = "Thunderdome Admin"},/area/tdome/tdomeadmin)
 <<<<<<< HEAD
 "dS" = (/obj/structure/table,/obj/machinery/door_control{id = "thunderdomehea"; name = "Heavy Supply Control"; pixel_y = 0; req_access_txt = "102"},/turf/simulated/floor/plasteel,/area/tdome/tdomeadmin)
