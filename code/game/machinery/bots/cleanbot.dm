@@ -25,7 +25,6 @@
 	health = 25
 	maxhealth = 25
 	var/blood = 1
-	var/prints = 1
 	var/list/target_types = list()
 	var/obj/effect/decal/cleanable/target
 	var/max_targets = 50 //Maximum number of targets a cleanbot can ignore.
@@ -90,7 +89,6 @@ Maintenance panel panel is [open ? "opened" : "closed"]"},
 text("<A href='?src=\ref[src];power=1'>[on ? "On" : "Off"]</A>"))
 	if(!locked || issilicon(user))
 		dat += text({"<BR>Cleans Blood: []<BR>"}, text("<A href='?src=\ref[src];operation=blood'>[blood ? "Yes" : "No"]</A>"))
-		dat += text({"<BR>Clean Footprints[]<BR>"},text("<A href='?src=\ref[src];operation=prints'>[src.prints ? "Yes" : "No"]</A>"))
 		dat += text({"<BR>Patrol station: []<BR>"}, text("<A href='?src=\ref[src];operation=patrol'>[auto_patrol ? "Yes" : "No"]</A>"))
 
 	var/datum/browser/popup = new(user, "autoclean", "Automatic Station Cleaner v1.1")
@@ -105,11 +103,6 @@ text("<A href='?src=\ref[src];power=1'>[on ? "On" : "Off"]</A>"))
 		if("blood")
 			blood =!blood
 			get_targets()
-			updateUsrDialog()
-		if("prints")
-			prints = !prints
-			get_targets()
-			updateUsrDialog()
 			updateUsrDialog()
 
 /obj/machinery/bot/cleanbot/attackby(obj/item/weapon/W, mob/user, params)
@@ -214,10 +207,6 @@ text("<A href='?src=\ref[src];power=1'>[on ? "On" : "Off"]</A>"))
 		target_types += /obj/effect/decal/cleanable/blood/gibs/
 		target_types += /obj/effect/decal/cleanable/blood/drip/
 		target_types += /obj/effect/decal/cleanable/trail_holder
-	if(src.prints)
-		target_types += /obj/effect/decal/cleanable/trail/bloodtrail
-		target_types += /obj/effect/decal/cleanable/trail/oiltrail
-		target_types += /obj/effect/decal/cleanable/trail/xenotrail
 
 /obj/machinery/bot/cleanbot/proc/clean(obj/effect/decal/cleanable/target)
 	anchored = 1

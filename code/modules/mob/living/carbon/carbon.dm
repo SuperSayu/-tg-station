@@ -33,46 +33,6 @@
 				src.nutrition -= HUNGER_FACTOR/10
 		if((src.disabilities & FAT) && src.m_intent == "run" && src.bodytemperature <= 360)
 			src.bodytemperature += 2
-	if(trail > 0 && prob(40))
-		var/obj/effect/decal/cleanable/trail/t
-		switch(trailtype)
-			if("blood")
-				if(istype(src, /mob/living/carbon/human))
-					t = new /obj/effect/decal/cleanable/trail/bloodtrail(src.loc)
-				if(istype(src, /mob/living/carbon/monkey))
-					t = new /obj/effect/decal/cleanable/trail/bloodtrail/paw(src.loc)
-				if(istype(src, /mob/living/carbon/alien/humanoid))
-					t = new /obj/effect/decal/cleanable/trail/bloodtrail/xeno(src.loc)
-			if("oil")
-				if(istype(src, /mob/living/carbon/human))
-					t = new /obj/effect/decal/cleanable/trail/oiltrail(src.loc)
-				if(istype(src, /mob/living/carbon/monkey))
-					t = new /obj/effect/decal/cleanable/trail/oiltrail/paw(src.loc)
-				if(istype(src, /mob/living/carbon/alien/humanoid))
-					t = new /obj/effect/decal/cleanable/trail/oiltrail/xeno(src.loc)
-			if("xeno")
-				if(istype(src, /mob/living/carbon/human))
-					t = new /obj/effect/decal/cleanable/trail/xenotrail(src.loc)
-				if(istype(src, /mob/living/carbon/monkey))
-					t = new /obj/effect/decal/cleanable/trail/xenotrail/paw(src.loc)
-				if(istype(src, /mob/living/carbon/alien/humanoid))
-					t = new /obj/effect/decal/cleanable/trail/xenotrail/xeno(src.loc)
-		if(t)
-			t.dir = src.dir
-			t.alpha = min(224,trail*32 + pick(64,32,16,0,0,-16,-32,-64))
-			if(t.alpha <= 0)
-				t.alpha = 16
-			if(t.alpha <= 64)
-				spawn(300)
-					if(t) t.alpha /= 2
-			if(t.alpha <= 32)
-				spawn(600)
-					if(t) del t
-			if(t.loc && isturf(t.loc))
-				for(var/obj/effect/decal/cleanable/trail/T in src.loc)
-					if(T.dir == t.dir && T != t)
-						del(T)
-		trail--
 
 /mob/living/carbon/movement_delay()
 	. = 0
