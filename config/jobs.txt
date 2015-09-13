@@ -17,7 +17,7 @@ Chemist=1
 
 Bartender=1
 Botanist=1
-Chef=1
+Cook=1
 Janitor=1
 Quartermaster=1
 Shaft Miner=2
