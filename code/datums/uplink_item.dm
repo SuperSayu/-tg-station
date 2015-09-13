@@ -100,7 +100,7 @@ var/list/uplink_items = list()
 	category = "Conspicuous and Dangerous Weapons"
 
 /datum/uplink_item/dangerous/pistol
-	name = "Syndicate Pistol"
+	name = "FK-69 Pistol"
 	desc = "A small, easily concealable handgun that uses 10mm auto rounds in 8-round magazines and is compatible with suppressors."
 	item = /obj/item/weapon/gun/projectile/automatic/pistol
 	cost = 9
@@ -477,7 +477,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/stealthy_tools/camera_bug
 	name = "Camera Bug"
-	desc = "Enables you to bug cameras to view them remotely. Adding particular items to it alters its functions."
+	desc = "Enables you to view all cameras on the network and track a target. Bugging cameras allows you to disable them remotely"
 	item = /obj/item/device/camera_bug
 	cost = 1
 	surplus = 90
