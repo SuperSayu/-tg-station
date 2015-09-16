@@ -50,7 +50,7 @@ var/list/icons_to_ignore_at_floor_init = list("damaged1","damaged2","damaged3","
 		ex_act(3)
 		return
 	switch(severity)
-		if(1.0)
+		if(1)
 /*
 			if(prob(80))
 				src.ChangeTurf(/turf/space)
@@ -59,7 +59,7 @@ var/list/icons_to_ignore_at_floor_init = list("damaged1","damaged2","damaged3","
 				new /obj/structure/faketurf(src)
 */
 			src.ChangeTurf(src.baseturf)
-		if(2.0)
+		if(2)
 			switch(pick(1,2;75,3))
 				if(1)
 					if(prob(60))
@@ -76,7 +76,7 @@ var/list/icons_to_ignore_at_floor_init = list("damaged1","damaged2","damaged3","
 						src.break_tile()
 					src.hotspot_expose(1000,CELL_VOLUME)
 					if(prob(33)) new /obj/item/stack/sheet/metal(src)
-		if(3.0)
+		if(3)
 			if (prob(50))
 				src.break_tile()
 				src.hotspot_expose(1000,CELL_VOLUME)

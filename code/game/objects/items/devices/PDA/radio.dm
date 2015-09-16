@@ -20,9 +20,8 @@
 
 /obj/item/radio/integrated/signal
 	var/frequency = 1457
-	var/code = 30.0
-	var/last_transmission = null
-	var/last_recieve = null
+	var/code = 30
+	var/last_transmission
 	var/datum/radio_frequency/radio_connection
 
 /obj/item/radio/integrated/signal/New()

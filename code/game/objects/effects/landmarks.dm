@@ -4,7 +4,7 @@ var/global/xartnum = 0 // Extra artifact number. Used to prevent too many extra 
 	name = "landmark"
 	icon = 'icons/mob/screen_gen.dmi'
 	icon_state = "x2"
-	anchored = 1.0
+	anchored = 1
 	unacidable = 1
 
 /obj/effect/landmark/New()
@@ -74,7 +74,7 @@ var/global/xartnum = 0 // Extra artifact number. Used to prevent too many extra 
 	name = "start"
 	icon = 'icons/mob/screen_gen.dmi'
 	icon_state = "x"
-	anchored = 1.0
+	anchored = 1
 
 /obj/effect/landmark/start/New()
 	..()

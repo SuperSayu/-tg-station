@@ -65,21 +65,21 @@
 		dismantle_wall(1,1)
 		return
 	switch(severity)
-		if(1.0)
+		if(1)
 /*			if(prob(90))
 				src.ChangeTurf(/turf/space)
 			else
 				new /obj/structure/faketurf(src)*/
 			src.ChangeTurf(src.baseturf)
 			return
-		if(2.0)
-			if (prob(45))
+		if(2)
+			if (prob(50))
 				dismantle_wall(0,1)
 			else if(prob(76))
 				dismantle_wall(1,1)
 			else
 				new /obj/structure/faketurf(src)
-		if(3.0)
+		if(3)
 			if (prob(hardness))
 				dismantle_wall(0,1)
 			else

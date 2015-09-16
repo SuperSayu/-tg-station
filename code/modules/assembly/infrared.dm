@@ -170,10 +170,10 @@
 	var/obj/effect/beam/i_beam/next = null
 	var/obj/effect/beam/i_beam/previous = null
 	var/obj/item/device/assembly/infra/master = null
-	var/limit = 0
-	var/visible = 0.0
-	var/left = 0
-	anchored = 1.0
+	var/limit = null
+	var/visible = 0
+	var/left = null
+	anchored = 1
 
 
 /obj/effect/beam/i_beam/proc/hit()

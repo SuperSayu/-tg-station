@@ -10,11 +10,11 @@ RSF
 	icon_state = "rcd"
 	opacity = 0
 	density = 0
-	anchored = 0.0
+	anchored = 0
 	var/matter = 0
 	var/matter_max = 20
 	var/mode = 1
-	w_class = 3.0
+	w_class = 3
 
 	var/list/mode_names = list("Dosh","Drinking glass", "Paper","Pen","Dice Pack", "Cigarette")
 	var/list/mode_paths = list(/obj/item/stack/spacecash/c10, /obj/item/weapon/reagent_containers/food/drinks/drinkingglass,/obj/item/weapon/paper,
