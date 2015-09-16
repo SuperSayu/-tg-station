@@ -186,7 +186,7 @@
 	if(TRAITS & TRAIT_SMART)
 		smartness = 25
 	else if(TRAITS & TRAIT_DUMB)
-		mutations |= CLUMSY
+		disabilities |= CLUMSY
 		smartness = 75
 
 	if(TRAITS & TRAIT_MEAN)

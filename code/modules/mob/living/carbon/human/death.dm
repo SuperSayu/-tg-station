@@ -118,15 +118,12 @@
 		update_body()
 
 /mob/living/carbon/proc/Drain()
-	var/drain = 1
-	if(back)
-		if(istype(back,/obj/item/artifact))
-			var/obj/item/artifact/A = back
-			if(A.power == 56 && A.activated && A.on) // A_REVIVE
-				drain = 0
-	if(drain)
-		ChangeToHusk()
-		mutations |= NOCLONE
-		return 1
-	else
-		return 0
+
+	if(back && istype(back,/obj/item/artifact))
+		var/obj/item/artifact/A = back
+		if(A.power == 56 && A.activated && A.on) // A_REVIVE
+			return
+
+	ChangeToHusk()
+	disabilities |= NOCLONE
+	return 1

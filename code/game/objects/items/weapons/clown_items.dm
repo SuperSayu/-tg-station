@@ -54,7 +54,7 @@
 	if (istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
 		M.slip(4, 2, src)
-		if(CLUMSY in M.mutations)
+		if(CLUMSY in M.disabilities)
 			uses++ // murphy's law compels you
 		else
 			uses--
