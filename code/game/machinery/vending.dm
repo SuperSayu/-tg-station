@@ -702,7 +702,7 @@ IF YOU MODIFY THE PRODUCTS LIST OF A MACHINE, MAKE SURE TO UPDATE ITS RESUPPLY C
 					/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola = 8, /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sodawater = 15,
 					/obj/item/weapon/reagent_containers/food/drinks/drinkingglass = 30,/obj/item/weapon/reagent_containers/food/drinks/ice = 10,
 					/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/shotglass = 12)
-	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/tea = 12)
+	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/mug/tea = 12)
 	premium = list(/obj/item/weapon/reagent_containers/food/drinks/golden_cup = 1, /obj/item/weapon/reagent_containers/food/drinks/britcup = 2, /obj/item/weapon/reagent_containers/food/drinks/shaker = 1,/obj/item/weapon/reagent_containers/pill/antihol = 5)
 
 	vend_delay = 15
@@ -728,7 +728,7 @@ IF YOU MODIFY THE PRODUCTS LIST OF A MACHINE, MAKE SURE TO UPDATE ITS RESUPPLY C
 	icon_state = "coffee"
 	icon_vend = "coffee-vend"
 	vend_delay = 34
-	products = list(/obj/item/weapon/reagent_containers/food/drinks/coffee = 25,/obj/item/weapon/reagent_containers/food/drinks/tea = 25,/obj/item/weapon/reagent_containers/food/drinks/h_chocolate = 25)
+	products = list(/obj/item/weapon/reagent_containers/food/drinks/coffee = 25,/obj/item/weapon/reagent_containers/food/drinks/mug/tea = 25,/obj/item/weapon/reagent_containers/food/drinks/mug/coco = 25)
 	contraband = list(/obj/item/weapon/reagent_containers/food/drinks/ice = 12)
 	refill_canister = /obj/item/weapon/vending_refill/coffee
 	initvend_minimum = 1
