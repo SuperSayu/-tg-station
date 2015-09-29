@@ -73,7 +73,7 @@
 
 				spawn(time)
 					if(C != null)
-						updateappearance(C)
+						C.updateappearance(mutcolor_update=1)
 
 						var/adverb = pick("suddenly","pleasantly","unpleasantly","strangely","oddly")
 						var/gender = "masculine"
@@ -107,7 +107,7 @@
 				L.apply_effect(time/10,WEAKEN)
 				spawn(time)
 					if(L != null)
-						domutcheck(L,null,1)
+						L.domutcheck()
 
 /datum/round_event/radiation_storm/ffour
 	start()
@@ -141,7 +141,7 @@
 			spawn(rand(10,100))
 				if(H != null)
 					H.apply_damages(-200,-200,-200,-200,-200)
-					domutcheck(H,null,1)
+					H.domutcheck()
 
 /datum/round_event/radiation_storm/healing
 	start()
