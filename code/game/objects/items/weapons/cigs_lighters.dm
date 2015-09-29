@@ -24,6 +24,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	var/smoketime = 5
 	w_class = 1
 	origin_tech = "materials=1"
+	heat = 1000
 
 /obj/item/weapon/match/process()
 	var/turf/location = get_turf(src)
@@ -89,6 +90,9 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		var/obj/item/clothing/mask/cigarette/cig = M.wear_mask
 		return cig
 
+/obj/item/weapon/match/is_hot()
+	return lit * heat
+
 //////////////////
 //FINE SMOKABLES//
 //////////////////
@@ -107,6 +111,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	var/lastHolder = null
 	var/smoketime = 300
 	var/chem_volume = 30
+	heat = 1000
 
 /obj/item/clothing/mask/cigarette/suicide_act(mob/user)
 	user.visible_message("<span class='suicide'>[user] is huffing the [src.name] as quickly as they can! It looks like \he's trying to give \himself cancer.</span>")
@@ -133,7 +138,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/attackby(obj/item/weapon/W, mob/user, params)
 	..()
-	if(!lit && smoketime > 0 && is_hot(W))
+	if(!lit && smoketime > 0 && W.is_hot())
 		var/lighting_text = is_lighter(W,user)
 		if(lighting_text)
 			light(lighting_text)
@@ -152,7 +157,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 			else
 				user << "<span class='notice'>[src] is full.</span>"
 
-/obj/item/clothing/mask/cigarette/proc/is_lighter(obj/O, mob/user)
+/obj/item/clothing/mask/cigarette/proc/is_lighter(obj/item/O, mob/user)
 	var/lighting_text = null
 	if(istype(O, /obj/item/weapon/weldingtool))
 		lighting_text = "<span class='notice'>[user] casually lights the [name] with [O], what a badass.</span>"
@@ -166,7 +171,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		lighting_text = "<span class='notice'>[user] fiddles with [O], and manages to light their [name].</span>"
 	else if(istype(O, /obj/item/device/flashlight/flare))
 		lighting_text = "<span class='notice'>[user] lights their [name] with [O] like a real badass.</span>"
-	else if(is_hot(O))
+	else if(O.is_hot())
 		lighting_text = "<span class='notice'>[user] lights their [name] with [O].</span>"
 	return lighting_text
 
@@ -270,6 +275,9 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/fire_act()
 	light()
+
+/obj/item/clothing/mask/cigarette/is_hot()
+	return lit * heat
 
 /obj/item/clothing/mask/cigarette/rollie
 	name = "rollie"
@@ -463,6 +471,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	flags = CONDUCT
 	slot_flags = SLOT_BELT
 	var/lit = 0
+	heat = 1500
 
 /obj/item/weapon/lighter/greyscale
 	name = "cheap lighter"
@@ -551,6 +560,8 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		SetLuminosity(1)
 	return
 
+/obj/item/weapon/lighter/is_hot()
+	return lit * heat
 
 ///////////
 //ROLLING//
