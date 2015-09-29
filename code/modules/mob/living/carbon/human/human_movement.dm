@@ -54,7 +54,7 @@
 	for(var/datum/mutation/human/HM in dna.mutations)
 		HM.on_move(src, NewLoc)
 	if(shoes)
-		if(!lying)
+		if(!lying && !buckled)
 			if(loc == NewLoc)
 				if(!has_gravity(loc))
 					return
