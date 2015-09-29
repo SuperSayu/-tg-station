@@ -79,6 +79,7 @@
 	. = 1
 	qdel(src)
 	return .
+<<<<<<< HEAD
 
 /obj/item/weapon/implant/tracking
 	name = "tracking implant"
@@ -173,3 +174,5 @@
 	if (src.uses < 1)	return 0
 	src.uses--
 	empulse(imp_in, 3, 5)
+=======
+>>>>>>> fd0b52f... Merge pull request #11920 from Jalleo/ImplantCleanup
