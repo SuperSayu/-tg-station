@@ -169,7 +169,7 @@
 			active = 0
 			updateUsrDialog()
 			update_icons()
-			art.radiation_act(intensity)
+			art.rad_act(intensity)
 	else if(href_list["increase"])
 		if(intensity+1 < 11)
 			intensity++

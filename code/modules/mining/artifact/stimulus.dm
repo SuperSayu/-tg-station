@@ -63,7 +63,7 @@ obj/item/artifact/proc/set_stim()
 			spawn(10)
 			hitdelay = 0
 
-/obj/item/artifact/proc/radiation_act(var/intensity)
+/obj/item/artifact/rad_act(var/intensity)
 	if(!checkfail(A_RADS))
 		if(intensity == extra3)
 			activate()
