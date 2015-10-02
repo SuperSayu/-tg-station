@@ -88,8 +88,7 @@
 		update_canmove()
 		if(client) blind.layer = 0
 
-	if(dna)
-		dna.species.spec_death(gibbed,src)
+	dna.species.spec_death(gibbed,src)
 
 	tod = worldtime2text()		//weasellos time of death patch
 	if(mind)	mind.store_memory("Time of death: [tod]", 0)
@@ -100,9 +99,8 @@
 	return ..(gibbed)
 
 /mob/living/carbon/human/proc/makeSkeleton()
-	if(!check_dna_integrity(src))	return
 	status_flags |= DISFIGURED
-	hardset_dna(src, null, null, null, null, /datum/species/skeleton)
+	set_species(/datum/species/skeleton)
 	return 1
 
 /mob/living/carbon/proc/ChangeToHusk()
@@ -118,15 +116,12 @@
 		update_body()
 
 /mob/living/carbon/proc/Drain()
-	var/drain = 1
-	if(back)
-		if(istype(back,/obj/item/artifact))
-			var/obj/item/artifact/A = back
-			if(A.power == 56 && A.activated && A.on) // A_REVIVE
-				drain = 0
-	if(drain)
-		ChangeToHusk()
-		mutations |= NOCLONE
-		return 1
-	else
-		return 0
+
+	if(back && istype(back,/obj/item/artifact))
+		var/obj/item/artifact/A = back
+		if(A.power == 56 && A.activated && A.on) // A_REVIVE
+			return
+
+	ChangeToHusk()
+	disabilities |= NOCLONE
+	return 1

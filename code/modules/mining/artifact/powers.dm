@@ -412,7 +412,7 @@
 				// Clean the person's DNA first
 				var/good = rand(0,1)
 				clean_randmut(H, good == 1 ? (good_se_blocks | op_se_blocks) : bad_se_blocks, 20) // copypasta from dnaide
-				domutcheck(H, 1)
+				H.domutcheck()
 		if(A_ELECTRIC)
 			// EXTRA 1: Effect range
 			// EXTRA 2: Effect power
@@ -681,10 +681,10 @@
 					if(prob(extra1)) // Mutation
 						if(prob(extra1)) // Good mutation
 							randmutg(H)
-							domutcheck(H, null, 1)
+							H.domutcheck()
 						else // Bad mutation
 							randmutb(H)
-							domutcheck(H, null, 1)
+							H.domutcheck()
 			else
 				if(istype(target,/mob/living/carbon/human))
 					var/mob/living/carbon/human/H = target
@@ -692,10 +692,10 @@
 					if(prob(extra1)) // Mutation
 						if(prob(extra1)) // Good mutation
 							randmutg(H)
-							domutcheck(H, null, 1)
+							H.domutcheck()
 						else // Bad mutation
 							randmutb(H)
-							domutcheck(H, null, 1)
+							H.domutcheck()
 		if(A_REPAIR)
 			// EXTRA 1: Repair strength
 			if(target == user)
@@ -737,7 +737,7 @@
 					H << "<span class='danger'><b>You feel your body weakening!</b></span>"
 					if(prob(extra1)) // Oh no
 						clean_randmut(H, bad_se_blocks, 20)
-						domutcheck(H, 1)
+						H.domutcheck()
 		if(A_MINING)
 			// EXTRA 1: Mining range
 			if(targtile)

@@ -43,6 +43,10 @@ Buildable meters
 		PIPE_GAS_MIXER, \
 	)
 
+/obj/item/pipe/examine(mob/user)
+	..()
+	user << "<span class='notice'>Alt-click to rotate it clockwise.</span>"
+
 /obj/item/pipe/New(loc, pipe_type, dir, obj/machinery/atmospherics/make_from)
 	..()
 	if(make_from)
@@ -159,6 +163,16 @@ var/global/list/pipeID2State = list(
 
 	return
 
+/obj/item/pipe/AltClick(mob/user)
+	..()
+	if(!user.canUseTopic(user))
+		user << "<span class='warning'>You can't do that right now!</span>"
+		return
+	if(!in_range(src, user))
+		return
+	else
+		rotate()
+
 /obj/item/pipe/Move()
 	..()
 	if ((pipe_type in list (PIPE_SIMPLE, PIPE_HE)) && is_bent \
@@ -214,7 +228,6 @@ var/global/list/pipeID2State = list(
 	var/obj/machinery/atmospherics/components/trinary/T = A
 	if(istype(T))
 		T.flipped = flipped
-
 	A.construction(pipe_type, color)
 
 	playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)

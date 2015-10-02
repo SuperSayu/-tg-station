@@ -8,7 +8,6 @@
 /datum/round_event/brand_intelligence
 	announceWhen	= 21
 	endWhen			= 1000	//Ends when all vending machines are subverted anyway.
-
 	var/list/obj/machinery/vending/vendingMachines = list()
 	var/list/obj/machinery/vending/infectedMachines = list()
 	var/obj/machinery/vending/originMachine
@@ -29,11 +28,9 @@
 	for(var/obj/machinery/vending/V in machines)
 		if(V.z != 1)	continue
 		vendingMachines.Add(V)
-
 	if(!vendingMachines.len)
 		kill()
 		return
-
 	originMachine = pick(vendingMachines)
 	vendingMachines.Remove(originMachine)
 	originMachine.shut_up = 0
@@ -49,7 +46,7 @@
 			originMachine.visible_message("[originMachine] beeps and seems lifeless.")
 		kill()
 		return
-
+	vendingMachines = removeNullsFromList(vendingMachines)
 	if(!vendingMachines.len)	//if every machine is infected
 		for(var/obj/machinery/vending/upriser in infectedMachines)
 			if(prob(70) && !upriser.gc_destroyed)
@@ -63,7 +60,6 @@
 
 		kill()
 		return
-
 	if(IsMultiple(activeFor, 4))
 		var/obj/machinery/vending/rebel = pick(vendingMachines)
 		vendingMachines.Remove(rebel)

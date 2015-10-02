@@ -4,11 +4,11 @@
 	name = "proxy bucket"
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "bucket_proxy"
-	force = 3.0
-	throwforce = 5.0
+	force = 3
+	throwforce = 5
 	throw_speed = 2
 	throw_range = 5
-	w_class = 3.0
+	w_class = 3.
 	var/created_name = "Cleanbot"
 
 
@@ -18,14 +18,13 @@
 	desc = "A little cleaning robot, he looks so excited!"
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "cleanbot0"
-	layer = 5.0
+	layer = 5
 	density = 0
 	anchored = 0
 	//weight = 1.0E7
 	health = 25
 	maxhealth = 25
 	var/blood = 1
-	var/prints = 1
 	var/list/target_types = list()
 	var/obj/effect/decal/cleanable/target
 	var/max_targets = 50 //Maximum number of targets a cleanbot can ignore.
@@ -90,7 +89,6 @@ Maintenance panel panel is [open ? "opened" : "closed"]"},
 text("<A href='?src=\ref[src];power=1'>[on ? "On" : "Off"]</A>"))
 	if(!locked || issilicon(user))
 		dat += text({"<BR>Cleans Blood: []<BR>"}, text("<A href='?src=\ref[src];operation=blood'>[blood ? "Yes" : "No"]</A>"))
-		dat += text({"<BR>Clean Footprints[]<BR>"},text("<A href='?src=\ref[src];operation=prints'>[src.prints ? "Yes" : "No"]</A>"))
 		dat += text({"<BR>Patrol station: []<BR>"}, text("<A href='?src=\ref[src];operation=patrol'>[auto_patrol ? "Yes" : "No"]</A>"))
 
 	var/datum/browser/popup = new(user, "autoclean", "Automatic Station Cleaner v1.1")
@@ -105,11 +103,6 @@ text("<A href='?src=\ref[src];power=1'>[on ? "On" : "Off"]</A>"))
 		if("blood")
 			blood =!blood
 			get_targets()
-			updateUsrDialog()
-		if("prints")
-			prints = !prints
-			get_targets()
-			updateUsrDialog()
 			updateUsrDialog()
 
 /obj/machinery/bot/cleanbot/attackby(obj/item/weapon/W, mob/user, params)
@@ -157,7 +150,7 @@ text("<A href='?src=\ref[src];power=1'>[on ? "On" : "Off"]</A>"))
 				PoolOrNew(/obj/effect/effect/foam, loc)
 
 	else if (prob(5))
-		visible_message("[src] makes an excited beeping booping sound!")
+		audible_message("[src] makes an excited beeping booping sound!")
 
 	if(!target) //Search for cleanables it can see.
 		target = scan(/obj/effect/decal/cleanable/)
@@ -214,10 +207,6 @@ text("<A href='?src=\ref[src];power=1'>[on ? "On" : "Off"]</A>"))
 		target_types += /obj/effect/decal/cleanable/blood/gibs/
 		target_types += /obj/effect/decal/cleanable/blood/drip/
 		target_types += /obj/effect/decal/cleanable/trail_holder
-	if(src.prints)
-		target_types += /obj/effect/decal/cleanable/trail/bloodtrail
-		target_types += /obj/effect/decal/cleanable/trail/oiltrail
-		target_types += /obj/effect/decal/cleanable/trail/xenotrail
 
 /obj/machinery/bot/cleanbot/proc/clean(obj/effect/decal/cleanable/target)
 	anchored = 1

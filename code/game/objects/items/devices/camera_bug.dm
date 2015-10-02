@@ -28,11 +28,12 @@
 	desc = "For illicit snooping through the camera network."
 	icon = 'icons/obj/device.dmi'
 	icon_state	= "camera_bug"
-	w_class		= 1.0
+	w_class		= 1
 	item_state	= "camera_bug"
 	throw_speed	= 4
 	throw_range	= 20
 	action_button_name = "check camera bug"
+	origin_tech = "syndicate=3;engineering=;1"
 
 	var/obj/machinery/camera/current = null
 	var/obj/item/expansion = null
@@ -90,9 +91,6 @@
 	if(expansion)
 		qdel(expansion)
 		expansion = null
-	qdel(src)
-//Easier to just call del() than this nonsense
-// ya no, del() takes 0.8ds to run on avg. this takes less than 0.01
 	get_cameras()
 	for(var/cam_tag in bugged_cameras)
 		var/obj/machinery/camera/camera = bugged_cameras[cam_tag]
@@ -101,7 +99,7 @@
 	bugged_cameras = list()
 	if(tracking)
 		tracking = null
-	..()
+	return ..()
 
 
 /obj/item/device/camera_bug/interact(mob/user = usr)

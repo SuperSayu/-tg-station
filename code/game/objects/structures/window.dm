@@ -22,6 +22,10 @@
 	var/image/crack_overlay
 	can_be_unanchored = 1
 
+/obj/structure/window/examine(mob/user)
+	..()
+	user << "<span class='notice'>Alt-click to rotate it clockwise.</span>"
+
 /obj/structure/window/New(Loc,re=0)
 	..()
 	health = maxhealth
@@ -54,13 +58,13 @@
 
 /obj/structure/window/ex_act(severity, target)
 	switch(severity)
-		if(1.0)
+		if(1)
 			qdel(src)
 			return
-		if(2.0)
+		if(2)
 			spawnfragments()
 			return
-		if(3.0)
+		if(3)
 			if(prob(50))
 				spawnfragments()
 				return
@@ -348,6 +352,15 @@
 	add_fingerprint(usr)
 	return
 
+/obj/structure/window/AltClick(mob/user)
+	..()
+	if(!user.canUseTopic(user))
+		user << "<span class='warning'>You can't do that right now!</span>"
+		return
+	if(!in_range(src, user))
+		return
+	else
+		revrotate()
 
 /*
 /obj/structure/window/proc/updateSilicate() what do you call a syndicate silicon?
@@ -370,7 +383,7 @@
 	if(!holo && !disassembled)
 		playsound(src, "shatter", 70, 1)
 	update_nearby_icons()
-	..()
+	return ..()
 
 
 /obj/structure/window/Move()
@@ -446,7 +459,7 @@
 	dir = 5
 	maxhealth = 50
 	fulltile = 1
-	smooth = 1
+	smooth = SMOOTH_TRUE
 	canSmoothWith = list(/obj/structure/window/fulltile, /obj/structure/window/reinforced/fulltile, /obj/structure/window/reinforced/tinted/fulltile)
 
 /obj/structure/window/reinforced/fulltile
@@ -455,7 +468,7 @@
 	dir = 5
 	maxhealth = 100
 	fulltile = 1
-	smooth = 1
+	smooth = SMOOTH_TRUE
 	canSmoothWith = list(/obj/structure/window/fulltile, /obj/structure/window/reinforced/fulltile, /obj/structure/window/reinforced/tinted/fulltile)
 
 /obj/structure/window/reinforced/tinted/fulltile
@@ -463,7 +476,7 @@
 	icon_state = "tinted_window"
 	dir = 5
 	fulltile = 1
-	smooth = 1
+	smooth = SMOOTH_TRUE
 	canSmoothWith = list(/obj/structure/window/fulltile, /obj/structure/window/reinforced/fulltile, /obj/structure/window/reinforced/tinted/fulltile)
 
 /obj/structure/window/shuttle
@@ -476,6 +489,6 @@
 	wtype = "shuttle"
 	fulltile = 1
 	reinf = 1
-	smooth = 1
+	smooth = SMOOTH_TRUE
 	canSmoothWith = null
 	explosion_block = 1

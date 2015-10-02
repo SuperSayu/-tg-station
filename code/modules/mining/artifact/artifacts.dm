@@ -28,7 +28,6 @@ var/global/ankh = 0 // only one can spawn
 	var/usetype = null
 	var/powerdelay = 0 // delay for checking power
 	var/hitdelay = 0 // for some reason throwing an item at a wall does throw_impact twice, so here's something to prevent that
-	var/raddelay = 0 // used for the grav gen... god, this is getting stupid
 	var/reflect_chance = 0
 	// Extra values, their uses depend on the other artifact attributes.
 	var/extra1 = 0 // Used for power

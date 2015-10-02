@@ -23,6 +23,7 @@ var/datum/subsystem/objects/SSobj
 				parse_area(locate(subtype))
 		distribute_secrets()
 
+	setupGenetics()
 	for(var/atom/movable/AM in world)
 		if (zlevel && AM.z != zlevel)
 			continue

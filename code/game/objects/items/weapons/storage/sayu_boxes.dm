@@ -20,7 +20,7 @@
 	else // why would you buy a salad at a fast food joint? (0.8%)
 		new /obj/item/weapon/reagent_containers/food/snacks/salad/validsalad(src)
 		new /obj/item/weapon/reagent_containers/food/snacks/grown/apple(src)
-		new /obj/item/weapon/reagent_containers/food/drinks/tea(src)
+		new /obj/item/weapon/reagent_containers/food/drinks/mug/tea(src)
 		new /obj/item/toy/random(src)
 		return
 

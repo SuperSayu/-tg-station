@@ -222,7 +222,7 @@
 //This could all be done better, but it works for now.
 /obj/machinery/computer/HolodeckControl/Destroy()
 	emergencyShutdown()
-	..()
+	return ..()
 
 
 /obj/machinery/computer/HolodeckControl/emp_act(severity)
@@ -542,7 +542,7 @@
 	density = 1
 	layer = 3.2//Just above doors
 	pressure_resistance = 4*ONE_ATMOSPHERE
-	anchored = 1.0
+	anchored = 1
 	flags = ON_BORDER
 
 
@@ -553,11 +553,11 @@
 	name = "holographic energy sword"
 	desc = "May the force be with you. Sorta"
 	icon_state = "sword0"
-	force = 3.0
+	force = 3
 	throw_speed = 2
 	throw_range = 5
 	throwforce = 0
-	w_class = 2.0
+	w_class = 2
 	hitsound = "swing_hit"
 	flags = NOSHIELD
 	var/active = 0
@@ -674,7 +674,7 @@
 	var/area/currentarea = null
 	var/eventstarted = 0
 
-	anchored = 1.0
+	anchored = 1
 	use_power = 1
 	idle_power_usage = 2
 	active_power_usage = 6

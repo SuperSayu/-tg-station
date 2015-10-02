@@ -18,7 +18,6 @@
 
 	var/turns_per_move = 1
 	var/turns_since_move = 0
-	var/list/butcher_results = null
 	var/stop_automated_movement = 0 //Use this to temporarely stop random movement or to if you write special movement code for animals.
 	var/wander = 1	// Does the mob wander around when idle?
 	var/stop_automated_movement_when_pulled = 1 //When set to 1 this stops the animal from moving when someone is pulling it.
@@ -33,6 +32,9 @@
 	//Temperature effect
 	var/minbodytemp = 250
 	var/maxbodytemp = 350
+
+	//Healable by medical stacks? Defaults to yes.
+	var/healable = 1
 
 	//Atmos effect - Yes, you can make creatures that require plasma or co2 to survive. N2O is a trace gas and handled separately, hence why it isn't here. It'd be hard to add it. Hard and me don't mix (Yes, yes make all the dick jokes you want with that.) - Errorage
 	var/list/atmos_requirements = list("min_oxy" = 5, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 1, "min_co2" = 0, "max_co2" = 5, "min_n2" = 0, "max_n2" = 0) //Leaving something at 0 means it's off - has no maximum
@@ -363,39 +365,6 @@
 	if(O.flags & NOBLUDGEON)
 		return
 
-	if(istype(O, /obj/item/stack/medical))
-		user.changeNext_move(CLICK_CD_MELEE)
-		if(stat != DEAD)
-			var/obj/item/stack/medical/MED = O
-			if(health < maxHealth)
-				if(MED.amount >= 1)
-					if(MED.heal_brute >= 1)
-						adjustBruteLoss(-MED.heal_brute)
-						MED.amount -= 1
-						if(MED.amount <= 0)
-							qdel(MED)
-						visible_message("<span class='notice'>[user] applies [MED] on [src].</span>")
-						return
-					else
-						user << "<span class='notice'>[MED] won't help at all.</span>"
-						return
-			else
-				user << "<span class='notice'>[src] is at full health.</span>"
-				return
-		else
-			user << "<span class='notice'>[src] is dead, medical items won't bring it back to life.</span>"
-			return
-
-	if((butcher_results) && (stat == DEAD))
-		user.changeNext_move(CLICK_CD_MELEE)
-		var/sharpness = is_sharp(O)
-		if(sharpness)
-			user << "<span class='notice'>You begin to butcher [src]...</span>"
-			playsound(loc, 'sound/weapons/slice.ogg', 50, 1, -1)
-			if(do_mob(user, src, 80/sharpness))
-				harvest(user)
-			return
-
 	..()
 
 /mob/living/simple_animal/movement_delay()
@@ -424,14 +393,14 @@
 /mob/living/simple_animal/ex_act(severity, target)
 	..()
 	switch (severity)
-		if (1.0)
+		if (1)
 			gib()
 			return
 
-		if (2.0)
+		if (2)
 			adjustBruteLoss(60)
 
-		if(3.0)
+		if(3)
 			adjustBruteLoss(30)
 	updatehealth()
 
@@ -489,11 +458,6 @@
 			continue
 	if(alone && partner && children < 3)
 		new childtype(loc)
-
-// Harvest an animal's delicious byproducts
-/mob/living/simple_animal/proc/harvest(mob/living/user)
-	visible_message("<span class='notice'>[user] butchers [src].</span>")
-	gib()
 
 /mob/living/simple_animal/stripPanelUnequip(obj/item/what, mob/who, where, child_override)
 	if(!child_override)

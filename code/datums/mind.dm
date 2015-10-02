@@ -234,7 +234,7 @@
 
 		else if(istype(I, /obj/item/device/radio))
 			var/obj/item/device/radio/R = I
-			R.traitor_frequency = 0.0
+			R.traitor_frequency = 0
 
 /datum/mind/proc/remove_all_antag() //For the Lazy amongst us.
 	remove_changeling()
@@ -297,9 +297,9 @@
 			text += "<br>Flash: <a href='?src=\ref[src];revolution=flash'>give</a>"
 
 			var/list/L = current.get_contents()
-			var/obj/item/device/flash/flash = locate() in L
+			var/obj/item/device/assembly/flash/flash = locate() in L
 			if (flash)
-				if(!flash.broken)
+				if(!flash.crit_fail)
 					text += "|<a href='?src=\ref[src];revolution=takeflash'>take</a>."
 				else
 					text += "|<a href='?src=\ref[src];revolution=takeflash'>take</a>|<a href='?src=\ref[src];revolution=repairflash'>repair</a>."
@@ -849,18 +849,19 @@
 
 			if("takeflash")
 				var/list/L = current.get_contents()
-				var/obj/item/device/flash/flash = locate() in L
+				var/obj/item/device/assembly/flash/flash = locate() in L
 				if (!flash)
 					usr << "<span class='danger'>Deleting flash failed!</span>"
 				qdel(flash)
 
 			if("repairflash")
 				var/list/L = current.get_contents()
-				var/obj/item/device/flash/flash = locate() in L
+				var/obj/item/device/assembly/flash/flash = locate() in L
 				if (!flash)
 					usr << "<span class='danger'>Repairing flash failed!</span>"
 				else
-					flash.broken = 0
+					flash.crit_fail = 0
+					flash.update_icon()
 
 
 
@@ -1017,10 +1018,10 @@
 					usr << "<span class='danger'>Resetting DNA failed!</span>"
 				else
 					var/mob/living/carbon/C = current
-					C.dna = changeling.first_prof.dna
+					changeling.first_prof.dna.transfer_identity(C, transfer_SE=1)
 					C.real_name = changeling.first_prof.name
-					updateappearance(C)
-					domutcheck(C)
+					C.updateappearance(mutcolor_update=1)
+					C.domutcheck()
 
 	else if (href_list["nuclear"])
 		switch(href_list["nuclear"])
@@ -1415,7 +1416,7 @@
 	ticker.mode.greet_revolutionary(src,0)
 
 	var/list/L = current.get_contents()
-	var/obj/item/device/flash/flash = locate() in L
+	var/obj/item/device/assembly/flash/flash = locate() in L
 	qdel(flash)
 	take_uplink()
 	var/fail = 0
@@ -1451,7 +1452,7 @@
 
 	var/mob/living/carbon/human/H = current
 
-	hardset_dna(H,null,null,null,null,/datum/species/abductor,null)
+	H.set_species(/datum/species/abductor)
 	var/datum/species/abductor/S = H.dna.species
 
 	switch(role)

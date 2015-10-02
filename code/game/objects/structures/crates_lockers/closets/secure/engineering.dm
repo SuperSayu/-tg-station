@@ -22,7 +22,7 @@
 	new /obj/item/clothing/mask/gas(src)
 	new /obj/item/device/multitool(src)
 	new /obj/item/clothing/gloves/ring(src)
-	new /obj/item/device/flash/handheld(src)
+	new /obj/item/device/assembly/flash/handheld(src)
 	new /obj/item/clothing/glasses/meson/engine(src)
 
 /obj/structure/closet/secure_closet/engineering_electrical
@@ -38,9 +38,9 @@
 	new /obj/item/weapon/storage/toolbox/electrical(src)
 	new /obj/item/weapon/storage/toolbox/electrical(src)
 	new /obj/item/weapon/storage/toolbox/electrical(src)
-	new /obj/item/weapon/module/power_control(src)
-	new /obj/item/weapon/module/power_control(src)
-	new /obj/item/weapon/module/power_control(src)
+	new /obj/item/weapon/electronics/apc(src)
+	new /obj/item/weapon/electronics/apc(src)
+	new /obj/item/weapon/electronics/apc(src)
 	new /obj/item/device/multitool(src)
 	new /obj/item/device/multitool(src)
 	new /obj/item/device/multitool(src)

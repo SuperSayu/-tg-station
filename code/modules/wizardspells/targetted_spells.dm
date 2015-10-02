@@ -224,13 +224,12 @@
 	castingmode = CAST_SPELL|CAST_MELEE //  too powerful for ranged casting
 
 	cast(mob/caster, mob/living/target) // todo flashy flash flash
-		check_dna_integrity(target)
+		target.has_dna()
 		if(target.stat == 2)
 			if(istype(target,/mob/living/carbon/human))
 				var/mob/living/carbon/human/H = target
-				if(H.dna && !istype(H.dna.species,/datum/species/skeleton))
-					H.dna.species = new /datum/species/skeleton()
-					updateappearance(H)
+				H.set_species(/datum/species/skeleton, icon_update=0)
+				H.updateappearance()
 			inspire_loyalty(caster, target)
 
 		target.revive()
@@ -611,7 +610,9 @@
 					target.gender = "MALE"
 				if("NEUTER","PLURAL")
 					target.gender = pick("MALE","FEMALE","NEUTER","PLURAL")
-		updateappearance(target)
+		if(iscarbon(target))
+			var/mob/living/carbon/M = target
+			M.updateappearance()
 
 /obj/effect/knowspell/target/make_bald
 	name = "Embalden"

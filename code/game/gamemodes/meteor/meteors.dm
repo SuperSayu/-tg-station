@@ -122,7 +122,7 @@
 
 /obj/effect/meteor/Destroy()
 	walk(src,0) //this cancels the walk_towards() proc
-	..()
+	return ..()
 
 /obj/effect/meteor/New()
 	..()
@@ -238,8 +238,7 @@
 	..(heavy)
 	explosion(src.loc, 0, 0, 4, 3, 0)
 	new /obj/effect/decal/cleanable/greenglow(get_turf(src))
-	for(var/mob/living/L in view(5, src))
-		L.irradiate(40)
+	radiation_pulse(get_turf(src), 2, 5, 50, 1)
 
 //Meaty Ore
 /obj/effect/meteor/meaty

@@ -37,6 +37,7 @@ var/list/ai_list = list()
 	var/obj/item/device/multitool/aiMulti = null
 	var/obj/machinery/bot/Bot
 	var/tracking = 0 //this is 1 if the AI is currently tracking somebody, but the track has not yet been completed.
+	var/datum/effect/effect/system/spark_spread/spark_system//So they can initialize sparks whenever/N
 
 	var/obj/item/device/camera_bug/ai/aibug = null
 
@@ -75,6 +76,7 @@ var/list/ai_list = list()
 	var/obj/machinery/camera/portable/builtInCamera
 
 /mob/living/silicon/ai/New(loc, var/datum/ai_laws/L, var/obj/item/device/mmi/B, var/safety = 0)
+	..()
 	rename_self("ai", 1)
 	name = real_name
 	anchored = 1
@@ -83,6 +85,10 @@ var/list/ai_list = list()
 	loc = loc
 
 	holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo1"))
+
+	spark_system = new /datum/effect/effect/system/spark_spread()
+	spark_system.set_up(5, 0, src)
+	spark_system.attach(src)
 
 	if(L)
 		if (istype(L, /datum/ai_laws))
@@ -142,15 +148,14 @@ var/list/ai_list = list()
 
 	builtInCamera = new /obj/machinery/camera/portable(src)
 	builtInCamera.network = list("SS13")
-	..()
-	return
+
 
 /mob/living/silicon/ai/Destroy()
 	ai_list -= src
 	shuttle_caller_list -= src
 	SSshuttle.autoEvac()
 	qdel(eyeobj) // No AI, no Eye
-	..()
+	return ..()
 
 
 /mob/living/silicon/ai/verb/pick_icon()
@@ -303,9 +308,8 @@ var/list/ai_list = list()
 	onclose(src, "airoster")
 
 /mob/living/silicon/ai/proc/ai_call_shuttle()
-	if(src.stat == DEAD)
-		src << "You can't call the shuttle because you are dead!"
-		return
+	if(stat == 2)
+		return //won't work if dead
 	if(istype(usr,/mob/living/silicon/ai))
 		var/mob/living/silicon/ai/AI = src
 		if(AI.control_disabled)
@@ -333,6 +337,8 @@ var/list/ai_list = list()
 	set name = "Toggle Floor Bolts"
 	if(!isturf(loc)) // if their location isn't a turf
 		return // stop
+	if(stat == 2)
+		return //won't work if dead
 	anchored = !anchored // Toggles the anchor
 
 	src << "[anchored ? "<b>You are now anchored.</b>" : "<b>You are now unanchored.</b>"]"
@@ -343,9 +349,8 @@ var/list/ai_list = list()
 
 /mob/living/silicon/ai/proc/ai_cancel_call()
 	set category = "Malfunction"
-	if(src.stat == 2)
-		src << "You can't send the shuttle back because you are dead!"
-		return
+	if(stat == 2)
+		return //won't work if dead
 	if(istype(usr,/mob/living/silicon/ai))
 		var/mob/living/silicon/ai/AI = src
 		if(AI.control_disabled)
@@ -383,13 +388,13 @@ var/list/ai_list = list()
 	..()
 
 	switch(severity)
-		if(1.0)
+		if(1)
 			gib()
-		if(2.0)
+		if(2)
 			if (stat != 2)
 				adjustBruteLoss(60)
 				adjustFireLoss(60)
-		if(3.0)
+		if(3)
 			if (stat != 2)
 				adjustBruteLoss(30)
 
@@ -509,8 +514,7 @@ var/list/ai_list = list()
 	set name = "Access Robot Control"
 	set desc = "Wirelessly control various automatic robots."
 	if(stat == 2)
-		src << "<span class='danger'>Critical error. System offline.</span>"
-		return
+		return //won't work if dead
 
 	if(control_disabled)
 		src << "Wireless communication is disabled."
@@ -625,9 +629,8 @@ var/list/ai_list = list()
 	cameraFollow = null
 	var/cameralist[0]
 
-	if(usr.stat == 2)
-		usr << "You can't change your camera network because you are dead!"
-		return
+	if(stat == 2)
+		return //won't work if dead
 
 	var/mob/living/silicon/ai/U = usr
 
@@ -670,9 +673,8 @@ var/list/ai_list = list()
 	set category = "AI Commands"
 	set name = "AI Status"
 
-	if(usr.stat == 2)
-		usr <<"You cannot change your emotional status because you are dead!"
-		return
+	if(stat == 2)
+		return //won't work if dead
 	var/list/ai_emotions = list("Very Happy", "Happy", "Neutral", "Unsure", "Confused", "Sad", "BSOD", "Blank", "Problems?", "Awesome", "Facepalm", "Friend Computer", "Dorfy", "Blue Glow", "Red Glow")
 	var/emote = input("Please, select a status!", "AI Status", null, null) in ai_emotions
 	for (var/obj/machinery/M in machines) //change status
@@ -695,6 +697,8 @@ var/list/ai_list = list()
 	set desc = "Change the default hologram available to AI to something else."
 	set category = "AI Commands"
 
+	if(stat == 2)
+		return //won't work if dead
 	var/input
 	if(alert("Would you like to select a hologram based on a crew member or switch to unique avatar?",,"Crew Member","Unique")=="Crew Member")
 
@@ -789,6 +793,8 @@ var/list/ai_list = list()
 	set desc = "Allows you to change settings of your radio."
 	set category = "AI Commands"
 
+	if(stat == 2)
+		return //won't work if dead
 	src << "Accessing Subspace Transceiver control..."
 	if (radio)
 		radio.interact(src)
@@ -802,6 +808,8 @@ var/list/ai_list = list()
 	set desc = "Modify the default radio setting for your automatic announcements."
 	set category = "AI Commands"
 
+	if(stat == 2)
+		return //won't work if dead
 	set_autosay()
 
 /mob/living/silicon/ai/attack_slime(mob/living/simple_animal/slime/user)
@@ -827,3 +835,8 @@ var/list/ai_list = list()
 
 /mob/living/silicon/ai/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0)
 	return // no eyes, no flashing
+
+/mob/living/silicon/ai/attackby(obj/item/weapon/W, mob/user, params)
+	if(W.force && W.damtype != STAMINA && src.stat != DEAD) //only sparks if real damage is dealt.
+		spark_system.start()
+	return ..()

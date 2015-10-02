@@ -12,13 +12,14 @@
 	random_icon_states = list("xfloor1", "xfloor2", "xfloor3", "xfloor4", "xfloor5", "xfloor6", "xfloor7")
 	var/list/viruses = list()
 	blood_DNA = list("UNKNOWN DNA" = "X*")
-	var/printamount = 5
+	bloodiness = MAX_SHOE_BLOODINESS
+	blood_state = BLOOD_STATE_XENO
 
 /obj/effect/decal/cleanable/xenoblood/Destroy()
 	for(var/datum/disease/D in viruses)
 		D.cure(0)
 	viruses = null
-	..()
+	return ..()
 
 /obj/effect/decal/cleanable/xenoblood/xgibs/proc/streak(list/directions)
 	spawn (0)
@@ -36,7 +37,6 @@
 
 /obj/effect/decal/cleanable/xenoblood/xsplatter
 	random_icon_states = list("xgibbl1", "xgibbl2", "xgibbl3", "xgibbl4", "xgibbl5")
-	printamount = 0
 
 /obj/effect/decal/cleanable/xenoblood/xgibs
 	name = "xeno gibs"
@@ -45,7 +45,6 @@
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "xgib1"
 	random_icon_states = list("xgib1", "xgib2", "xgib3", "xgib4", "xgib5", "xgib6")
-	printamount = 0
 
 /obj/effect/decal/cleanable/xenoblood/xgibs/ex_act()
 	return
@@ -69,4 +68,3 @@
 	icon_state = "xtracks"
 	random_icon_states = null
 	blood_DNA = list("UNKNOWN DNA" = "X*")
-	printamount = 0

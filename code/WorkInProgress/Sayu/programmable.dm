@@ -510,7 +510,9 @@
 				return
 
 			playsound(loc, "punch", 25, 1, -1)
-			if(HULK in H.mutations)			damage += 5
+
+			if(H.dna && (HULK in H.dna.mutations))
+				damage += 5
 
 			if(damage < 5)
 				visible_message("[H] gives \the [src] a weak punch.")

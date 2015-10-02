@@ -256,7 +256,7 @@
 	if(H.undershirt)
 		var/datum/sprite_accessory/undershirt/U2 = undershirt_list[H.undershirt]
 		if(U2)
-			if(H.dna && H.dna.species.sexes && H.gender == FEMALE)
+			if(H.dna.species.sexes && H.gender == FEMALE)
 				standing	+=	H.wear_female_version(U2.icon_state, U2.icon, BODY_LAYER)
 			else
 				standing	+= image("icon"=U2.icon, "icon_state"="[U2.icon_state]_s", "layer"=-BODY_LAYER)
@@ -686,7 +686,7 @@
 				var/obj/item/clothing/glasses/G = H.glasses
 				H.sight |= G.vision_flags
 				H.see_in_dark = G.darkness_view
-				H.see_invisible = G.invis_view
+				H.see_invisible = min(G.invis_view, H.see_invisible)
 		if(H.druggy)	//Override for druggy
 			H.see_invisible = see_temp
 
@@ -812,8 +812,8 @@
 					if(prob(1))
 						H << "<span class='danger'>You mutate!</span>"
 						randmutb(H)
-						domutcheck(H,null)
 						H.emote("gasp")
+						H.domutcheck()
 		return 0
 	return 1
 
@@ -922,22 +922,14 @@
 			else
 				M.do_attack_animation(H)
 
-				var/atk_verb = "punch"
+				var/atk_verb = M.dna.species.attack_verb
 				if(H.lying)
 					atk_verb = "kick"
-				else if(M.dna)
-					atk_verb = M.dna.species.attack_verb
 
-				var/damage = rand(0, 9)
-				if(M.dna)
-					damage += M.dna.species.punchmod
+				var/damage = rand(0, 9) + M.dna.species.punchmod
 
 				if(!damage)
-					if(M.dna)
-						playsound(H.loc, M.dna.species.miss_sound, 25, 1, -1)
-					else
-						playsound(H.loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-
+					playsound(H.loc, M.dna.species.miss_sound, 25, 1, -1)
 					H.visible_message("<span class='warning'>[M] has attempted to [atk_verb] [H]!</span>")
 					return 0
 
@@ -945,11 +937,7 @@
 				var/obj/item/organ/limb/affecting = H.get_organ(ran_zone(M.zone_sel.selecting))
 				var/armor_block = H.run_armor_check(affecting, "melee")
 
-				if(M.dna)
-					playsound(H.loc, M.dna.species.attack_sound, 25, 1, -1)
-				else
-					playsound(H.loc, 'sound/weapons/punch1.ogg', 25, 1, -1)
-
+				playsound(H.loc, M.dna.species.attack_sound, 25, 1, -1)
 
 				H.visible_message("<span class='danger'>[M] has [atk_verb]ed [H]!</span>", \
 								"<span class='userdanger'>[M] has [atk_verb]ed [H]!</span>")
@@ -1023,9 +1011,9 @@
 
 /datum/species/proc/spec_attacked_by(obj/item/I, mob/living/user, def_zone, obj/item/organ/limb/affecting, hit_area, intent, obj/item/organ/limb/target_limb, target_area, mob/living/carbon/human/H)
 	// Allows you to put in item-specific reactions based on species
-	if(user != src)
+	if(user != H)
 		user.do_attack_animation(H)
-	if((user != H) && H.check_shields(I.force, "the [I.name]", I))
+	if(H.check_shields(I.force, "the [I.name]", I))
 		return 0
 
 	if(I.attack_verb && I.attack_verb.len)
@@ -1037,15 +1025,15 @@
 	else
 		return 0
 
-	var/armor = H.run_armor_check(affecting, "melee", "<span class='notice'>Your armor has protected your [hit_area].</span>", "<span class='notice'>Your armor has softened a hit to your [hit_area].</span>",I.armour_penetration)
-	armor = min(90,armor) //cap damage reduction at 90%
+	var/armor_block = H.run_armor_check(affecting, "melee", "<span class='notice'>Your armor has protected your [hit_area].</span>", "<span class='notice'>Your armor has softened a hit to your [hit_area].</span>",I.armour_penetration)
+	armor_block = min(90,armor_block) //cap damage reduction at 90%
 	var/Iforce = I.force //to avoid runtimes on the forcesay checks at the bottom. Some items might delete themselves if you drop them. (stunning yourself, ninja swords)
 
-	apply_damage(I.force, I.damtype, affecting, armor, H)
+	apply_damage(I.force, I.damtype, affecting, armor_block, H)
 
 	var/bloody = 0
 
-	if(I.force > 1 && I.damtype == BRUTE && !is_sharp(I))
+	if(I.force > 1 && I.damtype == BRUTE && !I.is_sharp())
 		var/breakchance = ( I.force / 3 ) * I.w_class
 		if(armor > 0)
 			breakchance *= (100 / armor)
@@ -1061,28 +1049,30 @@
 				var/turf/location = H.loc
 				if(istype(location, /turf/simulated))
 					location.add_blood(H)
-				if(get_dist(H, H) <= 1)	//people with TK won't get smeared with blood
-					if(H.wear_suit)
-						H.wear_suit.add_blood(H)
-						H.update_inv_wear_suit()	//updates mob overlays to show the new blood (no refresh)
-					else if(H.w_uniform)
-						H.w_uniform.add_blood(H)
-						H.update_inv_w_uniform()	//updates mob overlays to show the new blood (no refresh)
-					if (H.gloves)
-						var/obj/item/clothing/gloves/G = H.gloves
-						G.add_blood(H)
-					else
-						H.add_blood(H)
-						H.update_inv_gloves()	//updates on-mob overlays for bloody hands and/or bloody gloves
+				if(ishuman(user))
+					var/mob/living/carbon/human/M = user
+					if(get_dist(M, H) <= 1)	//people with TK won't get smeared with blood
+						if(M.wear_suit)
+							M.wear_suit.add_blood(H)
+							M.update_inv_wear_suit()	//updates mob overlays to show the new blood (no refresh)
+						else if(M.w_uniform)
+							M.w_uniform.add_blood(H)
+							M.update_inv_w_uniform()	//updates mob overlays to show the new blood (no refresh)
+						if (M.gloves)
+							var/obj/item/clothing/gloves/G = M.gloves
+							G.add_blood(H)
+						else
+							M.add_blood(H)
+							M.update_inv_gloves()	//updates on-mob overlays for bloody hands and/or bloody gloves
 
 
 		switch(hit_area)
 			if("head")	//Harder to score a stun but if you do it lasts a bit longer
-				if(H.stat == CONSCIOUS && armor < 50)
+				if(H.stat == CONSCIOUS && armor_block < 50)
 					if(prob(I.force))
 						H.visible_message("<span class='danger'>[H] has been knocked unconscious!</span>", \
 										"<span class='userdanger'>[H] has been knocked unconscious!</span>")
-						H.apply_effect(20, PARALYZE, armor)
+						H.apply_effect(20, PARALYZE, armor_block)
 					if(prob(I.force + ((100 - H.health)/2)) && H != user && I.damtype == BRUTE)
 						ticker.mode.remove_revolutionary(H.mind)
 
@@ -1101,7 +1091,7 @@
 				if(H.stat == CONSCIOUS && I.force && prob(I.force + 10))
 					H.visible_message("<span class='danger'>[H] has been knocked down!</span>", \
 									"<span class='userdanger'>[H] has been knocked down!</span>")
-					H.apply_effect(5, WEAKEN, armor)
+					H.apply_effect(5, WEAKEN, armor_block)
 
 				if(bloody)
 					if(H.wear_suit)
@@ -1115,34 +1105,9 @@
 			H.forcesay(hit_appends)	//forcesay checks stat already.
 		return
 
-/datum/species/proc/attacked_by(obj/item/I, mob/living/user, def_zone, mob/living/carbon/human/H)
-	H.apply_damage(I.force, I.damtype)
-	if(I.damtype == "brute")
-		if(prob(33) && I.force && !(NOBLOOD in specflags))
-			var/turf/location = H.loc
-			if(istype(location, /turf/simulated))
-				location.add_blood_floor(H)
-
-	var/message_verb = ""
-	if(I.attack_verb && I.attack_verb.len)
-		message_verb = "[pick(I.attack_verb)]"
-	else if(I.force)
-		message_verb = "attacked"
-
-	var/attack_message = "[H] has been [message_verb] with [I]."
-	if(user)
-		user.do_attack_animation(src)
-		if(user in viewers(src, null))
-			attack_message = "[user] has [message_verb] [H] with [I]!"
-	if(message_verb)
-		H.visible_message("<span class='danger'>[attack_message]</span>",
-		"<span class='userdanger'>[attack_message]</span>")
-
-	return
-
 /datum/species/proc/apply_damage(damage, damagetype = BRUTE, def_zone = null, blocked, mob/living/carbon/human/H)
 	blocked = (100-(blocked+armor))/100
-	if(blocked <= 0)	return 0
+	if(!damage || blocked <= 0)	return 0
 
 	var/obj/item/organ/limb/organ = null
 	if(islimb(def_zone))
@@ -1171,6 +1136,7 @@
 			H.adjustCloneLoss(damage * blocked)
 		if(STAMINA)
 			H.adjustStaminaLoss(damage * blocked)
+	return 1
 
 /datum/species/proc/on_hit(obj/item/projectile/proj_type, mob/living/carbon/human/H)
 	// called when hit by a projectile

@@ -77,7 +77,7 @@
 		C.apply_effect(time,WEAKEN)
 		spawn(time)
 			if(C != null)
-				domutcheck(C,null,1)
+				C.domutcheck()
 	return 0
 
 /datum/round_event/radiation_flux/ffour
@@ -103,4 +103,4 @@
 		C.apply_effect(time,WEAKEN)
 		spawn(time)
 			if(C != null)
-				domutcheck(C,null,1)
+				C.domutcheck()
