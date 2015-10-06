@@ -87,6 +87,12 @@
 			if(M.client)
 				n++
 		return n
+	else if(T == "player_list")
+		var/list/all = list()
+		for(var/mob/M in player_list)
+			if(M.client)
+				all += M.ckey
+		return list2params(all)
 
 	else if (T == "status")
 		var/list/s = list()
