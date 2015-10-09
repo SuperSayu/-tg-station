@@ -289,6 +289,7 @@
 	return
 
 /mob/living/simple_animal/attack_hand(mob/living/carbon/human/M)
+	..()
 	switch(M.a_intent)
 
 		if("help")
