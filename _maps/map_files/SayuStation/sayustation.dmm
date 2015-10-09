@@ -2328,7 +2328,7 @@
 "aSN" = (/obj/structure/stool/bed/chair{dir = 1},/obj/effect/landmark/start{name = "Assistant"},/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/bar)
 "aSO" = (/obj/structure/stool/bed/chair{dir = 1},/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/bar)
 "aSP" = (/obj/machinery/atmospherics/pipe/simple/supply/hidden{dir = 4},/obj/structure/table/wood/poker,/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/bar)
-"aSQ" = (/mob/living/carbon/monkey{name = "Pun Pun"},/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/bar)
+"aSQ" = (/mob/living/carbon/monkey{name = "Pun Pun"; unique_name = 0},/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/bar)
 "aSR" = (/obj/machinery/door/airlock/glass{name = "Kitchen"; req_access_txt = "28"},/turf/simulated/floor/plasteel{icon_state = "bar"},/area/crew_quarters/kitchen)
 "aSS" = (/turf/simulated/floor/plasteel{icon_state = "cafeteria"},/area/crew_quarters/kitchen)
 "aST" = (/obj/structure/disposalpipe/segment{dir = 1; icon_state = "pipe-c"},/obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,/turf/simulated/floor/plasteel{icon_state = "cafeteria"},/area/crew_quarters/kitchen)
