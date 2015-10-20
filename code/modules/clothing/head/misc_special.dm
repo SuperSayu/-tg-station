@@ -70,7 +70,7 @@
 	if(status > 1)	return
 	src.onfire = !( src.onfire )
 	if (src.onfire)
-		src.force = 3
+		src.force = 15
 		src.damtype = "fire"
 		src.icon_state = "cake1"
 		SSobj.processing |= src
@@ -151,5 +151,3 @@
 	action_button_name = "Toggle Nose Light"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	brightness_on = 1 //luminosity when on
-
-

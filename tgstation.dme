@@ -12,6 +12,7 @@
 // END_PREFERENCES
 
 // BEGIN_INCLUDE
+#include "_maps\__MAP_DEFINES.dm"
 #include "_maps\sayustation.dm"
 #include "code\_compile_options.dm"
 #include "code\hub.dm"
