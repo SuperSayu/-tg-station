@@ -855,7 +855,7 @@
 			R.my_atom = artloc
 			R.add_reagent(pick(reagent), extra1)
 			var/datum/effect/effect/system/smoke_spread/chem/smoke = new
-			smoke.set_up(R, rand(1, 2), 0, artloc, 0, silent = 1)
+			smoke.set_up(R,1,artloc,silent = 1)
 			playsound(artloc, 'sound/effects/smoke.ogg', 50, 1, -3)
 			smoke.start()
 			qdel(R)
