@@ -103,6 +103,8 @@
 			throwing = 0
 			throw_impact(A)
 			. = 1
+			if(!A || qdeleted(A))
+				return
 		A.Bumped(src)
 
 
