@@ -1368,7 +1368,6 @@ B --><-- A
 	if(!x_dimension || !y_dimension)
 		return
 
-	//Get out of here, punk ass kids calling procs needlessly
 	if((x_dimension == world.icon_size) && (y_dimension == world.icon_size))
 		return I
 

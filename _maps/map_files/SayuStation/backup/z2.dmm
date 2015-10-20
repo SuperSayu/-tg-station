@@ -367,7 +367,7 @@
 "hc" = (/obj/structure/stool/bed/chair{dir = 1},/turf/simulated/floor/plasteel/shuttle{icon_state = "shuttlefloor2"},/area/centcom/evac)
 "hd" = (/obj/structure/stool/bed/chair{dir = 4},/turf/simulated/floor/plasteel/shuttle{icon_state = "shuttlefloor2"},/area/centcom/evac)
 "he" = (/obj/structure/table/reinforced,/obj/item/weapon/clipboard,/obj/item/weapon/stamp,/turf/simulated/floor/plasteel/shuttle{icon_state = "shuttlefloor2"},/area/centcom/evac)
-"hf" = (/obj/structure/table,/obj/item/device/flash/handheld,/turf/simulated/floor/plasteel/shuttle{icon_state = "shuttlefloor2"},/area/centcom/evac)
+"hf" = (/obj/structure/table,/obj/item/device/assembly/flash/handheld,/turf/simulated/floor/plasteel/shuttle{icon_state = "shuttlefloor2"},/area/centcom/evac)
 "hg" = (/obj/structure/stool/bed/chair{dir = 4},/turf/simulated/floor/plasteel/shuttle,/area/centcom/evac)
 "hh" = (/obj/structure/table,/obj/item/weapon/storage/box/handcuffs,/turf/simulated/floor/plasteel/shuttle{icon_state = "shuttlefloor2"},/area/centcom/evac)
 "hi" = (/obj/machinery/door/window/northright{base_state = "right"; dir = 4; icon_state = "right"; name = "Security Desk"; req_access_txt = "103"},/turf/simulated/floor/plasteel/shuttle{icon_state = "shuttlefloor2"},/area/centcom/evac)
