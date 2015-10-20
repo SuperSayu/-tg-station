@@ -101,8 +101,6 @@
 	new /obj/item/clothing/glasses/night(src)
 	new /obj/item/clothing/glasses/night/night3(src)
 	new /obj/item/weapon/storage/belt/security/full(src)
-	new /obj/item/ammo_box/magazine/wt550m9(src)
-	new /obj/item/weapon/gun/projectile/automatic/wt550(src)
 
 /obj/structure/closet/secure_closet/security
 	name = "security officer's locker"
