@@ -14,7 +14,6 @@
 	new /obj/effect/decal/remains/human(loc)
 
 /mob/living/carbon/human/death(gibbed)
-	if(stat == DEAD)	return
 
 /*
 	// Ankh artifact
@@ -71,7 +70,10 @@
 			qdel(W)
 */
 
-	if(healths)		healths.icon_state = "dead"
+	if(stat == DEAD)
+		return
+	if(healths)
+		healths.icon_state = "health5"
 	stat = DEAD
 	dizziness = 0
 	jitteriness = 0
