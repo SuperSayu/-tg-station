@@ -320,31 +320,31 @@ var/const/CAST_RANGED = 8	// Magic items: afterattack
 		if(!target) return
 
 		if(!badsmoke)
-			var/datum/effect/effect/system/smoke_spread/smoke = new
+			var/datum/effect_system/smoke_spread/smoke = new
 			smoke.set_up(smoke_amt, 0, target)
 			smoke.start()
 		else
-			var/datum/effect/effect/system/smoke_spread/bad/smoke = new
+			var/datum/effect_system/smoke_spread/bad/smoke = new
 			smoke.set_up(smoke_amt, 0, target)
 			smoke.start()
 
 	proc/scatter_sparks(var/atom/target, var/sparks_amt = 3)
 		target = get_turf(target)
 		if(!target) return
-		var/datum/effect/effect/system/spark_spread/sparks = new
+		var/datum/effect_system/spark_spread/sparks = new
 		sparks.set_up(sparks_amt, 0, target)
 		sparks.start()
 
 	proc/scatter_lightning(var/atom/target,var/lightning_amt =3)
 		target = get_turf(target)
 		if(!target) return
-		var/datum/effect/effect/system/lightning_spread/sparky = new
+		var/datum/effect_system/lightning_spread/sparky = new
 		sparky.set_up(lightning_amt, 0, target)
 		sparky.start()
 
 	proc/scatter_steam(var/atom/target,var/steam_amt = 10)
 		target = get_turf(target)
-		var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
+		var/datum/effect_system/steam_spread/steam = new /datum/effect_system/steam_spread()
 		steam.set_up(steam_amt, 0, target)
 		steam.start()
 

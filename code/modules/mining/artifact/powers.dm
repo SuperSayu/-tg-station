@@ -423,7 +423,7 @@
 					if(!G.siemens_coefficient) // insulated
 						insulated = 1
 				if(!insulated)
-					var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+					var/datum/effect_system/spark_spread/s = new /datum/effect_system/spark_spread
 					s.set_up(5, 1, H.loc)
 					s.start()
 					H.Stun(round(min((extra2/4),10)))
@@ -556,7 +556,7 @@
 			for(var/obj/effect/decal/cleanable/C in range(extra1,targtile))
 				qdel(C)
 			playsound(targtile, 'sound/effects/bamf.ogg', 50, 1)
-			var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
+			var/datum/effect_system/steam_spread/steam = new /datum/effect_system/steam_spread()
 			steam.set_up(10, 0, targtile)
 			steam.attach(targtile)
 			steam.start()
@@ -576,7 +576,7 @@
 				if(prob(60))
 					T.MakeSlippery(2)
 			playsound(targtile, 'sound/effects/bamf.ogg', 50, 1)
-			var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
+			var/datum/effect_system/steam_spread/steam = new /datum/effect_system/steam_spread()
 			steam.set_up(10, 0, targtile)
 			steam.attach(targtile)
 			steam.start()
@@ -597,7 +597,7 @@
 		if(A_RECHARGE)
 			// EXTRA 1: Effect range
 			// EXTRA 2: Amount of charge gained back, lower numbers are better
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+			var/datum/effect_system/spark_spread/s = new /datum/effect_system/spark_spread
 			s.set_up(5, 1, targtile)
 			s.start()
 			for(var/obj/machinery/power/apc/O in range(extra1,targtile))
@@ -648,7 +648,7 @@
 					if(!G.siemens_coefficient) // insulated
 						insulated = 1
 				if(!insulated)
-					var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+					var/datum/effect_system/spark_spread/s = new /datum/effect_system/spark_spread
 					s.set_up(5, 1, H.loc)
 					s.start()
 					H.Stun(extra1*2)
@@ -854,7 +854,7 @@
 			var/datum/reagents/R = new/datum/reagents(extra1)
 			R.my_atom = artloc
 			R.add_reagent(pick(reagent), extra1)
-			var/datum/effect/effect/system/smoke_spread/chem/smoke = new
+			var/datum/effect_system/smoke_spread/chem/smoke = new
 			smoke.set_up(R,1,artloc,silent = 1)
 			playsound(artloc, 'sound/effects/smoke.ogg', 50, 1, -3)
 			smoke.start()
