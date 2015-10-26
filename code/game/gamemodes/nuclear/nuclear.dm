@@ -77,9 +77,6 @@
 			synd_spawn += get_turf(A)
 			continue
 
-	var/obj/effect/landmark/uplinklocker = locate("landmark*Syndicate-Uplink")	//i will be rewriting this shortly
-	var/obj/effect/landmark/nuke_spawn = locate("landmark*Nuclear-Bomb")
-
 	var/nuke_code = "[rand(10000, 99999)]"
 	var/leader_selected = 0
 	var/agent_number = 1
@@ -107,14 +104,9 @@
 		spawnpos++
 		update_synd_icons_added(synd_mind)
 
-	if(uplinklocker)
-		new /obj/structure/closet/syndicate/nuclear(uplinklocker.loc)
-	if(nuke_spawn)
-		new /obj/machinery/nuclearbomb(nuke_spawn.loc)
-	if(synd_spawn.len > 0)
-		for(var/obj/machinery/nuclearbomb/the_bomb in world)
-			the_bomb.r_code = nuke_code
-
+	var/obj/machinery/nuclearbomb/nuke = locate("syndienuke") in nuke_list
+	if(nuke)
+		nuke.r_code = nuke_code
 	return ..()
 
 
@@ -322,7 +314,7 @@
 	U.hidden_uplink.uses = tc
 	U.hidden_uplink.mode_override = /datum/game_mode/nuclear //Goodies
 	H.equip_to_slot_or_del(U, slot_in_backpack)
-	
+
 	var/obj/item/weapon/implant/weapons_auth/W = new/obj/item/weapon/implant/weapons_auth(H)
 	W.implant(H)
 	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive(H)
@@ -338,7 +330,7 @@
 	suit = /obj/item/clothing/suit/space/hardsuit/syndi
 	l_pocket = /obj/item/weapon/tank/internals/emergency_oxygen/engi
 	r_pocket = /obj/item/weapon/gun/projectile/automatic/pistol
-	belt = /obj/item/weapon/storage/belt/military 
+	belt = /obj/item/weapon/storage/belt/military
 	r_hand = /obj/item/weapon/gun/projectile/automatic/shotgun/bulldog
 	backpack_contents = list(/obj/item/weapon/storage/box/engineer=1,\
 		/obj/item/weapon/tank/jetpack/oxygen/harness=1,\
@@ -349,7 +341,7 @@
 /datum/outfit/syndicate/full/post_equip(mob/living/carbon/human/H)
 	..()
 
-	
+
 	var/obj/item/clothing/suit/space/hardsuit/syndi/suit = H.wear_suit
 	suit.ToggleHelmet()
 	var/obj/item/clothing/head/helmet/space/hardsuit/syndi/helmet = H.head
