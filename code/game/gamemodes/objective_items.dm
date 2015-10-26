@@ -12,11 +12,14 @@
 
 /datum/objective_item/proc/check_special_completion() //for objectives with special checks (is that slime extract unused? does that intellicard have an ai in it? etcetc)
 	return 1
+
 /datum/objective_item/proc/add_objective()
 	return src // some objectives need to be their own copy, some do not
 // see if the objectives are the same, usually true
+
 /datum/objective_item/proc/compare_to(datum/objective_item/i)
 	return 1
+
 /datum/objective_item/proc/find_duplicate(datum/mind/M)
 	for(var/datum/objective/steal/s in M.objectives)
 		if(s.targetinfo.targetitem == targetitem && compare_to(s.targetinfo))
