@@ -52,9 +52,10 @@
 	antag_types = list("traitor","Changeling","Wizard")
 
 /datum/objective_item/steal/jetpack
-	name = "a jetpack"
-	targetitem = /obj/item/weapon/tank/jetpack
-	difficulty = 3
+	name = "the Captain's jetpack"
+	targetitem = /obj/item/weapon/tank/jetpack/oxygen/captain
+	difficulty = 5
+	excludefromjob = list("Captain")
 	antag_types = list("traitor","Changeling","Wizard")
 
 /datum/objective_item/steal/magboots
