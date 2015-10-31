@@ -222,8 +222,6 @@
 		investigate_log("collapsed.","singulo")
 		qdel(src)
 		return 0
-	if(energy > 2999 && !consumedSupermatter)
-		energy = 2000
 	switch(energy)//Some of these numbers might need to be changed up later -Mport
 		if(1 to 199)
 			allowed_size = STAGE_ONE
@@ -233,10 +231,11 @@
 			allowed_size = STAGE_THREE
 		if(1000 to 1999)
 			allowed_size = STAGE_FOUR
-		if(2000 to 2999)
-			allowed_size = STAGE_FIVE
-		if(3000 to INFINITY)
-			allowed_size = STAGE_SIX
+		if(2000 to INFINITY)
+			if(energy >= 3000 && consumedSupermatter)
+				allowed_size = STAGE_SIX
+			else
+				allowed_size = STAGE_FIVE
 	if(current_size != allowed_size)
 		expand()
 	return 1
