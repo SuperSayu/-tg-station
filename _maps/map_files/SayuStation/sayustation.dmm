@@ -3677,7 +3677,7 @@
 "bsK" = (/obj/structure/disposalpipe/segment,/obj/machinery/light{dir = 8},/turf/simulated/floor/plasteel,/area/hallway/primary/central)
 "bsL" = (/obj/structure/closet/wardrobe/chemistry_white,/obj/machinery/light_switch{pixel_x = -23; pixel_y = 0},/turf/simulated/floor/plasteel{icon_state = "white"},/area/medical/chemistry)
 "bsM" = (/obj/structure/bed/chair,/obj/machinery/atmospherics/pipe/simple/supply/hidden,/turf/simulated/floor/plasteel{icon_state = "white"},/area/medical/chemistry)
-"bsN" = (/obj/structure/table,/turf/simulated/floor/plasteel{icon_state = "white"},/area/medical/chemistry)
+"bsN" = (/obj/structure/table,/obj/item/weapon/book/manual/wiki/chemistry,/turf/simulated/floor/plasteel{icon_state = "white"},/area/medical/chemistry)
 "bsO" = (/obj/structure/bed/roller,/obj/machinery/button/door{desc = "A remote control switch for the medbay foyer."; id = "MedbayFoyer"; name = "Medbay Exit Button"; normaldoorcontrol = 1; pixel_x = 0; pixel_y = 26},/obj/structure/extinguisher_cabinet{pixel_x = -27; pixel_y = 0},/turf/simulated/floor/plasteel{icon_state = "white"},/area/medical/medbay)
 "bsP" = (/obj/machinery/status_display,/turf/simulated/wall,/area/medical/medbay)
 "bsQ" = (/obj/machinery/door/firedoor,/obj/machinery/door/airlock/medical{name = "Medbay Reception"; req_access_txt = "5"},/turf/simulated/floor/plasteel{icon_state = "white"},/area/medical/medbay)

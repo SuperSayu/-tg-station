@@ -137,16 +137,13 @@
 		S.remove_from_storage(O,src)
 
 	O.loc = src
-	var/n = name_filter(O.name)
+	var/n ="\ref[O]"
 
 	if(item_quants[n])
 		item_quants[n]++
 	else
 		item_quants[n] = 1
 	sortList(item_quants)
-
-/obj/machinery/smartfridge/proc/name_filter(n)
-	return sanitize_simple(n,list("'"="","+"=" ")) // these do not translate correctly in html links
 
 /obj/machinery/smartfridge/attack_paw(mob/user)
 	return src.attack_hand(user)
@@ -180,27 +177,29 @@
 		for (var/O in item_quants)
 			if(item_quants[O] > 0)
 				var/N = item_quants[O]
-				var/itemName = sanitize(O)
-				dat += "<FONT color = 'blue'><B>[capitalize(O)]</B>:"
+				var/obj/item/item = locate(O)
+				var/obj/item/itemName = sanitize(item.name)
+				dat += "<FONT color = 'blue'><B>[capitalize(itemName)]</B>:"
 				dat += " [N] </font>"
-				dat += "<a href='byond://?src=\ref[src];vend=[itemName];amount=1'>Vend</A> "
+				dat += "<a href='byond://?src=\ref[src];vend=[O];amount=1'>Vend</A> "
 				if(N > 5)
-					dat += "(<a href='byond://?src=\ref[src];vend=[itemName];amount=5'>x5</A>)"
+					dat += "(<a href='byond://?src=\ref[src];vend=[O];amount=5'>x5</A>)"
 					if(N > 10)
-						dat += "(<a href='byond://?src=\ref[src];vend=[itemName];amount=10'>x10</A>)"
+						dat += "(<a href='byond://?src=\ref[src];vend=[O];amount=10'>x10</A>)"
 						if(N > 25)
-							dat += "(<a href='byond://?src=\ref[src];vend=[itemName];amount=25'>x25</A>)"
+							dat += "(<a href='byond://?src=\ref[src];vend=[O];amount=25'>x25</A>)"
 				if(N > 1)
-					dat += "(<a href='?src=\ref[src];vend=[itemName];amount=[N]'>All</A>)"
-				if(is_seed(itemName) && N>1)
-					var/max_bags = round((N-1)/7)+1
-					dat += "(<a href='?src=\ref[src];bagvend=[itemName];amount=1'>1 Bag</A>)"
-					if(max_bags > 2) // at least 14
-						dat += "(<a href='?src=\ref[src];bagvend=[itemName];amount=2'>2 Bags</A>)"
-						if(max_bags > 5) // at least 35
-							dat += "(<a href='?src=\ref[src];bagvend=[itemName];amount=5'>5 Bags</A>)"
-					if(max_bags > 1)
-						dat += "(<a href='?src=\ref[src];bagvend=[itemName];amount=[max_bags]'>Bag All</A>)"
+					dat += "(<a href='?src=\ref[src];vend=\ref[O];amount=[N]'>All</A>)"
+
+					if(is_seed(itemName) && N>1)
+						var/max_bags = round((N-1)/7)+1
+						dat += "(<a href='?src=\ref[src];bagvend=\ref[O];amount=1'>1 Bag</A>)"
+						if(max_bags > 2) // at least 14
+							dat += "(<a href='?src=\ref[src];bagvend=\ref[O];amount=2'>2 Bags</A>)"
+							if(max_bags > 5) // at least 35
+								dat += "(<a href='?src=\ref[src];bagvend=\ref[O];amount=5'>5 Bags</A>)"
+						if(max_bags > 1)
+							dat += "(<a href='?src=\ref[src];bagvend=\ref[O];amount=[max_bags]'>Bag All</A>)"
 
 				dat += "<br>"
 
@@ -227,7 +226,7 @@
 		var/j = 0
 		var/obj/item/weapon/storage/bag/seeds/SB = new(loc)
 		for(var/obj/O in contents)
-			if(name_filter(O.name) == N && istype(O,/obj/item/seeds))
+			if(locate(N) == O && istype(O,/obj/item/seeds))
 				O.loc = SB
 				i--
 				j++
@@ -246,6 +245,7 @@
 		return
 
 	var/N = href_list["vend"]
+	//usr << N
 	var/amount = text2num(href_list["amount"])
 
 	if(item_quants[N] <= 0) // Sanity check, there are probably ways to press the button when it shouldn't be possible.
@@ -255,7 +255,7 @@
 
 	var/i = amount
 	for(var/obj/O in contents)
-		if(O.name == N)
+		if(locate(N) == O)
 			O.loc = src.loc
 			i--
 			if(i <= 0)
