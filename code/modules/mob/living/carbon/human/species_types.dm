@@ -341,7 +341,7 @@ datum/species/human/spec_death(gibbed, mob/living/carbon/human/H)
 	if(body.stat == UNCONSCIOUS)
 		owner << "<span class='warning'>You sense this body has passed out for some reason. Best to stay away.</span>"
 		return
-		
+
 	owner.mind.transfer_to(body)
 
 
@@ -390,7 +390,7 @@ datum/species/human/spec_death(gibbed, mob/living/carbon/human/H)
 	speedmod = 3
 	armor = 55
 	punchmod = 5
-	no_equip = list(slot_wear_mask, slot_wear_suit, slot_gloves, slot_shoes, slot_head, slot_w_uniform)
+	no_equip = list(slot_wear_mask, slot_wear_suit, slot_gloves, slot_shoes, slot_w_uniform)
 	nojumpsuit = 1
 	bone_chance_adjust = 0
 	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/golem
