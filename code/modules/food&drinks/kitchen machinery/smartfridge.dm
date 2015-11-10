@@ -245,7 +245,6 @@
 		return
 
 	var/N = href_list["vend"]
-	//usr << N
 	var/amount = text2num(href_list["amount"])
 
 	if(item_quants[N] <= 0) // Sanity check, there are probably ways to press the button when it shouldn't be possible.
@@ -261,8 +260,7 @@
 			if(i <= 0)
 				break
 
-	src.updateUsrDialog()
-	return
+	updateUsrDialog()
 
 
 // ----------------------------
