@@ -45,7 +45,7 @@
 	return
 
 /obj/item/weapon/magic/contract/proc/summon(mob/user)
-	var/list/candidates = get_candidates(BE_WIZARD)
+	var/list/candidates = get_candidates(ROLE_WIZARD)
 	if(candidates.len)
 		var/client/C = pick(candidates)
 		PoolOrNew(/obj/effect/particle_effect/smoke, user.loc)
