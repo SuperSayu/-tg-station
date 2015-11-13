@@ -62,7 +62,7 @@
 
 	S = hair_styles_list[hair_style]
 
-	if(S && ((HAIR in pref_species.specflags) || pref_species.spec_hair))
+	if(S && (HAIR in pref_species.specflags))
 		var/icon/hair_s = new/icon("icon" = S.icon, "icon_state" = "[S.icon_state]_s")
 		hair_s.Blend("#[hair_color]", ICON_MULTIPLY)
 		eyes_s.Blend(hair_s, ICON_OVERLAY)

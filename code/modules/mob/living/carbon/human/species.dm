@@ -36,7 +36,7 @@
 	var/hair_alpha = 255	// the alpha used by the hair. 255 is completely solid, 0 is transparent.
 	var/hair_luminosity = 0 // added/subtracted to the hair color's luminosity
 	var/use_skintones = 0	// does it use skintones or not? (spoiler alert this is only used by humans)
-	var/spec_hair = 0	// uses special species "hair" instead of real hair (ex. horns for lizards)
+	var/need_nutrition = 1  //Does it need to eat food on a regular basis?
 	var/exotic_blood = null	// If your race wants to bleed something other than bog standard blood, change this.
 	var/meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human //What the species drops on gibbing
 	var/list/no_equip = list()	// slots the race can't equip stuff to
@@ -621,7 +621,7 @@
 			H.update_inv_wear_suit()
 
 	// nutrition decrease and satiety
-	if (H.nutrition > 0 && H.stat != DEAD)
+	if (H.nutrition > 0 && H.stat != DEAD && !H.dna.species.need_nutrition)
 		var/hunger_rate = HUNGER_FACTOR
 		if(H.satiety > 0)
 			H.satiety--
