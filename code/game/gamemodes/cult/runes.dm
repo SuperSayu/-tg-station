@@ -387,7 +387,15 @@ var/list/teleport_other_runes = list()
 			sacrificed.Add(T.mind)
 			if(is_sacrifice_target(T.mind))
 				sacrifice_fulfilled = 1
-
+		for(var/mob/living/M in orange(1,src))
+			if(iscultist(M))
+				if(sacrifice_fulfilled)
+					M << "<span class='cult'>\"Yes! This is the one I desire! You have done well.\"</span>"
+				else
+					if(ishuman(T) || isrobot(T))
+						M << "<span class='cult'>\"I accept this sacrifice.\"</span>"
+					else
+						M << "<span class='cult'>\"I accept this meager sacrifice.\"</span>"
 		if(T.mind)
 			var/obj/item/device/soulstone/stone = new /obj/item/device/soulstone(get_turf(src))
 			stone.invisibility = INVISIBILITY_MAXIMUM //so it's not picked up during transfer_soul()
