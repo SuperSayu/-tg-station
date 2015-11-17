@@ -374,7 +374,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	var/list/names = list()
 	var/list/pois = list()
 	var/list/namecounts = list()
-	
+
 	for(var/mob/M in mobs)
 		var/name = M.name
 		if (name in names)
@@ -705,14 +705,14 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		sleep(timefraction)
 		if(!user || !target)
 			continue_looping = 0
-			
+
 		if (continue_looping && !uninterruptible && (user.loc != user_loc || target.loc != target_loc || user.get_active_hand() != holding || user.incapacitated() || user.lying ))
 			continue_looping = 0
-		
+
 		cancel_progress_bar(user, progbar)//Clear the way for the next progbar image
 		if(!continue_looping)
 			return 0
-			
+
 	cancel_progress_bar(user, progbar)
 	return 1
 
@@ -723,11 +723,11 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		progbar.icon_state = "prog_bar_[round(((current_number / goal_number) * 100), 10)]"
 		progbar.pixel_y = 32
 		return progbar
-		
+
 /proc/cancel_progress_bar(mob/user, image/progbar)
 	if(user && user.client && progbar)
 		user.client.images -= progbar
-	
+
 /proc/assign_progress_bar(mob/user, image/progbar)
 	if(user && user.client && progbar)
 		user.client.images |= progbar
@@ -744,22 +744,22 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		Tloc = target.loc
 
 	var/delayfraction = round(delay/numticks)
-	
+
 	var/atom/Uloc = user.loc
-	
+
 	var/holding = user.get_active_hand()
 	var/holdingnull = 1 //User is not holding anything
 	if(holding)
 		holdingnull = 0 //User is holding a tool of some kind
-		
+
 	var/image/progbar
-	
-	var/continue_looping = 1 
+
+	var/continue_looping = 1
 	for (var/i = 1 to numticks)
 		if(user.client && progress)
 			progbar = make_progress_bar(i, numticks, target)
 			assign_progress_bar(user, progbar)
-		
+
 		sleep(delayfraction)
 		if(!user || user.stat || user.weakened || user.stunned  || !(user.loc == Uloc))
 			continue_looping = 0
@@ -775,11 +775,11 @@ Turf and target are seperate in case you want to teleport some distance from a t
 					continue_looping = 0
 			if(continue_looping && user.get_active_hand() != holding)
 				continue_looping = 0
-		
+
 		cancel_progress_bar(user, progbar)//Clear the way for the next progbar image
 		if(!continue_looping)
 			return 0
-	
+
 	cancel_progress_bar(user,progbar)
 	return 1
 
@@ -845,130 +845,6 @@ Turf and target are seperate in case you want to teleport some distance from a t
 			for(var/atom/A in N)
 				atoms += A
 	return atoms
-
-/datum/coords //Simple datum for storing coordinates.
-	var/x_pos = null
-	var/y_pos = null
-	var/z_pos = null
-
-/proc/DuplicateObject(obj/original, perfectcopy = 0 , sameloc = 0, newloc = null)
-	if(!original)
-		return null
-
-	var/obj/O = null
-
-	if(sameloc)
-		O=new original.type(original.loc)
-	else
-		if(newloc)
-			O=new original.type(newloc)
-		else
-			O= new original.type(locate(0,0,0))
-
-	if(perfectcopy)
-		if((O) && (original))
-			var/global/list/forbidden_vars = list("type","loc","locs","vars", "parent","parent_type", "verbs","ckey","key","power_supply","contents","reagents","stat","x","y","z","group")
-
-			for(var/V in original.vars - forbidden_vars) // yes, list operations work like this
-				if(istype(original.vars[V],/list))
-					var/list/L = original.vars[V]
-					O.vars[V] = L.Copy()
-				else if(istype(original.vars[V],/datum))
-					continue	// this would reference the original's object, that will break when it is used or deleted.
-				else
-					O.vars[V] = original.vars[V]
-	return O
-
-
-/area/proc/copy_contents_to(area/A , platingRequired = 0 )
-	//Takes: Area. Optional: If it should copy to areas that don't have plating
-	//Returns: Nothing.
-	//Notes: Attempts to move the contents of one area to another area.
-	//       Movement based on lower left corner. Tiles that do not fit
-	//		 into the new area will not be moved.
-
-	if(!A || !src) return 0
-
-	var/list/turfs_src = get_area_turfs(src.type)
-	var/list/turfs_trg = get_area_turfs(A.type)
-
-	var/src_min_x = 99999
-	var/src_min_y = 99999
-	var/list/refined_src = new/list()
-
-	for (var/turf/T in turfs_src)
-		src_min_x = min(src_min_x,T.x)
-		src_min_y = min(src_min_y,T.y)
-	for (var/turf/T in turfs_src)
-		refined_src[T] = "[T.x - src_min_x].[T.y - src_min_y]"
-
-	var/trg_min_x = 99999
-	var/trg_min_y = 99999
-	var/list/refined_trg = new/list()
-
-	for (var/turf/T in turfs_trg)
-		trg_min_x = min(trg_min_x,T.x)
-		trg_min_y = min(trg_min_y,T.y)
-	for (var/turf/T in turfs_trg)
-		refined_trg["[T.x - trg_min_x].[T.y - trg_min_y]"] = T
-
-	var/list/toupdate = new/list()
-
-	var/copiedobjs = list()
-	var/list/doors = list()
-
-	for (var/turf/T in refined_src)
-		//var/datum/coords/C_src = refined_src[T]
-		var/coordstring = refined_src[T]
-		var/turf/B = refined_trg[coordstring]
-		if(!istype(B))
-			continue
-
-		var/old_dir1 = T.dir
-		var/old_icon_state1 = T.icon_state
-		var/old_icon1 = T.icon
-
-		if(platingRequired)
-			if(istype(B, /turf/space))
-				continue
-
-		var/turf/X = new T.type(B)
-		X.dir = old_dir1
-		X.icon_state = old_icon_state1
-		X.icon = old_icon1 //Shuttle floors are in shuttle.dmi while the defaults are floors.dmi
-
-		for(var/obj/O in T)
-			var/obj/O2 = DuplicateObject(O , 1, newloc = X)
-			if(!O2) continue
-			if(istype(O2,/obj/machinery/door))
-				doors += O2
-			copiedobjs += O2.contents + O2
-
-		for(var/mob/M in T)
-			if(!istype(M,/mob) || istype(M, /mob/camera)) continue // If we need to check for more mobs, I'll add a variable
-			copiedobjs += DuplicateObject(M , 1, newloc = X)
-
-		var/list/forbidden_vars = list("type","stat","loc","locs","vars", "parent", "parent_type","verbs","ckey","key","x","y","z","contents", "luminosity")
-		for(var/V in T.vars - forbidden_vars)
-			X.vars[V] = T.vars[V]
-
-//		var/area/AR = X.loc
-
-//		if(AR.lighting_use_dynamic)
-//			X.opacity = !X.opacity
-//			X.sd_SetOpacity(!X.opacity)			//TODO: rewrite this code so it's not messed by lighting ~Carn
-
-		toupdate += X
-
-	if(toupdate.len)
-		for(var/turf/simulated/T1 in toupdate)
-			T1.CalculateAdjacentTurfs()
-			SSair.add_to_active(T1,1)
-
-
-	return copiedobjs
-
-
 
 /proc/get_cardinal_dir(atom/A, atom/B)
 	var/dx = abs(B.x - A.x)
