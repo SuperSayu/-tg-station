@@ -347,7 +347,7 @@ datum/species/human/spec_death(gibbed, mob/living/carbon/human/H)
 
 /datum/species/jelly_sayu
 	name = "Xenoid"
-	id = "jelly"
+	id = "xenoid"
 	desc = "The three-eyed Xenoids hail from the outer reaches of the galaxy. They are vulnerable to water, but are also resistant to cellular damage."
 	default_color = "00FF90"
 	roundstart = 1
@@ -576,7 +576,6 @@ var/global/image/plasmaman_on_fire = image("icon"='icons/mob/OnFire.dmi', "icon_
 	safe_toxins_max = 0
 	dangerous_existence = 1 //So so much
 	need_nutrition = 0 //Hard to eat through a helmet
-	roundstart = 1
 	var/skin = 0
 
 /datum/species/plasmaman/skin
