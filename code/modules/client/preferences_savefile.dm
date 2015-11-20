@@ -234,11 +234,11 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	if(needs_update == -2)		//fatal, can't load any data
 		return 0
 
-	// Species
-	var/species_name
-	S["species"]	>> species_name
-	if(config.mutant_races && species_name && (species_name in roundstart_species))
-		var/newtype = roundstart_species[species_name]
+	//Species
+	var/species_id
+	S["species"]			>> species_id
+	if(config.mutant_races && species_id && (species_id in roundstart_species))
+		var/newtype = roundstart_species[species_id]
 		pref_species = new newtype()
 	else
 		pref_species = new /datum/species/human()
@@ -375,7 +375,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["undershirt"]			<< undershirt
 	S["socks"]				<< socks
 	S["backbag"]			<< backbag
-	S["species"]			<< pref_species.name
+	S["species"]			<< pref_species.id
 	S["feature_mcolor"]					<< features["mcolor"]
 	S["feature_lizard_tail"]			<< features["tail_lizard"]
 	S["feature_human_tail"]				<< features["tail_human"]
