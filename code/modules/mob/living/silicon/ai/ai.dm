@@ -37,7 +37,7 @@ var/list/ai_list = list()
 	var/obj/item/device/multitool/aiMulti = null
 	var/obj/machinery/bot/Bot
 	var/tracking = 0 //this is 1 if the AI is currently tracking somebody, but the track has not yet been completed.
-	var/datum/effect/effect/system/spark_spread/spark_system//So they can initialize sparks whenever/N
+	var/datum/effect_system/spark_spread/spark_system//So they can initialize sparks whenever/N
 
 	var/obj/item/device/camera_bug/ai/aibug = null
 
@@ -47,6 +47,7 @@ var/list/ai_list = list()
 	var/list/datum/AI_Module/current_modules = list()
 	var/fire_res_on_core = 0
 	var/can_dominate_mechs = 0
+	var/shunted = 0 //1 if the AI is currently shunted. Used to differentiate between shunted and ghosted/braindead
 
 	var/control_disabled = 0 // Set to 1 to stop AI from interacting via Click()
 	var/malfhacking = 0 // More or less a copy of the above var, so that malf AIs can hack and still get new cyborgs -- NeoFite
@@ -86,7 +87,7 @@ var/list/ai_list = list()
 
 	holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo1"))
 
-	spark_system = new /datum/effect/effect/system/spark_spread()
+	spark_system = new /datum/effect_system/spark_spread()
 	spark_system.set_up(5, 0, src)
 	spark_system.attach(src)
 
@@ -381,7 +382,7 @@ var/list/ai_list = list()
 			if(1)
 				view_core()
 			if(2)
-				ai_call_shuttle()
+				SSshuttle.requestEvac(src,"ALERT: Energy surge detected in AI core! Station integrity may be compromised! Initiati--%m091#ar-BZZT")
 	..()
 
 /mob/living/silicon/ai/ex_act(severity, target)
@@ -478,7 +479,7 @@ var/list/ai_list = list()
 
 
 /mob/living/silicon/ai/attack_alien(mob/living/carbon/alien/humanoid/M)
-	if (!ticker)
+	if(!ticker || !ticker.mode)
 		M << "You cannot attack people before the game has started."
 		return
 
@@ -840,3 +841,18 @@ var/list/ai_list = list()
 	if(W.force && W.damtype != STAMINA && src.stat != DEAD) //only sparks if real damage is dealt.
 		spark_system.start()
 	return ..()
+
+/mob/living/silicon/ai/can_buckle()
+	return 0
+
+/mob/living/silicon/ai/canUseTopic(atom/movable/M, be_close = 0)
+	if(stat)
+		return
+	if(be_close && !in_range(M, src))
+		return
+	//stop AIs from leaving windows open and using then after they lose vision
+	//apc_override is needed here because AIs use their own APC when powerless
+	//get_turf_pixel() is because APCs in maint aren't actually in view of the inner camera
+	if(cameranet && !cameranet.checkTurfVis(get_turf_pixel(M)) && !apc_override)
+		return
+	return 1

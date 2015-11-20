@@ -1,5 +1,5 @@
 var/list/sacrificed = list()
-var/list/non_revealed_runes = (typesof(/obj/effect/rune) - /obj/effect/rune/malformed - /obj/effect/rune )
+var/list/non_revealed_runes = (subtypesof(/obj/effect/rune) - /obj/effect/rune/malformed)
 
 /*
 
@@ -387,11 +387,22 @@ var/list/teleport_other_runes = list()
 			sacrificed.Add(T.mind)
 			if(is_sacrifice_target(T.mind))
 				sacrifice_fulfilled = 1
-
+		for(var/mob/living/M in orange(1,src))
+			if(iscultist(M))
+				if(sacrifice_fulfilled)
+					M << "<span class='cult'>\"Yes! This is the one I desire! You have done well.\"</span>"
+				else
+					if(ishuman(T) || isrobot(T))
+						M << "<span class='cult'>\"I accept this sacrifice.\"</span>"
+					else
+						M << "<span class='cult'>\"I accept this meager sacrifice.\"</span>"
 		if(T.mind)
 			var/obj/item/device/soulstone/stone = new /obj/item/device/soulstone(get_turf(src))
+			stone.invisibility = INVISIBILITY_MAXIMUM //so it's not picked up during transfer_soul()
 			if(!stone.transfer_soul("FORCE", T, usr)) //If it cannot be added
 				qdel(stone)
+			if(stone)
+				stone.invisibility = 0
 			if(!T)
 				rune_in_use = 0
 				return
@@ -408,7 +419,7 @@ var/list/teleport_other_runes = list()
 /obj/effect/rune/narsie
 	cultist_name = "Call Forth The Geometer"
 	cultist_desc = "Tears apart dimensional barriers, calling forth the avatar of the Geometer."
-	invocation = "Tok-lyr rqa'nap g'olt-ulotf!"
+	invocation = null
 	req_cultists = 9
 	icon = 'icons/effects/96x96.dmi'
 	icon_state = "rune_large"
@@ -424,7 +435,7 @@ var/list/teleport_other_runes = list()
 		var/datum/game_mode/cult/cult_mode = ticker.mode
 		if(!("eldergod" in cult_mode.cult_objectives))
 			message_admins("[usr.real_name]([user.ckey]) tried to summon Nar-Sie when the objective was wrong")
-			for(var/mob/living/M in orange(1,src))
+			for(var/mob/living/M in range(1,src))
 				if(iscultist(M))
 					M << "<span class='cult'><i>\"YOUR SOUL BURNS WITH YOUR ARROGANCE!!!\"</i></span>"
 					if(M.reagents)
@@ -442,13 +453,16 @@ var/list/teleport_other_runes = list()
 				log_game("Summon Nar-Sie rune failed - sacrifice not complete")
 				return
 		if(!cult_mode.eldergod)
-			for(var/mob/living/M in orange(1,src))
+			for(var/mob/living/M in range(1,src))
 				if(iscultist(M))
 					M << "<span class='warning'>The avatar of Nar-Sie is already on this plane!</span>"
 				log_game("Summon Nar-Sie rune failed - already summoned")
 				return
 		//BEGIN THE SUMMONING
 		used = 1
+		for(var/mob/living/M in range(1,src))
+			if(iscultist(M))
+				M.say("TOK-LYR RQA-NAP G'OLT-ULOFT!!")
 		world << 'sound/effects/dimensional_rend.ogg'
 		world << "<b><i>Rip... <span class='big'>Rrrip...</span> <span class='reallybig'>RRRRRRRRRR--</span></i></b>"
 		sleep(40)

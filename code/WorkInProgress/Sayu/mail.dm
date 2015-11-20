@@ -573,7 +573,7 @@
 
 /obj/machinery/mail/hub/emag_act()
 	playsound(src.loc, 'sound/machines/twobeep.ogg', 50, 0)
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+	var/datum/effect_system/spark_spread/s = new /datum/effect_system/spark_spread
 	s.set_up(2, 1, src)
 	s.start()
 	emagged = 1

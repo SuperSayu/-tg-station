@@ -197,13 +197,13 @@
 	action_button_name = "Toggle Wings"
 	burn_state = -1 //Won't burn in fires
 	var/state = 1 // 0 = retracted, 1 = extended
-	var/datum/effect/effect/system/wing_trail_follow/wing_trail
+	var/datum/effect_system/trail_follow/wing/wing_trail
 	var/mob/living/carbon/human/wearer = null
 	alternate_worn_icon = 'icons/mob/sayu_onmob.dmi'
 
 /obj/item/wings/New()
 	..()
-	wing_trail = new /datum/effect/effect/system/wing_trail_follow()
+	wing_trail = new /datum/effect_system/trail_follow/wing()
 	wing_trail.set_up(src)
 	wing_trail.start()
 
@@ -250,45 +250,37 @@
 // WING TRAILS //
 ////////////////
 
-/obj/effect/effect/wing_trails
+/obj/effect/particle_effect/wing_trails
 	name = "wing trails"
 	icon_state = "wingtrails"
 	icon = 'icons/effects/sayu_effects.dmi'
 	anchored = 1.0
 
-/datum/effect/effect/system/wing_trail_follow
-	var/turf/oldposition
-	var/processing = 1
-	var/on = 1
+/datum/effect_system/trail_follow/wing
+	effect_type = /obj/effect/particle_effect/wing_trails
 
-/datum/effect/effect/system/wing_trail_follow/set_up(atom/atom)
-	attach(atom)
-	oldposition = get_turf(atom)
-
-/datum/effect/effect/system/wing_trail_follow/start()
-	if(!src.on)
-		src.on = 1
-		src.processing = 1
-	if(src.processing)
-		src.processing = 0
-		var/turf/T = get_turf(src.holder)
-		if(T != src.oldposition)
+/datum/effect_system/trail_follow/wing/start()
+	if(!on)
+		on = 1
+		processing = 1
+		if(!oldposition)
+			oldposition = get_turf(holder)
+	if(processing)
+		processing = 0
+		var/turf/T = get_turf(holder)
+		if(T != oldposition)
 			if(!has_gravity(T))
-				var/obj/effect/effect/wing_trails/W = new /obj/effect/effect/wing_trails(src.oldposition)
-				src.oldposition = T
-				W.dir = src.holder.dir
-				spawn( 4 )
-					if(W)
-						W && qdel(W)
-			spawn(2)
-				if(src.on)
-					src.processing = 1
-					src.start()
-		else
-			spawn(2)
-				if(src.on)
-					src.processing = 1
-					src.start()
+				var/obj/effect/particle_effect/ion_trails/I = PoolOrNew(effect_type, oldposition)
+				I.dir = holder.dir
+				flick("ion_fade", I)
+				I.icon_state = ""
+				spawn(20)
+					qdel(I)
+			oldposition = T
+		spawn(2)
+			if(on)
+				processing = 1
+				start()
 
 //////////////////
 // ADMIN REROLL //

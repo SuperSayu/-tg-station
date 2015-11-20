@@ -241,8 +241,14 @@
 
 	if(bleedsuppress)
 		msg += "[t_He] [t_is] bandaged with something.\n"
-	else if(blood_max)
-		msg += "<B>[t_He] [t_is] bleeding!</B>\n"
+	if(blood_max)
+		if(reagents.has_reagent("heparin"))
+			msg += "<b>[t_He] [t_is] bleeding uncontrollably!</b>\n"
+		else
+			msg += "<B>[t_He] [t_is] bleeding!</B>\n"
+
+	if(reagents.has_reagent("teslium"))
+		msg += "[t_He] is emitting a gentle blue glow!\n"
 
 	msg += "</span>"
 
@@ -263,7 +269,7 @@
 		if(digitalcamo)
 			msg += "[t_He] [t_is] moving [t_his] body in an unnatural and blatantly inhuman manner.\n"
 
-	if(!wear_mask && is_thrall(src) && in_range(user,src))
+	if(!skipface && is_thrall(src) && in_range(user,src))
 		msg += "Their features seem unnaturally tight and drawn.\n"
 
 	if(istype(user, /mob/living/carbon/human))

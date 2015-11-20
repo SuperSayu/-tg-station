@@ -15,9 +15,6 @@
 	use_skintones = 1
 
 /datum/species/human/qualifies_for_rank(rank, list/features)
-	if(!config.mutant_humans) //No mutie scum here
-		return 1
-
 	if((!features["tail_human"] || features["tail_human"] == "None") && (!features["ears"] || features["ears"] == "None"))
 		return 1	//Pure humans are always allowed in all roles.
 
@@ -40,7 +37,7 @@
 /datum/species/human/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
 	if(chem.id == "mutationtoxin")
 		H << "<span class='danger'>Your flesh rapidly mutates!</span>"
-		H.set_species(/datum/species/slime)
+		H.set_species(/datum/species/jelly/slime)
 		H.reagents.del_reagent(chem.type)
 		H.faction |= "slime"
 		return 1
@@ -158,13 +155,12 @@ datum/species/human/spec_death(gibbed, mob/living/carbon/human/H)
 	//id = "pod" -- These use the same sprites now
 
 /datum/species/plant/pod/spec_life(mob/living/carbon/human/H)
+	if(H.stat == DEAD)
+		return
 	var/light_amount = 0 //how much light there is in the place, affects receiving nutrition and healing
 	if(isturf(H.loc)) //else, there's considered to be no light
 		var/turf/T = H.loc
-		var/area/A = T.loc
-		if(A)
-			if(A.lighting_use_dynamic)	light_amount = min(10,T.lighting_lumcount) - 5
-			else						light_amount =  5
+		light_amount = min(10,T.get_lumcount()) - 5
 		H.nutrition += light_amount
 		if(H.nutrition > NUTRITION_LEVEL_FULL)
 			H.nutrition = NUTRITION_LEVEL_FULL
@@ -195,36 +191,32 @@ datum/species/human/spec_death(gibbed, mob/living/carbon/human/H)
 	var/light_amount = 0
 	if(isturf(H.loc))
 		var/turf/T = H.loc
-		var/area/A = T.loc
-		if(A)
-			if(A.lighting_use_dynamic)	light_amount = T.lighting_lumcount
-			else						light_amount =  10
+		light_amount = T.get_lumcount()
+
 		if(light_amount > 2) //if there's enough light, start dying
 			H.take_overall_damage(1,1)
 		else if (light_amount < 2) //heal in the dark
 			H.heal_overall_damage(1,1)
 
 /*
- SLIMEPEOPLE
+ JELLYPEOPLE
 */
 
-/datum/species/slime
-	// Humans mutated by slime mutagen, produced from green slimes. They are not targetted by slimes.
-	name = "Slimeperson"
-	id = "slime"
-	default_color = "00FFFF"
-	darksight = 3
-	invis_sight = SEE_INVISIBLE_LEVEL_ONE
-	specflags = list(MUTCOLORS,EYECOLOR,HAIR,FACEHAIR,NOBLOOD)
-	hair_alpha = 165
-	hair_luminosity = -75
-	ignored_by = list(/mob/living/simple_animal/slime)
-	bone_chance_adjust = 0
+/datum/species/jelly
+	// Entirely alien beings that seem to be made entirely out of gel. They have three eyes and a skeleton visible within them.
+	name = "Xenobiological Jelly Entity"
+	id = "jelly"
+	default_color = "00FF90"
+	say_mod = "chirps"
+	eyes = "jelleyes"
+	specflags = list(MUTCOLORS,EYECOLOR,NOBLOOD)
 	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/slime
 	exotic_blood = /datum/reagent/toxin/slimejelly
 	var/recently_changed = 1
 
-/datum/species/slime/spec_life(mob/living/carbon/human/H)
+/datum/species/jelly/spec_life(mob/living/carbon/human/H)
+	if(H.stat == DEAD) //can't farm slime jelly from a dead slime/jelly person indefinitely
+		return
 	if(!H.reagents.get_reagent_amount("slimejelly"))
 		if(recently_changed)
 			H.reagents.add_reagent("slimejelly", 80)
@@ -238,25 +230,125 @@ datum/species/human/spec_death(gibbed, mob/living/carbon/human/H)
 		if(S.volume < 100)
 			if(H.nutrition >= NUTRITION_LEVEL_STARVING)
 				H.reagents.add_reagent("slimejelly", 0.5)
-				H.nutrition -= 5
+				H.nutrition -= 2.5
 		if(S.volume < 50)
 			if(prob(5))
 				H << "<span class='danger'>You feel drained!</span>"
 		if(S.volume < 10)
 			H.losebreath++
 
-/datum/species/slime/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
+/datum/species/jelly/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
 	if(chem.id == "slimejelly")
 		return 1
+
 /*
- JELLYPEOPLE
+ SLIMEPEOPLE
 */
 
-/datum/species/jelly
-	// Entirely alien beings that seem to be made entirely out of gel. They have three eyes and a skeleton visible within them.
+/datum/species/jelly/slime
+	// Humans mutated by slime mutagen, produced from green slimes. They are not targetted by slimes.
+	name = "Slimeperson"
+	id = "slime"
+	default_color = "00FFFF"
+	darksight = 3
+	invis_sight = SEE_INVISIBLE_LEVEL_ONE
+	specflags = list(MUTCOLORS,EYECOLOR,HAIR,FACEHAIR,NOBLOOD)
+	say_mod = "says"
+	eyes = "eyes"
+	hair_color = "mutcolor"
+	hair_alpha = 150
+	ignored_by = list(/mob/living/simple_animal/slime)
+	burnmod = 0.5
+	coldmod = 2
+	heatmod = 0.5
+
+/datum/species/jelly/slime/spec_life(mob/living/carbon/human/H)
+	if(recently_changed)
+		var/datum/action/innate/split_body/S = new
+		S.Grant(H)
+
+	for(var/datum/reagent/toxin/slimejelly/S in H.reagents.reagent_list)
+		if(S.volume >= 200)
+			if(prob(5))
+				H << "<span class='notice'>You feel very bloated!</span>"
+		if(S.volume < 200)
+			if(H.nutrition >= NUTRITION_LEVEL_WELL_FED)
+				H.reagents.add_reagent("slimejelly", 0.5)
+				H.nutrition -= 2.5
+
+	..()
+
+/datum/action/innate/split_body
+	name = "Split Body"
+	check_flags = AB_CHECK_ALIVE
+	button_icon_state = "slimesplit"
+	background_icon_state = "bg_alien"
+
+/datum/action/innate/split_body/CheckRemoval()
+	var/mob/living/carbon/human/H = owner
+	if(!ishuman(H) || !H.dna || !H.dna.species || H.dna.species.id != "slime")
+		return 1
+	return 0
+
+/datum/action/innate/split_body/Activate()
+	var/mob/living/carbon/human/H = owner
+	H << "<span class='notice'>You focus intently on moving your body while standing perfectly still...</span>"
+	H.notransform = 1
+	for(var/datum/reagent/toxin/slimejelly/S in H.reagents.reagent_list)
+		if(S.volume >= 200)
+			var/mob/living/carbon/human/spare = new /mob/living/carbon/human(H.loc)
+			spare.underwear = "Nude"
+			H.dna.transfer_identity(spare, transfer_SE=1)
+			H.dna.features["mcolor"] = pick("FFFFFF","7F7F7F", "7FFF7F", "7F7FFF", "FF7F7F", "7FFFFF", "FF7FFF", "FFFF7F")
+			spare.real_name = spare.dna.real_name
+			spare.name = spare.dna.real_name
+			spare.updateappearance(mutcolor_update=1)
+			spare.domutcheck()
+			spare.Move(get_step(H.loc, pick(NORTH,SOUTH,EAST,WEST)))
+			S.volume = 80
+			H.notransform = 0
+			var/datum/action/innate/swap_body/callforward = new /datum/action/innate/swap_body()
+			var/datum/action/innate/swap_body/callback = new /datum/action/innate/swap_body()
+			callforward.body = spare
+			callforward.Grant(H)
+			callback.body = H
+			callback.Grant(spare)
+			H.mind.transfer_to(spare)
+			spare << "<span class='notice'>...and after a moment of disorentation, you're besides yourself!</span>"
+			return
+
+	H << "<span class='warning'>...but there is not enough of you to go around! You must attain more mass to split!</span>"
+	H.notransform = 0
+
+/datum/action/innate/swap_body
+	name = "Swap Body"
+	check_flags = AB_CHECK_ALIVE
+	button_icon_state = "slimeswap"
+	background_icon_state = "bg_alien"
+	var/mob/living/carbon/human/body
+
+/datum/action/innate/swap_body/CheckRemoval()
+	var/mob/living/carbon/human/H = owner
+	if(!ishuman(H) || !H.dna || !H.dna.species || H.dna.species.id != "slime")
+		return 1
+	return 0
+
+/datum/action/innate/swap_body/Activate()
+	if(!body || !istype(body) || !body.dna || !body.dna.species || body.dna.species.id != "slime" || body.stat == DEAD || qdeleted(body))
+		owner << "<span class='warning'>Something is wrong, you cannot sense your other body!</span>"
+		Remove(owner)
+		return
+	if(body.stat == UNCONSCIOUS)
+		owner << "<span class='warning'>You sense this body has passed out for some reason. Best to stay away.</span>"
+		return
+
+	owner.mind.transfer_to(body)
+
+
+/datum/species/jelly_sayu
 	name = "Xenoid"
-	id = "jelly"
-	desc = "The three-eyed Xenoids hail from the outer reaches of the galaxy. They are vulnerable to freezing, but are also resistant to cellular damage."
+	id = "xenoid"
+	desc = "The three-eyed Xenoids hail from the outer reaches of the galaxy. They are vulnerable to water, but are also resistant to cellular damage."
 	default_color = "00FF90"
 	roundstart = 1
 	eyes = "jelleyes"
@@ -268,25 +360,20 @@ datum/species/human/spec_death(gibbed, mob/living/carbon/human/H)
 	bone_chance_adjust = 1.2
 	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/slime
 
-	// COLD DAMAGE LEVEL ONE: 0.9 (+0.4)
-	// COLD DAMAGE LEVEL TWO: 2.7 (+1.2)
-	// COLD DAMAGE LEVEL THREE: 5.4 (+2.4)
-	coldmod = 1.8
-
-/datum/species/jelly/before_equip_job(var/datum/job/J, var/mob/living/carbon/human/H)
+/datum/species/jelly_sayu/before_equip_job(var/datum/job/J, var/mob/living/carbon/human/H)
 	if(H.job == "Quartermaster" || H.job == "Captain" || H.job == "Head of Personnel")
 		H.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses/sunglasses3(H), slot_glasses)
 	if(H.job == "Head of Security" || H.job == "Warden")
 		H.equip_to_slot_or_del(new /obj/item/clothing/glasses/hud/security/sunglasses/sunglasses3(H), slot_glasses)
 
-/datum/species/jelly/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
+/datum/species/jelly_sayu/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
 	if(chem.id == "water")	// DANGER
 		if(H.reagents.has_reagent("water", 10))
 			H.adjustToxLoss(1)
 		H.reagents.remove_reagent(chem.id, 0.8)
 		return 1
 
-/datum/species/jelly/spec_life(mob/living/carbon/human/H)
+/datum/species/jelly_sayu/spec_life(mob/living/carbon/human/H)
 	if(H.getCloneLoss()) // clone loss is slowly regenerated
 		H.adjustCloneLoss(-0.2)
 
@@ -303,7 +390,7 @@ datum/species/human/spec_death(gibbed, mob/living/carbon/human/H)
 	speedmod = 3
 	armor = 55
 	punchmod = 5
-	no_equip = list(slot_wear_mask, slot_wear_suit, slot_gloves, slot_shoes, slot_head, slot_w_uniform)
+	no_equip = list(slot_wear_mask, slot_wear_suit, slot_gloves, slot_shoes, slot_w_uniform)
 	nojumpsuit = 1
 	bone_chance_adjust = 0
 	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/golem
@@ -346,9 +433,22 @@ datum/species/human/spec_death(gibbed, mob/living/carbon/human/H)
 	name = "Spooky Scary Skeleton"
 	id = "skeleton"
 	say_mod = "rattles"
+	need_nutrition = 0
 	sexes = 0
 	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/skeleton
 	specflags = list(NOBREATH,HEATRES,COLDRES,NOBLOOD,RADIMMUNE,VIRUSIMMUNE,PIERCEIMMUNE)
+	var/list/myspan = null
+
+
+/datum/species/skeleton/New()
+	..()
+	myspan = list(pick(SPAN_SANS,SPAN_PAPYRUS)) //pick a span and stick with it for the round
+
+
+/datum/species/skeleton/get_spans()
+	return myspan
+
+
 /*
  ZOMBIES
 */
@@ -464,16 +564,18 @@ datum/species/human/spec_death(gibbed, mob/living/carbon/human/H)
 var/global/image/plasmaman_on_fire = image("icon"='icons/mob/OnFire.dmi', "icon_state"="plasmaman")
 
 /datum/species/plasmaman
-	name = "Plasbone"
+	name = "Plasmaman"
 	id = "plasmaman"
 	say_mod = "rattles"
 	sexes = 0
-	meat = /obj/item/weapon/reagent_containers/food/snacks/meat/slab/human/mutant/skeleton
-	specflags = list(NOBLOOD,RADIMMUNE)
+	meat = /obj/item/stack/sheet/mineral/plasma
+	desc = "A skeletal species, who need plasma to live. Without their suits, oxygen sets them on fire."
+	specflags = list(NOBLOOD,RADIMMUNE,NOTRANSSTING)
 	safe_oxygen_min = 0 //We don't breath this
 	safe_toxins_min = 16 //We breath THIS!
 	safe_toxins_max = 0
 	dangerous_existence = 1 //So so much
+	need_nutrition = 0 //Hard to eat through a helmet
 	var/skin = 0
 
 /datum/species/plasmaman/skin
@@ -489,30 +591,33 @@ var/global/image/plasmaman_on_fire = image("icon"='icons/mob/OnFire.dmi', "icon_
 /datum/species/plasmaman/spec_life(mob/living/carbon/human/H)
 	var/datum/gas_mixture/environment = H.loc.return_air()
 
-	if(!istype(H.wear_suit, /obj/item/clothing/suit/space/eva/plasmaman) || !istype(H.head, /obj/item/clothing/head/helmet/space/hardsuit/plasmaman))
+	if(!istype(H.w_uniform, /obj/item/clothing/under/plasmaman) || !istype(H.head, /obj/item/clothing/head/helmet/plasmaman))
 		if(environment)
 			var/total_moles = environment.total_moles()
 			if(total_moles)
 				if((environment.oxygen /total_moles) >= 0.01)
-					if(!H.on_fire)
-						H.visible_message("<span class='danger'>[H]'s body reacts with the atmosphere and bursts into flames!</span>","<span class='userdanger'>Your body reacts with the atmosphere and bursts into flame!</span>")
 					H.adjust_fire_stacks(0.5)
+					if(!H.on_fire && H.fire_stacks > 0)
+						H.visible_message("<span class='danger'>[H]'s body reacts with the atmosphere and bursts into flames!</span>","<span class='userdanger'>Your body reacts with the atmosphere and bursts into flame!</span>")
 					H.IgniteMob()
 	else
 		if(H.fire_stacks)
-			var/obj/item/clothing/suit/space/eva/plasmaman/P = H.wear_suit
+			var/obj/item/clothing/under/plasmaman/P = H.w_uniform
 			if(istype(P))
 				P.Extinguish(H)
 	H.update_fire()
 
-//Heal from plasma
-/datum/species/plasmaman/handle_chemicals(datum/reagent/chem, mob/living/carbon/human/H)
-	if(chem.id == "plasma")
-		H.adjustBruteLoss(-5)
-		H.adjustFireLoss(-5)
-		H.reagents.remove_reagent(chem.id, REAGENTS_METABOLISM)
-		return 1
+/datum/species/plasmaman/before_equip_job(datum/job/J, mob/living/carbon/human/H)
+	var/datum/outfit/plasmaman/O = new /datum/outfit/plasmaman
+	H.equipOutfit(O)
+	return 0
 
-
-
+/datum/species/plasmaman/qualifies_for_rank(rank, list/features)
+	if(rank in command_positions)
+		return 0
+	if(rank in security_positions)
+		return 0
+	if(rank == "Clown" || rank == "Mime")//No funny bussiness
+		return 0
+	return 1
 

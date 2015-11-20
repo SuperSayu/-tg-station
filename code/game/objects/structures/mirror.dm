@@ -10,7 +10,8 @@
 
 
 /obj/structure/mirror/attack_hand(mob/user)
-	if(shattered)	return
+	if(shattered)
+		return
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
@@ -22,13 +23,15 @@
 
 		//handle facial hair
 		var/new_style = input(user, "Select a facial hair style", "Grooming")  as null|anything in facial_hair_styles_list
-		if(userloc != H.loc) return	//no tele-grooming
+		if(userloc != H.loc)
+			return	//no tele-grooming
 		if(new_style)
 			H.facial_hair_style = new_style
 
 		//handle normal hair
 		new_style = input(user, "Select a hair style", "Grooming")  as null|anything in hair_styles_list
-		if(userloc != H.loc) return	//no tele-grooming
+		if(userloc != H.loc)
+			return	//no tele-grooming
 		if(new_style)
 			H.hair_style = new_style
 
@@ -36,7 +39,8 @@
 
 
 /obj/structure/mirror/proc/shatter()
-	if(shattered)	return
+	if(shattered)
+		return
 	shattered = 1
 	icon_state = "mirror_broke"
 	playsound(src, "shatter", 70, 1)
@@ -58,6 +62,19 @@
 	if(I.damtype == STAMINA)
 		return
 	if(shattered)
+		if(istype(I, /obj/item/weapon/weldingtool))
+			var/obj/item/weapon/weldingtool/WT = I
+			if(WT.remove_fuel(0, user))
+				user << "<span class='notice'>You begin repairing [src]...</span>"
+				playsound(src, 'sound/items/Welder.ogg', 100, 1)
+				if(do_after(user, 10, target = src))
+					if(!user || !WT || !WT.isOn())
+						return
+					user << "<span class='notice'>You repair [src].</span>"
+					shattered = 0
+					icon_state = initial(icon_state)
+					desc = initial(desc)
+				return
 		playsound(src.loc, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		return
 
@@ -71,7 +88,8 @@
 
 /obj/structure/mirror/attack_alien(mob/living/user)
 	user.do_attack_animation(src)
-	if(islarva(user)) return
+	if(islarva(user))
+		return
 	if(shattered)
 		playsound(src.loc, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		return
@@ -80,9 +98,11 @@
 
 
 /obj/structure/mirror/attack_animal(mob/living/user)
-	if(!isanimal(user)) return
+	if(!isanimal(user))
+		return
 	var/mob/living/simple_animal/M = user
-	if(M.melee_damage_upper <= 0) return
+	if(M.melee_damage_upper <= 0)
+		return
 	M.do_attack_animation(src)
 	if(shattered)
 		playsound(src.loc, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
@@ -108,14 +128,18 @@
 
 /obj/structure/mirror/magic/New()
 	if(!choosable_races.len)
-		for(var/speciestype in typesof(/datum/species) - /datum/species)
+		for(var/speciestype in subtypesof(/datum/species))
 			var/datum/species/S = new speciestype()
 			if(!(S.id in races_blacklist))
 				choosable_races += S.id
 	..()
 
+/obj/structure/mirror/magic/lesser/New()
+	choosable_races = roundstart_species
+	..()
+
 /obj/structure/mirror/magic/badmin/New()
-	for(var/speciestype in typesof(/datum/species) - /datum/species)
+	for(var/speciestype in subtypesof(/datum/species))
 		var/datum/species/S = new speciestype()
 		choosable_races += S.id
 	..()

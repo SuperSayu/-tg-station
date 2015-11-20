@@ -308,9 +308,9 @@
 			if(low_o2 && prob(33))
 				var/obj/effect/smoke
 				if(prob(60))
-					smoke = new /obj/effect/effect/smoke/bad(loc)
+					smoke = new /obj/effect/particle_effect/smoke/bad(loc)
 				else
-					smoke = new /obj/effect/effect/smoke(loc)
+					smoke = new /obj/effect/particle_effect/smoke(loc)
 				spawn(0)
 					while(smoke)
 						sleep(rand(25,75))

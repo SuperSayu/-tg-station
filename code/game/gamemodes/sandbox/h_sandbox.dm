@@ -30,9 +30,10 @@ var/hsboxspawn = 1
 		/obj/item/weapon/grab, /obj/item/tk_grab, /obj/item/weapon/implant, // not implanter, the actual thing that is inside you
 		/obj/item/assembly,/obj/item/device/onetankbomb, /obj/item/radio, /obj/item/device/pda/ai,
 		/obj/item/device/uplink/hidden, /obj/item/smallDelivery, /obj/item/missile,/obj/item/projectile,
-		/obj/item/borg/sight,/obj/item/borg/overdrive,/obj/item/borg/stun,/obj/item/weapon/bombcore/badmin,
+		/obj/item/borg/sight,/obj/item/borg/stun,/obj/item/weapon/bombcore/badmin,
 		/obj/item/organ, /obj/item/weapon/robot_module, /obj/item/weapon/storage/secure/safe,
-		/obj/item/weapon/storage/belt/bluespace/admin, /obj/item/weapon/grenade/clusterbuster/apocalypse,/obj/item/weapon/veilrender)
+		/obj/item/weapon/storage/belt/bluespace/admin, /obj/item/weapon/grenade/clusterbuster/apocalypse,/obj/item/weapon/veilrender,
+		/obj/item/borg/sight,/obj/item/borg/stun,/obj/item/weapon/robot_module)
 
 /datum/hSB/proc/update()
 	var/global/list/hrefs = list(
@@ -232,7 +233,7 @@ var/hsboxspawn = 1
 
 				if(!clothinfo)
 					clothinfo = "<b>Clothing</b> <a href='?\ref[src];hsb=hsbreag'>(Reagent Containers)</a> <a href='?\ref[src];hsb=hsbobj'>(Other Items)</a><hr><br>"
-					var/list/all_items = typesof(/obj/item/clothing) - /obj/item/clothing
+					var/list/all_items = subtypesof(/obj/item/clothing)
 					for(var/typekey in spawn_forbidden)
 						all_items -= typesof(typekey)
 					for(var/O in reverseRange(all_items))
@@ -246,7 +247,7 @@ var/hsboxspawn = 1
 
 				if(!reaginfo)
 					reaginfo = "<b>Reagent Containers</b> <a href='?\ref[src];hsb=hsbcloth'>(Clothing)</a> <a href='?\ref[src];hsb=hsbobj'>(Other Items)</a><hr><br>"
-					var/list/all_items = typesof(/obj/item/weapon/reagent_containers) - /obj/item/weapon/reagent_containers
+					var/list/all_items = subtypesof(/obj/item/weapon/reagent_containers)
 					for(var/typekey in spawn_forbidden)
 						all_items -= typesof(typekey)
 					for(var/O in reverseRange(all_items))
@@ -260,7 +261,7 @@ var/hsboxspawn = 1
 
 				if(!objinfo)
 					objinfo = "<b>Other Items</b> <a href='?\ref[src];hsb=hsbcloth'>(Clothing)</a> <a href='?\ref[src];hsb=hsbreag'>(Reagent Containers)</a><hr><br>"
-					var/list/all_items = typesof(/obj/item/) - typesof(/obj/item/clothing) - typesof(/obj/item/weapon/reagent_containers) - /obj/item
+					var/list/all_items = subtypesof(/obj/item/) - typesof(/obj/item/clothing) - typesof(/obj/item/weapon/reagent_containers)
 					for(var/typekey in spawn_forbidden)
 						all_items -= typesof(typekey)
 

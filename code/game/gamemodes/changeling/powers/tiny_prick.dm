@@ -38,10 +38,8 @@
 		return
 	if(!isturf(user.loc))
 		return
-	if(get_dist(user, target) > (user.mind.changeling.sting_range))
-		return //sanity check as AStar is still throwing insane stunts
-	if(!AStar(user.loc, target.loc, null, /turf/proc/Distance, user.mind.changeling.sting_range))
-		return //hope this ancient magic still works
+	if(!AStar(user.loc, target.loc, null, /turf/proc/Distance, user.mind.changeling.sting_range, simulated_only = 0))
+		return
 	if(target.mind && target.mind.changeling)
 		sting_feedback(user,target)
 		take_chemical_cost(user.mind.changeling)
@@ -75,6 +73,9 @@
 		return
 	selected_dna = changeling.select_dna("Select the target DNA: ", "Target DNA")
 	if(!selected_dna)
+		return
+	if(NOTRANSSTING in selected_dna.dna.species.specflags)
+		user << "<span class = 'notice'>That DNA is not compatible with changeling retrovirus!"
 		return
 	..()
 

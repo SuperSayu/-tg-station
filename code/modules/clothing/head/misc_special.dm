@@ -48,6 +48,7 @@
 	icon_state = "cake0"
 	flags_cover = HEADCOVERSEYES
 	var/onfire = 0
+	var/brightness_on = 1 // luminosity when lit
 	var/status = 0
 	var/fire_resist = T0C+1300	//this is the max temp it can stand before you start to cook. although it might not burn away, you take damage
 	var/processing = 0 //I dont think this is used anywhere.
@@ -70,12 +71,14 @@
 	if(status > 1)	return
 	src.onfire = !( src.onfire )
 	if (src.onfire)
-		src.force = 3
+		src.force = 15
+		src.AddLuminosity(brightness_on)
 		src.damtype = "fire"
 		src.icon_state = "cake1"
 		SSobj.processing |= src
 	else
 		src.force = null
+		src.AddLuminosity(-brightness_on)
 		src.damtype = "brute"
 		src.icon_state = "cake0"
 	return
@@ -151,5 +154,3 @@
 	action_button_name = "Toggle Nose Light"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	brightness_on = 1 //luminosity when on
-
-

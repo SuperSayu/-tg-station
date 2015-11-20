@@ -65,11 +65,12 @@
 #define NOFIRE			2048
 #define VIRUSIMMUNE		4096
 #define PIERCEIMMUNE	8192
+#define NOTRANSSTING	16384
 
-#define MUTCOLORS_PARTSONLY 	16384	//Used if we want the mutant colour to be only used by mutant bodyparts. Don't combine this with MUTCOLORS, or it will be useless.
+#define MUTCOLORS_PARTSONLY 	32768	//Used if we want the mutant colour to be only used by mutant bodyparts. Don't combine this with MUTCOLORS, or it will be useless.
 
 
-#define NOPIXREMOVE		32768
+#define NOPIXREMOVE		65536
 /*
 	These defines are used specifically with the atom/movable/languages bitmask.
 	They are used in atom/movable/Hear() and atom/movable/say() to determine whether hearers can understand a message.

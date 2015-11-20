@@ -9,8 +9,10 @@
         #include "map_files\generic\z6.dmm"
         #include "map_files\generic\z7.dmm"
 
-        #define MAP_FILE "MetaStation.v39K.dmm"
-        #define MAP_NAME "MetaStation"
+        #define MAP_FILE "SayuStation.2.1.3.dmm"
+        #define MAP_NAME "SayuStation"
+
+        #define MAP_TRANSITION_CONFIG	list(MAIN_STATION = CROSSLINKED, CENTCOMM = SELFLOOPING, ABANDONED_SATELLITE = CROSSLINKED, DERELICT = CROSSLINKED, MINING = CROSSLINKED, EMPTY_AREA_1 = CROSSLINKED, EMPTY_AREA_2 = CROSSLINKED)
 
 #elif !defined(MAP_OVERRIDE)
 

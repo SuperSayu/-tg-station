@@ -16,7 +16,6 @@
 	var/max_n_of_items = 1500
 	var/icon_on = "smartfridge"
 	var/icon_off = "smartfridge-off"
-	var/list/item_quants = list()
 
 /obj/machinery/smartfridge/New()
 	..()
@@ -26,7 +25,6 @@
 	RefreshParts()
 
 /obj/machinery/smartfridge/construction()
-	item_quants.Cut()
 	for(var/datum/A in contents)
 		qdel(A)
 
@@ -137,16 +135,6 @@
 		S.remove_from_storage(O,src)
 
 	O.loc = src
-	var/n = name_filter(O.name)
-
-	if(item_quants[n])
-		item_quants[n]++
-	else
-		item_quants[n] = 1
-	sortList(item_quants)
-
-/obj/machinery/smartfridge/proc/name_filter(n)
-	return sanitize_simple(n,list("'"="","+"=" ")) // these do not translate correctly in html links
 
 /obj/machinery/smartfridge/attack_paw(mob/user)
 	return src.attack_hand(user)
@@ -164,7 +152,7 @@
 
 /obj/machinery/smartfridge/proc/is_seed(inv_name)
 	for(var/obj/item/seeds/s in src)
-		if(s.name == inv_name)
+		if(url_encode(s.name) == inv_name)
 			return 1
 	return 0
 
@@ -177,21 +165,31 @@
 	if (contents.len == 0)
 		dat += "<font color = 'red'>No product loaded!</font>"
 	else
-		for (var/O in item_quants)
-			if(item_quants[O] > 0)
-				var/N = item_quants[O]
-				var/itemName = sanitize(O)
-				dat += "<FONT color = 'blue'><B>[capitalize(O)]</B>:"
-				dat += " [N] </font>"
-				dat += "<a href='byond://?src=\ref[src];vend=[itemName];amount=1'>Vend</A> "
-				if(N > 5)
-					dat += "(<a href='byond://?src=\ref[src];vend=[itemName];amount=5'>x5</A>)"
-					if(N > 10)
-						dat += "(<a href='byond://?src=\ref[src];vend=[itemName];amount=10'>x10</A>)"
-						if(N > 25)
-							dat += "(<a href='byond://?src=\ref[src];vend=[itemName];amount=25'>x25</A>)"
-				if(N > 1)
-					dat += "(<a href='?src=\ref[src];vend=[itemName];amount=[N]'>All</A>)"
+		var/listofitems = list()
+		for (var/atom/movable/O in contents)
+			if (listofitems[O.name])
+				listofitems[O.name]++
+			else
+				listofitems[O.name] = 1
+		sortList(listofitems)
+
+		for (var/O in listofitems)
+			if(listofitems[O] <= 0)
+				continue
+			var/N = listofitems[O]
+			var/itemName = url_encode(O)
+			dat += "<FONT color = 'blue'><B>[capitalize(O)]</B>:"
+			dat += " [N] </font>"
+			dat += "<a href='byond://?src=\ref[src];vend=[itemName];amount=1'>Vend</A> "
+			if(N > 5)
+				dat += "(<a href='byond://?src=\ref[src];vend=[itemName];amount=5'>x5</A>)"
+				if(N > 10)
+					dat += "(<a href='byond://?src=\ref[src];vend=[itemName];amount=10'>x10</A>)"
+					if(N > 25)
+						dat += "(<a href='byond://?src=\ref[src];vend=[itemName];amount=25'>x25</A>)"
+			if(N > 1)
+				dat += "(<a href='?src=\ref[src];vend=[itemName];amount=[N]'>All</A>)"
+
 				if(is_seed(itemName) && N>1)
 					var/max_bags = round((N-1)/7)+1
 					dat += "(<a href='?src=\ref[src];bagvend=[itemName];amount=1'>1 Bag</A>)"
@@ -202,7 +200,7 @@
 					if(max_bags > 1)
 						dat += "(<a href='?src=\ref[src];bagvend=[itemName];amount=[max_bags]'>Bag All</A>)"
 
-				dat += "<br>"
+			dat += "<br>"
 
 		dat += "</TT>"
 	user << browse("<HEAD><TITLE>[src] supplies</TITLE></HEAD><TT>[dat]</TT>", "window=smartfridge")
@@ -218,16 +216,11 @@
 		var/N = href_list["bagvend"]
 		var/amount = text2num(href_list["amount"])
 
-		if(item_quants[N] <= 0) // Sanity check, there are probably ways to press the button when it shouldn't be possible.
-			return
-
-		item_quants[N] = max(item_quants[N] - amount*7, 0)
-
 		var/i = amount * 7
 		var/j = 0
 		var/obj/item/weapon/storage/bag/seeds/SB = new(loc)
 		for(var/obj/O in contents)
-			if(name_filter(O.name) == N && istype(O,/obj/item/seeds))
+			if(N == O.name && istype(O,/obj/item/seeds))
 				O.loc = SB
 				i--
 				j++
@@ -248,21 +241,16 @@
 	var/N = href_list["vend"]
 	var/amount = text2num(href_list["amount"])
 
-	if(item_quants[N] <= 0) // Sanity check, there are probably ways to press the button when it shouldn't be possible.
-		return
-
-	item_quants[N] = max(item_quants[N] - amount, 0)
-
 	var/i = amount
 	for(var/obj/O in contents)
+		if(i <= 0)
+			break
 		if(O.name == N)
 			O.loc = src.loc
 			i--
-			if(i <= 0)
-				break
 
-	src.updateUsrDialog()
-	return
+
+	updateUsrDialog()
 
 
 // ----------------------------

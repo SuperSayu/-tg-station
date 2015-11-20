@@ -15,6 +15,7 @@
 /obj/machinery/dominator/New()
 	..()
 	SetLuminosity(2)
+	poi_list |= src
 
 /obj/machinery/dominator/examine(mob/user)
 	..()
@@ -54,7 +55,7 @@
 		iconname += "-[gang.color]"
 		SetLuminosity(3)
 
-	var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread
+	var/datum/effect_system/spark_spread/sparks = new /datum/effect_system/spark_spread
 
 	health -= damage
 
@@ -109,6 +110,7 @@
 /obj/machinery/dominator/Destroy()
 	if(operating != -1)
 		set_broken()
+	poi_list.Remove(src)
 	return ..()
 
 /obj/machinery/dominator/emp_act(severity)

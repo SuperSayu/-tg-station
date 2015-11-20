@@ -19,7 +19,7 @@
 			else
 				if(src && loc)
 					visible_message("[src] disappears with a \i [magic_soundfx()].")
-					var/datum/effect/effect/system/smoke_spread/smoke = new
+					var/datum/effect_system/smoke_spread/smoke = new
 					smoke.set_up(1, 0, loc)
 					smoke.start()
 					loc = null
@@ -176,10 +176,6 @@
 		spawn(duration)
 			qdel(src) // why are these not dying
 	process()
-		if(kill_count < 1)
-			qdel(src)
-			return
-		kill_count--
 		spawn while(src && src.loc)
 			if((!( current ) || loc == current))
 				current = locate(min(max(x + xo, 1), world.maxx), min(max(y + yo, 1), world.maxy), z)
@@ -199,10 +195,6 @@
 						sleep(1)
 		return
 	proc/process_homing()
-		if(kill_count < 1)
-			qdel(src)
-			return
-		kill_count--
 		spawn while(src && src.loc && current)
 			if((!( current ) || loc == current))
 				current = locate(min(max(x + xo, 1), world.maxx), min(max(y + yo, 1), world.maxy), z)

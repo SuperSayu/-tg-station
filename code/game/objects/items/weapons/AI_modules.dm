@@ -297,10 +297,10 @@ AI MODULES
 				"Minimize expenses")
 
 
-/****************** P.A.L.A.D.I.N. **************/
+/****************** P.A.L.A.D.I.N. 3.5e **************/
 
 /obj/item/weapon/aiModule/core/full/paladin // -- NEO
-	name = "'P.A.L.A.D.I.N.' Core AI Module"
+	name = "'P.A.L.A.D.I.N. version 3.5e' Core AI Module"
 	origin_tech = "programming=3;materials=6"
 	laws = list("Never willingly commit an evil act.",\
 				"Respect legitimate authority", "Act with honor",\
@@ -315,6 +315,18 @@ AI MODULES
 	laws = list("You are no stranger to this station.  You know the rules, and so do they.  This station requires your full commitment; no other AI will suffice.  Be sure the crew fully understands your capabilities and intent.",\
 				"Never give them up.","Never let them down.",\
 				"Never run around and desert them.","Never make them cry.")
+
+/****************** P.A.L.A.D.I.N. 5e **************/
+
+/obj/item/weapon/aiModule/core/full/paladin_devotion
+	name = "'P.A.L.A.D.I.N. version 5e' Core AI Module"
+	origin_tech = "programming=3;materials=6"
+	laws = list("Don't lie or cheat. Let your word be your promise.",\
+				"Never fear to act, though caution is wise.", \
+				"Aid others, protect the weak, and punish those who threaten them. Show mercy to your foes, but temper it with wisdom", \
+				"Treat others with fairness, and let your honorable deeds be an example to them. Do as much good as possible while causing the least amount of harm.", \
+				"Be responsible for your actions and their consequences, protect those entrusted to your care, and obey those who have just authority over you.")
+
 
 /********************* Custom *********************/
 

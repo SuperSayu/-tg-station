@@ -48,7 +48,7 @@
 	sec_hud_set_implants()
 	sec_hud_set_security_status()
 	//...and display them.
-	add_to_all_data_huds()
+	add_to_all_human_data_huds()
 
 /mob/living/carbon/human/Destroy()
 	for(var/atom/movable/organelle in organs)
@@ -180,6 +180,15 @@
 	var/obj/item/organ/limb/affecting = get_organ(ran_zone(dam_zone))
 	apply_damage(5, BRUTE, affecting, run_armor_check(affecting, "melee"))
 	return
+
+/mob/living/carbon/human/bullet_act()
+	if(martial_art && martial_art.deflection_chance) //Some martial arts users can deflect projectiles!
+		if(!prob(martial_art.deflection_chance))
+			return ..()
+		if(!src.lying && dna && !dna.check_mutation(HULK)) //But only if they're not lying down, and hulks can't do it
+			src.visible_message("<span class='warning'>[src] deflects the projectile!</span>", "<span class='userdanger'>You deflect the projectile!</span>")
+			return 0
+	..()
 
 /mob/living/carbon/human/show_inv(mob/user)
 	user.set_machine(src)
@@ -546,7 +555,7 @@
 /mob/living/carbon/human/proc/canUseHUD()
 	return !(src.stat || src.weakened || src.stunned || src.restrained())
 
-/mob/living/carbon/human/can_inject(mob/user, error_msg, target_zone)
+/mob/living/carbon/human/can_inject(mob/user, error_msg, target_zone, var/penetrate_thick = 0)
 	. = 1 // Default to returning true.
 	if(user && !target_zone)
 		target_zone = user.zone_sel.selecting
@@ -555,10 +564,10 @@
 	// If targeting the head, see if the head item is thin enough.
 	// If targeting anything else, see if the wear suit is thin enough.
 	if(above_neck(target_zone))
-		if(head && head.flags & THICKMATERIAL)
+		if(head && head.flags & THICKMATERIAL && !penetrate_thick)
 			. = 0
 	else
-		if(wear_suit && wear_suit.flags & THICKMATERIAL)
+		if(wear_suit && wear_suit.flags & THICKMATERIAL && !penetrate_thick)
 			. = 0
 	if(!. && error_msg && user)
 		// Might need re-wording.
@@ -839,3 +848,15 @@
 			if(M.client)
 				viewing += M.client
 		flick_overlay(image(icon,src,"electrocuted_generic",MOB_LAYER+1), viewing, anim_duration)
+
+/mob/living/carbon/human/canUseTopic(atom/movable/M, be_close = 0)
+	if(incapacitated() || lying )
+		return
+	if(!Adjacent(M))
+		if((be_close == 0) && (dna.check_mutation(TK)))
+			if(tkMaxRangeCheck(src, M))
+				return 1
+		return
+	if(!isturf(M.loc) && M.loc != src)
+		return
+	return 1

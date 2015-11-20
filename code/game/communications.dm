@@ -274,9 +274,9 @@ var/list/pointers = list()
 	..()
 	pointers -= "\ref[src]"
 
-/datum/signal/Del()
+/datum/signal/Destroy()
 	pointers -= "\ref[src]"
-	..()
+	return ..()
 
 /datum/signal/proc/copy_from(datum/signal/model)
 	source = model.source

@@ -45,10 +45,10 @@
 	return
 
 /obj/item/weapon/magic/contract/proc/summon(mob/user)
-	var/list/candidates = get_candidates(BE_WIZARD)
+	var/list/candidates = get_candidates(ROLE_WIZARD)
 	if(candidates.len)
 		var/client/C = pick(candidates)
-		new /obj/effect/effect/smoke(user.loc)
+		PoolOrNew(/obj/effect/particle_effect/smoke, user.loc)
 		var/mob/living/carbon/human/M = new/mob/living/carbon/human(user.loc)
 		M.key = C.key
 		M << "<B>You are the [user.real_name]'s apprentice! You are bound by magic contract to follow their orders and help them in accomplishing their goals."

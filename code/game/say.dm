@@ -126,7 +126,7 @@ var/list/freqtospan = list(
 	output = "[output]'>"
 	return output
 
-/mob/living/proc/say_test(text)
+/proc/say_test(text)
 	var/ending = copytext(text, length(text))
 	if (ending == "?")
 		return "1"
@@ -165,3 +165,7 @@ var/list/freqtospan = list(
 
 /atom/movable/virtualspeaker/GetRadio()
 	return radio
+
+/atom/movable/virtualspeaker/Destroy()
+	..()
+	return QDEL_HINT_PUTINPOOL

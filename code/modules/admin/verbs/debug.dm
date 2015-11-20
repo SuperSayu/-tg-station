@@ -199,7 +199,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	set category = "Fun"
 	set name = "Make Robot"
 
-	if(!ticker)
+	if(!ticker || !ticker.mode)
 		alert("Wait until the game starts")
 		return
 	if(istype(M, /mob/living/carbon/human))
@@ -215,7 +215,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	set category = "Fun"
 	set name = "Make Blob"
 
-	if(!ticker)
+	if(!ticker || !ticker.mode)
 		alert("Wait until the game starts")
 		return
 	if(istype(M, /mob/living/carbon/human))
@@ -232,7 +232,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	set category = "Fun"
 	set name = "Make Simple Animal"
 
-	if(!ticker)
+	if(!ticker || !ticker.mode)
 		alert("Wait until the game starts")
 		return
 
@@ -280,7 +280,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	set category = "Fun"
 	set name = "Make Alien"
 
-	if(!ticker)
+	if(!ticker || !ticker.mode)
 		alert("Wait until the game starts")
 		return
 	if(ishuman(M))
@@ -297,7 +297,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	set category = "Fun"
 	set name = "Make slime"
 
-	if(!ticker)
+	if(!ticker || !ticker.mode)
 		alert("Wait until the game starts")
 		return
 	if(ishuman(M))
@@ -419,7 +419,7 @@ var/list/TYPES_SHORTCUTS = list(
 var/global/list/g_fancy_list_of_types = null
 /proc/get_fancy_list_of_types()
 	if (isnull(g_fancy_list_of_types)) //init
-		var/list/temp = sortList(typesof(/atom) - typesof(/area) - /atom - /atom/movable)
+		var/list/temp = sortList(subtypesof(/atom) - typesof(/area) - /atom/movable)
 		g_fancy_list_of_types = new(temp.len)
 		for(var/type in temp)
 			var/typename = "[type]"
@@ -474,7 +474,7 @@ var/global/list/g_fancy_list_of_types = null
 	set category = "Admin"
 	set name = "Grant Full Access"
 
-	if (!ticker)
+	if(!ticker || !ticker.mode)
 		alert("Wait until the game starts")
 		return
 	if (istype(M, /mob/living/carbon/human))
@@ -546,37 +546,37 @@ var/global/list/g_fancy_list_of_types = null
 		if(!(A.type in areas_all))
 			areas_all.Add(A.type)
 
-	for(var/obj/machinery/power/apc/APC in world)
+	for(var/obj/machinery/power/apc/APC in apcs_list)
 		var/area/A = get_area(APC)
 		if(!(A.type in areas_with_APC))
 			areas_with_APC.Add(A.type)
 
-	for(var/obj/machinery/alarm/alarm in world)
+	for(var/obj/machinery/alarm/alarm in machines)
 		var/area/A = get_area(alarm)
 		if(!(A.type in areas_with_air_alarm))
 			areas_with_air_alarm.Add(A.type)
 
-	for(var/obj/machinery/requests_console/RC in world)
+	for(var/obj/machinery/requests_console/RC in machines)
 		var/area/A = get_area(RC)
 		if(!(A.type in areas_with_RC))
 			areas_with_RC.Add(A.type)
 
-	for(var/obj/machinery/light/L in world)
+	for(var/obj/machinery/light/L in machines)
 		var/area/A = get_area(L)
 		if(!(A.type in areas_with_light))
 			areas_with_light.Add(A.type)
 
-	for(var/obj/machinery/light_switch/LS in world)
+	for(var/obj/machinery/light_switch/LS in machines)
 		var/area/A = get_area(LS)
 		if(!(A.type in areas_with_LS))
 			areas_with_LS.Add(A.type)
 
-	for(var/obj/item/device/radio/intercom/I in world)
+	for(var/obj/item/device/radio/intercom/I in machines)
 		var/area/A = get_area(I)
 		if(!(A.type in areas_with_intercom))
 			areas_with_intercom.Add(A.type)
 
-	for(var/obj/machinery/camera/C in world)
+	for(var/obj/machinery/camera/C in machines)
 		var/area/A = get_area(C)
 		if(!(A.type in areas_with_camera))
 			areas_with_camera.Add(A.type)
@@ -627,7 +627,7 @@ var/global/list/g_fancy_list_of_types = null
 
 
 	var/list/outfits = list("Naked","Custom","As Job...")
-	var/list/paths = typesof(/datum/outfit) - /datum/outfit - typesof(/datum/outfit/job)
+	var/list/paths = subtypesof(/datum/outfit) - typesof(/datum/outfit/job)
 	for(var/path in paths)
 		var/datum/outfit/O = path //not much to initalize here but whatever
 		outfits[initial(O.name)] = path
@@ -690,15 +690,15 @@ var/global/list/g_fancy_list_of_types = null
 	if(alert("Are you sure? This will start up the engine. Should only be used during debug!",,"Yes","No") != "Yes")
 		return
 
-	for(var/obj/machinery/power/emitter/E in world)
+	for(var/obj/machinery/power/emitter/E in machines)
 		if(E.anchored)
 			E.active = 1
 
-	for(var/obj/machinery/field/generator/F in world)
+	for(var/obj/machinery/field/generator/F in machines)
 		if(F.anchored)
 			F.Varedit_start = 1
 	spawn(30)
-		for(var/obj/machinery/the_singularitygen/G in world)
+		for(var/obj/machinery/the_singularitygen/G in machines)
 			if(G.anchored)
 				var/obj/singularity/S = new /obj/singularity(get_turf(G), 50)
 //				qdel(G)
@@ -715,7 +715,7 @@ var/global/list/g_fancy_list_of_types = null
 				//S.dissipate_track = 0
 				//S.dissipate_strength = 10
 
-	for(var/obj/machinery/power/rad_collector/Rad in world)
+	for(var/obj/machinery/power/rad_collector/Rad in machines)
 		if(Rad.anchored)
 			if(!Rad.P)
 				var/obj/item/weapon/tank/internals/plasma/Plasma = new/obj/item/weapon/tank/internals/plasma(Rad)
@@ -727,7 +727,7 @@ var/global/list/g_fancy_list_of_types = null
 			if(!Rad.active)
 				Rad.toggle_power()
 
-	for(var/obj/machinery/power/smes/SMES in world)
+	for(var/obj/machinery/power/smes/SMES in machines)
 		if(SMES.anchored)
 			SMES.input_attempt = 1
 
@@ -767,3 +767,11 @@ var/global/list/g_fancy_list_of_types = null
 		dat += "[path]<BR>"
 
 	usr << browse(dat, "window=dellog")
+
+/client/proc/debug_huds(i as num)
+	set category = "Debug"
+	set name = "Debug HUDs"
+	set desc = "Debug the data or antag HUDs"
+
+	if(!holder)	return
+	debug_variables(huds[i])
