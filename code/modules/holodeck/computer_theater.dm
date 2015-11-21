@@ -5,5 +5,6 @@
 	idle_power_usage = 10
 	active_power_usage = 50
 	offline_program = /area/holodeck/theater/wood
-	holodeck_type = /area/holodeck/betadeck
+	holodeck_type = /area/holodeck/theater
 	program_type = /area/holodeck/theater
+	random_program = 1

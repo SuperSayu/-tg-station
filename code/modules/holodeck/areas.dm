@@ -95,3 +95,82 @@
 	name = "Holodeck - Holdout Bunker"
 	restricted = 1
 
+//
+// Theater holodeck
+//
+
+/area/holodeck/theater
+	name = "\improper Holodeck Beta"
+
+/area/holodeck/theater/base
+	name = "Theater - Off"
+
+/area/holodeck/theater/beach
+	name = "Theater -  Beach"
+
+/area/holodeck/theater/grass
+	name = "Theater - Grass"
+
+/area/holodeck/theater/lava
+	name = "Theater - Lava"
+
+/area/holodeck/theater/alien
+	name = "Theater - Alien"
+
+/area/holodeck/theater/asteroid
+	name = "Theater - Asteroid"
+
+/area/holodeck/theater/plate_stairs
+	name = "Theater - Plating Stairs"
+
+/area/holodeck/theater/caution
+	name = "Theater - Caution Stripes"
+
+/area/holodeck/theater/ai
+	name = "Theater - AI"
+
+/area/holodeck/theater/malfai
+	name = "Theater - Malfunctioning AI"
+
+/area/holodeck/theater/bluecheckers
+	name = "Theater - Blue Checker Tile"
+
+/area/holodeck/theater/greycheckers
+	name = "Theater - Grey Checker Tile"
+
+/area/holodeck/theater/redcheckers
+	name = "Theater - Red Checker Tile"
+
+/area/holodeck/theater/carpet
+	name = "Theater - Carpet"
+
+/area/holodeck/theater/sslogo
+	name = "Theater - Station Logo"
+
+/area/holodeck/theater/sovietlogo
+	name = "Theater - Derelict Logo"
+
+/area/holodeck/theater/sovietstairs
+	name = "Theater - Syndicate Stairway"
+
+/area/holodeck/theater/cargo
+	name = "Theater - Cargo Loading"
+
+/area/holodeck/theater/burnt
+	name = "Theater - Burnt Tile"
+
+/area/holodeck/theater/wood
+	name = "Theater - Wood Floor"
+
+/area/holodeck/theater/solars
+	name = "Theater - Solars"
+
+/area/holodeck/theater/space
+	name = "Theater - Space"
+
+/area/holodeck/theater/party
+	name = "Theater - Dance Party"
+	party = 1
+
+/area/holodeck/theater/hyperspace
+	name = "Theater - Hyperspace"
