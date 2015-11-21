@@ -8,7 +8,8 @@
 *.lk
 *.int
 /data/mode.txt
-/_maps/backup
+/_maps/map_files/backup
+/_maps/RandomZLevels/backup
 
 #Logfiles
 *.log
@@ -21,3 +22,4 @@ data/job_fullnew.bdb
 */Thumbs.db
 data/mode.txt
 *.backup
+/data/minimaps
