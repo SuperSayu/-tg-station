@@ -47,8 +47,6 @@
 
 	var/obj/item/radio/integrated/signal/sradio // AI's signaller
 
-	var/obj/item/device/camera_bug/ai/bug
-
 
 /mob/living/silicon/pai/New(var/obj/item/device/paicard/P)
 	make_laws()
@@ -73,8 +71,6 @@
 		pda.ownjob = "Personal Assistant"
 		pda.owner = text("[]", src)
 		pda.name = pda.owner + " (" + pda.ownjob + ")"
-
-	bug = new(src)
 
 	..()
 
