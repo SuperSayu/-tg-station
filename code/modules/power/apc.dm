@@ -1187,10 +1187,7 @@
 					set_broken()
 
 /obj/machinery/power/apc/blob_act()
-	if (prob(75))
-		set_broken()
-		if (cell && prob(5))
-			cell.blob_act()
+	set_broken()
 
 /obj/machinery/power/apc/disconnect_terminal()
 	if(terminal)
