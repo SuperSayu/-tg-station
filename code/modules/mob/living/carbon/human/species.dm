@@ -53,6 +53,7 @@
 	var/coldmod = 1		// multiplier for cold damage
 	var/heatmod = 1		// multiplier for heat damage
 	var/punchmod = 0	// adds to the punch damage
+	var/siemens_coeff = 1 //base electrocution coefficient
 
 	var/bone_chance_adjust = 1
 	var/species_temp_coeff = 1
