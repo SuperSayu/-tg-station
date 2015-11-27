@@ -63,7 +63,8 @@ var/list/doppler_arrays = list()
 	if(stat & NOPOWER)
 		return
 	var/turf/zone = get_turf(src)
-
+	if(zone == null)
+		return
 	if(zone.z != epicenter.z)
 		return
 
