@@ -184,7 +184,7 @@
 "dB" = (/turf/simulated/floor/holofloor{tag = "icon-bar (EAST)"; icon_state = "bar"; dir = 4},/area/holodeck/theater/redcheckers)
 "dC" = (/turf/simulated/floor/holofloor{icon_state = "dark"},/area/holodeck/theater/ai)
 "dD" = (/turf/simulated/floor/holofloor/asteroid,/area/holodeck/theater/asteroid)
-"dE" = (/turf/space,/area/holodeck/theater/grass)
+"dE" = (/turf/simulated/floor/holofloor/grass,/area/holodeck/theater/grass)
 "dF" = (/turf/simulated/floor/holofloor{tag = "icon-bcircuit (EAST)"; icon_state = "bcircuit"; dir = 4},/area/holodeck/theater/ai)
 "dG" = (/obj/structure/showcase{desc = "Little more than a plastic box, but with just as much personality as the real thing."; icon = 'icons/mob/AI.dmi'; icon_state = "ai"; name = "'AI'"},/turf/simulated/floor/holofloor{icon_state = "dark"},/area/holodeck/theater/ai)
 "dH" = (/turf/simulated/floor/holofloor{icon_state = "dark"},/area/holodeck/theater/malfai)
