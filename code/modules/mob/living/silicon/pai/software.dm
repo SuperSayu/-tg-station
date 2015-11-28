@@ -62,12 +62,6 @@
 				left_part = src.medicalAnalysis()
 			if("doorjack")
 				left_part = src.softwareDoor()
-			if("camerajack")
-				//left_part = src.softwareCamera()
-				if(bug)
-					left_part = bug.menu(bug.get_cameras())
-				else
-					left_part = "Camera bug detached."
 			if("signaller")
 				left_part = src.softwareSignal()
 
@@ -137,8 +131,6 @@
 					if(src.ram >= cost)
 						src.ram -= cost
 						src.software.Add(target)
-						if(target == "camera jack")
-							bug.verbs += /obj/item/device/camera_bug/pai/proc/show_interface
 					else
 						src.temp = "Insufficient RAM available."
 				else
