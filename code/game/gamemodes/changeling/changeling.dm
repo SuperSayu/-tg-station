@@ -503,4 +503,3 @@ var/list/slot2type = list("head" = /obj/item/clothing/head/changeling, "wear_mas
 	newprofile.underwear = underwear
 	newprofile.undershirt = undershirt
 	newprofile.socks = socks
->>>>>>> aa672d3... Merge pull request #13230 from JJRcop/i12317
