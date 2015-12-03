@@ -246,7 +246,7 @@
 "eL" = (/obj/structure/closet/crate/trashcart,/obj/item/weapon/switchblade,/obj/item/weapon/switchblade,/turf/simulated/floor/plasteel{baseturf = /turf/simulated/floor/plating/basalt},/area/awaymission/listeningpost)
 "eM" = (/turf/simulated/floor/plasteel{baseturf = /turf/simulated/floor/plating/basalt},/area/awaymission/listeningpost)
 "eN" = (/obj/structure/table,/obj/item/weapon/gun/energy/kinetic_accelerator,/obj/item/weapon/gun/energy/kinetic_accelerator,/obj/effect/decal/cleanable/cobweb2,/turf/simulated/floor/plasteel{baseturf = /turf/simulated/floor/plating/basalt},/area/awaymission/listeningpost)
-"eO" = (/obj/machinery/vending/sovietsoda,/turf/simulated/floor/plasteel{baseturf = /turf/simulated/floor/plating/basalt},/area/awaymission/BMPship)
+"eO" = (/obj/machinery/vending/refillable/drink/sovietsoda,/turf/simulated/floor/plasteel{baseturf = /turf/simulated/floor/plating/basalt},/area/awaymission/BMPship)
 "eP" = (/obj/machinery/light/small{dir = 8},/obj/structure/table,/obj/item/weapon/storage/toolbox/electrical,/obj/item/device/multitool,/turf/simulated/floor/plasteel{baseturf = /turf/simulated/floor/plating/basalt},/area/awaymission/listeningpost)
 "eQ" = (/obj/effect/decal/cleanable/oil,/turf/simulated/floor/plasteel{baseturf = /turf/simulated/floor/plating/basalt},/area/awaymission/listeningpost)
 "eR" = (/obj/effect/landmark{name = "awaystart"},/turf/simulated/floor/plasteel{baseturf = /turf/simulated/floor/plating/basalt},/area/awaymission/listeningpost)
