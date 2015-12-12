@@ -37,7 +37,13 @@ var/global/list/spawned_surprises = list()
 
 	return room_turfs
 
-//////////////
+/proc/make_mining_asteroid_secrets()
+
+	for(1 to max_monoliths)
+		make_mining_asteroid_secret(1)
+
+	for(1 to max_secret_rooms)
+		make_mining_asteroid_secret()
 
 /proc/make_mining_asteroid_secret(var/monolith = 0)
 	var/valid = 0
