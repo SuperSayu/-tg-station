@@ -1835,7 +1835,7 @@
 	..()
 	mind.assigned_role = "Shade"
 
-/mob/living/simple_animal/construct/mind_initialize()
+/mob/living/simple_animal/hostile/construct/mind_initialize()
 	..()
 	mind.assigned_role = "[initial(name)]"
 	mind.special_role = "Cultist"

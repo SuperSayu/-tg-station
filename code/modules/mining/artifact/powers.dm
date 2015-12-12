@@ -949,7 +949,7 @@
 	if(on == 1 && usetype == A_RETALIATE)
 		use_power()
 
-/obj/item/artifact/IsShield()
+/obj/item/artifact/hit_reaction()
 	check_retaliate()
 	return 0
 
