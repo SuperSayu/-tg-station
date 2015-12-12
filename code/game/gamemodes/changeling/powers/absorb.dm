@@ -159,6 +159,7 @@
 	user.mind.transfer_to(target)
 	if(ghost && ghost.mind)
 		ghost.mind.transfer_to(user)
+	else if(ghost)
 		user.key = ghost.key
 
 	user.Paralyse(2)

@@ -1,21 +1,3 @@
-#define VANILLA_BUG		0
-#define UNIVERSAL_BUG	1
-#define NETWORK_BUG		2
-#define SABOTAGE_BUG	3
-#define ADVANCED_BUG	4
-#define AI_BUG			5
-#define ADMIN_BUG		6
-/*
-	Bugtypes:
-	Vanilla: Attack cameras to bug them, see only your own bugs
-	Universal: Attack cameras to bug them, see all bugs
-	Network: See all cameras on network
-	Sabotage: Attack cameras to bug them, see only your own bugs, EMP button for bugged cameras
-	Advanced: Attack cameras to bug them, see only your own bugs, monitor bugged cameras
-	AI: See all cameras on network, monitor bugged cameras
-	Admin: See all cameras on network, monitor bugged cameras,
-*/
-
 
 #define BUGMODE_LIST	0
 #define BUGMODE_MONITOR	1
@@ -28,21 +10,15 @@
 	desc = "For illicit snooping through the camera network."
 	icon = 'icons/obj/device.dmi'
 	icon_state	= "camera_bug"
-	w_class		= 1
+	w_class		= 1.0
 	item_state	= "camera_bug"
 	throw_speed	= 4
 	throw_range	= 20
-	action_button_name = "check camera bug"
-	origin_tech = "syndicate=3;engineering=1"
 
 	var/obj/machinery/camera/current = null
-	var/obj/item/expansion = null
-	var/bugtype = VANILLA_BUG
 
 	var/last_net_update = 0
-	var/last_bugtype = VANILLA_BUG
 	var/list/bugged_cameras = list()
-	var/skip_bugcheck = 0
 
 	var/track_mode = BUGMODE_LIST
 	var/last_tracked = 0
@@ -54,43 +30,13 @@
 	var/last_found = null
 	var/last_seen = null
 
-	var/emagged = 0
-
-/obj/item/device/camera_bug/ai
-	name = "Supplemental Camera Interface"
-	skip_bugcheck = 1
-	bugtype = AI_BUG
-
-/obj/item/device/camera_bug/ai/proc/show_interface()
-	var/isAi = istype(usr, /mob/living/silicon/ai)
-
-	if(!isAi)
-		return
-	else
-		var/mob/living/silicon/ai/A = usr
-		if(A.control_disabled)
-			usr << "Wireless control is disabled!"
-			return
-	interact(usr)
-
-/obj/item/device/camera_bug/pai
-	name = "Supplemental Camera Interface"
-	skip_bugcheck = 1
-	bugtype = AI_BUG
-
-/obj/item/device/camera_bug/pai/proc/show_interface()
-	set category="pAI Commands"
-	set name="Show Camera Monitor"
-	interact(usr)
+	var/is_silicon_bug = FALSE
 
 /obj/item/device/camera_bug/New()
 	..()
 	SSobj.processing += src
 
 /obj/item/device/camera_bug/Destroy()
-	if(expansion)
-		qdel(expansion)
-		expansion = null
 	get_cameras()
 	for(var/cam_tag in bugged_cameras)
 		var/obj/machinery/camera/camera = bugged_cameras[cam_tag]
@@ -122,7 +68,7 @@
 		return null
 
 	var/turf/T = get_turf(user.loc)
-	if(T.z != current.z || (!skip_bugcheck && current.bug != src) || !current.can_use())
+	if(T.z != current.z || !current.can_use())
 		user << "<span class='danger'>[src] has lost the signal.</span>"
 		current = null
 		user.reset_view(null)
@@ -132,22 +78,13 @@
 	return 1
 
 /obj/item/device/camera_bug/proc/get_cameras()
-	if(bugtype != last_bugtype || ( (bugtype in list(UNIVERSAL_BUG,NETWORK_BUG,AI_BUG,ADMIN_BUG)) && world.time > (last_net_update + 100)))
+	if( world.time > (last_net_update + 100))
 		bugged_cameras = list()
-		last_bugtype = bugtype
 		for(var/obj/machinery/camera/camera in cameranet.cameras)
 			if(camera.stat || !camera.can_use())
 				continue
-			switch(bugtype)
-				if(VANILLA_BUG,SABOTAGE_BUG,ADVANCED_BUG)
-					if(camera.bug == src)
-						bugged_cameras[camera.c_tag] = camera
-				if(UNIVERSAL_BUG)
-					if(camera.bug)
-						bugged_cameras[camera.c_tag] = camera
-				if(NETWORK_BUG,AI_BUG,ADMIN_BUG)
-					if(length(list("SS13","MINE")&camera.network))
-						bugged_cameras[camera.c_tag] = camera
+			if(length(list("SS13","MINE")&camera.network))
+				bugged_cameras[camera.c_tag] = camera
 	sortList(bugged_cameras)
 	return bugged_cameras
 
@@ -163,20 +100,10 @@
 			for(var/entry in cameras)
 				var/obj/machinery/camera/C = cameras[entry]
 				var/functions = ""
-				switch(bugtype)
-					if(VANILLA_BUG,UNIVERSAL_BUG) // not network bug
-						functions = " - <a href='?src=\ref[src];light=\ref[C]'>\[[C.luminosity?"Deactivate":"Activate"] Light\]</a>"
-					if(SABOTAGE_BUG)
-						functions = " - <a href='?src=\ref[src];emp=\ref[C]'>\[Disable\]</a> <a href='?src=\ref[src];light=\ref[C]'>\[[C.luminosity?"Deactivate":"Activate"] Light\]</a>"
-					//if(ADVANCED_BUG)
-					//	functions = " - <a href='?src=\ref[src];monitor=\ref[C]'>\[Monitor\]</a>"
-					if(ADVANCED_BUG,AI_BUG)
-						functions = " - <a href='?src=\ref[src];monitor=\ref[C]'>\[Monitor\]</a> <a href='?src=\ref[src];light=\ref[C]'>\[[C.luminosity?"Deactivate":"Activate"] Light\]</a>"
-					if(ADMIN_BUG)
-						if(C.bug == src)
-							functions = " - <a href='?src=\ref[src];monitor=\ref[C]'>\[Monitor\]</a>  <a href='?src=\ref[src];light=\ref[C]'>\[[C.luminosity?"Deactivate":"Activate"] Light\]</a> <a href='?src=\ref[src];emp=\ref[C]'>\[Disable\]</a>"
-						else
-							functions = " - <a href='?src=\ref[src];monitor=\ref[C]'>\[Monitor\]</a>  <a href='?src=\ref[src];light=\ref[C]'>\[[C.luminosity?"Deactivate":"Activate"] Light\]</a>"
+				if(C.bug == src  && !is_silicon_bug)
+					functions = " - <a href='?src=\ref[src];monitor=\ref[C]'>\[Monitor\]</a> <a href='?src=\ref[src];emp=\ref[C]'>\[Disable\]</a>"
+				else
+					functions = " - <a href='?src=\ref[src];monitor=\ref[C]'>\[Monitor\]</a>"
 				html += "<tr><td><a href='?src=\ref[src];view=\ref[C]'>[entry]</a></td><td>[functions]</td></tr>"
 
 		if(BUGMODE_MONITOR)
@@ -205,17 +132,11 @@
 						var/s = (time_diff - 4*m) * 15
 						if(!s) s = "00"
 						html += "Last seen near [outstring] ([m]:[s] minute\s ago)<br>"
+					if( C && (C.bug == src) && !is_silicon_bug) //Checks to see if the camera has a bug
+						html += "<a href='?src=\ref[src];emp=\ref[C]'>\[Disable\]</a>"
+
 				else
-					html += "Not yet seen.<br>"
-				if(bugtype == AI_BUG || bugtype == ADMIN_BUG)
-					var/mob/living/carbon/human/H = tracking
-					var/level = 0
-					if(istype(H))
-						html += "<br>Suit sensor data:<br>"
-						var/obj/item/clothing/under/U = H.w_uniform
-						if(istype(U) && U.has_sensor)
-							level = U.sensor_mode
-						html += health_report(H,level) // In case the above doesn't happen, it's basically "Unavailable"
+					html += "Not yet seen."
 			else
 				track_mode = BUGMODE_LIST
 				return .(cameras)
@@ -225,10 +146,8 @@
 	// this should only be called if current exists
 	var/dat = ""
 	if(current && current.can_use())
-		dat += "Light is <a href='?\ref[src];light=\ref[current]'>[current.luminosity?"on":"off"]</a><hr>"
 		var/list/seen = current.can_see()
 		var/list/names = list()
-		var/empty = 1
 		for(var/obj/singularity/S in seen) // god help you if you see more than one
 			if(S.name in names)
 				names[S.name]++
@@ -239,7 +158,6 @@
 			var/stage = round(S.current_size / 2)+1
 			dat += " (Stage [stage])"
 			dat += " <a href='?\ref[src];track=\ref[S]'>\[Track\]</a><br>"
-			empty = 0
 
 		for(var/obj/mecha/M in seen)
 			if(M.name in names)
@@ -249,11 +167,9 @@
 				names[M.name] = 1
 				dat += "[M.name]"
 			dat += " <a href='?\ref[src];track=\ref[M]'>\[Track\]</a><br>"
-			empty = 0
+
 
 		for(var/mob/living/M in seen)
-			if(!prob(M.alpha)) continue
-			if(M.digitalcamo) continue
 			if(M.name in names)
 				names[M.name]++
 				dat += "[M.name] ([names[M.name]])"
@@ -265,39 +181,11 @@
 			if(M.lying)
 				dat += " (Laying down)"
 			dat += " <a href='?\ref[src];track=\ref[M]'>\[Track\]</a><br>"
-			empty = 0
-		if(empty)
+		if(length(dat) == 0)
 			dat += "No motion detected."
 		return dat
 	else
 		return "Camera Offline<br>"
-
-/obj/item/device/camera_bug/proc/health_report(mob/living/M, sensor_mode)
-	if(sensor_mode < 1)
-		return "Unavailable"
-	var/turf/pos = get_turf(M)
-	if(pos.z != 1)
-		return "Unavailable"
-
-	var/life_status = "[M.stat > 1 ? "<span class='bad'>Deceased</span>" : "<span class='good'>Living</span>"]"
-
-	var/damage_report
-	if(sensor_mode > 1)
-		var/dam1 = round(M.getOxyLoss(),1)
-		var/dam2 = round(M.getToxLoss(),1)
-		var/dam3 = round(M.getFireLoss(),1)
-		var/dam4 = round(M.getBruteLoss(),1)
-		damage_report = "(<font color='teal'>[dam1]</font>/<font color='green'>[dam2]</font>/<font color='orange'>[dam3]</font>/<font color='red'>[dam4]</font>)"
-
-	switch(sensor_mode)
-		if(1)
-			return life_status
-		if(2)
-			return "[life_status] [damage_report]"
-		if(3)
-			var/area/player_area = get_area(M)
-			return "[life_status] [damage_report]<br>[format_text(player_area.name)] ([pos.x], [pos.y])"
-
 
 /obj/item/device/camera_bug/Topic(href,list/href_list)
 	if(usr != loc)
@@ -313,8 +201,7 @@
 		if(C)
 			track_mode = BUGMODE_MONITOR
 			current = C
-			if(!isAI(usr))
-				usr.reset_view(null)
+			usr.reset_view(null)
 			interact()
 	if("track" in href_list)
 		var/atom/A = locate(href_list["track"])
@@ -333,8 +220,7 @@
 		interact()
 		return
 	if("close" in href_list)
-		if(!isAI(usr))
-			usr.reset_view(null)
+		usr.reset_view(null)
 		usr.unset_machine()
 		current = null
 		return // I do not <- I do not remember what I was going to write in this comment -Sayu, sometime later
@@ -355,18 +241,12 @@
 					interact()
 				else
 					usr.unset_machine()
-					if(!isAI(usr))
-						usr.reset_view(null)
+					usr.reset_view(null)
 					usr << browse(null, "window=camerabug")
 			return
 		else
 			usr.unset_machine()
-			if(!isAI(usr))
-				usr.reset_view(null)
-	if("light" in href_list)
-		var/obj/machinery/camera/C = locate(href_list["light"])
-		if(istype(C) && C.can_use())
-			C.toggle_light()
+			usr.reset_view(null)
 
 	interact()
 
@@ -380,16 +260,10 @@
 		if(!tracking)
 			src.updateSelfDialog()
 			return
-		if(!prob(tracking.alpha))
-			src.updateSelfDialog()
-			return
 
 		if(tracking.name != tracked_name) // Hiding their identity, tricksy
 			var/mob/M = tracking
 			if(istype(M))
-				if(M.digitalcamo)
-					src.updateSelfDialog()
-					return
 				if(!(tracked_name == "Unknown" && findtext(tracking.name,"Unknown"))) // we saw then disguised before
 					if(!(tracked_name == M.real_name && findtext(tracking.name,M.real_name))) // or they're still ID'd
 						src.updateSelfDialog()//But if it's neither of those cases
@@ -413,72 +287,22 @@
 				break
 	src.updateSelfDialog()
 
-/obj/item/device/camera_bug/attackby(obj/item/W,mob/living/user, params)
-	if(istype(W,/obj/item/weapon/screwdriver) && expansion)
-		expansion.loc = get_turf(loc)
-		user << "<span class='notice'>You unscrew [expansion].</span>"
-		user.put_in_inactive_hand(expansion)
-		expansion = null
-		bugtype = VANILLA_BUG
-		skip_bugcheck = 0
-		track_mode = BUGMODE_LIST
-		tracking = null
+
+/obj/item/device/camera_bug/ai
+	name = "Supplemental Camera Interface"
+	is_silicon_bug = TRUE
+
+/obj/item/device/camera_bug/ai/proc/show_interface()
+	var/isAi = isAI(usr)
+
+	if(!isAi)
 		return
-
-	if(expansion || !W)
-		user << "There is already \an [expansion] in [src]."
-		return ..(W,user)
-
-	// I am not sure that this list is or should be final
-	// really I do not know what to do here.
-	var/static/list/expandables = list(
-		/obj/item/weapon/research = ADMIN_BUG, // could have been anything spawn-only
-
-		// these are all so hackish I am sorry
-
-		/obj/item/device/analyzer = UNIVERSAL_BUG,
-		/obj/item/weapon/stock_parts/subspace/analyzer = UNIVERSAL_BUG,
-
-		/obj/item/device/assembly/igniter = SABOTAGE_BUG,
-		/obj/item/device/assembly/infra = SABOTAGE_BUG, // ir blaster to disable camera
-		/obj/item/weapon/stock_parts/subspace/amplifier = SABOTAGE_BUG,
-
-		/obj/item/device/radio = NETWORK_BUG,
-		/obj/item/device/assembly/signaler = NETWORK_BUG,
-		/obj/item/weapon/stock_parts/subspace/transmitter = NETWORK_BUG,
-
-		/obj/item/device/detective_scanner = ADVANCED_BUG,
-		/obj/item/weapon/stock_parts/scanning_module = ADVANCED_BUG
-		)
-
-	for(var/entry in expandables)
-		if(istype(W,entry))
-
-			if(bugtype > VANILLA_BUG)
-				user << "You cannot modify [src]."
-
-			if(!user.unEquip(W))
-				return
-
-			bugtype = expandables[entry]
-			W.loc = src
-			expansion = W
-			user << "<span class='notice'>You add [W] to [src].</span>"
-			get_cameras() // the tracking code will want to know the new camera list
-			if(bugtype in list(UNIVERSAL_BUG,NETWORK_BUG,AI_BUG,ADMIN_BUG))
-				skip_bugcheck = 1
+	else
+		var/mob/living/silicon/ai/A = usr
+		if(A.control_disabled)
+			usr << "Wireless control is disabled!"
 			return
-
-	user << "[W] won't fit in [src]."
-	..()
-
-#undef VANILLA_BUG
-#undef UNIVERSAL_BUG
-#undef NETWORK_BUG
-#undef SABOTAGE_BUG
-#undef ADVANCED_BUG
-#undef AI_BUG
-#undef ADMIN_BUG
+	interact(usr)
 
 #undef BUGMODE_LIST
 #undef BUGMODE_MONITOR
