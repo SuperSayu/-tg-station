@@ -467,9 +467,9 @@ var/global/image/fire_overlay = image("icon" = 'icons/effects/fire.dmi', "icon_s
 
 // decay so that items are thrown when they get close, not all the time
 /obj/item/singularity_decay(var/obj/singularity/S, current_size, dist)
-	if(anchored || prob(40) || current_size < STAGE_FOUR) return ..()
-	spawn(0) //this is needed or multiple items will be thrown sequentially and not simultaneously
-		throw_at(S,14,3, spin = 0)
+	if(anchored || prob(40) || current_size < STAGE_FOUR)
+		return ..()
+	throw_at_fast(S,14,3, spin = 0)
 
 /obj/item/acid_act(acidpwr, acid_volume)
 	. = 1
