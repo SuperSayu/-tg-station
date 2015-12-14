@@ -1516,6 +1516,7 @@
 #include "code\modules\projectiles\guns\projectile\revolver.dm"
 #include "code\modules\projectiles\guns\projectile\sayu_gun.dm"
 #include "code\modules\projectiles\guns\projectile\shotgun.dm"
+#include "code\modules\projectiles\guns\projectile\sniper.dm"
 #include "code\modules\projectiles\guns\projectile\toy.dm"
 #include "code\modules\projectiles\projectile\beams.dm"
 #include "code\modules\projectiles\projectile\bullets.dm"
