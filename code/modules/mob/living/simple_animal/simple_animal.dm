@@ -515,3 +515,7 @@
 		nest.spawned_mobs -= src
 	nest = null
 	return ..()
+
+
+/mob/living/simple_animal/proc/sentience_act() //Called when a simple animal gains sentience via gold slime potion
+	return
