@@ -37,7 +37,6 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = 1.0
-	flags = FPRINT
 	castingmode = 0
 
 /obj/item/weapon/magic/contract/attack_self(mob/user as mob)

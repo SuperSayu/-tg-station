@@ -5,7 +5,7 @@
 	icon = 'icons/obj/device.dmi'
 	icon_state = "shield0"
 	var/active = 0.0
-	flags = FPRINT | CONDUCT
+	flags = CONDUCT
 	item_state = "electronic"
 	throwforce = 10.0
 	throw_speed = 2
