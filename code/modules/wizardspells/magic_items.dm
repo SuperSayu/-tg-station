@@ -301,7 +301,6 @@
 	icon = 'icons/obj/library.dmi'
 	icon_state ="book"
 	w_class = 2.0
-	flags = FPRINT
 	var/maxscrolls = 5
 	var/list/spawn_spells = list()
 

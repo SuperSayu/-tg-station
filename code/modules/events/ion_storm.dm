@@ -29,7 +29,7 @@
 /datum/round_event/ion_storm/start()
 
 	if(botEmagChance)
-		for(var/obj/machinery/bot/bot in world)
+		for(var/mob/living/simple_animal/bot/bot in world)
 			if(prob(botEmagChance))
 				bot.Emag()
 
@@ -47,7 +47,7 @@
 				M << "<br>"
 
 	if(botEmagChance)
-		for(var/obj/machinery/bot/bot in machines)
+		for(var/mob/living/simple_animal/bot/bot in living_mob_list)
 			if(prob(botEmagChance))
 				bot.Emag()
 

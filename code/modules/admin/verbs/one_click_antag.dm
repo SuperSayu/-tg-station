@@ -200,7 +200,6 @@
 
 
 /datum/admins/proc/makeCult()
-
 	var/datum/game_mode/cult/temp = new
 	if(config.protect_roles_from_antagonist)
 		temp.restricted_jobs += temp.protected_jobs
@@ -224,7 +223,7 @@
 									candidates += applicant
 
 	if(candidates.len)
-		var/numCultists = min(candidates.len, 4)
+		var/numCultists = min(candidates.len, 5)
 
 		for(var/i = 0, i<numCultists, i++)
 			H = pick(candidates)

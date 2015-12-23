@@ -369,13 +369,16 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	return .
 
 //Returns a list of all items of interest with their name
-/proc/getpois(mobs_only=0)
+/proc/getpois(mobs_only=0,skip_mindless=0)
 	var/list/mobs = sortmobs()
 	var/list/names = list()
 	var/list/pois = list()
 	var/list/namecounts = list()
 
 	for(var/mob/M in mobs)
+		if(skip_mindless && (!M.mind && !M.ckey))
+			if(!isbot(M))
+				continue
 		var/name = M.name
 		if (name in names)
 			namecounts[name]++
@@ -913,6 +916,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		var/rough_y = 0
 		var/final_x = 0
 		var/final_y = 0
+		var/final_z = 0
 
 		//Assume standards
 		var/i_width = world.icon_size
@@ -936,11 +940,18 @@ Turf and target are seperate in case you want to teleport some distance from a t
 			rough_y = round(AM.pixel_y/n_height)
 
 		//Find coordinates
-		final_x = AM.x + rough_x
-		final_y = AM.y + rough_y
+		if(!isturf(AM.loc))
+			var/turf/T = get_turf(AM)
+			final_x = T.x + rough_x
+			final_y = T.y + rough_y
+			final_z = T.z
+		else
+			final_x = AM.x + rough_x
+			final_y = AM.y + rough_y
+			final_z = AM.z
 
 		if(final_x || final_y)
-			return locate(final_x, final_y, AM.z)
+			return locate(final_x, final_y, final_z)
 
 //Finds the distance between two atoms, in pixels
 //centered = 0 counts from turf edge to edge
@@ -1341,3 +1352,11 @@ B --><-- A
 		c_dist++
 
 	return L
+
+/atom/proc/contains(var/atom/location)
+	if(!location)
+		return 0
+	for(location, location && location != src, location=location.loc); //semicolon is for the empty statement
+		if(location == src)
+			return 1
+		return 0

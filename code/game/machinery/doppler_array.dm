@@ -63,12 +63,13 @@ var/list/doppler_arrays = list()
 	if(stat & NOPOWER)
 		return
 	var/turf/zone = get_turf(src)
-
+	if(zone == null)
+		return
 	if(zone.z != epicenter.z)
 		return
 
 	var/distance = get_dist(epicenter, zone)
-	var/direct = get_dir(epicenter, zone)
+	var/direct = get_dir(zone, epicenter)
 
 	if(distance > max_dist)
 		return

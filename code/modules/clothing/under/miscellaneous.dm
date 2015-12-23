@@ -37,7 +37,7 @@
 	item_state = "armor"
 	can_adjust = 0
 	strip_delay = 100
-	burn_state = -1 //Won't burn in fires
+	burn_state = FIRE_PROOF
 
 /obj/item/clothing/under/waiter
 	name = "waiter's outfit"
@@ -71,13 +71,12 @@
 	item_state = "p_suit"
 	item_color = "psyche"
 
-/obj/item/clothing/under/sexyclown
+/obj/item/clothing/under/rank/clown/sexy
 	name = "sexy-clown suit"
 	desc = "It makes you look HONKable!"
 	icon_state = "sexyclown"
 	item_state = "sexyclown"
 	item_color = "sexyclown"
-	fitted = FEMALE_UNIFORM_TOP
 	can_adjust = 0
 
 /obj/item/clothing/under/rank/vice
@@ -118,7 +117,7 @@
 	heat_protection = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
 	max_heat_protection_temperature = SPACE_SUIT_MAX_TEMP_PROTECT
 	can_adjust = 0
-	burn_state = -1 //Won't burn in fires
+	burn_state = FIRE_PROOF
 
 /obj/item/clothing/under/acj
 	name = "administrative cybernetic jumpsuit"
@@ -135,7 +134,7 @@
 	heat_protection = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
 	max_heat_protection_temperature = SPACE_SUIT_MAX_TEMP_PROTECT
 	can_adjust = 0
-	burn_state = -1 //Won't burn in fires
+	burn_state = FIRE_PROOF
 
 /obj/item/clothing/under/owl
 	name = "owl uniform"
@@ -360,7 +359,7 @@
 	body_parts_covered = CHEST|GROIN|ARMS
 	fitted = NO_FEMALE_UNIFORM
 	can_adjust = 0
-	burn_state = -1 //Won't burn in fires
+	burn_state = FIRE_PROOF
 
 /obj/item/clothing/under/sundress
 	name = "sundress"
@@ -507,11 +506,10 @@
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 100, rad = 0)
 	body_parts_covered = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
 	can_adjust = 0
-	slowdown = 1
 	strip_delay = 80
 	var/next_extinguish = 0
 	var/extinguish_cooldown = 100
-	var/extinguishes_left = 10
+	var/extinguishes_left = 5
 
 
 /obj/item/clothing/under/plasmaman/examine(mob/user)
@@ -536,11 +534,11 @@
 
 /obj/item/clothing/under/plasmaman/attackby(obj/item/E, mob/user, params)
 	if (istype(E, /obj/item/device/extinguisher_refill))
-		if (extinguishes_left == 10)
+		if (extinguishes_left == 5)
 			user << "<span class='notice'>The inbuilt extinguisher is full.</span>"
 			return
 		else
-			extinguishes_left = 10
+			extinguishes_left = 5
 			user << "<span class='notice'>You refill the suits inbuilt extinguisher, using up the refill pack.</span>"
 			qdel(E)
 			return
@@ -550,5 +548,5 @@
 /obj/item/device/extinguisher_refill
 	name = "Plasma-man jumpsuit refill pack"
 	desc = "A compressed water pack used to refill plasma-man jumpsuit auto-extinguishers."
-	icon_state = "multitool"
+	icon_state = "plasmarefill"
 

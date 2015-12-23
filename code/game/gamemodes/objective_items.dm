@@ -89,8 +89,8 @@
 	excludefromjob = list("Captain")
 	antag_types = list("traitor","Changeling","Wizard","Space Ninja")
 
-/datum/objective_item/steal/ablative
-	name = "an ablative armor vest"
+/datum/objective_item/steal/reflector
+	name = "a reflector vest"
 	targetitem = /obj/item/clothing/suit/armor/laserproof
 	difficulty = 3
 	excludefromjob = list("Quartermaster","Cargo Technician","Head of Security", "Warden")

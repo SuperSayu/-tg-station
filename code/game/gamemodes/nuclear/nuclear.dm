@@ -10,7 +10,6 @@
 	recommended_enemies = 5
 	antag_flag = ROLE_OPERATIVE
 	enemy_minimum_age = 14
-
 	var/const/agents_possible = 5 //If we ever need more syndicate agents.
 
 	var/nukes_left = 1 // Call 3714-PRAY right now and order more nukes! Limited offer!
@@ -50,6 +49,11 @@
 		synd_mind.assigned_role = "Syndicate"
 		synd_mind.special_role = "Syndicate"//So they actually have a special role/N
 		log_game("[synd_mind.key] (ckey) has been selected as a nuclear operative")
+		if(ishuman(synd_mind.current))//don't want operatives burning to death instantly.
+			var/mob/living/carbon/human/human = synd_mind.current
+			if(human.dna && human.dna.species.dangerous_existence)
+				human.set_species(/datum/species/human)
+
 	return 1
 
 
@@ -117,6 +121,10 @@
 	synd_mind.current.real_name = "[syndicate_name()] [leader_title]"
 	synd_mind.current << "<B>You are the Syndicate [leader_title] for this mission. You are responsible for the distribution of telecrystals and your ID is the only one who can open the launch bay doors.</B>"
 	synd_mind.current << "<B>If you feel you are not up to this task, give your ID to another operative.</B>"
+	synd_mind.current << "<B>In your hand you will find a special item capable of triggering a greater challenge for your team. Examine it carefully and consult with your fellow operatives before activating it.</B>"
+
+	var/obj/item/device/nuclear_challenge/challenge = new /obj/item/device/nuclear_challenge
+	synd_mind.current.equip_to_slot_or_del(challenge, slot_r_hand)
 
 	var/list/foundIDs = synd_mind.current.search_contents_for(/obj/item/weapon/card/id)
 	if(foundIDs.len)
@@ -137,6 +145,7 @@
 	else
 		nuke_code = "code will be provided later"
 	return
+
 
 
 /datum/game_mode/proc/forge_syndicate_objectives(datum/mind/syndicate)

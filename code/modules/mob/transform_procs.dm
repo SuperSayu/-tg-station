@@ -426,14 +426,10 @@
 /mob/living/carbon/human/proc/Blobize()
 	if (notransform)
 		return
-	var/obj/effect/blob/core/new_blob = new /obj/effect/blob/core (loc)
-	if(!client)
-		for(var/mob/dead/observer/G in player_list)
-			if(ckey == "@[G.ckey]")
-				new_blob.create_overmind(G.client , 1)
-				break
+	if(!client) //TOO BAD
+		new /obj/effect/blob/core (loc)
 	else
-		new_blob.create_overmind(src.client , 1)
+		new /obj/effect/blob/core (loc,new_overmind = src.client)
 	gib(src)
 
 
@@ -540,7 +536,7 @@
 	if(!MP)
 		return 0	//Sanity, this should never happen.
 
-	if(ispath(MP, /mob/living/simple_animal/construct))
+	if(ispath(MP, /mob/living/simple_animal/hostile/construct))
 		return 0 //Verbs do not appear for players.
 
 //Good mobs!

@@ -27,10 +27,6 @@
 	..()
 	upgradeMotion()
 
-/obj/machinery/camera/bright/New()
-	..()
-	upgradeLight()
-
 // ALL UPGRADES
 /obj/machinery/camera/all
 	start_active = 1
@@ -40,8 +36,6 @@
 	upgradeEmpProof()
 	upgradeXRay()
 	upgradeMotion()
-	upgradeLight()
-
 
 // AUTONAME
 
@@ -67,28 +61,25 @@
 // CHECKS
 
 /obj/machinery/camera/proc/isEmpProof()
-	var/O = locate(/obj/item/stack/sheet/mineral/plasma) in assembly.upgrades
-	return O
+	return upgrades & CAMERA_UPGRADE_EMP_PROOF
 
 /obj/machinery/camera/proc/isXRay()
-	var/O = locate(/obj/item/device/analyzer) in assembly.upgrades
-	return O
+	return upgrades & CAMERA_UPGRADE_XRAY
 
 /obj/machinery/camera/proc/isMotion()
-	var/O = locate(/obj/item/device/assembly/prox_sensor) in assembly.upgrades
-	return O
+	return upgrades & CAMERA_UPGRADE_MOTION
 
 // UPGRADE PROCS
 
 /obj/machinery/camera/proc/upgradeEmpProof()
 	assembly.upgrades.Add(new /obj/item/stack/sheet/mineral/plasma(assembly))
+	upgrades |= CAMERA_UPGRADE_EMP_PROOF
 
 /obj/machinery/camera/proc/upgradeXRay()
 	assembly.upgrades.Add(new /obj/item/device/analyzer(assembly))
+	upgrades |= CAMERA_UPGRADE_XRAY
 
 // If you are upgrading Motion, and it isn't in the camera's New(), add it to the machines list.
 /obj/machinery/camera/proc/upgradeMotion()
 	assembly.upgrades.Add(new /obj/item/device/assembly/prox_sensor(assembly))
-/obj/machinery/camera/proc/upgradeLight()
-	assembly.upgrades.Add(new /obj/item/device/flashlight(assembly))
-	cam_luminosity = 5
+	upgrades |= CAMERA_UPGRADE_MOTION

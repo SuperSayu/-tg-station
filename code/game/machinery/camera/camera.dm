@@ -1,11 +1,15 @@
+#define CAMERA_UPGRADE_XRAY 1
+#define CAMERA_UPGRADE_EMP_PROOF 2
+#define CAMERA_UPGRADE_MOTION 4
+
 /obj/machinery/camera
 	name = "security camera"
 	desc = "It's used to monitor rooms."
 	icon = 'icons/obj/monitors.dmi'
 	icon_state = "camera"
-	use_power = 1
-	idle_power_usage = 10 // lights off
-	active_power_usage = 13 // lights on
+	use_power = 2
+	idle_power_usage = 5
+	active_power_usage = 10
 	layer = 5
 
 	var/health = 50
@@ -18,7 +22,6 @@
 	var/invuln = null
 	var/obj/item/device/camera_bug/bug = null
 	var/obj/machinery/camera_assembly/assembly = null
-	var/cam_luminosity = 2
 
 	//OTHER
 
@@ -30,12 +33,13 @@
 	var/busy = 0
 	var/emped = 0  //Number of consecutive EMP's on this camera
 
+	// Upgrades bitflag
+	var/upgrades = 0
+
 /obj/machinery/camera/New()
 	..()
 	assembly = new(src)
 	assembly.state = 4
-	if(prob(25)) cam_luminosity += pick(1,1,0,-1)
-
 	cameranet.cameras += src
 	cameranet.addCamera(src)
 	/* // Use this to look for cameras that have the same c_tag.
@@ -103,10 +107,6 @@
 		..()
 	return
 
-/obj/machinery/camera/blob_act()
-	qdel(src)
-	return
-
 /obj/machinery/camera/proc/setViewRange(num = 7)
 	src.view_range = num
 	cameranet.updateVisibility(src, 0)
@@ -115,14 +115,6 @@
 	if(!istype(user))
 		return
 	user.electrocute_act(10, src)
-
-/obj/machinery/camera/proc/toggle_light()
-	if(stat&(NOPOWER|BROKEN|EMPED) || luminosity)
-		SetLuminosity(0)
-		use_power = 1
-	else
-		SetLuminosity(cam_luminosity)
-		use_power = 2
 
 /obj/machinery/camera/attack_paw(mob/living/carbon/alien/humanoid/user)
 	if(!istype(user))
@@ -211,6 +203,8 @@
 		for(var/mob/O in player_list)
 			if(istype(O, /mob/living/silicon/ai))
 				var/mob/living/silicon/ai/AI = O
+				if(AI.control_disabled || (AI.stat == DEAD))
+					return
 				if(U.name == "Unknown")
 					AI << "<b>[U]</b> holds <a href='?_src_=usr;show_paper=1;'>\a [itemname]</a> up to one of your cameras ..."
 				else
@@ -249,12 +243,12 @@
 	return
 
 /obj/machinery/camera/proc/deactivate(mob/user, displaymessage = 1) //this should be called toggle() but doing a find and replace for this would be ass
+	status = !status
 	if(can_use())
 		cameranet.addCamera(src)
 	else
 		SetLuminosity(0)
 		cameranet.removeCamera(src)
-	status = !status
 	cameranet.updateChunk(x, y, z)
 	var/change_msg = "deactivates"
 	if(!status)
@@ -275,7 +269,6 @@
 
 		playsound(src.loc, 'sound/items/Wirecutter.ogg', 100, 1)
 
-
 	// now disconnect anyone using the camera
 	//Apparently, this will disconnect anyone even if the camera was re-activated.
 	//I guess that doesn't matter since they can't use it anyway?
@@ -295,15 +288,10 @@
 	for(var/mob/living/silicon/S in mob_list)
 		S.cancelAlarm("Camera", get_area(src), src)
 
-/obj/machinery/camera/power_change()
-	..()
-	if(stat&NOPOWER && luminosity)
-		toggle_light()
-
 /obj/machinery/camera/proc/can_use()
 	if(!status)
 		return 0
-	if(stat & (EMPED|NOPOWER))
+	if(stat & EMPED)
 		return 0
 	return 1
 

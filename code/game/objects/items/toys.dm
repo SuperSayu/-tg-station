@@ -270,7 +270,7 @@
 	item_state = "arm_blade"
 	attack_verb = list("pricked", "absorbed", "gored")
 	w_class = 2
-	burn_state = 0 //Burnable
+	burn_state = FLAMMABLE
 
 
 /*
@@ -288,7 +288,7 @@
 	origin_tech = null
 	attack_verb = list("attacked", "struck", "hit")
 
-/obj/item/weapon/twohanded/dualsaber/toy/IsShield()
+/obj/item/weapon/twohanded/dualsaber/toy/hit_reaction()
 	return 0
 
 /obj/item/weapon/twohanded/dualsaber/toy/IsReflect()//Stops Toy Dualsabers from reflecting energy projectiles
@@ -321,10 +321,11 @@
 	attack_verb = list("attacked", "coloured")
 	var/paint_color = "#FF0000" //RGB
 	var/drawtype = "rune"
-	var/list/graffiti = list("amyjon","face","matt","revolution","engie","guy","end","dwarf","uboa","body","cyka","arrow","poseur tag")
+	var/list/graffiti = list("amyjon","face","matt","revolution","engie","guy","end","dwarf","uboa","body","cyka","arrow","star","poseur tag")
 	var/list/letters = list("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")
+	var/list/numerals = list("0","1","2","3","4","5","6","7","8","9")
 	var/list/oriented = list("arrow","body") // These turn to face the same way as the drawer
-	var/uses = 30 //0 for unlimited uses
+	var/uses = 30 //-1 or less for unlimited uses
 	var/instant = 0
 	var/colourName = "red" //for updateIcon purposes
 	var/dat
@@ -355,7 +356,7 @@
 
 /obj/item/toy/crayon/proc/update_window(mob/living/user)
 	dat += "<center><h2>Currently selected: [drawtype]</h2><br>"
-	dat += "<a href='?src=\ref[src];type=random_letter'>Random letter</a><a href='?src=\ref[src];type=letter'>Pick letter</a>"
+	dat += "<a href='?src=\ref[src];type=random_letter'>Random letter</a><a href='?src=\ref[src];type=letter'>Pick letter/number</a>"
 	dat += "<hr>"
 	dat += "<h3>Runes:</h3><br>"
 	dat += "<a href='?src=\ref[src];type=random_rune'>Random rune</a>"
@@ -386,7 +387,7 @@
 		if("random_letter")
 			temp = pick(letters)
 		if("letter")
-			temp = input("Choose the letter.", "Scribbles") in letters
+			temp = input("Choose what to write.", "Scribbles") in (letters|numerals)
 		if("random_rune")
 			temp = "rune[rand(1,6)]"
 		if("random_graffiti")
@@ -413,6 +414,8 @@
 			temp = "letter"
 		else if(graffiti.Find(drawtype))
 			temp = "graffiti"
+		else if(numerals.Find(drawtype))
+			temp = "number"
 
 		////////////////////////// GANG FUNCTIONS
 		var/area/territory
@@ -468,7 +471,7 @@
 			else
 				new /obj/effect/decal/cleanable/crayon(target,paint_color,drawtype,temp,graf_rot)
 
-			user << "<span class='notice'>You finish [instant ? "spraying" : "drawing"] [temp].</span>"
+			user << "<span class='notice'>You finish [instant ? "spraying" : "drawing"] \the [temp].</span>"
 			if(instant<0)
 				playsound(user.loc, 'sound/effects/spray.ogg', 5, 1, 5)
 			if(uses < 0)
@@ -706,7 +709,7 @@
 
 
 /obj/item/toy/cards
-	burn_state = 0 //Burnable
+	burn_state = FLAMMABLE
 	burntime = 5
 	var/parentdeck = null
 	var/deckstyle = "nanotrasen"
@@ -956,8 +959,8 @@
 	newobj.card_throw_speed = sourceobj.card_throw_speed
 	newobj.card_throw_range = sourceobj.card_throw_range
 	newobj.card_attack_verb = sourceobj.card_attack_verb
-	if(sourceobj.burn_state == -1)
-		newobj.burn_state = -1
+	if(sourceobj.burn_state == FIRE_PROOF)
+		newobj.burn_state = FIRE_PROOF
 
 /obj/item/toy/cards/singlecard
 	name = "card"
@@ -1073,7 +1076,7 @@
 	card_throw_speed = 3
 	card_throw_range = 7
 	card_attack_verb = list("attacked", "sliced", "diced", "slashed", "cut")
-	burn_state = -1 //Not Burnable
+	burn_state = FIRE_PROOF
 
 /*
  * Fake nuke
@@ -1130,9 +1133,10 @@
 	desc = "An adorable stuffed toy that resembles a space carp."
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "carpplushie"
+	item_state = "carp_plushie"
 	w_class = 2
 	attack_verb = list("bitten", "eaten", "fin slapped")
-	burn_state = 0 //Burnable
+	burn_state = FLAMMABLE
 	var/bitesound = 'sound/weapons/bite.ogg'
 
 //Attack mob
@@ -1222,7 +1226,7 @@
 	icon_state = "toy_mouse"
 	w_class = 2.0
 	var/cooldown = 0
-
+	burn_state = FLAMMABLE
 
 
 /*
@@ -1236,6 +1240,7 @@
 	icon_state = "nuketoy"
 	var/cooldown = 0
 	var/toysay = "What the fuck did you do?"
+	var/toysound = 'sound/machines/click.ogg'
 
 /obj/item/toy/figure/New()
     desc = "A \"Space Life\" brand [src]."
@@ -1244,7 +1249,7 @@
 	if(cooldown <= world.time)
 		cooldown = world.time + 50
 		user << "<span class='notice'>The [src] says \"[toysay]\"</span>"
-		playsound(user, 'sound/machines/click.ogg', 20, 1)
+		playsound(user, toysound, 20, 1)
 
 /obj/item/toy/figure/cmo
 	name = "Chief Medical Officer action figure"
@@ -1270,6 +1275,7 @@
 	name = "Cyborg action figure"
 	icon_state = "borg"
 	toysay = "I. LIVE. AGAIN."
+	toysound = 'sound/voice/liveagain.ogg'
 
 /obj/item/toy/figure/botanist
 	name = "Botanist action figure"
@@ -1310,6 +1316,7 @@
 	name = "Clown action figure"
 	icon_state = "clown"
 	toysay = "Honk!"
+	toysound = 'sound/items/bikehorn.ogg'
 
 /obj/item/toy/figure/ian
 	name = "Ian action figure"
@@ -1375,6 +1382,7 @@
 	name = "Mime action figure"
 	icon_state = "mime"
 	toysay = "..."
+	toysound = null
 
 /obj/item/toy/figure/miner
 	name = "Shaft Miner action figure"
@@ -1390,6 +1398,7 @@
 	name = "Wizard action figure"
 	icon_state = "wizard"
 	toysay = "Ei Nath!"
+	toysound = 'sound/magic/Disintegrate.ogg'
 
 /obj/item/toy/figure/rd
 	name = "Research Director action figure"
@@ -1400,11 +1409,13 @@
 	name = "Roboticist action figure"
 	icon_state = "roboticist"
 	toysay = "Big stompy mechs!"
+	toysound = 'sound/mecha/mechstep.ogg'
 
 /obj/item/toy/figure/scientist
 	name = "Scientist action figure"
 	icon_state = "scientist"
 	toysay = "For science!"
+	toysound = 'sound/effects/explosionfar.ogg'
 
 /obj/item/toy/figure/syndie
 	name = "Nuclear Operative action figure"
@@ -1415,6 +1426,7 @@
 	name = "Security Officer action figure"
 	icon_state = "secofficer"
 	toysay = "I am the law!"
+	toysound = 'sound/voice/complionator/dredd.ogg'
 
 /obj/item/toy/figure/virologist
 	name = "Virologist action figure"

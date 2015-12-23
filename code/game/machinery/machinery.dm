@@ -147,7 +147,7 @@ Class Procs:
 	if(use_power && stat == 0)
 		use_power(7500/severity)
 
-		new/obj/effect/overlay/temp/emp(src.loc)
+		PoolOrNew(/obj/effect/overlay/temp/emp, src.loc)
 	..()
 
 /obj/machinery/proc/open_machine()
@@ -188,7 +188,9 @@ Class Procs:
 	update_icon()
 
 /obj/machinery/blob_act()
-	if(prob(50))
+	if(!density)
+		qdel(src)
+	if(prob(75))
 		qdel(src)
 
 /obj/machinery/proc/auto_use_power()
@@ -201,6 +203,13 @@ Class Procs:
 	return 1
 
 /obj/machinery/Topic(href, href_list)
+	..()
+	if(!can_be_used_by(usr))
+		return 1
+	add_fingerprint(usr)
+	return 0
+
+/obj/machinery/ui_act(action, params)
 	..()
 	if(!can_be_used_by(usr))
 		return 1
@@ -237,9 +246,9 @@ Class Procs:
 /obj/machinery/attack_hand(mob/user, check_power = 1, set_machine = 1)
 	if(..())// unbuckling etc
 		return 1
-	if(user.lying || user.stat)
+	if((user.lying || user.stat) && !IsAdminGhost(user))
 		return 1
-	if(!user.IsAdvancedToolUser())
+	if(!user.IsAdvancedToolUser() && !IsAdminGhost(user))
 		usr << "<span class='warning'>You don't have the dexterity to do this!</span>"
 		return 1
 	if (ishuman(user))
@@ -276,7 +285,7 @@ Class Procs:
 	gl_uid++
 
 /obj/machinery/proc/default_pry_open(obj/item/weapon/crowbar/C)
-	. = !(state_open || panel_open || is_operational()) && istype(C)
+	. = !(state_open || panel_open || is_operational() || (flags & NODECONSTRUCT)) && istype(C)
 	if(.)
 		playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
 		visible_message("<span class='notice'>[usr] pry open \the [src].</span>", "<span class='notice'>You pry open \the [src].</span>")
@@ -284,7 +293,7 @@ Class Procs:
 		return 1
 
 /obj/machinery/proc/default_deconstruction_crowbar(obj/item/weapon/crowbar/C, ignore_panel = 0)
-	. = istype(C) && (panel_open || ignore_panel)
+	. = istype(C) && (panel_open || ignore_panel) &&  !(flags & NODECONSTRUCT)
 	if(.)
 		deconstruction()
 		playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
@@ -299,7 +308,7 @@ Class Procs:
 		qdel(src)
 
 /obj/machinery/proc/default_deconstruction_screwdriver(mob/user, icon_state_open, icon_state_closed, obj/item/weapon/screwdriver/S)
-	if(istype(S))
+	if(istype(S) &&  !(flags & NODECONSTRUCT))
 		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 		if(!panel_open)
 			panel_open = 1
@@ -321,10 +330,10 @@ Class Procs:
 	return 0
 
 /obj/proc/default_unfasten_wrench(mob/user, obj/item/weapon/wrench/W, time = 20)
-	if(istype(W))
+	if(istype(W) &&  !(flags & NODECONSTRUCT))
 		user << "<span class='notice'>You begin [anchored ? "un" : ""]securing [name]...</span>"
 		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-		if(do_after(user, time, target = src))
+		if(do_after(user, time/W.toolspeed, target = src))
 			user << "<span class='notice'>You [anchored ? "un" : ""]secure [name].</span>"
 			anchored = !anchored
 			playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
@@ -332,6 +341,8 @@ Class Procs:
 	return 0
 
 /obj/machinery/proc/exchange_parts(mob/user, obj/item/weapon/storage/part_replacer/W)
+	if(flags & NODECONSTRUCT)
+		return
 	var/shouldplaysound = 0
 	if(istype(W) && component_parts)
 		if(panel_open || W.works_from_distance)
@@ -386,8 +397,8 @@ Class Procs:
 
 // Hook for html_interface module to prevent updates to clients who don't have this as their active machine.
 /obj/machinery/proc/hiIsValidClient(datum/html_interface_client/hclient, datum/html_interface/hi)
-	if (hclient.client.mob && hclient.client.mob.stat == 0)
-		if (isAI(hclient.client.mob)) return TRUE
+	if (hclient.client.mob && (hclient.client.mob.stat == 0 || IsAdminGhost(hclient.client.mob)))
+		if (isAI(hclient.client.mob) || IsAdminGhost(hclient.client.mob)) return TRUE
 		else                          return hclient.client.mob.machine == src && src.Adjacent(hclient.client.mob)
 	else
 		return FALSE

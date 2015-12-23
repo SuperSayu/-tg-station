@@ -64,9 +64,7 @@
 	throwforce = 10
 	w_class = 3
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
-
-/obj/item/weapon/claymore/IsShield()
-	return 1
+	block_chance = 50
 
 /obj/item/weapon/claymore/suicide_act(mob/user)
 	user.visible_message("<span class='suicide'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -84,6 +82,7 @@
 	w_class = 3
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
+	block_chance = 50
 
 /obj/item/weapon/katana/cursed
 	slot_flags = null
@@ -91,9 +90,6 @@
 /obj/item/weapon/katana/suicide_act(mob/user)
 	user.visible_message("<span class='suicide'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>")
 	return(BRUTELOSS)
-
-/obj/item/weapon/katana/IsShield()
-		return 1
 
 /obj/item/weapon/wirerod
 	name = "wired rod"
@@ -147,6 +143,7 @@
 	embed_chance = 100
 	embedded_fall_chance = 0 //Hahaha!
 	sharpness = IS_SHARP
+	materials = list(MAT_METAL=500, MAT_GLASS=500)
 
 //5*(2*4) = 5*8 = 45, 45 damage if you hit one person with all 5 stars.
 //Not counting the damage it will do while embedded (2*4 = 8, at 15% chance)
@@ -243,13 +240,14 @@
 	w_class = 2
 	flags = NOSHIELD
 	attack_verb = list("bludgeoned", "whacked", "disciplined")
-	burn_state = 0 //Burnable
+	burn_state = FLAMMABLE
 
 /obj/item/weapon/staff/broom
 	name = "broom"
 	desc = "Used for sweeping, and flying into the night while cackling. Black cat not included."
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "broom"
+	burn_state = FLAMMABLE
 
 /obj/item/weapon/staff/stick
 	name = "stick"
@@ -276,15 +274,16 @@
 	return (OXYLOSS)
 
 /obj/item/weapon/mounted_chainsaw
-        name = "mounted chainsaw"
-        desc = "A chainsaw that has replaced your arm."
-        icon_state = "chainsaw_on"
-        flags = ABSTRACT | NODROP
-        w_class = 5.0
-        force = 21
-        throwforce = 0
-        throw_range = 0
-        throw_speed = 0
-        sharpness = IS_SHARP
-        attack_verb = list("sawed", "torn", "cut", "chopped", "diced")
-        hitsound = "sound/weapons/chainsawhit.ogg"
+	name = "mounted chainsaw"
+	desc = "A chainsaw that has replaced your arm."
+	icon_state = "chainsaw_on"
+	item_state = "mounted_chainsaw"
+	flags = ABSTRACT | NODROP
+	w_class = 5.0
+	force = 21
+	throwforce = 0
+	throw_range = 0
+	throw_speed = 0
+	sharpness = IS_SHARP
+	attack_verb = list("sawed", "torn", "cut", "chopped", "diced")
+	hitsound = "sound/weapons/chainsawhit.ogg"

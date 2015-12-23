@@ -9,6 +9,7 @@
 	throw_speed = 3
 	throw_range = 7
 	flags = CONDUCT
+	origin_tech = "programming=3;bluespace=2;syndicate=5"
 	var/datum/gang/gang //Which gang uses this?
 	var/recalling = 0
 	var/outfits = 3
@@ -286,7 +287,8 @@
 						usr << "<span class='notice'>The <b>dominator</b> will secure your gang's dominance over the station. Turn it on when you are ready to defend it.</span>"
 						pointcost = 30
 				else
-					usr << "<span class='notice'>The <b>dominator</b> can be spawned only on territory controlled by your gang.</span>"
+					usr << "<span class='warning'>The <b>dominator</b> can be spawned only on territory controlled by your gang!</span>"
+					return
 
 		if(item_type)
 			gang.points -= pointcost

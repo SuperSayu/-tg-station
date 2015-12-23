@@ -88,9 +88,6 @@
 				src.loc = C
 				C.assembly = src
 
-				if(locate(/obj/item/device/flashlight) in src)
-					C.cam_luminosity = 5
-
 				C.dir = src.dir
 
 				C.network = tempnetwork

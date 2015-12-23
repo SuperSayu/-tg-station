@@ -18,7 +18,7 @@
 	pressure_resistance = 0
 	slot_flags = SLOT_HEAD
 	body_parts_covered = HEAD
-	burn_state = 0 //Burnable
+	burn_state = FLAMMABLE
 	burntime = 5
 
 	var/info		//What's actually written on the paper.
@@ -40,7 +40,7 @@
 
 
 /obj/item/weapon/paper/update_icon()
-	if(burn_state == 1)
+	if(burn_state == ON_FIRE)
 		icon_state = "paper_onfire"
 		return
 	if(info)
@@ -51,10 +51,9 @@
 
 /obj/item/weapon/paper/examine(mob/user)
 	..()
-	if(istype(src, /obj/item/weapon/paper/talisman)) //Talismans cannot be read
-		if(!iscultist(user) && !user.stat)
-			user << "<span class='danger'>There are indecipherable images scrawled on the paper in what looks to be... <i>blood?</i></span>"
-			return
+	var/datum/asset/assets = get_asset_datum(/datum/asset/simple/paper)
+	assets.send(user)
+
 	if(in_range(user, src) || isobserver(user))
 		if( !(ishuman(user) || isobserver(user) || issilicon(user)) )
 			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY>[stars(info)]<HR>[stamps]</BODY></HTML>", "window=[name]")
@@ -280,7 +279,7 @@
 /obj/item/weapon/paper/attackby(obj/item/weapon/P, mob/living/carbon/human/user, params)
 	..()
 
-	if(burn_state == 1)
+	if(burn_state == ON_FIRE)
 		return
 
 	if(is_blind(user))
