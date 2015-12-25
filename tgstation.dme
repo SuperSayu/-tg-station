@@ -3,6 +3,7 @@
 // New source code should be placed in .dm files: choose File/New --> Code File.
 // BEGIN_INTERNALS
 // END_INTERNALS
+
 // BEGIN_FILE_DIR
 #define FILE_DIR .
 // END_FILE_DIR
@@ -1618,6 +1619,7 @@
 #include "code\modules\surgery\remove_embedded_object.dm"
 #include "code\modules\surgery\surgery.dm"
 #include "code\modules\surgery\surgery_step.dm"
+#include "code\modules\surgery\tail_modification.dm"
 #include "code\modules\surgery\tools.dm"
 #include "code\modules\surgery\organs\augments_external.dm"
 #include "code\modules\surgery\organs\augments_eyes.dm"

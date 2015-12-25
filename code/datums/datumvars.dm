@@ -247,7 +247,8 @@ datum/proc/on_varedit(modified_var) //called whenever a var is edited
 		body += "<option value='?_src_=holder;adminplayerobservefollow=\ref[D]'>Follow</option>"
 	else
 		var/atom/A = D
-		body += "<option value='?_src_=holder;adminplayerobservecoodjump=1;X=[A.x];Y=[A.y];Z=[A.z]'>Jump to</option>"
+		if(istype(A))
+			body += "<option value='?_src_=holder;adminplayerobservecoodjump=1;X=[A.x];Y=[A.y];Z=[A.z]'>Jump to</option>"
 
 	body += "<option value>---</option>"
 
@@ -618,7 +619,7 @@ body
 				theghost = pick(candidates)
 				M << "Your mob has been taken over by a ghost!"
 				message_admins("[key_name_admin(theghost)] has taken control of ([key_name_admin(M)])")
-				M.ghostize()
+				M.ghostize(0)
 				M.key = theghost.key
 			else
 				M << "There were no ghosts willing to take control."

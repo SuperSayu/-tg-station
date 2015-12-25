@@ -94,9 +94,9 @@ var/list/preferences_datums = list()
 	if(istype(C))
 		if(!IsGuestKey(C.key))
 			load_path(C.ckey)
-			//unlock_content = C.IsByondMember()
-			//if(unlock_content)
-			//	max_save_slots = 8
+			unlock_content = C.IsByondMember()
+			if(unlock_content)
+				max_save_slots = 8
 	var/loaded_preferences_successfully = load_preferences()
 	if(loaded_preferences_successfully)
 		if(load_character())
@@ -108,6 +108,7 @@ var/list/preferences_datums = list()
 		save_preferences()
 	save_character()		//let's save this new random character so it doesn't keep generating new ones.
 	return
+
 
 /datum/preferences/proc/ShowChoices(mob/user)
 	if(!user || !user.client)	return
@@ -1112,6 +1113,8 @@ var/list/preferences_datums = list()
 
 	character.dna.blood_type = blood_type
 	character.dna.features = features
+	character.dna.features_buffer = features.Copy()
+	character.dna.species.mutant_bodyparts_buffer = character.dna.species.mutant_bodyparts.Copy()
 	character.dna.real_name = character.real_name
 	var/datum/species/chosen_species
 	if(pref_species != /datum/species/human && config.mutant_races)
