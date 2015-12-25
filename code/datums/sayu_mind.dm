@@ -1,7 +1,7 @@
 /datum/mind/proc/clone_to(mob/living/new_character) // this should only be used with in-character cloning, as it carries gameplay effects
 	if(current)
 		for(var/obj/effect/knowspell/mime/M in current)
-			del M
+			qdel(M)
 		for(var/obj/effect/knowspell/KS in current.contents)
 			var/allowed = 1
 			if(prob(KS.cloning_forget_chance))
