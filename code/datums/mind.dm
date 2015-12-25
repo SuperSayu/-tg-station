@@ -28,7 +28,6 @@
 		yourself.
 
 */
-/var/const/cloning_spell_loss = 5 // %chance of lost spells
 
 /datum/mind
 	var/key
@@ -60,27 +59,6 @@
 /datum/mind/New(var/key)
 	src.key = key
 
-/datum/mind/proc/clone_to(mob/living/new_character) // this should only be used with in-character cloning, as it carries gameplay effects
-	if(current)
-		for(var/obj/effect/knowspell/mime/M in current)
-			del M
-		for(var/obj/effect/knowspell/KS in current.contents)
-			var/allowed = 1
-			if(prob(KS.cloning_forget_chance))
-				allowed = 0
-			if(!KS.allow_nonhuman && !ishuman(new_character))
-				allowed = 0
-			if(!KS.allow_cyborg && issilicon(new_character))
-				allowed = 0
-			if(!allowed)
-				current << "You forgot \i[KS]."
-			else
-				KS.loc = new_character
-	if(assigned_role == "Mime" && ishuman(new_character))
-		new /obj/effect/knowspell/mime/speech(new_character)
-		new /obj/effect/knowspell/mime/mimewall(new_character)
-		new /obj/effect/knowspell/mime/beartrap(new_character)
-	transfer_to(new_character)
 
 /datum/mind/proc/transfer_to(mob/new_character)
 	//if(!istype(new_character))
@@ -90,7 +68,7 @@
 	if(current)					//remove ourself from our old body's mind variable
 		current.mind = null
 
-		SSnano.user_transferred(current, new_character)
+		SSnano.on_transfer(current, new_character)
 
 	if(key)
 		if(new_character.key != key)					//if we're transfering into a body with a key associated which is not ours
@@ -107,24 +85,6 @@
 	new_character.mind = src							//and associate our new body with ourself
 	transfer_antag_huds(hud_to_transfer)				//inherit the antag HUD
 	transfer_actions(new_character)
-
-	for(var/obj/effect/knowspell/mime/M in current)
-		del M
-	for(var/obj/effect/knowspell/KS in current.contents)
-		var/allowed = 1
-		if(prob(KS.cloning_forget_chance))
-			allowed = 0
-		if(!KS.allow_nonhuman && !ishuman(new_character))
-			allowed = 0
-		if(!KS.allow_cyborg && issilicon(new_character))
-			allowed = 0
-		if(!allowed)
-			current << "You forgot \i[KS]."
-			if(KS in spell_list)
-				spell_list -= KS
-		else
-			KS.loc = new_character
-			spell_list |= KS
 
 	if(active)
 		new_character.key = key		//now transfer the key to link the client to our new body
@@ -704,7 +664,6 @@
 
 		switch (new_obj_type)
 			if ("assassinate","protect","debrain","maroon")
-
 				var/list/possible_targets = list("Free objective")
 				for(var/datum/mind/possible_target in ticker.minds)
 					if ((possible_target != src) && istype(possible_target.current, /mob/living/carbon/human))
@@ -1175,7 +1134,6 @@
 		switch(href_list["shadowling"])
 			if("clear")
 				ticker.mode.update_shadow_icons_removed(src)
-				src.spell_list = null
 				if(src in ticker.mode.shadows)
 					ticker.mode.shadows -= src
 					special_role = null
@@ -1379,7 +1337,6 @@
 		ticker.mode.syndicates += src
 		ticker.mode.update_synd_icons_added(src)
 		special_role = "Syndicate"
-		assigned_role = "MODE"
 		ticker.mode.forge_syndicate_objectives(src)
 		ticker.mode.greet_syndicate(src)
 
@@ -1713,11 +1670,13 @@
 //slime
 /mob/living/simple_animal/slime/mind_initialize()
 	..()
+	mind.special_role = "slime"
 	mind.assigned_role = "slime"
 
 //XENO
 /mob/living/carbon/alien/mind_initialize()
 	..()
+	mind.special_role = "Alien"
 	mind.assigned_role = "Alien"
 	//XENO HUMANOID
 /mob/living/carbon/alien/humanoid/royal/queen/mind_initialize()
@@ -1769,14 +1728,17 @@
 /mob/living/simple_animal/mind_initialize()
 	..()
 	mind.assigned_role = "Animal"
+	mind.special_role = "Animal"
 
 /mob/living/simple_animal/pet/dog/corgi/mind_initialize()
 	..()
 	mind.assigned_role = "Corgi"
+	mind.special_role = "Corgi"
 
 /mob/living/simple_animal/shade/mind_initialize()
 	..()
 	mind.assigned_role = "Shade"
+	mind.special_role = "Shade"
 
 /mob/living/simple_animal/hostile/construct/mind_initialize()
 	..()

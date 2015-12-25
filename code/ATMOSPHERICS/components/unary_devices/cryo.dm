@@ -113,7 +113,7 @@
 /obj/machinery/atmospherics/components/unary/cryo_cell/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 0)
 	ui = SSnano.try_update_ui(user, src, ui_key, ui, force_open = force_open)
 	if (!ui)
-		ui = new(user, src, ui_key, "cryo", name, 520, 600, state = notcontained_state)
+		ui = new(user, src, ui_key, "cryo", name, 410, 550, state = notcontained_state)
 		ui.open()
 
 /obj/machinery/atmospherics/components/unary/cryo_cell/get_ui_data()
@@ -155,28 +155,6 @@
 	data["cellTemperatureStatus"] = "good"
 	if(air_contents.temperature > T0C) // if greater than 273.15 kelvin (0 celcius)
 		data["cellTemperatureStatus"] = "bad"
-		/*dat += "<br />"
-
-		dat +=  "<div class='line'><div class='statusLabel'>Health:</div><div class='progressBar'><div style='width: [round(occupant.health)]%;' class='progressFill good'></div></div><div class='statusValue'>[round(occupant.health)]%</div></div>"
-		dat +=  "<div class='line'><div class='statusLabel'>\> Brute Damage:</div><div class='progressBar'><div style='width: [round(occupant.getBruteLoss())]%;' class='progressFill bad'></div></div><div class='statusValue'>[round(occupant.getBruteLoss())]%</div></div>"
-		dat +=  "<div class='line'><div class='statusLabel'>\> Resp. Damage:</div><div class='progressBar'><div style='width: [round(occupant.getOxyLoss())]%;' class='progressFill bad'></div></div><div class='statusValue'>[round(occupant.getOxyLoss())]%</div></div>"
-		dat +=  "<div class='line'><div class='statusLabel'>\> Toxin Content:</div><div class='progressBar'><div style='width: [round(occupant.getToxLoss())]%;' class='progressFill bad'></div></div><div class='statusValue'>[round(occupant.getToxLoss())]%</div></div>"
-		dat +=  "<div class='line'><div class='statusLabel'>\> Burn Severity:</div><div class='progressBar'><div style='width: [round(occupant.getFireLoss())]%;' class='progressFill bad'></div></div><div class='statusValue'>[round(occupant.getFireLoss())]%</div></div>"
-		dat +=  "<div class='line'><div class='statusLabel'>Body Temperature:</div><div class='statusValue'>[round(occupant.bodytemperature)]</div></div>"
-
-		for(var/bone in occupant.broken)
-			var/bone_name
-			if(bone == "chest")
-				bone_name = "ribs"
-			if(bone == "head")
-				bone_name = "skull"
-			if(bone != "chest" && bone != "head")
-				bone_name = bone
-			dat +=  "<div class='line'><span class='bad'>Broken [bone_name] detected.</span></div>"
-
-	var/temp_text = ""
-	if(air_contents.temperature > T0C)
-		temp_text = "<span class='bad'>[air_contents.temperature]</span>"*/
 	else if(air_contents.temperature > 225)
 		data["cellTemperatureStatus"] = "average"
 

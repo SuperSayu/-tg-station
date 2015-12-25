@@ -182,6 +182,7 @@
 #include "code\datums\mutations.dm"
 #include "code\datums\outfit.dm"
 #include "code\datums\recipe.dm"
+#include "code\datums\sayu_mind.dm"
 #include "code\datums\sayu_uplink_item.dm"
 #include "code\datums\spell.dm"
 #include "code\datums\supplypacks.dm"
