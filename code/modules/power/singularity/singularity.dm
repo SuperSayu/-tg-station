@@ -29,6 +29,7 @@
 	var/last_warning
 	var/force_contained = 0
 	var/consumedSupermatter = 0 //If the singularity has eaten a supermatter shard and can go to stage six
+	burn_state = LAVA_PROOF
 
 /obj/singularity/New(loc, var/starting_energy = 50, var/temp = 0)
 	//CARN: admin-alert for chuckle-fuckery.
