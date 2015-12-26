@@ -5,7 +5,7 @@
 /datum/game_mode/nuclear
 	name = "nuclear emergency"
 	config_tag = "nuclear"
-	required_players = 12 // 20 players - 5 players to be the nuke ops = 15 players remaining
+	required_players = 15 // 20 players - 5 players to be the nuke ops = 15 players remaining
 	required_enemies = 1
 	recommended_enemies = 5
 	antag_flag = ROLE_OPERATIVE
@@ -23,15 +23,12 @@
 
 /datum/game_mode/nuclear/pre_setup()
 	var/agent_number = 0
-	var/n_players = num_players()
-
-	if(antag_candidates.len < 1)
-		return 0
-
 	if(antag_candidates.len > agents_possible)
 		agent_number = agents_possible
 	else
 		agent_number = antag_candidates.len
+
+	var/n_players = num_players()
 
 	if(config.nukeop_scaling_coeff)
 		agent_number = min(agent_number , round((n_players)/(config.nukeop_scaling_coeff) + 2))
@@ -107,7 +104,6 @@
 			agent_number++
 		spawnpos++
 		update_synd_icons_added(synd_mind)
-
 	var/obj/machinery/nuclearbomb/nuke = locate("syndienuke") in nuke_list
 	if(nuke)
 		nuke.r_code = nuke_code
@@ -168,8 +164,11 @@
 	return 1337 // WHY??? -- Doohl
 
 
-/datum/game_mode/proc/equip_syndicate(mob/living/carbon/human/synd_mob)
-	synd_mob.equipOutfit(/datum/outfit/syndicate)
+/datum/game_mode/proc/equip_syndicate(mob/living/carbon/human/synd_mob, telecrystals = TRUE)
+	if(telecrystals)
+		synd_mob.equipOutfit(/datum/outfit/syndicate)
+	else
+		synd_mob.equipOutfit(/datum/outfit/syndicate/no_crystals)
 	return 1
 
 
@@ -313,16 +312,21 @@
 
 	var/tc = 20
 
+/datum/outfit/syndicate/no_crystals
+	tc = 0
+
+
 /datum/outfit/syndicate/post_equip(mob/living/carbon/human/H)
 	var/obj/item/device/radio/R = H.ears
 	R.set_frequency(SYND_FREQ)
 	R.freqlock = 1
 
-	var/obj/item/device/radio/uplink/U = new /obj/item/device/radio/uplink(H)
-	U.hidden_uplink.uplink_owner="[H.key]"
-	U.hidden_uplink.uses = tc
-	U.hidden_uplink.mode_override = /datum/game_mode/nuclear //Goodies
-	H.equip_to_slot_or_del(U, slot_in_backpack)
+	if(tc)
+		var/obj/item/device/radio/uplink/U = new /obj/item/device/radio/uplink(H)
+		U.hidden_uplink.uplink_owner="[H.key]"
+		U.hidden_uplink.uses = tc
+		U.hidden_uplink.mode_override = /datum/game_mode/nuclear //Goodies
+		H.equip_to_slot_or_del(U, slot_in_backpack)
 
 	var/obj/item/weapon/implant/weapons_auth/W = new/obj/item/weapon/implant/weapons_auth(H)
 	W.implant(H)
