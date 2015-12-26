@@ -986,6 +986,11 @@
 		return 0
 	return 10
 
+/obj/machinery/porta_turret/syndicate/pod
+	health = 40
+	projectile = /obj/item/projectile/bullet/weakbullet3
+	eprojectile = /obj/item/projectile/bullet/weakbullet3
+
 ////////////////////////
 //Turret Control Panel//
 ////////////////////////
