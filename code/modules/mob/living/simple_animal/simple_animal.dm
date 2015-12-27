@@ -175,8 +175,6 @@
 					else
 						emote("me", 2, pick(emote_hear))
 
-	if(status_flags & GODMODE)
-		return 1 // everything after here is atmospheric damage
 
 /mob/living/simple_animal/handle_environment(datum/gas_mixture/environment)
 	var/atmos_suitable = 1
@@ -396,6 +394,9 @@
 	icon_state = icon_dead
 	stat = DEAD
 	density = 0
+	if(nest)
+		nest.spawned_mobs -= src
+		nest = null
 	if(!gibbed)
 		visible_message("<span class='danger'>\the [src] stops moving...</span>")
 	..()
