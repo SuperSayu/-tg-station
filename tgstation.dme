@@ -1,17 +1,11 @@
-// DM Environment file for tgstation.dme.
-// All manual changes should be made outside the BEGIN_ and END_ blocks.
-// New source code should be placed in .dm files: choose File/New --> Code File.
 // BEGIN_INTERNALS
 // END_INTERNALS
-
 // BEGIN_FILE_DIR
 #define FILE_DIR .
 // END_FILE_DIR
-
 // BEGIN_PREFERENCES
 #define DEBUG
 // END_PREFERENCES
-
 // BEGIN_INCLUDE
 #include "_maps\__MAP_DEFINES.dm"
 #include "_maps\sayustation.dm"
@@ -896,6 +890,7 @@
 #include "code\modules\admin\verbs\getlogs.dm"
 #include "code\modules\admin\verbs\machine_upgrade.dm"
 #include "code\modules\admin\verbs\manipulate_organs.dm"
+#include "code\modules\admin\verbs\map_template_loadverb.dm"
 #include "code\modules\admin\verbs\mapping.dm"
 #include "code\modules\admin\verbs\maprotation.dm"
 #include "code\modules\admin\verbs\massmodvar.dm"
