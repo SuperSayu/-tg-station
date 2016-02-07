@@ -40,7 +40,7 @@
 
 	var/eldergod = 0
 	var/orbs_needed = 3
-	var/large_shell_summoned = 0
+	var/obj/structure/constructshell/large/large_shell_reference = null
 	var/attempts_left = 3
 
 /datum/game_mode/cult/announce()
@@ -51,8 +51,6 @@
 /datum/game_mode/cult/pre_setup()
 	if(config.protect_roles_from_antagonist)
 		restricted_jobs += protected_jobs
-	else if(config.protect_captain_from_antagonist)
-		restricted_jobs += "Captain"
 
 	if(config.protect_assistant_from_antagonist)
 		restricted_jobs += "Assistant"
