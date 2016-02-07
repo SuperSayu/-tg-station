@@ -9,7 +9,6 @@
 	Specials are one-time effects as well, but you may only select so many specials out of any given spellbook, rather than being able to take your fill.
 */
 /var/const/max_spells = 3 // total spells a mob may learn under the new system
-/var/list/spells = typesof(/obj/effect/knowspell) // for badmin verb
 
 
 /*
