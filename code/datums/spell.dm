@@ -4,7 +4,7 @@
 /obj/effect/proc_holder
 	var/panel = "Debug"//What panel the proc holder needs to go on.
 
-//var/list/spells = typesof(/obj/effect/proc_holder/spell) //needed for the badmin verb for now
+var/list/spells = typesof(/obj/effect/proc_holder/spell) //needed for the badmin verb for now
 
 /obj/effect/proc_holder/spell
 	name = "Spell"
@@ -176,7 +176,7 @@
 /obj/effect/proc_holder/spell/proc/perform(list/targets, recharge = 1, mob/user = usr) //if recharge is started is important for the trigger spells
 	before_cast(targets)
 	invocation(user)
-	if(user.ckey)
+	if(user && user.ckey)
 		user.attack_log += text("\[[time_stamp()]\] <span class='danger'>[user.real_name] ([user.ckey]) cast the spell [name].</span>")
 	spawn(0)
 		if(charge_type == "recharge" && recharge)
@@ -303,7 +303,7 @@
 				//Adds a safety check post-input to make sure those targets are actually in range.
 				var/mob/M
 				if(!random_target)
-					M = input("Choose the target for the spell.", "Targeting") as mob in possible_targets
+					M = input("Choose the target for the spell.", "Targeting") as null|mob in possible_targets
 				else
 					switch(random_target_priority)
 						if(TARGET_RANDOM)
