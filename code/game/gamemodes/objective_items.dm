@@ -65,15 +65,11 @@
 	excludefromjob = list("Chief Engineer")
 	antag_types = list("traitor","Changeling","Space Ninja")
 
-/*
-//	We often don't have enough for captains to be a sure thing
-
 /datum/objective_item/steal/capmedal
 	name = "the medal of captaincy"
 	targetitem = /obj/item/clothing/tie/medal/gold/captain
 	difficulty = 5
 	excludefromjob = list("Captain")
-*/
 
 /datum/objective_item/steal/hypo
 	name = "the hypospray"
