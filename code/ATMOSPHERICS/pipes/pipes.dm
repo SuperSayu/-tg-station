@@ -99,3 +99,6 @@
 		if(NODE_I)
 			var/obj/machinery/atmospherics/N = NODE_I
 			N.update_icon()
+
+/obj/machinery/atmospherics/pipe/returnPipenets()
+	. = list(parent)

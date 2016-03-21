@@ -44,7 +44,6 @@
 				return
 	if(!can_buy(price))
 		return
-	B.color = blob_reagent_datum.color
 	var/obj/effect/blob/N = B.change_to(blobType, src)
 	return N
 
@@ -66,13 +65,13 @@
 /mob/camera/blob/verb/create_node()
 	set category = "Blob"
 	set name = "Create Node Blob (60)"
-	set desc = "Create a Node."
+	set desc = "Create a node, which will power nearby factory and resource blobs."
 	createSpecial(60, /obj/effect/blob/node, 5)
 
 /mob/camera/blob/verb/create_factory()
 	set category = "Blob"
 	set name = "Create Factory Blob (60)"
-	set desc = "Create a Spore producing blob."
+	set desc = "Create a spore tower that will spawn spores to harass your enemies."
 	createSpecial(60, /obj/effect/blob/factory, 7)
 
 /mob/camera/blob/verb/create_storage()
@@ -93,14 +92,28 @@
 	if(!istype(B, /obj/effect/blob/factory))
 		src << "<span class='warning'>Unable to use this blob, find a factory blob.</span>"
 		return
+	if(B.health < B.maxhealth*0.6) //if it's at less than 60% of its health, you can't blobbernaut it
+		src << "<span class='warning'>This factory blob is too damaged to produce a blobbernaut.</span>"
+		return
 	if(!can_buy(20))
 		return
 	var/mob/living/simple_animal/hostile/blob/blobbernaut/blobber = new /mob/living/simple_animal/hostile/blob/blobbernaut (get_turf(B))
-	if(blobber)
-		qdel(B)
-	blobber.color = blob_reagent_datum.color
+	var/obj/effect/blob/factory/F = B
+	F.take_damage(F.maxhealth*0.6, CLONE, null, 0) //take a bunch of damage, so you can't produce tons of blobbernauts from a single factory
+	F.visible_message("<span class='warning'><b>The blobbernaut [pick("rips", "tears", "shreds")] its way out of the factory blob!</b></span>")
+	F.spore_delay = world.time + 600 //one minute before it can spawn spores again
 	blobber.overmind = src
+	blobber.update_icons()
 	blob_mobs.Add(blobber)
+	var/list/candidates = get_candidates(ROLE_BLOB, ALIEN_AFK_BRACKET)
+	var/client/C = null
+	if(candidates.len) //if we got a candidate, they're a blobbernaut now.
+		C = pick(candidates)
+		blobber.key = C.key
+		blobber << 'sound/effects/blobattack.ogg'
+		blobber << "<b>You are a blobbernaut!</b>"
+		blobber << "Your overmind's blob reagent is: <b><font color=\"[blob_reagent_datum.color]\">[blob_reagent_datum.name]</b></font>!"
+		blobber << "The <b><font color=\"[blob_reagent_datum.color]\">[blob_reagent_datum.name]</b></font> reagent [blob_reagent_datum.description]"
 
 /mob/camera/blob/verb/relocate_core()
 	set category = "Blob"
@@ -186,24 +199,6 @@
 			BS.LoseTarget()
 			BS.Goto(pick(surrounding_turfs), BS.move_to_delay)
 
-/mob/camera/blob/verb/split_consciousness()
-	set category = "Blob"
-	set name = "Split consciousness (100) (One use)"
-	set desc = "Expend resources to attempt to produce another sentient overmind"
-	var/turf/T = get_turf(src)
-	var/obj/effect/blob/node/B = locate(/obj/effect/blob/node) in T
-	if(!B)
-		src << "<span class='warning'>You must be on a blob node!</span>"
-		return
-	if(!can_buy(100))
-		return
-	verbs -= /mob/camera/blob/verb/split_consciousness
-	new/obj/effect/blob/core/(get_turf(B), 200, null, blob_core.point_rate, 1)
-	qdel(B)
-	if(ticker && ticker.mode.name == "blob")
-		var/datum/game_mode/blob/BL = ticker.mode
-		BL.blobwincount += initial(BL.blobwincount) //Increase the victory condition by the set amount
-
 /mob/camera/blob/verb/blob_broadcast()
 	set category = "Blob"
 	set name = "Blob Broadcast"
@@ -249,3 +244,21 @@
 	src << "<i>Node Blobs</i> are blobs which grow, like the core. Like the core it can activate resource and factory blobs."
 	src << "<b>In addition to the buttons on your HUD, there are a few click shortcuts to speed up expansion and defense.</b>"
 	src << "<b>Shortcuts:</b> Click = Expand Blob <b>|</b> Middle Mouse Click = Rally Spores <b>|</b> Ctrl Click = Create Shield Blob <b>|</b> Alt Click = Remove Blob"
+
+/datum/action/innate/blob_burst
+	name = "Burst"
+	button_icon_state = "blob"
+	background_icon_state = "bg_alien"
+
+/datum/action/innate/blob_burst/CheckRemoval()
+	if(ticker.mode.name != "blob" || !ishuman(owner))
+		return 1
+	var/datum/game_mode/blob/B = ticker.mode
+	if(!owner.mind || !(owner.mind in B.infected_crew))
+		return 1
+	return 0
+
+/datum/action/innate/blob_burst/Activate()
+	var/datum/game_mode/blob/B = ticker.mode
+	B.burst_blob(owner.mind)
+	Remove(owner)

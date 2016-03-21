@@ -8,3 +8,4 @@
 
 # force changelog merging to use union
 html/changelog.html merge=union
+

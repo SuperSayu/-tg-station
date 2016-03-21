@@ -178,8 +178,11 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["chat_toggles"]		>> chat_toggles
 	S["toggles"]			>> toggles
 	S["ghost_form"]			>> ghost_form
+	S["ghost_orbit"]		>> ghost_orbit
 	S["preferred_map"]		>> preferred_map
 	S["ignoring"]			>> ignoring
+	S["ghost_hud"]			>> ghost_hud
+	S["inquisitive_ghost"]	>> inquisitive_ghost
 
 	//try to fix any outdated data if necessary
 	if(needs_update >= 0)
@@ -194,6 +197,7 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	default_slot	= sanitize_integer(default_slot, 1, max_save_slots, initial(default_slot))
 	toggles			= sanitize_integer(toggles, 0, 65535, initial(toggles))
 	ghost_form		= sanitize_inlist(ghost_form, ghost_forms, initial(ghost_form))
+	ghost_orbit 	= sanitize_inlist(ghost_orbit, ghost_orbits, initial(ghost_orbit))
 
 	return 1
 
@@ -215,8 +219,11 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	S["toggles"]			<< toggles
 	S["chat_toggles"]		<< chat_toggles
 	S["ghost_form"]			<< ghost_form
+	S["ghost_orbit"]		<< ghost_orbit
 	S["preferred_map"]		<< preferred_map
 	S["ignoring"]			<< ignoring
+	S["ghost_hud"]			<< ghost_hud
+	S["inquisitive_ghost"]	<< inquisitive_ghost
 
 	return 1
 

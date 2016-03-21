@@ -219,7 +219,7 @@
 
 	update_icon()
 	if(on)
-		if(!light || light.radius != brightness)
+		if(!light || light.luminosity != brightness)
 			switchcount++
 			if(rigged)
 				if(status == LIGHT_OK && trigger)
@@ -373,7 +373,7 @@
 				if(status != LIGHT_OK) break
 				on = !on
 				update(0)
-				sleep(rand(2, 25))
+				sleep(rand(5, 15))
 			on = (status == LIGHT_OK)
 			update(0)
 		flickering = 0
@@ -383,11 +383,6 @@
 /obj/machinery/light/attack_ai(mob/user)
 	src.flicker(1)
 	return
-/obj/machinery/light/attack_ghost(mob/user)
-	if(config.ghost_interaction && prob(1))
-		src.flicker(rand(3,7))
-	return
-
 
 // Aliens smash the bulb but do not get electrocuted./N
 /obj/machinery/light/attack_alien(mob/living/carbon/alien/humanoid/user)//So larva don't go breaking light bulbs.

@@ -138,9 +138,7 @@
 	apcs_list -= src
 
 	if(malfai && operating)
-		if (ticker.mode.config_tag == "malfunction")
-			if (src.z == ZLEVEL_STATION) //if (is_type_in_list(get_area(src), the_station_areas))
-				ticker.mode:apcs--
+		malfai.malf_picker.processing_time = Clamp(malfai.malf_picker.processing_time - 10,0,1000)
 	area.power_light = 0
 	area.power_equip = 0
 	area.power_environ = 0
@@ -684,7 +682,7 @@
 
 
 /obj/machinery/power/apc/proc/get_malf_status(mob/user)
-	if (ticker && ticker.mode && (user.mind in ticker.mode.malf_ai) && istype(user, /mob/living/silicon/ai))
+	if (is_special_character(user) && istype(user, /mob/living/silicon/ai))
 		if (src.malfai == (user:parent ? user:parent : user))
 			if (src.occupier == user)
 				return 3 // 3 = User is shunted in this APC
@@ -800,9 +798,7 @@
 						malfai.malfhack = null
 						malfai.malfhacking = 0
 						locked = 1
-						if (ticker.mode.config_tag == "malfunction")
-							if (src.z == ZLEVEL_STATION) //if (is_type_in_list(get_area(src), the_station_areas))
-								ticker.mode:apcs++
+						malfai.malf_picker.processing_time += 10
 						if(usr:parent)
 							src.malfai = usr:parent
 						else
@@ -848,7 +844,6 @@
 	if(malf.parent)
 		qdel(malf)
 	src.occupier.verbs += /mob/living/silicon/ai/proc/corereturn
-	src.occupier.verbs += /datum/game_mode/malfunction/proc/takeover
 	src.occupier.cancel_camera()
 	if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
 		for(var/obj/item/weapon/pinpointer/point in world)
@@ -866,8 +861,7 @@
 		qdel(src.occupier)
 		if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
 			for(var/obj/item/weapon/pinpointer/point in world)
-				for(var/datum/mind/AI_mind in ticker.mode.malf_ai)
-					var/mob/living/silicon/ai/A = AI_mind.current // the current mob the mind owns
+				for(var/mob/living/silicon/ai/A in living_mob_list)
 					if(A.stat != DEAD)
 						point.the_disk = A //The pinpointer tracks the AI back into its core.
 
@@ -1007,27 +1001,16 @@
 			lighting = autoset(lighting, 0)
 			environ = autoset(environ, 0)
 			area.poweralert(0, src)
-		else if(cell.percent() < 10)			// <10%, even if charging; this prevents some light flickering
-			equipment = autoset(equipment, 2)
-			lighting = autoset(lighting, 2)
-			environ = autoset(environ, 1)
-			area.poweralert(0, src)
 		else if(cell.percent() < 15 && longtermpower < 0)	// <15%, turn off lighting & equipment
 			equipment = autoset(equipment, 2)
 			lighting = autoset(lighting, 2)
 			environ = autoset(environ, 1)
 			area.poweralert(0, src)
-		else if(cell.percent() < 20 && longtermpower < 6)	// <20% and charging slowly: do not turn on the lights
-			equipment = autoset(equipment, 1)				// This is driven mostly by lag concerns
-			//lighting: Not altered here
-			environ = autoset(environ, 1)
-			area.poweralert(1, src)
 		else if(cell.percent() < 30 && longtermpower < 0)			// <30%, turn off equipment
 			equipment = autoset(equipment, 2)
 			lighting = autoset(lighting, 1)
 			environ = autoset(environ, 1)
 			area.poweralert(0, src)
-
 		else									// otherwise all can be on
 			equipment = autoset(equipment, 1)
 			lighting = autoset(lighting, 1)
@@ -1056,28 +1039,19 @@
 
 		if(chargemode)
 			if(!charging)
-				var/uptick = 0	// We have enough, this tick.
-				if(excess > (cell.charge*CHARGELEVEL))
-					uptick = 1
+				if(excess > cell.maxcharge*CHARGELEVEL)
 					chargecount++
-				else if(chargecount > 1)
-					chargecount -= 2
-					uptick = 0
+				else
+					chargecount = 0
 
-				if(uptick && prob(chargecount*10))	//Staggering the times that APCs start charging.
-					chargecount = 5					// This is in the perhaps vain hope that when restoring power,
-					charging = 1					// everything doesn't flip on and off like derps.
-			else if(charging == 1) // Chance to turn off so that everything doesn't flip off at once
-				if(excess < cell.maxcharge)
-					// The higher the charge, the more likely to switch off
-					if(prob(100 * (1 - (cell.charge/cell.maxcharge))))
-						charging = 0 // 2 only if fully charged, it's not here
-						chargecount--
+				if(chargecount == 10)
+
+					chargecount = 0
+					charging = 1
 
 		else // chargemode off
 			charging = 0
-			if(chargecount>0)
-				chargecount--
+			chargecount = 0
 
 	else // no cell, switch everything off
 
@@ -1156,9 +1130,7 @@
 
 /obj/machinery/power/apc/proc/set_broken()
 	if(malfai && operating)
-		if (ticker.mode.config_tag == "malfunction")
-			if (src.z == ZLEVEL_STATION) //if (is_type_in_list(get_area(src), the_station_areas))
-				ticker.mode:apcs--
+		malfai.malf_picker.processing_time = Clamp(malfai.malf_picker.processing_time - 10,0,1000)
 	stat |= BROKEN
 	operating = 0
 	if(occupier)

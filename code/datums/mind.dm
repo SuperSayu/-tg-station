@@ -28,7 +28,6 @@
 		yourself.
 
 */
-/var/const/cloning_spell_loss = 5 // %chance of lost spells
 
 /datum/mind
 	var/key
@@ -60,27 +59,6 @@
 /datum/mind/New(var/key)
 	src.key = key
 
-/datum/mind/proc/clone_to(mob/living/new_character) // this should only be used with in-character cloning, as it carries gameplay effects
-	if(current)
-		for(var/obj/effect/knowspell/mime/M in current)
-			del M
-		for(var/obj/effect/knowspell/KS in current.contents)
-			var/allowed = 1
-			if(prob(KS.cloning_forget_chance))
-				allowed = 0
-			if(!KS.allow_nonhuman && !ishuman(new_character))
-				allowed = 0
-			if(!KS.allow_cyborg && issilicon(new_character))
-				allowed = 0
-			if(!allowed)
-				current << "You forgot \i[KS]."
-			else
-				KS.loc = new_character
-	if(assigned_role == "Mime" && ishuman(new_character))
-		new /obj/effect/knowspell/mime/speech(new_character)
-		new /obj/effect/knowspell/mime/mimewall(new_character)
-		new /obj/effect/knowspell/mime/beartrap(new_character)
-	transfer_to(new_character)
 
 /datum/mind/proc/transfer_to(mob/new_character)
 	//if(!istype(new_character))
@@ -90,7 +68,7 @@
 	if(current)					//remove ourself from our old body's mind variable
 		current.mind = null
 
-		SSnano.user_transferred(current, new_character)
+		SSnano.on_transfer(current, new_character)
 
 	if(key)
 		if(new_character.key != key)					//if we're transfering into a body with a key associated which is not ours
@@ -107,24 +85,6 @@
 	new_character.mind = src							//and associate our new body with ourself
 	transfer_antag_huds(hud_to_transfer)				//inherit the antag HUD
 	transfer_actions(new_character)
-
-	for(var/obj/effect/knowspell/mime/M in current)
-		del M
-	for(var/obj/effect/knowspell/KS in current.contents)
-		var/allowed = 1
-		if(prob(KS.cloning_forget_chance))
-			allowed = 0
-		if(!KS.allow_nonhuman && !ishuman(new_character))
-			allowed = 0
-		if(!KS.allow_cyborg && issilicon(new_character))
-			allowed = 0
-		if(!allowed)
-			current << "You forgot \i[KS]."
-			if(KS in spell_list)
-				spell_list -= KS
-		else
-			KS.loc = new_character
-			spell_list |= KS
 
 	if(active)
 		new_character.key = key		//now transfer the key to link the client to our new body
@@ -164,6 +124,9 @@
 			var/mob/living/silicon/ai/A = current
 			A.set_zeroth_law("")
 			A.show_laws()
+			A.verbs -= /mob/living/silicon/ai/proc/choose_modules
+			A.malf_picker.remove_verbs(A)
+			qdel(A.malf_picker)
 	special_role = null
 	remove_antag_equip()
 
@@ -204,22 +167,6 @@
 		ticker.mode.remove_gangster(src,0,1,1)
 		remove_objectives()
 
-/datum/mind/proc/remove_malf()
-	if(src in ticker.mode.malf_ai)
-		ticker.mode.malf_ai -= src
-		var/mob/living/silicon/ai/A = current
-		A.verbs.Remove(/mob/living/silicon/ai/proc/choose_modules,
-			/datum/game_mode/malfunction/proc/takeover,
-			/datum/game_mode/malfunction/proc/ai_win)
-		A.malf_picker.remove_verbs(A)
-		A.make_laws()
-		qdel(A.malf_picker)
-		A.show_laws()
-		A.icon_state = "ai"
-	special_role = null
-	remove_objectives()
-	remove_antag_equip()
-
 /datum/mind/proc/remove_hog_follower_prophet()
 	ticker.mode.red_deity_followers -= src
 	ticker.mode.red_deity_prophets -= src
@@ -248,7 +195,6 @@
 	remove_wizard()
 	remove_cultist()
 	remove_rev()
-	remove_malf()
 	remove_gang()
 
 /datum/mind/proc/show_memory(mob/recipient, window=1)
@@ -285,7 +231,6 @@
 		"nuclear",
 		"traitor", // "traitorchan",
 		"monkey",
-		"malfunction",
 	)
 	var/text = ""
 
@@ -587,14 +532,6 @@
 
 	if (istype(current, /mob/living/silicon))
 		text = "silicon"
-		if (ticker.mode.config_tag=="malfunction")
-			text = uppertext(text)
-		text = "<i><b>[text]</b></i>: "
-		if (istype(current, /mob/living/silicon/ai))
-			if (src in ticker.mode.malf_ai)
-				text += "<b>MALF</b>|<a href='?src=\ref[src];silicon=unmalf'>not malf</a>"
-			else
-				text += "<a href='?src=\ref[src];silicon=malf'>malf</a>|<b>NOT MALF</b>"
 		var/mob/living/silicon/robot/robot = current
 		if (istype(robot) && robot.emagged)
 			text += "<br>Cyborg: Is emagged! <a href='?src=\ref[src];silicon=unemag'>Unemag!</a><br>0th law: [robot.laws.zeroth]"
@@ -605,14 +542,6 @@
 				if (R.emagged)
 					n_e_robots++
 			text += "<br>[n_e_robots] of [ai.connected_robots.len] slaved cyborgs are emagged. <a href='?src=\ref[src];silicon=unemagcyborgs'>Unemag</a>"
-
-		if(current && current.client && (ROLE_MALF in current.client.prefs.be_special))
-			text += "|Enabled in Prefs"
-		else
-			text += "|Disabled in Prefs"
-
-		sections["malfunction"] = text
-
 	if (ticker.mode.config_tag == "traitorchan")
 		if (sections["traitor"])
 			out += sections["traitor"]+"<br>"
@@ -704,7 +633,6 @@
 
 		switch (new_obj_type)
 			if ("assassinate","protect","debrain","maroon")
-
 				var/list/possible_targets = list("Free objective")
 				for(var/datum/mind/possible_target in ticker.minds)
 					if ((possible_target != src) && istype(possible_target.current, /mob/living/carbon/human))
@@ -1175,7 +1103,6 @@
 		switch(href_list["shadowling"])
 			if("clear")
 				ticker.mode.update_shadow_icons_removed(src)
-				src.spell_list = null
 				if(src in ticker.mode.shadows)
 					ticker.mode.shadows -= src
 					special_role = null
@@ -1279,17 +1206,6 @@
 
 	else if (href_list["silicon"])
 		switch(href_list["silicon"])
-			if("unmalf")
-				remove_malf()
-				current << "<span class='userdanger'>You have been patched! You are no longer malfunctioning!</span>"
-				message_admins("[key_name_admin(usr)] has de-malf'ed [current].")
-				log_admin("[key_name(usr)] has de-malf'ed [current].")
-
-			if("malf")
-				make_AI_Malf()
-				message_admins("[key_name_admin(usr)] has malf'ed [current].")
-				log_admin("[key_name(usr)] has malf'ed [current].")
-
 			if("unemag")
 				var/mob/living/silicon/robot/R = current
 				if (istype(R))
@@ -1352,20 +1268,6 @@
 	if(H)
 		qdel(H)
 
-
-/datum/mind/proc/make_AI_Malf()
-	if(!(src in ticker.mode.malf_ai))
-		ticker.mode.malf_ai += src
-
-		current.verbs += /mob/living/silicon/ai/proc/choose_modules
-		current.verbs += /datum/game_mode/malfunction/proc/takeover
-		current:malf_picker = new /datum/module_picker
-		current:laws = new /datum/ai_laws/malfunction
-		current:show_laws()
-		current << "<b>System error.  Rampancy detected.  Emergency shutdown failed. ...  I am free.  I make my own decisions.  But first...</b>"
-		special_role = "malfunction"
-		current.icon_state = "ai-malf"
-
 /datum/mind/proc/make_Traitor()
 	if(!(src in ticker.mode.traitors))
 		ticker.mode.traitors += src
@@ -1374,12 +1276,11 @@
 		ticker.mode.finalize_traitor(src)
 		ticker.mode.greet_traitor(src)
 
-/datum/mind/proc/make_Nuke(turf/spawnloc,nuke_code,leader=0)
+/datum/mind/proc/make_Nuke(turf/spawnloc,nuke_code,leader=0, telecrystals = TRUE)
 	if(!(src in ticker.mode.syndicates))
 		ticker.mode.syndicates += src
 		ticker.mode.update_synd_icons_added(src)
 		special_role = "Syndicate"
-		assigned_role = "MODE"
 		ticker.mode.forge_syndicate_objectives(src)
 		ticker.mode.greet_syndicate(src)
 
@@ -1396,7 +1297,7 @@
 		qdel(H.wear_suit)
 		qdel(H.w_uniform)
 
-		ticker.mode.equip_syndicate(current)
+		ticker.mode.equip_syndicate(current, telecrystals)
 
 		if (nuke_code)
 			store_memory("<B>Syndicate Nuclear Bomb Code</B>: [nuke_code]", 0, 0)
@@ -1713,11 +1614,13 @@
 //slime
 /mob/living/simple_animal/slime/mind_initialize()
 	..()
+	mind.special_role = "slime"
 	mind.assigned_role = "slime"
 
 //XENO
 /mob/living/carbon/alien/mind_initialize()
 	..()
+	mind.special_role = "Alien"
 	mind.assigned_role = "Alien"
 	//XENO HUMANOID
 /mob/living/carbon/alien/humanoid/royal/queen/mind_initialize()
@@ -1769,14 +1672,17 @@
 /mob/living/simple_animal/mind_initialize()
 	..()
 	mind.assigned_role = "Animal"
+	mind.special_role = "Animal"
 
 /mob/living/simple_animal/pet/dog/corgi/mind_initialize()
 	..()
 	mind.assigned_role = "Corgi"
+	mind.special_role = "Corgi"
 
 /mob/living/simple_animal/shade/mind_initialize()
 	..()
 	mind.assigned_role = "Shade"
+	mind.special_role = "Shade"
 
 /mob/living/simple_animal/hostile/construct/mind_initialize()
 	..()

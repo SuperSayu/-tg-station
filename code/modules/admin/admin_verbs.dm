@@ -84,7 +84,6 @@ var/list/admin_verbs_fun = list(
 	/client/proc/object_say,
 	/client/proc/toggle_random_events,
 	/client/proc/set_ooc,
-	/client/proc/cmd_admin_artreroll,
 	/client/proc/reset_ooc,
 	/client/proc/forceEvent,
 	/client/proc/bluespace_artillery,
@@ -136,7 +135,9 @@ var/list/admin_verbs_debug = list(
 	/client/proc/cmd_display_del_log,
 	/client/proc/reset_latejoin_spawns,
 	/client/proc/create_outfits,
-	/client/proc/debug_huds
+	/client/proc/debug_huds,
+	/client/proc/map_template_load,
+	/client/proc/map_template_upload
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -476,7 +477,6 @@ var/list/admin_verbs_hideable = list(
 	for(var/A in spells)
 		spell_list[copytext("[A]", type_length)] = A
 	var/obj/effect/proc_holder/spell/S = input("Choose the spell to give to that guy", "ABRAKADABRA") as null|anything in spell_list
-
 	if(!S)
 		return
 	S = spell_list[S]

@@ -470,8 +470,9 @@
 
 	if(check_anomalies)	//if it's set to check for xenos/simpleanimals
 		for(var/mob/living/simple_animal/SA in turretview)
-			if(!SA.stat && (!SA.has_unlimited_silicon_privilege || !(faction in SA.faction))) //don't target dead animals or NT maint drones.
-				targets += SA
+			if(SA.stat || (faction in SA.faction) || SA.has_unlimited_silicon_privilege) //don't target dead animals or NT maint drones.
+				continue
+			targets += SA
 
 	for(var/mob/living/carbon/C in turretview)	//loops through all carbon-based lifeforms in view(7)
 		if(emagged && C.stat != DEAD)	//if emagged, every living carbon is a target.
@@ -985,6 +986,11 @@
 	if(faction in perp.faction) //Shoot all non syndies
 		return 0
 	return 10
+
+/obj/machinery/porta_turret/syndicate/pod
+	health = 40
+	projectile = /obj/item/projectile/bullet/weakbullet3
+	eprojectile = /obj/item/projectile/bullet/weakbullet3
 
 ////////////////////////
 //Turret Control Panel//
